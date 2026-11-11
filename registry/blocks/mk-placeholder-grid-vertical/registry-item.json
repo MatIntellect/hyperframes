@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-placeholder-grid-vertical",
+  "type": "hyperframes:block",
+  "title": "Placeholder Grid (vertical)",
+  "description": "Vertical transparent media grid: the layouts turned for the tall field (stacked, two by three, hero on top plus two), cells box in one by one, images settle slowly; empty slots are numbered wells. Layout, images and placement full, top or bottom are variables; holds.",
+  "tags": ["placeholder", "media", "grid", "minimal", "collage", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-placeholder-grid-vertical.html",
+      "target": "compositions/mk-placeholder-grid-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

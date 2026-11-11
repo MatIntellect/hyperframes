@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-prism-title-vertical",
+  "type": "hyperframes:block",
+  "title": "Prism Title (vertical)",
+  "description": "Vertical transparent title overlay: Bebas title, up to two lines, focuses in from blur with a red and grey prism fringe and a slow drift. Title is a variable; placement bottom (above captions), top or center; cues set entrance and blur-out; holds.",
+  "tags": ["typography", "title-card", "overlay", "chromatic", "creator", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-prism-title-vertical.html",
+      "target": "compositions/yt-prism-title-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

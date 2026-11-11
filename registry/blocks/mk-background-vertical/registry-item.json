@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-background-vertical",
+  "type": "hyperframes:block",
+  "title": "Soft Backdrop (vertical)",
+  "description": "Vertical soft-blob backdrop: a muted red and a grey glow drift slowly over the brand ground. Placement full fills the frame; top or bottom makes it a rounded 780x760 card with the rest transparent. Cues set fade-in and fade-out; holds.",
+  "tags": ["background", "gradient", "minimal", "backdrop", "presentation", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-background-vertical.html",
+      "target": "compositions/mk-background-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

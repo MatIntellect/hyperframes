@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "logo-outro-vertical",
+  "type": "hyperframes:block",
+  "title": "Logo Outro (vertical)",
+  "description": "Vertical outro card: wordmark letters fly in and close up with a red glow, the tagline (up to two lines) and a URL pill fade up. Wordmark, tagline and URL are variables; placement full, top or bottom card; cues set assembly and tagline; holds.",
+  "tags": ["branding", "outro", "logo", "wordmark", "end-card", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "logo-outro-vertical.html",
+      "target": "compositions/logo-outro-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "shape", "type": "enum", "role": "layout", "label": "Shape", "description": "full keeps the backdrop full-bleed. card shrinks it into a rounded card 1440x800 at the second cue, the frame around it turns transparent.", "default": "full", "options": [{ "value": "full", "label": "Full-bleed" }, { "value": "card", "label": "Card" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the backdrop fades in, 2 it shrinks into the card (wide, shape card), 3 it fades out (only when exit is fade). Empty keeps 0 and 1.6.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the backdrop to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #mbg-root {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+        overflow: hidden;
+      }
+      #mbg-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      }
+      .mbg-blob {
+        position: absolute;
+        border-radius: 50%;
+      }
+      #mbg-blob1 {
+        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--accent, #ff0000) 45%, transparent) 0%, transparent 72%);
+      }
+      #mbg-blob2 {
+        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--muted, #8a8a90) 30%, transparent) 0%, transparent 72%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mbg-root" data-composition-id="mk-background" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="mbg-card" data-layout-allow-occlusion>
+        <div id="mbg-blob1" class="mbg-blob" data-layout-allow-overflow data-layout-ignore></div>
+        <div id="mbg-blob2" class="mbg-blob" data-layout-allow-overflow data-layout-ignore></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mbg-root");
+        var card = document.getElementById("mbg-card");
+        var b1 = document.getElementById("mbg-blob1"),
+          b2 = document.getElementById("mbg-blob2");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var W = 1920,
+          H = 1080;
+        var k = Math.max(W, H) / 1920;
+        function place(el, x, y, r, w, h) {
+          el.style.cssText = "width:" + 2 * r + "px;height:" + 2 * r + "px;left:" + (x * w - r) + "px;top:" + (y * h - r) + "px";
+        }
+        place(b1, 0.28, 0.32, 950 * k, W, H);
+        place(b2, 0.74, 0.66, 1100 * k, W, H);
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cB = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 1.6;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.from(card, { opacity: 0, duration: 0.7, ease: "power2.out" }, c0);
+        tl.from([b1, b2], { scale: 1.14, duration: 1.2, ease: "power3.out" }, c0);
+        tl.to(b1, { x: 70 * k, y: 42 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: 11 }, c0 + 0.3);
+        tl.to(b2, { x: -84 * k, y: -36 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: 11 }, c0 + 0.3);
+        
+        if (oneOf(V.shape, ["full", "card"], "full") === "card")
+          tl.to(card, { x: 240, y: 140, width: 1440, height: 800, borderRadius: 40, duration: 1.1, ease: "power3.inOut" }, cB);
+        
+        
+        if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cB + 4);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["mk-background"] = tl;
+      })();
+    </script>
+  </body>
+</html>

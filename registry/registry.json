@@ -148,6 +148,38 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "carousel-text-circle-1",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-1-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-3",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-3-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-4",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-4-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-5",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-text-circle-5-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "carousel-vision-1",
       "type": "hyperframes:block"
     },
@@ -204,11 +236,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "flowchart",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "flowchart-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "instagram-follow",
       "type": "hyperframes:block"
     },
     {
       "name": "instagram-follow-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "logo-outro",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "logo-outro-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -324,6 +372,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "mk-background",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-background-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "mk-callout-highlight",
       "type": "hyperframes:block"
     },
@@ -337,6 +393,14 @@
     },
     {
       "name": "mk-line-graph-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-placeholder-grid",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-placeholder-grid-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -452,6 +516,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "world-map",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "world-map-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "x-post",
       "type": "hyperframes:block"
     },
@@ -473,6 +545,14 @@
     },
     {
       "name": "yt-lower-third-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-prism-title",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-prism-title-vertical",
       "type": "hyperframes:block"
     }
   ]

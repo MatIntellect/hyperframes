@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "world-map-vertical",
+  "type": "hyperframes:block",
+  "title": "World Map (vertical)",
+  "description": "Vertical world choropleth: headline, subtitle, a 780-wide map in a dark-red to accent-red scale by value, legend and source under it; the top five pulse. Data and labels are variables; placement full, top or bottom card; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "world", "choropleth", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "world-map-vertical.html",
+      "target": "compositions/world-map-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/world-110m.js",
+      "target": "assets/world-110m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

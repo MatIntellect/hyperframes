@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "flowchart",
+  "type": "hyperframes:block",
+  "title": "Flowchart",
+  "description": "Decision tree on a dotted board: question, two answers, four leaves pop in along drawn connectors, then a cursor selects the first leaf and retypes a misspelled word, and a check badge pops. All words are variables; cues set question, leaves and the fix; holds.",
+  "tags": ["diagram", "flowchart", "decision-tree", "interactive", "cursor"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "flowchart.html",
+      "target": "compositions/flowchart.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

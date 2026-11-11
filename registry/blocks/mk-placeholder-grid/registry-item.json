@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-placeholder-grid",
+  "type": "hyperframes:block",
+  "title": "Placeholder Grid",
+  "description": "Transparent media grid of rounded cells (two, three, four, six, or a hero plus two): cells box in one after another, images settle with a slow inside scale; empty slots show numbered brand wells. Layout and images are variables; cues set entrance and fade; holds.",
+  "tags": ["placeholder", "media", "grid", "minimal", "collage"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-placeholder-grid.html",
+      "target": "compositions/mk-placeholder-grid.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,354 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "ВВП на душу населения" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Номинальный, долларов на человека, 2024" },
+    { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "Countries separated by ;, each as Country: value. Country is the Natural Earth English name (Russia, China, United States of America, United Kingdom, South Korea...) or the ISO 3166 numeric code. Up to 40 countries; colour runs from the lowest to the highest value, the top five pulse.", "maxLength": 900, "default": "United States of America: 85373; China: 13136; India: 2731; Germany: 54291; United Kingdom: 48913; France: 44408; Japan: 33950; Brazil: 10412; Australia: 65366; Canada: 54866; Russia: 14403; South Korea: 33147; Mexico: 13434; Indonesia: 5108; Nigeria: 1621; South Africa: 6190; Egypt: 4295; Turkey: 13110; Saudi Arabia: 32270; Thailand: 7647; Vietnam: 4623; Poland: 22393; Sweden: 59324; Norway: 94660; Switzerland: 105669; Argentina: 13709; Colombia: 7230; Kenya: 2198; Pakistan: 1658; Bangladesh: 2688" },
+    { "id": "legendLow", "type": "string", "role": "content", "label": "Legend low", "description": "Label at the low end of the colour bar.", "maxLength": 14, "default": "Ниже" },
+    { "id": "legendHigh", "type": "string", "role": "content", "label": "Legend high", "description": "Label at the high end of the colour bar.", "maxLength": 14, "default": "Выше" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Источник: МВФ" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the countries start to reveal (about 3 s), 3 the top five pulse, 4 the map fades out (only when exit is fade). Empty keeps 0, 1, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the map to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/world-110m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #wmapv-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .wmapv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #wmapv-box {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #wmapv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #wmapv-sub {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        opacity: 0;
+      }
+      #wmapv-map {
+        display: block;
+        flex: none;
+      }
+      .wmapv-country {
+        stroke: var(--bg, #0c1014);
+        stroke-width: 0.8;
+        opacity: 0;
+      }
+      .wmapv-grat {
+        fill: none;
+        stroke: var(--border, #2e2e32);
+        stroke-width: 0.6;
+        stroke-opacity: 0.6;
+      }
+      #wmapv-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+      }
+      #wmapv-source {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        opacity: 0;
+      }
+      #wmapv-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        opacity: 0;
+      }
+      #wmapv-bar {
+        height: 16px;
+        border-radius: 8px;
+      }
+      #wmapv-labels {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--muted, #8a8a90);
+      }
+      
+      
+      #wmapv-box {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+        justify-content: center;
+      }
+      #wmapv-title {
+        font-size: 104px;
+      }
+      #wmapv-sub {
+        font-size: 36px;
+        margin-top: 14px;
+      }
+      #wmapv-map {
+        margin-top: 56px;
+      }
+      #wmapv-foot {
+        margin-top: 40px;
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 22px;
+      }
+      #wmapv-root.wmapv-card #wmapv-box {
+        height: 760px;
+        padding: 40px 30px;
+        background: var(--bg, #0c1014);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #wmapv-root.wmapv-bottom #wmapv-box {
+        top: 600px;
+      }
+      #wmapv-root.wmapv-card #wmapv-title {
+        font-size: 68px;
+      }
+      #wmapv-root.wmapv-card #wmapv-sub {
+        font-size: 30px;
+        margin-top: 10px;
+      }
+      #wmapv-root.wmapv-card #wmapv-map {
+        margin-top: 30px;
+      }
+      #wmapv-root.wmapv-card #wmapv-foot {
+        margin-top: 26px;
+        gap: 14px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="wmapv-root" data-composition-id="world-map-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="wmapv-ground"></div>
+      <div id="wmapv-box">
+        <div id="wmapv-title"></div>
+        <div id="wmapv-sub"></div>
+        <svg id="wmapv-map"></svg>
+        <div id="wmapv-foot">
+          <div id="wmapv-source"></div>
+          <div id="wmapv-legend">
+            <div id="wmapv-bar"></div>
+            <div id="wmapv-labels"><span id="wmapv-low"></span><span id="wmapv-high"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("wmapv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var MAPW = 1680,
+          MAPH = 680;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        MAPW = 780;
+        MAPH = 420;
+        if (placement !== "full") {
+          root.classList.add("wmapv-card", "wmapv-" + placement);
+          root.querySelector(".wmapv-ground").remove();
+          MAPW = 716;
+          MAPH = 290;
+        }
+        
+        var DEF =
+          "United States of America: 85373; China: 13136; India: 2731; Germany: 54291; United Kingdom: 48913; France: 44408; Japan: 33950; Brazil: 10412; Australia: 65366; Canada: 54866; Russia: 14403; South Korea: 33147; Mexico: 13434; Indonesia: 5108; Nigeria: 1621; South Africa: 6190; Egypt: 4295; Turkey: 13110; Saudi Arabia: 32270; Thailand: 7647; Vietnam: 4623; Poland: 22393; Sweden: 59324; Norway: 94660; Switzerland: 105669; Argentina: 13709; Colombia: 7230; Kenya: 2198; Pakistan: 1658; Bangladesh: 2688";
+        var titleEl = document.getElementById("wmapv-title"),
+          subEl = document.getElementById("wmapv-sub"),
+          srcEl = document.getElementById("wmapv-source");
+        titleEl.textContent = txt(V.title, "ВВП на душу населения");
+        subEl.textContent = txt(V.subtitle, "Номинальный, долларов на человека, 2024");
+        srcEl.textContent = txt(V.source, "Источник: МВФ");
+        if (!subEl.textContent) subEl.style.display = "none";
+        document.getElementById("wmapv-low").textContent = txt(V.legendLow, "Ниже") || "Ниже";
+        document.getElementById("wmapv-high").textContent = txt(V.legendHigh, "Выше") || "Выше";
+
+        // Данные: «Страна: значение» по имени Natural Earth или числовому коду ISO
+        var world = window.__hfWorld110m;
+        var countries = topojson.feature(world, world.objects.countries).features.filter(function (f) {
+          return f.properties.name !== "Antarctica";
+        });
+        var byKey = {};
+        countries.forEach(function (f) {
+          byKey[String(f.properties.name).toLowerCase()] = f;
+          byKey[String(f.id).padStart(3, "0")] = f;
+        });
+        var values = {};
+        String(typeof V.data === "string" && V.data.trim() ? V.data : DEF)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.lastIndexOf(":");
+            if (k < 0) return;
+            var key = item.slice(0, k).trim().toLowerCase();
+            var num = parseFloat(item.slice(k + 1).replace(/[\s ]/g, "").replace(",", "."));
+            var f = byKey[key] || byKey[key.padStart(3, "0")];
+            if (f && isFinite(num)) values[f.id] = num;
+          });
+        var ids = Object.keys(values);
+        var vmin = Math.min.apply(null, ids.map(function (i) {
+            return values[i];
+          })),
+          vmax = Math.max.apply(null, ids.map(function (i) {
+            return values[i];
+          }));
+
+        // Цвета – из меток темы: от тёмного красного к акценту; без данных – чуть светлее карточки
+        function rgb(css) {
+          var p = document.createElement("i");
+          p.style.color = css;
+          root.appendChild(p);
+          var m = getComputedStyle(p).color.match(/[\d.]+/g).map(Number);
+          p.remove();
+          return m;
+        }
+        var cs = getComputedStyle(root);
+        var accent = rgb(cs.getPropertyValue("--accent").trim() || "#ff0000"),
+          surface = rgb(cs.getPropertyValue("--surface").trim() || "#18181a"),
+          fg = rgb(cs.getPropertyValue("--fg").trim() || "#f2f2f2");
+        function mix(a, b, t) {
+          return "rgb(" + [0, 1, 2].map(function (i) {
+            return Math.round(a[i] + (b[i] - a[i]) * t);
+          }).join(",") + ")";
+        }
+        var noData = mix(surface, fg, 0.1);
+        function colorOf(v) {
+          var t = vmax > vmin ? (v - vmin) / (vmax - vmin) : 1;
+          return mix(surface, accent, 0.28 + 0.72 * t);
+        }
+        document.getElementById("wmapv-bar").style.background =
+          "linear-gradient(90deg, " + mix(surface, accent, 0.28) + ", " + mix(surface, accent, 1) + ")";
+
+        var svg = d3.select("#wmapv-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        var projection = d3.geoNaturalEarth1().fitSize([MAPW, MAPH], { type: "FeatureCollection", features: countries });
+        var path = d3.geoPath().projection(projection);
+        svg.append("path").datum(d3.geoGraticule10()).attr("class", "wmapv-grat").attr("d", path);
+        svg
+          .selectAll(".wmapv-country")
+          .data(countries)
+          .enter()
+          .append("path")
+          .attr("class", "wmapv-country")
+          .attr("id", function (d) {
+            return "wmapv-c" + d.id;
+          })
+          .attr("d", path)
+          .attr("fill", function (d) {
+            return d.id in values ? colorOf(values[d.id]) : noData;
+          });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cM = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 1;
+        var cP = isFinite(cues[2]) && cues[2] > cM ? cues[2] : cM + 4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
+        tl.to("#wmapv-map .wmapv-country", { opacity: 1, duration: 0.3, ease: "power1.out", stagger: { each: 2.7 / countries.length, from: "center" } }, cM);
+        tl.to("#wmapv-legend", { opacity: 1, duration: 0.6, ease: "power2.out" }, cM + 3);
+        tl.to(srcEl, { opacity: 1, duration: 0.5, ease: "power2.out" }, cM + 3.5);
+        ids
+          .sort(function (a, b) {
+            return values[b] - values[a];
+          })
+          .slice(0, 5)
+          .forEach(function (id, i) {
+            var el = document.getElementById("wmapv-c" + id);
+            el.parentNode.appendChild(el);
+            tl.to(el, { stroke: "rgb(" + fg.join(",") + ")", strokeWidth: 2.4, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
+            tl.to(el, { stroke: "rgb(" + rgb(cs.getPropertyValue("--bg").trim() || "#0c1014").join(",") + ")", strokeWidth: 0.8, duration: 0.6, ease: "power2.inOut" }, cP + i * 0.15 + 0.4);
+          });
+        if (exit === "fade") tl.to("#wmapv-box", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["world-map-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-prism-title",
+  "type": "hyperframes:block",
+  "title": "Prism Title",
+  "description": "Transparent title overlay: a Bebas title focuses in from heavy blur, a red and grey fringe settles to a soft prism, a slight perspective bow and a slow scale drift. Title is a variable, size follows its length; cues set entrance and blur-out; holds.",
+  "tags": ["typography", "title-card", "overlay", "chromatic", "creator"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-prism-title.html",
+      "target": "compositions/yt-prism-title.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

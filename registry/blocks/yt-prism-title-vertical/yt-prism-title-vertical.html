@@ -1,0 +1,186 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the title sits on y 1360, just above the caption band. top: the title hangs from y 180. center: centred on y 770.", "default": "center", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "The title, Bebas Neue. Size follows the length: one line wide, up to two lines vertical.", "maxLength": 24, "default": "Монтаж без монтажёра" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the title starts to focus in, 2 it blurs out (only when exit is fade). Empty keeps 0.1 and 5.4.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the title to the end of the mount; fade blurs it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Blur out" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #yptv-root {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+      }
+      #yptv-bow {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        transform: perspective(950px) rotateX(6deg);
+      }
+      #yptv-line {
+        position: relative;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 0.95;
+        text-transform: uppercase;
+        text-align: center;
+        text-wrap: balance;
+      }
+      .yptv-copy {
+        position: absolute;
+        inset: 0;
+        opacity: 0.85;
+      }
+      .yptv-copy.yptv-r {
+        color: var(--accent, #ff0000);
+      }
+      .yptv-copy.yptv-b {
+        color: var(--muted, #8a8a90);
+      }
+      #yptv-main {
+        position: relative;
+        color: var(--fg, #f2f2f2);
+      }
+      
+      
+      #yptv-bow {
+        left: 150px;
+        width: 780px;
+      }
+      #yptv-root.yptv-bottom #yptv-bow {
+        bottom: 560px;
+        align-items: flex-end;
+      }
+      #yptv-root.yptv-top #yptv-bow {
+        top: 180px;
+        align-items: flex-start;
+      }
+      #yptv-root.yptv-center #yptv-bow {
+        top: 0;
+        height: 1540px;
+        align-items: center;
+      }
+      #yptv-line {
+        max-width: 780px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="yptv-root" data-composition-id="yt-prism-title-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="yptv-bow">
+        <div id="yptv-line">
+          <div class="yptv-copy yptv-r" aria-hidden="true" data-layout-allow-overlap></div>
+          <div class="yptv-copy yptv-b" aria-hidden="true" data-layout-allow-overlap></div>
+          <div id="yptv-main"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("yptv-root");
+        var bow = document.getElementById("yptv-bow");
+        var line = document.getElementById("yptv-line");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var title = typeof V.title === "string" && V.title.trim() ? V.title.trim() : "Монтаж без монтажёра";
+        root.querySelectorAll(".yptv-copy, #yptv-main").forEach(function (el) {
+          el.textContent = title;
+        });
+        // Размер по длине: средняя ширина знака Bebas около 0,42 кегля
+        var n = title.length;
+        
+        
+        root.classList.add("yptv-" + oneOf(V.placement, ["bottom", "top", "center"], "center"));
+        var longest = title.split(/\s+/).reduce(function (m, w) {
+          return Math.max(m, w.length);
+        }, 0);
+        var perLine = Math.max(longest, Math.ceil(n / 2));
+        var size = Math.max(100, Math.min(220, 760 / (0.44 * perLine)));
+        
+        line.style.fontSize = Math.round(size) + "px";
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var O = 4,
+          IN = 0.48;
+        var R = root.querySelector(".yptv-r"),
+          B = root.querySelector(".yptv-b");
+
+        var tl = gsap.timeline({ paused: true });
+        gsap.set(bow, { opacity: 0, filter: "blur(18px)" });
+        gsap.set(R, { x: -O * 4.5, opacity: 0.45 });
+        gsap.set(B, { x: O * 4.5, opacity: 0.45 });
+        tl.to(bow, { opacity: 1, duration: IN * 1.4, ease: "power2.out" }, c0);
+        tl.to(bow, { filter: "blur(2.5px)", duration: IN * 2.4, ease: "power2.out" }, c0);
+        tl.to(R, { x: -O, opacity: 0.85, duration: IN * 2.4, ease: "power2.out" }, c0);
+        tl.to(B, { x: O, opacity: 0.85, duration: IN * 2.4, ease: "power2.out" }, c0);
+        tl.to(line, { scale: 1.035, duration: 5, ease: "sine.out" }, c0 + 0.3);
+        tl.to(R, { x: -O - 1.4, duration: 1.9, ease: "sine.inOut", yoyo: true, repeat: 1 }, c0 + 1.3);
+        tl.to(B, { x: O + 1.4, duration: 1.9, ease: "sine.inOut", yoyo: true, repeat: 1 }, c0 + 1.3);
+        if (exit === "fade") tl.to(bow, { opacity: 0, filter: "blur(12px)", duration: 0.36, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : 5.4);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["yt-prism-title-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

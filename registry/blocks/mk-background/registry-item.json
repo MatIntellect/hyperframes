@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-background",
+  "type": "hyperframes:block",
+  "title": "Soft Backdrop",
+  "description": "Soft-blob backdrop on the brand ground: a muted red and a grey radial glow drift slowly; fades in, can shrink into a rounded 1440x800 card over a transparent frame. Shape and cues are variables; holds to the end of the mount.",
+  "tags": ["background", "gradient", "minimal", "backdrop", "presentation"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-background.html",
+      "target": "compositions/mk-background.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

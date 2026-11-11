@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "world-map",
+  "type": "hyperframes:block",
+  "title": "World Map",
+  "description": "World choropleth on the brand ground: headline wipes in, countries reveal from the centre in a dark-red to accent-red scale by value, legend and source fade in, the top five pulse. Headline, data and labels are variables; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "world", "choropleth"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "world-map.html",
+      "target": "compositions/world-map.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/world-110m.js",
+      "target": "assets/world-110m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,370 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own board to the frame edge, the tree in the 780x1180 field (y 180-1360). top / bottom: the tree on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "question", "type": "string", "role": "content", "label": "Question", "description": "Root note, up to two lines.", "maxLength": 40, "default": "Стоит ли учиться программировать?" },
+    { "id": "answers", "type": "string", "role": "content", "label": "Answers", "description": "Two second-level notes separated by ;, each up to 22 characters.", "maxLength": 46, "default": "Да; Не уверен" },
+    { "id": "leaves", "type": "string", "role": "content", "label": "Leaves", "description": "Four leaf notes separated by ;, each up to 32 characters: two under the first answer, two under the second.", "maxLength": 134, "default": "Начать с Python; Сначала без кода; Сделать свой сайт; Пройти вводный курс" },
+    { "id": "typo", "type": "string", "role": "content", "label": "Typo", "description": "Misspelled form of the last word of the first leaf: it lands with a red wavy underline, the cursor selects it and retypes the right word. Empty skips the correction, the cursor only selects the leaf.", "maxLength": 14, "default": "Pythom" },
+    { "id": "cursorTag", "type": "string", "role": "content", "label": "Cursor tag", "description": "Name tag next to the cursor.", "maxLength": 10, "default": "Вы" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the question lands (answers follow 1.2 s later), 2 the leaves land, 3 the cursor comes in to fix the first leaf, 4 the tree fades out (only when exit is fade). Empty keeps 0.2, 2.4, 3.6.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the tree to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #fchv-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .fchv-board {
+        position: absolute;
+        background-color: var(--bg, #0c1014);
+        background-image: radial-gradient(var(--border, #2e2e32) 2px, transparent 2px);
+        background-size: 32px 32px;
+      }
+      #fchv-root svg.fchv-lines {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+      }
+      .fchv-line {
+        fill: none;
+        stroke: var(--muted, #8a8a90);
+        stroke-width: 4;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      .fchv-node {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 20px;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        transform: scale(0);
+      }
+      .fchv-node.fchv-q {
+        font-weight: 700;
+        border: 3px solid var(--accent, #ff0000);
+      }
+      .fchv-node.fchv-a {
+        font-weight: 700;
+      }
+      .fchv-node.fchv-leaf {
+        font-weight: 600;
+      }
+      .fchv-wrong {
+        text-decoration: underline wavy var(--accent, #ff0000);
+        text-decoration-thickness: 3px;
+        text-underline-offset: 6px;
+      }
+      .fchv-wrong.fchv-sel,
+      .fchv-right.fchv-sel {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 4px;
+      }
+      .fchv-right span {
+        display: none;
+      }
+      .fchv-selbox {
+        position: absolute;
+        inset: -8px;
+        border: 3px solid var(--fg, #f2f2f2);
+        border-radius: 22px;
+        opacity: 0;
+      }
+      #fchv-cursor {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        align-items: flex-start;
+        z-index: 10;
+      }
+      #fchv-tag {
+        margin: 26px 0 0 6px;
+        padding: 4px 14px;
+        border-radius: 8px;
+        background: var(--accent, #ff0000);
+        color: var(--fg, #f2f2f2);
+        font-size: 28px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #fchv-badge {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--accent, #ff0000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: scale(0);
+        z-index: 9;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="fchv-root" data-composition-id="flowchart-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="fchv-tree">
+        <div id="fchv-board" class="fchv-board"></div>
+        <svg class="fchv-lines" id="fchv-lines" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+        <div id="fchv-badge">
+          <svg width="36" height="36" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#f2f2f2" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </div>
+        <div id="fchv-cursor" data-layout-allow-occlusion data-layout-allow-overflow>
+          <svg width="40" height="40" viewBox="0 0 24 24"><path d="M5.65 12.37H5.46L5.32 12.5L0.5 16.88V1.2L11.78 12.37H5.65Z" fill="#f2f2f2" stroke="#0c1014" stroke-width="1" /></svg>
+          <div id="fchv-tag">Вы</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("fchv-root");
+        var tree = document.getElementById("fchv-tree");
+        var board = document.getElementById("fchv-board");
+        var svg = document.getElementById("fchv-lines");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function list(v, d, n) {
+          var a = str(v, d)
+            .split(";")
+            .map(function (s) {
+              return s.trim();
+            });
+          var b = d.split(";");
+          for (var i = 0; i < n; i++) if (!a[i]) a[i] = b[i].trim();
+          return a.slice(0, n);
+        }
+        var question = str(V.question, "Стоит ли учиться программировать?");
+        var answers = list(V.answers, "Да; Не уверен", 2);
+        var leaves = list(V.leaves, "Начать с Python; Сначала без кода; Сделать свой сайт; Пройти вводный курс", 4);
+        var typo = typeof V.typo === "string" ? V.typo.trim() : "Pythom";
+        document.getElementById("fchv-tag").textContent = str(V.cursorTag, "Вы");
+
+        // Раскладка: коробки заметок {x,y,w,h,f} и линии между ними – заданы числами, без замеров текста
+        var Q, A = [], LV = [], lines = [];
+        function tree3(pb, ct, px, cx) {
+          var my = (pb + ct) / 2;
+          return "M " + px + " " + pb + " L " + px + " " + my + " L " + cx + " " + my + " L " + cx + " " + ct;
+        }
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        var s =
+          placement === "full"
+            ? { x0: 150, x1: 930, T: 285, rh: 190, rf: 56, g1: 110, ah: 150, af: 40, g2: 60, lh: 210, lf: 34, g3: 40, ind: 56 }
+            : { x0: 180, x1: 900, T: (placement === "top" ? 180 : 600) + 60, rh: 130, rf: 38, g1: 50, ah: 100, af: 30, g2: 30, lh: 130, lf: 28, g3: 16, ind: 48 };
+        if (placement === "full") board.style.cssText = "left:0;top:0;width:1080px;height:1920px";
+        else board.style.cssText = "left:150px;top:" + (placement === "top" ? 180 : 600) + "px;width:780px;height:760px;border:2px solid var(--border, #2e2e32);border-radius:32px";
+        Q = { x: s.x0, y: s.T, w: s.x1 - s.x0, h: s.rh, f: s.rf };
+        var mid = (s.x0 + s.x1) / 2,
+          colW = (s.x1 - s.x0 - 30) / 2;
+        var ay = s.T + s.rh + s.g1,
+          ly0 = ay + s.ah + s.g2;
+        [0, 1].forEach(function (c) {
+          var cx0 = c === 0 ? s.x0 : s.x1 - colW;
+          A.push({ x: cx0, y: ay, w: colW, h: s.ah, f: s.af });
+          lines.push(tree3(s.T + s.rh, ay, mid, cx0 + colW / 2));
+          var rail = cx0 + s.ind / 2;
+          [0, 1].forEach(function (k) {
+            var ly = ly0 + k * (s.lh + s.g3);
+            LV.push({ x: cx0 + s.ind, y: ly, w: colW - s.ind, h: s.lh, f: s.lf });
+            lines.push("M " + rail + " " + (ay + s.ah) + " L " + rail + " " + (ly + s.lh / 2) + " L " + (cx0 + s.ind) + " " + (ly + s.lh / 2));
+          });
+        });
+        
+
+        function note(box, cls, id) {
+          var el = document.createElement("div");
+          el.className = "fchv-node " + cls;
+          el.id = id;
+          el.style.cssText = "left:" + box.x + "px;top:" + box.y + "px;width:" + box.w + "px;height:" + box.h + "px;font-size:" + box.f + "px";
+          tree.insertBefore(el, document.getElementById("fchv-badge"));
+          return el;
+        }
+        var qEl = note(Q, "fchv-q", "fchv-q");
+        qEl.textContent = question;
+        var aEls = A.map(function (b, i) {
+          var el = note(b, "fchv-a", "fchv-a" + i);
+          el.textContent = answers[i];
+          return el;
+        });
+        var lEls = LV.map(function (b, i) {
+          var el = note(b, "fchv-leaf", "fchv-leaf" + i);
+          el.textContent = leaves[i];
+          return el;
+        });
+        var lineEls = lines.map(function (d, i) {
+          var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          p.setAttribute("d", d);
+          p.setAttribute("pathLength", "1");
+          p.setAttribute("class", "fchv-line");
+          svg.appendChild(p);
+          return p;
+        });
+
+        // Первый лист: последнее слово с опечаткой, буквы верного слова – по одной
+        var leaf0 = lEls[0];
+        var words = leaves[0].split(" ");
+        var last = words.pop();
+        var wrongEl = null,
+          rightEl = document.createElement("span"),
+          letters = [];
+        leaf0.textContent = "";
+        var inner = document.createElement("span");
+        inner.appendChild(document.createTextNode(words.length ? words.join(" ") + " " : ""));
+        rightEl.className = "fchv-right";
+        last.split("").forEach(function (ch) {
+          var sp = document.createElement("span");
+          sp.textContent = ch;
+          rightEl.appendChild(sp);
+          letters.push(sp);
+        });
+        if (typo) {
+          wrongEl = document.createElement("span");
+          wrongEl.className = "fchv-wrong";
+          wrongEl.textContent = typo;
+          inner.appendChild(wrongEl);
+        } else {
+          letters.forEach(function (sp) {
+            sp.style.display = "inline";
+          });
+        }
+        inner.appendChild(rightEl);
+        leaf0.appendChild(inner);
+        var selbox = document.createElement("div");
+        selbox.className = "fchv-selbox";
+        leaf0.appendChild(selbox);
+
+        var cursor = document.getElementById("fchv-cursor");
+        var badge = document.getElementById("fchv-badge");
+        var L0 = LV[0];
+        var W = 1080,
+          H = 1920;
+        var tx = L0.x + L0.w * 0.72,
+          ty = L0.y + L0.h * 0.58;
+        var lowest = LV.reduce(function (m, b) {
+          return Math.max(m, b.y + b.h);
+        }, 0);
+        var rx = L0.x + L0.w * 0.3,
+          ry = lowest + 24;
+        gsap.set(cursor, { x: W + 40, y: H + 40 });
+        gsap.set(badge, { left: L0.x - 24, top: L0.y - 30 });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.2;
+        var cL = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 2.2;
+        var cC = isFinite(cues[2]) && cues[2] > cL ? cues[2] : cL + 1.2;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(qEl, { scale: 1, duration: 0.45, ease: "power2.out" }, c0);
+        var cA = c0 + 1.2;
+        tl.to(lineEls.slice(0, 2), { strokeDashoffset: 0, duration: 0.5, ease: "none" }, cA - 0.4);
+        aEls.forEach(function (el, i) {
+          tl.to(el, { scale: 1, duration: 0.4, ease: "back.out(1.7)" }, cA + i * 0.2);
+        });
+        tl.to(lineEls.slice(2), { strokeDashoffset: 0, duration: 0.4, ease: "none" }, cL - 0.3);
+        lEls.forEach(function (el, i) {
+          tl.to(el, { scale: 1, duration: 0.4, ease: "back.out(1.7)" }, cL + i * 0.15);
+        });
+        tl.to(cursor, { x: tx, y: ty, duration: 1, ease: "power1.inOut" }, cC);
+        var t = cC + 1;
+        tl.to(cursor, { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1 }, t);
+        tl.set(selbox, { opacity: 1 }, t);
+        t += 0.4;
+        if (wrongEl) {
+          tl.to(cursor, { scale: 0.85, duration: 0.06, yoyo: true, repeat: 3 }, t);
+          tl.set(wrongEl, { attr: { class: "fchv-wrong fchv-sel" } }, t + 0.1);
+          t += 0.5;
+          tl.set(wrongEl, { display: "none" }, t);
+          tl.set(rightEl, { attr: { class: "fchv-right fchv-sel" } }, t);
+          letters.forEach(function (sp, i) {
+            tl.set(sp, { display: "inline" }, t + 0.07 * i);
+          });
+          t += 0.07 * letters.length + 0.3;
+          tl.set(rightEl, { attr: { class: "fchv-right" } }, t);
+          t += 0.3;
+        }
+        tl.to(cursor, { x: rx, y: ry, duration: 0.4, ease: "power1.out" }, t);
+        tl.to(cursor, { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1 }, t + 0.3);
+        tl.set(selbox, { opacity: 0 }, t + 0.3);
+        tl.to(badge, { scale: 1, duration: 0.25, ease: "back.out(2)" }, t + 0.4);
+        if (exit === "fade") tl.to(tree, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : t + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["flowchart-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the grid fills the 780x1180 field (y 180-1360). top / bottom: the grid fills 780x760 at y 180-940 / 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "layout", "type": "enum", "role": "layout", "label": "Layout", "description": "Cell layout. Wide: 2up and 3up are a row, 4up is 2x2, 3x2 is three by two, 1+2 is a hero left with two stacked right. Vertical turns them for the tall field: 2up and 3up stack, 3x2 is two by three, 1+2 is a hero on top with two side by side under it.", "default": "1+2", "options": [{ "value": "2up", "label": "Two" }, { "value": "3up", "label": "Three" }, { "value": "4up", "label": "Four" }, { "value": "3x2", "label": "Six" }, { "value": "1+2", "label": "Hero plus two" }] },
+    { "id": "images", "type": "string", "role": "content", "label": "Images", "description": "Image paths in layout order separated by ; (for example assets/a.jpg; assets/b.jpg). An empty slot shows a numbered brand well.", "maxLength": 600, "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first cell boxes in (the rest follow 0.15 s apart), 2 the grid fades out (only when exit is fade). Empty keeps 0.3 and 7.5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the grid to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #mpgv-root {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+      }
+      .mpgv-cell {
+        position: absolute;
+        border-radius: 40px;
+        overflow: hidden;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+      }
+      .mpgv-media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .mpgv-well {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--surface, #18181a) 82%, var(--fg, #f2f2f2)) 0%, var(--surface, #18181a) 100%);
+      }
+      .mpgv-num {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-weight: 600;
+        font-size: 88px;
+        color: var(--muted, #8a8a90);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mpgv-root" data-composition-id="mk-placeholder-grid-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="mpgv-grid"></div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mpgv-root");
+        var gridEl = document.getElementById("mpgv-grid");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var layout = oneOf(V.layout, ["2up", "3up", "4up", "3x2", "1+2"], "1+2");
+        function grid(x0, y0, iw, ih, g, cols, rows) {
+          var cw = (iw - (cols - 1) * g) / cols,
+            ch = (ih - (rows - 1) * g) / rows,
+            out = [];
+          for (var r = 0; r < rows; r++)
+            for (var c = 0; c < cols; c++) out.push({ x: x0 + c * (cw + g), y: y0 + r * (ch + g), w: cw, h: ch });
+          return out;
+        }
+        var R;
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        var x0 = 150,
+          iw = 780,
+          y0 = placement === "bottom" ? 600 : 180,
+          ih = placement === "full" ? 1180 : 760,
+          g = 30;
+        if (layout === "2up") R = grid(x0, y0, iw, ih, g, 1, 2);
+        else if (layout === "3up") R = grid(x0, y0, iw, ih, g, 1, 3);
+        else if (layout === "4up") R = grid(x0, y0, iw, ih, g, 2, 2);
+        else if (layout === "3x2") R = grid(x0, y0, iw, ih, g, 2, 3);
+        else {
+          var h1 = Math.round((ih - g) * 0.58),
+            hb = ih - g - h1,
+            wb = (iw - g) / 2;
+          R = [
+            { x: x0, y: y0, w: iw, h: h1 },
+            { x: x0, y: y0 + h1 + g, w: wb, h: hb },
+            { x: x0 + wb + g, y: y0 + h1 + g, w: wb, h: hb },
+          ];
+        }
+        
+        var srcs = String(typeof V.images === "string" ? V.images : "")
+          .split(";")
+          .map(function (s) {
+            return s.trim();
+          });
+
+        var cells = [],
+          medias = [];
+        R.forEach(function (r, i) {
+          var cell = document.createElement("div");
+          cell.id = "mpgv-cell-" + i;
+          cell.className = "mpgv-cell";
+          cell.style.cssText = "left:" + r.x + "px;top:" + r.y + "px;width:" + r.w + "px;height:" + r.h + "px";
+          var inner;
+          if (srcs[i]) {
+            inner = document.createElement("img");
+            inner.className = "mpgv-media";
+            inner.src = srcs[i];
+          } else {
+            inner = document.createElement("div");
+            inner.className = "mpgv-well";
+            var num = document.createElement("span");
+            num.className = "mpgv-num";
+            num.textContent = String(i + 1);
+            inner.appendChild(num);
+          }
+          inner.id = "mpgv-inner-" + i;
+          inner.setAttribute("data-layout-allow-overflow", "");
+          cell.appendChild(inner);
+          gridEl.appendChild(cell);
+          cells.push(cell);
+          medias.push(inner);
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        cells.forEach(function (cell, i) {
+          var t0 = c0 + i * 0.15;
+          gsap.set(cell, { opacity: 0, scale: 0.92, y: 28 });
+          tl.to(cell, { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: "power3.out" }, t0);
+          tl.fromTo(medias[i], { scale: 1.06 }, { scale: 1, duration: 7.1, ease: "sine.out" }, t0);
+        });
+        if (exit === "fade") tl.to(gridEl, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : 7.5);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["mk-placeholder-grid-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
