@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-lcd-background",
+  "type": "hyperframes:block",
+  "title": "LCD Board",
+  "description": "Screen board on the brand ground: drifting scanlines, a faint pixel grid and static grain, a Bebas display word with a red and grey chromatic fringe focusing in from a blur over a spaced subtitle. Title, subtitle, grid and cues are variables; holds.",
+  "tags": ["background", "texture", "creator"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-lcd-background.html",
+      "target": "compositions/yt-lcd-background.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

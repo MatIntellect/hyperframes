@@ -1,0 +1,121 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the flash peaks (it builds in 0.05 s and clears within 0.4 s, so the frame is clean again by itself). Put the cut under it at the same second. Empty keeps 1.", "default": "" }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #efo-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #efo-box {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #efo-flash {
+        position: absolute;
+        inset: -12%;
+        overflow: hidden;
+      }
+      .efo-layer {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+      #efo-wash {
+        background: var(--fg, #f2f2f2);
+      }
+      #efo-core {
+        inset: -18%;
+        background: radial-gradient(
+          ellipse 68% 92% at 37% 47%,
+          #ffffff 0%,
+          color-mix(in srgb, #ffffff 98%, transparent) 20%,
+          color-mix(in srgb, var(--fg, #f2f2f2) 86%, transparent) 45%,
+          color-mix(in srgb, var(--accent, #ff0000) 32%, transparent) 67%,
+          transparent 86%
+        );
+        mix-blend-mode: screen;
+        transform-origin: 38% 48%;
+      }
+      #efo-sweep {
+        inset: -28%;
+        background: linear-gradient(
+          108deg,
+          transparent 21%,
+          color-mix(in srgb, var(--accent, #ff0000) 10%, transparent) 38%,
+          color-mix(in srgb, var(--fg, #f2f2f2) 90%, transparent) 49%,
+          color-mix(in srgb, #ffffff 98%, transparent) 53%,
+          color-mix(in srgb, var(--muted, #8a8a90) 24%, transparent) 62%,
+          transparent 79%
+        );
+        mix-blend-mode: screen;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="efo-root" data-composition-id="editorial-flash-overlay" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="efo-box">
+        <div id="efo-flash" data-layout-allow-overflow>
+          <div id="efo-wash" class="efo-layer"></div>
+          <div id="efo-core" class="efo-layer" data-layout-allow-overflow></div>
+          <div id="efo-sweep" class="efo-layer" data-layout-allow-overflow></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("efo-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var hit = isFinite(cues[0]) && cues[0] >= 0.05 ? cues[0] : 1;
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to("#efo-wash", { opacity: 0.92, duration: 0.04, ease: "power4.in" }, hit);
+        tl.fromTo("#efo-core", { opacity: 0, scale: 0.86, rotation: -5 }, { opacity: 1, scale: 1, rotation: -5, duration: 0.05, ease: "power4.in" }, hit - 0.01);
+        tl.fromTo("#efo-sweep", { opacity: 0, xPercent: -12, rotation: -2 }, { opacity: 0.9, xPercent: 8, rotation: -2, duration: 0.04, ease: "power4.in" }, hit);
+        tl.to("#efo-wash", { opacity: 0, duration: 0.18, ease: "power3.out" }, hit + 0.04);
+        tl.to("#efo-core", { opacity: 0, scale: 1.18, rotation: -5, duration: 0.34, ease: "power2.out" }, hit + 0.04);
+        tl.to("#efo-sweep", { opacity: 0, xPercent: 28, rotation: -2, duration: 0.3, ease: "power2.out" }, hit + 0.04);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["editorial-flash-overlay"] = tl;
+      })();
+    </script>
+  </body>
+</html>

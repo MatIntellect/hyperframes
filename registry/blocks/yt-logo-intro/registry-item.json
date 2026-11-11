@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-logo-intro",
+  "type": "hyperframes:block",
+  "title": "Logo Intro",
+  "description": "Logo intro on a lined brand board: the logo circle pops, a spaced kicker line gives way to the Bebas title with a red arrow chip; the lines breathe. Logo text or image, kicker and title are variables; cues set pop and swap; holds.",
+  "tags": ["logo", "intro", "creator"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-logo-intro.html",
+      "target": "compositions/yt-logo-intro.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

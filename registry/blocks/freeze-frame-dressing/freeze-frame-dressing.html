@@ -1,0 +1,119 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the flash hits on the freeze (paper and two strips of tape follow within 0.5 s), 2 the dressing fades out (only when exit is fade). Empty keeps 1.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the paper and tape to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #ffd-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #ffd-box {
+        position: absolute;
+        inset: 0;
+      }
+      #ffd-paper {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background:
+          linear-gradient(115deg, color-mix(in srgb, var(--accent, #ff0000) 86%, transparent) 0 16%, transparent 16%),
+          linear-gradient(345deg, color-mix(in srgb, var(--muted, #8a8a90) 92%, transparent) 0 17%, transparent 17%),
+          linear-gradient(color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent), color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent));
+        clip-path: polygon(2% 8%, 97% 2%, 94% 94%, 6% 98%);
+        mix-blend-mode: screen;
+      }
+      .ffd-tape {
+        position: absolute;
+        width: 135px;
+        height: 31px;
+        opacity: 0;
+        background: color-mix(in srgb, var(--fg, #f2f2f2) 76%, transparent);
+        border: 1px solid color-mix(in srgb, var(--muted, #8a8a90) 30%, transparent);
+        box-shadow: 0 3px 9px rgb(0 0 0 / 18%);
+      }
+      #ffd-tape-a {
+        top: 8%;
+        left: 12.5%;
+        rotate: -8deg;
+      }
+      #ffd-tape-b {
+        right: 12.5%;
+        bottom: 7%;
+        rotate: 7deg;
+      }
+      #ffd-flash {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background: var(--fg, #f2f2f2);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="ffd-root" data-composition-id="freeze-frame-dressing" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="ffd-box">
+        <div id="ffd-paper"></div>
+        <div id="ffd-tape-a" class="ffd-tape"></div>
+        <div id="ffd-tape-b" class="ffd-tape"></div>
+        <div id="ffd-flash"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("ffd-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var hit = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 1;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to("#ffd-flash", { opacity: 0.95, duration: 0.06, ease: "power2.out" }, hit);
+        tl.to("#ffd-flash", { opacity: 0, duration: 0.24, ease: "power2.in" }, hit + 0.06);
+        tl.to("#ffd-paper", { opacity: 0.64, duration: 0.18, ease: "power2.out" }, hit + 0.04);
+        tl.fromTo("#ffd-tape-a", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" }, hit + 0.3);
+        tl.fromTo("#ffd-tape-b", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" }, hit + 0.42);
+        if (exit === "fade")
+          tl.to(["#ffd-paper", "#ffd-tape-a", "#ffd-tape-b"], { opacity: 0, duration: 0.24, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > hit ? cues[1] : hit + 2.7);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["freeze-frame-dressing"] = tl;
+      })();
+    </script>
+  </body>
+</html>

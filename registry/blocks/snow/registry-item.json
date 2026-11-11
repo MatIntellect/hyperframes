@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "snow",
+  "type": "hyperframes:block",
+  "title": "Snow",
+  "description": "Transparent falling-snow overlay: sparse or dense flakes drift down with size, speed and opacity tied to depth, the frame centre kept clear for a subject or caption. Density, speed and cues are variables; holds or fades.",
+  "tags": [
+    "snow",
+    "snowfall",
+    "winter",
+    "weather",
+    "overlay",
+    "ambient",
+    "particles",
+    "media-treatment-overlay",
+    "loopable"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "snow.html",
+      "target": "compositions/snow.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

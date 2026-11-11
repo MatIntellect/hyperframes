@@ -1,0 +1,310 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own lined ground to the frame edge, the intro centred in the 780x1180 field (y 180-1360). top / bottom: on a lined brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "logoText", "type": "string", "role": "content", "label": "Logo text", "description": "Letters in the logo circle, Bebas Neue. Shown when logo image is empty.", "maxLength": 3, "default": "MI" },
+    { "id": "logoImage", "type": "string", "role": "content", "label": "Logo image", "description": "Image path for the logo circle (for example assets/logo.png), contained in the circle. Empty shows the logo text.", "maxLength": 200, "default": "" },
+    { "id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Spaced capitals line shown first, then replaced by the title.", "maxLength": 22, "default": "Начинаем" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Title in Bebas Neue, one line above the arrow chip; size follows the length.", "maxLength": 24, "default": "Монтаж без монтажёра" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the logo pops (the kicker follows 0.45 s later), 2 the kicker gives way to the title and the arrow chip, 3 the intro fades out (only when exit is fade). Empty keeps 0.3 and 2.3.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the title to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #yliv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #yliv-board {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #yliv-lines {
+        position: absolute;
+        inset: 0;
+      }
+      .yliv-line {
+        position: absolute;
+        left: -40px;
+        right: -40px;
+        height: 2px;
+        background: color-mix(in srgb, var(--fg, #f2f2f2) 10%, transparent);
+      }
+      #yliv-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #yliv-logo {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--fg, #f2f2f2);
+        color: var(--bg, #0c1014);
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        line-height: 1;
+        overflow: hidden;
+        filter: drop-shadow(0 14px 30px rgb(0 0 0 / 35%));
+      }
+      #yliv-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      #yliv-textrow {
+        position: relative;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .yliv-text {
+        white-space: nowrap;
+        filter: drop-shadow(0 14px 30px rgb(0 0 0 / 35%));
+      }
+      #yliv-kicker {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      #yliv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+      #yliv-arrow {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        background: var(--accent, #ff0000);
+        opacity: 0;
+      }
+      #yliv-arrow svg {
+        stroke: #ffffff;
+        stroke-width: 3.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+      
+      
+      #yliv-center {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+        gap: 48px;
+      }
+      #yliv-logo {
+        width: 240px;
+        height: 240px;
+        font-size: 130px;
+      }
+      #yliv-textrow {
+        flex-direction: column;
+        gap: 34px;
+        min-height: 230px;
+      }
+      #yliv-kicker {
+        font-size: 36px;
+      }
+      #yliv-arrow {
+        width: 96px;
+        height: 72px;
+      }
+      #yliv-arrow svg {
+        width: 42px;
+      }
+      #yliv-root.yliv-card #yliv-board {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #yliv-root.yliv-card #yliv-center {
+        height: 760px;
+        gap: 34px;
+      }
+      #yliv-root.yliv-bottom #yliv-board,
+      #yliv-root.yliv-bottom #yliv-center {
+        top: 600px;
+      }
+      #yliv-root.yliv-card #yliv-logo {
+        width: 180px;
+        height: 180px;
+        font-size: 98px;
+      }
+      #yliv-root.yliv-card #yliv-textrow {
+        gap: 26px;
+        min-height: 200px;
+      }
+      #yliv-root.yliv-card #yliv-kicker {
+        font-size: 32px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="yliv-root" data-composition-id="yt-logo-intro-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="yliv-board"><div id="yliv-lines" data-layout-ignore></div></div>
+      <div id="yliv-center">
+        <div id="yliv-logo"></div>
+        <div id="yliv-textrow">
+          <div id="yliv-kicker" class="yliv-text"></div>
+          <div id="yliv-title" class="yliv-text"></div>
+          <div id="yliv-arrow">
+            <svg viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7" /></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("yliv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var logoText = txt(V.logoText, "MI") || "MI";
+        var logoImage = txt(V.logoImage, "");
+        var kicker = txt(V.kicker, "Начинаем");
+        var title = txt(V.title, "Монтаж без монтажёра") || "Монтаж без монтажёра";
+        var lineH = 1080,
+          lineN = 12,
+          avail = 1500,
+          cap = 120;
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        lineH = 1920;
+        lineN = 20;
+        avail = 740;
+        cap = 130;
+        if (placement !== "full") {
+          root.classList.add("yliv-card", "yliv-" + placement);
+          lineH = 760;
+          lineN = 8;
+          avail = 700;
+          cap = 110;
+        }
+        
+        var lines = document.getElementById("yliv-lines");
+        var gap = lineH / (lineN + 1);
+        for (var i = 1; i <= lineN; i++) {
+          var l = document.createElement("div");
+          l.className = "yliv-line";
+          l.style.top = Math.round(i * gap + Math.sin(i * 2.399) * 10) + "px";
+          l.style.transform = "rotate(" + (Math.sin(i * 1.7) * 0.35).toFixed(2) + "deg)";
+          lines.appendChild(l);
+        }
+        var logo = document.getElementById("yliv-logo");
+        if (logoImage) {
+          var img = document.createElement("img");
+          img.src = logoImage;
+          logo.appendChild(img);
+        } else logo.textContent = logoText;
+        var kEl = document.getElementById("yliv-kicker"),
+          tEl = document.getElementById("yliv-title"),
+          arrow = document.getElementById("yliv-arrow");
+        kEl.textContent = kicker;
+        tEl.textContent = title;
+        // размер заголовка по длине: средняя ширина знака Bebas около 0,44 кегля
+        tEl.style.fontSize = Math.round(Math.min(cap, avail / (0.44 * title.length))) + "px";
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var cT = isFinite(cues[1]) && cues[1] > c0 + 0.9 ? cues[1] : c0 + 2;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.from("#yliv-board", { opacity: 0, duration: 0.4, ease: "power2.out" }, 0);
+        tl.fromTo(logo, { opacity: 0, scale: 0.55, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.5)" }, c0);
+        if (kicker) {
+          tl.fromTo(kEl, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, c0 + 0.45);
+          tl.to(kEl, { opacity: 0, y: -12, duration: 0.3, ease: "power2.in" }, cT);
+        } else kEl.style.display = "none";
+        gsap.set(tEl, { opacity: 0 });
+        tl.fromTo(tEl, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, cT + 0.36);
+        tl.fromTo(arrow, { opacity: 0, scale: 0.5, x: -14 }, { opacity: 1, scale: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" }, cT + 0.6);
+        tl.to(lines, { y: 8, duration: 2.2, ease: "sine.inOut", yoyo: true, repeat: 13 }, 0.5);
+        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cT + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["yt-logo-intro-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

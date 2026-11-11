@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "beat-freeze-cut",
+  "type": "hyperframes:block",
+  "title": "Beat Freeze Cut",
+  "description": "Beat-driven promo sequence on the brand ground: a waveform card punches in on the first beat, speed-ramps into a freeze with a Bebas hit word, flash and red outline, then a hard cut to a title with three stat cards that pulse on the third beat. All words and cues are variables; holds.",
+  "tags": ["transition", "music", "beat-driven", "freeze-frame"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "beat-freeze-cut.html",
+      "target": "compositions/beat-freeze-cut.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

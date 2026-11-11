@@ -1,0 +1,653 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, both shots in the 780x1180 field (y 180-1360), shot two stacked. top / bottom: inside a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent; the card has no room for the paragraph, it is hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "intro", "type": "string", "role": "content", "label": "Intro label", "description": "Spaced pill shown before the first beat.", "maxLength": 18, "default": "В такт" },
+    { "id": "hit", "type": "string", "role": "content", "label": "Hit word", "description": "Big Bebas word slammed on the freeze.", "maxLength": 10, "default": "Дроп" },
+    { "id": "kicker", "type": "string", "role": "content", "label": "Card kicker", "description": "Spaced line at the foot of the shot one card.", "maxLength": 14, "default": "Промо" },
+    { "id": "pill", "type": "string", "role": "content", "label": "Card pill", "description": "Red pill next to the kicker.", "maxLength": 8, "default": "Эфир" },
+    { "id": "badge", "type": "string", "role": "content", "label": "Freeze badge", "description": "Red tag in the corner during the freeze.", "maxLength": 10, "default": "Стоп" },
+    { "id": "eyebrow", "type": "string", "role": "content", "label": "Eyebrow", "description": "Red spaced line above the shot two title.", "maxLength": 22, "default": "Следующий кадр" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Shot two title in Bebas Neue, up to two lines.", "maxLength": 20, "default": "Резкая склейка" },
+    { "id": "sub", "type": "string", "role": "content", "label": "Paragraph", "description": "Grey paragraph under the title, up to three lines.", "maxLength": 64, "default": "Стоп-кадр в такт, затем склейка. Для промо под музыку" },
+    { "id": "card1", "type": "string", "role": "content", "label": "Card 1", "description": "Label|value of the first stat card, value in red.", "maxLength": 22, "default": "Разгон|1,35→2,2" },
+    { "id": "card2", "type": "string", "role": "content", "label": "Card 2", "description": "Label|value of the second stat card; it pulses on the third beat.", "maxLength": 22, "default": "Стоп|0,8 с" },
+    { "id": "card3", "type": "string", "role": "content", "label": "Card 3", "description": "Label|value of the third stat card, value in red.", "maxLength": 22, "default": "Склейка|3,00" },
+    { "id": "intensity", "type": "number", "role": "style", "label": "Intensity", "description": "Strength of the punch-ins and the flash.", "default": 1, "min": 0.6, "max": 1.4, "step": 0.05 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start, put them on the music: 1 first beat (punch-in; the speed ramp starts 0.65 s later), 2 freeze with the hit word, 3 hard cut to shot two, 4 third beat (card two pulses), 5 the block fades out (only when exit is fade). Empty keeps 0.7, 2.2, 3, 4.7.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds shot two to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #bfcv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+        --panel2: color-mix(in srgb, var(--surface, #18181a) 94%, var(--fg, #f2f2f2));
+      }
+      #bfcv-ground {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 80% 60% at 50% 40%, color-mix(in srgb, var(--accent, #ff0000) 7%, transparent) 0%, transparent 55%),
+          var(--bg, #0c1014);
+      }
+      #bfcv-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.22;
+        background-image:
+          linear-gradient(color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px, transparent 1px),
+          linear-gradient(90deg, color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px, transparent 1px);
+        background-size: 80px 80px;
+        mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 20%, transparent 75%);
+      }
+      #bfcv-vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 45%, rgb(0 0 0 / 55%) 100%);
+        opacity: 0.85;
+      }
+      #bfcv-box {
+        position: absolute;
+        inset: 0;
+      }
+      #bfcv-stage {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 48%;
+      }
+      .bfcv-shot {
+        position: absolute;
+        inset: 0;
+      }
+      #bfcv-a-crop {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #bfcv-a-card {
+        position: relative;
+        border-radius: 36px;
+        background:
+          linear-gradient(160deg, color-mix(in srgb, var(--fg, #f2f2f2) 6%, transparent) 0%, transparent 40%),
+          linear-gradient(180deg, var(--panel2) 0%, var(--surface, #18181a) 100%);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 40px 120px rgb(0 0 0 / 55%);
+        overflow: hidden;
+      }
+      #bfcv-a-glow {
+        position: absolute;
+        left: 50%;
+        top: 28%;
+        width: 420px;
+        height: 420px;
+        margin: -210px 0 0 -210px;
+        border-radius: 50%;
+        background: radial-gradient(circle, color-mix(in srgb, var(--accent, #ff0000) 28%, transparent) 0%, transparent 68%);
+        opacity: 0.85;
+      }
+      #bfcv-a-wave {
+        position: absolute;
+        left: 64px;
+        right: 64px;
+        top: 110px;
+        height: 220px;
+      }
+      #bfcv-a-wave svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #bfcv-wave-path {
+        fill: none;
+        stroke: var(--accent, #ff0000);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      #bfcv-wave-fill {
+        fill: var(--accent, #ff0000);
+        opacity: 0.12;
+      }
+      #bfcv-a-bars {
+        position: absolute;
+        left: 72px;
+        right: 72px;
+        bottom: 170px;
+        height: 96px;
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      .bfcv-bar {
+        flex: 1;
+        border-radius: 6px 6px 2px 2px;
+        background: linear-gradient(180deg, var(--accent, #ff0000) 0%, color-mix(in srgb, var(--accent, #ff0000) 25%, transparent) 100%);
+        transform-origin: 50% 100%;
+      }
+      #bfcv-a-meta {
+        position: absolute;
+        left: 56px;
+        right: 56px;
+        bottom: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      #bfcv-kicker {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+      }
+      .bfcv-red {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffffff;
+        background: var(--accent, #ff0000);
+        padding: 8px 18px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      #bfcv-b-layout {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+      }
+      #bfcv-b-left {
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+      }
+      #bfcv-eyebrow {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent, #ff0000);
+      }
+      #bfcv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        line-height: 0.92;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+      }
+      #bfcv-bar-acc {
+        width: 120px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--accent, #ff0000);
+      }
+      #bfcv-sub {
+        font-size: 32px;
+        font-weight: 500;
+        color: var(--muted, #8a8a90);
+        line-height: 1.35;
+      }
+      #bfcv-b-right {
+        display: flex;
+        flex-direction: column;
+      }
+      .bfcv-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--panel2), var(--surface, #18181a));
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 18px 48px rgb(0 0 0 / 35%);
+      }
+      .bfcv-card-label {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+      }
+      .bfcv-card-value {
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .bfcv-card-value.bfcv-acc {
+        color: var(--accent, #ff0000);
+      }
+      #bfcv-intro {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+      }
+      #bfcv-intro span {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted, #8a8a90);
+        padding: 10px 20px;
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--bg, #0c1014) 55%, transparent);
+        white-space: nowrap;
+      }
+      #bfcv-hit {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+      }
+      #bfcv-hit span {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-shadow:
+          0 0 40px color-mix(in srgb, var(--accent, #ff0000) 35%, transparent),
+          0 8px 40px rgb(0 0 0 / 55%);
+      }
+      #bfcv-freeze {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+      #bfcv-f-outline {
+        position: absolute;
+        border: 3px solid var(--accent, #ff0000);
+        border-radius: 8px;
+        box-shadow: 0 0 48px color-mix(in srgb, var(--accent, #ff0000) 20%, transparent);
+      }
+      #bfcv-f-flash {
+        position: absolute;
+        inset: 0;
+        background: #ffffff;
+        mix-blend-mode: screen;
+      }
+      #bfcv-f-contour {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent, #ff0000) 8%, transparent) 48%, transparent 52%),
+          radial-gradient(ellipse 40% 55% at 50% 48%, transparent 40%, color-mix(in srgb, var(--accent, #ff0000) 18%, transparent) 100%);
+        mix-blend-mode: screen;
+      }
+      #bfcv-badge {
+        position: absolute;
+        border-radius: 6px;
+        padding: 8px 18px;
+      }
+      #bfcv-cut {
+        position: absolute;
+        inset: -8% -20%;
+        opacity: 0;
+        visibility: hidden;
+        background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 35%, rgb(255 255 255 / 55%) 50%, color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 65%, transparent 100%);
+        filter: blur(18px);
+      }
+      
+      
+      #bfcv-box {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+      }
+      #bfcv-a-card {
+        width: 640px;
+        height: 700px;
+      }
+      #bfcv-b-layout {
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 48px;
+      }
+      #bfcv-b-right {
+        gap: 18px;
+      }
+      #bfcv-title {
+        font-size: 140px;
+      }
+      .bfcv-card {
+        padding: 24px 30px;
+      }
+      .bfcv-card-value {
+        font-size: 44px;
+      }
+      #bfcv-intro {
+        top: 30px;
+      }
+      #bfcv-hit span {
+        font-size: 200px;
+      }
+      #bfcv-f-outline {
+        inset: 0;
+      }
+      #bfcv-badge {
+        top: 30px;
+        right: 30px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-ground,
+      #bfcv-root.bfcv-cardmode #bfcv-box {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 760px;
+        border-radius: 32px;
+        overflow: hidden;
+      }
+      #bfcv-root.bfcv-bottom #bfcv-ground,
+      #bfcv-root.bfcv-bottom #bfcv-box {
+        top: 600px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-ground {
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-a-card {
+        width: 560px;
+        height: 620px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-a-meta {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-b-layout {
+        padding: 40px 36px;
+        gap: 28px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-b-left {
+        gap: 18px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-sub {
+        display: none;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-title {
+        font-size: 96px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-b-right {
+        gap: 12px;
+      }
+      #bfcv-root.bfcv-cardmode .bfcv-card {
+        padding: 16px 26px;
+      }
+      #bfcv-root.bfcv-cardmode .bfcv-card-value {
+        font-size: 38px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-f-outline {
+        inset: 16px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="bfcv-root" data-composition-id="beat-freeze-cut-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="bfcv-ground">
+        <div id="bfcv-grid" data-layout-ignore></div>
+        <div id="bfcv-vignette" data-layout-ignore></div>
+      </div>
+      <div id="bfcv-box">
+        <div id="bfcv-stage" data-layout-allow-overflow>
+          <div id="bfcv-shot-a" class="bfcv-shot">
+            <div id="bfcv-a-crop" data-layout-allow-overflow>
+              <div id="bfcv-a-card" data-layout-allow-overflow>
+                <div id="bfcv-a-glow" data-layout-ignore></div>
+                <div id="bfcv-a-wave" data-layout-ignore>
+                  <svg viewBox="0 0 592 220" preserveAspectRatio="none">
+                    <path id="bfcv-wave-fill" d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80 L592,220 L0,220 Z" />
+                    <path id="bfcv-wave-path" d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80" />
+                  </svg>
+                </div>
+                <div id="bfcv-a-bars"></div>
+                <div id="bfcv-a-meta"><span id="bfcv-kicker"></span><span id="bfcv-pill" class="bfcv-red"></span></div>
+              </div>
+            </div>
+          </div>
+          <div id="bfcv-shot-b" class="bfcv-shot" style="visibility: hidden; opacity: 0">
+            <div id="bfcv-b-layout">
+              <div id="bfcv-b-left">
+                <div id="bfcv-eyebrow"></div>
+                <div id="bfcv-title"></div>
+                <div id="bfcv-bar-acc"></div>
+                <div id="bfcv-sub"></div>
+              </div>
+              <div id="bfcv-b-right"></div>
+            </div>
+          </div>
+        </div>
+        <div id="bfcv-intro"><span id="bfcv-intro-t"></span></div>
+        <div id="bfcv-hit" data-layout-allow-occlusion><span id="bfcv-hit-t"></span></div>
+        <div id="bfcv-freeze" data-layout-allow-occlusion>
+          <div id="bfcv-f-flash"></div>
+          <div id="bfcv-f-contour"></div>
+          <div id="bfcv-f-outline"></div>
+          <div id="bfcv-badge" class="bfcv-red"></div>
+        </div>
+        <div id="bfcv-cut" data-layout-allow-overflow data-layout-ignore></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("bfcv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function $(id) {
+          return document.getElementById("bfcv-" + id);
+        }
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") root.classList.add("bfcv-cardmode", "bfcv-" + placement);
+        
+        $("intro-t").textContent = txt(V.intro, "В такт");
+        $("hit-t").textContent = txt(V.hit, "Дроп") || "Дроп";
+        $("kicker").textContent = txt(V.kicker, "Промо");
+        $("pill").textContent = txt(V.pill, "Эфир");
+        $("badge").textContent = txt(V.badge, "Стоп");
+        $("eyebrow").textContent = txt(V.eyebrow, "Следующий кадр");
+        $("title").textContent = txt(V.title, "Резкая склейка");
+        $("sub").textContent = txt(V.sub, "Стоп-кадр в такт, затем склейка. Для промо под музыку");
+        ["intro-t", "kicker", "pill", "badge", "eyebrow", "sub"].forEach(function (id) {
+          if (!$(id).textContent) $(id).style.display = "none";
+        });
+        if (!$("intro-t").textContent) $("intro").style.display = "none";
+        var right = $("b-right");
+        var cards = [
+          [V.card1, "Разгон|1,35→2,2", true],
+          [V.card2, "Стоп|0,8 с", false],
+          [V.card3, "Склейка|3,00", true],
+        ].map(function (c, i) {
+          var p = (txt(c[0], c[1]) || c[1]).split("|");
+          var el = document.createElement("div");
+          el.className = "bfcv-card";
+          el.id = "bfcv-card-" + i;
+          var l = document.createElement("span");
+          l.className = "bfcv-card-label";
+          l.textContent = (p[0] || "").trim();
+          var v = document.createElement("span");
+          v.className = "bfcv-card-value" + (c[2] ? " bfcv-acc" : "");
+          v.textContent = (p[1] || "").trim();
+          el.appendChild(l);
+          el.appendChild(v);
+          right.appendChild(el);
+          return el;
+        });
+        var barsEl = $("a-bars"),
+          bars = [];
+        [34, 58, 42, 78, 52, 88, 46, 64, 36, 72, 48, 92].forEach(function (h, i) {
+          var b = document.createElement("div");
+          b.className = "bfcv-bar";
+          b.style.height = h + "%";
+          barsEl.appendChild(b);
+          bars.push(b);
+        });
+
+        var intensity = Math.max(0.6, Math.min(1.4, Number(V.intensity) || 1));
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var beat1 = isFinite(cues[0]) && cues[0] >= 0.3 ? cues[0] : 0.7;
+        var freezeAt = isFinite(cues[1]) && cues[1] > beat1 + 0.4 ? cues[1] : beat1 + 1.5;
+        var cutAt = isFinite(cues[2]) && cues[2] > freezeAt + 0.4 ? cues[2] : freezeAt + 0.8;
+        var beat3 = isFinite(cues[3]) && cues[3] > cutAt + 0.5 ? cues[3] : cutAt + 1.7;
+        var holdAt = beat3 + 0.5;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var introAt = Math.max(0, beat1 - 0.58);
+
+        var stage = $("stage"),
+          shotA = $("shot-a"),
+          shotB = $("shot-b"),
+          aCrop = $("a-crop"),
+          aCard = $("a-card"),
+          intro = $("intro"),
+          hit = $("hit"),
+          freeze = $("freeze"),
+          fOut = $("f-outline"),
+          fFlash = $("f-flash"),
+          fCont = $("f-contour"),
+          badge = $("badge"),
+          cutFx = $("cut"),
+          bLeft = $("b-left");
+
+        var tl = gsap.timeline({ paused: true });
+        gsap.set(aCard, { scale: 0.9, y: 20 });
+        gsap.set(intro, { y: -12 });
+        gsap.set(hit, { scale: 1.15 });
+        gsap.set([fOut, fFlash, fCont, badge], { opacity: 0 });
+        gsap.set(cutFx, { scaleX: 0.4, x: -200 });
+        gsap.set(bLeft, { opacity: 0, x: -48 });
+        gsap.set(cards, { opacity: 0, x: 40 });
+        gsap.set(bars, { scaleY: 0.55 });
+
+        tl.to(aCard, { scale: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0);
+        tl.to(stage, { scale: 1 + 0.04 * intensity, duration: 0.7, ease: "power1.out" }, 0);
+        tl.to(bars, { scaleY: 1, duration: 0.5, ease: "power2.out", stagger: 0.02 }, 0.12);
+        tl.set(intro, { visibility: "visible" }, introAt);
+        tl.to(intro, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" }, introAt);
+        tl.to(intro, { opacity: 0, y: -8, duration: 0.18, ease: "power2.in" }, beat1 - 0.18);
+        tl.set(intro, { visibility: "hidden" }, beat1);
+        // бит 1: рывок
+        tl.to(aCrop, { scale: 1 + 0.18 * intensity, x: -80 * intensity, y: 24 * intensity, duration: 0.22, ease: "power4.out" }, beat1);
+        tl.to(stage, { scale: Math.min(1.2, 1 + 0.08 * intensity), duration: 0.28, ease: "expo.out" }, beat1);
+        var pattern = [0.55, 1.15, 0.7, 1.35, 0.9, 1.4, 0.65, 1.1, 0.5, 1.25, 0.8, 1.45];
+        tl.to(bars, { scaleY: function (i) { return pattern[i]; }, duration: 0.18, ease: "power3.out", stagger: 0.01 }, beat1);
+        // разгон к стоп-кадру
+        var rampStart = Math.min(beat1 + 0.65, freezeAt - 0.2);
+        var rampDur = Math.max(0.2, freezeAt - rampStart);
+        tl.to(aCrop, { scale: 1.28 * (0.9 + 0.1 * intensity), x: 28 * intensity, y: -12 * intensity, duration: rampDur, ease: "power3.in" }, rampStart);
+        tl.to(stage, { scale: 1.12, filter: "brightness(1.08)", duration: rampDur, ease: "power2.in" }, rampStart);
+        tl.to(bars, { scaleY: 1.55, duration: rampDur * 0.85, ease: "power2.in", stagger: { each: 0.012, from: "center" } }, rampStart);
+        // стоп-кадр
+        tl.set(freeze, { visibility: "visible", opacity: 1 }, freezeAt);
+        tl.set(fOut, { opacity: 1 }, freezeAt);
+        tl.set(fCont, { opacity: 0.85 }, freezeAt);
+        tl.set(badge, { opacity: 1 }, freezeAt);
+        tl.set(hit, { visibility: "visible", opacity: 1, scale: 1 }, freezeAt);
+        tl.to(stage, { scale: 1.12, filter: "brightness(1.15)", duration: 0.05, ease: "power4.out" }, freezeAt);
+        tl.fromTo(fFlash, { opacity: 0.55 * intensity }, { opacity: 0, duration: 0.28, ease: "power2.out" }, freezeAt);
+        tl.to(hit, { opacity: 0, scale: 0.96, duration: 0.2, ease: "power2.in" }, freezeAt + 0.55);
+        tl.set(hit, { visibility: "hidden" }, freezeAt + 0.78);
+        tl.to([fOut, fCont, badge], { opacity: 0.75, duration: 0.35, ease: "sine.out" }, freezeAt + 0.35);
+        // резкая склейка
+        tl.set(cutFx, { visibility: "visible" }, cutAt);
+        tl.fromTo(cutFx, { opacity: 0, scaleX: 0.35, x: -280 }, { opacity: 0.95, scaleX: 1.6, x: 120, duration: 0.12, ease: "power4.in" }, cutAt);
+        tl.to(stage, { filter: "blur(14px) brightness(1.35)", scaleX: 1.35, scaleY: 0.92, duration: 0.12, ease: "power3.in" }, cutAt);
+        var sw = cutAt + 0.14;
+        tl.set(shotA, { opacity: 0, visibility: "hidden" }, sw);
+        tl.set(shotB, { opacity: 1, visibility: "visible" }, sw);
+        tl.set(freeze, { opacity: 0, visibility: "hidden" }, sw);
+        tl.set(bLeft, { opacity: 1, x: -24 }, sw);
+        tl.set(cards, { opacity: 1, x: 24 }, sw);
+        tl.to(stage, { filter: "blur(0px) brightness(1)", scale: 1, scaleX: 1, scaleY: 1, x: 0, y: 0, duration: 0.18, ease: "power3.out" }, sw);
+        tl.to(cutFx, { opacity: 0, x: 360, duration: 0.16, ease: "power2.out" }, cutAt + 0.16);
+        tl.set(cutFx, { visibility: "hidden" }, cutAt + 0.34);
+        tl.to(bLeft, { x: 0, duration: 0.4, ease: "power3.out" }, sw);
+        tl.to(cards, { x: 0, duration: 0.38, ease: "power3.out", stagger: 0.06 }, sw + 0.04);
+        tl.to(stage, { scale: 1.02, duration: Math.max(0.3, beat3 - sw - 0.2), ease: "sine.out" }, sw + 0.18);
+        // бит 3
+        tl.to(stage, { scale: 1.08 * (0.9 + 0.1 * intensity), duration: 0.14, ease: "power4.out" }, beat3);
+        tl.to(cards[1], { scale: 1.04, duration: 0.12, ease: "power3.out" }, beat3);
+        tl.to(cards[1], { scale: 1, duration: 0.22, ease: "power2.out" }, beat3 + 0.14);
+        tl.to(stage, { scale: 1.03, duration: 0.35, ease: "power2.out" }, holdAt);
+        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[4]) && cues[4] > holdAt ? cues[4] : holdAt + 2);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["beat-freeze-cut-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

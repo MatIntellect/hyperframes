@@ -36,11 +36,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "beat-freeze-cut",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "beat-freeze-cut-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "camcorder-hud",
       "type": "hyperframes:block"
     },
     {
       "name": "camcorder-hud-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "camera-dolly-zoom",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "camera-dolly-zoom-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -316,11 +332,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "editorial-flash-overlay",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "editorial-flash-overlay-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "flowchart",
       "type": "hyperframes:block"
     },
     {
       "name": "flowchart-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "freeze-frame-dressing",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "freeze-frame-dressing-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -524,11 +556,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "organic-light-leak-overlay",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "organic-light-leak-overlay-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "oscilloscope-trace",
       "type": "hyperframes:block"
     },
     {
       "name": "oscilloscope-trace-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "rack-focus",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "rack-focus-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -553,6 +601,14 @@
     },
     {
       "name": "slack-notification-ad-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "snow",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "snow-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -620,6 +676,22 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "yt-lcd-background",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-lcd-background-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-logo-intro",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-logo-intro-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "yt-lower-third",
       "type": "hyperframes:block"
     },
@@ -633,6 +705,14 @@
     },
     {
       "name": "yt-prism-title-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-vertical-fill",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-vertical-fill-vertical",
       "type": "hyperframes:block"
     }
   ]

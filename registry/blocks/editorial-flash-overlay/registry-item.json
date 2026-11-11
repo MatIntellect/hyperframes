@@ -1,0 +1,28 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "editorial-flash-overlay",
+  "type": "hyperframes:block",
+  "title": "Editorial Flash",
+  "description": "Transparent camera-flash overlay: a white wash, a hot core with a faint red edge and a light sweep peak in 0.05 s and clear within 0.4 s, to hide a cut or reveal. Cues set the peak.",
+  "tags": [
+    "flash",
+    "editorial",
+    "social",
+    "light",
+    "transition",
+    "overlay",
+    "media-treatment-overlay"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "editorial-flash-overlay.html",
+      "target": "compositions/editorial-flash-overlay.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "image", "type": "string", "role": "content", "label": "Portrait image", "description": "Path to a portrait IMAGE (for example assets/shot.jpg). Media inside a block is not seeked, so live footage stays in the host over the picture slot (x 656, width 608). Empty shows a 9:16 stand-in.", "maxLength": 200, "default": "" },
+    { "id": "mode", "type": "enum", "role": "style", "label": "Fill mode", "description": "scale: a big blurred copy behind. mirror: dimmed mirrored copies on both sides. copy: dimmed straight copies on both sides.", "default": "scale", "options": [{ "value": "scale", "label": "Blurred scale" }, { "value": "mirror", "label": "Mirror" }, { "value": "copy", "label": "Copy" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the picture rises in over the fill (then eases out of a slow 5% push), 2 the block fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the picture to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #yvf-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #yvf-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      .yvf-media {
+        position: absolute;
+        overflow: hidden;
+      }
+      .yvf-media img,
+      .yvf-media .yvf-fill {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #yvf-bg {
+        inset: -60px;
+        filter: blur(42px) brightness(0.75);
+      }
+      #yvf-scrim {
+        position: absolute;
+        inset: 0;
+        background: color-mix(in srgb, var(--bg, #0c1014) 28%, transparent);
+      }
+      #yvf-grid {
+        position: absolute;
+        inset: 0;
+        background:
+          repeating-linear-gradient(0deg, color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px, transparent 1px 28px),
+          repeating-linear-gradient(90deg, color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px, transparent 1px 28px);
+      }
+      #yvf-fg {
+        box-shadow: 0 0 90px rgb(0 0 0 / 55%);
+      }
+      .yvf-fill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 120px;
+        color: var(--muted, #8a8a90);
+        background: linear-gradient(160deg, color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%, var(--surface, #18181a) 60%, color-mix(in srgb, var(--surface, #18181a) 80%, var(--accent, #ff0000)) 100%);
+      }
+      
+      .yvf-side {
+        top: 0;
+        bottom: 0;
+        width: 656px;
+      }
+      #yvf-fg {
+        top: 0;
+        bottom: 0;
+        left: 656px;
+        width: 608px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="yvf-root" data-composition-id="yt-vertical-fill" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="yvf-stage">
+        <div class="yvf-media" id="yvf-bg" data-layout-allow-overflow data-layout-ignore></div>
+        <div class="yvf-media yvf-side" id="yvf-side-a" data-layout-ignore></div>
+        <div class="yvf-media yvf-side" id="yvf-side-b" data-layout-ignore></div>
+        <div id="yvf-scrim"></div>
+        <div id="yvf-grid"></div>
+        <div class="yvf-media" id="yvf-fg"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("yvf-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var src = typeof V.image === "string" ? V.image.trim() : "";
+        var mode = oneOf(V.mode, ["scale", "mirror", "copy"], "scale");
+        var bg = document.getElementById("yvf-bg"),
+          sA = document.getElementById("yvf-side-a"),
+          sB = document.getElementById("yvf-side-b"),
+          fg = document.getElementById("yvf-fg");
+        var stand = "9:16",
+          flip = "scaleX(-1)";
+        
+        sA.style.left = "0";
+        sB.style.right = "0";
+        
+        
+        function media() {
+          if (!src) {
+            var d = document.createElement("div");
+            d.className = "yvf-fill";
+            d.textContent = stand;
+            return d;
+          }
+          var img = document.createElement("img");
+          img.src = src;
+          return img;
+        }
+        fg.appendChild(media());
+        fg.style.filter = "contrast(1.06) brightness(1.03) saturate(1.08)";
+        if (mode === "scale") {
+          bg.appendChild(media());
+          sA.style.display = sB.style.display = "none";
+        } else {
+          bg.style.display = "none";
+          [sA, sB].forEach(function (s) {
+            var m = media();
+            if (mode === "mirror") m.style.transform = flip;
+            s.appendChild(m);
+            s.style.filter = "blur(6px) brightness(0.72)";
+          });
+        }
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.from("#yvf-stage", { opacity: 0, duration: 0.6, ease: "power2.out" }, 0);
+        tl.fromTo(fg, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.96, ease: "power3.out" }, c0);
+        tl.fromTo(fg.firstChild, { scale: 1.05 }, { scale: 1, duration: 7, ease: "sine.out" }, c0);
+        if (exit === "fade") tl.to("#yvf-stage", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["yt-vertical-fill"] = tl;
+      })();
+    </script>
+  </body>
+</html>

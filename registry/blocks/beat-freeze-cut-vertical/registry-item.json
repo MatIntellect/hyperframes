@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "beat-freeze-cut-vertical",
+  "type": "hyperframes:block",
+  "title": "Beat Freeze Cut (vertical)",
+  "description": "Vertical beat-driven promo: waveform card punch-in, speed ramp, freeze with a Bebas hit word, hard cut to a stacked title and three stat cards. All words and cues are variables; placement full, top or bottom card; holds.",
+  "tags": ["transition", "music", "beat-driven", "freeze-frame", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "beat-freeze-cut-vertical.html",
+      "target": "compositions/beat-freeze-cut-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

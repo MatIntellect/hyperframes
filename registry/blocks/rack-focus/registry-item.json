@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "rack-focus",
+  "type": "hyperframes:block",
+  "title": "Rack Focus",
+  "description": "Focus pull with real aperture bokeh over a night exterior: the focal plane travels from a near string of lamps to far towers, one resolving as the other blows into hard-edged polygon discs that clip to a cat's eye at the corners. Lens, depths and cues are variables; holds.",
+  "tags": ["webgl", "shader", "camera", "depth", "cinematic", "showcase"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "rack-focus.html",
+      "target": "compositions/rack-focus.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

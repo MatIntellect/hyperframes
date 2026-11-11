@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-lcd-background-vertical",
+  "type": "hyperframes:block",
+  "title": "LCD Board (vertical)",
+  "description": "Vertical screen board: scanlines, pixel grid and grain, a Bebas word with a chromatic fringe focusing in over a spaced subtitle. Title, subtitle, grid and cues are variables; placement full, top or bottom card; holds.",
+  "tags": ["background", "texture", "creator", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-lcd-background-vertical.html",
+      "target": "compositions/yt-lcd-background-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

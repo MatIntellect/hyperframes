@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-vertical-fill",
+  "type": "hyperframes:block",
+  "title": "Vertical Fill",
+  "description": "Portrait image filling a widescreen frame: blurred-scale, mirror or copy side fills under a faint grid, the picture rising in with a contrast lift and slow push. Image, fill mode and cues are variables; images only, live footage stays in the host; holds.",
+  "tags": ["placeholder", "vertical", "media"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-vertical-fill.html",
+      "target": "compositions/yt-vertical-fill.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "organic-light-leak-overlay-vertical",
+  "type": "hyperframes:block",
+  "title": "Organic Light Leak (vertical)",
+  "description": "Vertical film light-leak overlay: white and red glows bloom in and settle to a soft drifting glow. Placement full covers the frame; top or bottom glows inside a 780x760 card slot. Cues set bloom and fade; holds or fades.",
+  "tags": [
+    "light-leak",
+    "film",
+    "memory",
+    "transition",
+    "overlay",
+    "media-treatment-overlay",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "organic-light-leak-overlay-vertical.html",
+      "target": "compositions/organic-light-leak-overlay-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

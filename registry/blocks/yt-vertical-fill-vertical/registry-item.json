@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-vertical-fill-vertical",
+  "type": "hyperframes:block",
+  "title": "Vertical Fill (vertical)",
+  "description": "Landscape image filling a vertical frame: blurred-scale, mirror or copy fills above and below a 780-wide picture under a faint grid. Image, fill mode and cues are variables; placement full, top or bottom card; images only, footage stays in the host; holds.",
+  "tags": ["placeholder", "vertical", "media", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-vertical-fill-vertical.html",
+      "target": "compositions/yt-vertical-fill-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

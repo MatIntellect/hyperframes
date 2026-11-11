@@ -1,0 +1,28 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "freeze-frame-dressing",
+  "type": "hyperframes:block",
+  "title": "Freeze-Frame Dressing",
+  "description": "Transparent dressing for a freeze-frame: a flash hits, a torn paper sheet in brand colours screens over the shot and two strips of tape land on its corners. Cues set the hit; holds or fades.",
+  "tags": [
+    "freeze-frame",
+    "cutout",
+    "scrapbook",
+    "paper",
+    "social",
+    "overlay",
+    "media-treatment-overlay"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "freeze-frame-dressing.html",
+      "target": "compositions/freeze-frame-dressing.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

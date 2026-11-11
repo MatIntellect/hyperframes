@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-logo-intro-vertical",
+  "type": "hyperframes:block",
+  "title": "Logo Intro (vertical)",
+  "description": "Vertical logo intro: logo circle pops, a spaced kicker gives way to the Bebas title over a red arrow chip on a lined brand board. Logo, kicker and title are variables; placement full, top or bottom card; cues set pop and swap; holds.",
+  "tags": ["logo", "intro", "creator", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-logo-intro-vertical.html",
+      "target": "compositions/yt-logo-intro-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

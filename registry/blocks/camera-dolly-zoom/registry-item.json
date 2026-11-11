@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "camera-dolly-zoom",
+  "type": "hyperframes:block",
+  "title": "Dolly Zoom",
+  "description": "Dolly-zoom demo scene in brand greys: the camera tracks while the field of view changes the opposite way, so the red figure holds its size and the arches and lit doorway rush in or fall away. Focal length is solved from distance every frame. Label, direction, strength, distance, easing and cues are variables; holds.",
+  "tags": ["camera", "depth", "3d", "cinematic"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "camera-dolly-zoom.html",
+      "target": "compositions/camera-dolly-zoom.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

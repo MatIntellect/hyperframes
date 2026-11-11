@@ -1,0 +1,175 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: snow falls over the whole frame, the centre kept clear. top / bottom: it falls inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "density", "type": "enum", "role": "style", "label": "Density", "description": "Flake count across the frame.", "default": "sparse", "options": [{ "value": "sparse", "label": "Sparse" }, { "value": "dense", "label": "Dense" }] },
+    { "id": "speed", "type": "enum", "role": "style", "label": "Fall speed", "description": "How fast flakes fall and sway.", "default": "calm", "options": [{ "value": "calm", "label": "Calm" }, { "value": "gust", "label": "Gust" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the snow fades in over 0.6 s (0 = already falling on the first frame), 2 it fades out (only when exit is fade). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the snow falling to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #snwv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #snwv-box {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #snwv-snow {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        /* середина кадра свободна: человек или подпись под снегом читаются */
+        -webkit-mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
+        mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
+      }
+      .snwv-flake {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        background: var(--fg, #f2f2f2);
+      }
+      
+      #snwv-root.snwv-card #snwv-box {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+      }
+      #snwv-root.snwv-bottom #snwv-box {
+        top: 600px;
+      }
+      #snwv-root.snwv-card #snwv-snow {
+        -webkit-mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
+        mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="snwv-root" data-composition-id="snow-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="snwv-box">
+        <div id="snwv-snow" data-layout-allow-overflow></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("snwv-root");
+        var field = document.getElementById("snwv-snow");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var W = 1080,
+          H = 1920,
+          k = 1;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("snwv-card", "snwv-" + placement);
+          W = 780;
+          H = 760;
+          k = 760 / 1080;
+        }
+        
+        var duration = 30;
+        var COUNT = Math.round((V.density === "dense" ? 280 : 120) * (W * H) / (1920 * 1080));
+        var fallSeconds = V.speed === "gust" ? 2.2 : 4.5;
+        var swaySeconds = V.speed === "gust" ? 2.2 : 4;
+        // ровное покрытие без случайных чисел (последовательность Вейля)
+        var PHI = 0.6180339887498949,
+          RT2 = 0.4142135623730951,
+          TAU = 2 * Math.PI,
+          WRAP = 0.02;
+        function frac(x) {
+          return x - Math.floor(x);
+        }
+        function rnd(n) {
+          var x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+          return x - Math.floor(x);
+        }
+        function whole(c) {
+          return Math.max(1, Math.round(duration / c));
+        }
+        var fallBase = whole(fallSeconds),
+          swayBase = whole(swaySeconds);
+        var flakes = [];
+        for (var i = 0; i < COUNT; i++) {
+          var depth = rnd(i);
+          var size = (2 + depth * depth * 16) * k;
+          var bokeh = depth > 0.85;
+          var el = document.createElement("div");
+          el.className = "snwv-flake";
+          el.style.width = size + "px";
+          el.style.height = size + "px";
+          el.style.opacity = bokeh ? 0.5 : 0.35 + depth * 0.55;
+          if (bokeh) el.style.filter = "blur(2px)";
+          field.appendChild(el);
+          flakes.push({
+            el: el,
+            laneX: frac(i * PHI + 0.07),
+            fallCycles: fallBase + (depth < 1 / 3 ? 0 : depth < 2 / 3 ? 1 : 2),
+            fallPhi: frac(i * RT2 + 0.37),
+            swayPx: (6 + depth * 24) * k,
+            swayCycles: swayBase + Math.round(rnd(i + 5000) * 2),
+            swayPhi: TAU * rnd(i + 3000),
+          });
+        }
+        var state = { phase: 0 };
+        function render() {
+          var p = state.phase;
+          for (var s = 0; s < flakes.length; s++) {
+            var f = flakes[s];
+            var y = (-WRAP + frac(f.fallCycles * p + f.fallPhi) * (1 + 2 * WRAP)) * H;
+            var x = f.laneX * W + f.swayPx * Math.sin(TAU * f.swayCycles * p + f.swayPhi);
+            f.el.style.transform = "translate(" + Math.round(x) + "px, " + Math.round(y) + "px) translate(-50%, -50%)";
+          }
+        }
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(state, { phase: 1, duration: duration, ease: "none", onUpdate: render }, 0);
+        render();
+        if (c0 > 0) tl.fromTo(field, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, c0);
+        if (exit === "fade") tl.to(field, { opacity: 0, duration: 0.8, ease: "sine.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["snow-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

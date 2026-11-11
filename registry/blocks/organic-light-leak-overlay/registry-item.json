@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "organic-light-leak-overlay",
+  "type": "hyperframes:block",
+  "title": "Organic Light Leak",
+  "description": "Transparent film light-leak overlay in brand colours: white and red glows bloom in over the shot, then settle to a soft glow that keeps drifting. Cues set bloom and fade; holds or fades.",
+  "tags": ["light-leak", "film", "memory", "transition", "overlay", "media-treatment-overlay"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "organic-light-leak-overlay.html",
+      "target": "compositions/organic-light-leak-overlay.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

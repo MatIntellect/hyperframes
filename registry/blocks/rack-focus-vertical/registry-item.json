@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "rack-focus-vertical",
+  "type": "hyperframes:block",
+  "title": "Rack Focus (vertical)",
+  "description": "Vertical focus pull with real aperture bokeh: near lamps to far towers and a red neon sign, polygon bokeh with cat's-eye corners. Lens, depths and cues are variables; placement full, top or bottom card; holds.",
+  "tags": ["webgl", "shader", "camera", "depth", "cinematic", "showcase", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "rack-focus-vertical.html",
+      "target": "compositions/rack-focus-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

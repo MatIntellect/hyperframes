@@ -1,0 +1,133 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the leak washes over the whole frame. top / bottom: it glows inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the leak blooms in (peaks 1 s later, then settles to a soft glow that keeps drifting), 2 it fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the soft drifting glow to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #ollv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #ollv-box {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #ollv-leak {
+        position: absolute;
+        inset: -16%;
+        opacity: 0;
+        overflow: hidden;
+        mix-blend-mode: screen;
+      }
+      .ollv-layer {
+        position: absolute;
+        inset: -20%;
+      }
+      #ollv-warm {
+        background:
+          radial-gradient(ellipse 52% 110% at 10% 58%, color-mix(in srgb, var(--fg, #f2f2f2) 92%, transparent), transparent 45%),
+          radial-gradient(ellipse 72% 120% at 24% 54%, color-mix(in srgb, var(--accent, #ff0000) 70%, transparent), transparent 66%);
+        filter: blur(30px);
+      }
+      #ollv-red {
+        background: radial-gradient(ellipse 58% 105% at 78% 34%, color-mix(in srgb, var(--accent, #ff0000) 72%, transparent), color-mix(in srgb, var(--accent, #ff0000) 28%, transparent) 48%, transparent 76%);
+        filter: blur(43px);
+      }
+      #ollv-band {
+        background: linear-gradient(
+          104deg,
+          transparent 24%,
+          color-mix(in srgb, var(--accent, #ff0000) 30%, transparent) 40%,
+          color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent) 51%,
+          color-mix(in srgb, var(--accent, #ff0000) 22%, transparent) 62%,
+          transparent 78%
+        );
+        filter: blur(22px);
+      }
+      
+      #ollv-root.ollv-card #ollv-box {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+      }
+      #ollv-root.ollv-bottom #ollv-box {
+        top: 600px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="ollv-root" data-composition-id="organic-light-leak-overlay-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="ollv-box">
+        <div id="ollv-leak" data-layout-allow-overflow>
+          <div id="ollv-warm" class="ollv-layer" data-layout-allow-overflow></div>
+          <div id="ollv-red" class="ollv-layer" data-layout-allow-overflow></div>
+          <div id="ollv-band" class="ollv-layer" data-layout-allow-overflow></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("ollv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") root.classList.add("ollv-card", "ollv-" + placement);
+        
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var leak = "#ollv-leak";
+
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(leak, { opacity: 0 }, { opacity: 0.9, duration: 1, ease: "sine.out" }, c0);
+        tl.to(leak, { opacity: 0.46, duration: 0.8, ease: "sine.inOut" }, c0 + 1.4);
+        // слои плывут туда и обратно по 4 с – стык петли без скачка
+        tl.fromTo("#ollv-warm", { xPercent: -20, scale: 0.92, rotation: -4 }, { xPercent: 18, scale: 1.1, rotation: 2, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 7 }, 0);
+        tl.fromTo("#ollv-red", { xPercent: 20, yPercent: -8, scale: 1.08 }, { xPercent: -16, yPercent: 8, scale: 0.94, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 7 }, 0);
+        tl.fromTo("#ollv-band", { xPercent: -28, rotation: -6 }, { xPercent: 24, rotation: 4, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 7 }, 0);
+        if (exit === "fade") tl.to(leak, { opacity: 0, duration: 1, ease: "sine.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 2.7);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["organic-light-leak-overlay-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
