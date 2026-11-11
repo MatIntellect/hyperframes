@@ -17,8 +17,8 @@
       "type": "hyperframes:composition"
     },
     {
-      "path": "assets/avatar.jpg",
-      "target": "assets/tiktok-avatar.jpg",
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
       "type": "hyperframes:asset"
     }
   ]

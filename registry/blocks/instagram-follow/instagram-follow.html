@@ -3,12 +3,12 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, card centred in the 780x1180 field (y 180-1360). top: card in the 780x760 field at y 180-940, rest of the frame transparent. bottom: same field at y 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "displayName", "type": "string", "role": "content", "label": "Display name", "description": "Profile name in bold.", "maxLength": 14, "default": "MatIntellect" },
-    { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Account handle with @.", "maxLength": 20, "default": "@matintellect" },
-    { "id": "followers", "type": "string", "role": "content", "label": "Followers line", "description": "Small grey line under the handle.", "maxLength": 24, "default": "12,5 тыс. подписчиков" },
+    { "id": "displayName", "type": "string", "role": "content", "label": "Display name", "description": "Profile name in bold.", "maxLength": 12, "default": "MatIntellect" },
+    { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Account handle with @.", "maxLength": 18, "default": "@matintellect" },
+    { "id": "followers", "type": "string", "role": "content", "label": "Followers line", "description": "Small grey line under the handle.", "maxLength": 21, "default": "12,5 тыс. подписчиков" },
     { "id": "followLabel", "type": "string", "role": "content", "label": "Follow button", "description": "Button text before the press.", "maxLength": 12, "default": "Подписаться" },
     { "id": "followingLabel", "type": "string", "role": "content", "label": "Following button", "description": "Button text after the press.", "maxLength": 12, "default": "Вы подписаны" },
-    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round profile picture.", "default": "assets/instagram-avatar.jpg" },
+    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round profile picture.", "default": "assets/img/matintellect-avatar.svg" },
     { "id": "verified", "type": "boolean", "role": "content", "label": "Verified badge", "description": "Blue tick after the name.", "default": true },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 card lands, 2 button pressed, 3 card leaves (only when exit is not none). Empty keeps 0.1, 1.0, 3.8.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "down", "label": "Slide down" }] }
@@ -149,8 +149,19 @@
     >
       <div class="igf-ground"></div>
       <div class="igf-field">
-        <div id="igf-card" class="clip igf-card" data-start="0" data-duration="30" data-track-index="0">
-          <img class="igf-avatar" src="assets/instagram-avatar.jpg" alt="" crossorigin="anonymous" />
+        <div
+          id="igf-card"
+          class="clip igf-card"
+          data-start="0"
+          data-duration="30"
+          data-track-index="0"
+        >
+          <img
+            class="igf-avatar"
+            src="assets/img/matintellect-avatar.svg"
+            alt=""
+            crossorigin="anonymous"
+          />
           <div class="igf-info">
             <div class="igf-name-row">
               <div class="igf-name">MatIntellect</div>
@@ -166,7 +177,15 @@
             <span id="igf-follow" class="igf-btn-text">Подписаться</span>
             <span id="igf-following" class="igf-btn-text igf-following"
               ><span class="igf-following-label">Вы подписаны</span
-              ><svg class="igf-chevron" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              ><svg
+                class="igf-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fff"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polyline points="6 9 12 15 18 9"></polyline></svg
             ></span>
           </div>
@@ -194,10 +213,19 @@
 
         root.querySelector(".igf-name").textContent = str(vars.displayName, "MatIntellect");
         root.querySelector(".igf-handle").textContent = str(vars.handle, "@matintellect");
-        root.querySelector(".igf-followers").textContent = str(vars.followers, "12,5 тыс. подписчиков");
+        root.querySelector(".igf-followers").textContent = str(
+          vars.followers,
+          "12,5 тыс. подписчиков",
+        );
         root.querySelector("#igf-follow").textContent = str(vars.followLabel, "Подписаться");
-        root.querySelector(".igf-following-label").textContent = str(vars.followingLabel, "Вы подписаны");
-        root.querySelector(".igf-avatar").src = str(vars.avatar, "assets/instagram-avatar.jpg");
+        root.querySelector(".igf-following-label").textContent = str(
+          vars.followingLabel,
+          "Вы подписаны",
+        );
+        root.querySelector(".igf-avatar").src = str(
+          vars.avatar,
+          "assets/img/matintellect-avatar.svg",
+        );
         if (vars.verified === false) root.querySelector(".igf-badge").remove();
 
         var authored = [0.1, 1.0, 3.8];
@@ -225,7 +253,8 @@
         tl.to(tFollow, { opacity: 0, duration: 0.08, ease: "none" }, at(1) + 0.15);
         tl.to(tFollowing, { opacity: 1, duration: 0.08, ease: "none" }, at(1) + 0.18);
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.3, ease: "power2.in" }, at(2));
-        if (exit === "down") tl.to(card, { y: 300, opacity: 0, duration: 0.25, ease: "power3.in" }, at(2));
+        if (exit === "down")
+          tl.to(card, { y: 300, opacity: 0, duration: 0.25, ease: "power3.in" }, at(2));
 
         window.__timelines = window.__timelines || {};
         window.__timelines["instagram-follow"] = tl;
