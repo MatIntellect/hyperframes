@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-highlight",
+  "type": "hyperframes:block",
+  "title": "Code Highlight",
+  "description": "A highlight band sweeps onto one line while the rest of the code dims. Code, language and file name are fields; colours of the github-dark theme; on the brand ground; holds to the end of the mount.",
+  "tags": ["code", "code-animation", "highlight", "developer"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-highlight.html",
+      "target": "compositions/code-highlight.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

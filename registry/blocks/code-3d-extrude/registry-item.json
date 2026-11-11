@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-3d-extrude",
+  "type": "hyperframes:block",
+  "title": "Code 3D Extrude",
+  "description": "The code on a lit, bevelled 3D slab that turns through space and settles to a readable rest. Code, language are fields; colours of the github-dark theme; on the brand ground; holds to the end of the mount.",
+  "tags": ["code", "code-animation", "3d", "webgl", "developer"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-3d-extrude.html",
+      "target": "compositions/code-3d-extrude.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

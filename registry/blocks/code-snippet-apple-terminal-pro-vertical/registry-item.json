@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-snippet-apple-terminal-pro-vertical",
+  "type": "hyperframes:block",
+  "title": "Apple Terminal Pro (vertical)",
+  "description": "Vertical macOS Terminal in the Pro profile: the command types after the prompt, the output prints, a new prompt blinks. Title, prompt, command and output (lines up to 42 characters) are fields; placement full, top or bottom; holds.",
+  "tags": ["code", "developer", "showcase", "terminal", "apple", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-snippet-apple-terminal-pro-vertical.html",
+      "target": "compositions/code-snippet-apple-terminal-pro-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

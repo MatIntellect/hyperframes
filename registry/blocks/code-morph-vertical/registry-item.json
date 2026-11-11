@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-morph-vertical",
+  "type": "hyperframes:block",
+  "title": "Code Morph (vertical)",
+  "description": "Vertical: one snippet turns into the next and the next: shared tokens glide, leavers fade out, newcomers fade in. Code (lines up to 38 characters) and language are fields; placement full, top or bottom; holds.",
+  "tags": ["code", "code-animation", "morph", "refactor", "developer", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-morph-vertical.html",
+      "target": "compositions/code-morph-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

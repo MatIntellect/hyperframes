@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-diff",
+  "type": "hyperframes:block",
+  "title": "Code Diff",
+  "description": "An edit shown as a diff: removed lines collapse in red, added lines expand in green. Code, language and file name are fields; colours of the github-dark theme; on the brand ground; holds to the end of the mount.",
+  "tags": ["code", "code-animation", "diff", "developer"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-diff.html",
+      "target": "compositions/code-diff.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

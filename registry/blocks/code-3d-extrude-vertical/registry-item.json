@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-3d-extrude-vertical",
+  "type": "hyperframes:block",
+  "title": "Code 3D Extrude (vertical)",
+  "description": "Vertical: the code on a lit, bevelled 3D slab that turns through space and settles to a readable rest. Code (lines up to 38 characters) and language are fields; placement full, top or bottom; holds.",
+  "tags": ["code", "code-animation", "3d", "webgl", "developer", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-3d-extrude-vertical.html",
+      "target": "compositions/code-3d-extrude-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-shader-dissolve",
+  "type": "hyperframes:block",
+  "title": "Code Shader Dissolve",
+  "description": "The code resolves out of noise under a GPU shader with a chromatic dissolve front, then holds crisp. Code, language are fields; colours of the github-dark theme; on the brand ground; holds to the end of the mount.",
+  "tags": ["code", "code-animation", "shader", "webgl", "developer"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-shader-dissolve.html",
+      "target": "compositions/code-shader-dissolve.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

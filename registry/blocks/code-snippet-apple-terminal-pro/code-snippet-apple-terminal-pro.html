@@ -1,0 +1,245 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title in the window bar.", "maxLength": 30, "default": "bash — 80×24" },
+    { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Dim line already on screen above the prompt. Empty hides it. Up to 78 characters.", "maxLength": 78, "default": "Last login: Mon Jun 2 09:14:22 on ttys008" },
+    { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "Prompt before the command, green.", "maxLength": 18, "default": "user@Mac myapp %" },
+    { "id": "command", "type": "string", "role": "content", "label": "Command", "description": "Command typed after the prompt, up to 58 characters.", "maxLength": 58, "default": "npm run build" },
+    { "id": "output", "type": "string", "role": "content", "label": "Output", "description": "Output lines, one per line, up to 11 lines of 78 characters. A line starting with ! is green and bold, with ~ is dim, with * is white and bold.", "maxLength": 880, "default": "~Building production bundle...\nvite v5.3.1 building for production...\n✓ 142 modules transformed.\ndist/index.html                  0.48 kB\ndist/assets/index-Cv3rN.js     284.12 kB\ndist/assets/index-Du4mP.css     42.08 kB\n!✓ built in 2.31s" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts (it takes 1.5 s), 2 the output starts, 3 the window fades out (only when exit is fade). Empty keeps 0.5 and 2.3.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@500&display=block" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #atp-root {
+        position: absolute;
+        inset: 0;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .atp-ground {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, var(--surface, #18181a) 0%, var(--bg, #0c1014) 70%);
+      }
+      #atp-win {
+        position: absolute;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        background: #000000;
+      }
+      .atp-bar {
+        height: 56px;
+        flex: none;
+        background: #1c1c1c;
+        border-bottom: 1px solid #333333;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        position: relative;
+      }
+      .atp-lights {
+        display: flex;
+        gap: 10px;
+      }
+      .atp-lights span {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+      }
+      .atp-title {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+        font-size: 28px;
+        color: #bbbbbb;
+        white-space: nowrap;
+      }
+      #atp-canvas {
+        flex: 1;
+        padding: 22px 24px;
+        font-size: 28px;
+        line-height: 42px;
+        color: #bbbbbb;
+        overflow: hidden;
+      }
+      .atp-l {
+        display: block;
+        white-space: pre;
+        min-height: 42px;
+      }
+      .atp-dim {
+        color: #666666;
+      }
+      .atp-acc {
+        color: #88ff67;
+        font-weight: 700;
+      }
+      .atp-bold {
+        color: #ffffff;
+        font-weight: 700;
+      }
+      .atp-prompt {
+        color: #88ff67;
+        font-weight: 700;
+      }
+      .atp-cur {
+        display: inline-block;
+        width: 17px;
+        height: 32px;
+        background: #88ff67;
+        vertical-align: -6px;
+        margin-left: 2px;
+      }
+      .atp-ch {
+        display: none;
+      }
+      
+      #atp-win {
+        left: 260px;
+        top: 190px;
+        width: 1400px;
+        height: 700px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="atp-root" data-composition-id="code-snippet-apple-terminal-pro" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="atp-ground"></div>
+      <div id="atp-win">
+        <div class="atp-bar">
+          <div class="atp-lights">
+            <span style="background: #ff5f57; border: 1px solid #e0443e"></span>
+            <span style="background: #ffbd2e; border: 1px solid #dfa123"></span>
+            <span style="background: #28c840; border: 1px solid #1aab29"></span>
+          </div>
+          <span class="atp-title" id="atp-title"></span>
+        </div>
+        <div id="atp-canvas"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("atp-root");
+        var canvas = document.getElementById("atp-canvas");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v : d;
+        }
+        var D = {
+          
+          header: "Last login: Mon Jun 2 09:14:22 on ttys008",
+          output:
+            "~Building production bundle...\nvite v5.3.1 building for production...\n✓ 142 modules transformed.\ndist/index.html                  0.48 kB\ndist/assets/index-Cv3rN.js     284.12 kB\ndist/assets/index-Du4mP.css     42.08 kB\n!✓ built in 2.31s",
+          
+          
+        };
+        
+        document.getElementById("atp-title").textContent = txt(V.title, "bash — 80×24");
+        var header = txt(V.header, D.header).trim();
+        var prompt = (txt(V.prompt, "user@Mac myapp %").trim() || "user@Mac myapp %") + " ";
+        var command = txt(V.command, "npm run build").trim() || "npm run build";
+        var output = (typeof V.output === "string" && V.output.trim() ? V.output : D.output).replace(/\r/g, "").split("\n");
+
+        function line(cls, text) {
+          var el = document.createElement("span");
+          el.className = "atp-l" + (cls ? " atp-" + cls : "");
+          if (text !== undefined) el.textContent = text;
+          canvas.appendChild(el);
+          return el;
+        }
+        if (header) line("dim", header);
+        // строка команды: подсказка, буквы команды по одной, курсор
+        var cmdLine = line("");
+        var p = document.createElement("span");
+        p.className = "atp-prompt";
+        p.textContent = prompt;
+        cmdLine.appendChild(p);
+        var letters = command.split("").map(function (ch) {
+          var s = document.createElement("span");
+          s.className = "atp-ch";
+          s.textContent = ch;
+          cmdLine.appendChild(s);
+          return s;
+        });
+        var cur1 = document.createElement("span");
+        cur1.className = "atp-cur";
+        cmdLine.appendChild(cur1);
+        var outEls = output.map(function (t) {
+          var k = t.charAt(0);
+          var cls = k === "!" ? "acc" : k === "~" ? "dim" : k === "*" ? "bold" : "";
+          var el = line(cls, cls ? t.slice(1) : t);
+          el.style.visibility = "hidden";
+          return el;
+        });
+        var last = line("");
+        last.style.visibility = "hidden";
+        var p2 = p.cloneNode(true);
+        last.appendChild(p2);
+        var cur2 = document.createElement("span");
+        cur2.className = "atp-cur";
+        last.appendChild(cur2);
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.5;
+        var per = 1.5 / letters.length;
+        var cO = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 1.8;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        letters.forEach(function (s, i) {
+          tl.set(s, { display: "inline" }, c0 + i * per);
+        });
+        tl.set(cur1, { opacity: 0 }, cO - 0.1);
+        outEls.forEach(function (el, i) {
+          tl.set(el, { visibility: "visible" }, cO + 0.1 * i);
+        });
+        var tEnd = cO + 0.1 * outEls.length + 0.3;
+        tl.set(last, { visibility: "visible" }, tEnd);
+        for (var t = tEnd + 0.4, i = 0; t < 30; t += 0.4, i++) tl.set(cur2, { opacity: i % 2 === 0 ? 0 : 1 }, t);
+        if (exit === "fade") tl.to("#atp-win", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : tEnd + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["code-snippet-apple-terminal-pro"] = tl;
+      })();
+    </script>
+  </body>
+</html>

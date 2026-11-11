@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "camcorder-hud",
+  "type": "hyperframes:block",
+  "title": "Camcorder HUD",
+  "description": "Transparent camcorder overlay: blinking red REC dot, battery, date corner and a running time counter driven by the timeline. Label, date, mode and counter start are fields; holds to the end of the mount or fades.",
+  "tags": ["camcorder", "camera", "recording", "hud", "overlay", "creator"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "camcorder-hud.html",
+      "target": "compositions/camcorder-hud.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

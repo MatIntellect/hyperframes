@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-shader-dissolve-vertical",
+  "type": "hyperframes:block",
+  "title": "Code Shader Dissolve (vertical)",
+  "description": "Vertical: the code resolves out of noise under a GPU shader with a chromatic dissolve front, then holds crisp. Code (lines up to 38 characters) and language are fields; placement full, top or bottom; holds.",
+  "tags": ["code", "code-animation", "shader", "webgl", "developer", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-shader-dissolve-vertical.html",
+      "target": "compositions/code-shader-dissolve-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-particle-assemble",
+  "type": "hyperframes:block",
+  "title": "Code Particle Assemble",
+  "description": "Thousands of GPU points fly in and settle onto the exact pixels of the code, resolving into readable text. Code, language are fields; colours of the github-dark theme; on the brand ground; holds to the end of the mount.",
+  "tags": ["code", "code-animation", "particles", "webgl", "developer"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-particle-assemble.html",
+      "target": "compositions/code-particle-assemble.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

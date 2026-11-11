@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-snippet-apple-terminal-pro",
+  "type": "hyperframes:block",
+  "title": "Apple Terminal Pro",
+  "description": "macOS Terminal in the Pro profile: black window, grey text, lime prompt and block cursor; a command types after the prompt letter by letter, the output lines print, a new prompt blinks. Title, prompt, command and output are fields; on the brand ground; holds.",
+  "tags": ["code", "developer", "showcase", "terminal", "apple"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-snippet-apple-terminal-pro.html",
+      "target": "compositions/code-snippet-apple-terminal-pro.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

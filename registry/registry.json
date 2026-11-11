@@ -36,6 +36,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "camcorder-hud",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "camcorder-hud-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "carousel-circle-1",
       "type": "hyperframes:block"
     },
@@ -225,6 +233,78 @@
     },
     {
       "name": "claude-exchange-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-3d-extrude",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-3d-extrude-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-diff",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-diff-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-highlight",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-highlight-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-morph",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-morph-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-particle-assemble",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-particle-assemble-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-scroll",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-scroll-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-shader-dissolve",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-shader-dissolve-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-pro",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-snippet-apple-terminal-pro-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-typing",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-typing-vertical",
       "type": "hyperframes:block"
     },
     {
