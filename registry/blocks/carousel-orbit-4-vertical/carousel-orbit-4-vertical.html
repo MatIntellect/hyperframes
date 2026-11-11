@@ -319,7 +319,7 @@
             }
             if (ctl.yAngle3d) {
               const dist = Math.abs(x - cx);
-              let r = aeEase(dist, 0, comp.width * (700 / 1920), 0, ctl.yAngle3d);
+              let r = aeEase(dist, 0, 3840 * (700 / 1920), 0, ctl.yAngle3d);
               if (ctl.mirrorY !== false && x < cx) r = -r;
               rotY += r;
             }
@@ -940,41 +940,6 @@
           }
         }
 
-        
-        {
-          /* the motion over the whole mount is sampled once, in perspective; the scene is scaled and moved so
-             every card stays inside the field and the motion sits on its centre */
-          const P = comp.cameraZoom;
-          const cx = comp.width / 2,
-            cy = comp.height / 2;
-          let x0 = cx - 1,
-            x1 = cx + 1,
-            y0 = cy - 1,
-            y1 = cy + 1;
-          for (let t = 0; t <= comp.duration; t += 0.25) {
-            const c = controlsAt(t),
-              u = uAt(t);
-            const poses = family === "orbit" ? R.orbitRig(c, comp, n, u) : R.pathRig(path, c, comp, n, u);
-            poses.forEach((q, i) => {
-              if (q.visible === false || P + q.z + camShift <= 0) return;
-              const f = P / (P + q.z + camShift);
-              const hw = (parseFloat(els[i].style.width) * q.scale) / 2,
-                hh = (parseFloat(els[i].style.height) * q.scale) / 2;
-              const px = cx + (q.x - cx) * f,
-                py = cy + (q.y - cy) * f;
-              x0 = Math.min(x0, px - hw * f);
-              x1 = Math.max(x1, px + hw * f);
-              y0 = Math.min(y0, py - hh * f);
-              y1 = Math.max(y1, py + hh * f);
-            });
-          }
-          /* scaled round the frame centre, then the middle of the motion is moved onto it */
-          const k = Math.min(1, fieldW / (x1 - x0), fieldH / (y1 - y0));
-          const tx = -k * ((x0 + x1) / 2 - cx),
-            ty = -k * ((y0 + y1) / 2 - cy);
-          group.style.transform = ("translate(" + tx + "px," + ty + "px) " + (group.style.transform || "") + " scale(" + k + ")").trim();
-        }
-        
         const clock = { t: 0 };
         const tl = gsap.timeline({ paused: true });
         tl.fromTo(
@@ -1125,6 +1090,38 @@
             );
           }
         }
+        
+        {
+          /* 3D families: the scene renders in its own depth; the flat picture is then scaled on the outer
+             scaler so every card, measured on screen at every frame of the mount, stays inside the field */
+          const sc = document.getElementById(DATA.id + "-scaler");
+          const base = sc.style.transform;
+          const R0 = root.getBoundingClientRect();
+          const s0 = R0.width / comp.outWidth || 1;
+          let x0 = Infinity,
+            x1 = -Infinity,
+            y0 = Infinity,
+            y1 = -Infinity;
+          for (let f = 0; f <= comp.duration * comp.fps; f++) {
+            render(f / comp.fps);
+            els.forEach((el) => {
+              if (!(parseFloat(el.style.opacity) > 0)) return;
+              const r = el.getBoundingClientRect();
+              if (!r.width || !r.height) return;
+              x0 = Math.min(x0, (r.left - R0.left) / s0);
+              x1 = Math.max(x1, (r.right - R0.left) / s0);
+              y0 = Math.min(y0, (r.top - R0.top) / s0);
+              y1 = Math.max(y1, (r.bottom - R0.top) / s0);
+            });
+          }
+          if (x0 < x1) {
+            const k = Math.min(1, 780 / (x1 - x0), (field[1] - field[0]) / (y1 - y0));
+            const tx = 540 - (k * (x0 + x1)) / 2,
+              ty = (field[0] + field[1]) / 2 - (k * (y0 + y1)) / 2;
+            sc.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + k + ") " + base;
+          }
+        }
+        
         render(0);
         const cues = String(V.cues || "").split(",").map(parseFloat);
         if (V.exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);

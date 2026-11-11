@@ -869,7 +869,6 @@
           }
         }
 
-        
         const clock = { t: 0 };
         const tl = gsap.timeline({ paused: true });
         tl.fromTo(
@@ -1020,6 +1019,7 @@
             );
           }
         }
+        
         render(0);
         const cues = String(V.cues || "").split(",").map(parseFloat);
         if (V.exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
