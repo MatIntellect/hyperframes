@@ -1,0 +1,383 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "country", "type": "string", "role": "content", "label": "Country", "description": "Country the camera zooms into and the scribble circles: the Natural Earth English name (North Korea, Iran, Russia, United States of America...) or the ISO 3166 numeric code. Overseas parts are left out of the framing.", "maxLength": 40, "default": "North Korea" },
+    { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Pop-up label above the circle, Bebas Neue, up to two lines separated by |.", "maxLength": 20, "default": "Под|замком" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the camera starts its zoom (the circle draws 3.1 s later, the label and the red wash follow), 2 the map fades out (only when exit is fade). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the circled country to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/world-50m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #nkl-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #nkl-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #nkl-camera {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 51%;
+      }
+      #nkl-map {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+      }
+      .nkl-country {
+        fill: var(--surface, #18181a);
+        stroke: var(--border, #2e2e32);
+        stroke-width: 0.8;
+      }
+      #nkl-depth {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 52% 50%, color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent), transparent 40%);
+      }
+      #nkl-annotation {
+        position: absolute;
+        z-index: 4;
+        width: 560px;
+        height: 392px;
+      }
+      #nkl-scribble {
+        position: absolute;
+        inset: 0;
+        width: 560px;
+        height: 392px;
+        overflow: visible;
+      }
+      #nkl-scribble path {
+        fill: none;
+        stroke: var(--accent, #ff0000);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 8px 12px color-mix(in srgb, var(--accent, #ff0000) 30%, transparent));
+      }
+      #nkl-circle-a {
+        stroke-width: 12;
+        stroke-dasharray: 980;
+        stroke-dashoffset: 980;
+      }
+      #nkl-circle-b {
+        stroke-width: 6;
+        opacity: 0.82;
+        stroke-dasharray: 910;
+        stroke-dashoffset: 910;
+      }
+      #nkl-label {
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% - 24px);
+        transform: translateX(-50%) scale(0.82);
+        transform-origin: 50% 100%;
+        width: max-content;
+        min-width: 370px;
+        max-width: 760px;
+        padding: 22px 30px 16px;
+        border-radius: 18px;
+        color: var(--bg, #0c1014);
+        background: var(--fg, #f2f2f2);
+        box-shadow: 0 22px 54px rgb(0 0 0 / 45%);
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-size: 100px;
+        line-height: 0.9;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        overflow-wrap: break-word;
+        opacity: 0;
+      }
+      #nkl-label::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -16px;
+        width: 32px;
+        height: 32px;
+        background: var(--fg, #f2f2f2);
+        transform: translateX(-50%) rotate(45deg);
+      }
+      #nkl-wash {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background:
+          radial-gradient(
+            circle at 50% 48%,
+            color-mix(in srgb, var(--accent, #ff0000) 22%, transparent),
+            color-mix(in srgb, var(--accent, #ff0000) 5%, transparent) 42%,
+            color-mix(in srgb, var(--accent, #ff0000) 16%, transparent) 100%
+          ),
+          linear-gradient(90deg, color-mix(in srgb, var(--accent, #ff0000) 6%, transparent), color-mix(in srgb, var(--accent, #ff0000) 12%, transparent));
+        opacity: 0;
+      }
+      #nkl-scan {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        opacity: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          color-mix(in srgb, var(--accent, #ff0000) 14%, transparent) 0,
+          color-mix(in srgb, var(--accent, #ff0000) 14%, transparent) 1px,
+          transparent 1px,
+          transparent 7px
+        );
+      }
+      .nkl-corner {
+        position: absolute;
+        z-index: 6;
+        width: 84px;
+        height: 84px;
+        border-color: var(--muted, #8a8a90);
+        opacity: 0;
+      }
+      .nkl-tl {
+        border-top: 5px solid;
+        border-left: 5px solid;
+      }
+      .nkl-tr {
+        border-top: 5px solid;
+        border-right: 5px solid;
+      }
+      .nkl-bl {
+        border-bottom: 5px solid;
+        border-left: 5px solid;
+      }
+      .nkl-br {
+        border-bottom: 5px solid;
+        border-right: 5px solid;
+      }
+      
+      .nkl-tl {
+        left: 86px;
+        top: 78px;
+      }
+      .nkl-tr {
+        right: 86px;
+        top: 78px;
+      }
+      .nkl-bl {
+        left: 86px;
+        bottom: 78px;
+      }
+      .nkl-br {
+        right: 86px;
+        bottom: 78px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="nkl-root" data-composition-id="north-korea-locked-down" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="nkl-stage">
+        <div id="nkl-camera" data-layout-allow-overflow>
+          <svg id="nkl-map" data-layout-ignore></svg>
+          <div id="nkl-depth"></div>
+        </div>
+        <div id="nkl-annotation">
+          <div id="nkl-label" data-layout-allow-overflow></div>
+          <svg id="nkl-scribble" viewBox="0 0 560 392" aria-hidden="true" data-layout-ignore>
+            <path id="nkl-circle-a" d="M 74 211 C 42 119 118 42 254 36 C 410 30 524 111 508 222 C 494 320 350 377 208 346 C 94 322 37 278 74 211" />
+            <path id="nkl-circle-b" d="M 92 231 C 33 150 105 55 243 44 C 408 31 529 126 501 244 C 480 334 335 370 197 342 C 83 319 47 269 92 231" />
+          </svg>
+        </div>
+        <div id="nkl-wash"></div>
+        <div id="nkl-scan"></div>
+        <div class="nkl-corner nkl-tl"></div>
+        <div class="nkl-corner nkl-tr"></div>
+        <div class="nkl-corner nkl-bl"></div>
+        <div class="nkl-corner nkl-br"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("nkl-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(id) {
+          return document.getElementById("nkl-" + id);
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+
+        var W = 1920,
+          H = 1080;
+        // центр круга на экране и его масштаб
+        var S =  [932, 431]  ;
+        var K = 1;
+        
+        // штрих круга – по его настоящей длине, иначе круг не замыкается
+        ["circle-a", "circle-b"].forEach(function (id) {
+          var n = $(id).getTotalLength();
+          $(id).style.strokeDasharray = n;
+          $(id).style.strokeDashoffset = n;
+        });
+        var ann = $("annotation");
+        ann.style.left = S[0] - 280 + "px";
+        ann.style.top = S[1] - 196 + "px";
+        ann.style.transform = "scale(" + K + ")";
+
+        $("label").innerHTML = "";
+        txt(V.label, "Под|замком")
+          .split("|")
+          .slice(0, 2)
+          .forEach(function (t, i) {
+            if (i) $("label").appendChild(document.createElement("br"));
+            $("label").appendChild(document.createTextNode(t.trim()));
+          });
+
+        // страна по имени Natural Earth или числовому коду ISO; заморские части в кадр не берутся
+        var world = window.__hfWorld50m;
+        var countries = topojson.feature(world, world.objects.countries).features;
+        var key = txt(V.country, "North Korea").toLowerCase();
+        var target =
+          countries.find(function (f) {
+            return String(f.properties.name).toLowerCase() === key || String(f.id).padStart(3, "0") === key.padStart(3, "0");
+          }) ||
+          countries.find(function (f) {
+            return f.properties.name === "North Korea";
+          });
+        var main = target;
+        if (target.geometry.type === "MultiPolygon") {
+          var best = 0;
+          target.geometry.coordinates.forEach(function (poly) {
+            var g = { type: "Polygon", coordinates: poly };
+            var a = d3.geoArea(g);
+            if (a > best) {
+              best = a;
+              main = g;
+            }
+          });
+        }
+        // камера к 3,6 с: масштаб 2,2 и сдвиг (-44, -34) от точки 50% 51% – страна встаёт в круг на экране
+        var O = [W * 0.5, H * 0.51],
+          s = 2.2,
+          t = [-44, -34];
+        var P = [O[0] + (S[0] - t[0] - O[0]) / s, O[1] + (S[1] - t[1] - O[1]) / s];
+        var hw = (210 * K) / s,
+          hh = (130 * K) / s;
+        var projection = d3.geoMercator().fitExtent(
+          [
+            [P[0] - hw, P[1] - hh],
+            [P[0] + hw, P[1] + hh],
+          ],
+          main,
+        );
+        d3.select("#nkl-map")
+          .attr("width", W)
+          .attr("height", H)
+          .attr("viewBox", "0 0 " + W + " " + H)
+          .selectAll("path")
+          .data(countries)
+          .enter()
+          .append("path")
+          .attr("class", "nkl-country")
+          .attr("d", d3.geoPath(projection));
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        // ход родной, сдвинут на момент начала наезда
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(
+          "#nkl-camera",
+          { scale: 0.92, x: -70, y: 18, filter: "saturate(0.92) contrast(0.98)" },
+          { scale: 2.12, x: -56, y: -22, filter: "saturate(1.08) contrast(1.04)", duration: 3.18, ease: "expo.inOut" },
+          c,
+        );
+        tl.to("#nkl-camera", { scale: 2.2, x: -44, y: -34, duration: 0.42, ease: "back.out(1.5)" }, c + 3.18);
+        tl.fromTo(".nkl-corner", { opacity: 0, scale: 0.72 }, { opacity: 0.72, scale: 1, duration: 0.28, stagger: 0.035, ease: "power3.out" }, c + 0.42);
+        tl.fromTo(
+          "#nkl-annotation",
+          { opacity: 0, scale: 0.92 * K, x: 4, y: -4 },
+          { opacity: 1, scale: K, x: 0, y: 0, duration: 0.16, ease: "power2.out" },
+          c + 3.12,
+        );
+        tl.to("#nkl-circle-a", { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" }, c + 3.24);
+        tl.to("#nkl-circle-b", { strokeDashoffset: 0, duration: 0.44, ease: "power3.out" }, c + 3.46);
+        tl.to("#nkl-label", { opacity: 1, scale: 1, duration: 0.28, ease: "back.out(2.1)" }, c + 3.78);
+        tl.to("#nkl-wash", { opacity: 1, duration: 0.24, ease: "power2.out" }, c + 3.82);
+        tl.to("#nkl-scan", { opacity: 0.44, duration: 0.18, ease: "none" }, c + 3.86);
+        tl.to("#nkl-annotation", { scale: 1.045 * K, duration: 0.14, yoyo: true, repeat: 1, ease: "sine.inOut" }, c + 4.1);
+        tl.to("#nkl-camera", { scale: 2.06, x: -82, y: -8, duration: 2.35, ease: "sine.inOut" }, c + 4.2);
+        tl.to("#nkl-wash", { opacity: 0.82, duration: 2.35, ease: "sine.inOut" }, c + 4.2);
+        tl.to(".nkl-corner", { opacity: 0.38, duration: 0.72, ease: "sine.inOut" }, c + 5.82);
+        tl.to("#nkl-label", { y: -6, duration: 0.4, yoyo: true, repeat: 1, ease: "sine.inOut" }, c + 5.94);
+        if (exit === "fade") tl.to("#nkl-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c ? cues[1] : c + 7);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["north-korea-locked-down"] = tl;
+      })();
+    </script>
+  </body>
+</html>

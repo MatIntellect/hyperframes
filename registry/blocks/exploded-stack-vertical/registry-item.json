@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "exploded-stack-vertical",
+  "type": "hyperframes:block",
+  "title": "Exploded Stack (vertical)",
+  "description": "Vertical exploded stack: grey isometric plates at the left of the 780 field explode apart, wrapped labels land on the right and light each layer red. Title and layer names are variables; placement full, top or bottom card; holds, collapses or fades.",
+  "tags": [
+    "3d-object",
+    "three-js",
+    "webgl",
+    "isometric",
+    "exploded-view",
+    "layers",
+    "diagram",
+    "architecture",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "exploded-stack-vertical.html",
+      "target": "compositions/exploded-stack-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

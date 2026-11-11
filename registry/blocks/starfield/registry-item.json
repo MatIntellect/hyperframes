@@ -1,0 +1,32 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "starfield",
+  "type": "hyperframes:block",
+  "title": "Starfield",
+  "description": "Transparent night-sky overlay: sparse or dense stars in three size tiers twinkle and drift in two parallax layers, the frame centre kept clear for a subject or caption. Density, tone, speed and cues are variables; holds or fades.",
+  "tags": [
+    "starfield",
+    "night-sky",
+    "stars",
+    "twinkle",
+    "sky",
+    "weather",
+    "overlay",
+    "ambient",
+    "particles",
+    "media-treatment-overlay",
+    "loopable"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "starfield.html",
+      "target": "compositions/starfield.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

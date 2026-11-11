@@ -1,0 +1,33 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "starfield-vertical",
+  "type": "hyperframes:block",
+  "title": "Starfield (vertical)",
+  "description": "Vertical night-sky overlay with the centre kept clear. Placement full covers the frame; top or bottom shines inside a 780x760 card slot. Density, tone, speed and cues are variables; holds or fades.",
+  "tags": [
+    "starfield",
+    "night-sky",
+    "stars",
+    "twinkle",
+    "sky",
+    "weather",
+    "overlay",
+    "ambient",
+    "particles",
+    "media-treatment-overlay",
+    "loopable",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "starfield-vertical.html",
+      "target": "compositions/starfield-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

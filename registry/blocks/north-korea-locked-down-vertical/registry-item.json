@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "north-korea-locked-down-vertical",
+  "type": "hyperframes:block",
+  "title": "Country Locked Down (vertical)",
+  "description": "Vertical map zoom: the camera rushes into a country, a red scribble circles it, a label pops above and a red wash follows. Country and label are variables; placement full, top or bottom card; cues set the start; holds.",
+  "tags": ["showcase", "map", "annotation", "youtube", "kinetic", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "north-korea-locked-down-vertical.html",
+      "target": "compositions/north-korea-locked-down-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/world-50m.js",
+      "target": "assets/world-50m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

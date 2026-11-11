@@ -1,0 +1,341 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "20 крупнейших городов США" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Размер круга – население города" },
+    { "id": "cities", "type": "string", "role": "content", "label": "Cities", "description": "Cities separated by ;, each as Name: latitude, longitude, value (decimal point in the coordinates). Up to 25 cities; circle area follows the value, the five largest get a label (three on the vertical card), arcs run from the largest to the next four.", "maxLength": 1000, "default": "Нью-Йорк: 40.71, -74.01, 8300000; Лос-Анджелес: 34.05, -118.24, 3900000; Чикаго: 41.88, -87.63, 2700000; Хьюстон: 29.76, -95.37, 2300000; Финикс: 33.45, -112.07, 1600000; Филадельфия: 39.95, -75.17, 1600000; Сан-Антонио: 29.42, -98.49, 1400000; Сан-Диего: 32.72, -117.16, 1400000; Даллас: 32.78, -96.8, 1300000; Джэксонвилл: 30.33, -81.66, 950000; Остин: 30.27, -97.74, 960000; Сан-Хосе: 37.34, -121.89, 1000000; Форт-Уэрт: 32.76, -97.33, 930000; Колумбус: 39.96, -83, 910000; Шарлотт: 35.23, -80.84, 870000; Индианаполис: 39.77, -86.16, 880000; Сан-Франциско: 37.77, -122.42, 870000; Сиэтл: 47.61, -122.33, 740000; Денвер: 39.74, -104.99, 710000; Нашвилл: 36.16, -86.78, 690000" },
+    { "id": "unit", "type": "string", "role": "content", "label": "Value unit", "description": "Word after the value in the labels (values print as 8,3 млн or 950 тыс.). Empty prints the number alone.", "maxLength": 10, "default": "" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Источник: Бюро переписи США, 2024" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the states fade up and the circles pop in from the largest (about 2.5 s), 3 the labels fade in and the arcs draw from the largest city, then it pulses, 4 the map fades out (only when exit is fade). Empty keeps 0, 1, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the map to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/us-states-10m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #usb-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .usb-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #usb-box {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #usb-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #usb-sub {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        opacity: 0;
+      }
+      #usb-map {
+        display: block;
+        flex: none;
+      }
+      .usb-country {
+        fill: var(--surface, #18181a);
+        stroke: var(--border, #2e2e32);
+        stroke-width: 0.8;
+        opacity: 0;
+      }
+      .usb-bubble {
+        fill: color-mix(in srgb, var(--accent, #ff0000) 60%, transparent);
+        stroke: var(--fg, #f2f2f2);
+        stroke-width: 1;
+      }
+      .usb-pulse {
+        fill: none;
+        stroke: var(--accent, #ff0000);
+        stroke-width: 2;
+        opacity: 0;
+      }
+      .usb-arc {
+        fill: none;
+        stroke: color-mix(in srgb, var(--accent, #ff0000) 55%, transparent);
+        stroke-width: 2;
+      }
+      .usb-tick {
+        stroke: var(--muted, #8a8a90);
+        stroke-width: 1.5;
+      }
+      .usb-label {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        fill: var(--fg, #f2f2f2);
+        stroke: var(--bg, #0c1014);
+        stroke-width: 5px;
+        paint-order: stroke;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+      .usb-label tspan.usb-val {
+        font-weight: 500;
+        fill: var(--muted, #8a8a90);
+      }
+      #usb-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+      }
+      #usb-source {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        opacity: 0;
+      }
+      
+      #usb-box {
+        left: 120px;
+        top: 70px;
+        width: 1680px;
+        height: 960px;
+      }
+      #usb-title {
+        font-size: 96px;
+        white-space: nowrap;
+      }
+      #usb-sub {
+        font-size: 34px;
+        margin-top: 12px;
+        white-space: nowrap;
+      }
+      #usb-map {
+        margin: 24px auto 0;
+      }
+      #usb-foot {
+        margin-top: 16px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="usb-root" data-composition-id="us-map-bubble" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="usb-ground"></div>
+      <div id="usb-box">
+        <div id="usb-title"></div>
+        <div id="usb-sub"></div>
+        <svg id="usb-map"></svg>
+        <div id="usb-foot">
+          <div id="usb-source"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("usb-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var MAPW = 1380,
+          MAPH = 680;
+        
+        var DEF =
+          "Нью-Йорк: 40.71, -74.01, 8300000; Лос-Анджелес: 34.05, -118.24, 3900000; Чикаго: 41.88, -87.63, 2700000; Хьюстон: 29.76, -95.37, 2300000; Финикс: 33.45, -112.07, 1600000; Филадельфия: 39.95, -75.17, 1600000; Сан-Антонио: 29.42, -98.49, 1400000; Сан-Диего: 32.72, -117.16, 1400000; Даллас: 32.78, -96.8, 1300000; Джэксонвилл: 30.33, -81.66, 950000; Остин: 30.27, -97.74, 960000; Сан-Хосе: 37.34, -121.89, 1000000; Форт-Уэрт: 32.76, -97.33, 930000; Колумбус: 39.96, -83, 910000; Шарлотт: 35.23, -80.84, 870000; Индианаполис: 39.77, -86.16, 880000; Сан-Франциско: 37.77, -122.42, 870000; Сиэтл: 47.61, -122.33, 740000; Денвер: 39.74, -104.99, 710000; Нашвилл: 36.16, -86.78, 690000";
+        var titleEl = document.getElementById("usb-title"),
+          subEl = document.getElementById("usb-sub"),
+          srcEl = document.getElementById("usb-source");
+        titleEl.textContent = txt(V.title, "20 крупнейших городов США");
+        subEl.textContent = txt(V.subtitle, "Размер круга – население города");
+        srcEl.textContent = txt(V.source, "Источник: Бюро переписи США, 2024");
+        if (!subEl.textContent) subEl.style.display = "none";
+        var unit = txt(V.unit, "");
+
+        var us = window.__hfUsStates10m;
+        var states = topojson.feature(us, us.objects.states).features;
+        var svg = d3.select("#usb-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        var projection = d3.geoAlbersUsa().fitSize([MAPW, MAPH], { type: "FeatureCollection", features: states });
+        var path = d3.geoPath().projection(projection);
+        svg.selectAll(".usb-country").data(states).enter().append("path").attr("class", "usb-country").attr("d", path);
+
+        // Города: «Имя: широта, долгота, значение»
+        var cities = [];
+        String(typeof V.cities === "string" && V.cities.trim() ? V.cities : DEF)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.indexOf(":");
+            if (k < 0) return;
+            var p = item.slice(k + 1).split(",").map(function (x) {
+              return parseFloat(x.replace(/[\s ]/g, ""));
+            });
+            if (p.length < 3 || !p.every(isFinite)) return;
+            var xy = projection([p[1], p[0]]);
+            if (xy) cities.push({ name: item.slice(0, k).trim(), v: p[2], x: xy[0], y: xy[1] });
+          });
+        cities = cities.sort(function (a, b) {
+          return b.v - a.v;
+        }).slice(0, 25);
+        var vmax = cities.length ? cities[0].v : 1;
+        var k0 = MAPW / 1380;
+        cities.forEach(function (c) {
+          c.r = Math.max(4, 45 * k0 * Math.sqrt(c.v / vmax));
+        });
+        function fmt(v) {
+          var t = v >= 1e6 ? (v / 1e6).toFixed(1).replace(".", ",") + " млн" : v >= 1e3 ? Math.round(v / 1e3) + " тыс." : String(v).replace(".", ",");
+          return unit ? t + " " + unit : t;
+        }
+        var arcG = svg.append("g"),
+          bubG = svg.append("g"),
+          labG = svg.append("g");
+        var big = cities[0];
+        var arcs = cities.slice(1, 5).map(function (c) {
+          return arcG
+            .append("path")
+            .attr("class", "usb-arc")
+            .attr("d", "M " + big.x + " " + big.y + " Q " + (big.x + c.x) / 2 + " " + (Math.min(big.y, c.y) - 60 * k0) + " " + c.x + " " + c.y)
+            .node();
+        });
+        var bubbles = cities.map(function (c) {
+          return bubG.append("circle").attr("class", "usb-bubble").attr("cx", c.x).attr("cy", c.y).attr("r", c.r).node();
+        });
+        var pulse = big ? bubG.append("circle").attr("class", "usb-pulse").attr("cx", big.x).attr("cy", big.y).attr("r", big.r).node() : null;
+        // Подписи пяти крупных: над кругом, иначе под ним, слева, справа – первое место без наложений
+        var boxes = [];
+        function hits(b) {
+          return b.x < 0 || b.x + b.w > MAPW || b.y < 0 || b.y + b.h > MAPH || boxes.some(function (o) {
+            return b.x < o.x + o.w + 8 && o.x < b.x + b.w + 8 && b.y < o.y + o.h + 4 && o.y < b.y + b.h + 4;
+          });
+        }
+        var nLab = 5;
+        
+        // кружки подписанных городов – тоже препятствия
+        cities.slice(0, nLab).forEach(function (c) {
+          boxes.push({ x: c.x - c.r, y: c.y - c.r, w: 2 * c.r, h: 2 * c.r });
+        });
+        var labels = cities.slice(0, nLab).map(function (c) {
+          var g = labG.append("g").style("opacity", 0);
+          var tick = g.append("line").attr("class", "usb-tick");
+          var t = g.append("text").attr("class", "usb-label");
+          t.append("tspan").text(c.name + " ");
+          t.append("tspan").attr("class", "usb-val").text(fmt(c.v));
+          var w = t.node().getComputedTextLength(),
+            h = 34;
+          var gap = 14;
+          var spots = [
+            [c.x, c.y - c.r - gap - h / 2, "middle"],
+            [c.x, c.y + c.r + gap + h / 2, "middle"],
+            [c.x - c.r - gap - w / 2, c.y, "middle"],
+            [c.x + c.r + gap + w / 2, c.y, "middle"],
+            [c.x, c.y - c.r - gap - h * 1.6, "middle"],
+            [c.x, c.y + c.r + gap + h * 1.6, "middle"],
+          ];
+          var pick = spots[0];
+          for (var i = 0; i < spots.length; i++) {
+            var b = { x: spots[i][0] - w / 2, y: spots[i][1] - h / 2, w: w, h: h };
+            if (!hits(b)) {
+              pick = spots[i];
+              break;
+            }
+          }
+          var lx = Math.max(w / 2, Math.min(MAPW - w / 2, pick[0]));
+          boxes.push({ x: lx - w / 2, y: pick[1] - h / 2, w: w, h: h });
+          t.attr("x", lx).attr("y", pick[1]);
+          var ty = pick[1] < c.y - c.r ? pick[1] + h / 2 : pick[1] > c.y + c.r ? pick[1] - h / 2 : c.y;
+          tick.attr("x1", c.x).attr("y1", c.y).attr("x2", Math.abs(pick[1] - c.y) < 1 ? (pick[0] < c.x ? lx + w / 2 : lx - w / 2) : c.x).attr("y2", ty);
+          return g.node();
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cM = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 1;
+        var cP = isFinite(cues[2]) && cues[2] > cM ? cues[2] : cM + 3;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
+        tl.to("#usb-map .usb-country", { opacity: 0.8, duration: 0.6, ease: "power2.out" }, cM - 0.2);
+        tl.from(bubbles, { attr: { r: 0 }, duration: 0.5, ease: "back.out(1.7)", stagger: 2 / Math.max(1, bubbles.length) }, cM + 0.5);
+        tl.to(srcEl, { opacity: 1, duration: 0.5, ease: "power2.out" }, cM + 2.5);
+        labels.forEach(function (g, i) {
+          tl.fromTo(g, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, cP + i * 0.25);
+        });
+        arcs.forEach(function (a) {
+          var L = a.getTotalLength();
+          tl.fromTo(a, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, cP + 1.4);
+        });
+        if (pulse) tl.fromTo(pulse, { attr: { r: big.r }, opacity: 0.6 }, { attr: { r: big.r + 30 * k0 + 10 }, opacity: 0, duration: 1.5, ease: "power2.out", repeat: 2, immediateRender: false }, cP + 2.8);
+        if (exit === "fade") tl.to("#usb-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["us-map-bubble"] = tl;
+      })();
+    </script>
+  </body>
+</html>

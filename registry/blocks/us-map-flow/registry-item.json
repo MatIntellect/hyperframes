@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "us-map-flow",
+  "type": "hyperframes:block",
+  "title": "US Flow Map",
+  "description": "US flow map on the brand ground: grey states fade up, city dots pop in with labels that place themselves clear of each other, red arcs sized by volume draw one after another and a dot runs along each. Headline, cities, flows and source are variables; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "usa", "flow"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "us-map-flow.html",
+      "target": "compositions/us-map-flow.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/us-states-10m.js",
+      "target": "assets/us-states-10m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "north-korea-locked-down",
+  "type": "hyperframes:block",
+  "title": "Country Locked Down",
+  "description": "Map zoom on the brand ground: the camera rushes into a country, a red scribble circles it, a light label pops above and the frame takes a red wash with scanlines. Country and label are variables; cues set the start; holds.",
+  "tags": ["showcase", "map", "annotation", "youtube", "kinetic"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "north-korea-locked-down.html",
+      "target": "compositions/north-korea-locked-down.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/world-50m.js",
+      "target": "assets/world-50m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

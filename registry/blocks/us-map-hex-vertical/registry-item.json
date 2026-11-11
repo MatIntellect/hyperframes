@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "us-map-hex-vertical",
+  "type": "hyperframes:block",
+  "title": "US Hex Map (vertical)",
+  "description": "Vertical US hex tile map: one equal hex per state with its code, dark red to accent red by value, chosen states pulse. Data and labels are variables; placement full, top or bottom card (codes hidden on the card); cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "usa", "hex", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "us-map-hex-vertical.html",
+      "target": "compositions/us-map-hex-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

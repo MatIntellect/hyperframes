@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "spain-map-vertical",
+  "type": "hyperframes:block",
+  "title": "Spain Map (vertical)",
+  "description": "Vertical Spain choropleth by autonomous community: headline, a 780-wide map in a dark-red to accent-red scale, legend and source; chosen regions pulse with their codes. Data and labels are variables; placement full, top or bottom card; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "spain", "choropleth", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "spain-map-vertical.html",
+      "target": "compositions/spain-map-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/es-autonomous-regions.js",
+      "target": "assets/es-autonomous-regions.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "us-map",
+  "type": "hyperframes:block",
+  "title": "US Map",
+  "description": "US choropleth on the brand ground: headline wipes in, states reveal from the centre in a dark-red to accent-red scale by value, legend and source fade in, five chosen states pulse with their codes. Headline, data, scale and labels are variables; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "usa", "choropleth"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "us-map.html",
+      "target": "compositions/us-map.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/us-states-10m.js",
+      "target": "assets/us-states-10m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

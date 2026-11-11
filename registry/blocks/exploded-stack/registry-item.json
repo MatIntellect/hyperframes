@@ -1,0 +1,29 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "exploded-stack",
+  "type": "hyperframes:block",
+  "title": "Exploded Stack",
+  "description": "Isometric brand-grey layer plates explode apart, a label lands beside each layer and lights it red; holds, collapses back or fades. Title and four layer names are variables; cues set the beats. Built for architecture and system diagrams.",
+  "tags": [
+    "3d-object",
+    "three-js",
+    "webgl",
+    "isometric",
+    "exploded-view",
+    "layers",
+    "diagram",
+    "architecture"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "exploded-stack.html",
+      "target": "compositions/exploded-stack.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

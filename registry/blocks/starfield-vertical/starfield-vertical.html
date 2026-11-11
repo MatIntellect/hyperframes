@@ -1,0 +1,181 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: stars over the whole frame, the centre kept clear. top / bottom: stars inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "density", "type": "enum", "role": "style", "label": "Density", "description": "Star count across the frame.", "default": "sparse", "options": [{ "value": "sparse", "label": "Sparse" }, { "value": "dense", "label": "Dense" }] },
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Star color mix; white is the brand light text colour.", "default": "warm", "options": [{ "value": "warm", "label": "Warm (white + yellow)" }, { "value": "cool", "label": "Cool (white + blue)" }, { "value": "white", "label": "White only" }] },
+    { "id": "speed", "type": "enum", "role": "style", "label": "Twinkle speed", "description": "How fast stars pulse.", "default": "slow", "options": [{ "value": "slow", "label": "Slow" }, { "value": "fast", "label": "Fast" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the stars fade in over 0.6 s (0 = already shining on the first frame), 2 it fades out (only when exit is fade). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the stars twinkling to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #stfv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #stfv-box {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #stfv-sky {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        /* середина кадра свободна: человек или подпись под звёздами читаются */
+        -webkit-mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
+        mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
+      }
+      .stfv-star {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      
+      #stfv-root.stfv-card #stfv-box {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+      }
+      #stfv-root.stfv-bottom #stfv-box {
+        top: 600px;
+      }
+      #stfv-root.stfv-card #stfv-sky {
+        -webkit-mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
+        mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="stfv-root" data-composition-id="starfield-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="stfv-box">
+        <div id="stfv-sky" data-layout-allow-overflow></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("stfv-root");
+        var field = document.getElementById("stfv-sky");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var W = 1080,
+          H = 1920;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("stfv-card", "stfv-" + placement);
+          W = 780;
+          H = 760;
+        }
+        
+        var fg = getComputedStyle(root).getPropertyValue("--fg").trim() || "#f2f2f2";
+        var TONES = {
+          warm: ["#fff7e0", "#ffe08a"],
+          cool: ["#f2f8ff", "#a9d6ff"],
+          white: [fg, fg],
+        };
+        var COUNT = Math.round((V.density === "dense" ? 420 : 180) * (W * H) / (1920 * 1080));
+        var palette = TONES[oneOf(V.tone, ["warm", "cool", "white"], "warm")];
+        var cycleSeconds = V.speed === "fast" ? 0.9 : 1.6;
+        // детерминированный разброс без случайных чисел (как у разработчиков)
+        function rnd(n) {
+          var x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+          return x - Math.floor(x);
+        }
+        var duration = 30;
+        var TAU = 2 * Math.PI;
+        var FADE = 0.12; // доля пути звезды на проявление и на угасание
+        function smooth(x) {
+          x = Math.min(1, Math.max(0, x / FADE));
+          return x * x * (3 - 2 * x);
+        }
+        var stars = [];
+        for (var i = 0; i < COUNT; i++) {
+          // 70% тусклых 1 px, 25% 1,6 px и 5% ярких 2,6 px со свечением
+          var r = rnd(i + 7000);
+          var tier = r < 0.7 ? 0 : r < 0.95 ? 1 : 2;
+          var sizePx = [1, 1.6, 2.6][tier];
+          var color = i % 3 === 0 ? palette[1] : palette[0];
+          var el = document.createElement("div");
+          el.className = "stfv-star";
+          el.style.width = sizePx + "px";
+          el.style.height = sizePx + "px";
+          el.style.background = color;
+          if (tier === 2) {
+            el.style.borderRadius = "50%";
+            el.style.boxShadow = "0 0 3px 1px " + color + ", 0 0 8px 2px color-mix(in srgb, " + color + " 50%, transparent)";
+          }
+          field.appendChild(el);
+          var cycles = Math.max(1, Math.round((duration / cycleSeconds) * (2 + rnd(i + 4000) * 2)));
+          stars.push({
+            el: el,
+            x: rnd(i + 5000) * W - sizePx / 2,
+            y: Math.round(rnd(i + 6000) * H - sizePx / 2),
+            drift: (tier === 0 ? 2 : 5) * duration,
+            lag: rnd(i + 8000),
+            omega: TAU * cycles,
+            phi: TAU * rnd(i + 1000),
+            base: 0.75 + rnd(i + 2000) * 0.25,
+            amp: tier === 2 ? 0.12 : 0.2 + rnd(i + 3000) * 0.2,
+          });
+        }
+        var state = { phase: 0 };
+        function render() {
+          var p = state.phase;
+          for (var s = 0; s < stars.length; s++) {
+            var star = stars[s];
+            var u = (p + star.lag) % 1;
+            var twinkle = Math.min(1, star.base + star.amp * Math.sin(star.omega * p + star.phi));
+            star.el.style.transform = "translate3d(" + (star.x - star.drift * (u - 0.5)) + "px," + star.y + "px,0)";
+            star.el.style.opacity = twinkle * smooth(u) * smooth(1 - u);
+          }
+        }
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(state, { phase: 1, duration: duration, ease: "none", onUpdate: render }, 0);
+        render();
+        if (c0 > 0) tl.fromTo(field, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, c0);
+        if (exit === "fade") tl.to(field, { opacity: 0, duration: 0.8, ease: "sine.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["starfield-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

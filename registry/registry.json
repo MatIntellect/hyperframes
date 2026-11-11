@@ -340,6 +340,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "exploded-stack",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "exploded-stack-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "flowchart",
       "type": "hyperframes:block"
     },
@@ -353,6 +361,14 @@
     },
     {
       "name": "freeze-frame-dressing-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "glass-hero",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "glass-hero-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -540,6 +556,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "north-korea-locked-down",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "north-korea-locked-down-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "notes-reveal",
       "type": "hyperframes:block"
     },
@@ -553,6 +577,14 @@
     },
     {
       "name": "notification-cascade-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "nyc-paris-flight",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "nyc-paris-flight-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -612,6 +644,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "spain-map",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "spain-map-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "split-flap-board",
       "type": "hyperframes:block"
     },
@@ -628,6 +668,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "starfield",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "starfield-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "thread-message-stack",
       "type": "hyperframes:block"
     },
@@ -641,6 +689,38 @@
     },
     {
       "name": "tiktok-follow-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-bubble",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-bubble-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-flow",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-flow-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-hex",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-hex-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "us-map-vertical",
       "type": "hyperframes:block"
     },
     {

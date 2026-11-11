@@ -1,0 +1,420 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "ВВП на душу по регионам Испании" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Евро на человека, оценка 2024" },
+    { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "Autonomous communities separated by ;, each as code: value. Codes: AND ARA AST BAL CAN CNT CYL CLM CAT VAL EXT GAL MAD MUR NAV PVA RIO CEU MEL. Colour runs from the lowest to the highest value.", "maxLength": 400, "default": "AND: 20200; ARA: 30500; AST: 24100; BAL: 28900; CAN: 21500; CNT: 25200; CYL: 25800; CLM: 21400; CAT: 33700; VAL: 23800; EXT: 19200; GAL: 24500; MAD: 38100; MUR: 22100; NAV: 35200; PVA: 36800; RIO: 29800; CEU: 21000; MEL: 19500" },
+    { "id": "highlight", "type": "string", "role": "content", "label": "Highlight", "description": "Codes of up to five communities that pulse one after another and get their code as a label, separated by commas. Empty pulses none.", "maxLength": 24, "default": "MAD, PVA, NAV" },
+    { "id": "legendLow", "type": "string", "role": "content", "label": "Legend low", "description": "Label at the low end of the colour bar.", "maxLength": 14, "default": "Ниже" },
+    { "id": "legendHigh", "type": "string", "role": "content", "label": "Legend high", "description": "Label at the high end of the colour bar.", "maxLength": 14, "default": "Выше" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Источник: Национальный институт статистики" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the communities start to reveal (about 3 s), 3 the highlighted states pulse and get labels, 4 the map fades out (only when exit is fade). Empty keeps 0, 1, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the map to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/es-autonomous-regions.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #esmv-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .esmv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #esmv-box {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #esmv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #esmv-sub {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        opacity: 0;
+      }
+      #esmv-map {
+        display: block;
+        flex: none;
+      }
+      .esmv-country {
+        stroke: var(--bg, #0c1014);
+        stroke-width: 1.2;
+        opacity: 0;
+      }
+      .esmv-label {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        fill: var(--fg, #f2f2f2);
+        stroke: var(--bg, #0c1014);
+        stroke-width: 5px;
+        paint-order: stroke;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+      .esmv-inset {
+        stroke: var(--border, #2e2e32);
+        stroke-width: 2;
+      }
+      .esmv-tick {
+        stroke: var(--fg, #f2f2f2);
+        stroke-width: 2;
+      }
+      #esmv-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+      }
+      #esmv-source {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        opacity: 0;
+      }
+      #esmv-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        opacity: 0;
+      }
+      #esmv-bar {
+        height: 16px;
+        border-radius: 8px;
+      }
+      #esmv-labels {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--muted, #8a8a90);
+      }
+      
+      
+      #esmv-box {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+        justify-content: center;
+      }
+      #esmv-title {
+        font-size: 104px;
+      }
+      #esmv-sub {
+        font-size: 36px;
+        margin-top: 14px;
+      }
+      #esmv-map {
+        margin-top: 56px;
+      }
+      #esmv-foot {
+        margin-top: 40px;
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 22px;
+      }
+      #esmv-root.esmv-card #esmv-box {
+        height: 760px;
+        padding: 40px 30px;
+        background: var(--bg, #0c1014);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #esmv-root.esmv-bottom #esmv-box {
+        top: 600px;
+      }
+      #esmv-root.esmv-card #esmv-title {
+        font-size: 68px;
+      }
+      #esmv-root.esmv-card #esmv-sub {
+        font-size: 30px;
+        margin-top: 10px;
+      }
+      #esmv-root.esmv-card #esmv-map {
+        margin-top: 30px;
+      }
+      #esmv-root.esmv-card #esmv-foot {
+        margin-top: 26px;
+        gap: 14px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="esmv-root" data-composition-id="spain-map-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="esmv-ground"></div>
+      <div id="esmv-box">
+        <div id="esmv-title"></div>
+        <div id="esmv-sub"></div>
+        <svg id="esmv-map"></svg>
+        <div id="esmv-foot">
+          <div id="esmv-source"></div>
+          <div id="esmv-legend">
+            <div id="esmv-bar"></div>
+            <div id="esmv-labels"><span id="esmv-low"></span><span id="esmv-high"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("esmv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var MAPW = 1200,
+          MAPH = 680;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        MAPW = 780;
+        MAPH = 500;
+        if (placement !== "full") {
+          root.classList.add("esmv-card", "esmv-" + placement);
+          root.querySelector(".esmv-ground").remove();
+          MAPW = 716;
+          MAPH = 300;
+        }
+        
+        var DEF =
+          "AND: 20200; ARA: 30500; AST: 24100; BAL: 28900; CAN: 21500; CNT: 25200; CYL: 25800; CLM: 21400; CAT: 33700; VAL: 23800; EXT: 19200; GAL: 24500; MAD: 38100; MUR: 22100; NAV: 35200; PVA: 36800; RIO: 29800; CEU: 21000; MEL: 19500";
+        var titleEl = document.getElementById("esmv-title"),
+          subEl = document.getElementById("esmv-sub"),
+          srcEl = document.getElementById("esmv-source");
+        titleEl.textContent = txt(V.title, "ВВП на душу по регионам Испании");
+        subEl.textContent = txt(V.subtitle, "Евро на человека, оценка 2024");
+        srcEl.textContent = txt(V.source, "Источник: Национальный институт статистики");
+        if (!subEl.textContent) subEl.style.display = "none";
+        document.getElementById("esmv-low").textContent = txt(V.legendLow, "Ниже") || "Ниже";
+        document.getElementById("esmv-high").textContent = txt(V.legendHigh, "Выше") || "Выше";
+
+        // Данные: «код: значение» по коду автономии (номера – из es-atlas)
+        var CODES = { AND: "01", ARA: "02", AST: "03", BAL: "04", CAN: "05", CNT: "06", CYL: "07", CLM: "08", CAT: "09", VAL: "10", EXT: "11", GAL: "12", MAD: "13", MUR: "14", NAV: "15", PVA: "16", RIO: "17", CEU: "18", MEL: "19" };
+        var ABBR = {};
+        Object.keys(CODES).forEach(function (k) {
+          ABBR[CODES[k]] = k;
+        });
+        var es = window.__hfEsRegions;
+        var countries = topojson.feature(es, es.objects.autonomous_regions).features.filter(function (f) {
+          return ABBR[String(f.id).padStart(2, "0")];
+        });
+        var values = {};
+        String(typeof V.data === "string" && V.data.trim() ? V.data : DEF)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.lastIndexOf(":");
+            if (k < 0) return;
+            var id = CODES[item.slice(0, k).trim().toUpperCase()];
+            var num = parseFloat(item.slice(k + 1).replace(/[\s ]/g, "").replace(",", "."));
+            if (id && isFinite(num)) values[id] = num;
+          });
+        countries.forEach(function (f) {
+          f.id = String(f.id).padStart(2, "0");
+        });
+        var ids = Object.keys(values);
+        var vmin = Math.min.apply(null, ids.map(function (i) {
+            return values[i];
+          })),
+          vmax = Math.max.apply(null, ids.map(function (i) {
+            return values[i];
+          }));
+
+        // Цвета – из меток темы: от тёмного красного к акценту; без данных – чуть светлее карточки
+        function rgb(css) {
+          var p = document.createElement("i");
+          p.style.color = css;
+          root.appendChild(p);
+          var m = getComputedStyle(p).color.match(/[\d.]+/g).map(Number);
+          p.remove();
+          return m;
+        }
+        var cs = getComputedStyle(root);
+        var accent = rgb(cs.getPropertyValue("--accent").trim() || "#ff0000"),
+          surface = rgb(cs.getPropertyValue("--surface").trim() || "#18181a"),
+          fg = rgb(cs.getPropertyValue("--fg").trim() || "#f2f2f2");
+        function mix(a, b, t) {
+          return "rgb(" + [0, 1, 2].map(function (i) {
+            return Math.round(a[i] + (b[i] - a[i]) * t);
+          }).join(",") + ")";
+        }
+        var noData = mix(surface, fg, 0.1);
+        function colorOf(v) {
+          var top = vmax;
+          var t = top > vmin ? (v - vmin) / (top - vmin) : 1;
+          return mix(surface, accent, 0.28 + 0.72 * Math.min(1, t));
+        }
+        document.getElementById("esmv-bar").style.background =
+          "linear-gradient(90deg, " + mix(surface, accent, 0.28) + ", " + mix(surface, accent, 1) + ")";
+
+        var svg = d3.select("#esmv-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        // Канары – врезкой в левом нижнем углу, полуостров – на всё поле (как на картах Испании)
+        var main = countries.filter(function (f) {
+          return f.id !== "05";
+        });
+        var can = countries.filter(function (f) {
+          return f.id === "05";
+        });
+        var projection = d3.geoConicConformal().center([0, 39.5]).rotate([3.5, 0]).fitSize([MAPW, MAPH], { type: "FeatureCollection", features: main });
+        var inset = [MAPW * 0.24, MAPH * 0.2];
+        var projCan = d3.geoConicConformal().rotate([16, 0]).center([0, 28.3]).fitExtent([[6, MAPH - inset[1] - 6], [inset[0], MAPH - 6]], { type: "FeatureCollection", features: can });
+        var pMain = d3.geoPath().projection(projection),
+          pCan = d3.geoPath().projection(projCan);
+        function path(f) {
+          return (f.id === "05" ? pCan : pMain)(f);
+        }
+        path.centroid = function (f) {
+          return (f.id === "05" ? pCan : pMain).centroid(f);
+        };
+        svg
+          .selectAll(".esmv-country")
+          .data(countries)
+          .enter()
+          .append("path")
+          .attr("class", "esmv-country")
+          .attr("id", function (d) {
+            return "esmv-c" + d.id;
+          })
+          .attr("d", path)
+          .attr("fill", function (d) {
+            return d.id in values ? colorOf(values[d.id]) : noData;
+          });
+
+        svg
+          .append("path")
+          .attr("class", "esmv-inset")
+          .attr("d", "M0," + (MAPH - inset[1] - 16) + " H" + (inset[0] + 14) + " V" + MAPH)
+          .attr("fill", "none");
+        var labG = svg.append("g"),
+          placed = [];
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cM = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 1;
+        var cP = isFinite(cues[2]) && cues[2] > cM ? cues[2] : cM + 4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
+        tl.to("#esmv-map .esmv-country", { opacity: 1, duration: 0.3, ease: "power1.out", stagger: { each: 2.7 / countries.length, from: "center" } }, cM);
+        tl.to("#esmv-legend", { opacity: 1, duration: 0.6, ease: "power2.out" }, cM + 3);
+        tl.to(srcEl, { opacity: 1, duration: 0.5, ease: "power2.out" }, cM + 3.5);
+        String(typeof V.highlight === "string" ? V.highlight : "MAD, PVA, NAV")
+          .split(",")
+          .map(function (c) {
+            return CODES[c.trim().toUpperCase()];
+          })
+          .filter(function (id) {
+            return id && document.getElementById("esmv-c" + id);
+          })
+          .slice(0, 5)
+          .forEach(function (id, i) {
+            var el = document.getElementById("esmv-c" + id);
+            el.parentNode.insertBefore(el, labG.node());
+            var c = path.centroid(el.__data__);
+            var lab = labG.append("g").style("opacity", 0);
+            var tick = lab.append("line").attr("class", "esmv-tick");
+            var t = lab.append("text").attr("class", "esmv-label").text(ABBR[id]);
+            // место подписи: на регионе, иначе выше, ниже, левее, правее – без наложений и в пределах карты
+            var w = t.node().getComputedTextLength() + 10,
+              h = 34;
+            var spots = [[0, 0], [0, -h], [0, h], [-w, 0], [w, 0], [-w, -h], [w, -h], [-w, h], [w, h]];
+            var p = spots[0];
+            for (var q = 0; q < spots.length; q++) {
+              var b = { x: c[0] + spots[q][0] - w / 2, y: c[1] + spots[q][1] - h / 2, w: w, h: h };
+              var free = b.x >= 0 && b.x + b.w <= MAPW && b.y >= 0 && b.y + b.h <= MAPH && !placed.some(function (o) {
+                return b.x < o.x + o.w && o.x < b.x + b.w && b.y < o.y + o.h && o.y < b.y + b.h;
+              });
+              if (free) {
+                p = spots[q];
+                placed.push(b);
+                break;
+              }
+            }
+            t.attr("x", c[0] + p[0]).attr("y", c[1] + p[1]);
+            if (p[0] || p[1]) tick.attr("x1", c[0]).attr("y1", c[1]).attr("x2", c[0] + p[0] * 0.6).attr("y2", c[1] + p[1] * 0.6);
+            tl.to(lab.node(), { opacity: 1, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
+            tl.to(el, { stroke: "rgb(" + fg.join(",") + ")", strokeWidth: 2.4, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
+            tl.to(el, { stroke: "rgb(" + rgb(cs.getPropertyValue("--bg").trim() || "#0c1014").join(",") + ")", strokeWidth: 0.8, duration: 0.6, ease: "power2.inOut" }, cP + i * 0.15 + 0.4);
+          });
+        if (exit === "fade") tl.to("#esmv-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["spain-map-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

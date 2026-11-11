@@ -1,0 +1,352 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "Потоки между городами" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Толщина дуги – объём направления" },
+    { "id": "cities", "type": "string", "role": "content", "label": "Cities", "description": "Cities separated by ;, each as Name: latitude, longitude (decimal point). Up to 16 cities; names label the dots, a label with no free room beside its dot is left out.", "maxLength": 700, "default": "Сан-Франциско: 37.77, -122.42; Нью-Йорк: 40.71, -74.01; Лос-Анджелес: 34.05, -118.24; Чикаго: 41.88, -87.63; Сиэтл: 47.61, -122.33; Остин: 30.27, -97.74; Майами: 25.76, -80.19; Денвер: 39.74, -104.99; Хьюстон: 29.76, -95.37; Атланта: 33.75, -84.39; Бостон: 42.36, -71.06; Даллас: 32.78, -96.8" },
+    { "id": "flows", "type": "string", "role": "content", "label": "Flows", "description": "Flows separated by ;, each as From > To: volume, using the city names above. Up to 16 flows; arc width and brightness follow the volume.", "maxLength": 700, "default": "Сан-Франциско > Нью-Йорк: 100; Лос-Анджелес > Чикаго: 85; Сиэтл > Остин: 70; Нью-Йорк > Майами: 90; Чикаго > Денвер: 65; Хьюстон > Атланта: 75; Бостон > Сан-Франциско: 80; Денвер > Лос-Анджелес: 60; Атланта > Даллас: 55; Майами > Нью-Йорк: 50; Остин > Сиэтл: 45; Даллас > Чикаго: 40" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Данные условные" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the states fade up, the city dots pop in and their labels follow (about 2 s), 3 the arcs draw one after another and a dot runs along each, 4 the map fades out (only when exit is fade). Empty keeps 0, 1, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the map to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/us-states-10m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #usf-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .usf-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #usf-box {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #usf-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #usf-sub {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        opacity: 0;
+      }
+      #usf-map {
+        display: block;
+        flex: none;
+      }
+      .usf-country {
+        fill: var(--surface, #18181a);
+        stroke: var(--border, #2e2e32);
+        stroke-width: 0.8;
+        opacity: 0;
+      }
+      .usf-dot {
+        fill: var(--fg, #f2f2f2);
+      }
+      .usf-arc {
+        fill: none;
+        stroke: var(--accent, #ff0000);
+        stroke-linecap: round;
+      }
+      .usf-run {
+        fill: var(--fg, #f2f2f2);
+        opacity: 0;
+      }
+      .usf-label {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        fill: var(--fg, #f2f2f2);
+        stroke: var(--bg, #0c1014);
+        stroke-width: 5px;
+        paint-order: stroke;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      #usf-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+      }
+      #usf-source {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        opacity: 0;
+      }
+      
+      #usf-box {
+        left: 120px;
+        top: 70px;
+        width: 1680px;
+        height: 960px;
+      }
+      #usf-title {
+        font-size: 96px;
+        white-space: nowrap;
+      }
+      #usf-sub {
+        font-size: 34px;
+        margin-top: 12px;
+        white-space: nowrap;
+      }
+      #usf-map {
+        margin: 24px auto 0;
+      }
+      #usf-foot {
+        margin-top: 16px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="usf-root" data-composition-id="us-map-flow" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="usf-ground"></div>
+      <div id="usf-box">
+        <div id="usf-title"></div>
+        <div id="usf-sub"></div>
+        <svg id="usf-map"></svg>
+        <div id="usf-foot">
+          <div id="usf-source"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("usf-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var MAPW = 1380,
+          MAPH = 680;
+        
+        var DEFC =
+          "Сан-Франциско: 37.77, -122.42; Нью-Йорк: 40.71, -74.01; Лос-Анджелес: 34.05, -118.24; Чикаго: 41.88, -87.63; Сиэтл: 47.61, -122.33; Остин: 30.27, -97.74; Майами: 25.76, -80.19; Денвер: 39.74, -104.99; Хьюстон: 29.76, -95.37; Атланта: 33.75, -84.39; Бостон: 42.36, -71.06; Даллас: 32.78, -96.8";
+        var DEFF =
+          "Сан-Франциско > Нью-Йорк: 100; Лос-Анджелес > Чикаго: 85; Сиэтл > Остин: 70; Нью-Йорк > Майами: 90; Чикаго > Денвер: 65; Хьюстон > Атланта: 75; Бостон > Сан-Франциско: 80; Денвер > Лос-Анджелес: 60; Атланта > Даллас: 55; Майами > Нью-Йорк: 50; Остин > Сиэтл: 45; Даллас > Чикаго: 40";
+        var titleEl = document.getElementById("usf-title"),
+          subEl = document.getElementById("usf-sub"),
+          srcEl = document.getElementById("usf-source");
+        titleEl.textContent = txt(V.title, "Потоки между городами");
+        subEl.textContent = txt(V.subtitle, "Толщина дуги – объём направления");
+        srcEl.textContent = txt(V.source, "Данные условные");
+        if (!subEl.textContent) subEl.style.display = "none";
+
+        var us = window.__hfUsStates10m;
+        var states = topojson.feature(us, us.objects.states).features;
+        var svg = d3.select("#usf-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        var projection = d3.geoAlbersUsa().fitSize([MAPW, MAPH], { type: "FeatureCollection", features: states });
+        var path = d3.geoPath().projection(projection);
+        svg.selectAll(".usf-country").data(states).enter().append("path").attr("class", "usf-country").attr("d", path);
+        var k0 = MAPW / 1380;
+
+        // Города «Имя: широта, долгота», потоки «Откуда > Куда: объём»
+        var city = {},
+          order = [];
+        String(typeof V.cities === "string" && V.cities.trim() ? V.cities : DEFC)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.indexOf(":");
+            if (k < 0 || order.length >= 16) return;
+            var p = item.slice(k + 1).split(",").map(function (x) {
+              return parseFloat(x.replace(/[\s ]/g, ""));
+            });
+            var xy = p.length >= 2 && p.every(isFinite) ? projection([p[1], p[0]]) : null;
+            var name = item.slice(0, k).trim();
+            if (xy && name && !city[name]) {
+              city[name] = { name: name, x: xy[0], y: xy[1], w: 0 };
+              order.push(city[name]);
+            }
+          });
+        var flows = [];
+        String(typeof V.flows === "string" && V.flows.trim() ? V.flows : DEFF)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.lastIndexOf(":"),
+              g = item.indexOf(">");
+            if (k < 0 || g < 0 || g > k || flows.length >= 16) return;
+            var a = city[item.slice(0, g).trim()],
+              b = city[item.slice(g + 1, k).trim()],
+              v = parseFloat(item.slice(k + 1).replace(/[\s ]/g, "").replace(",", "."));
+            if (a && b && a !== b && isFinite(v)) {
+              flows.push({ a: a, b: b, v: v });
+              a.w += v;
+              b.w += v;
+            }
+          });
+        var vmax = Math.max.apply(null, flows.map(function (f) {
+          return f.v;
+        }).concat([1]));
+        var arcG = svg.append("g"),
+          runG = svg.append("g"),
+          dotG = svg.append("g"),
+          labG = svg.append("g");
+        var arcs = flows.map(function (f) {
+          var mx = (f.a.x + f.b.x) / 2,
+            my = Math.min(f.a.y, f.b.y) - Math.abs(f.b.x - f.a.x) * 0.15;
+          var el = arcG
+            .append("path")
+            .attr("class", "usf-arc")
+            .attr("d", "M" + f.a.x + "," + f.a.y + " Q" + mx + "," + my + " " + f.b.x + "," + f.b.y)
+            .attr("stroke-width", (1.5 + (f.v / vmax) * 2.5) * Math.max(1, k0 * 1.4))
+            .style("opacity", 0.4 + (f.v / vmax) * 0.6)
+            .node();
+          return { el: el, L: el.getTotalLength(), run: runG.append("circle").attr("class", "usf-run").attr("r", 4).attr("cx", f.a.x).attr("cy", f.a.y).node() };
+        });
+        var dots = order.map(function (c) {
+          return dotG.append("circle").attr("class", "usf-dot").attr("cx", c.x).attr("cy", c.y).attr("r", 6).node();
+        });
+        // Подписи: по весу города, место рядом с точкой без наложений; нет места – подпись не ставится
+        var boxes = order.map(function (c) {
+          return { x: c.x - 8, y: c.y - 8, w: 16, h: 16 };
+        });
+        function hits(b) {
+          return b.x < 0 || b.x + b.w > MAPW || b.y < 0 || b.y + b.h > MAPH || boxes.some(function (o) {
+            return b.x < o.x + o.w + 6 && o.x < b.x + b.w + 6 && b.y < o.y + o.h + 2 && o.y < b.y + b.h + 2;
+          });
+        }
+        var labels = [];
+        order
+          .slice()
+          .sort(function (a, b) {
+            return b.w - a.w;
+          })
+          .forEach(function (c) {
+            var t = labG.append("text").attr("class", "usf-label").style("opacity", 0).text(c.name);
+            var w = t.node().getComputedTextLength(),
+              h = 34,
+              gap = 12;
+            var spots = [
+              [c.x + gap + w / 2, c.y - gap - h / 2 + 8],
+              [c.x - gap - w / 2, c.y - gap - h / 2 + 8],
+              [c.x + gap + w / 2, c.y + gap + h / 2 - 8],
+              [c.x - gap - w / 2, c.y + gap + h / 2 - 8],
+              [c.x, c.y - gap - h / 2 - 4],
+              [c.x, c.y + gap + h / 2 + 4],
+            ];
+            for (var i = 0; i < spots.length; i++) {
+              var b = { x: spots[i][0] - w / 2, y: spots[i][1] - h / 2, w: w, h: h };
+              if (!hits(b)) {
+                boxes.push(b);
+                t.attr("x", spots[i][0]).attr("y", spots[i][1]);
+                labels.push(t.node());
+                return;
+              }
+            }
+            t.remove();
+          });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cM = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 1;
+        var cP = isFinite(cues[2]) && cues[2] > cM ? cues[2] : cM + 2.5;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
+        tl.to("#usf-map .usf-country", { opacity: 1, duration: 0.8, ease: "power2.out" }, cM - 0.2);
+        tl.from(dots, { attr: { r: 0 }, duration: 0.4, ease: "back.out(1.7)", stagger: 0.05 }, cM + 0.5);
+        tl.to(labels, { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.05 }, cM + 1.2);
+        arcs.forEach(function (a, i) {
+          // круглый конец дуги нулевой длины – видимая точка, поэтому до старта дуга скрыта
+          gsap.set(a.el, { visibility: "hidden" });
+          tl.set(a.el, { visibility: "visible" }, cP + i * 0.2);
+          tl.fromTo(a.el, { strokeDasharray: a.L, strokeDashoffset: a.L }, { strokeDashoffset: 0, duration: 1, ease: "power2.inOut", immediateRender: false }, cP + i * 0.2);
+        });
+        var tRun = cP + arcs.length * 0.2 + 1;
+        arcs.forEach(function (a, i) {
+          var pr = { v: 0 };
+          var t0 = tRun + i * 0.1;
+          tl.set(a.run, { opacity: 0.9 }, t0);
+          tl.to(pr, { v: 1, duration: 1.5, ease: "power1.inOut", onUpdate: function () {
+            var pt = a.el.getPointAtLength(pr.v * a.L);
+            a.run.setAttribute("cx", pt.x);
+            a.run.setAttribute("cy", pt.y);
+          } }, t0);
+          tl.to(a.run, { opacity: 0, duration: 0.3 }, t0 + 1.5);
+        });
+        tl.to(srcEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, cM + 2);
+        if (exit === "fade") tl.to("#usf-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["us-map-flow"] = tl;
+      })();
+    </script>
+  </body>
+</html>

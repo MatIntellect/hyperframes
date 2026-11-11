@@ -1,0 +1,523 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "eyebrow", "type": "string", "role": "content", "label": "Eyebrow", "description": "Grey line above the headline. Empty hides it.", "maxLength": 30, "default": "Перелёт за шесть секунд" },
+    { "id": "join", "type": "string", "role": "content", "label": "Headline join", "description": "Red word between the two city names in the Bebas headline.", "maxLength": 6, "default": "–" },
+    { "id": "meta", "type": "string", "role": "content", "label": "Route line", "description": "Grey line under the headline after a red dash. Empty hides it.", "maxLength": 28, "default": "5 837 км за шесть секунд" },
+    { "id": "fromName", "type": "string", "role": "content", "label": "From city", "description": "Start city: headline and pin label.", "maxLength": 16, "default": "Нью-Йорк" },
+    { "id": "fromCode", "type": "string", "role": "content", "label": "From code", "description": "Grey line under the start city name in its pin label. Empty hides it.", "maxLength": 12, "default": "JFK / NYC" },
+    { "id": "fromPoint", "type": "string", "role": "content", "label": "From point", "description": "Start city as latitude, longitude (decimal point).", "maxLength": 24, "default": "40.71, -74.01" },
+    { "id": "toName", "type": "string", "role": "content", "label": "To city", "description": "Destination city: headline and pin label.", "maxLength": 16, "default": "Париж" },
+    { "id": "toCode", "type": "string", "role": "content", "label": "To code", "description": "Grey line under the destination name in its pin label. Empty hides it.", "maxLength": 12, "default": "CDG / FR" },
+    { "id": "toPoint", "type": "string", "role": "content", "label": "To point", "description": "Destination as latitude, longitude (decimal point). The map is framed on the two cities; it reads best when they lie mostly east-west of each other.", "maxLength": 24, "default": "48.86, 2.35" },
+    { "id": "badge", "type": "string", "role": "content", "label": "Landing badge", "description": "Red pill that pops up by the destination on landing.", "maxLength": 12, "default": "Прилетели" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The flight keeps its native 6 s rhythm, tied to its sound. Comma-separated seconds from mount start: 1 the exit (only when exit is fade or flash). Empty keeps 5.5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed map to the end of the mount; fade fades it out; flash cuts to a solid light frame and stays, as in the native block.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "flash", "label": "Cut to light" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/world-50m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #npf-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--fg, #f2f2f2);
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #npf-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #npf-map-plane {
+        position: absolute;
+        inset: 0;
+        transform-origin: 52% 48%;
+      }
+      #npf-land {
+        position: absolute;
+        inset: 0;
+      }
+      .npf-country {
+        fill: var(--surface, #18181a);
+        stroke: var(--border, #2e2e32);
+        stroke-width: 1;
+      }
+      .npf-svg {
+        position: absolute;
+        inset: 0;
+        overflow: visible;
+      }
+      #npf-route-glow {
+        fill: none;
+        stroke: color-mix(in srgb, var(--accent, #ff0000) 23%, transparent);
+        stroke-width: 24;
+        stroke-linecap: round;
+        filter: blur(4px);
+      }
+      #npf-route-path {
+        fill: none;
+        stroke: var(--accent, #ff0000);
+        stroke-width: 9;
+        stroke-linecap: round;
+      }
+      #npf-route-thread {
+        fill: none;
+        stroke: color-mix(in srgb, var(--fg, #f2f2f2) 86%, transparent);
+        stroke-width: 3;
+        stroke-linecap: round;
+      }
+      .npf-tick {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        margin: -7px 0 0 -7px;
+        border-radius: 999px;
+        background: var(--fg, #f2f2f2);
+        border: 3px solid var(--accent, #ff0000);
+        opacity: 0;
+      }
+      .npf-pin {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: var(--fg, #f2f2f2);
+        border: 7px solid var(--accent, #ff0000);
+        box-shadow:
+          0 15px 34px rgb(0 0 0 / 40%),
+          0 0 0 10px color-mix(in srgb, var(--accent, #ff0000) 14%, transparent);
+        transform: translate(-50%, -50%);
+      }
+      .npf-pin::after {
+        content: "";
+        position: absolute;
+        inset: -20px;
+        border-radius: 999px;
+        border: 2px solid color-mix(in srgb, var(--accent, #ff0000) 30%, transparent);
+      }
+      .npf-pin-label {
+        position: absolute;
+        top: 34px;
+        padding: 14px 18px 15px;
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--surface, #18181a) 92%, transparent);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 18px 38px rgb(0 0 0 / 35%);
+        color: var(--fg, #f2f2f2);
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .npf-pin-label span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        font-weight: 600;
+      }
+      #npf-plane {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 112px;
+        height: 112px;
+        offset-distance: 0%;
+        offset-rotate: auto;
+        offset-anchor: 50% 50%;
+        filter: drop-shadow(0 22px 22px rgb(0 0 0 / 45%));
+      }
+      #npf-plane-core {
+        position: absolute;
+        inset: 0;
+      }
+      #npf-plane svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .npf-doodle {
+        fill: none;
+        stroke: var(--fg, #f2f2f2);
+        stroke-width: 13;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 900;
+        stroke-dashoffset: 900;
+      }
+      .npf-doodle.npf-thin {
+        stroke-width: 6;
+        opacity: 0.82;
+      }
+      #npf-pulse {
+        position: absolute;
+        width: 126px;
+        height: 126px;
+        margin: -63px 0 0 -63px;
+        border-radius: 999px;
+        border: 4px solid color-mix(in srgb, var(--fg, #f2f2f2) 40%, transparent);
+        opacity: 0;
+      }
+      #npf-badge {
+        position: absolute;
+        padding: 14px 22px 15px;
+        border-radius: 999px;
+        background: var(--accent, #ff0000);
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        box-shadow: 0 20px 44px rgb(0 0 0 / 40%);
+        opacity: 0;
+        transform: scale(0.78);
+      }
+      #npf-title {
+        position: absolute;
+        z-index: 6;
+        border-radius: 30px;
+        background: color-mix(in srgb, var(--surface, #18181a) 88%, transparent);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 28px 70px rgb(0 0 0 / 40%);
+      }
+      #npf-eyebrow {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      #npf-headline {
+        margin-top: 12px;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 0.95;
+        text-transform: uppercase;
+        overflow-wrap: break-word;
+      }
+      #npf-headline span {
+        color: var(--accent, #ff0000);
+      }
+      #npf-meta {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 18px;
+        color: var(--muted, #8a8a90);
+        font-size: 30px;
+        font-weight: 700;
+      }
+      #npf-meta i {
+        display: block;
+        flex: none;
+        width: 54px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--accent, #ff0000);
+      }
+      #npf-flash {
+        position: absolute;
+        inset: 0;
+        z-index: 30;
+        background: var(--fg, #f2f2f2);
+        opacity: 0;
+      }
+      
+      #npf-title {
+        left: 82px;
+        top: 70px;
+        max-width: 860px;
+        padding: 30px 36px 34px;
+      }
+      #npf-headline {
+        font-size: 110px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="npf-root" data-composition-id="nyc-paris-flight" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="npf-stage">
+        <div id="npf-map-plane" data-layout-allow-overflow>
+          <svg id="npf-land" data-layout-ignore></svg>
+          <svg class="npf-svg" id="npf-route" data-layout-ignore>
+            <path id="npf-route-glow" />
+            <path id="npf-route-path" />
+            <path id="npf-route-thread" />
+          </svg>
+          <div id="npf-ticks"></div>
+          <div id="npf-from" class="npf-pin"><div class="npf-pin-label" id="npf-from-label"></div></div>
+          <div id="npf-to" class="npf-pin"><div class="npf-pin-label" id="npf-to-label"></div></div>
+          <div id="npf-plane" aria-hidden="true">
+            <div id="npf-plane-core">
+              <svg viewBox="-64 -64 128 128">
+                <path
+                  d="M 58 0 C 52 -10 37 -15 15 -16 L -18 -56 C -23 -62 -34 -58 -32 -49 L -21 -15 L -48 -12 C -56 -11 -60 -6 -60 0 C -60 6 -56 11 -48 12 L -21 15 L -32 49 C -34 58 -23 62 -18 56 L 15 16 C 37 15 52 10 58 0 Z"
+                  fill="var(--fg, #f2f2f2)"
+                />
+                <path
+                  d="M 54 0 C 46 -6 33 -9 14 -10 L -19 -50 C -21 -53 -25 -52 -25 -47 L -15 -10 L -49 -6 C -53 -5 -55 -2 -55 0 C -55 2 -53 5 -49 6 L -15 10 L -25 47 C -25 52 -21 53 -19 50 L 14 10 C 33 9 46 6 54 0 Z"
+                  fill="var(--accent, #ff0000)"
+                />
+                <circle cx="18" cy="0" r="6" fill="var(--fg, #f2f2f2)" opacity="0.95" />
+              </svg>
+            </div>
+          </div>
+          <svg class="npf-svg" id="npf-doodles" data-layout-ignore>
+            <g id="npf-doodle-g">
+              <path
+                id="npf-doodle-a"
+                class="npf-doodle"
+                d="M -101.6 -5.8 C -106.6 -64.8 -51.6 -100.8 15.4 -87.8 C 88.4 -72.8 128.4 -29.8 108.4 28.2 C 93.4 80.2 12.4 98.2 -55.6 74.2 C -93.6 61.2 -117.6 29.2 -101.6 -5.8"
+              />
+              <path
+                id="npf-doodle-b"
+                class="npf-doodle npf-thin"
+                d="M -93.6 8.2 C -123.6 -31.8 -83.6 -80.8 -6.6 -91.8 C 76.4 -103.8 136.4 -49.8 118.4 9.2 C 101.4 65.2 29.4 92.2 -41.6 75.2 C -85.6 65.2 -107.6 39.2 -93.6 8.2"
+              />
+            </g>
+          </svg>
+          <div id="npf-pulse"></div>
+          <div id="npf-badge"></div>
+        </div>
+        <div id="npf-title">
+          <div id="npf-eyebrow"></div>
+          <div id="npf-headline"></div>
+          <div id="npf-meta"><i></i><p id="npf-meta-t"></p></div>
+        </div>
+        <div id="npf-flash"></div>
+      </div>
+      <audio id="npf-sfx" data-start="0" data-duration="6" data-track-index="9" src="assets/nyc-paris-flight.wav" data-volume="0.95"></audio>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("npf-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(id) {
+          return document.getElementById("npf-" + id);
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function point(v, d) {
+          var p = String(v || "")
+            .split(",")
+            .map(parseFloat);
+          return p.length === 2 && isFinite(p[0]) && isFinite(p[1]) && Math.abs(p[0]) <= 85 && Math.abs(p[1]) <= 180 ? [p[1], p[0]] : d;
+        }
+
+        var W = 1920,
+          H = 1080;
+        // поле, в которое вписаны два города: x0, y0, x1, y1
+        var BOX =  [310, 400, 1610, 600]  ;
+        var DOODLE =  1  ;
+        
+
+        var fromName = txt(V.fromName, "Нью-Йорк") || "Нью-Йорк";
+        var toName = txt(V.toName, "Париж") || "Париж";
+        $("eyebrow").textContent = txt(V.eyebrow, "Перелёт за шесть секунд");
+        if (!$("eyebrow").textContent) $("eyebrow").style.display = "none";
+        var hl = $("headline");
+        hl.appendChild(document.createTextNode(fromName + " "));
+        var j = document.createElement("span");
+        j.textContent = txt(V.join, "–") || "–";
+        hl.appendChild(j);
+        hl.appendChild(document.createTextNode(" " + toName));
+        $("meta-t").textContent = txt(V.meta, "5 837 км за шесть секунд");
+        if (!$("meta-t").textContent) $("meta").style.display = "none";
+        $("badge").textContent = txt(V.badge, "Прилетели") || "Прилетели";
+        function label(el, name, code) {
+          el.appendChild(document.createTextNode(name));
+          if (code) {
+            var s = document.createElement("span");
+            s.textContent = code;
+            el.appendChild(s);
+          }
+        }
+        label($("from-label"), fromName, txt(V.fromCode, "JFK / NYC"));
+        label($("to-label"), toName, txt(V.toCode, "CDG / FR"));
+
+        // карта: проекция Меркатора вписывает два города в поле BOX
+        var A0 = point(V.fromPoint, [-74.01, 40.71]),
+          B0 = point(V.toPoint, [2.35, 48.86]);
+        var projection = d3.geoMercator().fitExtent(
+          [
+            [BOX[0], BOX[1]],
+            [BOX[2], BOX[3]],
+          ],
+          { type: "MultiPoint", coordinates: [A0, B0] },
+        );
+        var world = window.__hfWorld50m;
+        var land = d3.select("#npf-land").attr("width", W).attr("height", H).attr("viewBox", "0 0 " + W + " " + H);
+        land
+          .selectAll("path")
+          .data(topojson.feature(world, world.objects.countries).features)
+          .enter()
+          .append("path")
+          .attr("class", "npf-country")
+          .attr("d", d3.geoPath(projection));
+        ["route", "doodles"].forEach(function (id) {
+          $(id).setAttribute("width", W);
+          $(id).setAttribute("height", H);
+          $(id).setAttribute("viewBox", "0 0 " + W + " " + H);
+        });
+
+        // маршрут – дуга вверх той же формы, что у разработчиков (подъём 1% и 16,5% длины)
+        var A = projection(A0),
+          B = projection(B0);
+        var dx = B[0] - A[0],
+          dy = B[1] - A[1],
+          len = Math.hypot(dx, dy) || 1;
+        var up = [dy / len, -dx / len];
+        if (up[1] > 0) up = [-up[0], -up[1]];
+        function at(t, lift) {
+          return [A[0] + dx * t + up[0] * lift * len, A[1] + dy * t + up[1] * lift * len].map(function (v) {
+            return v.toFixed(1);
+          });
+        }
+        var d = "M " + A[0].toFixed(1) + " " + A[1].toFixed(1) + " C " + at(0.262, 0.01).join(" ") + " " + at(0.623, 0.165).join(" ") + " " + B[0].toFixed(1) + " " + B[1].toFixed(1);
+        ["route-glow", "route-path", "route-thread"].forEach(function (id) {
+          $(id).setAttribute("d", d);
+        });
+        var L = $("route-path").getTotalLength();
+        ["route-glow", "route-path", "route-thread"].forEach(function (id) {
+          $(id).style.strokeDasharray = L;
+          $(id).style.strokeDashoffset = L;
+        });
+        $("plane").style.offsetPath = 'path("' + d + '")';
+
+        // метки пути, булавки, подписи к другому городу, круг и плашка у города прилёта
+        var ticks = [];
+        for (var i = 0; i < 6; i++) {
+          var q = $("route-path").getPointAtLength(L * (0.13 + i * 0.142));
+          var t = document.createElement("div");
+          t.className = "npf-tick";
+          t.style.left = q.x + "px";
+          t.style.top = q.y + "px";
+          $("ticks").appendChild(t);
+          ticks.push(t);
+        }
+        function place(el, p) {
+          el.style.left = p[0] + "px";
+          el.style.top = p[1] + "px";
+        }
+        place($("from"), A);
+        place($("to"), B);
+        place($("pulse"), B);
+        var east = B[0] >= A[0];
+        $("from-label").style[east ? "left" : "right"] = "28px";
+        // подпись города прилёта – за краем круга, иначе её закрывают самолёт и круг
+        $("to-label").style[east ? "right" : "left"] = Math.round(124 * DOODLE) + "px";
+        $("doodle-g").setAttribute("transform", "translate(" + B[0].toFixed(1) + " " + B[1].toFixed(1) + ") scale(" + DOODLE + ")");
+        var badge = $("badge");
+        var bw = badge.offsetWidth,
+          bh = badge.offsetHeight;
+        place(badge, [Math.max(24, Math.min(W - 24 - bw, B[0] - 111 * DOODLE)), Math.min(H - 24 - bh, B[1] + 114 * DOODLE)]);
+        
+
+        // ритм родной, привязан к звуку
+        var tl = gsap.timeline({ paused: true });
+        tl.from("#npf-map-plane", { scale: 1.1, x: -38, y: 20, opacity: 0.94, duration: 1.05, ease: "power2.out" }, 0.16);
+        tl.from("#npf-title", { y: 28, scale: 0.97, opacity: 0, duration: 0.52, ease: "expo.out" }, 0.24);
+        tl.from("#npf-eyebrow", { x: -22, opacity: 0, duration: 0.36, ease: "power3.out" }, 0.32);
+        tl.from("#npf-headline", { y: 34, opacity: 0, duration: 0.5, ease: "back.out(1.45)" }, 0.4);
+        tl.from("#npf-meta", { x: -26, opacity: 0, duration: 0.38, ease: "circ.out" }, 0.58);
+        tl.from("#npf-from", { scale: 0.12, opacity: 0, duration: 0.34, ease: "back.out(2.8)" }, 0.7);
+        tl.from("#npf-to", { scale: 0.12, opacity: 0, duration: 0.34, ease: "elastic.out(1, 0.5)" }, 0.86);
+        tl.from("#npf-plane", { scale: 0.48, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, 1.08);
+        tl.to("#npf-route-glow", { strokeDashoffset: 0, duration: 3.1, ease: "power1.inOut" }, 1.16);
+        tl.to("#npf-route-path", { strokeDashoffset: 0, duration: 3.05, ease: "power2.inOut" }, 1.2);
+        tl.to("#npf-route-thread", { strokeDashoffset: 0, duration: 2.92, ease: "sine.inOut" }, 1.26);
+        tl.to("#npf-plane", { offsetDistance: "100%", duration: 3.25, ease: "sine.inOut" }, 1.17);
+        tl.to("#npf-plane-core", { scale: 1.06, duration: 0.2, repeat: 12, yoyo: true, ease: "sine.inOut" }, 1.22);
+        tl.to("#npf-map-plane", { scale: 1.025, duration: 3.2, ease: "sine.inOut" }, 1.28);
+        ticks.forEach(function (tick, k) {
+          tl.fromTo(tick, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "back.out(3)", immediateRender: false }, 1.34 + k * 0.44);
+          tl.to(tick, { scale: 0.6, opacity: 0.18, duration: 0.34, ease: "power2.out" }, 1.48 + k * 0.44);
+        });
+        tl.fromTo("#npf-pulse", { scale: 0.52, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)", immediateRender: false }, 4.06);
+        tl.to("#npf-doodle-a", { strokeDashoffset: 0, duration: 0.54, ease: "power2.out" }, 4.18);
+        tl.to("#npf-doodle-b", { strokeDashoffset: 0, duration: 0.36, ease: "power3.out" }, 4.36);
+        tl.to("#npf-pulse", { scale: 1.5, opacity: 0, duration: 0.58, ease: "power3.out" }, 4.64);
+        tl.to("#npf-plane-core", { scale: 1.23, duration: 0.16, ease: "back.out(3)" }, 4.96);
+        tl.to("#npf-plane-core", { scale: 0.9, duration: 0.12, ease: "power2.in" }, 5.12);
+        tl.to("#npf-plane-core", { scale: 1, duration: 0.22, ease: "elastic.out(1, 0.45)" }, 5.24);
+        tl.to("#npf-badge", { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2.4)" }, 5.02);
+        tl.to("#npf-badge", { scale: 1.06, duration: 0.16, yoyo: true, repeat: 1, ease: "sine.inOut" }, 5.3);
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var tExit = isFinite(cues[0]) && cues[0] > 0 ? cues[0] : 5.5;
+        var exit = oneOf(V.exit, ["none", "fade", "flash"], "none");
+        if (exit === "flash") tl.set("#npf-flash", { opacity: 1 }, tExit);
+        if (exit === "fade") tl.to("#npf-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, tExit);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["nyc-paris-flight"] = tl;
+      })();
+    </script>
+  </body>
+</html>

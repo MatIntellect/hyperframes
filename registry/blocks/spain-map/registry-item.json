@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "spain-map",
+  "type": "hyperframes:block",
+  "title": "Spain Map",
+  "description": "Spain choropleth by autonomous community on the brand ground: headline wipes in, regions reveal from the centre in a dark-red to accent-red scale by value, legend and source fade in, chosen regions pulse with their codes. Headline, data and labels are variables; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "spain", "choropleth"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "spain-map.html",
+      "target": "compositions/spain-map.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/es-autonomous-regions.js",
+      "target": "assets/es-autonomous-regions.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

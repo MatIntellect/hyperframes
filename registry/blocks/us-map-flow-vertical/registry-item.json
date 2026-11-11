@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "us-map-flow-vertical",
+  "type": "hyperframes:block",
+  "title": "US Flow Map (vertical)",
+  "description": "Vertical US flow map: a 780-wide grey map, city dots with self-placing labels, red arcs by volume with running dots. Cities, flows and labels are variables; placement full, top or bottom card; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "usa", "flow", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "us-map-flow-vertical.html",
+      "target": "compositions/us-map-flow-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/us-states-10m.js",
+      "target": "assets/us-states-10m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

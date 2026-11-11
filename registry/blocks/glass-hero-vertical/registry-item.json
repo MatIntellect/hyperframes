@@ -1,0 +1,29 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "glass-hero-vertical",
+  "type": "hyperframes:block",
+  "title": "Glass Hero (vertical)",
+  "description": "Vertical glass hero: a clear lens or ring rises in front of a giant Bebas headline in the middle of the field and keeps turning, bending the type. Headline, subline and shape are variables; placement full, top or bottom card; holds.",
+  "tags": [
+    "3d-object",
+    "three-js",
+    "webgl",
+    "glass",
+    "refraction",
+    "hero",
+    "title-card",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "glass-hero-vertical.html",
+      "target": "compositions/glass-hero-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

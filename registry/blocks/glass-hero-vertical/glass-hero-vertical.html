@@ -1,0 +1,317 @@
+<!doctype html>
+<!--
+  Glass Hero: a glass object rises in front of a giant headline and turns, bending the type.
+  The headline is drawn inside the scene because transmission only refracts what is rendered.
+  Seek-safe: every frame is render(t), driven by one linear GSAP clock.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the headline across the middle of the 780x1180 field (y 180-1360), the subline under it. top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "headline", "type": "string", "role": "content", "label": "Headline behind the glass", "description": "One word or two, Bebas Neue, set as large as the width allows.", "default": "Ясность", "maxLength": 12 },
+    { "id": "subline", "type": "string", "role": "content", "label": "Subline", "description": "Line under the scene. Empty hides it.", "default": "Каждая деталь видна, ничего не мешает", "maxLength": 48 },
+    { "id": "shape", "type": "enum", "role": "style", "label": "Glass shape", "default": "lens", "options": [ { "value": "lens", "label": "Lens" }, { "value": "ring", "label": "Ring" } ] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the glass starts rising (it settles in 1.8 s and keeps turning), 2 the subline fades up, 3 the block fades out (only when exit is fade). Empty keeps 0 and 1.5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the glass turning to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #glhv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #glhv-box {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #glhv-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #glhv-subline {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--muted, #8a8a90);
+        opacity: 0;
+      }
+      
+      
+      #glhv-subline {
+        left: 150px;
+        right: 150px;
+        top: 1210px;
+        font-size: 36px;
+      }
+      #glhv-root.glhv-card #glhv-box {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+        box-sizing: border-box;
+      }
+      #glhv-root.glhv-bottom #glhv-box {
+        top: 600px;
+      }
+      #glhv-root.glhv-card #glhv-subline {
+        left: 36px;
+        right: 36px;
+        top: auto;
+        bottom: 44px;
+        font-size: 30px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="glhv-root" data-composition-id="glass-hero-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <div id="glhv-box">
+        <canvas id="glhv-canvas" class="clip" data-start="0" data-duration="30" data-track-index="1"></canvas>
+        <div id="glhv-subline"></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var V =
+          (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var root = document.getElementById("glhv-root");
+        var W = 1080,
+          H = 1920,
+          card = false;
+        
+        var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+        if (placement !== "full") {
+          root.classList.add("glhv-card", "glhv-" + placement);
+          W = 780;
+          H = 760;
+          card = true;
+        }
+        
+        var subline = document.getElementById("glhv-subline");
+        subline.textContent = txt(V.subline, "Каждая деталь видна, ничего не мешает");
+        var cs = getComputedStyle(root);
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var c1 = isFinite(cues[1]) && cues[1] >= 0 ? cues[1] : c0 + 1.5;
+
+        var clock = { t: 0 };
+        var scene = {
+          headline: txt(V.headline, "") || "Ясность",
+          shape: V.shape === "ring" ? "ring" : "lens",
+          W: W,
+          H: H,
+          card: card,
+          start: c0,
+          bg: cs.getPropertyValue("--bg").trim() || "#0c1014",
+          fg: cs.getPropertyValue("--fg").trim() || "#f2f2f2",
+          font: (cs.getPropertyValue("--font-display").trim() || '"Bebas Neue"').split(",")[0],
+          clock: clock,
+          render: null,
+        };
+        window.glhvGlass = scene;
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["glass-hero-vertical"] = new Promise(function (resolve) {
+          scene.ready = resolve;
+        });
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(clock, {
+          t: 30,
+          duration: 30,
+          ease: "none",
+          onUpdate: function () {
+            if (scene.render) scene.render(clock.t);
+          },
+        });
+        if (subline.textContent) tl.fromTo(subline, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, c1);
+        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) && cues[2] > c0 ? cues[2] : c0 + 5);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["glass-hero-vertical"] = tl;
+      })();
+    </script>
+
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.184.0/+esm";
+
+      const host = window.glhvGlass;
+      const W = host.W,
+        H = host.H;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById("glhv-canvas"),
+        antialias: true,
+        preserveDrawingBuffer: true,
+      });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      // No tone mapping: the glass passes the ground and type through at their true values.
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(host.bg);
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      // Studio light for the reflections: a soft key box overhead and two tall strips at the sides.
+      const studio = new THREE.Scene();
+      studio.background = new THREE.Color(0.08, 0.08, 0.08);
+      const softbox = (w, h, x, y, z, level) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(level, level, level), side: THREE.DoubleSide }));
+        m.position.set(x, y, z);
+        m.lookAt(0, 0, 0);
+        studio.add(m);
+      };
+      softbox(8, 3, -1, 6, 2, 2.5);
+      softbox(1.2, 9, -7, 0, -1, 4);
+      softbox(1.2, 9, 7, 0, -1, 4);
+      scene.environment = pmrem.fromScene(studio, 0.02).texture;
+
+      const camera = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
+      camera.position.set(0, 0, 10);
+
+      // заголовок: Bebas бренда, ширина – доля кадра, высота строки в вертикали – центр поля
+      const LAYOUT =   host.card ? { width: 0.84, y: 0.47, glass: 0.89 } : { width: 0.72, y: 0.4, glass: 0.52 } ;
+      async function headlineTexture() {
+        try {
+          await document.fonts.load("700 200px " + host.font, host.headline);
+        } catch (error) {
+          console.error("[glass-hero] headline font failed to load", error);
+        }
+        const c = document.createElement("canvas");
+        c.width = W * 2;
+        c.height = H * 2;
+        const g = c.getContext("2d");
+        g.fillStyle = host.bg;
+        g.fillRect(0, 0, c.width, c.height);
+        const text = host.headline.toUpperCase();
+        let size = Math.round(c.height * 0.6);
+        g.font = `700 ${size}px ${host.font}, sans-serif`;
+        while (g.measureText(text).width > c.width * LAYOUT.width && size > 120) {
+          size -= 10;
+          g.font = `700 ${size}px ${host.font}, sans-serif`;
+        }
+        g.textAlign = "center";
+        g.textBaseline = "middle";
+        g.fillStyle = host.fg;
+        g.fillText(text, c.width / 2, c.height * LAYOUT.y);
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        return tex;
+      }
+
+      // The backdrop plane fills the frustum at z = -2, so it reads as the page itself.
+      const planeHeight = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 12;
+      const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(planeHeight * (W / H), planeHeight), new THREE.MeshBasicMaterial({ map: await headlineTexture() }));
+      backdrop.position.z = -2;
+      scene.add(backdrop);
+
+      const geometries = {
+        ring: () => new THREE.TorusGeometry(1.25, 0.46, 96, 200),
+        lens: () => {
+          const g = new THREE.SphereGeometry(1.6, 128, 64);
+          g.scale(1, 1, 0.42);
+          return g;
+        },
+      };
+      const glass = new THREE.Mesh(
+        geometries[host.shape](),
+        new THREE.MeshPhysicalMaterial({
+          color: 0xffffff,
+          transmission: 1,
+          thickness: 0.6,
+          ior: 1.3,
+          roughness: 0.03,
+          metalness: 0,
+          dispersion: 0.6,
+          attenuationColor: new THREE.Color(host.fg),
+          attenuationDistance: 2.2,
+          specularIntensity: 1,
+          clearcoat: 1,
+          clearcoatRoughness: 0.04,
+        }),
+      );
+      scene.add(glass);
+
+      const key = new THREE.DirectionalLight(0xffffff, 2.4);
+      key.position.set(-4, 5, 6);
+      scene.add(key);
+
+      const easeOut = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+      const lens = host.shape !== "ring";
+      // вертикаль: центр стекла по высоте – на строке заголовка (в широкой – как у разработчиков, по центру)
+      const visH = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (10 - 1.2);
+      const cy =   (0.5 - LAYOUT.y) * visH ;
+
+      host.render = (t) => {
+        // Rise and settle over the first 1.8 s, then keep turning; the turn never stops,
+        // so a held frame still shows the type moving through the glass.
+        const T = t - host.start;
+        const rise = easeOut(T / 1.8);
+        glass.position.set(Math.sin(T * 0.55) * 0.35 * LAYOUT.glass, cy - 3.2 * (1 - rise) + Math.sin(T * 0.9) * 0.06, 1.2);
+        glass.scale.setScalar((0.62 + 0.14 * rise) * LAYOUT.glass);
+        glass.rotation.set(lens ? Math.sin(T * 0.7) * 0.35 : 0.5 + T * 0.22, lens ? Math.sin(T * 0.5) * 0.5 + 0.2 : T * 0.34, lens ? 0 : 0.2 + T * 0.08);
+        renderer.render(scene, camera);
+      };
+      host.render(host.clock.t);
+      host.ready();
+    </script>
+  </body>
+</html>

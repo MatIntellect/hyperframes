@@ -1,0 +1,364 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "Плотность населения США" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Жителей на квадратную милю, оценка 2024" },
+    { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "States separated by ;, each as code: value with the two-letter postal code (CA, NY, TX, DC...). Colour runs from the lowest value to the scale top.", "maxLength": 700, "default": "AL: 99,2; AK: 1,3; AZ: 63,5; AR: 58,1; CA: 253,9; CO: 56,5; CT: 738,1; DE: 508; FL: 410,5; GA: 185,6; HI: 226,6; ID: 22,8; IL: 228,2; IN: 186,7; IA: 57,1; KS: 35,9; KY: 113,2; LA: 107,7; ME: 43,8; MD: 636,1; MA: 901,2; MI: 176,4; MN: 71,7; MS: 63,5; MO: 89,5; MT: 7,6; NE: 25,3; NV: 28,3; NH: 153,2; NJ: 1263; NM: 17,4; NY: 415,3; NC: 214,7; ND: 11,3; OH: 288,8; OK: 57,7; OR: 43,9; PA: 286,1; RI: 1061,4; SC: 170,2; SD: 12,2; TN: 167; TX: 112,8; UT: 40,3; VT: 68; VA: 218,6; WA: 115,9; WV: 74,6; WI: 108,8; WY: 5,8" },
+    { "id": "highlight", "type": "string", "role": "content", "label": "Highlight", "description": "Postal codes of up to five states that pulse one after another and get their code as a label, separated by commas. Empty pulses none.", "maxLength": 24, "default": "CA, NY, TX, FL, NJ" },
+    { "id": "scaleMax", "type": "number", "role": "style", "label": "Scale top", "description": "Value that gets the full accent colour; higher values stay at full. 0 uses the highest value in the data.", "default": 500, "min": 0 },
+    { "id": "legendLow", "type": "string", "role": "content", "label": "Legend low", "description": "Label at the low end of the colour bar.", "maxLength": 14, "default": "Ниже" },
+    { "id": "legendHigh", "type": "string", "role": "content", "label": "Legend high", "description": "Label at the high end of the colour bar.", "maxLength": 14, "default": "Выше" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Источник: Бюро переписи США" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the states start to reveal (about 3 s), 3 the highlighted states pulse and get labels, 4 the map fades out (only when exit is fade). Empty keeps 0, 1, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the map to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"
+      integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <script src="assets/us-states-10m.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #usm-root {
+        position: absolute;
+        inset: 0;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      .usm-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #usm-box {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #usm-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #usm-sub {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        opacity: 0;
+      }
+      #usm-map {
+        display: block;
+        flex: none;
+      }
+      .usm-country {
+        stroke: var(--bg, #0c1014);
+        stroke-width: 1.2;
+        opacity: 0;
+      }
+      .usm-label {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        fill: var(--fg, #f2f2f2);
+        stroke: var(--bg, #0c1014);
+        stroke-width: 5px;
+        paint-order: stroke;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+      .usm-tick {
+        stroke: var(--fg, #f2f2f2);
+        stroke-width: 2;
+      }
+      #usm-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+      }
+      #usm-source {
+        color: var(--muted, #8a8a90);
+        font-size: 28px;
+        opacity: 0;
+      }
+      #usm-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        opacity: 0;
+      }
+      #usm-bar {
+        height: 16px;
+        border-radius: 8px;
+      }
+      #usm-labels {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--muted, #8a8a90);
+      }
+      
+      #usm-box {
+        left: 120px;
+        top: 70px;
+        width: 1680px;
+        height: 960px;
+      }
+      #usm-title {
+        font-size: 96px;
+        white-space: nowrap;
+      }
+      #usm-sub {
+        font-size: 34px;
+        margin-top: 12px;
+        white-space: nowrap;
+      }
+      #usm-map {
+        margin: 24px auto 0;
+      }
+      #usm-foot {
+        margin-top: 16px;
+      }
+      #usm-legend {
+        width: 520px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="usm-root" data-composition-id="us-map" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="usm-ground"></div>
+      <div id="usm-box">
+        <div id="usm-title"></div>
+        <div id="usm-sub"></div>
+        <svg id="usm-map"></svg>
+        <div id="usm-foot">
+          <div id="usm-source"></div>
+          <div id="usm-legend">
+            <div id="usm-bar"></div>
+            <div id="usm-labels"><span id="usm-low"></span><span id="usm-high"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("usm-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        var MAPW = 1380,
+          MAPH = 680;
+        
+        var DEF =
+          "AL: 99,2; AK: 1,3; AZ: 63,5; AR: 58,1; CA: 253,9; CO: 56,5; CT: 738,1; DE: 508; FL: 410,5; GA: 185,6; HI: 226,6; ID: 22,8; IL: 228,2; IN: 186,7; IA: 57,1; KS: 35,9; KY: 113,2; LA: 107,7; ME: 43,8; MD: 636,1; MA: 901,2; MI: 176,4; MN: 71,7; MS: 63,5; MO: 89,5; MT: 7,6; NE: 25,3; NV: 28,3; NH: 153,2; NJ: 1263; NM: 17,4; NY: 415,3; NC: 214,7; ND: 11,3; OH: 288,8; OK: 57,7; OR: 43,9; PA: 286,1; RI: 1061,4; SC: 170,2; SD: 12,2; TN: 167; TX: 112,8; UT: 40,3; VT: 68; VA: 218,6; WA: 115,9; WV: 74,6; WI: 108,8; WY: 5,8";
+        var titleEl = document.getElementById("usm-title"),
+          subEl = document.getElementById("usm-sub"),
+          srcEl = document.getElementById("usm-source");
+        titleEl.textContent = txt(V.title, "Плотность населения США");
+        subEl.textContent = txt(V.subtitle, "Жителей на квадратную милю, оценка 2024");
+        srcEl.textContent = txt(V.source, "Источник: Бюро переписи США");
+        if (!subEl.textContent) subEl.style.display = "none";
+        document.getElementById("usm-low").textContent = txt(V.legendLow, "Ниже") || "Ниже";
+        document.getElementById("usm-high").textContent = txt(V.legendHigh, "Выше") || "Выше";
+
+        // Данные: «код: значение» по двухбуквенному почтовому коду штата
+        var CODES = { AL: "01", AK: "02", AZ: "04", AR: "05", CA: "06", CO: "08", CT: "09", DE: "10", DC: "11", FL: "12", GA: "13", HI: "15", ID: "16", IL: "17", IN: "18", IA: "19", KS: "20", KY: "21", LA: "22", ME: "23", MD: "24", MA: "25", MI: "26", MN: "27", MS: "28", MO: "29", MT: "30", NE: "31", NV: "32", NH: "33", NJ: "34", NM: "35", NY: "36", NC: "37", ND: "38", OH: "39", OK: "40", OR: "41", PA: "42", RI: "44", SC: "45", SD: "46", TN: "47", TX: "48", UT: "49", VT: "50", VA: "51", WA: "53", WV: "54", WI: "55", WY: "56" };
+        var ABBR = {};
+        Object.keys(CODES).forEach(function (k) {
+          ABBR[CODES[k]] = k;
+        });
+        var us = window.__hfUsStates10m;
+        var countries = topojson.feature(us, us.objects.states).features.filter(function (f) {
+          return ABBR[String(f.id).padStart(2, "0")];
+        });
+        var values = {};
+        String(typeof V.data === "string" && V.data.trim() ? V.data : DEF)
+          .split(";")
+          .forEach(function (item) {
+            var k = item.lastIndexOf(":");
+            if (k < 0) return;
+            var id = CODES[item.slice(0, k).trim().toUpperCase()];
+            var num = parseFloat(item.slice(k + 1).replace(/[\s ]/g, "").replace(",", "."));
+            if (id && isFinite(num)) values[id] = num;
+          });
+        countries.forEach(function (f) {
+          f.id = String(f.id).padStart(2, "0");
+        });
+        var ids = Object.keys(values);
+        var vmin = Math.min.apply(null, ids.map(function (i) {
+            return values[i];
+          })),
+          vmax = Math.max.apply(null, ids.map(function (i) {
+            return values[i];
+          }));
+
+        // Цвета – из меток темы: от тёмного красного к акценту; без данных – чуть светлее карточки
+        function rgb(css) {
+          var p = document.createElement("i");
+          p.style.color = css;
+          root.appendChild(p);
+          var m = getComputedStyle(p).color.match(/[\d.]+/g).map(Number);
+          p.remove();
+          return m;
+        }
+        var cs = getComputedStyle(root);
+        var accent = rgb(cs.getPropertyValue("--accent").trim() || "#ff0000"),
+          surface = rgb(cs.getPropertyValue("--surface").trim() || "#18181a"),
+          fg = rgb(cs.getPropertyValue("--fg").trim() || "#f2f2f2");
+        function mix(a, b, t) {
+          return "rgb(" + [0, 1, 2].map(function (i) {
+            return Math.round(a[i] + (b[i] - a[i]) * t);
+          }).join(",") + ")";
+        }
+        var noData = mix(surface, fg, 0.1);
+        function colorOf(v) {
+          var top = Number(V.scaleMax);
+          if (!(V.scaleMax !== "" && V.scaleMax !== undefined && isFinite(top))) top = 500;
+          if (top <= vmin) top = vmax;
+          var t = top > vmin ? (v - vmin) / (top - vmin) : 1;
+          return mix(surface, accent, 0.28 + 0.72 * Math.min(1, t));
+        }
+        document.getElementById("usm-bar").style.background =
+          "linear-gradient(90deg, " + mix(surface, accent, 0.28) + ", " + mix(surface, accent, 1) + ")";
+
+        var svg = d3.select("#usm-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        var projection = d3.geoAlbersUsa().fitSize([MAPW, MAPH], { type: "FeatureCollection", features: countries });
+        var path = d3.geoPath().projection(projection);
+        svg
+          .selectAll(".usm-country")
+          .data(countries)
+          .enter()
+          .append("path")
+          .attr("class", "usm-country")
+          .attr("id", function (d) {
+            return "usm-c" + d.id;
+          })
+          .attr("d", path)
+          .attr("fill", function (d) {
+            return d.id in values ? colorOf(values[d.id]) : noData;
+          });
+
+        var labG = svg.append("g"),
+          placed = [];
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var cM = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 1;
+        var cP = isFinite(cues[2]) && cues[2] > cM ? cues[2] : cM + 4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
+        tl.to("#usm-map .usm-country", { opacity: 1, duration: 0.3, ease: "power1.out", stagger: { each: 2.7 / countries.length, from: "center" } }, cM);
+        tl.to("#usm-legend", { opacity: 1, duration: 0.6, ease: "power2.out" }, cM + 3);
+        tl.to(srcEl, { opacity: 1, duration: 0.5, ease: "power2.out" }, cM + 3.5);
+        String(typeof V.highlight === "string" ? V.highlight : "CA, NY, TX, FL, NJ")
+          .split(",")
+          .map(function (c) {
+            return CODES[c.trim().toUpperCase()];
+          })
+          .filter(function (id) {
+            return id && document.getElementById("usm-c" + id);
+          })
+          .slice(0, 5)
+          .forEach(function (id, i) {
+            var el = document.getElementById("usm-c" + id);
+            el.parentNode.insertBefore(el, labG.node());
+            var c = path.centroid(el.__data__);
+            var lab = labG.append("g").style("opacity", 0);
+            var tick = lab.append("line").attr("class", "usm-tick");
+            var t = lab.append("text").attr("class", "usm-label").text(ABBR[id]);
+            // место подписи: на регионе, иначе выше, ниже, левее, правее – без наложений и в пределах карты
+            var w = t.node().getComputedTextLength() + 10,
+              h = 34;
+            var spots = [[0, 0], [0, -h], [0, h], [-w, 0], [w, 0], [-w, -h], [w, -h], [-w, h], [w, h]];
+            var p = spots[0];
+            for (var q = 0; q < spots.length; q++) {
+              var b = { x: c[0] + spots[q][0] - w / 2, y: c[1] + spots[q][1] - h / 2, w: w, h: h };
+              var free = b.x >= 0 && b.x + b.w <= MAPW && b.y >= 0 && b.y + b.h <= MAPH && !placed.some(function (o) {
+                return b.x < o.x + o.w && o.x < b.x + b.w && b.y < o.y + o.h && o.y < b.y + b.h;
+              });
+              if (free) {
+                p = spots[q];
+                placed.push(b);
+                break;
+              }
+            }
+            t.attr("x", c[0] + p[0]).attr("y", c[1] + p[1]);
+            if (p[0] || p[1]) tick.attr("x1", c[0]).attr("y1", c[1]).attr("x2", c[0] + p[0] * 0.6).attr("y2", c[1] + p[1] * 0.6);
+            tl.to(lab.node(), { opacity: 1, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
+            tl.to(el, { stroke: "rgb(" + fg.join(",") + ")", strokeWidth: 2.4, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
+            tl.to(el, { stroke: "rgb(" + rgb(cs.getPropertyValue("--bg").trim() || "#0c1014").join(",") + ")", strokeWidth: 0.8, duration: 0.6, ease: "power2.inOut" }, cP + i * 0.15 + 0.4);
+          });
+        if (exit === "fade") tl.to("#usm-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["us-map"] = tl;
+      })();
+    </script>
+  </body>
+</html>

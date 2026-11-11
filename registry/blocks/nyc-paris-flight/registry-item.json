@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "nyc-paris-flight",
+  "type": "hyperframes:block",
+  "title": "City to City Flight",
+  "description": "Flight map on the brand ground: a title card lands, two city pins pop, a plane flies a red arc between them with ticks, a doodle circles the destination and a red pill pops on landing, with its own sound. Cities, coordinates and words are variables; native 6 s rhythm; holds, fades or cuts to light.",
+  "tags": ["showcase", "travel", "map", "youtube", "sfx"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "nyc-paris-flight.html",
+      "target": "compositions/nyc-paris-flight.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/nyc-paris-flight.wav",
+      "target": "assets/nyc-paris-flight.wav",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/world-50m.js",
+      "target": "assets/world-50m.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "us-map-hex",
+  "type": "hyperframes:block",
+  "title": "US Hex Map",
+  "description": "US hex tile map on the brand ground: every state is one equal hex with its code, coloured from dark red to accent red by value; hexes grow in from the centre, legend and source fade in, chosen states pulse twice. Headline, data, legend and source are variables; cues set the beats; holds.",
+  "tags": ["data", "map", "geography", "usa", "hex"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "us-map-hex.html",
+      "target": "compositions/us-map-hex.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
