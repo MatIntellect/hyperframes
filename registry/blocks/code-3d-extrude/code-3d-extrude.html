@@ -5,7 +5,7 @@
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 12 lines, a line up to 60 characters.", "maxLength": 732, "default": "async function loadConfig(path) {\n  const raw = await readFile(path, \"utf8\")\n  const config = JSON.parse(raw)\n  return validate(config)\n}"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 is not used (the move starts with the block), 2 the block fades out (only when exit is fade).", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount; fade fades the whole block at cue 2, by default 2 s after the code is complete.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
 
   ]'
 >
@@ -70,7 +70,7 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
-        var DEF = {"seq": "feature", "codes": ["async function loadConfig(path) {\n  const raw = await readFile(path, \"utf8\")\n  const config = JSON.parse(raw)\n  return validate(config)\n}"], "fields": ["code"], "block": {"id": "code-3d-extrude", "effect": "extrude", "seq": "feature", "duration": 8, "seed": 7}, "start": 0.45, "exitAt": 8, "filename": "main.js"};
+        var DEF = {"seq": "feature", "codes": ["async function loadConfig(path) {\n  const raw = await readFile(path, \"utf8\")\n  const config = JSON.parse(raw)\n  return validate(config)\n}"], "fields": ["code"], "block": {"id": "code-3d-extrude", "effect": "extrude", "seq": "feature", "duration": 8, "seed": 7}, "start": 0.45, "exitAt": 8, "filename": "main.js", "lineBase": 1, "line1": 0};
         var LANGS = { js: "javascript", ts: "typescript", python: "python", bash: "bash", json: "json" };
         var lang = LANGS[V.lang] ? V.lang : "js";
         var COLORS = {
@@ -150,7 +150,7 @@
         var line = parseInt(V.line, 10);
         window.__BLOCK = DEF.block;
         window.__BLOCK.id = "code-3d-extrude";
-        if (DEF.block.line) window.__BLOCK.line = line >= 1 ? line : DEF.block.line;
+        if (DEF.block.line) window.__BLOCK.line = (line >= 1 ? line : DEF.line1) - (1 - DEF.lineBase);
         var cues = String(V.cues || "")
           .split(",")
           .map(function (v) {
@@ -158,8 +158,13 @@
           });
         window.__BLOCK.start = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : DEF.start;
         window.__kodExit = function (tl) {
-          if (V.exit === "fade")
-            tl.to(document.getElementById("kddext-root"), { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : DEF.exitAt);
+          if (V.exit !== "fade") return;
+          // default: 2 s after the last move of the content (the pad to the mount length is not content)
+          var end = 0;
+          tl.getChildren(false, true, true).forEach(function (c) {
+            if (!(c.startTime() === 0 && c.duration() >= tl.duration() - 0.001)) end = Math.max(end, c.endTime());
+          });
+          tl.to(document.getElementById("kddext-root"), { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : Math.max(DEF.exitAt, end + 2));
         };
         var root = document.getElementById("kddext-root");
         // своя графика сцены – из меток темы: фон и кромка растворения
@@ -175,6 +180,7 @@
             return (Number(c) / 255).toFixed(3);
           })
           .join(",");
+        window.__kodAccentCss = getComputedStyle(probe).color;
         probe.remove();
         
         var fname = document.getElementById("kddext-fname");
@@ -351,7 +357,7 @@
           var key = new THREE.DirectionalLight(0xbcd4ff, 1.25);
           key.position.set(5, 7, 9);
           scene.add(key);
-          var rim = new THREE.DirectionalLight(0x4fffa0, 0.45);
+          var rim = new THREE.DirectionalLight(new THREE.Color(window.__kodAccentCss), 0.45);
           rim.position.set(-7, -3, 5);
           scene.add(rim);
 

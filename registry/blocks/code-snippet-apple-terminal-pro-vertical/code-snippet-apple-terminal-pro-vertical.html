@@ -251,7 +251,7 @@
         var tEnd = cO + 0.1 * outEls.length + 0.3;
         tl.set(last, { visibility: "visible" }, tEnd);
         for (var t = tEnd + 0.4, i = 0; t < 30; t += 0.4, i++) tl.set(cur2, { opacity: i % 2 === 0 ? 0 : 1 }, t);
-        if (exit === "fade") tl.to("#atpv-win", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : tEnd + 3);
+        if (exit === "fade") tl.to("#atpv-root", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : tEnd + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["code-snippet-apple-terminal-pro-vertical"] = tl;

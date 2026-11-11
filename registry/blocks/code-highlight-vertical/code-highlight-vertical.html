@@ -5,11 +5,11 @@
 
     {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "async function loadConfig(path) {\n  const raw = await readFile(path)\n  const config = JSON.parse(raw)\n  return validate(config)\n}"},
-    {"id": "line", "type": "string", "role": "content", "label": "Line", "description": "Number of the line to bring forward (1 is the first line).", "maxLength": 3, "default": "1"},
+    {"id": "line", "type": "string", "role": "content", "label": "Line", "description": "Number of the line to bring forward (1 is the first line).", "maxLength": 3, "default": "2"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
-    {"id": "filename", "type": "string", "role": "content", "label": "File name", "description": "Name in the window title bar.", "maxLength": 28, "default": "main.js"},
+    {"id": "filename", "type": "string", "role": "content", "label": "File name", "description": "Name in the window title bar.", "maxLength": 28, "default": "loadConfig.js"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the code starts, 2 the block fades out (only when exit is fade). Empty keeps 0.45.", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount; fade fades the whole block at cue 2, by default 2 s after the code is complete.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
 >
   <head>
@@ -322,9 +322,7 @@
           <div class="dots">
             <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
           </div>
-          <span class="filename"
-            ><span class="accent">loadConfig.js</span> — Code Highlight Sweep</span
-          >
+          <span class="filename"><span class="accent" id="kdhighv-fname">loadConfig.js</span></span>
         </div>
         <div class="code-surface" id="kdhighv-surface"></div>
       </div>
@@ -339,7 +337,7 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
-        var DEF = {"seq": "feature", "codes": ["async function loadConfig(path) {\n  const raw = await readFile(path)\n  const config = JSON.parse(raw)\n  return validate(config)\n}"], "fields": ["code"], "block": {"id": "code-highlight", "effect": "highlight", "seq": "feature", "line": 1, "duration": 5}, "start": 0.45, "exitAt": 5, "filename": "main.js"};
+        var DEF = {"seq": "feature", "codes": ["async function loadConfig(path) {\n  const raw = await readFile(path)\n  const config = JSON.parse(raw)\n  return validate(config)\n}"], "fields": ["code"], "block": {"id": "code-highlight", "effect": "highlight", "seq": "feature", "line": 1, "duration": 5}, "start": 0.45, "exitAt": 5, "filename": "loadConfig.js", "lineBase": 0, "line1": 2};
         var LANGS = { js: "javascript", ts: "typescript", python: "python", bash: "bash", json: "json" };
         var lang = LANGS[V.lang] ? V.lang : "js";
         var COLORS = {
@@ -419,7 +417,7 @@
         var line = parseInt(V.line, 10);
         window.__BLOCK = DEF.block;
         window.__BLOCK.id = "code-highlight-vertical";
-        if (DEF.block.line) window.__BLOCK.line = line >= 1 ? line : DEF.block.line;
+        if (DEF.block.line) window.__BLOCK.line = (line >= 1 ? line : DEF.line1) - (1 - DEF.lineBase);
         var cues = String(V.cues || "")
           .split(",")
           .map(function (v) {
@@ -427,8 +425,13 @@
           });
         window.__BLOCK.start = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : DEF.start;
         window.__kodExit = function (tl) {
-          if (V.exit === "fade")
-            tl.to(document.getElementById("kdhighv-root"), { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : DEF.exitAt);
+          if (V.exit !== "fade") return;
+          // default: 2 s after the last move of the content (the pad to the mount length is not content)
+          var end = 0;
+          tl.getChildren(false, true, true).forEach(function (c) {
+            if (!(c.startTime() === 0 && c.duration() >= tl.duration() - 0.001)) end = Math.max(end, c.endTime());
+          });
+          tl.to(document.getElementById("kdhighv-root"), { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : Math.max(DEF.exitAt, end + 2));
         };
         var root = document.getElementById("kdhighv-root");
         // своя графика сцены – из меток темы: фон и кромка растворения
@@ -444,6 +447,7 @@
             return (Number(c) / 255).toFixed(3);
           })
           .join(",");
+        window.__kodAccentCss = getComputedStyle(probe).color;
         probe.remove();
         
         var PL = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
