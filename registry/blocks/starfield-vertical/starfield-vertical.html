@@ -4,7 +4,7 @@
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: stars over the whole frame, the centre kept clear. top / bottom: stars inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "density", "type": "enum", "role": "style", "label": "Density", "description": "Star count across the frame.", "default": "sparse", "options": [{ "value": "sparse", "label": "Sparse" }, { "value": "dense", "label": "Dense" }] },
-    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Star color mix; white is the brand light text colour.", "default": "warm", "options": [{ "value": "warm", "label": "Warm (white + yellow)" }, { "value": "cool", "label": "Cool (white + blue)" }, { "value": "white", "label": "White only" }] },
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Star color mix; white (default) is the brand light text colour, warm and cool tint it.", "default": "white", "options": [{ "value": "warm", "label": "Warm (white + yellow)" }, { "value": "cool", "label": "Cool (white + blue)" }, { "value": "white", "label": "White only" }] },
     { "id": "speed", "type": "enum", "role": "style", "label": "Twinkle speed", "description": "How fast stars pulse.", "default": "slow", "options": [{ "value": "slow", "label": "Slow" }, { "value": "fast", "label": "Fast" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the stars fade in over 0.6 s (0 = already shining on the first frame), 2 it fades out (only when exit is fade). Empty keeps 0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the stars twinkling to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -105,7 +105,7 @@
           white: [fg, fg],
         };
         var COUNT = Math.round((V.density === "dense" ? 420 : 180) * (W * H) / (1920 * 1080));
-        var palette = TONES[oneOf(V.tone, ["warm", "cool", "white"], "warm")];
+        var palette = TONES[oneOf(V.tone, ["warm", "cool", "white"], "white")];
         var cycleSeconds = V.speed === "fast" ? 0.9 : 1.6;
         // детерминированный разброс без случайных чисел (как у разработчиков)
         function rnd(n) {

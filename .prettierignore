@@ -59,3 +59,16 @@ skills/slideshow/SKILL.md
 skills/remotion-to-hyperframes/SKILL.md
 skills/reverse-any-video/SKILL.md
 skills/style-sampling/SKILL.md
+# generated map geometry (TopoJSON as a script): pretty-printing doubles its size
+registry/blocks/us-map/assets/us-states-10m.js
+registry/blocks/us-map-vertical/assets/us-states-10m.js
+registry/blocks/us-map-bubble/assets/us-states-10m.js
+registry/blocks/us-map-bubble-vertical/assets/us-states-10m.js
+registry/blocks/us-map-flow/assets/us-states-10m.js
+registry/blocks/us-map-flow-vertical/assets/us-states-10m.js
+registry/blocks/spain-map/assets/es-autonomous-regions.js
+registry/blocks/spain-map-vertical/assets/es-autonomous-regions.js
+registry/blocks/nyc-paris-flight/assets/world-50m.js
+registry/blocks/nyc-paris-flight-vertical/assets/world-50m.js
+registry/blocks/north-korea-locked-down/assets/world-50m.js
+registry/blocks/north-korea-locked-down-vertical/assets/world-50m.js
