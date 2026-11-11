@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-lower-third-vertical",
+  "type": "hyperframes:block",
+  "title": "YouTube Subscribe (vertical)",
+  "description": "Vertical YouTube channel card in native colors, centred over footage: avatar, channel, subscriber count and a wide Подписаться button that is pressed and turns grey Вы подписаны. Words and avatar are variables; placement bottom, top or centre; cues set slide-in and press; holds.",
+  "tags": ["social", "overlay", "youtube", "subscribe", "lower-third", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-lower-third-vertical.html",
+      "target": "compositions/yt-lower-third-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

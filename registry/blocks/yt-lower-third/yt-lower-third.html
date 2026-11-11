@@ -1,0 +1,194 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "channel", "type": "string", "role": "content", "label": "Channel", "description": "Channel name, bold.", "maxLength": 20, "default": "MatIntellect" },
+    { "id": "subscribers", "type": "string", "role": "content", "label": "Subscribers", "description": "Line under the name, as YouTube writes it.", "maxLength": 26, "default": "82,2 тыс. подписчиков" },
+    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round channel picture.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card slides in, 2 the button is pressed and turns into Вы подписаны, 3 the card leaves (only when exit is out). Empty keeps 0.1, 1.0, 3.8.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the subscribed card to the end of the mount; out slides it away at cue 3.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #ylt-root {
+        font-family: "Roboto", sans-serif;
+      }
+      #ylt-wrap {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+      }
+      #ylt-card {
+        display: flex;
+        background: #ffffff;
+        box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
+      }
+      #ylt-avatar {
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: #e5e5e5;
+      }
+      #ylt-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      #ylt-name {
+        font-weight: 700;
+        color: #0f0f0f;
+        line-height: 1.25;
+      }
+      #ylt-subs {
+        color: #606060;
+        line-height: 1.3;
+      }
+      #ylt-btn {
+        position: relative;
+        flex-shrink: 0;
+        background: #0f0f0f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .ylt-btn-text {
+        position: absolute;
+        font-weight: 500;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      #ylt-sub {
+        color: #ffffff;
+      }
+      #ylt-subd {
+        color: #0f0f0f;
+        opacity: 0;
+      }
+      
+      #ylt-wrap {
+        left: 0;
+        width: 1920px;
+        bottom: 80px;
+      }
+      #ylt-card {
+        align-items: center;
+        gap: 28px;
+        border-radius: 60px;
+        padding: 20px 24px 20px 20px;
+      }
+      #ylt-avatar {
+        width: 96px;
+        height: 96px;
+      }
+      #ylt-info {
+        margin-right: 20px;
+      }
+      #ylt-name {
+        font-size: 36px;
+        white-space: nowrap;
+      }
+      #ylt-subs {
+        font-size: 28px;
+        white-space: nowrap;
+      }
+      #ylt-btn {
+        min-width: 260px;
+        height: 72px;
+        padding: 0 32px;
+        border-radius: 36px;
+      }
+      .ylt-btn-text {
+        font-size: 30px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="ylt-root" data-composition-id="yt-lower-third" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="ylt-wrap">
+        <div id="ylt-card">
+          <div id="ylt-row" style="display: contents"></div>
+          <img id="ylt-avatar" src="assets/img/matintellect-avatar.svg" alt="" />
+          <div id="ylt-info">
+            <div id="ylt-name">MatIntellect</div>
+            <div id="ylt-subs">82,2 тыс. подписчиков</div>
+          </div>
+          <div id="ylt-btn">
+            <span id="ylt-sub" class="ylt-btn-text">Подписаться</span>
+            <span id="ylt-subd" class="ylt-btn-text"
+              ><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg
+              >Вы подписаны</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("ylt-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        document.getElementById("ylt-name").textContent = str(V.channel, "MatIntellect");
+        document.getElementById("ylt-subs").textContent = str(V.subscribers, "82,2 тыс. подписчиков");
+        document.getElementById("ylt-avatar").src = str(V.avatar, "assets/img/matintellect-avatar.svg");
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var c1 = isFinite(cues[1]) && cues[1] > c0 + 0.5 ? cues[1] : c0 + 0.9;
+        var exit = oneOf(V.exit, ["none", "out"], "none");
+
+        var card = document.getElementById("ylt-card");
+        var btn = document.getElementById("ylt-btn");
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(card, { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, c0);
+        tl.to(btn, { scale: 0.94, duration: 0.15, ease: "power2.out" }, c1);
+        tl.to(btn, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.4)" }, c1 + 0.15);
+        tl.to(btn, { backgroundColor: "#f2f2f2", duration: 0.1, ease: "none" }, c1 + 0.15);
+        tl.to("#ylt-sub", { opacity: 0, duration: 0.08, ease: "none" }, c1 + 0.15);
+        tl.to("#ylt-subd", { opacity: 1, duration: 0.08, ease: "none" }, c1 + 0.18);
+        if (exit === "out") tl.to(card, { y: 300, opacity: 0, duration: 0.25, ease: "power3.in" }, isFinite(cues[2]) ? cues[2] : c1 + 2.8);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["yt-lower-third"] = tl;
+      })();
+    </script>
+  </body>
+</html>

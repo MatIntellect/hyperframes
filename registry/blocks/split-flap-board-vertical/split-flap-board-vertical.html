@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the board centred in the 780x1180 field (y 180-1360), up to 4 rows of 8 cells. top / bottom: the board on a brand card 780x760 at y 180-940 / 600-1360, up to 3 rows of 8 cells, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "boardText", "type": "string", "role": "content", "label": "Board text", "description": "Text the board flips to, upper case, Bebas Neue. Words wrap into rows (wide: 2 rows of 14 cells; vertical: rows of 8). Russian and Latin letters, digits and . , ! ? - : are on the drum; other characters stay blank.", "maxLength": 28, "default": "МОНТАЖ ГОТОВ" },
+    { "id": "boardText", "type": "string", "role": "content", "label": "Board text", "description": "Text the board flips to, upper case, Bebas Neue. Words wrap into rows (wide: 2 rows of 14 cells; vertical: rows of 8 cells, more and narrower cells when the words need them). Russian and Latin letters, digits and . , ! ? - : are on the drum; other characters stay blank.", "maxLength": 28, "default": "МОНТАЖ ГОТОВ" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the board starts flipping, 2 the last cell lands (the flap speed is set so every cell walks its drum by then), 3 the board fades out (only when exit is fade). Empty keeps 0.2 and 2.6.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed board to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -31,7 +31,14 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -46,6 +53,11 @@
       body {
         width: 1080px;
         height: 1920px;
+      }
+      #sfbv-root {
+        /* flap faces: two greys a step above the brand card, local to the board */
+        --sfbv-face: #242427;
+        --sfbv-face-low: #1f1f22;
       }
       #sfbv-root .sfbv-ground {
         position: absolute;
@@ -80,7 +92,7 @@
         width: 100%;
         height: 50%;
         overflow: hidden;
-        background: #242427;
+        background: var(--sfbv-face);
       }
       .sfbv-top,
       .sfbv-leaf-a {
@@ -91,7 +103,7 @@
       .sfbv-leaf-b {
         top: 50%;
         border-radius: 0 0 10px 10px;
-        background: #1f1f22;
+        background: var(--sfbv-face-low);
       }
       .sfbv-leaf-a {
         transform-origin: 50% 100%;

@@ -35,7 +35,14 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -209,9 +216,29 @@
           return e;
         }
 
-        var pad = FS * 1.4;
+        /* labels on the axis: the size fits the step between points, never under 28; if 28 still does not fit, two staggered rows.
+           the side pad is half of the widest label or value, so the first and last stay inside the field */
+        function w(t, f, k) {
+          return String(t).length * f * k;
+        }
+        var xl = labels.slice(0, n);
+        var longL = Math.max.apply(null, xl.map(function (t) { return w(t, 1, 0.7); }));
+        var longV = 0;
+        series.forEach(function (s) {
+          s.raw.forEach(function (t) {
+            longV = Math.max(longV, w(t, FS, 0.72));
+          });
+        });
+        var LFS = FS, rows = 1, pad = 0;
+        for (var it = 0; it < 2; it++) {
+          pad = Math.max(FS * 1.4, (longL * LFS) / 2, longV / 2) + 6;
+          var step = n > 1 ? (CW - 2 * pad) / (n - 1) : CW;
+          LFS = Math.min(FS, Math.floor((step - 12) / longL));
+          rows = LFS < 28 && n > 1 ? 2 : 1;
+          if (LFS < 28) LFS = 28;
+        }
         var top = FS + 30,
-          base = CH - FS - 22;
+          base = CH - rows * (LFS + 8) - 14;
         var max = 0;
         series.forEach(function (s) {
           s.v.forEach(function (v) {
@@ -233,9 +260,10 @@
         }
         var axis = el("line", { x1: 0, x2: CW, y1: base, y2: base, stroke: "var(--fg, #f2f2f2)", "stroke-width": 2, opacity: 0 });
         var xls = labels.slice(0, n).map(function (t, i) {
-          return el("text", { x: px(i), y: base + FS + 12, "text-anchor": "middle", "font-size": FS, fill: "var(--muted, #8a8a90)", opacity: 0 }, t);
+          return el("text", { x: px(i), y: base + LFS + 10 + (rows === 2 && i % 2 ? LFS + 8 : 0), "text-anchor": "middle", "font-size": LFS, fill: "var(--muted, #8a8a90)", opacity: 0 }, t);
         });
-        series.forEach(function (s, si) {
+        /* the grey path first, so the red one is drawn over it */
+        series.slice().reverse().forEach(function (s) {
           s.path = el("path", {
             d: s.v
               .map(function (v, i) {
@@ -257,9 +285,15 @@
             s.dots.push(el("circle", { cx: px(i), cy: py(v), r: 10, fill: "var(--bg, #0c1014)", stroke: s.color, "stroke-width": 5, "class": "mlg-dot" }));
           });
         });
+        /* two series: at every point the upper one carries its value over the dot, the lower one under it, so the numbers never meet.
+           one series: the value rides over the dot, a dip carries it under, off the line */
         series.forEach(function (s, si) {
-          var below = si > 0;
           s.v.forEach(function (v, i) {
+            var below;
+            if (series.length > 1) {
+              var other = series[1 - si].v[i];
+              below = si ? v <= other : v < other;
+            } else below = (i === 0 || v < s.v[i - 1]) && (i === n - 1 || v < s.v[i + 1]) && n > 1;
             s.vals.push(
               el(
                 "text",

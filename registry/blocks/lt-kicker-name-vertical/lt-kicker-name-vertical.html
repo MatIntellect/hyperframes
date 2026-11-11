@@ -4,7 +4,7 @@
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
     { "id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small red tag above the name, upper case. Empty hides it.", "maxLength": 24, "default": "Выпуск 47" },
-    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Heavy upper-case name; wraps to two lines in the vertical version.", "maxLength": 24, "default": "Мат Джестер" },
+    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Heavy upper-case name; wraps to up to three lines in the vertical version.", "maxLength": 24, "default": "Мат Джестер" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the kicker drops in and the name and red baseline follow, 2 the plate leaves (only when exit is not none). Empty keeps 0.1, 4.25.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the plate to the end of the mount; retract pulls the baseline back and lifts the words out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "retract", "label": "Retract" }] }
   ]'
@@ -32,7 +32,14 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -63,14 +70,14 @@
       #lknv-kicker {
         display: inline-block;
         font-weight: 700;
-        color: #ffffff;
+        color: var(--fg, #f2f2f2);
         background: var(--accent, #ff0000);
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
       #lknv-name {
         font-weight: 800;
-        color: #ffffff;
+        color: var(--fg, #f2f2f2);
         line-height: 1;
         letter-spacing: -0.01em;
         text-transform: uppercase;
@@ -117,7 +124,7 @@
   <body>
     <div id="lknv-root" data-composition-id="lt-kicker-name-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
       <div id="lknv-lt">
-        <div id="lknv-kickwrap"><span id="lknv-kicker">Выпуск 47</span></div>
+        <div id="lknv-kickwrap"><span id="lknv-kicker" data-layout-allow-overflow>Выпуск 47</span></div>
         <div id="lknv-name">Мат Джестер</div>
         <div id="lknv-baseline"></div>
       </div>

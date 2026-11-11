@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-lower-third",
+  "type": "hyperframes:block",
+  "title": "YouTube Subscribe",
+  "description": "YouTube subscribe card in native colors: avatar, channel and subscriber count slide in on a white pill, the black Подписаться button is pressed and turns grey Вы подписаны. Channel, count and avatar are variables; cues set slide-in and press; holds to the end of the mount.",
+  "tags": ["social", "overlay", "youtube", "subscribe", "lower-third"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-lower-third.html",
+      "target": "compositions/yt-lower-third.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

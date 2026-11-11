@@ -102,6 +102,7 @@
       }
       #bcrv-plot {
         position: absolute;
+        z-index: 1;
         overflow: hidden;
         opacity: 0;
       }
@@ -130,7 +131,6 @@
       #bcrv-axis {
         position: absolute;
         inset: 0;
-        z-index: 5000;
         opacity: 0;
       }
       .bcrv-tick-line {
@@ -157,8 +157,8 @@
           <div id="bcrv-subtitle">Подписчики, тысяч</div>
         </div>
         <div id="bcrv-period">2019</div>
-        <div id="bcrv-plot"></div>
         <div id="bcrv-axis"></div>
+        <div id="bcrv-plot"></div>
       </div>
     </div>
     <script>
