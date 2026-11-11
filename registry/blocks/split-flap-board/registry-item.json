@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "split-flap-board",
+  "type": "hyperframes:block",
+  "title": "Split-Flap Board",
+  "description": "Departure board: every cell walks its drum forward through the letters until it lands on its target, so the words resolve as a mechanical cascade. Board text (Russian and Latin) is a variable; cues set when flipping starts and when the last cell lands; holds.",
+  "tags": ["text", "kinetic", "mechanical", "split-flap", "title"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "split-flap-board.html",
+      "target": "compositions/split-flap-board.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

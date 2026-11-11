@@ -1,0 +1,333 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "boardText", "type": "string", "role": "content", "label": "Board text", "description": "Text the board flips to, upper case, Bebas Neue. Words wrap into rows (wide: 2 rows of 14 cells; vertical: rows of 8). Russian and Latin letters, digits and . , ! ? - : are on the drum; other characters stay blank.", "maxLength": 28, "default": "МОНТАЖ ГОТОВ" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the board starts flipping, 2 the last cell lands (the flap speed is set so every cell walks its drum by then), 3 the board fades out (only when exit is fade). Empty keeps 0.2 and 2.6.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed board to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #sfb-root .sfb-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #sfb-field {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #sfb-board {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .sfb-rowbox {
+        display: flex;
+      }
+      .sfb-cell {
+        position: relative;
+        flex: 0 0 auto;
+        perspective: 900px;
+        border-radius: 10px;
+        background: var(--surface, #18181a);
+        box-shadow: 0 18px 34px rgba(0, 0, 0, 0.5);
+      }
+      .sfb-face {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        overflow: hidden;
+        background: #242427;
+      }
+      .sfb-top,
+      .sfb-leaf-a {
+        top: 0;
+        border-radius: 10px 10px 0 0;
+      }
+      .sfb-bot,
+      .sfb-leaf-b {
+        top: 50%;
+        border-radius: 0 0 10px 10px;
+        background: #1f1f22;
+      }
+      .sfb-leaf-a {
+        transform-origin: 50% 100%;
+        z-index: 3;
+        backface-visibility: hidden;
+      }
+      .sfb-leaf-b {
+        transform-origin: 50% 0%;
+        z-index: 3;
+        backface-visibility: hidden;
+      }
+      .sfb-glyph {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        color: var(--fg, #f2f2f2);
+        white-space: pre;
+      }
+      .sfb-seam {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 3px;
+        margin-top: -1.5px;
+        background: var(--bg, #0c1014);
+        z-index: 4;
+      }
+      
+      #sfb-field {
+        inset: 0;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="sfb-root" data-composition-id="split-flap-board" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="sfb-ground"></div>
+      <div id="sfb-field"><div id="sfb-board"></div></div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("sfb-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        /* drum order: blank, Russian, Latin, digits, punctuation. A cell walks forward from blank */
+        var ALPHABET = " АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-:";
+        var N = ALPHABET.length;
+        var DEG = Math.PI / 180;
+
+        
+        var COLS = 14,
+          ROWS = 2,
+          WIDTH = 1640,
+          CMAX = 120;
+        
+        
+
+        var text = String(typeof V.boardText === "string" && V.boardText.trim() ? V.boardText : "МОНТАЖ ГОТОВ")
+          .toUpperCase()
+          .trim();
+        /* words into rows of COLS cells; a word longer than a row is split. When the rows run out,
+           the row takes more, narrower cells, so no word is ever dropped */
+        function pack(width) {
+          var out = [""];
+          text.split(/\s+/).forEach(function (w) {
+            while (w.length > width) {
+              if (out[out.length - 1]) out.push("");
+              out[out.length - 1] = w.slice(0, width);
+              out.push("");
+              w = w.slice(width);
+            }
+            var cur = out[out.length - 1];
+            if (!cur) out[out.length - 1] = w;
+            else if (cur.length + 1 + w.length <= width) out[out.length - 1] = cur + " " + w;
+            else out.push(w);
+          });
+          return out.filter(Boolean);
+        }
+        var lines = pack(COLS);
+        while (lines.length > ROWS && COLS < 28) lines = pack(++COLS);
+        var cols = Math.max.apply(
+          null,
+          lines.map(function (l) {
+            return l.length;
+          }),
+        );
+
+        var GAP = 10;
+        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols));
+        var chh = Math.round(cw * 1.45);
+        var board = document.getElementById("sfb-board");
+        board.style.gap = GAP * 1.6 + "px";
+        function makeFace(cls, glyphTop) {
+          var face = document.createElement("div");
+          face.className = "sfb-face " + cls;
+          /* each half shows half a glyph and covers the other half: the mechanism, declared */
+          face.setAttribute("data-layout-allow-occlusion", "");
+          var glyph = document.createElement("span");
+          glyph.className = "sfb-glyph";
+          glyph.style.height = chh + "px";
+          glyph.style.lineHeight = chh + "px";
+          glyph.style.fontSize = Math.round(cw * 1.1) + "px";
+          glyph.style.top = glyphTop + "px";
+          face.appendChild(glyph);
+          return face;
+        }
+        var cells = [];
+        lines.forEach(function (line, r) {
+          var rowBox = document.createElement("div");
+          rowBox.className = "sfb-rowbox";
+          rowBox.style.gap = GAP + "px";
+          var lead = Math.floor((cols - line.length) / 2);
+          for (var c = 0; c < cols; c++) {
+            var ch = c >= lead && c < lead + line.length ? line.charAt(c - lead) : " ";
+            var g = ALPHABET.indexOf(ch);
+            var cell = document.createElement("div");
+            cell.className = "sfb-cell";
+            cell.id = "sfb-cell-" + r + "-" + c;
+            cell.style.width = cw + "px";
+            cell.style.height = chh + "px";
+            cell.setAttribute("data-layout-allow-overlap", "");
+            cell.setAttribute("data-layout-allow-occlusion", "");
+            cell.setAttribute("data-layout-allow-overflow", "");
+            var top = makeFace("sfb-top", 0);
+            var bot = makeFace("sfb-bot", -Math.round(chh / 2));
+            var leafA = makeFace("sfb-leaf-a", 0);
+            var leafB = makeFace("sfb-leaf-b", -Math.round(chh / 2));
+            var seam = document.createElement("div");
+            seam.className = "sfb-seam";
+            seam.setAttribute("data-layout-allow-occlusion", "");
+            cell.appendChild(top);
+            cell.appendChild(bot);
+            cell.appendChild(leafA);
+            cell.appendChild(leafB);
+            cell.appendChild(seam);
+            rowBox.appendChild(cell);
+            cells.push({ steps: g < 0 ? 0 : g, top: top.firstChild, bot: bot.firstChild, leafA: leafA, leafB: leafB, glyphA: leafA.firstChild, glyphB: leafB.firstChild });
+          }
+          board.appendChild(rowBox);
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.2;
+        var c1 = isFinite(cues[1]) && cues[1] > c0 + 0.5 ? cues[1] : c0 + 2.4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        /* the cell order of the cascade, and the flap speed that lands the slowest cell on cue 2 */
+        var stagger = Math.min(0.05, ((c1 - c0) * 0.3) / Math.max(1, cells.length - 1));
+        var latest = 0;
+        cells.forEach(function (cell, i) {
+          cell.delay = i * stagger;
+        });
+        var flipDur = Infinity;
+        cells.forEach(function (cell) {
+          if (cell.steps > 0) flipDur = Math.min(flipDur, (c1 - c0 - cell.delay) / cell.steps);
+        });
+        if (!isFinite(flipDur)) flipDur = 0.06;
+
+        function clearLeaf(leaf, glyph) {
+          leaf.style.opacity = "0";
+          leaf.style.transform = "";
+          leaf.style.filter = "";
+          glyph.textContent = "";
+        }
+        function showLeaf(leaf, glyph, ch, angle, shade) {
+          glyph.textContent = ch;
+          leaf.style.opacity = "1";
+          leaf.style.transform = "rotateX(" + angle.toFixed(2) + "deg)";
+          leaf.style.filter = "brightness(" + shade + ")";
+        }
+        /* pure function of time: seeking to any t rebuilds the board from t alone */
+        function paint(t) {
+          for (var i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            var tLocal = t - c0 - cell.delay;
+            var raw = tLocal <= 0 ? 0 : tLocal / flipDur;
+            var count = Math.floor(raw);
+            var p = raw - count;
+            if (count >= cell.steps) {
+              count = cell.steps;
+              p = 0;
+            }
+            var outgoing = ALPHABET.charAt(count % N);
+            var incoming = ALPHABET.charAt((count + 1) % N);
+            if (!(count < cell.steps && p > 0)) {
+              cell.top.textContent = outgoing;
+              cell.bot.textContent = outgoing;
+              clearLeaf(cell.leafA, cell.glyphA);
+              clearLeaf(cell.leafB, cell.glyphB);
+              continue;
+            }
+            cell.top.textContent = incoming;
+            cell.bot.textContent = outgoing;
+            var theta = 180 * p * p;
+            var shade = (1 - 0.5 * Math.sin(theta * DEG)).toFixed(3);
+            if (theta < 90) {
+              showLeaf(cell.leafA, cell.glyphA, outgoing, -theta, shade);
+              clearLeaf(cell.leafB, cell.glyphB);
+            } else {
+              clearLeaf(cell.leafA, cell.glyphA);
+              showLeaf(cell.leafB, cell.glyphB, incoming, 180 - theta, shade);
+            }
+          }
+        }
+        var driverTime = 0;
+        var driver = {};
+        Object.defineProperty(driver, "t", {
+          get: function () {
+            return driverTime;
+          },
+          set: function (value) {
+            driverTime = value;
+            paint(value);
+          },
+        });
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(driver, { t: 0 }, { t: 30, duration: 30, ease: "none" }, 0);
+        tl.fromTo(board, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, Math.max(0, c0 - 0.2));
+        if (exit === "fade") tl.to(board, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c1 + 3);
+        paint(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["split-flap-board"] = tl;
+      })();
+    </script>
+  </body>
+</html>

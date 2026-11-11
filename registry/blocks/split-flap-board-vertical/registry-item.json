@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "split-flap-board-vertical",
+  "type": "hyperframes:block",
+  "title": "Split-Flap Board (vertical)",
+  "description": "Vertical departure board in rows of 8 cells: every cell walks its drum through the letters until it lands, the words resolve as a mechanical cascade. Board text (Russian and Latin) is a variable; placement full, top or bottom; cues set start and landing; holds.",
+  "tags": ["text", "kinetic", "mechanical", "split-flap", "title", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "split-flap-board-vertical.html",
+      "target": "compositions/split-flap-board-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
