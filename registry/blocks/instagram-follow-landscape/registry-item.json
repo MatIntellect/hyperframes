@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "instagram-follow-landscape",
+  "type": "hyperframes:block",
+  "title": "Instagram Follow (landscape)",
+  "description": "Instagram follow card in native colors as a lower third: profile, follower count, the button press. Words, avatar and press time are variables; holds to the end of the mount.",
+  "tags": ["social", "overlay", "instagram", "landscape"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "instagram-follow-landscape.html",
+      "target": "compositions/instagram-follow-landscape.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/avatar.jpg",
+      "target": "assets/avatar.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

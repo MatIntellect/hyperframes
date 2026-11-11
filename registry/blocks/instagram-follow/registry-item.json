@@ -3,13 +3,13 @@
   "name": "instagram-follow",
   "type": "hyperframes:block",
   "title": "Instagram Follow",
-  "description": "Animated Instagram follow overlay with profile card and follow button",
-  "tags": ["social", "overlay", "instagram"],
+  "description": "Instagram follow card in native colors: profile, follower count, the button press. Words, avatar and press time are variables; placement full, top or bottom; holds to the end of the mount.",
+  "tags": ["social", "overlay", "instagram", "vertical"],
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 4.5,
+  "duration": 30,
   "files": [
     {
       "path": "instagram-follow.html",
@@ -21,9 +21,5 @@
       "target": "assets/avatar.jpg",
       "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/instagram-follow.mp4",
-    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/instagram-follow.png"
-  }
+  ]
 }
