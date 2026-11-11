@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-specs-list",
+  "type": "hyperframes:block",
+  "title": "Specs List",
+  "description": "Specs list: an optional Bebas headline, then label and value rows slide in one by one, each with a red underline sweeping under it. Headline and rows are variables; cues set the first and last row; holds to the end of the mount.",
+  "tags": ["text", "list", "specs", "checklist", "minimal"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-specs-list.html",
+      "target": "compositions/mk-specs-list.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

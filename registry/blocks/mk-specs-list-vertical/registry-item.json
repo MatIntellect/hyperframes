@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-specs-list-vertical",
+  "type": "hyperframes:block",
+  "title": "Specs List (vertical)",
+  "description": "Vertical specs list: optional headline, then rows (label with its value under it) slide in one by one with a red underline sweep. Headline and rows are variables; placement full (6 rows), top or bottom (4 rows); cues set first and last row; holds.",
+  "tags": ["text", "list", "specs", "checklist", "minimal", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-specs-list-vertical.html",
+      "target": "compositions/mk-specs-list-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
