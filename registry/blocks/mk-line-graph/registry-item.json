@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-line-graph",
+  "type": "hyperframes:block",
+  "title": "Line Graph",
+  "description": "Line graph with one or two series: the red line and then the grey line draw on point by point, dots pop and values ride their points, under an optional Bebas headline. Labels, values, names and headline are variables; cues set each draw; holds to the end of the mount.",
+  "tags": ["data", "chart", "graph", "line", "minimal"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-line-graph.html",
+      "target": "compositions/mk-line-graph.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

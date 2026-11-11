@@ -1,0 +1,334 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the graph in the 780x1180 field (y 180-1360). top / bottom: the graph on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, up to two lines. Empty hides it.", "maxLength": 28, "default": "Рендеры растут" },
+    { "id": "labels", "type": "string", "role": "content", "label": "X labels", "description": "Point labels separated by ;, 2 to 7 items, each up to 5 characters.", "maxLength": 48, "default": "Янв;Фев;Мар;Апр;Май;Июн" },
+    { "id": "name1", "type": "string", "role": "content", "label": "Series 1 name", "description": "Legend name of the red line.", "maxLength": 18, "default": "Рендеры" },
+    { "id": "values1", "type": "string", "role": "content", "label": "Series 1 values", "description": "Red line values separated by ;, one per label, each up to 5 characters, decimals with a comma or a dot. Shown as written.", "maxLength": 48, "default": "12;26;22;38;44;58" },
+    { "id": "name2", "type": "string", "role": "content", "label": "Series 2 name", "description": "Legend name of the grey line.", "maxLength": 18, "default": "Проекты" },
+    { "id": "values2", "type": "string", "role": "content", "label": "Series 2 values", "description": "Grey line values separated by ;. Empty draws one line.", "maxLength": 48, "default": "8;14;18;16;28;36" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the axis and labels appear, 2 the red line starts drawing (1.3 s, values pop on its points), 3 the grey line starts drawing, 4 the graph fades out (only when exit is fade). Empty keeps 0.2, 0.6, 1.0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the drawn graph to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #mlgv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #mlgv-root .mlgv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #mlgv-field {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      #mlgv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 0.98;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #mlgv-key {
+        display: flex;
+        gap: 36px;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .mlgv-key-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .mlgv-key-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+      }
+      #mlgv-root svg {
+        display: block;
+        overflow: visible;
+      }
+      .mlgv-halo {
+        paint-order: stroke;
+        stroke: var(--bg, #0c1014);
+        stroke-width: 10px;
+        stroke-linejoin: round;
+      }
+      #mlgv-root.mlgv-card .mlgv-halo {
+        stroke: var(--surface, #18181a);
+      }
+      
+      
+      #mlgv-field {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+      }
+      #mlgv-title {
+        font-size: 112px;
+      }
+      #mlgv-key {
+        font-size: 32px;
+        margin-top: 26px;
+      }
+      #mlgv-root.mlgv-card #mlgv-field {
+        height: 760px;
+        padding: 40px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #mlgv-root.mlgv-bottom #mlgv-field {
+        top: 600px;
+      }
+      #mlgv-root.mlgv-card #mlgv-title {
+        font-size: 64px;
+      }
+      #mlgv-root.mlgv-card #mlgv-key {
+        font-size: 28px;
+        margin-top: 16px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="mlgv-root" data-composition-id="mk-line-graph-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="mlgv-ground"></div>
+      <div id="mlgv-field">
+        <div id="mlgv-title">Рендеры растут</div>
+        <div id="mlgv-key"></div>
+        <svg id="mlgv-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mlgv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" ? v : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function list(v) {
+          return String(v)
+            .split(";")
+            .map(function (s) {
+              return s.trim();
+            })
+            .filter(function (s) {
+              return s.length;
+            });
+        }
+        function num(s) {
+          return parseFloat(String(s).replace(",", "."));
+        }
+
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("mlgv-card", "mlgv-" + placement);
+          root.querySelector(".mlgv-ground").remove();
+        }
+        var CW = placement === "full" ? 780 : 696,
+          CH = placement === "full" ? 760 : 440,
+          FS = placement === "full" ? 32 : 28;
+        
+
+        var title = str(V.title, "Рендеры растут");
+        var titleEl = document.getElementById("mlgv-title");
+        titleEl.textContent = title;
+        if (!title) titleEl.style.display = "none";
+
+        var labels = list(str(V.labels, "") || "Янв;Фев;Мар;Апр;Май;Июн");
+        var raw = [list(str(V.values1, "") || "12;26;22;38;44;58"), list(str(V.values2, "8;14;18;16;28;36"))];
+        var names = [str(V.name1, "Рендеры"), str(V.name2, "Проекты")];
+        var n = Math.min(labels.length, raw[0].length, 7);
+        var series = [{ raw: raw[0].slice(0, n), color: "var(--accent, #ff0000)" }];
+        if (raw[1].length >= n) series.push({ raw: raw[1].slice(0, n), color: "var(--muted, #8a8a90)" });
+        series.forEach(function (s) {
+          s.v = s.raw.map(num);
+        });
+
+        var key = document.getElementById("mlgv-key");
+        series.forEach(function (s, si) {
+          var item = document.createElement("div");
+          item.className = "mlgv-key-item";
+          var dot = document.createElement("span");
+          dot.className = "mlgv-key-dot";
+          dot.style.background = s.color;
+          item.appendChild(dot);
+          item.appendChild(document.createTextNode(names[si]));
+          key.appendChild(item);
+        });
+
+        var svg = document.getElementById("mlgv-svg");
+        svg.setAttribute("width", CW);
+        svg.setAttribute("height", CH);
+        svg.setAttribute("viewBox", "0 0 " + CW + " " + CH);
+        svg.style.marginTop = "28px";
+        var NS = "http://www.w3.org/2000/svg";
+        function el(tag, attrs, text) {
+          var e = document.createElementNS(NS, tag);
+          for (var k in attrs) {
+            if (k === "fill" || k === "stroke") e.style[k] = attrs[k];
+            else e.setAttribute(k, attrs[k]);
+          }
+          if (text != null) e.textContent = text;
+          svg.appendChild(e);
+          return e;
+        }
+
+        var pad = FS * 1.4;
+        var top = FS + 30,
+          base = CH - FS - 22;
+        var max = 0;
+        series.forEach(function (s) {
+          s.v.forEach(function (v) {
+            if (v > max) max = v;
+          });
+        });
+        max = max * 1.08 || 1;
+        function px(i) {
+          return pad + (n > 1 ? (i / (n - 1)) * (CW - 2 * pad) : (CW - 2 * pad) / 2);
+        }
+        function py(v) {
+          return base - (v / max) * (base - top - (series.length > 1 ? FS + 30 : 0));
+        }
+
+        var grid = [];
+        for (var g = 1; g <= 3; g++) {
+          var gy = base - (g / 3) * (base - top);
+          grid.push(el("line", { x1: 0, x2: CW, y1: gy, y2: gy, stroke: "var(--border, #2e2e32)", "stroke-width": 2, opacity: 0 }));
+        }
+        var axis = el("line", { x1: 0, x2: CW, y1: base, y2: base, stroke: "var(--fg, #f2f2f2)", "stroke-width": 2, opacity: 0 });
+        var xls = labels.slice(0, n).map(function (t, i) {
+          return el("text", { x: px(i), y: base + FS + 12, "text-anchor": "middle", "font-size": FS, fill: "var(--muted, #8a8a90)", opacity: 0 }, t);
+        });
+        series.forEach(function (s, si) {
+          s.path = el("path", {
+            d: s.v
+              .map(function (v, i) {
+                return (i ? "L" : "M") + px(i) + " " + py(v);
+              })
+              .join(" "),
+            fill: "none",
+            stroke: s.color,
+            "stroke-width": 6,
+            "stroke-linejoin": "round",
+            "stroke-linecap": "round",
+          });
+          s.dots = [];
+          s.vals = [];
+        });
+        /* dots and values after both paths, so no line crosses a number */
+        series.forEach(function (s, si) {
+          s.v.forEach(function (v, i) {
+            s.dots.push(el("circle", { cx: px(i), cy: py(v), r: 10, fill: "var(--bg, #0c1014)", stroke: s.color, "stroke-width": 5, "class": "mlgv-dot" }));
+          });
+        });
+        series.forEach(function (s, si) {
+          var below = si > 0;
+          s.v.forEach(function (v, i) {
+            s.vals.push(
+              el(
+                "text",
+                { x: px(i), y: py(v) + (below ? FS + 22 : -24), "text-anchor": "middle", "font-size": FS, "font-weight": 700, fill: si ? "var(--fg, #f2f2f2)" : "var(--accent, #ff0000)", "class": "mlgv-halo", opacity: 0 },
+                s.raw[i],
+              ),
+            );
+          });
+        });
+        if (root.classList.contains("mlgv-card"))
+          svg.querySelectorAll(".mlgv-dot").forEach(function (d) {
+            d.style.fill = "var(--surface, #18181a)";
+          });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.2;
+        var c1 = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 0.4;
+        var c2 = isFinite(cues[2]) && cues[2] >= c1 ? cues[2] : c1 + 0.4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var DRAW = 1.3;
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 0.8, ease: "power1.inOut" }, c0);
+        tl.to(key, { opacity: 1, duration: 0.4, ease: "power2.out" }, c0 + 0.3);
+        tl.to([axis].concat(grid), { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }, c0);
+        xls.forEach(function (x, i) {
+          tl.fromTo(x, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, c0 + 0.05 + i * 0.05);
+        });
+        series.forEach(function (s, si) {
+          var t0 = si ? c2 : c1;
+          var len = s.path.getTotalLength();
+          tl.fromTo(s.path, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: DRAW, ease: "power2.inOut" }, t0);
+          s.v.forEach(function (v, i) {
+            var td = t0 + (n > 1 ? (i / (n - 1)) * DRAW * 0.92 : 0);
+            tl.fromTo(s.dots[i], { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(1.2)" }, td);
+            tl.fromTo(s.vals[i], { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, td + 0.06);
+          });
+        });
+        if (exit === "fade") tl.to("#mlgv-field", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : c2 + DRAW + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["mk-line-graph-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
