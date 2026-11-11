@@ -236,6 +236,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "oscilloscope-trace",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "oscilloscope-trace-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "reddit-post",
       "type": "hyperframes:block"
     },

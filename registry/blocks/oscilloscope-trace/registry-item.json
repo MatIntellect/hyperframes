@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "oscilloscope-trace",
+  "type": "hyperframes:block",
+  "title": "Oscilloscope Trace",
+  "description": "CRT oscilloscope beam sweeping a waveform across a 10x8 graticule with phosphor persistence: the tail decays as exp(-age/tau) and brightens where the beam slows. The scope face keeps its green phosphor; the readout is in the brand, its words are variables.",
+  "tags": ["instrument", "data", "showcase", "retro"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "oscilloscope-trace.html",
+      "target": "compositions/oscilloscope-trace.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

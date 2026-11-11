@@ -1,0 +1,447 @@
+<!doctype html>
+<!--
+  oscilloscope-trace: a CRT beam sweeps a waveform across a 10x8 graticule
+  with closed-form phosphor persistence: the tail decays as exp(-age/tau) and
+  brightens where the beam slows. Every frame is recomputed from time alone,
+  so a seek anywhere is exact. The scope face keeps its own instrument
+  colours (P1 green phosphor); the readout around it is the brand.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the 780x624 scope face from y 180 with the readout under it. top / bottom: the scope face alone, centred in y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "waveform", "type": "enum", "role": "content", "label": "Waveform", "default": "sine", "options": [{ "value": "sine", "label": "Sine" }, { "value": "square", "label": "Square" }, { "value": "triangle", "label": "Triangle" }, { "value": "data", "label": "Data series" }] },
+    { "id": "frequency", "type": "number", "role": "content", "label": "Signal frequency", "unit": "Hz", "default": 12, "min": 0.1, "max": 200, "step": 0.1 },
+    { "id": "amplitude", "type": "number", "role": "content", "label": "Amplitude", "unit": "div", "default": 3, "min": 0.1, "max": 4, "step": 0.1 },
+    { "id": "persistenceMs", "type": "number", "role": "style", "label": "Phosphor persistence (tau)", "unit": "ms", "default": 100, "min": 1, "max": 1000, "step": 1 },
+    { "id": "sweepRate", "type": "number", "role": "style", "label": "Sweep rate", "unit": "sweeps/s", "default": 5, "min": 0.25, "max": 60, "step": 0.25 },
+    { "id": "dataSeries", "type": "string", "role": "content", "label": "Data series (waveform=data)", "description": "Comma-separated numbers from -1 to 1, one pass per signal cycle. Fewer than two falls back to sine.", "maxLength": 200, "default": "" },
+    { "id": "title", "type": "string", "role": "content", "label": "Readout title", "description": "Bebas Neue heading of the readout.", "maxLength": 20, "default": "Осциллограф" },
+    { "id": "labels", "type": "string", "role": "content", "label": "Readout labels", "description": "Five row labels separated by |: signal, frequency, timebase, amplitude, phosphor.", "maxLength": 60, "default": "Сигнал|Частота|Развёртка|Размах|Люминофор" },
+    { "id": "waveNames", "type": "string", "role": "content", "label": "Waveform names", "description": "Names shown for sine, square, triangle and data, separated by |.", "maxLength": 50, "default": "синус|меандр|треугольник|данные" },
+    { "id": "note", "type": "string", "role": "content", "label": "Note", "description": "Grey note under the readout, up to three lines. Empty hides it.", "maxLength": 80, "default": "Свечение гаснет за лучом и ярче там, где луч идёт медленнее" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Seconds from mount start: 1 the block fades (only when exit is fade). Empty keeps 6.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the scope to the end of the mount; the beam keeps sweeping.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #oscv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      .oscv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #oscv-screen {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        display: block;
+      }
+      /* decorative CRT falloff, no timing, no motion */
+      .oscv-vignette {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #oscv-readout {
+        position: absolute;
+        color: var(--muted, #8a8a90);
+        font-size: 30px;
+        line-height: 1.15;
+      }
+      .oscv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        color: var(--fg, #f2f2f2);
+        font-size: 64px;
+        line-height: 1;
+        letter-spacing: 0.06em;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--border, #2e2e32);
+        margin-bottom: 14px;
+      }
+      .oscv-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .oscv-val {
+        color: var(--fg, #f2f2f2);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .oscv-note {
+        margin-top: 24px;
+        font-size: 28px;
+        line-height: 1.4;
+      }
+      
+      
+      .oscv-vignette {
+        background: radial-gradient(90% 60% at 50% 30%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.5) 100%);
+      }
+      #oscv-readout {
+        left: 150px;
+        top: 844px;
+        width: 780px;
+      }
+      .oscv-title {
+        font-size: 56px;
+        padding-bottom: 14px;
+        margin-bottom: 8px;
+      }
+      .oscv-row {
+        padding: 9px 0;
+      }
+      .oscv-note {
+        margin-top: 16px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="oscv-root" data-composition-id="oscilloscope-trace-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="oscv-ground"></div>
+      <canvas id="oscv-screen" width="1080" height="1920"></canvas>
+      <div class="oscv-vignette"></div>
+      <div id="oscv-readout">
+        <div class="oscv-title" id="oscv-r-title">Осциллограф</div>
+        <div class="oscv-row"><span class="oscv-lbl">Сигнал</span><span class="oscv-val" id="oscv-r-wave">-</span></div>
+        <div class="oscv-row"><span class="oscv-lbl">Частота</span><span class="oscv-val" id="oscv-r-freq">-</span></div>
+        <div class="oscv-row"><span class="oscv-lbl">Развёртка</span><span class="oscv-val" id="oscv-r-time">-</span></div>
+        <div class="oscv-row"><span class="oscv-lbl">Размах</span><span class="oscv-val" id="oscv-r-amp">-</span></div>
+        <div class="oscv-row"><span class="oscv-lbl">Люминофор</span><span class="oscv-val" id="oscv-r-phos">-</span></div>
+        <div class="oscv-note" id="oscv-r-note"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("oscv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function num(value, fallback, min, max) {
+          var n = typeof value === "number" ? value : parseFloat(value);
+          if (!isFinite(n)) n = fallback;
+          return Math.min(max, Math.max(min, n));
+        }
+        function str(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function parts(v, d, n) {
+          var a = str(v, "").split("|").map(function (s) {
+            return s.trim();
+          });
+          return a.length >= n && a.every(Boolean) ? a : d.split("|");
+        }
+
+        /* scope geometry: a 10x8 graticule of square divisions; S scales strokes with the division */
+        var W = 1080;
+        var H = 1920;
+        var DIV = 100;
+        var SX = 140;
+        var SY = 140;
+        
+        DIV = 78;
+        SX = 150;
+        SY = 180;
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.querySelector(".oscv-ground").remove();
+          root.querySelector(".oscv-vignette").remove();
+          document.getElementById("oscv-readout").remove();
+          SY = placement === "top" ? 248 : 668;
+        }
+        
+        var S = DIV / 100;
+        var DIVS_X = 10;
+        var DIVS_Y = 8;
+        var SW = DIV * DIVS_X;
+        var SH = DIV * DIVS_Y;
+        var CY = SY + SH / 2;
+
+        /* tail window 3 tau leaves ~5% brightness; sub-steps keep each segment under 3 px of travel */
+        var TAIL_TAUS = 3;
+        var SEG_TARGET_PX = 3;
+        var K_MIN = 120;
+        var K_MAX = 8000;
+        /* band-limited square: steep but not instantaneous edge, as on a real generator and front end */
+        var SQUARE_SHARPNESS = 8;
+
+        var waveform = oneOf(String(V.waveform), ["sine", "square", "triangle", "data"], "sine");
+        var frequency = num(V.frequency, 12, 0.1, 200);
+        var amplitude = num(V.amplitude, 3, 0.1, 4);
+        var tau = num(V.persistenceMs, 100, 1, 1000) / 1000;
+        var sweepRate = num(V.sweepRate, 5, 0.25, 60);
+        var phosphor = [93, 255, 143];
+
+        var series = String(V.dataSeries == null ? "" : V.dataSeries)
+          .split(/[\s,]+/)
+          .map(parseFloat)
+          .filter(function (n) {
+            return isFinite(n);
+          })
+          .map(function (n) {
+            return Math.min(1, Math.max(-1, n));
+          });
+        if (waveform === "data" && series.length < 2) waveform = "sine";
+
+        function rgba(c, a) {
+          return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a.toFixed(4) + ")";
+        }
+        function wave(t) {
+          var p = frequency * t;
+          if (waveform === "square") return Math.tanh(SQUARE_SHARPNESS * Math.sin(2 * Math.PI * p));
+          if (waveform === "triangle") return (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * p));
+          if (waveform === "data") {
+            var pos = (p - Math.floor(p)) * (series.length - 1);
+            var i = Math.floor(pos);
+            var a = series[i];
+            var b = series[Math.min(series.length - 1, i + 1)];
+            return a + (b - a) * (pos - i);
+          }
+          return Math.sin(2 * Math.PI * p);
+        }
+        function sweepU(t) {
+          var s = t * sweepRate;
+          return s - Math.floor(s);
+        }
+        function beamY(t) {
+          return CY - wave(t) * amplitude * DIV;
+        }
+
+        /* upper bound on beam speed picks the sub-step count; a square edge is SQUARE_SHARPNESS times steeper */
+        var slopeBound;
+        if (waveform === "square") slopeBound = SQUARE_SHARPNESS * 2 * Math.PI * frequency;
+        else if (waveform === "triangle") slopeBound = 4 * frequency;
+        else if (waveform === "data") {
+          var maxStep = 0;
+          for (var si = 1; si < series.length; si++) maxStep = Math.max(maxStep, Math.abs(series[si] - series[si - 1]));
+          slopeBound = maxStep * (series.length - 1) * frequency;
+        } else slopeBound = 2 * Math.PI * frequency;
+        var beamSpeedMax = Math.sqrt(Math.pow(SW * sweepRate, 2) + Math.pow(slopeBound * amplitude * DIV, 2));
+
+        /* graticule, drawn once offscreen */
+        var grat = document.createElement("canvas");
+        grat.width = W;
+        grat.height = H;
+        (function () {
+          var g = grat.getContext("2d");
+          g.fillStyle = "#04080a";
+          g.fillRect(SX, SY, SW, SH);
+          g.strokeStyle = "rgba(120,180,160,0.16)";
+          g.lineWidth = 1;
+          for (var i = 1; i < DIVS_X; i++) {
+            g.beginPath();
+            g.moveTo(SX + i * DIV + 0.5, SY);
+            g.lineTo(SX + i * DIV + 0.5, SY + SH);
+            g.stroke();
+          }
+          for (var j = 1; j < DIVS_Y; j++) {
+            g.beginPath();
+            g.moveTo(SX, SY + j * DIV + 0.5);
+            g.lineTo(SX + SW, SY + j * DIV + 0.5);
+            g.stroke();
+          }
+          g.strokeStyle = "rgba(150,205,185,0.32)";
+          var cx = SX + SW / 2 + 0.5;
+          var cy = CY + 0.5;
+          g.beginPath();
+          g.moveTo(cx, SY);
+          g.lineTo(cx, SY + SH);
+          g.moveTo(SX, cy);
+          g.lineTo(SX + SW, cy);
+          g.stroke();
+          g.strokeStyle = "rgba(150,205,185,0.42)";
+          var tick = 9 * S;
+          for (var k = 1; k < DIVS_X * 5; k++) {
+            var x = SX + (k * DIV) / 5 + 0.5;
+            g.beginPath();
+            g.moveTo(x, cy - tick);
+            g.lineTo(x, cy + tick);
+            g.stroke();
+          }
+          for (var m = 1; m < DIVS_Y * 5; m++) {
+            var y = SY + (m * DIV) / 5 + 0.5;
+            g.beginPath();
+            g.moveTo(cx - tick, y);
+            g.lineTo(cx + tick, y);
+            g.stroke();
+          }
+          g.strokeStyle = "rgba(160,215,195,0.55)";
+          g.lineWidth = 2;
+          g.strokeRect(SX + 1, SY + 1, SW - 2, SH - 2);
+        })();
+
+        var ctx = document.getElementById("oscv-screen").getContext("2d");
+        function draw(t) {
+          ctx.globalCompositeOperation = "source-over";
+          ctx.clearRect(0, 0, W, H);
+          ctx.drawImage(grat, 0, 0);
+          var windowS = TAIL_TAUS * tau;
+          var K = Math.max(K_MIN, Math.min(K_MAX, Math.round((windowS * beamSpeedMax) / SEG_TARGET_PX)));
+          var dt = windowS / K;
+          /* slowest possible beam travel per sub-step: the brightness reference, so the weight never exceeds 1 */
+          var lRef = SW * sweepRate * dt;
+          ctx.globalCompositeOperation = "lighter";
+          ctx.lineCap = "round";
+          var prevX = 0;
+          var prevY = 0;
+          var prevU = 0;
+          var havePrev = false;
+          for (var k = K; k >= 0; k--) {
+            var tk = t - k * dt;
+            if (tk < 0) {
+              havePrev = false;
+              continue;
+            }
+            var u = sweepU(tk);
+            var x = SX + u * SW;
+            var y = beamY(tk);
+            /* retrace is blanked: when the sweep wraps, no line is drawn back across */
+            if (havePrev && u >= prevU) {
+              var dx = x - prevX;
+              var dy = y - prevY;
+              var len = Math.sqrt(dx * dx + dy * dy);
+              var vel = len > 1e-6 ? Math.min(1, lRef / len) : 1;
+              var a = Math.exp((-k * dt) / tau) * vel;
+              if (a > 0.002) {
+                ctx.beginPath();
+                ctx.moveTo(prevX, prevY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = rgba(phosphor, a * 0.13);
+                ctx.lineWidth = 13 * S;
+                ctx.stroke();
+                ctx.strokeStyle = rgba(phosphor, a * 0.9);
+                ctx.lineWidth = 3 * S;
+                ctx.stroke();
+                if (a > 0.55) {
+                  ctx.strokeStyle = "rgba(255,255,255," + (((a - 0.55) / 0.45) * 0.7).toFixed(4) + ")";
+                  ctx.lineWidth = 1.4 * S;
+                  ctx.stroke();
+                }
+              }
+            }
+            prevX = x;
+            prevY = y;
+            prevU = u;
+            havePrev = true;
+          }
+          var hx = SX + sweepU(t) * SW;
+          var hy = beamY(t);
+          var R = 22 * S;
+          var glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, R);
+          glow.addColorStop(0, "rgba(255,255,255,0.95)");
+          glow.addColorStop(0.22, rgba(phosphor, 0.85));
+          glow.addColorStop(1, rgba(phosphor, 0));
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(hx, hy, R, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalCompositeOperation = "source-over";
+        }
+
+        /* readout: nearest EIA phosphor class for the chosen tau, a label, not simulation */
+        if (document.getElementById("oscv-readout")) {
+          var tauMs = tau * 1000;
+          var cls = tauMs <= 1 ? "P31" : tauMs <= 150 ? "P1" : "P33";
+          var msPerDiv = 1000 / (sweepRate * DIVS_X);
+          var ru = function (n, d) {
+            return n.toFixed(d).replace(".", ",");
+          };
+          var labels = parts(V.labels, "Сигнал|Частота|Развёртка|Размах|Люминофор", 5);
+          var names = parts(V.waveNames, "синус|меандр|треугольник|данные", 4);
+          document.querySelectorAll(".oscv-lbl").forEach(function (el, i) {
+            el.textContent = labels[i];
+          });
+          document.getElementById("oscv-r-title").textContent = str(V.title, "") || "Осциллограф";
+          document.getElementById("oscv-r-wave").textContent = names[["sine", "square", "triangle", "data"].indexOf(waveform)];
+          document.getElementById("oscv-r-freq").textContent = ru(frequency, frequency < 10 ? 2 : 1) + " Гц";
+          document.getElementById("oscv-r-time").textContent = ru(msPerDiv, msPerDiv >= 10 ? 0 : 2) + " мс/дел";
+          document.getElementById("oscv-r-amp").textContent = ru(amplitude, 1) + " дел";
+          document.getElementById("oscv-r-phos").textContent = cls + " · τ " + ru(tauMs, 0) + " мс";
+          var note = str(V.note, "Свечение гаснет за лучом и ярче там, где луч идёт медленнее");
+          var noteEl = document.getElementById("oscv-r-note");
+          if (note) noteEl.textContent = note;
+          else noteEl.remove();
+        }
+
+        /* the runtime seeks with events suppressed, so the repaint is driven from a tweened setter */
+        var beam = { t: 0 };
+        var driver = {};
+        Object.defineProperty(driver, "t", {
+          get: function () {
+            return beam.t;
+          },
+          set: function (value) {
+            beam.t = value;
+            draw(value);
+          },
+        });
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var tl = gsap.timeline({ paused: true });
+        tl.to(driver, { t: 30, duration: 30, ease: "none", lazy: false }, 0);
+        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        draw(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["oscilloscope-trace-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
