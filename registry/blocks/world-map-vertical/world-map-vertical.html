@@ -344,7 +344,7 @@
             tl.to(el, { stroke: "rgb(" + fg.join(",") + ")", strokeWidth: 2.4, duration: 0.4, ease: "power2.out" }, cP + i * 0.15);
             tl.to(el, { stroke: "rgb(" + rgb(cs.getPropertyValue("--bg").trim() || "#0c1014").join(",") + ")", strokeWidth: 0.8, duration: 0.6, ease: "power2.inOut" }, cP + i * 0.15 + 0.4);
           });
-        if (exit === "fade") tl.to("#wmapv-box", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
+        if (exit === "fade") tl.to("#wmapv-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : cP + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["world-map-vertical"] = tl;

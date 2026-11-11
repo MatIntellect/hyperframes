@@ -1132,6 +1132,39 @@
             );
           }
         }
+        
+        {
+          /* every card, measured on screen at every frame of the mount, stays inside the field: the picture is
+             scaled on the outer scaler. 3D families fit the 780 width too; flat curves may run past the side
+             edges, so only their height is fitted */
+          const sc = document.getElementById(DATA.id + "-scaler");
+          const base = sc.style.transform;
+          const R0 = root.getBoundingClientRect();
+          const s0 = R0.width / comp.outWidth || 1;
+          let x0 = Infinity,
+            x1 = -Infinity,
+            y0 = Infinity,
+            y1 = -Infinity;
+          for (let f = 0; f <= comp.duration * comp.fps; f++) {
+            render(f / comp.fps);
+            els.forEach((el) => {
+              if (!(parseFloat(el.style.opacity) > 0)) return;
+              const r = el.getBoundingClientRect();
+              if (!r.width || !r.height) return;
+              x0 = Math.min(x0, (r.left - R0.left) / s0);
+              x1 = Math.max(x1, (r.right - R0.left) / s0);
+              y0 = Math.min(y0, (r.top - R0.top) / s0);
+              y1 = Math.max(y1, (r.bottom - R0.top) / s0);
+            });
+          }
+          if (x0 < x1 && (y0 < field[0] || y1 > field[1])) {
+            const k = Math.min(1, (field[1] - field[0]) / (y1 - y0));
+            const tx = 540 - k * 540,
+              ty = (field[0] + field[1]) / 2 - (k * (y0 + y1)) / 2;
+            sc.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + k + ") " + base;
+          }
+        }
+        
         render(0);
         const cues = String(V.cues || "").split(",").map(parseFloat);
         if (V.exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);

@@ -205,7 +205,7 @@
         tl.to(glow, { opacity: 0, scale: 1.8, duration: 1.2, ease: "power2.out" }, tx + 0.4);
         tl.fromTo(tagEl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, cT);
         tl.fromTo(pill, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, cT + 0.4);
-        if (exit === "fade") tl.to("#lgo-box", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cT + 3);
+        if (exit === "fade") tl.to("#lgo-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cT + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["logo-outro"] = tl;
