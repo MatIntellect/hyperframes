@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lower-third-bild",
+  "type": "hyperframes:block",
+  "title": "Lower Third Tabloid",
+  "description": "Tabloid news lower third in the brand: a Bebas headline on a light bar with a red offset shadow and an upper-case line on a red bar wipe in; long lines wrap onto their own bars. Words are variables; cues set entrance and exit.",
+  "tags": ["broadcast", "lower-third", "news", "overlay"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lower-third-bild.html",
+      "target": "compositions/lower-third-bild.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

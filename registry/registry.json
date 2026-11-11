@@ -60,6 +60,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "lower-third-bild",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lower-third-bild-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "lt-accent-underline",
       "type": "hyperframes:block"
     },

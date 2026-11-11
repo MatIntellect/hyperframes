@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lower-third-bild-vertical",
+  "type": "hyperframes:block",
+  "title": "Lower Third Tabloid (vertical)",
+  "description": "Vertical tabloid lower third over footage: Bebas headline on a light bar with a red offset shadow, red sub-line bar; each wrapped line gets its own bar. Words are variables; placement bottom (above the caption band), top or centre; cues set entrance and exit.",
+  "tags": ["broadcast", "lower-third", "news", "overlay", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lower-third-bild-vertical.html",
+      "target": "compositions/lower-third-bild-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
