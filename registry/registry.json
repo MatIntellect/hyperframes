@@ -36,6 +36,86 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "carousel-circle-1",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-1-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-2",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-2-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-3",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-3-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-4",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-4-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-5",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-circle-5-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-1",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-1-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-2",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-2-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-3",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-3-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-4",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-4-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-5",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "carousel-path-5-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "chatgpt-exchange",
       "type": "hyperframes:block"
     },
