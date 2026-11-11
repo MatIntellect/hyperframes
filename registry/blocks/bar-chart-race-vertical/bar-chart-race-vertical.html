@@ -1,0 +1,487 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the race in the 780x1180 field (y 180-1360), 6 bars. top / bottom: the race on a brand card 780x760 at y 180-940 / 600-1360, 5 bars, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Headline, Bebas Neue, up to two lines.", "maxLength": 28, "default": "Кто растёт быстрее" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "One line under the headline; the unit goes here.", "maxLength": 36, "default": "Подписчики, тысяч" },
+    { "id": "periods", "type": "string", "role": "content", "label": "Periods", "description": "Period labels separated by commas, 2 to 12, each up to 6 characters. The current one is shown large.", "maxLength": 90, "default": "2019, 2020, 2021, 2022, 2023, 2024" },
+    { "id": "series", "type": "string", "role": "content", "label": "Series", "description": "One series per line or separated by ;, as Name: v1, v2, ... with a dot for decimals; one value per period, a short row holds its last value. Names up to 14 characters, up to 12 series.", "maxLength": 900, "default": "Telegram: 42, 58, 71, 96, 118, 131\nYouTube: 30, 46, 68, 92, 126, 168\nInstagram: 55, 62, 66, 70, 74, 79\nTikTok: 18, 33, 52, 61, 88, 104\nВКонтакте: 25, 28, 44, 58, 63, 72\nДзен: 12, 20, 39, 47, 55, 90\nThreads: 8, 11, 15, 24, 40, 66\nX: 35, 37, 38, 40, 42, 44" },
+    { "id": "barCount", "type": "number", "role": "layout", "label": "Bars shown", "description": "How many ranks are visible.", "default": 6, "min": 3, "max": 8, "step": 1 },
+    { "id": "valuePrefix", "type": "string", "role": "content", "label": "Value prefix", "maxLength": 2, "default": "" },
+    { "id": "valueSuffix", "type": "string", "role": "content", "label": "Value suffix", "maxLength": 4, "default": "" },
+    { "id": "valueDecimals", "type": "number", "role": "content", "label": "Value decimals", "default": 0, "min": 0, "max": 2, "step": 1 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first period are in and the race starts, 2 the race reaches the last period, 3 the chart fades out (only when exit is fade). Empty keeps 0.8 and 2 s per period.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the final ranking to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #bcrv-root {
+        --bcrv-chip: var(--bg, #0c1014);
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+        overflow: hidden;
+      }
+      #bcrv-root .bcrv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #bcrv-box {
+        position: absolute;
+      }
+      #bcrv-root.bcrv-card #bcrv-box {
+        --bcrv-chip: var(--surface, #18181a);
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+        overflow: hidden;
+      }
+      #bcrv-head {
+        position: absolute;
+      }
+      #bcrv-title {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 0.98;
+        text-transform: uppercase;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      #bcrv-subtitle {
+        color: var(--muted, #8a8a90);
+        line-height: 1.25;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      #bcrv-period {
+        position: absolute;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      #bcrv-plot {
+        position: absolute;
+        overflow: hidden;
+        opacity: 0;
+      }
+      .bcrv-row {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .bcrv-name,
+      .bcrv-value {
+        position: absolute;
+        font-weight: 600;
+        line-height: 1.3;
+        white-space: nowrap;
+        background-color: var(--bcrv-chip);
+        font-variant-numeric: tabular-nums;
+      }
+      .bcrv-value {
+        padding: 0 12px;
+      }
+      .bcrv-bar {
+        position: absolute;
+        border-radius: 4px;
+      }
+      #bcrv-axis {
+        position: absolute;
+        inset: 0;
+        z-index: 5000;
+        opacity: 0;
+      }
+      .bcrv-tick-line {
+        position: absolute;
+        left: 0;
+        width: 2px;
+        background-color: var(--border, #2e2e32);
+      }
+      .bcrv-tick-label {
+        position: absolute;
+        left: 0;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bcrv-root" data-composition-id="bar-chart-race-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="bcrv-ground"></div>
+      <div id="bcrv-box">
+        <div id="bcrv-head">
+          <div id="bcrv-title">Кто растёт быстрее</div>
+          <div id="bcrv-subtitle">Подписчики, тысяч</div>
+        </div>
+        <div id="bcrv-period">2019</div>
+        <div id="bcrv-plot"></div>
+        <div id="bcrv-axis"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        "use strict";
+        var root = document.getElementById("bcrv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function num(value, fallback, lo, hi) {
+          var n = typeof value === "number" ? value : Number.parseFloat(value);
+          if (!Number.isFinite(n)) n = fallback;
+          return Math.min(hi, Math.max(lo, n));
+        }
+        function str(value, fallback) {
+          return typeof value === "string" && value.trim().length > 0 ? value : fallback;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        /* geometry: every number of the layout in one place */
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        var G;
+        if (placement === "full") {
+          G = {
+            box: [0, 0, 1080, 1920],
+            head: [150, 180, 780],
+            titleSize: 104,
+            subSize: 36,
+            period: { left: 150, top: 470, size: 120 },
+            plot: [0, 680, 1080, 680],
+            stacked: true,
+            nameX: 150,
+            trackX: 150,
+            trackW: 590,
+            fs: 32,
+            tickTop: 616,
+            tickSize: 28,
+            bars: 6,
+          };
+        } else {
+          G = {
+            box: [150, placement === "top" ? 180 : 600, 780, 760],
+            head: [36, 34, 520],
+            titleSize: 64,
+            subSize: 28,
+            period: { right: 36, top: 30, size: 104 },
+            plot: [0, 268, 780, 470],
+            stacked: true,
+            nameX: 36,
+            trackX: 36,
+            trackW: 520,
+            fs: 28,
+            tickTop: 212,
+            tickSize: 28,
+            bars: 5,
+          };
+          root.classList.add("bcrv-card");
+          root.querySelector(".bcrv-ground").remove();
+        }
+        
+
+        var box = document.getElementById("bcrv-box");
+        box.style.left = G.box[0] + "px";
+        box.style.top = G.box[1] + "px";
+        box.style.width = G.box[2] + "px";
+        box.style.height = G.box[3] + "px";
+        var head = document.getElementById("bcrv-head");
+        head.style.left = G.head[0] + "px";
+        head.style.top = G.head[1] + "px";
+        head.style.width = G.head[2] + "px";
+        document.getElementById("bcrv-title").style.fontSize = G.titleSize + "px";
+        var subEl = document.getElementById("bcrv-subtitle");
+        subEl.style.fontSize = G.subSize + "px";
+        subEl.style.marginTop = Math.round(G.subSize * 0.35) + "px";
+        var periodEl = document.getElementById("bcrv-period");
+        periodEl.style.fontSize = G.period.size + "px";
+        periodEl.style.top = G.period.top + "px";
+        if (G.period.right != null) periodEl.style.right = G.period.right + "px";
+        else periodEl.style.left = G.period.left + "px";
+        var plot = document.getElementById("bcrv-plot");
+        plot.style.left = G.plot[0] + "px";
+        plot.style.top = G.plot[1] + "px";
+        plot.style.width = G.plot[2] + "px";
+        plot.style.height = G.plot[3] + "px";
+
+        document.getElementById("bcrv-title").textContent = str(V.title, "Кто растёт быстрее");
+        var sub = typeof V.subtitle === "string" ? V.subtitle : "Подписчики, тысяч";
+        subEl.textContent = sub;
+
+        var BAR_COUNT = Math.min(Math.round(num(V.barCount, G.bars, 3, 8)), G.bars);
+        var DECIMALS = Math.round(num(V.valueDecimals, 0, 0, 2));
+        var PREFIX = typeof V.valuePrefix === "string" ? V.valuePrefix : "";
+        var SUFFIX = typeof V.valueSuffix === "string" ? V.valueSuffix : "";
+
+        function parsePeriods(text) {
+          return String(text)
+            .split(",")
+            .map(function (s) {
+              return s.trim();
+            })
+            .filter(function (s) {
+              return s.length > 0;
+            });
+        }
+        function parseSeries(text, periodCount) {
+          var out = [];
+          var lines = String(text).split(/[\n;]+/);
+          for (var i = 0; i < lines.length && out.length < 12; i++) {
+            var line = lines[i].trim();
+            var split = line.indexOf(":");
+            if (split < 1) continue;
+            var values = line
+              .slice(split + 1)
+              .split(",")
+              .map(function (s) {
+                return Number.parseFloat(s.trim());
+              })
+              .filter(function (n) {
+                return Number.isFinite(n);
+              });
+            if (values.length === 0) continue;
+            while (values.length < periodCount) values.push(values[values.length - 1]);
+            out.push({ label: line.slice(0, split).trim(), values: values.slice(0, periodCount) });
+          }
+          return out;
+        }
+        var DEF_SERIES =
+          "Telegram: 42, 58, 71, 96, 118, 131\nYouTube: 30, 46, 68, 92, 126, 168\nInstagram: 55, 62, 66, 70, 74, 79\nTikTok: 18, 33, 52, 61, 88, 104\nВКонтакте: 25, 28, 44, 58, 63, 72\nДзен: 12, 20, 39, 47, 55, 90\nThreads: 8, 11, 15, 24, 40, 66\nX: 35, 37, 38, 40, 42, 44";
+        var PERIODS = parsePeriods(str(V.periods, "2019, 2020, 2021, 2022, 2023, 2024"));
+        if (PERIODS.length === 0) PERIODS = ["1"];
+        var SERIES = parseSeries(str(V.series, DEF_SERIES), PERIODS.length);
+        if (SERIES.length === 0) SERIES = parseSeries(DEF_SERIES, PERIODS.length);
+        var T = PERIODS.length;
+        var N = SERIES.length;
+
+        /* closed-form state: race time u runs 0..T-1 (one unit per period) */
+        var K = 10;
+        var KF_COUNT = T > 1 ? (T - 1) * K + 1 : 1;
+        function clamp(v, lo, hi) {
+          return v < lo ? lo : v > hi ? hi : v;
+        }
+        function valueAt(u, s) {
+          if (T < 2) return s.values[0];
+          var i = clamp(Math.floor(u), 0, T - 2);
+          var f = clamp(u - i, 0, 1);
+          return s.values[i] + (s.values[i + 1] - s.values[i]) * f;
+        }
+        var RANKS = [];
+        for (var m = 0; m < KF_COUNT; m++) {
+          var um = m / K;
+          var order = SERIES.map(function (s, j) {
+            return { j: j, v: valueAt(um, s) };
+          });
+          order.sort(function (a, b) {
+            return b.v - a.v || a.j - b.j;
+          });
+          var row = new Array(N);
+          for (var r = 0; r < order.length; r++) row[order[r].j] = r;
+          RANKS.push(row);
+        }
+        function smoothstep(x) {
+          return x * x * (3 - 2 * x);
+        }
+        function rankPosAt(u, j) {
+          if (KF_COUNT < 2) return RANKS[0][j];
+          var mm = u * K;
+          var m0 = clamp(Math.floor(mm), 0, KF_COUNT - 2);
+          var e = smoothstep(clamp(mm - m0, 0, 1));
+          return RANKS[m0][j] + (RANKS[m0 + 1][j] - RANKS[m0][j]) * e;
+        }
+        function formatValue(v) {
+          return PREFIX + v.toLocaleString("ru-RU", { minimumFractionDigits: DECIMALS, maximumFractionDigits: DECIMALS }) + SUFFIX;
+        }
+        function formatTick(v, step) {
+          var d = step >= 1 ? 0 : Math.min(2, Math.ceil(-Math.log10(step)));
+          return PREFIX + v.toLocaleString("ru-RU", { minimumFractionDigits: d, maximumFractionDigits: d }) + SUFFIX;
+        }
+        function niceStep(x) {
+          var e = Math.pow(10, Math.floor(Math.log10(x)));
+          var f = x / e;
+          return e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10);
+        }
+
+        var PITCH = G.plot[3] / BAR_COUNT;
+        var NAME_H = G.fs * 1.3;
+        var BAR_H = G.stacked ? Math.max(24, PITCH - NAME_H - 22) : Math.max(16, PITCH * 0.62);
+        var rows = SERIES.map(function (s) {
+          var rowEl = document.createElement("div");
+          rowEl.className = "bcrv-row";
+          rowEl.style.height = PITCH + "px";
+          var name = document.createElement("div");
+          name.className = "bcrv-name";
+          name.setAttribute("data-layout-allow-overlap", "");
+          name.setAttribute("data-layout-allow-occlusion", "");
+          name.textContent = s.label;
+          name.style.fontSize = G.fs + "px";
+          name.style.left = G.nameX + "px";
+          var bar = document.createElement("div");
+          bar.className = "bcrv-bar";
+          bar.style.height = BAR_H + "px";
+          bar.style.left = G.trackX + "px";
+          var value = document.createElement("div");
+          value.className = "bcrv-value";
+          value.setAttribute("data-layout-allow-overlap", "");
+          value.setAttribute("data-layout-allow-occlusion", "");
+          value.style.fontSize = G.fs + "px";
+          value.style.left = G.trackX + "px";
+          if (G.stacked) {
+            name.style.top = "0px";
+            bar.style.top = NAME_H + 6 + "px";
+            value.style.top = NAME_H + 6 + BAR_H / 2 + "px";
+          } else {
+            name.style.top = "50%";
+            name.style.transform = "translateY(-50%)";
+            name.style.width = G.nameW + "px";
+            name.style.textAlign = "right";
+            name.style.paddingRight = "4px";
+            bar.style.top = "50%";
+            bar.style.transform = "translateY(-50%)";
+            value.style.top = "50%";
+          }
+          rowEl.appendChild(name);
+          rowEl.appendChild(bar);
+          rowEl.appendChild(value);
+          plot.appendChild(rowEl);
+          return { row: rowEl, bar: bar, value: value };
+        });
+        var axis = document.getElementById("bcrv-axis");
+        var ticks = [];
+        for (var k = 0; k < 12; k++) {
+          var line = document.createElement("div");
+          line.className = "bcrv-tick-line";
+          line.style.top = G.tickTop + G.tickSize * 1.4 + "px";
+          line.style.height = G.plot[1] + G.plot[3] - G.tickTop - G.tickSize * 1.4 + "px";
+          var label = document.createElement("div");
+          label.className = "bcrv-tick-label";
+          label.style.top = G.tickTop + "px";
+          label.style.fontSize = G.tickSize + "px";
+          axis.appendChild(line);
+          axis.appendChild(label);
+          ticks.push({ line: line, label: label });
+        }
+
+        function render(u) {
+          var values = SERIES.map(function (s) {
+            return valueAt(u, s);
+          });
+          var byValue = values
+            .map(function (v, i) {
+              return i;
+            })
+            .sort(function (a, b) {
+              return values[b] - values[a] || a - b;
+            });
+          var zRank = new Array(values.length);
+          for (var q = 0; q < byValue.length; q++) zRank[byValue[q]] = q;
+          var leader = byValue[0];
+          var scaleMax = Math.max(values[leader] * 1.06, 1e-6);
+          var step = niceStep(scaleMax / 4);
+          var widest = formatTick(Math.floor(scaleMax / step) * step, step).length * G.tickSize * 0.62 + 24;
+          var every = Math.max(1, Math.ceil(widest / ((step / scaleMax) * G.trackW)));
+          for (var i = 0; i < ticks.length; i++) {
+            var tv = i * step;
+            var visible = tv <= scaleMax && i % every === 0 && (i === 0 || (tv / scaleMax) * G.trackW > widest * 0.75);
+            var tx = G.trackX + (tv / scaleMax) * G.trackW;
+            ticks[i].line.style.transform = "translateX(" + tx.toFixed(2) + "px)";
+            ticks[i].line.style.opacity = visible ? "1" : "0";
+            ticks[i].label.style.transform = "translateX(" + tx.toFixed(2) + "px)" + (i === 0 ? "" : " translateX(-50%)");
+            ticks[i].label.style.opacity = visible ? "1" : "0";
+            ticks[i].label.textContent = visible ? formatTick(tv, step) : "";
+          }
+          for (var j = 0; j < rows.length; j++) {
+            var rankPos = rankPosAt(u, j);
+            var barW = (values[j] / scaleMax) * G.trackW;
+            var el = rows[j];
+            el.row.style.transform = "translateY(" + (rankPos * PITCH).toFixed(2) + "px)";
+            el.row.style.opacity = clamp(BAR_COUNT - rankPos, 0, 1).toFixed(3);
+            el.row.style.zIndex = String(1000 - zRank[j]);
+            el.bar.style.width = barW.toFixed(2) + "px";
+            el.bar.style.backgroundColor = j === leader ? "var(--accent, #ff0000)" : "var(--muted, #8a8a90)";
+            el.value.style.transform = "translate(" + barW.toFixed(2) + "px, -50%)";
+            el.value.textContent = formatValue(values[j]);
+          }
+          periodEl.textContent = PERIODS[clamp(Math.round(u), 0, T - 1)];
+        }
+
+        var driver = { _u: 0 };
+        Object.defineProperty(driver, "u", {
+          get: function () {
+            return this._u;
+          },
+          set: function (value) {
+            this._u = value;
+            render(value);
+          },
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var start = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.8;
+        var end = isFinite(cues[1]) && cues[1] > start ? cues[1] : start + Math.max(T - 1, 0) * 2;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        var lead = Math.min(start, 0.8);
+        var t0 = start - lead;
+        tl.to("#bcrv-title", { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: lead * 0.9 + 0.001, ease: "power1.inOut" }, t0);
+        tl.to(["#bcrv-subtitle", "#bcrv-period", "#bcrv-axis", "#bcrv-plot"], { opacity: 1, duration: lead * 0.6 + 0.001, stagger: lead * 0.1, ease: "power2.out" }, t0 + lead * 0.2);
+        if (T > 1) tl.fromTo(driver, { u: 0 }, { u: T - 1, duration: end - start, ease: "none", immediateRender: false }, start);
+        if (exit === "fade") tl.to(box, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : end + 3);
+        tl.set({}, {}, 30);
+        render(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["bar-chart-race-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "bar-chart-race",
+  "type": "hyperframes:block",
+  "title": "Bar Chart Race",
+  "description": "Ranked bars grow and overtake each other period by period; the axis rescales and the brand red marks whoever leads. Periods, series, units and words are variables; cues set when the race starts and ends; holds the final ranking.",
+  "tags": ["data", "chart", "statistics", "ranking", "race"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "bar-chart-race.html",
+      "target": "compositions/bar-chart-race.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

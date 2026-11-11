@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "bar-chart-race-vertical",
+  "type": "hyperframes:block",
+  "title": "Bar Chart Race (vertical)",
+  "description": "Vertical bar chart race: names above the bars, ranks overtake period by period, the brand red marks the leader. Periods, series and words are variables; placement full, top or bottom; cues set start and end; holds the final ranking.",
+  "tags": ["data", "chart", "statistics", "ranking", "race", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "bar-chart-race-vertical.html",
+      "target": "compositions/bar-chart-race-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
