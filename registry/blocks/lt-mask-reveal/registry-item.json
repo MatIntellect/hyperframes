@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-mask-reveal",
+  "type": "hyperframes:block",
+  "title": "Lower Third Mask Reveal",
+  "description": "Cardless lower third over footage: a red sweep crosses the name and a clip-path mask reveals it behind the sweep, the role fades up. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "mask", "reveal"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-mask-reveal.html",
+      "target": "compositions/lt-mask-reveal.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

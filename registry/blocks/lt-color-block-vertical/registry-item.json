@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-color-block-vertical",
+  "type": "hyperframes:block",
+  "title": "Lower Third Color Block (vertical)",
+  "description": "Vertical, centred on the frame over footage. Loud lower third: a brand-red block slides in with a small overshoot, the upper-case name and the role rise inside it. Placement bottom (above the caption band), top or centre; cues set entrance and exit; holds.",
+  "tags": ["lower-third", "overlay", "name", "bold", "red", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-color-block-vertical.html",
+      "target": "compositions/lt-color-block-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

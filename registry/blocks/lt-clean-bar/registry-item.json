@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-clean-bar",
+  "type": "hyperframes:block",
+  "title": "Lower Third Clean Bar",
+  "description": "Lower third on a dark brand card with a red tab: the card wipes in, the tab grows, name and role rise. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "card", "interview"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-clean-bar.html",
+      "target": "compositions/lt-clean-bar.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

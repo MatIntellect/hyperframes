@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-soft-pill",
+  "type": "hyperframes:block",
+  "title": "Lower Third Soft Pill",
+  "description": "Rounded pill lower third on a dark brand surface: the pill pops up, a red status dot pulses in, name and role settle. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "pill", "minimal"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-soft-pill.html",
+      "target": "compositions/lt-soft-pill.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

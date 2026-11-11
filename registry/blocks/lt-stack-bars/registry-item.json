@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-stack-bars",
+  "type": "hyperframes:block",
+  "title": "Lower Third Stack Bars",
+  "description": "Two stacked bars: a dark brand bar with the upper-case name wipes in from the left, a red bar with the role wipes in from the right. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "bars", "bold"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-stack-bars.html",
+      "target": "compositions/lt-stack-bars.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

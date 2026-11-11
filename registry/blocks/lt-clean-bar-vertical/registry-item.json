@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-clean-bar-vertical",
+  "type": "hyperframes:block",
+  "title": "Lower Third Clean Bar (vertical)",
+  "description": "Vertical, centred on the frame over footage. Lower third on a dark brand card with a red tab: the card wipes in, the tab grows, name and role rise. Placement bottom (above the caption band), top or centre; cues set entrance and exit; holds.",
+  "tags": ["lower-third", "overlay", "name", "card", "interview", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-clean-bar-vertical.html",
+      "target": "compositions/lt-clean-bar-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

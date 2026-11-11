@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-color-block",
+  "type": "hyperframes:block",
+  "title": "Lower Third Color Block",
+  "description": "Loud lower third: a brand-red block slides in with a small overshoot, the upper-case name and the role rise inside it. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "bold", "red"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-color-block.html",
+      "target": "compositions/lt-color-block.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

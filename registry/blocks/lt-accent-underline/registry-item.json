@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-accent-underline",
+  "type": "hyperframes:block",
+  "title": "Lower Third Accent Underline",
+  "description": "Cardless lower third over footage: the upper-case name rises, a red rule draws under it, the role fades up. Name and second line are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "underline", "minimal"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-accent-underline.html",
+      "target": "compositions/lt-accent-underline.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
