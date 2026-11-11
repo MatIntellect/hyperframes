@@ -3,13 +3,13 @@
   "name": "tiktok-follow",
   "type": "hyperframes:block",
   "title": "TikTok Follow",
-  "description": "Animated TikTok follow overlay with profile card and follow button",
-  "tags": ["social", "overlay", "tiktok"],
+  "description": "TikTok follow card in native colors: profile, follower count, the button press. Words, avatar and press time are variables; placement full, top or bottom; holds to the end of the mount.",
+  "tags": ["social", "overlay", "tiktok", "vertical"],
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 4.5,
+  "duration": 30,
   "files": [
     {
       "path": "tiktok-follow.html",
@@ -18,12 +18,8 @@
     },
     {
       "path": "assets/avatar.jpg",
-      "target": "assets/avatar.jpg",
+      "target": "assets/tiktok-avatar.jpg",
       "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/tiktok-follow.mp4",
-    "poster": "https://static.heygen.ai/hyperframes-oss/docs/images/catalog/blocks/tiktok-follow.png"
-  }
+  ]
 }

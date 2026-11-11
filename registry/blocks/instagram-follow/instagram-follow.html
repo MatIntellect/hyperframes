@@ -8,7 +8,7 @@
     { "id": "followers", "type": "string", "role": "content", "label": "Followers line", "description": "Small grey line under the handle.", "maxLength": 24, "default": "12,5 тыс. подписчиков" },
     { "id": "followLabel", "type": "string", "role": "content", "label": "Follow button", "description": "Button text before the press.", "maxLength": 12, "default": "Подписаться" },
     { "id": "followingLabel", "type": "string", "role": "content", "label": "Following button", "description": "Button text after the press.", "maxLength": 12, "default": "Вы подписаны" },
-    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round profile picture.", "default": "assets/avatar.jpg" },
+    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round profile picture.", "default": "assets/instagram-avatar.jpg" },
     { "id": "verified", "type": "boolean", "role": "content", "label": "Verified badge", "description": "Blue tick after the name.", "default": true },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 card lands, 2 button pressed, 3 card leaves (only when exit is not none). Empty keeps 0.1, 1.0, 3.8.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "down", "label": "Slide down" }] }
@@ -150,7 +150,7 @@
       <div class="igf-ground"></div>
       <div class="igf-field">
         <div id="igf-card" class="clip igf-card" data-start="0" data-duration="30" data-track-index="0">
-          <img class="igf-avatar" src="assets/avatar.jpg" alt="" crossorigin="anonymous" />
+          <img class="igf-avatar" src="assets/instagram-avatar.jpg" alt="" crossorigin="anonymous" />
           <div class="igf-info">
             <div class="igf-name-row">
               <div class="igf-name">MatIntellect</div>
@@ -197,7 +197,7 @@
         root.querySelector(".igf-followers").textContent = str(vars.followers, "12,5 тыс. подписчиков");
         root.querySelector("#igf-follow").textContent = str(vars.followLabel, "Подписаться");
         root.querySelector(".igf-following-label").textContent = str(vars.followingLabel, "Вы подписаны");
-        root.querySelector(".igf-avatar").src = str(vars.avatar, "assets/avatar.jpg");
+        root.querySelector(".igf-avatar").src = str(vars.avatar, "assets/instagram-avatar.jpg");
         if (vars.verified === false) root.querySelector(".igf-badge").remove();
 
         var authored = [0.1, 1.0, 3.8];

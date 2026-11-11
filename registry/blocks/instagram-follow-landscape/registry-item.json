@@ -18,7 +18,7 @@
     },
     {
       "path": "assets/avatar.jpg",
-      "target": "assets/avatar.jpg",
+      "target": "assets/instagram-avatar.jpg",
       "type": "hyperframes:asset"
     }
   ]
