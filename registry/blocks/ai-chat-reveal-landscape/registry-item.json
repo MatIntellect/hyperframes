@@ -1,0 +1,21 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "ai-chat-reveal-landscape",
+  "type": "hyperframes:block",
+  "title": "AI Chat Reveal (landscape)",
+  "description": "A question is typed in a chat app, sent, and answered by an AI that streams its reply word by word on a measured token rhythm: thinking dot, uneven bursts, a bulleted list. The app's white to the frame edge, the chat column with header and Russian keyboard in the middle. Question, answer and four beat times are variables; holds the finished answer to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "ai", "chat", "landscape"],
+  "author": "Miao Yang",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "ai-chat-reveal-landscape.html",
+      "target": "compositions/ai-chat-reveal-landscape.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

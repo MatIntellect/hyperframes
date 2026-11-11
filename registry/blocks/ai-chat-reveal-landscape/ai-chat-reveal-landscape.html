@@ -1,0 +1,806 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "botName", "type": "string", "role": "content", "label": "Assistant name", "description": "Name of the assistant in the chat header.", "maxLength": 20, "default": "ChatGPT" },
+    { "id": "userMessage", "type": "string", "role": "content", "label": "User message", "description": "The question typed in the composer and sent, up to two lines in the bubble.", "maxLength": 50, "default": "Как смонтировать рилс без монтажёра?" },
+    { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First streamed paragraph, up to three lines.", "maxLength": 120, "default": "Монтажёр не нужен. MatIntellect собирает ролик из твоей записи сам: субтитры, графика, звук." },
+    { "id": "answer2", "type": "string", "role": "content", "label": "Answer paragraph 2", "description": "Short second beat, one line.", "maxLength": 40, "default": "Ты только снимаешь." },
+    { "id": "answer3", "type": "string", "role": "content", "label": "Answer paragraph 3", "description": "Lead-in to the list, one line.", "maxLength": 40, "default": "Что ты получаешь:" },
+    { "id": "bullet1", "type": "string", "role": "content", "label": "Bullet 1", "description": "First list item, one line.", "maxLength": 36, "default": "Субтитры по каждому слову" },
+    { "id": "bullet2", "type": "string", "role": "content", "label": "Bullet 2", "description": "Second list item, one line.", "maxLength": 36, "default": "Графику под смысл фразы" },
+    { "id": "bullet3", "type": "string", "role": "content", "label": "Bullet 3", "description": "Third list item, one line.", "maxLength": 36, "default": "Готовый ролик за минуты" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, 2 the message is sent, 3 the answer starts streaming, 4 the last word lands, 5 the chat fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm (for the default texts about 0.9, 4.2, 5.3, 9.1).", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the finished answer to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>AI Chat Reveal</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      #acr-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      #acr-ground {
+        position: absolute;
+        inset: 0;
+        background: #fdfdfd;
+      }
+      /* the field: the chat app's working part, authored at 750 px wide and scaled 1.04 to 780 */
+      #acr-field {
+        position: absolute;
+        left: 570px;
+        top: 40px;
+        width: 780px;
+        height: 1000px;
+        overflow: hidden;
+      }
+      .acr-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 750px;
+        height: var(--acr-stage-h, 962px);
+        transform: scale(1.04);
+        transform-origin: top left;
+        overflow: hidden;
+      }
+
+      /* header */
+      #acr-header {
+        position: absolute;
+        top: 16px;
+        left: 0;
+        right: 0;
+        height: 52px;
+      }
+      #acr-hleft {
+        position: absolute;
+        left: 28px;
+        top: 12px;
+      }
+      #acr-htitle {
+        position: absolute;
+        left: 0;
+        right: 48px;
+        text-align: center;
+        top: 9px;
+        font-size: 27px;
+        font-weight: 600;
+        color: #0d0d0d;
+      }
+      .acr-hicons {
+        position: absolute;
+        right: 28px;
+        top: 14px;
+        display: flex;
+        gap: 26px;
+        align-items: center;
+      }
+      #acr-hicons-b {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      /* user bubble */
+      #acr-bubble {
+        position: absolute;
+        top: var(--acr-bubble-top, 84px);
+        right: 32px;
+        max-width: 544px;
+        background: #f3f3f3;
+        border-radius: 34px;
+        padding: 20px 30px;
+        font-size: 27px;
+        line-height: 38.6px;
+        color: #111;
+        letter-spacing: 1.25px;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      /* answer */
+      #acr-answer {
+        position: absolute;
+        top: 222px;
+        left: 33px;
+        width: 662px;
+        font-size: 27px;
+        line-height: 38.6px;
+        color: #141414;
+        letter-spacing: 1.25px;
+      }
+      #acr-answer .acr-ap {
+        margin: 0 0 15.5px 0;
+      }
+      #acr-answer .acr-ali {
+        display: flex;
+        margin: 0 0 6.5px 0;
+      }
+      #acr-answer .acr-mark {
+        width: 30px;
+        flex: 0 0 30px;
+        text-align: center;
+        font-size: 18px;
+        line-height: 38.6px;
+      }
+      #acr-answer .acr-alitext {
+        flex: 1;
+      }
+      .acr-w {
+        opacity: 0;
+      }
+      #acr-dot {
+        position: absolute;
+        left: 32px;
+        top: 234px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #646464;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      /* composer (rest dock; rides the keyboard via transform) */
+      #acr-composer {
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        bottom: 31px;
+      }
+      #acr-pill {
+        position: relative;
+        width: 100%;
+        min-height: 81px;
+        background: #fff;
+        border: 2px solid #ececec;
+        border-radius: 41px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        padding: 13px 160px 13px 78px;
+      }
+      #acr-plusi {
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      #acr-ph {
+        position: absolute;
+        left: 78px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #767676;
+        font-size: 28px;
+        letter-spacing: 1.25px;
+        white-space: nowrap;
+      }
+      #acr-ctextwrap {
+        width: 100%;
+        min-height: 38px;
+      }
+      #acr-ctext {
+        font-size: 28px;
+        line-height: 38px;
+        color: #0d0d0d;
+        letter-spacing: 1.25px;
+        visibility: hidden;
+        opacity: 0;
+      }
+      #acr-caret {
+        display: inline-block;
+        width: 3px;
+        height: 30px;
+        margin-left: 2px;
+        border-radius: 1.5px;
+        background: #0d0d0d;
+        vertical-align: -4px;
+        visibility: hidden;
+        opacity: 0;
+      }
+      #acr-cmic {
+        position: absolute;
+        right: 80px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .acr-cbtn {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+      }
+      #acr-btn-send-grey {
+        background: #ececec;
+      }
+      #acr-btn-send-black {
+        background: #0d0d0d;
+        visibility: hidden;
+        opacity: 0;
+      }
+      #acr-btn-stop {
+        background: #0d0d0d;
+        visibility: hidden;
+        opacity: 0;
+      }
+      #acr-btn-stop .acr-sq {
+        width: 19px;
+        height: 19px;
+        border-radius: 5px;
+        background: #fff;
+      }
+
+      /* keyboard: iOS Russian layout on the measured #d2d5e0 ground */
+      #acr-keyboard {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 750px;
+        height: 482px;
+        background: #d2d5e0;
+      }
+      #acr-suggest {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 74px;
+        display: flex;
+      }
+      #acr-suggest .acr-sug {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        font-size: 29px;
+        color: #0d0d0d;
+        position: relative;
+      }
+      #acr-suggest .acr-sug + .acr-sug::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 16px;
+        bottom: 16px;
+        width: 1.5px;
+        background: #bcbabf;
+      }
+      .acr-key {
+        position: absolute;
+        height: 74px;
+        background: #fdfdfd;
+        border-radius: 10px;
+        box-shadow: 0 2px 0 #8b8a8f;
+        display: grid;
+        place-items: center;
+        font-size: 32px;
+        color: #000;
+      }
+      .acr-gkey {
+        background: #aeacaf;
+      }
+      .acr-num,
+      .acr-spc {
+        font-size: 27px;
+      }
+      .acr-kbstrip {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        height: 52px;
+      }
+      .acr-kglobe {
+        position: absolute;
+        left: 48px;
+        top: 21px;
+      }
+      .acr-kmic {
+        position: absolute;
+        right: 52px;
+        top: 23px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="acr-root"
+      data-composition-id="ai-chat-reveal-landscape"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="30"
+    >
+      <section id="acr-chat" class="clip" data-start="0" data-duration="30" data-track-index="1">
+        <div id="acr-ground"></div>
+        <div id="acr-field">
+          <div class="acr-stage">
+            <div id="acr-header">
+              <div id="acr-hleft">
+                <svg
+                  width="29"
+                  height="29"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#0d0d0d"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                >
+                  <path d="M4 8 H20 M4 15 H12" />
+                </svg>
+              </div>
+              <div id="acr-htitle">ChatGPT</div>
+              <div class="acr-hicons" id="acr-hicons-a">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 26 24"
+                  fill="none"
+                  stroke="#0d0d0d"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                >
+                  <circle cx="10" cy="8" r="4" />
+                  <path d="M3 21 C3 16 6.5 14 10 14 C13.5 14 17 16 17 21" />
+                  <path d="M20 6 V12 M17 9 H23" /></svg
+                ><svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#0d0d0d"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-dasharray="2.4 3.4"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
+              </div>
+              <div class="acr-hicons" id="acr-hicons-b">
+                <svg
+                  width="23"
+                  height="23"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#0d0d0d"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4 20 L5 15.5 L16.5 4 C17.6 2.9 19.4 2.9 20.5 4 C21.6 5.1 21.6 6.9 20.5 8 L9 19.5 L4 20 Z"
+                  /></svg
+                ><svg width="34" height="34" viewBox="0 0 24 24" fill="#0d0d0d">
+                  <circle cx="5" cy="12" r="1.7" />
+                  <circle cx="12" cy="12" r="1.7" />
+                  <circle cx="19" cy="12" r="1.7" />
+                </svg>
+              </div>
+            </div>
+
+            <div id="acr-bubble">Как смонтировать рилс без монтажёра?</div>
+
+            <div id="acr-dot"></div>
+            <div id="acr-answer" data-layout-allow-occlusion></div>
+
+            <div id="acr-composer">
+              <div id="acr-pill">
+                <div id="acr-plusi">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0d0d0d"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                  >
+                    <path d="M12 5 V19 M5 12 H19" />
+                  </svg>
+                </div>
+                <div id="acr-ph" data-layout-allow-overlap data-layout-allow-occlusion>
+                  Спросите что-нибудь
+                </div>
+                <div id="acr-ctextwrap">
+                  <span id="acr-ctext"></span><span id="acr-caret"></span>
+                </div>
+                <div id="acr-cmic">
+                  <svg
+                    width="15"
+                    height="22"
+                    viewBox="0 0 24 34"
+                    fill="none"
+                    stroke="#0d0d0d"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <rect x="8" y="2" width="8" height="16" rx="4" fill="#0d0d0d" stroke="none" />
+                    <path d="M4 14 a8 8 0 0 0 16 0 M12 22 V28 M7 31 H17" stroke-width="2.2" />
+                  </svg>
+                </div>
+                <div class="acr-cbtn" id="acr-btn-send-grey">
+                  <svg
+                    width="26"
+                    height="26"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#b6b6b6"
+                    stroke-width="2.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 19 V6 M6.5 11 L12 5.5 L17.5 11" />
+                  </svg>
+                </div>
+                <div class="acr-cbtn" id="acr-btn-send-black">
+                  <svg
+                    width="26"
+                    height="26"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="2.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 19 V6 M6.5 11 L12 5.5 L17.5 11" />
+                  </svg>
+                </div>
+                <div class="acr-cbtn" id="acr-btn-stop"><div class="acr-sq"></div></div>
+              </div>
+            </div>
+
+            <div id="acr-keyboard">
+              <div id="acr-suggest">
+                <div class="acr-sug">Как</div>
+                <div class="acr-sug">Что</div>
+                <div class="acr-sug">Мой</div>
+              </div>
+              <div id="acr-keys"></div>
+              <div class="acr-kbstrip">
+                <span class="acr-kglobe"
+                  ><svg
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000"
+                    stroke-width="2.6"
+                  >
+                    <circle cx="12" cy="12" r="9.6" />
+                    <path
+                      d="M2.4 12 H21.6 M12 2.4 C7.8 6.8 7.8 17.2 12 21.6 C16.2 17.2 16.2 6.8 12 2.4 M4 7 H20 M4 17 H20"
+                      stroke-width="2.2"
+                    /></svg></span
+                ><span class="acr-kmic"
+                  ><svg
+                    width="16"
+                    height="25"
+                    viewBox="0 0 24 34"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    stroke="#0d0d0d"
+                    stroke-width="3.9"
+                    stroke-linecap="round"
+                  >
+                    <rect
+                      x="5.5"
+                      y="1"
+                      width="13"
+                      height="17.5"
+                      rx="6.5"
+                      fill="#0d0d0d"
+                      stroke="none"
+                    />
+                    <path d="M2.5 14 a9.5 9.5 0 0 0 19 0 M12 23.5 V28.5 M5.5 32 H18.5" /></svg
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* -------- variables -------- */
+        var vars =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function text(value, fallback) {
+          return typeof value === "string" && value.trim() ? value.trim() : fallback;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        var root = document.getElementById("acr-root");
+        var full = true;
+        /* stage height in authored px: the field height / 1.04 */
+        root.style.setProperty("--acr-stage-h", "962px");
+        root.style.setProperty("--acr-bubble-top", "84px");
+
+        var botName = text(vars.botName, "ChatGPT");
+        var userMessage = text(vars.userMessage, "Как смонтировать рилс без монтажёра?");
+        var answer1 = text(
+          vars.answer1,
+          "Монтажёр не нужен. MatIntellect собирает ролик из твоей записи сам: субтитры, графика, звук.",
+        );
+        var answer2 = text(vars.answer2, "Ты только снимаешь.");
+        var answer3 = text(vars.answer3, "Что ты получаешь:");
+        var bullets = [
+          text(vars.bullet1, "Субтитры по каждому слову"),
+          text(vars.bullet2, "Графику под смысл фразы"),
+          text(vars.bullet3, "Готовый ролик за минуты"),
+        ];
+
+        if (full) document.getElementById("acr-htitle").textContent = botName;
+        var bubble = document.getElementById("acr-bubble");
+        bubble.textContent = userMessage;
+
+        /* -------- build the answer DOM: paragraphs of word spans, then bullets -------- */
+        var answerEl = document.getElementById("acr-answer");
+        var wordEls = [];
+        function addWords(parent, str) {
+          str.split(/\s+/).forEach(function (word, i) {
+            if (i > 0) parent.appendChild(document.createTextNode(" "));
+            var s = document.createElement("span");
+            s.className = "acr-w";
+            s.textContent = word;
+            parent.appendChild(s);
+            wordEls.push(s);
+          });
+        }
+        [answer1, answer2, answer3].forEach(function (str) {
+          var p = document.createElement("p");
+          p.className = "acr-ap";
+          addWords(p, str);
+          answerEl.appendChild(p);
+        });
+        bullets.forEach(function (b) {
+          var row = document.createElement("div");
+          row.className = "acr-ali";
+          var mark = document.createElement("span");
+          mark.className = "acr-mark acr-w";
+          mark.textContent = "•";
+          row.appendChild(mark);
+          wordEls.push(mark);
+          var body = document.createElement("div");
+          body.className = "acr-alitext";
+          addWords(body, b);
+          row.appendChild(body);
+          answerEl.appendChild(row);
+        });
+        /* the answer starts 60 px under the bubble, whatever its line count */
+        var answerTop = bubble.offsetTop + bubble.offsetHeight + 60;
+        answerEl.style.top = answerTop + "px";
+        document.getElementById("acr-dot").style.top = answerTop + 12 + "px";
+
+        /* -------- build the keyboard: iOS Russian layout -------- */
+        if (full) {
+          var keysEl = document.getElementById("acr-keys");
+          var ROWS = [
+            { top: 83, left: 6, pitch: 67.1, width: 58, letters: "йцукенгшщзх" },
+            { top: 173, left: 6, pitch: 67.1, width: 58, letters: "фывапролджэ" },
+            { top: 263, left: 101, pitch: 61.2, width: 53, letters: "ячсмитьбю" },
+          ];
+          ROWS.forEach(function (row) {
+            row.letters.split("").forEach(function (ch, i) {
+              var k = document.createElement("div");
+              k.className = "acr-key";
+              k.style.left = row.left + i * row.pitch + "px";
+              k.style.top = row.top + "px";
+              k.style.width = row.width + "px";
+              k.textContent = ch;
+              keysEl.appendChild(k);
+            });
+          });
+          [
+            {
+              left: 6,
+              top: 263,
+              width: 82,
+              cls: " acr-gkey",
+              html: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round"><path d="M12 4 L4.5 12 H8.5 V17 H15.5 V12 H19.5 Z"/></svg>',
+            },
+            {
+              left: 662,
+              top: 263,
+              width: 82,
+              cls: " acr-gkey",
+              html: '<svg width="31" height="24" viewBox="0 0 28 20" fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 2 H26 V18 H9 L1.5 10 Z"/><path d="M13 6.5 L20 13.5 M20 6.5 L13 13.5"/></svg>',
+            },
+            { left: 13, top: 353, width: 97, cls: " acr-gkey acr-num", html: "123" },
+            {
+              left: 118,
+              top: 353,
+              width: 86,
+              cls: "",
+              html: '<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="0.6" fill="#000"/><circle cx="15" cy="10" r="0.6" fill="#000"/><path d="M8 14.5 C9.5 16.5 14.5 16.5 16 14.5"/></svg>',
+            },
+            { left: 217, top: 353, width: 389, cls: " acr-spc", html: "пробел" },
+            {
+              left: 614,
+              top: 353,
+              width: 124,
+              cls: " acr-gkey",
+              html: '<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 V11 H6"/><path d="M9.5 7.5 L6 11 L9.5 14.5"/></svg>',
+            },
+          ].forEach(function (spec) {
+            var k = document.createElement("div");
+            k.className = "acr-key" + spec.cls;
+            k.style.left = spec.left + "px";
+            k.style.top = spec.top + "px";
+            k.style.width = spec.width + "px";
+            k.innerHTML = spec.html;
+            keysEl.appendChild(k);
+          });
+        }
+
+        /* -------- timeline -------- */
+        var tl = gsap.timeline({ paused: true });
+
+        /* keystroke and token rhythms, measured from the reference and cycled */
+        var KEY_GAPS = [
+          0.1, 0.033, 0.2, 0.133, 0.2, 0.033, 0.067, 0.033, 0.1, 0.067, 0.033, 0.067, 0.067, 0.067,
+          0.133, 0.067, 0.033, 0.067, 0.1, 0.1, 0.067, 0.133, 0.1, 0.033, 0.1, 0.033, 0.167, 0.033,
+          0.1, 0.1, 0.067, 0.133, 0.033, 0.067, 0.1, 0.033, 0.1, 0.067,
+        ];
+        var WORD_GAPS = [
+          0.167, 0.1, 0.0, 0.367, 0.0, 0.167, 0.133, 0.1, 0.1, 0.133, 0.167, 0.133, 0.0, 0.233,
+          0.167, 0.1, 0.0, 0.133, 0.133, 0.1, 0.167, 0.133, 0.1, 0.133, 0.167, 0.1, 0.133, 0.1,
+          0.133,
+        ];
+
+        /* keyboard rises, composer rides it */
+        if (full) {
+          tl.fromTo(
+            "#acr-keyboard",
+            { y: 482 },
+            { y: 0, duration: 0.2667, ease: "power2.out" },
+            0.2,
+          );
+          tl.fromTo(
+            "#acr-composer",
+            { y: 0 },
+            { y: -497, duration: 0.2667, ease: "power2.out" },
+            0.2,
+          );
+        }
+
+        /* typing: two characters land on the first beat, then the measured gaps */
+        tl.set("#acr-ctext", { textContent: "", autoAlpha: 0 }, 0.001);
+        var TYPE_START = 0.8637;
+        tl.set("#acr-ctext", { autoAlpha: 1 }, TYPE_START);
+        tl.set("#acr-ph", { autoAlpha: 0 }, TYPE_START);
+        tl.set("#acr-btn-send-grey", { autoAlpha: 0 }, TYPE_START);
+        tl.set("#acr-btn-send-black", { autoAlpha: 1 }, TYPE_START);
+        var t = TYPE_START;
+        for (var n = 2; n <= userMessage.length; n += 1) {
+          tl.set("#acr-ctext", { textContent: userMessage.slice(0, n) }, t);
+          t += KEY_GAPS[(n - 2) % KEY_GAPS.length];
+        }
+        var typeEnd = t;
+        /* caret blinks on a steady half-second while typing */
+        tl.set("#acr-caret", { autoAlpha: 0 }, 0.001);
+        for (var c = TYPE_START, on = true; c < typeEnd; c += 0.5333, on = !on) {
+          tl.set("#acr-caret", { autoAlpha: on ? 1 : 0 }, c);
+        }
+
+        /* send: bubble pops, keyboard drops, stream begins */
+        var SEND = typeEnd + 0.1667;
+        tl.set("#acr-caret", { autoAlpha: 0 }, SEND);
+        tl.set("#acr-ctext", { textContent: "" }, SEND);
+        tl.set("#acr-ph", { autoAlpha: 1 }, SEND);
+        tl.set("#acr-btn-send-black", { autoAlpha: 0 }, SEND);
+        tl.set("#acr-btn-stop", { autoAlpha: 1 }, SEND);
+        tl.fromTo(
+          "#acr-bubble",
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.1667, ease: "power1.out" },
+          SEND - 0.03,
+        );
+        if (full) {
+          tl.set("#acr-hicons-a", { autoAlpha: 0 }, SEND);
+          tl.set("#acr-hicons-b", { autoAlpha: 1 }, SEND);
+          tl.to("#acr-keyboard", { y: 482, duration: 0.2667, ease: "power1.inOut" }, SEND - 0.03);
+          tl.to("#acr-composer", { y: 0, duration: 0.2667, ease: "power1.inOut" }, SEND - 0.03);
+        }
+
+        /* thinking dot: the measured alpha ramp, then it yields to the words */
+        var DOT_RAMP = [
+          0.488, 0.53, 0.53, 0.56, 0.608, 0.687, 0.729, 0.771, 0.813, 0.867, 0.904, 0.988, 1,
+        ];
+        var dotStart = SEND + 0.4333;
+        tl.set("#acr-dot", { autoAlpha: 0 }, 0.001);
+        DOT_RAMP.forEach(function (a, i) {
+          tl.set("#acr-dot", { autoAlpha: a }, dotStart + i * 0.0333);
+        });
+        tl.set("#acr-dot", { autoAlpha: 0 }, dotStart + 0.5667);
+
+        /* the stream: measured token rhythm, fresh grey inking to full colour */
+        var STREAM = dotStart + 0.6333;
+        var w = STREAM;
+        wordEls.forEach(function (el, i) {
+          if (i > 0) w += WORD_GAPS[i % WORD_GAPS.length];
+          tl.set(el, { opacity: 1 }, w);
+          tl.fromTo(
+            el,
+            { color: "#767676" },
+            { color: "#141414", duration: 0.2667, ease: "none" },
+            w,
+          );
+        });
+
+        /* stream ends: stop button returns to send */
+        tl.set("#acr-btn-stop", { autoAlpha: 0 }, w + 0.4667);
+        tl.set("#acr-btn-send-black", { autoAlpha: 1 }, w + 0.4667);
+        tl.set({}, {}, 30);
+
+        /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
+        var exit = oneOf(vars.exit, ["none", "fade"], "none");
+        var BEATS = [TYPE_START, SEND, STREAM, w];
+        var cues = String(vars.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = BEATS.map(function (b, i) {
+          return isFinite(cues[i]) ? cues[i] : b;
+        });
+        var ordered = at.every(function (x, i) {
+          return x >= 0 && (i === 0 || x > at[i - 1]);
+        });
+        if (!ordered) at = BEATS.slice();
+        var master = gsap.timeline({ paused: true });
+        var from = 0;
+        BEATS.forEach(function (b, i) {
+          master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
+          from = at[i];
+        });
+        master.to(tl, { time: 30, duration: 30 - BEATS[BEATS.length - 1], ease: "none" }, from);
+        if (exit === "fade") {
+          var out = isFinite(cues[4]) ? cues[4] : from + 2;
+          master.to("#acr-chat", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+        }
+        master.set({}, {}, 30);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["ai-chat-reveal-landscape"] = master;
+      })();
+    </script>
+  </body>
+</html>
