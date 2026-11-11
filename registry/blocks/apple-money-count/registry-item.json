@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "apple-money-count",
+  "type": "hyperframes:block",
+  "title": "Money Count",
+  "description": "Money counter: counts from 0 to the amount in 3.2 s, flashes the brand red and bursts grey bills and coins, with its own counting sound. Amount, currency sign and label are variables; starts at the mount start; holds to the end of the mount.",
+  "tags": ["data", "money", "counter", "finance", "sound"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "apple-money-count.html",
+      "target": "compositions/apple-money-count.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/money-count.wav",
+      "target": "assets/money-count.wav",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

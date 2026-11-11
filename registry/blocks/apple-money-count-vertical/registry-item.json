@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "apple-money-count-vertical",
+  "type": "hyperframes:block",
+  "title": "Money Count (vertical)",
+  "description": "Vertical money counter: counts from 0 to the amount in 3.2 s, flashes red and bursts grey bills and coins, with its own sound. Amount, currency and label are variables; placement full, top or bottom; holds to the end of the mount.",
+  "tags": ["data", "money", "counter", "finance", "sound", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "apple-money-count-vertical.html",
+      "target": "compositions/apple-money-count-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/money-count.wav",
+      "target": "assets/money-count.wav",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

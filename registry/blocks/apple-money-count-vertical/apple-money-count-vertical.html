@@ -1,0 +1,305 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the amount centred in the 780x1180 field (y 180-1360), the burst may reach the frame edge. top / bottom: the amount and the burst on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "amount", "type": "number", "role": "content", "label": "Amount", "description": "The count runs from 0 to this number in 3.2 s, then flashes red and bursts bills and coins, with its own sound.", "default": 10000, "min": 1, "max": 9999999, "step": 1 },
+    { "id": "currency", "type": "string", "role": "content", "label": "Currency", "description": "Currency sign, also printed on the bills and coins.", "maxLength": 1, "default": "$" },
+    { "id": "currencyAfter", "type": "boolean", "role": "content", "label": "Sign after the number", "description": "true prints 10 000 ₽, false prints $10 000.", "default": false },
+    { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Line under the amount, up to two lines. Empty hides it.", "maxLength": 40, "default": "Выручка за первый месяц" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the amount fades out (only when exit is fade). The count itself starts at the mount start and lands at 3.2 s, tied to its sound.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the amount to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #amcv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+        overflow: hidden;
+      }
+      #amcv-root .amcv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #amcv-stage {
+        position: absolute;
+        overflow: hidden;
+      }
+      #amcv-flash {
+        position: absolute;
+        inset: 0;
+        background: var(--accent, #ff0000);
+        opacity: 0;
+      }
+      #amcv-center {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 5;
+      }
+      #amcv-amount {
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      #amcv-label {
+        margin-top: 24px;
+        font-weight: 600;
+        color: var(--muted, #8a8a90);
+        line-height: 1.2;
+      }
+      #amcv-burst {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        pointer-events: none;
+      }
+      .amcv-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        opacity: 0;
+      }
+      .amcv-icon.amcv-bill {
+        width: 104px;
+        height: 56px;
+        border-radius: 10px;
+        background: var(--surface, #242427);
+        border: 3px solid var(--muted, #8a8a90);
+      }
+      .amcv-icon.amcv-coin {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: var(--muted, #8a8a90);
+        border: 4px solid var(--fg, #f2f2f2);
+      }
+      .amcv-icon span {
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 1;
+        color: var(--fg, #f2f2f2);
+      }
+      .amcv-icon.amcv-coin span {
+        color: var(--bg, #0c1014);
+      }
+      
+      
+      #amcv-stage {
+        inset: 0;
+      }
+      #amcv-center {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 1180px;
+      }
+      #amcv-label {
+        font-size: 48px;
+        max-width: 780px;
+      }
+      #amcv-root.amcv-card #amcv-stage {
+        inset: auto;
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 760px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #amcv-root.amcv-bottom #amcv-stage {
+        top: 600px;
+      }
+      #amcv-root.amcv-card #amcv-center {
+        left: 40px;
+        top: 40px;
+        width: 700px;
+        height: 680px;
+      }
+      #amcv-root.amcv-card #amcv-label {
+        font-size: 40px;
+        max-width: 700px;
+      }
+      #amcv-root.amcv-card .amcv-icon.amcv-bill {
+        background: var(--card-inner, #242427);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="amcv-root" data-composition-id="apple-money-count-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="amcv-ground"></div>
+      <div id="amcv-stage">
+        <div id="amcv-flash"></div>
+        <div id="amcv-center">
+          <div id="amcv-amount">$0</div>
+          <div id="amcv-label">Выручка за первый месяц</div>
+        </div>
+        <div id="amcv-burst" data-layout-allow-overflow data-layout-ignore></div>
+      </div>
+      <audio id="amcv-sfx" data-start="0" data-duration="5" data-track-index="9" src="assets/money-count.wav" data-volume="0.92"></audio>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("amcv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function num(value, fallback, lo, hi) {
+          var n = typeof value === "number" ? value : Number.parseFloat(value);
+          if (!Number.isFinite(n)) n = fallback;
+          return Math.min(hi, Math.max(lo, n));
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("amcv-card", "amcv-" + placement);
+          root.querySelector(".amcv-ground").remove();
+        }
+        var SIZE = placement === "full" ? 220 : 170,
+          FIT = placement === "full" ? 780 : 700,
+          SPREAD = placement === "full" ? [480, 700] : [330, 330],
+          ICON = placement === "full" ? 1.5 : 1.1,
+          LOW = placement === "full" ? 520 : 330;
+        
+
+        var AMOUNT = Math.round(num(V.amount, 10000, 1, 9999999));
+        var SIGN = typeof V.currency === "string" ? V.currency : "$";
+        var AFTER = V.currencyAfter === true || V.currencyAfter === "true";
+        function fmt(v) {
+          var n = Math.round(Math.max(0, Math.min(AMOUNT, v))).toLocaleString("ru-RU");
+          return AFTER ? n + (SIGN ? " " + SIGN : "") : SIGN + n;
+        }
+        var label = typeof V.label === "string" ? V.label : "Выручка за первый месяц";
+        var labelEl = document.getElementById("amcv-label");
+        labelEl.textContent = label;
+        if (!label) labelEl.style.display = "none";
+
+        var amountEl = document.getElementById("amcv-amount");
+        amountEl.style.fontSize = Math.round(Math.min(SIZE, FIT / (fmt(AMOUNT).length * 0.68))) + "px";
+        amountEl.textContent = fmt(0);
+
+        /* bills and coins: placed by index (golden angle), no randomness */
+        var burst = document.getElementById("amcv-burst");
+        var icons = [],
+          specs = [];
+        for (var i = 0; i < 62; i++) {
+          var icon = document.createElement("div");
+          var coin = i % 3 === 0;
+          icon.className = "amcv-icon " + (coin ? "amcv-coin" : "amcv-bill");
+          var mark = document.createElement("span");
+          mark.textContent = SIGN || "$";
+          icon.appendChild(mark);
+          burst.appendChild(icon);
+          icons.push(icon);
+          var a = i * 2.399963229728653;
+          var ring = i % 5;
+          var k = 0.3 + ring * 0.17 + (i % 7) * 0.012;
+          specs.push({
+            x: Math.max(-SPREAD[0], Math.min(SPREAD[0], Math.cos(a) * SPREAD[0] * k)),
+            y: Math.max(-SPREAD[1], Math.min(LOW, Math.sin(a * 1.13) * SPREAD[1] * k)),
+            delay: (i % 8) * 0.025,
+            duration: 0.74 + (i % 5) * 0.045,
+            fadeDelay: (i % 5) * 0.05,
+            rotation: ((i * 43) % 160) - 80,
+            scale: ICON * (coin ? 0.72 + (i % 4) * 0.08 : 0.68 + (i % 5) * 0.07),
+          });
+        }
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var center = document.getElementById("amcv-center");
+        var st = { v: 0 };
+        var tl = gsap.timeline({ paused: true });
+        gsap.set(icons, { x: 0, y: 0, xPercent: -50, yPercent: -50, opacity: 0, scale: 0.18 });
+        tl.fromTo(center, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
+        tl.fromTo(
+          st,
+          { v: 0 },
+          {
+            v: AMOUNT,
+            duration: 3.16,
+            ease: "none",
+            onUpdate: function () {
+              amountEl.textContent = fmt(st.v);
+            },
+          },
+          0,
+        );
+        tl.to(amountEl, { color: "#ff0000", duration: 0.18 }, 3.16);
+        tl.to(amountEl, { scale: 1.06, duration: 0.16, ease: "back.out(2.2)" }, 3.16);
+        tl.to(amountEl, { scale: 1, duration: 0.23, ease: "power2.out" }, 3.33);
+        tl.to("#amcv-flash", { opacity: 0.14, duration: 0.08, ease: "none" }, 3.16);
+        tl.to("#amcv-flash", { opacity: 0.07, duration: 0.76, ease: "none" }, 3.24);
+        tl.to("#amcv-flash", { opacity: 0, duration: 0.16, ease: "power2.out" }, 4);
+        icons.forEach(function (icon, i) {
+          var s = specs[i];
+          tl.to(icon, { x: s.x, y: s.y, rotation: s.rotation, scale: s.scale, opacity: 1, duration: s.duration, ease: "power4.out" }, 3.28 + s.delay);
+          tl.to(icon, { y: s.y + (s.y < 0 ? -58 : Math.min(58, LOW - s.y)), scale: s.scale * 0.54, opacity: 0, duration: 0.38, ease: "power2.in" }, 4.18 + s.fadeDelay);
+        });
+        if (exit === "fade") tl.to(center, { opacity: 0, duration: 0.3, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["apple-money-count-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
