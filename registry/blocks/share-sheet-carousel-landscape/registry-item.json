@@ -1,0 +1,139 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "share-sheet-carousel-landscape",
+  "type": "hyperframes:block",
+  "title": "Share-Sheet Carousel (landscape)",
+  "description": "An iOS share sheet springs up over its blurred ground and cuts through four previews on a fast rhythm, then the accept tap. Words, images and beat times are variables; holds to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "share-sheet", "ad-template", "landscape"],
+  "author": "Miao Yang",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "variables": [
+    {
+      "id": "shareTitle",
+      "type": "string",
+      "role": "content",
+      "label": "Sheet title",
+      "description": "Heading at the top of the share sheet.",
+      "default": "Share"
+    },
+    {
+      "id": "senderName",
+      "type": "string",
+      "role": "content",
+      "label": "Sender",
+      "description": "Name of the brand this video promotes, shown as the sender offering the item. Use the real name of that brand.",
+      "portrays": ["subject_name"],
+      "default": "HyperFrames"
+    },
+    {
+      "id": "itemLabel",
+      "type": "string",
+      "role": "content",
+      "label": "Item",
+      "description": "What the sender is offering, completing the sentence \"… would like to share …\".",
+      "default": "a video"
+    },
+    {
+      "id": "stripText",
+      "type": "string",
+      "role": "content",
+      "label": "Brand strip",
+      "description": "Positioning line of the brand this video promotes, in small caps beside its logo.",
+      "portrays": ["subject_tagline"],
+      "default": "OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML"
+    },
+    {
+      "id": "acceptLabel",
+      "type": "string",
+      "role": "content",
+      "label": "Accept label",
+      "description": "Right-hand action button.",
+      "default": "Accept"
+    },
+    {
+      "id": "declineLabel",
+      "type": "string",
+      "role": "content",
+      "label": "Decline label",
+      "description": "Left-hand action button.",
+      "default": "Decline"
+    },
+    {
+      "id": "slideImage1",
+      "type": "image",
+      "role": "content",
+      "label": "Slide image 1",
+      "description": "First carousel image; also fills the blurred background.",
+      "default": "assets/slide-01.jpg"
+    },
+    {
+      "id": "slideImage2",
+      "type": "image",
+      "role": "content",
+      "label": "Slide image 2",
+      "description": "Second carousel image; also fills the blurred background.",
+      "default": "assets/slide-02.jpg"
+    },
+    {
+      "id": "slideImage3",
+      "type": "image",
+      "role": "content",
+      "label": "Slide image 3",
+      "description": "Third carousel image; also fills the blurred background.",
+      "default": "assets/slide-03.jpg"
+    },
+    {
+      "id": "slideImage4",
+      "type": "image",
+      "role": "content",
+      "label": "Slide image 4",
+      "description": "Fourth carousel image; also fills the blurred background.",
+      "default": "assets/slide-04.jpg"
+    },
+    {
+      "id": "brandLogo",
+      "type": "image",
+      "role": "content",
+      "label": "Brand logo",
+      "description": "Transparent horizontal wordmark of the brand this video promotes, in the preview strip.",
+      "portrays": ["subject_logo"],
+      "default": "assets/hyperframes-logo-black.svg"
+    }
+  ],
+  "files": [
+    {
+      "path": "share-sheet-carousel-landscape.html",
+      "target": "compositions/share-sheet-carousel-landscape.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/slide-01.jpg",
+      "target": "assets/slide-01.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/slide-02.jpg",
+      "target": "assets/slide-02.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/slide-03.jpg",
+      "target": "assets/slide-03.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/slide-04.jpg",
+      "target": "assets/slide-04.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/hyperframes-logo-black.svg",
+      "target": "assets/hyperframes-logo-black.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

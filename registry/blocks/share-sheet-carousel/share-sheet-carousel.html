@@ -1,18 +1,21 @@
 <!doctype html>
 <html
-  lang="en"
+  lang="ru"
   data-composition-variables='[
-    { "id": "shareTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Heading at the top of the share sheet.", "default": "Share" },
-    { "id": "senderName", "type": "string", "role": "content", "label": "Sender", "description": "Name of the brand this video promotes, shown as the sender offering the item. Use the real name of that brand.", "portrays": ["subject_name"], "default": "HyperFrames" },
-    { "id": "itemLabel", "type": "string", "role": "content", "label": "Item", "description": "What the sender is offering, completing the sentence \"… would like to share …\".", "default": "a video" },
-    { "id": "stripText", "type": "string", "role": "content", "label": "Brand strip", "description": "Positioning line of the brand this video promotes, in small caps beside its logo.", "portrays": ["subject_tagline"], "default": "OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML" },
-    { "id": "acceptLabel", "type": "string", "role": "content", "label": "Accept label", "description": "Right-hand action button.", "default": "Accept" },
-    { "id": "declineLabel", "type": "string", "role": "content", "label": "Decline label", "description": "Left-hand action button.", "default": "Decline" },
-    { "id": "slideImage1", "type": "image", "role": "content", "label": "Slide image 1", "description": "First carousel image; also fills the blurred background.", "default": "assets/slide-01.jpg" },
-    { "id": "slideImage2", "type": "image", "role": "content", "label": "Slide image 2", "description": "Second carousel image; also fills the blurred background.", "default": "assets/slide-02.jpg" },
-    { "id": "slideImage3", "type": "image", "role": "content", "label": "Slide image 3", "description": "Third carousel image; also fills the blurred background.", "default": "assets/slide-03.jpg" },
-    { "id": "slideImage4", "type": "image", "role": "content", "label": "Slide image 4", "description": "Fourth carousel image; also fills the blurred background.", "default": "assets/slide-04.jpg" },
-    { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent horizontal wordmark of the brand this video promotes, in the preview strip.", "portrays": ["subject_logo"], "default": "assets/hyperframes-logo-black.svg" }
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the blurred slide ground to the frame edge, the sheet centred in the 780x1180 field (y 180-1360). top / bottom: the sheet alone, preview shortened so it fills the 780x760 field at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "shareTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Heading at the top of the share sheet.", "maxLength": 20, "default": "Поделиться" },
+    { "id": "senderName", "type": "string", "role": "content", "label": "Sender", "description": "Who offers the item, bold, before \"хочет поделиться\".", "maxLength": 16, "default": "MatIntellect" },
+    { "id": "itemLabel", "type": "string", "role": "content", "label": "Item", "description": "What is offered, after \"хочет поделиться\".", "maxLength": 14, "default": "видео" },
+    { "id": "stripText", "type": "string", "role": "content", "label": "Brand strip", "description": "Small caps line beside the logo under the preview.", "maxLength": 40, "default": "MATINTELLECT.COM" },
+    { "id": "acceptLabel", "type": "string", "role": "content", "label": "Accept label", "description": "Right-hand action button.", "maxLength": 12, "default": "Принять" },
+    { "id": "declineLabel", "type": "string", "role": "content", "label": "Decline label", "description": "Left-hand action button.", "maxLength": 12, "default": "Отклонить" },
+    { "id": "slideImage1", "type": "image", "role": "content", "label": "Slide image 1", "description": "First carousel image; also fills the blurred ground in full placement.", "default": "assets/slide-01.jpg" },
+    { "id": "slideImage2", "type": "image", "role": "content", "label": "Slide image 2", "description": "Second carousel image.", "default": "assets/slide-02.jpg" },
+    { "id": "slideImage3", "type": "image", "role": "content", "label": "Slide image 3", "description": "Third carousel image.", "default": "assets/slide-03.jpg" },
+    { "id": "slideImage4", "type": "image", "role": "content", "label": "Slide image 4", "description": "Fourth carousel image.", "default": "assets/slide-04.jpg" },
+    { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent horizontal wordmark in the preview strip.", "default": "assets/hyperframes-logo-black.svg" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sheet springs up, 2 the previews start cutting, 3 the accept tap, 4 the sheet leaves (only when exit is not none). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 0.06, 0.99, 6.32.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the accepted sheet to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
   <head>
@@ -26,16 +29,18 @@
         padding: 0;
         box-sizing: border-box;
       }
+      html,
       body {
-        background: #000;
+        background: transparent;
+        overflow: hidden;
       }
       #ssc-root {
         position: relative;
         width: 1080px;
         height: 1920px;
         overflow: hidden;
-        background: #000;
-        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+        background: transparent;
+        font-family: "Inter", sans-serif;
       }
       #ssc-scene {
         position: absolute;
@@ -182,6 +187,42 @@
         color: #6f6f73;
         font-weight: 400;
       }
+      #ssc-root.ssc-full #ssc-card {
+        top: 283px;
+      }
+      #ssc-root.ssc-top #ssc-card,
+      #ssc-root.ssc-bottom #ssc-card {
+        top: 180px;
+        height: 760px;
+      }
+      #ssc-root.ssc-bottom #ssc-card {
+        top: 600px;
+      }
+      #ssc-root.ssc-top #ssc-imagebox,
+      #ssc-root.ssc-bottom #ssc-imagebox {
+        height: 418px;
+      }
+      #ssc-root.ssc-top .ssc-slide,
+      #ssc-root.ssc-bottom .ssc-slide {
+        height: 300px;
+      }
+      #ssc-root.ssc-top #ssc-strip,
+      #ssc-root.ssc-bottom #ssc-strip {
+        top: 300px;
+        height: 118px;
+      }
+      #ssc-root.ssc-top #ssc-hdivider,
+      #ssc-root.ssc-bottom #ssc-hdivider {
+        top: 645px;
+      }
+      #ssc-root.ssc-top #ssc-vdivider,
+      #ssc-root.ssc-bottom #ssc-vdivider,
+      #ssc-root.ssc-top #ssc-presscell,
+      #ssc-root.ssc-bottom #ssc-presscell,
+      #ssc-root.ssc-top .ssc-btn,
+      #ssc-root.ssc-bottom .ssc-btn {
+        top: 647px;
+      }
       #ssc-accept {
         left: 335px;
         right: 0;
@@ -197,14 +238,14 @@
       data-start="0"
       data-width="1080"
       data-height="1920"
-      data-duration="7.2333"
+      data-duration="30"
       data-fps="30"
     >
       <section
         id="ssc-scene"
         class="clip"
         data-start="0"
-        data-duration="7.2333"
+        data-duration="30"
         data-track-index="1"
       >
         <img
@@ -241,8 +282,8 @@
         />
         <div id="ssc-card">
           <div id="ssc-cardclipper">
-            <div id="ssc-title">Share</div>
-            <div id="ssc-subtitle"><b>HyperFrames</b>&nbsp;would like to share a video</div>
+            <div id="ssc-title">Поделиться</div>
+            <div id="ssc-subtitle"><b>MatIntellect</b> хочет поделиться видео</div>
             <div id="ssc-imagebox">
               <img
                 class="ssc-slide"
@@ -282,14 +323,14 @@
                   src="assets/hyperframes-logo-black.svg"
                   alt="Brand logo"
                 />
-                <div id="ssc-strip-text">OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML</div>
+                <div id="ssc-strip-text">MATINTELLECT.COM</div>
               </div>
             </div>
             <div id="ssc-hdivider"></div>
             <div id="ssc-presscell"></div>
             <div id="ssc-vdivider"></div>
-            <div id="ssc-decline" class="ssc-btn">Decline</div>
-            <div id="ssc-accept" class="ssc-btn">Accept</div>
+            <div id="ssc-decline" class="ssc-btn">Отклонить</div>
+            <div id="ssc-accept" class="ssc-btn">Принять</div>
           </div>
         </div>
       </section>
@@ -305,30 +346,37 @@
             : {};
 
         function text(value, fallback) {
-          if (typeof value !== "string") return fallback;
-          var t = value.trim();
-          if (!t) return fallback;
-          return t.length > 60 ? t.slice(0, 60) : t;
+          return typeof value === "string" && value.trim() ? value : fallback;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var root = document.getElementById("ssc-root");
+        var placement = oneOf(vars.placement, ["full", "top", "bottom"], "full");
+        root.classList.add("ssc-" + placement);
+        if (placement !== "full") {
+          document.querySelectorAll(".ssc-bg").forEach(function (el) {
+            el.remove();
+          });
         }
 
-        document.getElementById("ssc-title").textContent = text(vars.shareTitle, "Share");
+        document.getElementById("ssc-title").textContent = text(vars.shareTitle, "Поделиться");
         var subtitle = document.getElementById("ssc-subtitle");
         subtitle.innerHTML = "";
         var sender = document.createElement("b");
-        sender.textContent = text(vars.senderName, "HyperFrames");
+        sender.textContent = text(vars.senderName, "MatIntellect");
         subtitle.appendChild(sender);
         subtitle.appendChild(
-          document.createTextNode(" would like to share " + text(vars.itemLabel, "a video")),
+          document.createTextNode(" хочет поделиться " + text(vars.itemLabel, "видео")),
         );
         document.getElementById("ssc-strip-text").textContent = text(
           vars.stripText,
-          "OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML",
+          "MATINTELLECT.COM",
         );
-        document.getElementById("ssc-decline").textContent = text(vars.declineLabel, "Decline");
-        document.getElementById("ssc-accept").textContent = text(vars.acceptLabel, "Accept");
+        document.getElementById("ssc-decline").textContent = text(vars.declineLabel, "Отклонить");
+        document.getElementById("ssc-accept").textContent = text(vars.acceptLabel, "Принять");
 
         /* -------- timeline: spring entry and cut rhythm measured from the reference -------- */
-        window.__timelines = window.__timelines || {};
         var tl = gsap.timeline({ paused: true });
 
         tl.set("#ssc-card", { y: 1450, autoAlpha: 0 }, 0.001);
@@ -385,7 +433,36 @@
         tl.set("#ssc-presscell", { autoAlpha: 0 }, 6.656667);
         tl.set({}, {}, 7.2333);
 
-        window.__timelines["share-sheet-carousel"] = tl;
+        /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
+        var exit = oneOf(vars.exit, ["none", "fade"], "none");
+        var BEATS = [0.056667, 0.99, 6.323333];
+        var cues = String(vars.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = BEATS.map(function (b, i) {
+          return isFinite(cues[i]) ? cues[i] : b;
+        });
+        var ordered = at.every(function (t, i) {
+          return t >= 0 && (i === 0 || t > at[i - 1]);
+        });
+        if (!ordered) at = BEATS.slice();
+        var master = gsap.timeline({ paused: true });
+        var from = 0;
+        BEATS.forEach(function (b, i) {
+          master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
+          from = at[i];
+        });
+        master.to(tl, { time: tl.duration(), duration: tl.duration() - BEATS[BEATS.length - 1], ease: "none" }, from);
+        if (exit === "fade") {
+          var out = isFinite(cues[3]) ? cues[3] : from + 1;
+          master.to("#ssc-card", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+        }
+        master.set({}, {}, 30);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["share-sheet-carousel"] = master;
       })();
     </script>
   </body>

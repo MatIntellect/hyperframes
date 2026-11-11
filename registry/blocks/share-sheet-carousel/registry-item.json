@@ -3,14 +3,14 @@
   "name": "share-sheet-carousel",
   "type": "hyperframes:block",
   "title": "Share-Sheet Carousel",
-  "description": "A share sheet springs up from the bottom of the phone and cycles previews inside its card on a fast cut rhythm while the blurred ground swaps behind it, ending on an accept tap",
-  "tags": ["showcase", "mock-ui", "share-sheet", "vertical", "ad-template"],
+  "description": "An iOS share sheet springs up and cuts through four previews on a fast rhythm, then the accept tap. Words, images and beat times are variables; placement full (blurred ground) or top / bottom (the sheet alone); holds to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "share-sheet", "ad-template", "vertical"],
   "author": "Miao Yang",
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 7.2333,
+  "duration": 30,
   "variables": [
     {
       "id": "shareTitle",
@@ -134,15 +134,6 @@
       "path": "assets/hyperframes-logo-black.svg",
       "target": "assets/hyperframes-logo-black.svg",
       "type": "hyperframes:asset"
-    },
-    {
-      "path": "TEMPLATE.md",
-      "target": "TEMPLATE.md",
-      "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/share-sheet-carousel/preview.mp4",
-    "poster": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/share-sheet-carousel/poster.jpg"
-  }
+  ]
 }
