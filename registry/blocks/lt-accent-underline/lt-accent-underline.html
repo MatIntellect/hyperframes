@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Upper-case name, heavy, shadowed for footage; wraps to two lines in the vertical version.", "maxLength": 28, "default": "Мат Джестер" },
+    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Upper-case name, heavy, shadowed for footage; wraps to up to three lines in the vertical version.", "maxLength": 28, "default": "Мат Джестер" },
     { "id": "role", "type": "string", "role": "content", "label": "Role", "description": "Line under the red rule. Empty hides it.", "maxLength": 40, "default": "Основатель MatIntellect" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the name rises, the red rule draws and the role follows, 2 the plate leaves (only when exit is out). Empty keeps 0.1, 4.3.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the plate to the end of the mount; out plays its own leaving motion at cue 2.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Leave" }] }
@@ -31,7 +31,14 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -54,7 +61,7 @@
         position: absolute;
       }
       #lau-lt { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
-      #lau-name { font-weight: 800; color: #ffffff; line-height: 1; text-transform: uppercase; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55); }
+      #lau-name { font-weight: 800; color: var(--fg, #f2f2f2); line-height: 1; text-transform: uppercase; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55); }
       #lau-rule { height: 6px; width: 100%; background: var(--accent, #ff0000); border-radius: 3px; transform-origin: 0% 50%; }
       #lau-role { color: #f2f2f2; line-height: 1.2; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55); }
       

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "news-ticker-vertical",
+  "type": "hyperframes:block",
+  "title": "News Ticker (vertical)",
+  "description": "Vertical news panel, centred on the frame over footage: red live tag, Bebas headline up to two lines with red words, a news crawl running under it. Words and crawl lines are variables; placement bottom (above the caption band), top or centre; cues set entrance and exit.",
+  "tags": ["lower-third", "overlay", "news", "ticker", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "news-ticker-vertical.html",
+      "target": "compositions/news-ticker-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

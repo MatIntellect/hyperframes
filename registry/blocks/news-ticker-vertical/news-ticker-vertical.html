@@ -1,0 +1,353 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the panel sits on y 1360, just above the caption band. top: the panel hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "live", "type": "string", "role": "content", "label": "Live tag", "description": "Red tag with the pulsing dot, upper case.", "maxLength": 12, "default": "Эфир" },
+    { "id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue; one line in the wide version, up to two lines in the vertical one.", "maxLength": 36, "default": "Монтаж роликов теперь делает система" },
+    { "id": "accentWords", "type": "string", "role": "content", "label": "Red words", "description": "Words of the headline drawn in red, separated by commas. Empty keeps the headline white.", "maxLength": 30, "default": "система" },
+    { "id": "time", "type": "string", "role": "content", "label": "Time", "description": "Small time chip beside the headline. Empty hides it.", "maxLength": 8, "default": "09:41" },
+    { "id": "tag", "type": "string", "role": "content", "label": "Crawl tag", "description": "Label in front of the crawl, upper case.", "maxLength": 12, "default": "Срочно" },
+    { "id": "items", "type": "string", "role": "content", "label": "Crawl items", "description": "News lines of the crawl separated by ;. They run right to left at a steady speed and repeat for the whole mount.", "maxLength": 160, "default": "Ролик собирается за минуты;Графика из готовой базы блоков;Субтитры по словам речи;Рендер один раз после проверок" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the panel slides up, the headline writes in and the crawl starts, 2 the panel leaves (only when exit is out). Empty keeps 0.1, 6.5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the panel and the running crawl to the end of the mount; out slides the panel down and away at cue 2.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #ntkv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #ntkv-shell {
+        position: absolute;
+        overflow: hidden;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 24px 44px rgba(0, 0, 0, 0.35);
+      }
+      /* two rows on one grid: the tag column takes the width of the longer tag, both tags share it */
+      #ntkv-shell {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+      #ntkv-live {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: var(--accent, #ff0000);
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      #ntkv-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--fg, #f2f2f2);
+        flex-shrink: 0;
+      }
+      #ntkv-headwrap {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        flex: 1;
+        min-width: 0;
+      }
+      #ntkv-headline {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: 0.01em;
+        clip-path: inset(-0.3em 100% -0.3em 0);
+      }
+      .ntkv-red {
+        color: var(--accent, #ff0000);
+      }
+      #ntkv-time {
+        flex-shrink: 0;
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 999px;
+        color: var(--muted, #8a8a90);
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      #ntkv-tag,
+      #ntkv-window {
+        border-top: 2px solid var(--border, #2e2e32);
+        background: var(--bg, #0c1014);
+      }
+      #ntkv-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent, #ff0000);
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        border-right: 2px solid var(--border, #2e2e32);
+      }
+      #ntkv-window {
+        position: relative;
+        overflow: hidden;
+      }
+      #ntkv-track {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+      .ntkv-item {
+        display: inline-flex;
+        align-items: center;
+        font-weight: 600;
+      }
+      .ntkv-sep {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent, #ff0000);
+        flex-shrink: 0;
+      }
+      .ntkv-fade {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        z-index: 2;
+      }
+      #ntkv-fadel {
+        left: 0;
+        background: linear-gradient(90deg, var(--bg, #0c1014), transparent);
+      }
+      #ntkv-fader {
+        right: 0;
+        background: linear-gradient(270deg, var(--bg, #0c1014), transparent);
+      }
+      
+      
+      #ntkv-shell {
+        left: 150px;
+        width: 780px;
+        border-radius: 28px;
+      }
+      #ntkv-root.ntkv-bottom #ntkv-shell {
+        bottom: 560px;
+      }
+      #ntkv-root.ntkv-top #ntkv-shell {
+        top: 180px;
+      }
+      #ntkv-root.ntkv-center #ntkv-shell {
+        top: 770px;
+        transform: translateY(-50%);
+      }
+      #ntkv-shell {
+        grid-template-areas: "live live" "head head" "tag win";
+        grid-template-rows: auto auto 84px;
+      }
+      #ntkv-live {
+        grid-area: live;
+        justify-self: start;
+        margin: 28px 32px 0;
+        font-size: 28px;
+        padding: 10px 18px;
+        border-radius: 8px;
+      }
+      #ntkv-headwrap {
+        grid-area: head;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 18px 32px 30px;
+      }
+      #ntkv-headline {
+        font-size: 84px;
+        width: 100%;
+      }
+      #ntkv-time {
+        font-size: 28px;
+        padding: 8px 16px;
+      }
+      #ntkv-tag {
+        grid-area: tag;
+        padding: 0 22px;
+        font-size: 28px;
+      }
+      #ntkv-window {
+        grid-area: win;
+      }
+      .ntkv-item {
+        font-size: 32px;
+        gap: 16px;
+        margin-right: 36px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="ntkv-root" data-composition-id="news-ticker-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="ntkv-shell">
+        <div id="ntkv-live"><span id="ntkv-dot"></span><span id="ntkv-livetext">Эфир</span></div>
+        <div id="ntkv-headwrap">
+          <div id="ntkv-headline">Монтаж роликов теперь делает система</div>
+          <div id="ntkv-time">09:41</div>
+        </div>
+        <div id="ntkv-tag">Срочно</div>
+        <div id="ntkv-window">
+          <div id="ntkv-track" data-layout-allow-overflow></div>
+          <div id="ntkv-fadel" class="ntkv-fade" data-layout-ignore></div>
+          <div id="ntkv-fader" class="ntkv-fade" data-layout-ignore></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("ntkv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        root.classList.add("ntkv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
+        
+
+        document.getElementById("ntkv-livetext").textContent = str(V.live, "") || "Эфир";
+        document.getElementById("ntkv-tag").textContent = str(V.tag, "") || "Срочно";
+        var time = str(V.time, "09:41");
+        var timeEl = document.getElementById("ntkv-time");
+        if (time) timeEl.textContent = time;
+        else timeEl.remove();
+
+        /* headline: words named in accentWords turn red */
+        var headline = str(V.headline, "") || "Монтаж роликов теперь делает система";
+        var red = str(V.accentWords, "система")
+          .split(",")
+          .map(function (w) {
+            return w.trim().toLowerCase();
+          })
+          .filter(Boolean);
+        var hl = document.getElementById("ntkv-headline");
+        hl.textContent = "";
+        headline.split(/\s+/).forEach(function (w, i) {
+          if (i) hl.appendChild(document.createTextNode(" "));
+          var span = document.createElement("span");
+          span.textContent = w;
+          if (red.indexOf(w.toLowerCase().replace(/[.,!?:;«»"]/g, "")) >= 0) span.className = "ntkv-red";
+          hl.appendChild(span);
+        });
+
+        /* crawl: the items repeat until the track covers the window plus 30 s of travel, so it never runs dry */
+        var items = (str(V.items, "") || "Ролик собирается за минуты;Графика из готовой базы блоков;Субтитры по словам речи;Рендер один раз после проверок")
+          .split(";")
+          .map(function (t) {
+            return t.trim();
+          })
+          .filter(Boolean);
+        var SPEED = 110;
+        var track = document.getElementById("ntkv-track");
+        var win = document.getElementById("ntkv-window");
+        function addSet() {
+          items.forEach(function (t) {
+            var it = document.createElement("span");
+            it.className = "ntkv-item";
+            /* the crawl runs out under the tag edge on purpose */
+            it.setAttribute("data-layout-allow-occlusion", "");
+            var sep = document.createElement("span");
+            sep.className = "ntkv-sep";
+            it.appendChild(sep);
+            it.appendChild(document.createTextNode(t));
+            track.appendChild(it);
+          });
+        }
+        var need = win.clientWidth + SPEED * 32;
+        for (var guard = 0; guard < 60 && track.scrollWidth < need * 1.3; guard++) addSet();
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var exit = oneOf(V.exit, ["none", "out"], "none");
+
+        var shell = document.getElementById("ntkv-shell");
+        /* how far the card travels in and out: from under the frame edge in the wide version, a short lift in the vertical one so it never crosses the caption band */
+        var RISE = 200;
+        
+        RISE = 60;
+        
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(shell, { y: RISE, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, c0);
+        tl.fromTo("#ntkv-live", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, c0 + 0.08);
+        tl.to(hl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 0.6, ease: "power2.out" }, c0 + 0.18);
+        if (time) tl.fromTo(timeEl, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, c0 + 0.5);
+        tl.fromTo("#ntkv-tag", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, c0 + 0.5);
+        var start = c0 + 0.55;
+        tl.fromTo(track, { x: win.clientWidth * 0.6 }, { x: win.clientWidth * 0.6 - SPEED * (30 - start), duration: 30 - start, ease: "none" }, start);
+        /* the live dot breathes for the whole mount */
+        tl.fromTo("#ntkv-dot", { opacity: 1 }, { opacity: 0.35, duration: 0.6, ease: "sine.inOut", repeat: Math.max(1, Math.floor((30 - start) / 0.6) - 1), yoyo: true }, start);
+        if (exit === "out") tl.to(shell, { y: RISE, opacity: 0, duration: 0.35, ease: "power3.in" }, isFinite(cues[1]) ? cues[1] : c0 + 6.4);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["news-ticker-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

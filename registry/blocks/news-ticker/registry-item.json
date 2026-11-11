@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "news-ticker",
+  "type": "hyperframes:block",
+  "title": "News Ticker",
+  "description": "Broadcast lower third on a dark brand panel: a red live tag with a breathing dot, a Bebas headline writing in with chosen words in red, and a news crawl running under it for the whole mount. Words and crawl lines are variables; cues set entrance and exit.",
+  "tags": ["lower-third", "overlay", "news", "ticker"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "news-ticker.html",
+      "target": "compositions/news-ticker.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
