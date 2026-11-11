@@ -974,6 +974,8 @@
       const compScrim = el("comp-scrim");
       compScrim.setAttribute("data-layout-allow-occlusion", "true");
       const header = el("header");
+      // the thread scrolls under the app header, as in the app
+      header.setAttribute("data-layout-allow-occlusion", "true");
       header.innerHTML =
         `<div class="circle-btn hdr-left">${ICO.burger}</div>` +
         `<div class="hdr-right" id="cle-hdr-right">` +
@@ -1098,7 +1100,7 @@
         gsap.set(document.getElementById("cle-hdr-right"), { width: 44 });
         gsap.set(emptyMark, { autoAlpha: 0, scale: 0.72, transformOrigin: "50% 50%" });
         gsap.set(headWords, { autoAlpha: 0, y: 12 });
-        gsap.set(keyboard, { y: 0 });
+        gsap.set(keyboard, { y: 0, autoAlpha: 1 });
         gsap.set(composer, { width: 385.7, x: 0, y: COMP_UP, height: 97.7 });
         pdEls.forEach((pd) => {
           gsap.set(pd.stages[0], { autoAlpha: 1 });
@@ -1180,6 +1182,8 @@
         tl.to(chEls, { opacity: 0, duration: 0.01 }, tGo);
         tl.to(curEls, { autoAlpha: 0, duration: 0.01 }, tGo);
         tl.to(keyboard, { y: 340, duration: 0.3, ease: "power2.out" }, tGo);
+        // gone once it has left the screen, so nothing sits clipped below the field
+        tl.set(keyboard, { autoAlpha: 0 }, tGo + 0.3);
         tl.to(document.getElementById("cle-comp-mic"), { autoAlpha: 0, duration: 0.12 }, tGo + 0.1);
         // card narrows and re-centres as it docks
         tl.to(composer, { width: 369.7, x: 8, duration: 0.3, ease: "power2.out" }, tGo);

@@ -18,7 +18,7 @@
       "role": "content",
       "label": "Note title line 1",
       "description": "First line of the bold note title.",
-      "maxLength": 20,
+      "maxLength": 16,
       "default": "Что я понял"
     },
     {
@@ -27,7 +27,7 @@
       "role": "content",
       "label": "Note title line 2",
       "description": "Second line of the note title.",
-      "maxLength": 20,
+      "maxLength": 16,
       "default": "про ролики."
     },
     {

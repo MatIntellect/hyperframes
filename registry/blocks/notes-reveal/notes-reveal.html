@@ -3,8 +3,8 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1180 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x760 at y 180-940 / 600-1360 with the nav and the note (no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "titleL1", "type": "string", "role": "content", "label": "Note title line 1", "description": "First line of the bold note title.", "maxLength": 20, "default": "Что я понял" },
-    { "id": "titleL2", "type": "string", "role": "content", "label": "Note title line 2", "description": "Second line of the note title.", "maxLength": 20, "default": "про ролики." },
+    { "id": "titleL1", "type": "string", "role": "content", "label": "Note title line 1", "description": "First line of the bold note title.", "maxLength": 16, "default": "Что я понял" },
+    { "id": "titleL2", "type": "string", "role": "content", "label": "Note title line 2", "description": "Second line of the note title.", "maxLength": 16, "default": "про ролики." },
     { "id": "noteLine1", "type": "string", "role": "content", "label": "Note body line 1", "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes.", "maxLength": 30, "default": "ролики выходили скучными" },
     { "id": "noteLine2", "type": "string", "role": "content", "label": "Note body line 2", "description": "Second typed line.", "maxLength": 30, "default": "монтажёр стоил дорого" },
     { "id": "noteLine3", "type": "string", "role": "content", "label": "Note body line 3", "description": "Third typed line.", "maxLength": 30, "default": "и правки не кончались." },
@@ -251,9 +251,10 @@
           <div id="nrv-field">
             <div id="notes-fade" class="ui">
               <!-- nav pills -->
-              <div class="pill" id="nav-back"></div>
+              <div class="pill" id="nav-back" data-layout-allow-occlusion></div>
               <svg
                 class="navicon"
+                data-layout-allow-occlusion
                 style="left: 74px; top: 166px"
                 width="40"
                 height="40"
@@ -268,9 +269,10 @@
                   stroke-linejoin="round"
                 />
               </svg>
-              <div class="pill" id="nav-mid"></div>
+              <div class="pill" id="nav-mid" data-layout-allow-occlusion></div>
               <svg
                 class="navicon"
+                data-layout-allow-occlusion
                 style="left: 588px; top: 168px"
                 width="44"
                 height="40"
@@ -294,6 +296,7 @@
               </svg>
               <svg
                 class="navicon"
+                data-layout-allow-occlusion
                 style="left: 702px; top: 162px"
                 width="44"
                 height="48"
@@ -317,6 +320,7 @@
               </svg>
               <svg
                 class="navicon"
+                data-layout-allow-occlusion
                 style="left: 806px; top: 186px"
                 width="66"
                 height="12"
@@ -326,9 +330,10 @@
                 <circle cx="33" cy="6" r="5.5" fill="#111" />
                 <circle cx="60" cy="6" r="5.5" fill="#111" />
               </svg>
-              <div id="nav-check"></div>
+              <div id="nav-check" data-layout-allow-occlusion></div>
               <svg
                 class="navicon"
+                data-layout-allow-occlusion
                 style="left: 958px; top: 168px"
                 width="56"
                 height="46"
@@ -427,6 +432,7 @@
               <div id="fmtbar"></div>
               <div
                 class="fmtaa ui"
+                data-layout-ignore
                 style="
                   left: 52px;
                   width: 100px;
@@ -761,7 +767,7 @@
         // `mx` is a backstop, not the layout rule. Every text slot below is width-fitted at
         // build time, so the cap only has to be low enough that the fit floor can still hold
         // the string inside its box -- it is not what keeps the design intact.
-        // no silent cut: a long value is shrunk by the width fit, never truncated
+        // no silent cut and no shrinking: maxLength is what keeps a line inside the note
         function t(v, fb) {
           if (typeof v !== "string") return fb;
           var s = v.trim();
@@ -1132,37 +1138,6 @@
       const TEXT_X = 62,
         VIEW_TOP = 272;
 
-      // ---------- width fitting ----------
-      // Every text slot sits at a fixed left edge on one line, so a long value is shrunk until it
-      // fits, never past the floor and never grown past the designed size. Measured with
-      // offset* (layout values), so the field scale does not enter.
-      const FIT_FLOOR = 0.74; // 52.5 px x 0.74 x 0.722 field scale = 28 px on screen
-
-      function fitWidth(el, maxWidth, basePx) {
-        el.style.fontSize = basePx + "px";
-        const floor = Math.max(8, basePx * FIT_FLOOR);
-        let px = basePx;
-        // Integer steps: the renderer screenshots frames, so the result has to be identical on
-        // every pass rather than converge to a fractional size.
-        while (px > floor && el.offsetWidth > maxWidth) {
-          px -= 1;
-          el.style.fontSize = px + "px";
-        }
-        return px;
-      }
-
-      // Room each slot has before it leaves its box: the note is 1080 wide behind an
-      // overflow-hidden viewport.
-      const NOTE_MAX = 1080 - TEXT_X - 40;
-
-      function fitAll() {
-        fitWidth(document.getElementById("title-l1"), NOTE_MAX, 88);
-        fitWidth(document.getElementById("title-l2"), NOTE_MAX, 88);
-        for (let li = 0; li < 7; li++) {
-          fitWidth(document.getElementById("line-" + li), NOTE_MAX, 52.5);
-        }
-      }
-
       // ---------- typewriter timing ----------
       // EV is the packaged per-character rhythm. Its per-line first/last frames are the window
       // JUMPS and SCROLLS were hand-tuned against, so the actual characters are distributed
@@ -1213,9 +1188,6 @@
       // gate-scale corrected (bodyRect.width / 1080) per renderer-traps.
       function build() {
         tl.clear();
-        // Fit first: the caret rides each character's measured right edge, so the type has to be
-        // at its final size before anything is measured.
-        fitAll();
         const bodyRect = body.getBoundingClientRect();
         const scale = bodyRect.width / 1080;
 

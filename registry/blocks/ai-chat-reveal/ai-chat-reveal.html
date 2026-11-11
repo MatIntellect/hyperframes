@@ -756,6 +756,8 @@
           tl.set("#acr-hicons-a", { autoAlpha: 0 }, SEND);
           tl.set("#acr-hicons-b", { autoAlpha: 1 }, SEND);
           tl.to("#acr-keyboard", { y: 482, duration: 0.2667, ease: "power1.inOut" }, SEND - 0.03);
+          // gone once it has left the field, so nothing sits clipped below the stage
+          tl.set("#acr-keyboard", { autoAlpha: 0 }, SEND + 0.24);
           tl.to("#acr-composer", { y: 0, duration: 0.2667, ease: "power1.inOut" }, SEND - 0.03);
         }
 

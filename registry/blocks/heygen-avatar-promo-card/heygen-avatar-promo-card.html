@@ -248,7 +248,7 @@
       data-duration="30"
       data-fps="25"
     >
-      <div class="bgfill"></div>
+      <div class="bgfill" data-layout-allow-occlusion></div>
       <div id="apc-card">
         <div id="apc-stage">
           <!-- belt: geometry + motion law measured from the reference -->
@@ -258,24 +258,141 @@
               <div class="tile row1 cyan brand-tile" style="left: 139.1px">
                 <img src="assets/heygen-logo.svg?t=1" alt="" />
               </div>
-              <video class="tile row1 clip" id="apc-v-r1k1" src="assets/av_r1k1.mp4" style="left: 523.4px" data-start="0" data-duration="8.60" data-track-index="1" muted playsinline></video>
-              <div id="apc-offer-value" class="tile row1 light serif-tile" style="left: 907.7px">25%</div>
-              <video class="tile row1 clip" id="apc-v-r1k3" src="assets/av_r1k3.mp4" style="left: 1292px" data-start="1.44" data-duration="8.56" data-track-index="2" muted playsinline></video>
-              <video class="tile row1 clip" id="apc-v-r1k3-b" src="assets/av_r1k3.mp4" style="left: 1292px" data-start="10" data-duration="10" data-track-index="2" muted playsinline></video>
-              <video class="tile row1 clip" id="apc-v-r1k3-c" src="assets/av_r1k3.mp4" style="left: 1292px" data-start="20" data-duration="10" data-track-index="2" muted playsinline></video>
-              <video class="tile row1 clip" id="apc-v-r1k4" src="assets/av_r1k4.mp4" style="left: 1676.3px" data-start="5.56" data-duration="4.44" data-track-index="3" muted playsinline></video>
-              <video class="tile row1 clip" id="apc-v-r1k4-b" src="assets/av_r1k4.mp4" style="left: 1676.3px" data-start="10" data-duration="10" data-track-index="3" muted playsinline></video>
-              <video class="tile row1 clip" id="apc-v-r1k4-c" src="assets/av_r1k4.mp4" style="left: 1676.3px" data-start="20" data-duration="10" data-track-index="3" muted playsinline></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k1"
+                src="assets/av_r1k1.mp4"
+                style="left: 523.4px"
+                data-start="0"
+                data-duration="8.60"
+                data-track-index="1"
+                muted
+                playsinline
+              ></video>
+              <div id="apc-offer-value" class="tile row1 light serif-tile" style="left: 907.7px">
+                25%
+              </div>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3"
+                src="assets/av_r1k3.mp4"
+                style="left: 1292px"
+                data-start="1.44"
+                data-duration="8.56"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3-b"
+                src="assets/av_r1k3.mp4"
+                style="left: 1292px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3-c"
+                src="assets/av_r1k3.mp4"
+                style="left: 1292px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4"
+                src="assets/av_r1k4.mp4"
+                style="left: 1676.3px"
+                data-start="5.56"
+                data-duration="4.44"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4-b"
+                src="assets/av_r1k4.mp4"
+                style="left: 1676.3px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4-c"
+                src="assets/av_r1k4.mp4"
+                style="left: 1676.3px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
               <div class="tile row1 cyan" style="left: 2060.6px"></div>
               <!-- row 2 -->
-              <video class="tile row2 clip" id="apc-v-r2k0" src="assets/av_r2k0.mp4" style="left: 139.1px" data-start="0" data-duration="4.48" data-track-index="4" muted playsinline></video>
-              <div id="apc-offer-suffix" class="tile row2 light serif-tile" style="left: 523.4px">СКИДКА</div>
-              <video class="tile row2 clip" id="apc-v-r2k2" src="assets/av_r2k2.mp4" style="left: 907.7px" data-start="0" data-duration="10" data-track-index="5" muted playsinline></video>
-              <video class="tile row2 clip" id="apc-v-r2k2-b" src="assets/av_r2k2.mp4" style="left: 907.7px" data-start="10" data-duration="10" data-track-index="5" muted playsinline></video>
-              <video class="tile row2 clip" id="apc-v-r2k2-c" src="assets/av_r2k2.mp4" style="left: 907.7px" data-start="20" data-duration="10" data-track-index="5" muted playsinline></video>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k0"
+                src="assets/av_r2k0.mp4"
+                style="left: 139.1px"
+                data-start="0"
+                data-duration="4.48"
+                data-track-index="4"
+                muted
+                playsinline
+              ></video>
+              <div id="apc-offer-suffix" class="tile row2 light serif-tile" style="left: 523.4px">
+                СКИДКА
+              </div>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2"
+                src="assets/av_r2k2.mp4"
+                style="left: 907.7px"
+                data-start="0"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2-b"
+                src="assets/av_r2k2.mp4"
+                style="left: 907.7px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2-c"
+                src="assets/av_r2k2.mp4"
+                style="left: 907.7px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
               <div class="tile row2 dark code-tile" style="left: 1292px">
                 <div id="apc-code-label" class="code">ПРОМОКОД</div>
-                <div class="promo"><span id="apc-promo-prefix" class="gen">GEN</span><span id="apc-promo-suffix" class="n25">25</span></div>
+                <div class="promo">
+                  <span id="apc-promo-prefix" class="gen">GEN</span
+                  ><span id="apc-promo-suffix" class="n25">25</span>
+                </div>
               </div>
               <div class="tile row2 light brand-tile" style="left: 1676.3px">
                 <img src="assets/heygen-logo.svg?t=2" alt="" />
@@ -286,7 +403,10 @@
 
           <!-- header block -->
           <div class="hdr" id="apc-hdr-logo"><img src="assets/heygen-logo.svg" alt="HeyGen" /></div>
-          <div class="hdr" id="apc-hdr-title">Ваш аватар,<div id="apc-title-line-2">без камеры.</div></div>
+          <div class="hdr" id="apc-hdr-title">
+            Ваш аватар,
+            <div id="apc-title-line-2">без камеры.</div>
+          </div>
           <div class="hdr" id="apc-hdr-subhead">Видео с ИИ за пару минут.</div>
           <div class="hdr" id="apc-hdr-pills">
             <div id="apc-pill-1" class="pill">4K АВАТАРЫ</div>
@@ -319,9 +439,15 @@
       document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
         image.src = text("brandLogo", "assets/heygen-logo.svg");
       });
-      document.getElementById("apc-hdr-title").firstChild.nodeValue = text("titleLine1", "Ваш аватар,");
+      document.getElementById("apc-hdr-title").firstChild.nodeValue = text(
+        "titleLine1",
+        "Ваш аватар,",
+      );
       document.getElementById("apc-title-line-2").textContent = text("titleLine2", "без камеры.");
-      document.getElementById("apc-hdr-subhead").textContent = text("subhead", "Видео с ИИ за пару минут.");
+      document.getElementById("apc-hdr-subhead").textContent = text(
+        "subhead",
+        "Видео с ИИ за пару минут.",
+      );
       document.getElementById("apc-pill-1").textContent = text("pill1", "4K АВАТАРЫ");
       document.getElementById("apc-pill-2").textContent = text("pill2", "БЕЗ СЪЁМОК");
       document.getElementById("apc-code-label").textContent = text("codeLabel", "ПРОМОКОД");
@@ -364,10 +490,26 @@
       }
 
       // Header waterfall — measured fades, from cue 1
-      tl.fromTo("#apc-hdr-logo", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: "power2.out" }, h);
-      tl.fromTo("#apc-hdr-title", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, ease: "power2.out" }, h + 0.1);
-      tl.fromTo("#apc-hdr-subhead", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, ease: "power2.out" }, h + 0.5);
-      if (exit === "fade") tl.to("#apc-card", { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, at(1, 9.5));
+      tl.fromTo(
+        "#apc-hdr-logo",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
+        h,
+      );
+      tl.fromTo(
+        "#apc-hdr-title",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
+        h + 0.1,
+      );
+      tl.fromTo(
+        "#apc-hdr-subhead",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
+        h + 0.5,
+      );
+      if (exit === "fade")
+        tl.to("#apc-card", { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, at(1, 9.5));
       tl.set({}, {}, 30);
 
       window.__timelines = window.__timelines || {};
