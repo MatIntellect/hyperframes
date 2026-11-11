@@ -1,0 +1,426 @@
+<!doctype html>
+<!--
+  week-in-merges: each person's avatar bounces across their row at a speed
+  set by their count, so the leader races and the rest trail in proportion.
+  The motion is a pure function of time: a seek sets every avatar directly.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "eyebrow", "type": "string", "role": "content", "label": "Eyebrow", "description": "Small upper-case line above the title.", "maxLength": 30, "default": "MatIntellect / неделя" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Bebas Neue headline.", "maxLength": 30, "default": "Ролики за неделю" },
+    { "id": "period", "type": "string", "role": "content", "label": "Period", "description": "Grey line under the title. Empty hides it.", "maxLength": 34, "default": "3–9 ноября 2026" },
+    { "id": "total", "type": "string", "role": "content", "label": "Total", "description": "Bold total on the right of the period. Empty hides it.", "maxLength": 16, "default": "26 роликов" },
+    { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "JSON array of {name, merges, avatar}: name up to 12 characters, merges is the count that sets the speed, avatar an optional image path (empty draws initials). Sorted highest first.", "maxLength": 600, "default": "[{\"name\":\"Монтажёр\",\"merges\":12,\"avatar\":\"\"},{\"name\":\"Дизайнер\",\"merges\":7,\"avatar\":\"\"},{\"name\":\"Копирайтер\",\"merges\":4,\"avatar\":\"\"},{\"name\":\"Маркетолог\",\"merges\":2,\"avatar\":\"\"},{\"name\":\"Кот\",\"merges\":1,\"avatar\":\"\"}]" },
+    { "id": "units", "type": "string", "role": "content", "label": "Count word", "description": "The word after each count in three Russian forms, one|few|many, e.g. ролик|ролика|роликов.", "maxLength": 40, "default": "ролик|ролика|роликов" },
+    { "id": "rows_max", "type": "number", "role": "content", "label": "Maximum rows", "description": "Rows drawn, highest count first; the rest go to the overflow line.", "default": 7, "min": 1, "max": 7, "step": 1 },
+    { "id": "overflow", "type": "string", "role": "content", "label": "Overflow line", "description": "Line for everyone past the cap. Empty writes it from the rows left out.", "maxLength": 44, "default": "" },
+    { "id": "footer", "type": "string", "role": "content", "label": "Footer", "description": "Grey note under the rule. Empty hides it.", "maxLength": 44, "default": "Скорость – по числу роликов" },
+    { "id": "source", "type": "string", "role": "content", "label": "Source line", "description": "Grey source line at the bottom. Empty hides it.", "maxLength": 44, "default": "Данные: монтажёр MatIntellect" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Seconds from mount start: 1 the chart fades (only when exit is fade). Empty keeps 6.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the chart to the end of the mount; the avatars keep running.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #wim-root {
+        color: var(--fg, #f2f2f2);
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      .wim-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #wim-stage {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      #wim-eyebrow {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted, #8a8a90);
+      }
+      #wim-title {
+        margin-top: 12px;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 400;
+        line-height: 1;
+      }
+      #wim-sub {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 24px;
+        margin-top: 14px;
+      }
+      #wim-period {
+        min-width: 0;
+        font-size: 30px;
+        line-height: 1.3;
+        color: var(--muted, #8a8a90);
+      }
+      #wim-total {
+        flex: none;
+        font-size: 32px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #wim-rows {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        margin-top: 24px;
+      }
+      .wim-row {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        min-height: 0;
+      }
+      .wim-meta {
+        flex: none;
+        min-width: 0;
+      }
+      .wim-name {
+        font-weight: 700;
+        line-height: 1.1;
+        white-space: nowrap;
+      }
+      .wim-count {
+        margin-top: 4px;
+        font-size: 28px;
+        line-height: 1.2;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+      }
+      .wim-lane {
+        position: relative;
+        flex: 1;
+        align-self: stretch;
+        min-width: 0;
+      }
+      .wim-avatar {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: var(--wim-avatar, 88px);
+        height: var(--wim-avatar, 88px);
+        margin-top: calc(var(--wim-avatar, 88px) / -2);
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .wim-lead {
+        background: var(--accent, #ff0000);
+      }
+      .wim-rest {
+        background: color-mix(in srgb, var(--fg, #f2f2f2) 22%, var(--bg, #0c1014));
+      }
+      .wim-avatar img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .wim-initials {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: #ffffff;
+        font-weight: 800;
+      }
+      #wim-overflow {
+        display: none;
+        margin-top: 8px;
+        font-size: 28px;
+        line-height: 1.3;
+        color: var(--muted, #8a8a90);
+      }
+      #wim-rule {
+        flex: none;
+        height: 2px;
+        margin: 12px 0 14px;
+        background: var(--border, #2e2e32);
+      }
+      #wim-footer,
+      #wim-source {
+        font-size: 28px;
+        line-height: 1.3;
+        color: var(--muted, #8a8a90);
+      }
+      
+      #wim-stage {
+        inset: 0;
+        padding: 64px 120px 52px;
+      }
+      #wim-title {
+        font-size: 96px;
+      }
+      .wim-meta {
+        width: 460px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="wim-root" data-composition-id="week-in-merges" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div class="wim-ground"></div>
+      <div id="wim-stage">
+        <p id="wim-eyebrow"></p>
+        <h1 id="wim-title"></h1>
+        <div id="wim-sub">
+          <p id="wim-period"></p>
+          <p id="wim-total"></p>
+        </div>
+        <div id="wim-rows"></div>
+        <p id="wim-overflow"></p>
+        <div id="wim-rule"></div>
+        <p id="wim-footer"></p>
+        <p id="wim-source"></p>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var FLOOR_SPEED = 10;
+        var LEADER_SPEED = 300;
+        var root = document.getElementById("wim-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function num(value, fallback, lo, hi) {
+          var n = typeof value === "number" ? value : parseFloat(value);
+          if (!isFinite(n)) n = fallback;
+          return Math.min(hi, Math.max(lo, n));
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var maxRows = 7;
+        var NAME_PX = 36;
+        
+        
+
+        var FALLBACK_ROWS = [
+          { name: "Монтажёр", merges: 12, avatar: "" },
+          { name: "Дизайнер", merges: 7, avatar: "" },
+          { name: "Копирайтер", merges: 4, avatar: "" },
+          { name: "Маркетолог", merges: 2, avatar: "" },
+          { name: "Кот", merges: 1, avatar: "" },
+        ];
+        function parseRows(text) {
+          var raw;
+          try {
+            raw = JSON.parse(String(text));
+          } catch (err) {
+            return null;
+          }
+          if (!Array.isArray(raw)) return null;
+          var out = [];
+          raw.forEach(function (row) {
+            if (!row || typeof row.name !== "string" || !row.name.trim()) return;
+            out.push({
+              name: row.name.trim().slice(0, 12),
+              merges: Math.round(num(row.merges, 0, 0, 100000)),
+              avatar: typeof row.avatar === "string" ? row.avatar : "",
+            });
+          });
+          return out.length ? out : null;
+        }
+        var forms = str(V.units, "ролик|ролика|роликов").split("|");
+        if (forms.length < 3) forms = [forms[0], forms[0], forms[0]];
+        function counted(n) {
+          var m10 = n % 10;
+          var m100 = n % 100;
+          var i = m10 === 1 && m100 !== 11 ? 0 : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 1 : 2;
+          return n + " " + forms[i].trim();
+        }
+        function overflowLine(hidden) {
+          if (!hidden.length) return "";
+          var lo = hidden[0].merges;
+          var hi = lo;
+          hidden.forEach(function (h) {
+            lo = Math.min(lo, h.merges);
+            hi = Math.max(hi, h.merges);
+          });
+          return "и ещё " + hidden.length + ": " + (lo === hi ? counted(lo) : lo + "–" + counted(hi));
+        }
+        function initials(name) {
+          var parts = name.split(/\s+/);
+          return (parts.length >= 2 ? parts[0].charAt(0) + parts[parts.length - 1].charAt(0) : parts[0].charAt(0)).toUpperCase();
+        }
+        /* distance tracks count / the leader's count; the floor is only for a genuine zero */
+        function speedFor(merges, maxM) {
+          if (!(merges > 0)) return FLOOR_SPEED;
+          if (!(maxM > 0)) return LEADER_SPEED;
+          return (LEADER_SPEED * merges) / maxM;
+        }
+        function bounceX(distance, span) {
+          var cycle = span * 2;
+          if (!(cycle > 0)) return 0;
+          var phase = distance % cycle;
+          if (phase < 0) phase += cycle;
+          return phase <= span ? phase : cycle - phase;
+        }
+
+        var ranked = (parseRows(V.rows) || FALLBACK_ROWS).slice().sort(function (a, b) {
+          return b.merges - a.merges;
+        });
+        var cap = Math.min(maxRows, Math.round(num(V.rows_max, 7, 1, 7)));
+        var rows = ranked.slice(0, cap);
+        var hidden = ranked.slice(cap);
+        var maxM = rows[0].merges;
+
+        function fill(id, text) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          if (text) el.textContent = text;
+          else el.style.display = "none";
+        }
+        fill("wim-eyebrow", str(V.eyebrow, "MatIntellect / неделя"));
+        document.getElementById("wim-title").textContent = str(V.title, "") || "Ролики за неделю";
+        fill("wim-period", str(V.period, "3–9 ноября 2026"));
+        fill("wim-total", str(V.total, "26 роликов"));
+        fill("wim-footer", str(V.footer, "Скорость – по числу роликов"));
+        fill("wim-source", str(V.source, "Данные: монтажёр MatIntellect"));
+        var overflowText = str(V.overflow, "") || overflowLine(hidden);
+        var overflowEl = document.getElementById("wim-overflow");
+        overflowEl.textContent = overflowText;
+        overflowEl.style.display = overflowText ? "block" : "none";
+
+        var mount = document.getElementById("wim-rows");
+        var avatars = rows.map(function (row, r) {
+          var rowEl = document.createElement("div");
+          rowEl.className = "wim-row";
+          var meta = document.createElement("div");
+          meta.className = "wim-meta";
+          var nameEl = document.createElement("div");
+          nameEl.className = "wim-name";
+          nameEl.textContent = row.name;
+          var countEl = document.createElement("div");
+          countEl.className = "wim-count";
+          countEl.textContent = counted(row.merges);
+          meta.appendChild(nameEl);
+          meta.appendChild(countEl);
+          var lane = document.createElement("div");
+          lane.className = "wim-lane";
+          var avatar = document.createElement("div");
+          avatar.className = "wim-avatar " + (row.merges === maxM ? "wim-lead" : "wim-rest");
+          if (row.avatar) {
+            var img = document.createElement("img");
+            img.alt = "";
+            img.src = row.avatar;
+            avatar.appendChild(img);
+          } else {
+            var letters = document.createElement("div");
+            letters.className = "wim-initials";
+            letters.textContent = initials(row.name);
+            avatar.appendChild(letters);
+          }
+          lane.appendChild(avatar);
+          rowEl.appendChild(meta);
+          rowEl.appendChild(lane);
+          mount.appendChild(rowEl);
+          return { el: avatar, nameEl: nameEl, lane: lane, speed: speedFor(row.merges, maxM) };
+        });
+
+        /* avatars follow the row height; words stay at their size, never under 28 px */
+        var rowH = mount.firstChild ? mount.firstChild.clientHeight : 120;
+        var avatarPx = Math.max(64, Math.min(96, Math.floor(rowH * 0.62)));
+        var namePx = NAME_PX;
+        root.style.setProperty("--wim-avatar", avatarPx + "px");
+        avatars.forEach(function (a) {
+          a.nameEl.style.fontSize = namePx + "px";
+          var ini = a.el.querySelector(".wim-initials");
+          if (ini) ini.style.fontSize = Math.max(28, Math.round(avatarPx * 0.4)) + "px";
+        });
+        var span = Math.max(0, (avatars.length ? avatars[0].lane.clientWidth : 560) - avatarPx);
+
+        function render(t) {
+          avatars.forEach(function (a) {
+            a.el.style.transform = "translateX(" + bounceX(a.speed * t, span).toFixed(2) + "px)";
+          });
+        }
+        /* GSAP seek calls the setter; a timeline onUpdate does not run on seek */
+        var driver = { _t: 0 };
+        Object.defineProperty(driver, "t", {
+          get: function () {
+            return this._t;
+          },
+          set: function (value) {
+            this._t = value;
+            render(value);
+          },
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var tl = gsap.timeline({ paused: true });
+        tl.to(driver, { t: 30, duration: 30, ease: "none" }, 0);
+        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        render(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["week-in-merges"] = tl;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "week-in-merges",
+  "type": "hyperframes:block",
+  "title": "Week in Merges",
+  "description": "Each person's avatar bounces across their row at a speed set by their count; the leader runs in red. Title, period, total, rows, count word and notes are variables; holds to the end of the mount or fades out.",
+  "tags": ["data", "chart", "ranking", "leaderboard"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "week-in-merges.html",
+      "target": "compositions/week-in-merges.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

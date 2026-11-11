@@ -292,6 +292,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "week-in-merges",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "week-in-merges-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "x-post",
       "type": "hyperframes:block"
     },
