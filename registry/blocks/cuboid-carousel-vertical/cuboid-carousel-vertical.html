@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the hero card held in the 780x1180 field (y 180-1360). top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the scene drawn in the field band y 180-1360 (fading into the ground at its edges), the hero card held in the 780x1180 field. top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "card1Category", "type": "string", "role": "content", "label": "Card 1 category", "description": "Accent line on top of card 1.", "maxLength": 16, "default": "Монтаж" },
     { "id": "card1Title", "type": "string", "role": "content", "label": "Card 1 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Нарезать интервью" },
     { "id": "card1Status", "type": "string", "role": "content", "label": "Card 1 status", "description": "First pill.", "maxLength": 11, "default": "В работе" },
@@ -173,7 +173,11 @@
         top0 = 0;
       
       const placement = ["full", "top", "bottom"].includes(VM.placement) ? VM.placement : "full";
-      top0 = 770 - H / 2;
+      // full: холст только на поле y 180–1360 (масштаб тот же – px на единицу от высоты): на входе ближняя
+      // карточка цепи уходила до y 1730 – через полосу субтитров; к краям поля она растворяется в фоне сцены
+      const fieldFade = placement === "full";
+      H = 1180;
+      top0 = 180;
       if (placement !== "full") {
         stage.classList.add("cubv-card", "cubv-" + placement);
         W = 780;
@@ -187,6 +191,13 @@
       canvasEl.width = W;
       canvasEl.height = H;
       canvasEl.style.cssText = "display:block;position:absolute;left:0;top:" + top0 + "px;width:" + W + "px;height:" + H + "px";
+      
+      if (fieldFade) {
+        const fade = "linear-gradient(to bottom, transparent 0, #000 60px, #000 calc(100% - 90px), transparent 100%)";
+        canvasEl.style.maskImage = fade;
+        canvasEl.style.webkitMaskImage = fade;
+      }
+      
       stage.appendChild(canvasEl);
 
       // theme colours and fonts as ready values for three.js and the face canvas

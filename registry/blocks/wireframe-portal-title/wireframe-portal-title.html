@@ -1575,7 +1575,9 @@
           THREE.MathUtils.lerp(P.cameraDistance, P.cameraDistance3D, portal) -
           push * 52 +
           Math.sin(t * 0.34) * 1.6 * portal * (1 - push);
-        const driftAmp = portal * (1 - 0.7 * push);
+        // покачивание – доля ширины кадра, как у разработчиков на 1920: в узком кадре те же единицы сцены
+        // дают те же ~68 px, и края фразы уходили под размытие краёв
+        const driftAmp = portal * (1 - 0.7 * push) * (LAY.W / 1920);
         camera.rotation.x = Math.cos(t * 0.47) * 0.04 * driftAmp;
         camera.rotation.y = Math.sin(t * 0.62 + 1.2) * 0.06 * driftAmp;
         camera.position.x = Math.sin(t * 0.41) * 1.4 * driftAmp;

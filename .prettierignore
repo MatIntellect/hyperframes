@@ -27,17 +27,26 @@ registry/blocks/frost-sequence-camera-orbit/assets/frost.js
 registry/blocks/frost-sequence-camera-orbit/assets/motion.js
 registry/blocks/frost-sequence-camera-orbit/assets/gsap-3.14.2.min.js
 registry/blocks/glass-shard-title/assets/glass-main.js
+registry/blocks/glass-shard-title-vertical/assets/glass-main.js
 registry/blocks/code-slice-hero/assets/gsap-3.14.2.min.js
 registry/blocks/cuboid-carousel/assets/three.core.min.js
 registry/blocks/cuboid-carousel/assets/three.module.min.js
 registry/blocks/cuboid-carousel/assets/gsap-3.14.2.min.js
 registry/blocks/cuboid-carousel/assets/addons/**/*.js
+registry/blocks/cuboid-carousel-vertical/assets/three.core.min.js
+registry/blocks/cuboid-carousel-vertical/assets/three.module.min.js
+registry/blocks/cuboid-carousel-vertical/assets/gsap-3.14.2.min.js
+registry/blocks/cuboid-carousel-vertical/assets/addons/**/*.js
 registry/blocks/orbit-card/assets/three.core.min.js
 registry/blocks/orbit-card/assets/three.module.min.js
 registry/blocks/orbit-card/assets/gsap-3.14.2.min.js
+registry/blocks/orbit-card-vertical/assets/three.core.min.js
+registry/blocks/orbit-card-vertical/assets/three.module.min.js
+registry/blocks/orbit-card-vertical/assets/gsap-3.14.2.min.js
 registry/examples/path-traced-3d/assets/vendor/three-path-tracer.min.js
 # generated Lottie data: pretty-printing multiplies its size
 registry/blocks/lottie-character-walk/assets/mascot.json
+registry/blocks/lottie-character-walk-vertical/assets/mascot.json
 # repo-native skill examples with intentional pseudo-markup placeholders
 # (e.g. <RANGE>, <TOTAL> tokens the agent replaces at build time — not real HTML)
 .claude/skills/**/examples/**/*.html

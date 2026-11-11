@@ -6,7 +6,7 @@
     { "id": "product_name", "type": "string", "role": "content", "label": "Label wordmark", "description": "Bebas Neue on the can label, twice around.", "default": "MATINTELLECT", "maxLength": 12 },
     { "id": "flavor", "type": "string", "role": "content", "label": "Label line", "description": "Line under the wordmark, on the front face.", "default": "Для монтажа", "maxLength": 11 },
     { "id": "volume", "type": "string", "role": "content", "label": "Label volume", "description": "Small line on the label seams.", "default": "355 мл", "maxLength": 8 },
-    { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Line in the lower left corner. Empty hides it.", "default": "Для монтажа · 355 мл", "maxLength": 32 },
+    { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Line under the product: lower left corner in wide, centred under the plinth in vertical. Empty hides it.", "default": "Для монтажа · 355 мл", "maxLength": 32 },
     { "id": "turns", "type": "number", "role": "motion", "label": "Turns per 6 s", "description": "Revolutions every 6 seconds; the turn never stops, so any mount length loops seamlessly.", "default": 1, "min": 1, "max": 4, "step": 1 },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the turn starts (the label faces the camera before it), 2 the block fades out (only when exit is fade). Empty keeps 0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps turning to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }

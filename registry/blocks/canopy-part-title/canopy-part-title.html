@@ -392,6 +392,11 @@
       const LETTER_SP = 0.01;
       const FONT_STACK = '"' + FONT + '", sans-serif';
       const BG = "#" + new THREE.Color(TH.bg).getHexString();
+      // Цепочка проходов без OutputPass пишет на экран линейные числа как есть: стена в --bg выходила
+      // #010102. Фон, туман и стена получают числа --bg как линейные – на экран ложится ровно --bg;
+      // листья и свет не тронуты (родной вид)
+      const bgS = new THREE.Color(BG).getRGB({ r: 0, g: 0, b: 0 }, THREE.SRGBColorSpace);
+      const BG_OUT = new THREE.Color().setRGB(bgS.r, bgS.g, bgS.b, THREE.LinearSRGBColorSpace);
       const RETAINED_BREEZE = 1;
       const state = window.cptState;
 
@@ -431,17 +436,19 @@
       renderer.shadowMap.type = THREE.PCFShadowMap;
 
       const scene = new THREE.Scene();
-      const bgColor = new THREE.Color(BG);
+      const bgColor = BG_OUT.clone();
       scene.background = bgColor.clone();
       scene.fog = new THREE.FogExp2(bgColor.clone(), 0.008);
 
       // the headline plane (z -5) sits 17.1 units from the camera: px per unit there sets the frame
+      const VH = TH.layout.vh || H;
       const camera = new THREE.PerspectiveCamera(
-        (2 * Math.atan(H / 2 / TH.layout.pxu / 17.1) * 180) / Math.PI,
-        W / H,
+        (2 * Math.atan(VH / 2 / TH.layout.pxu / 17.1) * 180) / Math.PI,
+        W / VH,
         0.1,
         40,
       );
+      if (VH !== H) camera.setViewOffset(W, VH, 0, TH.layout.vy, W, H);
       camera.position.set(0, 0.15, 12.1);
       camera.lookAt(0, 0, -1.5);
 

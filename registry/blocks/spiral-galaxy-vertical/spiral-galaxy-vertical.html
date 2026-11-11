@@ -8,8 +8,8 @@
     { "id": "rate", "type": "number", "role": "motion", "label": "Rotation rate", "description": "Core turn over the native 10 s shot; the rim stands still, so the arms wind. The shot is laid over cue 1 .. cue 2, or to the mount end.", "default": 0.25, "min": 0, "max": 1.5, "step": 0.05, "unit": "rad/s" },
     { "id": "glow", "type": "number", "role": "style", "label": "Core brightness", "default": 1.9, "min": 0.2, "max": 4, "step": 0.1 },
     { "id": "size", "type": "number", "role": "style", "label": "Star size", "default": 10, "min": 2, "max": 40, "step": 1, "unit": "px" },
-    { "id": "core", "type": "color", "role": "style", "label": "Core colour", "default": "#ffa575" },
-    { "id": "rim", "type": "color", "role": "style", "label": "Rim colour", "default": "#311599" },
+    { "id": "core", "type": "color", "role": "style", "label": "Core colour", "default": "#f2f2f2" },
+    { "id": "rim", "type": "color", "role": "style", "label": "Rim colour", "default": "#ff0000" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the galaxy fades in over 0.6 s and starts winding (0 = already shining on the first frame), 2 the winding ends, and the galaxy fades out from 0.5 s before it when exit is fade. Without cue 2 the winding spans to the mount end. Empty keeps 0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the galaxy turning to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -62,11 +62,11 @@
         inset: 0;
         mix-blend-mode: screen;
         opacity: 0.12;
-        background: radial-gradient(72% 46% at 50% 50%, var(--rim, #311599) 0%, #000000 70%);
+        background: radial-gradient(72% 46% at 50% 50%, var(--rim, #ff0000) 0%, #000000 70%);
       }
       
       #sgxv-halo {
-        background: radial-gradient(72% 26% at 50% 40%, var(--rim, #311599) 0%, #000000 70%);
+        background: radial-gradient(72% 26% at 50% 40%, var(--rim, #ff0000) 0%, #000000 70%);
       }
       #sgxv-stage.sgxv-card {
         left: 150px;
@@ -80,7 +80,7 @@
         top: 600px;
       }
       #sgxv-stage.sgxv-card #sgxv-halo {
-        background: radial-gradient(72% 46% at 50% 50%, var(--rim, #311599) 0%, #000000 70%);
+        background: radial-gradient(72% 46% at 50% 50%, var(--rim, #ff0000) 0%, #000000 70%);
       }
       
     </style>
@@ -115,7 +115,7 @@
         // research; reimplemented here, nothing copied.
         //   count 20000 · branches 3 · radius = ratio^1.5 * 5 · spin 1
         //   angle = branchAngle + spin * radius + t * (1 - radiusRatio)
-        //   randomnessPower 3 · inside #ffa575 · outside #311599
+        //   randomnessPower 3 · inside #f2f2f2 · outside #ff0000
         var DISC_RADIUS = 5.0; // world units, from `radius = ratio^1.5 * 5`
         var RADIUS_POWER = 1.5; // ratio -> radius exponent
         // Static Archimedean twist, radians per world unit. This is what draws
@@ -144,8 +144,8 @@
         var RATE = clampNum(vars.rate, 0, 1.5, 0.25);
         var GLOW = clampNum(vars.glow, 0.2, 4, 1.9);
         var SIZE = clampNum(vars.size, 2, 40, 10);
-        var CORE_COLOR = typeof vars.core === "string" ? vars.core : "#ffa575";
-        var RIM_COLOR = typeof vars.rim === "string" ? vars.rim : "#311599";
+        var CORE_COLOR = typeof vars.core === "string" ? vars.core : "#f2f2f2";
+        var RIM_COLOR = typeof vars.rim === "string" ? vars.rim : "#ff0000";
 
         // layout: canvas size and offset; fit scales the native 1920x1080 view
         // (disc about 1610 px wide) so the whole spiral stays in the frame
