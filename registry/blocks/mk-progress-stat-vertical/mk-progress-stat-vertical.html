@@ -1,0 +1,254 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the stat centred in the 780x1180 field (y 180-1360). top / bottom: the stat on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "value", "type": "number", "role": "content", "label": "Value", "description": "The number the count runs up to.", "default": 22, "min": 0, "max": 9999999, "step": 1 },
+    { "id": "decimals", "type": "number", "role": "content", "label": "Decimals", "default": 0, "min": 0, "max": 2, "step": 1 },
+    { "id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Before the number, for example $ or +.", "maxLength": 2, "default": "" },
+    { "id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "After the number, for example % or K.", "maxLength": 3, "default": "" },
+    { "id": "max", "type": "number", "role": "content", "label": "Track maximum", "description": "The track fills to value / max. 0 hides the track.", "default": 30, "min": 0, "max": 9999999, "step": 1 },
+    { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Line under the number, up to two lines.", "maxLength": 40, "default": "Целей достигнуто" },
+    { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Smaller line under the track, up to two lines. Empty hides it.", "maxLength": 60, "default": "Осталось восемь до плана года" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the stat lands and the count starts, 2 the count reaches the value, 3 the stat fades out (only when exit is fade). Empty keeps 0.3, 2.1.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the stat to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #mpsv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #mpsv-root .mpsv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #mpsv-field {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #mpsv-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      #mpsv-num {
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      #mpsv-label {
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      #mpsv-track {
+        position: relative;
+        border-radius: 999px;
+        background: var(--border, #2e2e32);
+        overflow: hidden;
+      }
+      #mpsv-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: var(--accent, #ff0000);
+        transform-origin: left center;
+      }
+      #mpsv-caption {
+        color: var(--muted, #8a8a90);
+        line-height: 1.3;
+      }
+      
+      
+      #mpsv-field {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+      }
+      #mpsv-group {
+        width: 780px;
+      }
+      #mpsv-label {
+        margin-top: 20px;
+        font-size: 56px;
+      }
+      #mpsv-track {
+        width: 780px;
+        height: 14px;
+        margin-top: 44px;
+      }
+      #mpsv-caption {
+        margin-top: 32px;
+        font-size: 38px;
+      }
+      #mpsv-root.mpsv-card #mpsv-field {
+        height: 760px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #mpsv-root.mpsv-bottom #mpsv-field {
+        top: 600px;
+      }
+      #mpsv-root.mpsv-card #mpsv-group {
+        width: 700px;
+      }
+      #mpsv-root.mpsv-card #mpsv-label {
+        margin-top: 14px;
+        font-size: 44px;
+      }
+      #mpsv-root.mpsv-card #mpsv-track {
+        width: 700px;
+        height: 12px;
+        margin-top: 32px;
+      }
+      #mpsv-root.mpsv-card #mpsv-caption {
+        margin-top: 24px;
+        font-size: 32px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="mpsv-root" data-composition-id="mk-progress-stat-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="mpsv-ground"></div>
+      <div id="mpsv-field">
+        <div id="mpsv-group">
+          <div id="mpsv-num">0</div>
+          <div id="mpsv-label">Целей достигнуто</div>
+          <div id="mpsv-track"><div id="mpsv-fill"></div></div>
+          <div id="mpsv-caption">Осталось восемь до плана года</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mpsv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function num(value, fallback, lo, hi) {
+          var n = typeof value === "number" ? value : Number.parseFloat(value);
+          if (!Number.isFinite(n)) n = fallback;
+          return Math.min(hi, Math.max(lo, n));
+        }
+        function str(v, d) {
+          return typeof v === "string" ? v : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("mpsv-card", "mpsv-" + placement);
+          root.querySelector(".mpsv-ground").remove();
+        }
+        var NUM_SIZE = placement === "full" ? 300 : 220,
+          NUM_W = placement === "full" ? 780 : 700;
+        
+
+        var VALUE = num(V.value, 22, 0, 9999999);
+        var DEC = Math.round(num(V.decimals, 0, 0, 2));
+        var MAX = num(V.max, 30, 0, 9999999);
+        var PRE = str(V.prefix, "");
+        var SUF = str(V.suffix, "");
+        function fmt(v) {
+          return PRE + v.toLocaleString("ru-RU", { minimumFractionDigits: DEC, maximumFractionDigits: DEC }) + SUF;
+        }
+        document.getElementById("mpsv-label").textContent = str(V.label, "Целей достигнуто");
+        var cap = str(V.caption, "Осталось восемь до плана года");
+        var capEl = document.getElementById("mpsv-caption");
+        capEl.textContent = cap;
+        if (!cap) capEl.style.display = "none";
+        if (!(MAX > 0)) document.getElementById("mpsv-track").style.display = "none";
+
+        /* the final number decides the size, so the count never outgrows the field */
+        var numEl = document.getElementById("mpsv-num");
+        numEl.style.fontSize = Math.round(Math.min(NUM_SIZE, NUM_W / (fmt(VALUE).length * 0.66))) + "px";
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var c1 = isFinite(cues[1]) && cues[1] > c0 + 0.3 ? cues[1] : c0 + 1.8;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var group = document.getElementById("mpsv-group");
+        var fill = document.getElementById("mpsv-fill");
+        var tl = gsap.timeline({ paused: true });
+        var st = { v: 0 };
+        numEl.textContent = fmt(0);
+        tl.fromTo(group, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, c0);
+        tl.fromTo(
+          st,
+          { v: 0 },
+          {
+            v: VALUE,
+            duration: c1 - c0 - 0.2,
+            ease: "power2.out",
+            onUpdate: function () {
+              numEl.textContent = fmt(st.v);
+            },
+          },
+          c0 + 0.2,
+        );
+        tl.fromTo(fill, { scaleX: 0 }, { scaleX: MAX > 0 ? Math.min(1, VALUE / MAX) : 0, duration: c1 - c0 - 0.2, ease: "power2.out" }, c0 + 0.2);
+        if (exit === "fade") tl.to(group, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c1 + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["mk-progress-stat-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
