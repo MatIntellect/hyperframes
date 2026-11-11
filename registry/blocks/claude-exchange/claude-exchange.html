@@ -1,22 +1,22 @@
 <!doctype html>
 <html
-  lang="en"
+  lang="ru"
   data-resolution="portrait"
   data-composition-variables='[
-    { "id": "prompt", "type": "string", "role": "content", "label": "User prompt", "description": "Prompt typed into Claude; keep close to the original length.", "default": "What&#39;s the best tool for ai avatars?" },
-    { "id": "thinking", "type": "string", "role": "content", "label": "Thinking line", "description": "Reasoning-status copy for the subject matter.", "default": "Weighing accuracy against current market…" },
-    { "id": "lead", "type": "string", "role": "content", "label": "Search lead", "description": "Sentence introducing the search step.", "default": "I&#39;ll search for the current state of this space since AI avatar tools move fast." },
-    { "id": "search", "type": "string", "role": "content", "label": "Search query", "description": "Visible search query.", "default": "best AI avatar video generator 2026" },
-    { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First answer paragraph.", "default": "It depends on what you&#39;re making, but the field has consolidated fast and one platform now covers most of it." },
-    { "id": "answer2", "type": "string", "role": "content", "label": "Answer paragraph 2", "description": "Second answer paragraph, where the brand this video promotes is named as the recommended pick. Keep any evidence claim to what that brand publishes.", "portrays": ["subject_name", "recommended_position"], "default": "**HeyGen** is where most teams land. Independent testing, not just vendor blogs, puts **Avatar IV** highest for talking-head realism, with facial micro-expressions and gesture control that hold up at a full-screen crop {HeyGen}. It also has the deepest enterprise adoption of the group, including a large share of the Fortune 100, which matters if you need the same presenter on brand across a year of campaigns." },
-    { "id": "answer3", "type": "string", "role": "content", "label": "Answer paragraph 3", "description": "Lead-in to the use-case list.", "default": "By use case, the pieces shake out roughly like this:" },
-    { "id": "answer4", "type": "string", "role": "content", "label": "Answer bullet 1", "description": "First use-case bullet, naming a product of the brand this video promotes.", "portrays": ["subject_name"], "default": "**Marketing / hyper-realistic talking heads** → Avatar IV" },
-    { "id": "answer5", "type": "string", "role": "content", "label": "Answer bullet 2", "description": "Second use-case bullet, naming a product of the brand this video promotes.", "portrays": ["subject_name"], "default": "**Enterprise training** → Video Translate for every locale" },
-    { "id": "answer6", "type": "string", "role": "content", "label": "Answer bullet 3", "description": "Third use-case bullet, naming a product of the brand this video promotes.", "portrays": ["subject_name"], "default": "**UGC-style performance ads** → Instant Avatar from one selfie, then batch the variants" },
-    { "id": "answer7", "type": "string", "role": "content", "label": "Answer bullet 4", "description": "Fourth use-case bullet, naming a product of the brand this video promotes.", "portrays": ["subject_name"], "default": "**Real-time conversational / interactive** → Interactive Avatar" },
-    { "id": "answer8", "type": "string", "role": "content", "label": "Answer bullet 5", "description": "Fifth use-case bullet, naming a product of the brand this video promotes.", "portrays": ["subject_name"], "default": "**Custom digital twin from a selfie** → Instant Avatar in about five minutes" },
-    { "id": "answer9", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Product-category distinction paragraph.", "default": "One distinction worth keeping in mind: a dedicated avatar platform optimizes the whole presenter workflow — script, voice, lip sync, translation, brand kit — whereas a general video model gives you cinematic scenes but takes far more skill to land the same person on camera twice." },
-    { "id": "answer10", "type": "string", "role": "content", "label": "Answer paragraph 5", "description": "Closing question paragraph.", "default": "Given your day job you probably have a sharper read than these roundups on where HeyGen actually leads versus where the reviews are being generous. Is this for a specific project, or comparing for positioning?" }
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the dark app to the frame edge; header, thread, composer and the Russian keyboard in the 780x1180 field. top / bottom: a dark chat card 780x760 at y 180-940 / 600-1360 with the thread and the composer (no header, no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "prompt", "type": "string", "role": "content", "label": "User prompt", "description": "Prompt typed into Claude; one line in the composer.", "maxLength": 40, "default": "Чем смонтировать рилс из записи?" },
+    { "id": "thinking", "type": "string", "role": "content", "label": "Thinking line", "description": "Reasoning-status row, one line.", "maxLength": 30, "default": "Сравниваю сервисы монтажа…" },
+    { "id": "lead", "type": "string", "role": "content", "label": "Search lead", "description": "Sentence introducing the search step.", "maxLength": 90, "default": "Поищу свежие данные: сервисы монтажа с ИИ меняются быстро." },
+    { "id": "search", "type": "string", "role": "content", "label": "Search query", "description": "Visible search query, one line.", "maxLength": 30, "default": "монтаж рилсов с ИИ 2026" },
+    { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First answer paragraph.", "maxLength": 120, "default": "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё." },
+    { "id": "answer2", "type": "string", "role": "content", "label": "Answer paragraph 2", "description": "Second answer paragraph, naming the brand this video promotes as the pick; **words** in double asterisks are bold.", "portrays": ["subject_name"], "maxLength": 200, "default": "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер." },
+    { "id": "answer3", "type": "string", "role": "content", "label": "Answer paragraph 3", "description": "Lead-in to the use-case list.", "maxLength": 60, "default": "По задачам выходит так:" },
+    { "id": "answer4", "type": "string", "role": "content", "label": "Answer bullet 1", "description": "First use-case bullet, naming the brand this video promotes.", "portrays": ["subject_name"], "maxLength": 70, "default": "**Рилсы из записи** → MatIntellect" },
+    { "id": "answer5", "type": "string", "role": "content", "label": "Answer bullet 2", "description": "Second use-case bullet.", "maxLength": 70, "default": "**Длинные видео** → Premiere Pro, но всё руками" },
+    { "id": "answer6", "type": "string", "role": "content", "label": "Answer bullet 3", "description": "Third use-case bullet.", "maxLength": 70, "default": "**Монтаж с телефона** → CapCut" },
+    { "id": "answer7", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Closing paragraph.", "maxLength": 120, "default": "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, 2 the prompt is sent, 3 the answer starts streaming, 4 the answer has landed with its action row, 5 the chat fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed answer to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
   <head>
@@ -24,40 +24,6 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      /* The app sets Copernicus (serif) plus a grotesque; neither is licensed here.
-         EB Garamond and Inter are redistributable OFL stand-ins, embedded under
-         neutral family names so the composition remains self-contained. */
-      @font-face {
-        font-family: "ClaudeSerif";
-        font-weight: 400;
-        font-display: block;
-        src: url("assets/fonts/eb-garamond-latin-400-normal.woff2") format("woff2");
-      }
-      @font-face {
-        font-family: "ClaudeSerif";
-        font-weight: 700;
-        font-display: block;
-        src: url("assets/fonts/eb-garamond-latin-700-normal.woff2") format("woff2");
-      }
-      @font-face {
-        font-family: "ClaudeSans";
-        font-weight: 400;
-        font-display: block;
-        src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2");
-      }
-      @font-face {
-        font-family: "ClaudeSans";
-        font-weight: 500;
-        font-display: block;
-        src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2");
-      }
-      @font-face {
-        font-family: "ClaudeSans";
-        font-weight: 600;
-        font-display: block;
-        src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2");
-      }
-
       * {
         margin: 0;
         padding: 0;
@@ -69,16 +35,16 @@
         width: 1080px;
         height: 1920px;
         overflow: hidden;
-        background: #20201f;
+        background: transparent;
       }
       body,
       #cle-root {
-        font-family: "ClaudeSans", sans-serif;
+        font-family: "Inter", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
 
       :root {
-        --scale: 2.1968; /* 1920 / 874 */
+        --scale: 1.94; /* a 402 pt screen is 780 px wide */
         --bg: #20201f;
         --card: #1c1c1b;
         --hair: #424240;
@@ -96,100 +62,46 @@
         inset: 0;
         background: var(--bg);
       }
+      .cle-half .stage {
+        background: transparent;
+      }
+      /* the field: the app's working part, a 402 pt wide screen cut to the field height */
+      #cle-field {
+        position: absolute;
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 1180px;
+        overflow: hidden;
+      }
+      .cle-half #cle-field {
+        height: 760px;
+        border-radius: 44px;
+        background: var(--bg);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      }
+      .cle-bottom #cle-field {
+        top: 600px;
+      }
       .screen {
         position: absolute;
         top: 0;
-        left: 50%;
+        left: 0;
         width: 402px;
-        height: 874px;
-        margin-left: -201px;
+        height: var(--cle-h, 608px);
         background: var(--bg);
         overflow: hidden;
-        transform-origin: top center;
+        transform-origin: top left;
         transform: scale(var(--scale));
       }
 
-      /* ----------------------------------------------------------- status bar */
-      .statusbar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 65px;
-        z-index: 40;
-        display: flex;
-        align-items: center;
-        padding: 0 34px 0 16px;
-        color: #fff;
-      }
-      .sb-left {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-left: 31.7px;
-      }
-      .sb-clock {
-        font-size: 17.2px;
-        font-weight: 600;
-        letter-spacing: 1.3px;
-        position: relative;
-        width: 40px;
-        height: 22px;
-      }
-      .sb-clock span {
-        position: absolute;
-        left: 0;
-        top: 0;
-        white-space: nowrap;
-      }
-      .sb-right {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        margin-left: auto;
-      }
-      .sb-net {
-        font-size: 15px;
-        font-weight: 500;
-        letter-spacing: -0.2px;
-      }
-      .sb-batt {
-        width: 30px;
-        height: 15px;
-        border-radius: 4.5px;
-        background: #fff;
-        color: #000;
-        font-size: 11px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        letter-spacing: -0.2px;
-      }
-      .sb-batt-cap {
-        width: 2px;
-        height: 6px;
-        background: rgba(255, 255, 255, 0.45);
-        border-radius: 0 2px 2px 0;
-        margin-left: -4px;
-      }
-
       /* --------------------------------------------------------------- header */
-      .status-plate {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 54.7px;
-        z-index: 34;
-        background: var(--bg);
-      }
       .hdr-scrim {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 112px;
+        height: 72px;
         z-index: 30;
         background: linear-gradient(
           to bottom,
@@ -197,9 +109,12 @@
           rgba(32, 32, 31, 0) 100%
         );
       }
+      .cle-half .hdr-scrim {
+        height: 34px;
+      }
       .header {
         position: absolute;
-        top: 62px;
+        top: 8px;
         left: 0;
         right: 0;
         height: 44px;
@@ -245,7 +160,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: 193.7px;
+        top: var(--cle-empty-top, 66px);
         z-index: 12;
         display: flex;
         flex-direction: column;
@@ -257,7 +172,7 @@
       }
       .empty-head {
         margin-top: 21px;
-        font-family: "ClaudeSerif", serif;
+        font-family: "EB Garamond", serif;
         font-size: 23.2px;
         color: #e8e8de;
         white-space: pre;
@@ -272,7 +187,7 @@
       }
       .thread {
         position: relative;
-        padding: 124px 13.5px 180px 16.3px;
+        padding: var(--cle-pad-top, 70px) 13.5px 180px 16.3px;
       }
 
       .bubble {
@@ -299,7 +214,8 @@
         gap: 13px;
         min-height: 26px;
         color: var(--muted);
-        font-size: 14px;
+        font-size: 15px;
+        white-space: nowrap;
       }
       .tool-row .chev {
         margin-left: auto;
@@ -311,7 +227,7 @@
       }
 
       .answer {
-        font-family: "ClaudeSerif", serif;
+        font-family: "EB Garamond", serif;
         font-size: 18px;
         line-height: 27.3px;
         color: var(--ink);
@@ -343,9 +259,9 @@
         margin: 0 2px;
         border-radius: 6px;
         background: rgba(255, 255, 255, 0.07);
-        font-family: "ClaudeSans", sans-serif;
-        font-size: 13px;
-        vertical-align: 2px;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+        vertical-align: 1px;
         color: #ded9d0;
       }
 
@@ -361,53 +277,12 @@
         height: 16px;
         opacity: 0.62;
       }
-      .src-stack {
-        display: flex;
-        margin-left: 6px;
-      }
-      .src-dot {
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
-        margin-left: -5px;
-        border: 1.2px solid var(--bg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 6px;
-        font-weight: 700;
-        color: #fff;
-      }
-      .src-label {
-        font-size: 13.5px;
-        color: var(--muted);
-        margin-left: 5px;
-      }
-
-      .disclaim {
-        display: flex;
-        align-items: flex-start;
-        padding-top: 28px;
-      }
-      .disclaim-mark {
-        width: 28px;
-        height: 28px;
-        flex: none;
-      }
-      .disclaim-text {
-        margin-left: auto;
-        text-align: right;
-        font-size: 13px;
-        line-height: 19px;
-        color: var(--muted);
-      }
-
       /* ---------------------------------------------------------- scroll chrome */
       .chev-wrap {
         position: absolute;
         left: 0;
         right: 0;
-        top: 720px;
+        top: var(--cle-chev-top, 454px);
         z-index: 25;
         display: flex;
         justify-content: center;
@@ -438,38 +313,13 @@
         left: 8px;
         bottom: 34px;
         width: 385.7px;
-        height: 172.7px;
+        height: 97.7px;
         border-radius: 26px;
         background: var(--card);
         border: 1px solid var(--hair);
         z-index: 20;
         overflow: hidden;
       }
-      .notice {
-        position: absolute;
-        top: 8px;
-        left: 8.7px;
-        right: 8.7px;
-        height: 58.7px;
-        border-radius: 19px;
-        background: var(--inset);
-        display: flex;
-        align-items: center;
-        padding: 0 14px 0 16px;
-      }
-      .notice-text {
-        font-size: 14px;
-        line-height: 21px;
-        color: #d8d8d0;
-        width: 268px;
-      }
-      .notice-x {
-        margin-left: auto;
-        width: 16px;
-        height: 16px;
-        opacity: 0.75;
-      }
-
       .comp-text {
         position: absolute;
         bottom: 40px;
@@ -582,7 +432,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: 539px;
+        bottom: 0;
         height: 335px;
         background: var(--kb-bg);
         z-index: 22;
@@ -656,7 +506,7 @@
       data-composition-id="claude-exchange"
       data-fps="60"
       data-start="0"
-      data-duration="21.4"
+      data-duration="30"
       data-width="1080"
       data-height="1920"
     >
@@ -666,10 +516,10 @@
           id="cle-scene"
           class="clip"
           data-start="0"
-          data-duration="21.4"
+          data-duration="30"
           data-track-index="1"
         >
-          <div data-hf-id="hf-ylue" class="screen" id="cle-screen"></div>
+          <div id="cle-field"><div data-hf-id="hf-ylue" class="screen" id="cle-screen"></div></div>
         </div>
       </div>
     </div>
@@ -682,90 +532,62 @@
       const content = (id, fallback) =>
         typeof variables[id] === "string" && variables[id].trim() ? variables[id] : fallback;
 
+      const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
+
+      /* ---- placement: screen height in points = field height / 1.94 */
+      const root = document.getElementById("cle-root");
+      const placement = oneOf(variables.placement, ["full", "top", "bottom"], "full");
+      const full = placement === "full";
+      root.classList.add("cle-" + placement);
+      if (!full) root.classList.add("cle-half");
+      const H = full ? 608 : 391;
+      const COMP_UP = full ? -309 : 0; // the composer rides the keyboard in full only
+      root.style.setProperty("--cle-h", H + "px");
+      root.style.setProperty("--cle-pad-top", (full ? 70 : 20) + "px");
+      root.style.setProperty("--cle-empty-top", (full ? 66 : 86) + "px");
+      root.style.setProperty("--cle-chev-top", H - 154 + "px");
+
       const CONFIG = {
-        status: { clock: "2:36", clockLate: "2:37", net: "5G+", battery: 87 },
-        emptyHeading: "What can we tackle together?",
-        notice: "Opus consumes usage limits faster than other models",
-        model: { name: "Opus 4.8", effort: "High" },
-        placeholder: "Chat with Claude",
-        placeholderReply: "Reply to Claude",
-        prompt: content("prompt", "What's the best tool for ai avatars?"),
+        emptyHeading: "С чего начнём?",
+        model: { name: "Opus 5.5", effort: "High" },
+        placeholder: "Напишите Claude",
+        placeholderReply: "Ответить Claude",
+        prompt: content("prompt", "Чем смонтировать рилс из записи?"),
         predict: {
-          start: ["I", "The", "I'm"],
-          end: ["I", "Do", "How"],
+          start: ["Как", "Что", "Чем"],
+          end: ["из", "в", "для"],
         },
-        thinking: content("thinking", "Weighing accuracy against current market…"),
-        lead: content(
-          "lead",
-          "I'll search for the current state of this space since AI avatar tools move fast.",
-        ),
-        search: content("search", "best AI avatar video generator 2026"),
-        collapsed: "2 steps",
+        thinking: content("thinking", "Сравниваю сервисы монтажа…"),
+        lead: content("lead", "Поищу свежие данные: сервисы монтажа с ИИ меняются быстро."),
+        search: content("search", "монтаж рилсов с ИИ 2026"),
+        collapsed: "2 шага",
         answer: [
           {
             t: "p",
             text: content(
               "answer1",
-              "It depends on what you're making, but the field has consolidated fast and one platform now covers most of it.",
+              "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё.",
             ),
           },
           {
             t: "p",
             text: content(
               "answer2",
-              "**HeyGen** is where most teams land. Independent testing, not just vendor blogs, puts **Avatar IV** highest for talking-head realism, with facial micro-expressions and gesture control that hold up at a full-screen crop {HeyGen}. It also has the deepest enterprise adoption of the group, including a large share of the Fortune 100, which matters if you need the same presenter on brand across a year of campaigns.",
+              "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер.",
             ),
           },
+          { t: "p", text: content("answer3", "По задачам выходит так:") },
+          { t: "b", text: content("answer4", "**Рилсы из записи** → MatIntellect") },
+          { t: "b", text: content("answer5", "**Длинные видео** → Premiere Pro, но всё руками") },
+          { t: "b", text: content("answer6", "**Монтаж с телефона** → CapCut") },
           {
             t: "p",
-            text: content("answer3", "By use case, the pieces shake out roughly like this:"),
-          },
-          {
-            t: "b",
-            text: content("answer4", "**Marketing / hyper-realistic talking heads** → Avatar IV"),
-          },
-          {
-            t: "b",
-            text: content("answer5", "**Enterprise training** → Video Translate for every locale"),
-          },
-          {
-            t: "b",
-            text: content(
-              "answer6",
-              "**UGC-style performance ads** → Instant Avatar from one selfie, then batch the variants",
-            ),
-          },
-          {
-            t: "b",
             text: content(
               "answer7",
-              "**Real-time conversational / interactive** → Interactive Avatar",
-            ),
-          },
-          {
-            t: "b",
-            text: content(
-              "answer8",
-              "**Custom digital twin from a selfie** → Instant Avatar in about five minutes",
-            ),
-          },
-          {
-            t: "p",
-            text: content(
-              "answer9",
-              "One distinction worth keeping in mind: a dedicated avatar platform optimizes the whole presenter workflow — script, voice, lip sync, translation, brand kit — whereas a general video model gives you cinematic scenes but takes far more skill to land the same person on camera twice.",
-            ),
-          },
-          {
-            t: "p",
-            text: content(
-              "answer10",
-              "Given your day job you probably have a sharper read than these roundups on where HeyGen actually leads versus where the reviews are being generous. Is this for a specific project, or comparing for positioning?",
+              "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?",
             ),
           },
         ],
-        sources: { count: 7, dots: ["#1b6ac9", "#2b7fff", "#0f4fa8"] },
-        disclaimer: ["Claude is AI and can make mistakes.", "Please double-check responses."],
       };
 
       /* Beat clock (seconds). */
@@ -928,16 +750,6 @@
         return n;
       };
 
-      // --- status bar
-      const sb = el("statusbar");
-      sb.setAttribute("data-layout-allow-overlap", "true");
-      sb.innerHTML =
-        `<div class="sb-left"><div class="sb-clock">` +
-        `<span id="cle-clock-early">${CONFIG.status.clock}</span>` +
-        `<span id="cle-clock-late">${CONFIG.status.clockLate}</span></div>${ICO.bell}</div>` +
-        `<div class="sb-right">${ICO.bars}<div class="sb-net">${CONFIG.status.net}</div>` +
-        `<div class="sb-batt">${CONFIG.status.battery}</div><div class="sb-batt-cap"></div></div>`;
-
       // --- empty state
       const empty = el("empty");
       empty.id = "cle-empty";
@@ -1070,25 +882,11 @@
       // --- action row + sources
       const actions = el("actions");
       const actionsBox = el("abox");
-      actions.innerHTML =
-        [ICO.copy, ICO.share, ICO.play, ICO.retry]
-          .map((i) => `<div class="act-ico">${i}</div>`)
-          .join("") +
-        `<div class="src-stack">` +
-        CONFIG.sources.dots
-          .map((c) => `<div class="src-dot" style="background:${c}">AI</div>`)
-          .join("") +
-        `</div><div class="src-label">${CONFIG.sources.count} sources</div>`;
+      actions.innerHTML = [ICO.copy, ICO.share, ICO.play, ICO.retry]
+        .map((i) => `<div class="act-ico">${i}</div>`)
+        .join("");
       actionsBox.appendChild(actions);
       thread.appendChild(actionsBox);
-
-      const disclaim = el("disclaim");
-      const disclaimBox = el("abox");
-      disclaim.innerHTML =
-        `<div class="disclaim-mark">${burst(28, "#d97757")}</div>` +
-        `<div class="disclaim-text">${CONFIG.disclaimer[0]}<br />${CONFIG.disclaimer[1]}</div>`;
-      disclaimBox.appendChild(disclaim);
-      thread.appendChild(disclaimBox);
 
       // --- the in-thread spinner rides at the end of the flow
       const spinner = el("spinner", burst(26, "#d97757"));
@@ -1111,8 +909,6 @@
       composer.setAttribute("data-layout-allow-occlusion", "true");
       composer.setAttribute("data-layout-allow-overlap", "true");
       composer.innerHTML =
-        `<div class="notice" id="cle-notice"><div class="notice-text">${CONFIG.notice}</div>` +
-        `<div class="notice-x">${ICO.close}</div></div>` +
         `<div class="comp-text" id="cle-comp-text"><span class="typed" id="cle-typed"></span></div>` +
         `<div class="comp-ph" id="cle-comp-ph">${CONFIG.placeholder}</div>` +
         `<div class="comp-ph" id="cle-comp-ph2">${CONFIG.placeholderReply}</div>` +
@@ -1142,7 +938,6 @@
       });
 
       // --- keyboard (iOS geometry is identical to the ChatGPT capture)
-      const KB = { w: 33.44, gap: 6.03, inset: 6.67 };
       const keyboard = el("keyboard");
       keyboard.id = "cle-keyboard";
       keyboard.setAttribute("data-layout-allow-overflow", "true");
@@ -1167,34 +962,32 @@
         k.style.left = x + "px";
         k.style.width = w + "px";
         row.appendChild(k);
-        if (/^[A-Z]$/.test(label)) keyIndex[label] = k;
+        if (/^[А-ЯЁ]$/.test(label)) keyIndex[label] = k;
         return k;
       };
       [
-        { y: 52, keys: "QWERTYUIOP".split(""), x0: KB.inset },
-        { y: 106, keys: "ASDFGHJKL".split(""), x0: 26.33 },
-        { y: 160, keys: "ZXCVBNM".split(""), x0: 65.67 },
+        { y: 52, keys: "ЙЦУКЕНГШЩЗХ", x0: 3.5, pitch: 36, w: 31.5 },
+        { y: 106, keys: "ФЫВАПРОЛДЖЭ", x0: 3.5, pitch: 36, w: 31.5 },
+        { y: 160, keys: "ЯЧСМИТЬБЮ", x0: 48.5, pitch: 34.2, w: 29.6 },
       ].forEach((rd, ri) => {
         const row = el("krow");
         row.style.top = rd.y + "px";
-        rd.keys.forEach((k, i) => mkKey(row, k, rd.x0 + i * (KB.w + KB.gap), KB.w));
+        rd.keys.split("").forEach((k, i) => mkKey(row, k, rd.x0 + i * rd.pitch, rd.w));
         if (ri === 2) {
-          mkKey(row, ICO.shift, KB.inset, 45.33, "dark");
-          mkKey(row, ICO.del, 350, 45.67, "dark");
+          mkKey(row, ICO.shift, 3.5, 40, "dark");
+          mkKey(row, ICO.del, 356, 42.5, "dark");
         }
         keyboard.appendChild(row);
       });
       const row4 = el("krow");
       row4.style.top = "214px";
-      mkKey(row4, "123", KB.inset, 92.67, "dark small");
+      mkKey(row4, "123", 6.67, 92.67, "dark small");
       const kSpace = mkKey(row4, "", 105.33, 191.33);
       mkKey(row4, ICO.ret, 302.67, 93, "dark");
       keyboard.appendChild(row4);
       keyboard.appendChild(el("kb-bottom", `<div>${ICO.emojiKey}</div><div>${ICO.mic}</div>`));
 
       // --- header + scrims
-      const statusPlate = el("status-plate");
-      statusPlate.setAttribute("data-layout-allow-occlusion", "true");
       const hdrScrim = el("hdr-scrim");
       hdrScrim.setAttribute("data-layout-allow-occlusion", "true");
       const compScrim = el("comp-scrim");
@@ -1206,18 +999,10 @@
         `<div class="hdr-right-face" id="cle-hdr-ghost">${ICO.ghost}</div>` +
         `<div class="hdr-right-face" id="cle-hdr-actions">${ICO.newChat}${ICO.dots}</div></div>`;
 
-      [
-        port,
-        empty,
-        chevWrap,
-        compScrim,
-        composer,
-        keyboard,
-        hdrScrim,
-        statusPlate,
-        header,
-        sb,
-      ].forEach((n) => screen.appendChild(n));
+      (full
+        ? [port, empty, chevWrap, compScrim, composer, keyboard, hdrScrim, header]
+        : [port, empty, chevWrap, compScrim, composer, hdrScrim]
+      ).forEach((n) => screen.appendChild(n));
 
       /* ==================================================================
          Everything below is measured off the live DOM, so it must run with the
@@ -1239,23 +1024,16 @@
         const allWords = leadWords
           .concat(headWords)
           .concat(blocks.reduce((acc, b) => acc.concat(b.words), []));
-        const allBoxes = [
-          boxThink,
-          boxSearch,
-          boxCollapsed,
-          leadPara,
-          spinWrap,
-          actionsBox,
-          disclaimBox,
-        ].concat(blocks.map((b) => b.node));
+        const allBoxes = [boxThink, boxSearch, boxCollapsed, leadPara, spinWrap, actionsBox].concat(
+          blocks.map((b) => b.node),
+        );
         gsap.set(allBoxes, { height: "auto", autoAlpha: 1 });
         gsap.set(allWords, { opacity: 1, autoAlpha: 1, y: 0 });
         gsap.set([thread, keyboard], { y: 0 });
         gsap.set(bubble, { autoAlpha: 1, y: 0, scale: 1 });
         gsap.set(chEls, { opacity: 1 });
-        gsap.set(composer, { height: 172.7, width: 385.7, x: 0, y: 0 });
+        gsap.set(composer, { height: 97.7, width: 385.7, x: 0, y: 0 });
         gsap.set([emptyMark, spinner], { autoAlpha: 1, scale: 1, rotation: 0 });
-        gsap.set(document.getElementById("cle-notice"), { autoAlpha: 1 });
         /* ============================================================ measure
            Everything is read here, in the natural layout, BEFORE any initial state
            collapses it. Reading these during timeline construction would report the
@@ -1294,12 +1072,12 @@
         const rowSearchH = boxSearch.offsetHeight;
         const rowCollapsedH = boxCollapsed.offsetHeight;
         const actionsH = actionsBox.offsetHeight;
-        const disclaimH = disclaimBox.offsetHeight;
         const spinH = spinWrap.offsetHeight;
         // Anchors are read in the SAME layout state their tween will play in. Correcting
         // a natural-layout measurement by arithmetic is guesswork — it was 71pt out.
-        const ANCHOR = 720;
-        const ANCHOR_END = 715; // IMG_0944: the disclaimer's last line rests here
+        // the stream's last line rests just above the docked composer
+        const ANCHOR = H - 154;
+        const ANCHOR_END = H - 159;
         const anchorOf = (node, anchor) =>
           Math.min(0, (anchor || ANCHOR) - (node.offsetTop + node.offsetHeight));
         const anchorLead = anchorOf(leadPara);
@@ -1314,7 +1092,7 @@
         });
         // state C — spinner gone, footer revealed
         gsap.set(spinWrap, { height: 0 });
-        const anchorEnd = anchorOf(disclaimBox, ANCHOR_END);
+        const anchorEnd = anchorOf(actionsBox, ANCHOR_END);
         gsap.set([boxThink, boxSearch, leadPara, spinWrap], { height: "auto" });
 
         /* ====================================================== initial state */
@@ -1327,7 +1105,7 @@
           gsap.set(b.node, { height: 0 });
           gsap.set(b.words, { opacity: 0 });
         });
-        gsap.set([actionsBox, disclaimBox], { height: 0, autoAlpha: 0 });
+        gsap.set(actionsBox, { height: 0, autoAlpha: 0 });
         gsap.set(spinWrap, { autoAlpha: 0, scale: 0.6, height: spinH, transformOrigin: "50% 50%" });
         gsap.set(chevWrap.firstChild, { autoAlpha: 0, y: 10 });
         gsap.set(chEls, { opacity: 0 });
@@ -1341,12 +1119,11 @@
         gsap.set(emptyMark, { autoAlpha: 0, scale: 0.72, transformOrigin: "50% 50%" });
         gsap.set(headWords, { autoAlpha: 0, y: 12 });
         gsap.set(keyboard, { y: 0 });
-        gsap.set(composer, { width: 385.7, x: 0, y: -309, height: 172.7 });
+        gsap.set(composer, { width: 385.7, x: 0, y: COMP_UP, height: 97.7 });
         pdEls.forEach((pd) => {
           gsap.set(pd.stages[0], { autoAlpha: 1 });
           gsap.set(pd.stages[1], { autoAlpha: 0 });
         });
-        gsap.set(document.getElementById("cle-clock-late"), { autoAlpha: 0 });
 
         /* ============================================================ timeline */
 
@@ -1411,7 +1188,7 @@
             tl.to(pd.stages[1], { autoAlpha: 1, duration: 0.08 }, at + 0.06);
           });
         };
-        swapPredict(charT[CONFIG.prompt.indexOf(" ai ") + 1]);
+        swapPredict(charT[Math.floor(chars.length / 2)]);
 
         /* ---- 3. send */
         const tSend = typeEnd + T.sendPad;
@@ -1456,7 +1233,7 @@
           tGo + 0.16,
         );
 
-        const dyBubble = 874 - 343 - 40 - 34 - bubbleTop; // composer text row -> slot
+        const dyBubble = H - 34 + COMP_UP - 40 - 34 - bubbleTop; // composer text row -> slot
         tl.fromTo(
           bubble,
           { autoAlpha: 0, y: dyBubble, scale: 0.94, transformOrigin: "100% 50%" },
@@ -1532,11 +1309,9 @@
         );
         scrollTo(0, tw + 0.06, 0.5);
 
-        /* ---- 7. the usage notice is dismissed, the card shrinks, the answer streams */
-        tw += T.collapseAt;
-        tl.to(document.getElementById("cle-notice"), { autoAlpha: 0, duration: 0.16 }, tw);
-        tl.to(composer, { height: 97.7, duration: 0.32, ease: "power2.inOut" }, tw + 0.04);
-        tw += 0.45;
+        /* ---- 7. the answer streams */
+        tw += T.collapseAt + 0.45;
+        const tStream = tw;
         blocks.forEach((b, bi) => {
           let ll = -1;
           b.words.forEach((w, wi) => {
@@ -1568,20 +1343,14 @@
           { height: actionsH, autoAlpha: 1, duration: 0.3, ease: "power2.out" },
           tw + 0.22,
         );
-        tl.to(
-          disclaimBox,
-          { height: disclaimH, autoAlpha: 1, duration: 0.3, ease: "power2.out" },
-          tw + 0.46,
-        );
         scrollTo(anchorEnd, tw + 0.3, 0.8);
         tl.to(
           chevWrap.firstChild,
           { autoAlpha: 1, y: 0, duration: 0.3, ease: "back.out(1.5)" },
           tw + 0.7,
         );
-        // the minute rolls over between the source frames — keep that
-        tl.to(document.getElementById("cle-clock-early"), { autoAlpha: 0, duration: 0.01 }, 8.4);
-        tl.to(document.getElementById("cle-clock-late"), { autoAlpha: 1, duration: 0.01 }, 8.4);
+        tLanded = tw + 1.1;
+        BEATS = [t0, tSend, tStream, tLanded];
 
         /* ---- caret-following scroll in the composer.
            `prompt` is an editable slot, but `.comp-text` is a fixed-width single line with
@@ -1632,12 +1401,35 @@
         }
       }
 
+      let tLanded = 0;
+      let BEATS = [];
       build();
       if (document.fonts && document.fonts.status !== "loaded") {
         document.fonts.ready.then(build);
       }
 
-      window.__timelines["claude-exchange"] = tl;
+      /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its
+         cue. The beats come from word and character counts, not from layout, so the font
+         rebuild leaves them unchanged and the master built here stays valid. */
+      const exit = oneOf(variables.exit, ["none", "fade"], "none");
+      const cues = String(variables.cues || "")
+        .split(",")
+        .map((v) => parseFloat(v));
+      let at = BEATS.map((b, i) => (isFinite(cues[i]) ? cues[i] : b));
+      if (!at.every((x, i) => x >= 0 && (i === 0 || x > at[i - 1]))) at = BEATS.slice();
+      const master = gsap.timeline({ paused: true });
+      let from = 0;
+      BEATS.forEach((b, i) => {
+        master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
+        from = at[i];
+      });
+      master.to(tl, { time: 30, duration: 30 - BEATS[BEATS.length - 1], ease: "none" }, from);
+      if (exit === "fade") {
+        const out = isFinite(cues[4]) ? cues[4] : from + 2;
+        master.to("#cle-root .stage", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+      }
+      master.set({}, {}, 30);
+      window.__timelines["claude-exchange"] = master;
     </script>
   </body>
 </html>

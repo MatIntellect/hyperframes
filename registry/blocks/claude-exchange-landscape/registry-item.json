@@ -1,0 +1,21 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "claude-exchange-landscape",
+  "type": "hyperframes:block",
+  "title": "Claude Exchange Landscape",
+  "description": "Landscape 1920x1080 version of claude-exchange: the Russian Claude chat in a centred 780x1000 field, header and docked composer, cues and an exit",
+  "tags": ["showcase", "mock-ui", "ai", "chat", "landscape", "ad-template"],
+  "author": "Jake Moran",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "claude-exchange-landscape.html",
+      "target": "compositions/claude-exchange-landscape.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
