@@ -1,0 +1,886 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "card1Category", "type": "string", "role": "content", "label": "Card 1 category", "description": "Accent line on top of card 1.", "maxLength": 16, "default": "Монтаж" },
+    { "id": "card1Title", "type": "string", "role": "content", "label": "Card 1 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Нарезать интервью" },
+    { "id": "card1Status", "type": "string", "role": "content", "label": "Card 1 status", "description": "First pill.", "maxLength": 11, "default": "В работе" },
+    { "id": "card1Date", "type": "string", "role": "content", "label": "Card 1 date", "description": "Second pill.", "maxLength": 8, "default": "17 июля" },
+    { "id": "card2Category", "type": "string", "role": "content", "label": "Card 2 category", "description": "Accent line on top of card 2.", "maxLength": 16, "default": "Графика" },
+    { "id": "card2Title", "type": "string", "role": "content", "label": "Card 2 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Собрать титры" },
+    { "id": "card2Status", "type": "string", "role": "content", "label": "Card 2 status", "description": "First pill.", "maxLength": 11, "default": "На проверке" },
+    { "id": "card2Date", "type": "string", "role": "content", "label": "Card 2 date", "description": "Second pill.", "maxLength": 8, "default": "20 июля" },
+    { "id": "card3Category", "type": "string", "role": "content", "label": "Card 3 category", "description": "Accent line on top of card 3.", "maxLength": 16, "default": "Звук" },
+    { "id": "card3Title", "type": "string", "role": "content", "label": "Card 3 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Почистить голос" },
+    { "id": "card3Status", "type": "string", "role": "content", "label": "Card 3 status", "description": "First pill.", "maxLength": 11, "default": "В работе" },
+    { "id": "card3Date", "type": "string", "role": "content", "label": "Card 3 date", "description": "Second pill.", "maxLength": 8, "default": "2 авг." },
+    { "id": "card4Category", "type": "string", "role": "content", "label": "Card 4 category", "description": "Accent line on top of card 4.", "maxLength": 16, "default": "Субтитры" },
+    { "id": "card4Title", "type": "string", "role": "content", "label": "Card 4 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Расставить субтитры" },
+    { "id": "card4Status", "type": "string", "role": "content", "label": "Card 4 status", "description": "First pill.", "maxLength": 11, "default": "В плане" },
+    { "id": "card4Date", "type": "string", "role": "content", "label": "Card 4 date", "description": "Second pill.", "maxLength": 8, "default": "9 авг." },
+    { "id": "card5Category", "type": "string", "role": "content", "label": "Card 5 category", "description": "Accent line on top of card 5.", "maxLength": 16, "default": "Обложка" },
+    { "id": "card5Title", "type": "string", "role": "content", "label": "Card 5 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Нарисовать обложку" },
+    { "id": "card5Status", "type": "string", "role": "content", "label": "Card 5 status", "description": "First pill.", "maxLength": 11, "default": "В плане" },
+    { "id": "card5Date", "type": "string", "role": "content", "label": "Card 5 date", "description": "Second pill.", "maxLength": 8, "default": "15 авг." },
+    { "id": "card6Category", "type": "string", "role": "content", "label": "Card 6 category", "description": "Accent line on top of card 6.", "maxLength": 16, "default": "Публикация" },
+    { "id": "card6Title", "type": "string", "role": "content", "label": "Card 6 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Выложить рилс" },
+    { "id": "card6Status", "type": "string", "role": "content", "label": "Card 6 status", "description": "First pill.", "maxLength": 11, "default": "Ждёт" },
+    { "id": "card6Date", "type": "string", "role": "content", "label": "Card 6 date", "description": "Second pill.", "maxLength": 8, "default": "22 авг." },
+    { "id": "card7Category", "type": "string", "role": "content", "label": "Card 7 category", "description": "Accent line on top of card 7.", "maxLength": 16, "default": "Сценарий" },
+    { "id": "card7Title", "type": "string", "role": "content", "label": "Card 7 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Написать сценарий" },
+    { "id": "card7Status", "type": "string", "role": "content", "label": "Card 7 status", "description": "First pill.", "maxLength": 11, "default": "В плане" },
+    { "id": "card7Date", "type": "string", "role": "content", "label": "Card 7 date", "description": "Second pill.", "maxLength": 8, "default": "1 сент." },
+    { "id": "card8Category", "type": "string", "role": "content", "label": "Card 8 category", "description": "Accent line on top of card 8.", "maxLength": 16, "default": "Аналитика" },
+    { "id": "card8Title", "type": "string", "role": "content", "label": "Card 8 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Разобрать охваты" },
+    { "id": "card8Status", "type": "string", "role": "content", "label": "Card 8 status", "description": "First pill.", "maxLength": 11, "default": "В плане" },
+    { "id": "card8Date", "type": "string", "role": "content", "label": "Card 8 date", "description": "Second pill.", "maxLength": 8, "default": "8 сент." },
+    { "id": "heroCard", "type": "number", "role": "content", "label": "Hero card", "description": "Which card (1-8) breaks away and holds in the centre.", "default": 4, "min": 1, "max": 8, "step": 1 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the chain flies in (the hero breaks away at 1 s and is centred at 3 s after it), 2 the hero leaves (it holds still from 5 s after cue 1 until then). Empty keeps 0, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fly: the native Blender fly-through at cue 2. fade: the block fades out at cue 2 instead.", "default": "fly", "options": [{ "value": "fade", "label": "Fade" }, { "value": "fly", "label": "Fly through" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap-3.14.2.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/three.module.min.js",
+          "three/addons/": "./assets/addons/",
+          "cuboid-carousel/motion": "./assets/cuboid-motion.js"
+        }
+      }
+    </script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #cub-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #cub-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #cub-fontload {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="cub-root" data-composition-id="cuboid-carousel" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <section id="cub-stage" class="clip" data-start="0" data-duration="30" data-track-index="1"></section>
+      <div id="cub-fontload" aria-hidden="true">
+        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span style="font-weight: 500">Аа</span><span style="font-weight: 600">Аа</span>
+      </div>
+    </div>
+    <script type="module">
+      /* Approved Blender choreography, 200 frames at 30 fps. Card geometry,
+         content textures and lighting remain the existing live block. Motion
+         uses saved native card curves and evaluated camera/handheld samples.
+         Frame 31: breakaway; 90–150: locked hero; 150–190: camera fly-through. */
+      import * as THREE from "three";
+      import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+      import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
+
+      import { MOTION } from "cuboid-carousel/motion";
+
+      const DUR = MOTION.endFrame / MOTION.fps;
+      // Bare __hyperframes is this composition's own in a module.
+      const VM =
+        typeof __hyperframes !== "undefined" && __hyperframes.getVariables
+          ? __hyperframes.getVariables()
+          : {};
+      // look knobs: the values the developers declared as defaults (the approved preview)
+      const V = Object.assign(
+        {
+          heroCard: 4, count: 8, gap: 0.01, cuboidWidth: 1.7, cuboidHeight: 2.4, cuboidDepth: 0.14,
+          cornerRadius: 0.105, bevelSize: 0.03, bevelThickness: 0.04, smoothness: 32, roughness: 0.6,
+          metalness: 0.4, heroScale: 1, heroFillIntensity: 0.55, heroExitX: 288, heroExitY: -234,
+          heroExitZ: 198, ambientIntensity: 0.35, ambientColor: "#ffffff", topIntensity: 3.1,
+          topColor: "#ffffff", bottomIntensity: 2.15, bottomColor: "#ffcaad", keyIntensity: 5,
+          keyColor: "#ffe9d6", shadowRadius: 44.5, shadowMapSize: 2048, cameraFov: 11, cameraX: -1.65,
+          cameraY: 8.5, cameraZ: -8.508708, cameraSettleFrame: 70, handheldStrength: 1,
+          cameraTargetFov: 34, cameraTargetX: -7.25, cameraTargetY: 1.15, cameraTargetZ: 6.2,
+        },
+        { heroCard: VM.heroCard },
+      );
+
+      // layout per version: canvas size, the scene centre in the frame, px per world unit kept from 1920x1080
+      const stage = document.getElementById("cub-stage");
+      const root = stage.closest("[data-composition-id]");
+      let W = 1920,
+        H = 1080,
+        top0 = 0;
+      
+      const V_SCALE = H / 1080;
+      const canvasEl = document.createElement("canvas");
+      canvasEl.id = "cub-canvas";
+      canvasEl.width = W;
+      canvasEl.height = H;
+      canvasEl.style.cssText = "display:block;position:absolute;left:0;top:" + top0 + "px;width:" + W + "px;height:" + H + "px";
+      stage.appendChild(canvasEl);
+
+      // theme colours and fonts as ready values for three.js and the face canvas
+      const cs = getComputedStyle(root);
+      const css = (name, d) => {
+        const probe = document.createElement("i");
+        probe.style.color = cs.getPropertyValue(name).trim() || d;
+        root.appendChild(probe);
+        const c = getComputedStyle(probe).color;
+        probe.remove();
+        return "#" + new THREE.Color(c).getHexString();
+      };
+      const fontOf = (name, d) => (cs.getPropertyValue(name).trim() || d).split(",")[0];
+      const T = {
+        bg: css("--bg", "#0c1014"),
+        surface: css("--surface", "#18181a"),
+        fg: css("--fg", "#f2f2f2"),
+        muted: css("--muted", "#8a8a90"),
+        accent: css("--accent", "#ff0000"),
+        display: fontOf("--font-display", '"Bebas Neue"'),
+        body: fontOf("--font-body", '"Montserrat"'),
+      };
+
+      // ---- variable readers (every one clamped to the DialKit range) ----
+      const num = (v, d, lo, hi) => {
+        const n = Number(v);
+        return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d;
+      };
+      const col = (v, d) =>
+        typeof v === "string" && /^#[0-9a-fA-F]{3,8}$/.test(v.trim()) ? v.trim() : d;
+      const bool = (v, d) =>
+        typeof v === "boolean" ? v : v === "true" ? true : v === "false" ? false : d;
+      const pick = (v, opts, d) => (opts.indexOf(String(v)) >= 0 ? String(v) : d);
+
+      // cuboid
+      const WIDTH = num(V.cuboidWidth, 1.7, 0.3, 5);
+      const HEIGHT = num(V.cuboidHeight, 2.4, 0.3, 6);
+      const DEPTH = num(V.cuboidDepth, 0.16, 0.02, 2);
+      const CORNER_R = num(V.cornerRadius, 0.105, 0, 0.6);
+      const BEVEL_SIZE = num(V.bevelSize, 0.03, 0, 0.3);
+      const BEVEL_THICK = num(V.bevelThickness, 0.04, 0, 0.3);
+      const SMOOTH = Math.round(num(V.smoothness, 32, 1, 32));
+      const ROUGH = num(V.roughness, 0.6, 0, 1);
+      const METAL = num(V.metalness, 0.4, 0, 1);
+      const BODY = T.surface;
+      // layout
+      const COUNT = Math.round(num(V.count, 8, 1, 12));
+      const GAP = num(V.gap, 0.01, 0, 1.5);
+      // rotation
+      const AXIS = "x";
+      // hero
+      const HERO_SCALE = num(V.heroScale, 1, 1, 1.6);
+      // lights
+      const AMB_I = num(V.ambientIntensity, 0.35, 0, 4);
+      const AMB_C = col(V.ambientColor, "#ffffff");
+      const TOP_I = num(V.topIntensity, 3.1, 0, 12);
+      const TOP_C = col(V.topColor, "#ffffff");
+      const BOT_I = num(V.bottomIntensity, 2.15, 0, 12);
+      const BOT_C = col(V.bottomColor, "#ffcaad");
+      const KEY_I = num(V.keyIntensity, 5, 0, 12);
+      const KEY_C = col(V.keyColor, "#ffe9d6");
+      // shadows
+      const SHADOW_RADIUS = num(V.shadowRadius, 44.5, 0, 50);
+      const MAP_SIZE = Math.max(
+        512,
+        Math.min(4096, Math.round(num(V.shadowMapSize, 2048, 512, 4096) / 256) * 256),
+      );
+      // flat page background
+      const BACKDROP = T.bg;
+      // camera
+      const FOV = num(V.cameraFov, 65, 10, 90);
+      const CAM_X = num(V.cameraX, -0.010523080825805664, -20, 20);
+      const CAM_Y = num(V.cameraY, 0.5195326805114746, -20, 20);
+      const CAM_Z = num(V.cameraZ, -8.508708000183105, -20, 50);
+
+      const TARGET_FOV = num(V.cameraTargetFov, 34, 10, 90);
+      const TARGET_X = num(V.cameraTargetX, -7.25, -20, 20);
+      const TARGET_Y = num(V.cameraTargetY, 1.15, -20, 20);
+      const TARGET_Z = num(V.cameraTargetZ, 6.2, 2, 50);
+
+      /* ---- derived spacing: the no-overlap floor (see header) ---- */
+      const sweepHalf =
+        AXIS === "x"
+          ? WIDTH / 2
+          : AXIS === "y"
+            ? Math.hypot(WIDTH, DEPTH) / 2
+            : Math.hypot(WIDTH, HEIGHT) / 2;
+      const zSweepHalf =
+        AXIS === "x"
+          ? Math.hypot(HEIGHT, DEPTH) / 2
+          : AXIS === "y"
+            ? Math.hypot(WIDTH, DEPTH) / 2
+            : DEPTH / 2;
+      const SPACING = Math.max(WIDTH, 2 * sweepHalf + 0.02) + GAP;
+      const HALF_EXTENT = sweepHalf * HERO_SCALE;
+
+      /* ---- viewport maths (ported from viewportHalfWidth) ---- */
+      const ASPECT = 1920 / 1080; // spacing maths stay on the native frame
+      const vFov = (FOV * Math.PI) / 180;
+      const hFov = 2 * Math.atan(Math.tan(vFov / 2) * ASPECT);
+      const VIEW_HALF = CAM_Z * Math.tan(hFov / 2);
+      /* Off-screen test. A cuboid reaches back to z = -zSweepHalf*heroScale,
+         where the frustum is WIDER than at z = 0, so culling on VIEW_HALF
+         alone would clip a corner that is still in shot. Measure at the
+         deepest point the geometry can reach. */
+      const EDGE =
+        (CAM_Z + zSweepHalf * HERO_SCALE) * Math.tan(hFov / 2) + Math.abs(CAM_X) + HALF_EXTENT; // |x| > EDGE = off-screen
+
+      /* ================= CONTENT - edit here =================
+         Each: { color, category, title, pills: [1-2 strings] }. The same array
+         can be supplied at render/preview time as JSON via the `cardsJson`
+         variable; anything invalid falls back to this list. */
+      const str = (v, d) => (typeof v === "string" && v.trim() ? v : d);
+      const DEF = [
+        ["Монтаж", "Нарезать интервью", "В работе", "17 июля"],
+        ["Графика", "Собрать титры", "На проверке", "20 июля"],
+        ["Звук", "Почистить голос", "В работе", "2 авг."],
+        ["Субтитры", "Расставить субтитры", "В плане", "9 авг."],
+        ["Обложка", "Нарисовать обложку", "В плане", "15 авг."],
+        ["Публикация", "Выложить рилс", "Ждёт", "22 авг."],
+        ["Сценарий", "Написать сценарий", "В плане", "1 сент."],
+        ["Аналитика", "Разобрать охваты", "В плане", "8 сент."],
+      ];
+      const ITEMS = DEF.map((d, i) => ({
+        category: str(VM["card" + (i + 1) + "Category"], d[0]),
+        title: str(VM["card" + (i + 1) + "Title"], d[1]),
+        pills: [str(VM["card" + (i + 1) + "Status"], d[2]), str(VM["card" + (i + 1) + "Date"], d[3])],
+      }));
+
+      const HERO = Math.max(0, Math.min(COUNT - 1, Math.round(num(V.heroCard, 4, 1, 8)) - 1));
+
+      const clamp01 = (x) => Math.max(0, Math.min(1, x));
+      const smooth01 = (x) => x * x * (3 - 2 * x);
+      const N = MOTION.tiles.length;
+      const CAMERA_SETTLE = num(V.cameraSettleFrame, 70, 20, 90);
+      const T_IN = CAMERA_SETTLE / 30,
+        T_BREAK = 31 / 30,
+        T_CENTER = 90 / 30;
+      const T_CLEAR = MOTION.tiles.find((tile) => !tile.hero).hideFrame / 30;
+      const T_OUT = 150 / 30,
+        T_EMPTY = 190 / 30;
+
+      const canvas = canvasEl;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(BACKDROP);
+
+      const camera = new THREE.PerspectiveCamera(FOV, W / H, 0.1, 200);
+      camera.position.set(CAM_X, CAM_Y, CAM_Z);
+      camera.lookAt(0, 0, 0);
+
+      // environment (stand-in for the `city` preset)
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
+      const envMap = envRT.texture;
+
+      // ---- lights, exactly the experiment's rig ----
+      scene.add(new THREE.AmbientLight(new THREE.Color(AMB_C), AMB_I));
+
+      const top = new THREE.DirectionalLight(new THREE.Color(TOP_C), TOP_I);
+      top.position.set(20, 9, 3);
+      top.castShadow = true;
+      top.shadow.mapSize.set(MAP_SIZE, MAP_SIZE);
+      // "softness at the reference map size (2048)" - stable across mapSize
+      top.shadow.radius = SHADOW_RADIUS * (MAP_SIZE / 2048);
+      top.shadow.bias = -0.0003;
+      top.shadow.normalBias = 0.02;
+      {
+        const c = top.shadow.camera;
+        const halfW = Math.max(14, VIEW_HALF + SPACING * 3);
+        const halfH = Math.max(10, HEIGHT * 0.7 + 2);
+        c.left = -halfW;
+        c.right = halfW;
+        c.top = halfH;
+        c.bottom = -halfH;
+        c.near = 0.5;
+        c.far = 60;
+        c.updateProjectionMatrix();
+      }
+      scene.add(top);
+
+      const bottom = new THREE.DirectionalLight(new THREE.Color(BOT_C), BOT_I);
+      bottom.position.set(0, -8, 3);
+      scene.add(bottom);
+
+      const keyLight = new THREE.DirectionalLight(new THREE.Color(KEY_C), KEY_I);
+      keyLight.position.set(12, 9.2, 7);
+      scene.add(keyLight);
+
+      /* ---- rounded-rect shape + bevelled extrude, ported from
+             roundedRectShape() / buildCardGeometry() ---- */
+      function roundedRectShape(w, h, r) {
+        const s = new THREE.Shape();
+        const x = -w / 2,
+          y = -h / 2;
+        s.moveTo(x + r, y);
+        s.lineTo(x + w - r, y);
+        s.quadraticCurveTo(x + w, y, x + w, y + r);
+        s.lineTo(x + w, y + h - r);
+        s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        s.lineTo(x + r, y + h);
+        s.quadraticCurveTo(x, y + h, x, y + h - r);
+        s.lineTo(x, y + r);
+        s.quadraticCurveTo(x, y, x + r, y);
+        s.closePath();
+        return s;
+      }
+
+      function buildCardGeometry() {
+        const outerR = Math.min(CORNER_R, Math.min(WIDTH, HEIGHT) / 2 - 0.001);
+        const r = Math.max(outerR, 0.002);
+        const bSize = Math.max(
+          0,
+          Math.min(BEVEL_SIZE, r * 0.98, WIDTH / 2 - 0.005, HEIGHT / 2 - 0.005),
+        );
+        const maxThick = Math.max(DEPTH * 0.45, 0.0005);
+        const bThick = Math.max(0, Math.min(BEVEL_THICK, maxThick));
+        const sizeOn = bSize > 0.0005,
+          thickOn = bThick > 0.0005;
+        const bevelOn = sizeOn || thickOn;
+        const innerW = sizeOn ? Math.max(WIDTH - 2 * bSize, 0.01) : WIDTH;
+        const innerH = sizeOn ? Math.max(HEIGHT - 2 * bSize, 0.01) : HEIGHT;
+        const innerR = sizeOn ? Math.max(r - bSize, 0.002) : r;
+        const extrudeDepth = thickOn ? Math.max(DEPTH - 2 * bThick, DEPTH * 0.15, 0.002) : DEPTH;
+
+        const shape = roundedRectShape(innerW, innerH, innerR);
+
+        // Cap UVs span the full face so the text texture lands square on it;
+        // side walls collapse to a single point, as in the source.
+        const uvGenerator = {
+          generateTopUV(_g, vertices, a, b, c) {
+            const p = (i) =>
+              new THREE.Vector2(
+                (vertices[i * 3] + WIDTH / 2) / WIDTH,
+                (vertices[i * 3 + 1] + HEIGHT / 2) / HEIGHT,
+              );
+            return [p(a), p(b), p(c)];
+          },
+          generateSideWallUV() {
+            return [
+              new THREE.Vector2(0, 0),
+              new THREE.Vector2(0, 0),
+              new THREE.Vector2(0, 0),
+              new THREE.Vector2(0, 0),
+            ];
+          },
+        };
+
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: extrudeDepth,
+          bevelEnabled: bevelOn,
+          bevelThickness: bThick,
+          bevelSize: bSize,
+          bevelSegments: Math.max(16, Math.round(SMOOTH * 2)),
+          curveSegments: Math.max(16, Math.round(SMOOTH)),
+          steps: 1,
+          UVGenerator: uvGenerator,
+        });
+        geo.center();
+        if (bevelOn) {
+          const merged = mergeVertices(geo, 1e-4);
+          geo.dispose();
+          merged.computeVertexNormals();
+          merged.computeBoundingSphere();
+          return merged;
+        }
+        geo.computeVertexNormals();
+        geo.computeBoundingSphere();
+        return geo;
+      }
+
+      /* ---- face texture, ported from face-renderer.ts (540x756).
+             The source clears to transparent and lets the body colour show
+             through a masking shader; painting the body colour in first gives
+             the same result without the extra pass. ---- */
+      const FACE_W = 540,
+        FACE_H = 756;
+      const FONT_BODY = T.body + ", sans-serif",
+        FONT_DISPLAY = T.display + ", sans-serif";
+      // on screen the held hero face is about 0.875 of the texture: 33 px of texture = 29 px in the frame
+      const F = { cat: 33, title: 64, titleLine: 64, pill: 33, pillH: 56 };
+
+      function roundedRectPath(ctx, x, y, w, h, r) {
+        const radius = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.arcTo(x + w, y, x + w, y + h, radius);
+        ctx.arcTo(x + w, y + h, x, y + h, radius);
+        ctx.arcTo(x, y + h, x, y, radius);
+        ctx.arcTo(x, y, x + w, y, radius);
+        ctx.closePath();
+      }
+      function wrapLines(ctx, text, maxWidth) {
+        const words = String(text).split(" ");
+        const lines = [];
+        let current = "";
+        for (const word of words) {
+          const candidate = current ? current + " " + word : word;
+          if (ctx.measureText(candidate).width > maxWidth && current) {
+            lines.push(current);
+            current = word;
+          } else current = candidate;
+        }
+        if (current) lines.push(current);
+        return lines;
+      }
+
+      function faceTexture(item) {
+        const c = document.createElement("canvas");
+        c.width = FACE_W;
+        c.height = FACE_H;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = BODY;
+        ctx.fillRect(0, 0, FACE_W, FACE_H);
+
+        const tint = T.muted;
+        const pad = 45;
+        const contentW = FACE_W - pad * 2;
+        let y = pad + 8;
+
+        ctx.textBaseline = "alphabetic";
+        ctx.textAlign = "left";
+
+        ctx.fillStyle = T.accent;
+        ctx.font = "600 " + F.cat + "px " + FONT_BODY;
+        ctx.fillText(item.category, pad, y + F.cat * 0.88);
+        y += F.cat * 0.88 + F.cat * 1.36;
+
+        ctx.fillStyle = T.fg;
+        ctx.font = "700 " + F.title + "px " + FONT_DISPLAY;
+        for (const line of wrapLines(ctx, item.title.toUpperCase(), contentW)) {
+          ctx.fillText(line, pad, y + F.title * 0.9);
+          y += F.titleLine;
+        }
+
+        ctx.font = "500 " + F.pill + "px " + FONT_BODY;
+        const pillH = F.pillH;
+        // pills sit on the bottom edge; one that does not fit the row starts a row above
+        const pills = item.pills.filter(Boolean).map((label) => ({ label, w: ctx.measureText(label).width + F.pill * 2.3 }));
+        const rows = [[]];
+        let rowW = 0;
+        for (const p of pills) {
+          if (rows[rows.length - 1].length && rowW + 15 + p.w > contentW) {
+            rows.push([]);
+            rowW = 0;
+          }
+          rows[rows.length - 1].push(p);
+          rowW += (rowW ? 15 : 0) + p.w;
+        }
+        rows.forEach((row, r) => {
+          const pillY = FACE_H - pad - pillH - (rows.length - 1 - r) * (pillH + 12);
+          let pillX = pad;
+          for (const p of row) {
+            roundedRectPath(ctx, pillX, pillY, p.w, pillH, pillH / 2);
+            ctx.strokeStyle = tint;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = tint;
+            ctx.textBaseline = "middle";
+            ctx.fillText(p.label, pillX + F.pill * 1.15, pillY + pillH / 2 + 1);
+            ctx.textBaseline = "alphabetic";
+            pillX += p.w + 15;
+          }
+        });
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.flipY = false;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        return tex;
+      }
+
+      // ---- build the chain ----
+      const geometry = buildCardGeometry();
+      const sideMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(BODY),
+        roughness: ROUGH,
+        metalness: METAL,
+        envMap,
+        envMapIntensity: 0.3,
+      });
+      const EULER_ORDER = AXIS === "x" ? "XYZ" : AXIS === "y" ? "YXZ" : "ZXY";
+
+      let capMats = [];
+      let heroMat = null;
+      let cuboids = [];
+      function buildChain() {
+        if (heroMat) heroMat.dispose();
+        capMats.forEach((m) => {
+          if (m.map) m.map.dispose();
+          m.dispose();
+        });
+        capMats = ITEMS.map((item) => {
+          const capMat = new THREE.MeshStandardMaterial({
+            map: faceTexture(item),
+            roughness: ROUGH,
+            metalness: METAL,
+            envMap,
+            envMapIntensity: 0,
+          });
+          /* The source masks content to the front cap with a smoothstep on
+             position.z (uHalfDepth / uCapBand). Same idea: the back cap drops
+             the map and shows plain body colour, so text never reads mirrored. */
+          capMat.onBeforeCompile = (shader) => {
+            shader.uniforms.uBody = { value: new THREE.Color(BODY) };
+            shader.vertexShader = shader.vertexShader
+              .replace("#include <common>", "#include <common>\nvarying float vLocalZ;")
+              .replace("#include <begin_vertex>", "#include <begin_vertex>\nvLocalZ = position.z;");
+            shader.fragmentShader = shader.fragmentShader
+              .replace(
+                "#include <common>",
+                "#include <common>\nvarying float vLocalZ;\nuniform vec3 uBody;",
+              )
+              .replace(
+                "#include <map_fragment>",
+                "#include <map_fragment>\nif (vLocalZ > 0.0) diffuseColor.rgb = uBody;",
+              )
+              .replace(
+                "#include <emissivemap_fragment>",
+                "#include <emissivemap_fragment>\nif (vLocalZ > 0.0) totalEmissiveRadiance = vec3(0.0);",
+              );
+          };
+          return capMat;
+        });
+        // A separate material avoids brightening repeated cards with the same
+        // content. Emissive fill is masked off the unprinted back cap as well.
+        const heroSource = capMats[HERO % ITEMS.length];
+        heroMat = heroSource.clone();
+        heroMat.onBeforeCompile = heroSource.onBeforeCompile;
+        heroMat.emissive.set(0xffffff);
+        heroMat.emissiveMap = heroSource.map;
+        heroMat.emissiveIntensity = 0;
+        if (cuboids.length === 0) {
+          for (let j = 0; j < N; j++) {
+            // ExtrudeGeometry group 0 = caps, group 1 = side walls
+            const mesh = new THREE.Mesh(geometry, [capMats[0], sideMat]);
+            mesh.rotation.order = EULER_ORDER;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            scene.add(mesh);
+            cuboids.push(mesh);
+          }
+        }
+      }
+      buildChain();
+
+      // Blender frame 0 maps to web time 0. Every pose is reconstructed on seek.
+      const basis = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(1, 0, 0),
+        -Math.PI / 2,
+      );
+      const inverseBasis = basis.clone().invert();
+      const sourceRoot = new THREE.Matrix4().set(...MOTION.rootMatrix);
+      const convertedRoot = new THREE.Matrix4()
+        .makeRotationFromQuaternion(basis)
+        .multiply(sourceRoot)
+        .multiply(new THREE.Matrix4().makeRotationFromQuaternion(inverseBasis));
+      const motionRoot = new THREE.Group();
+      motionRoot.name = "Blender approved Cuboid chain";
+      motionRoot.matrixAutoUpdate = false;
+      motionRoot.matrix.copy(convertedRoot);
+      scene.add(motionRoot);
+      for (const mesh of cuboids) motionRoot.add(mesh);
+      const heroSlot = MOTION.tiles.findIndex((tile) => tile.hero);
+      const sourceStart = new THREE.Vector3(...MOTION.cameraStart).applyQuaternion(basis);
+      const sourceEnd = new THREE.Vector3(...MOTION.cameraEnd).applyQuaternion(basis);
+      const startOffset = new THREE.Vector3(CAM_X, CAM_Y, CAM_Z).sub(sourceStart);
+      const endOffset = new THREE.Vector3(TARGET_X, TARGET_Y, TARGET_Z).sub(sourceEnd);
+      const hasCameraOffset = startOffset.lengthSq() + endOffset.lengthSq() > 1e-14;
+      const targetCamera = new THREE.Vector3(TARGET_X, TARGET_Y, TARGET_Z);
+      const samplePosition = new THREE.Vector3(),
+        basePosition = new THREE.Vector3();
+      const sampleQuaternion = new THREE.Quaternion(),
+        baseQuaternion = new THREE.Quaternion();
+      const qA = new THREE.Quaternion(),
+        qB = new THREE.Quaternion(),
+        qDelta = new THREE.Quaternion();
+      const poseEuler = new THREE.Euler(0, 0, 0, "ZYX");
+      const lookCamera = new THREE.PerspectiveCamera();
+      const zero = new THREE.Vector3();
+      const S = { t: 0 };
+      const HERO_FILL = num(V.heroFillIntensity, 0.55, 0, 2);
+      const HANDHELD = num(V.handheldStrength, 1, 0, 1);
+      const EXIT_ANGLES = [
+        num(V.heroExitX, 288, -720, 720),
+        num(V.heroExitY, -234, -720, 720),
+        num(V.heroExitZ, 198, -720, 720),
+      ];
+      const sourceExitAngles = [288, -234, 198];
+
+      function channelAt(keys, frame) {
+        if (!keys || !keys.length) return 0;
+        if (frame <= keys[0][0]) return keys[0][1];
+        let lo = 0,
+          hi = keys.length - 1;
+        if (frame >= keys[hi][0]) return keys[hi][1];
+        while (hi - lo > 1) {
+          const mid = (lo + hi) >> 1;
+          if (keys[mid][0] <= frame) lo = mid;
+          else hi = mid;
+        }
+        const a = keys[lo],
+          b = keys[hi],
+          u = (frame - a[0]) / (b[0] - a[0]);
+        return a[1] + (b[1] - a[1]) * u;
+      }
+      function readCamera(frame, position, quaternion) {
+        const f = Math.max(0, Math.min(MOTION.endFrame, frame));
+        const i = Math.floor(f),
+          j = Math.min(MOTION.endFrame, i + 1),
+          u = f - i;
+        const a = MOTION.camera[i],
+          b = MOTION.camera[j];
+        position
+          .set(a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u)
+          .applyQuaternion(basis);
+        qA.set(a[3], a[4], a[5], a[6]);
+        qB.set(b[3], b[4], b[5], b[6]);
+        // Camera optical axes are already -Z forward / +Y up: convert world basis only.
+        quaternion.slerpQuaternions(qA, qB, u).premultiply(basis).normalize();
+        return a[7] + (b[7] - a[7]) * u;
+      }
+      function cameraAt(frame) {
+        const cameraFrame =
+          frame < CAMERA_SETTLE ? (frame * 70) / CAMERA_SETTLE : Math.max(70, frame);
+        const sourceFov = readCamera(cameraFrame, samplePosition, sampleQuaternion);
+        const inHandheld = frame > 90 && frame < 150;
+        if (inHandheld) {
+          readCamera(90, basePosition, baseQuaternion);
+          if (HANDHELD !== 1) {
+            samplePosition.lerpVectors(basePosition, samplePosition, HANDHELD);
+            sampleQuaternion.slerpQuaternions(baseQuaternion, sampleQuaternion, HANDHELD);
+          }
+        } else {
+          basePosition.copy(samplePosition);
+          baseQuaternion.copy(sampleQuaternion);
+        }
+        const u = clamp01(
+          (MOTION.cameraControls["Start FOV degrees"] - sourceFov) /
+            (MOTION.cameraControls["Start FOV degrees"] - MOTION.cameraControls["End FOV degrees"]),
+        );
+        // A changed start must not recompute the approved settled/handheld pose.
+        if (hasCameraOffset && (u < 1 || endOffset.lengthSq() > 1e-14)) {
+          qDelta.copy(baseQuaternion).invert().multiply(sampleQuaternion);
+          const offset = startOffset.clone().lerp(endOffset, u);
+          lookCamera.position.copy(basePosition).add(offset);
+          lookCamera.lookAt(zero);
+          sampleQuaternion.copy(lookCamera.quaternion).multiply(qDelta);
+          samplePosition.add(offset);
+        }
+        camera.position.copy(samplePosition);
+        camera.quaternion.copy(sampleQuaternion);
+        const fov = FOV === 65 && TARGET_FOV === 34 ? sourceFov : FOV + (TARGET_FOV - FOV) * u;
+        // the same px per world unit as the native 1920x1080 frame
+        camera.fov = (2 * Math.atan(Math.tan((fov * Math.PI) / 360) * V_SCALE) * 180) / Math.PI;
+        camera.updateProjectionMatrix();
+        camera.updateMatrixWorld();
+      }
+      const heroInitialX = MOTION.tiles[heroSlot].channels.location[0][0][1];
+      const slotOffsets = MOTION.tiles.map(
+        (tile) => (tile.channels.location[0][0][1] - heroInitialX) / 1.73,
+      );
+      // One mesh owns the hero slot before and after separation. Its arrival
+      // must use the same transport as the constant-rate chain, not the old
+      // slower Blender arrival curve. Keep that transport while it first lifts
+      // clear, then rejoin the approved absolute path without a position jump.
+      const heroXKeys = MOTION.tiles[heroSlot].channels.location[0];
+      const chainXKeys = MOTION.tiles.find((tile) => !tile.hero).channels.location[0];
+      const HERO_SLOT_RELEASE = 36,
+        HERO_PATH_REJOIN = 70;
+      const heroSlotXAt = (frame) => heroInitialX + channelAt(chainXKeys, frame) - chainXKeys[0][1];
+      const heroSlotDelta =
+        heroSlotXAt(HERO_SLOT_RELEASE) - channelAt(heroXKeys, HERO_SLOT_RELEASE);
+      const heroSlotVelocityDelta =
+        (heroSlotXAt(HERO_SLOT_RELEASE) -
+          heroSlotXAt(HERO_SLOT_RELEASE - 0.25) -
+          channelAt(heroXKeys, HERO_SLOT_RELEASE) +
+          channelAt(heroXKeys, HERO_SLOT_RELEASE - 0.25)) /
+        0.25;
+      function heroSlotCorrection(frame) {
+        if (frame <= HERO_SLOT_RELEASE) return heroSlotXAt(frame) - channelAt(heroXKeys, frame);
+        if (frame >= HERO_PATH_REJOIN) return 0;
+        const duration = HERO_PATH_REJOIN - HERO_SLOT_RELEASE;
+        const u = (frame - HERO_SLOT_RELEASE) / duration,
+          u2 = u * u,
+          u3 = u2 * u;
+        return (
+          (2 * u3 - 3 * u2 + 1) * heroSlotDelta +
+          (u3 - 2 * u2 + u) * duration * heroSlotVelocityDelta
+        );
+      }
+      const heroExitBase = MOTION.tiles[heroSlot].channels.rotation_euler.map((keys) =>
+        channelAt(keys, 150),
+      );
+      const actualPose = { frame: 0, camera: [], hero: [], heroRotation: [], visibleTiles: 0 };
+      function renderAt(time) {
+        S.t = Math.max(0, Math.min(DUR, time));
+        const frame = S.t * MOTION.fps;
+        cameraAt(frame);
+        const heroProgress = smooth01(clamp01((frame - 31) / 59));
+        heroMat.emissiveIntensity = HERO_FILL * heroProgress;
+        let visibleTiles = 0;
+        for (let j = 0; j < cuboids.length; j++) {
+          const mesh = cuboids[j],
+            tile = MOTION.tiles[j],
+            c = tile.channels;
+          const p = c.location.map((keys) => channelAt(keys, frame));
+          if (tile.hero) p[0] += heroSlotCorrection(frame);
+          const r = c.rotation_euler.map((keys) => channelAt(keys, frame));
+          if (tile.hero && frame > 150) {
+            for (let axis = 0; axis < 3; axis++)
+              r[axis] =
+                heroExitBase[axis] +
+                ((r[axis] - heroExitBase[axis]) * EXIT_ANGLES[axis]) / sourceExitAngles[axis];
+          }
+          mesh.position.set(p[0], p[2], -p[1]);
+          if (!tile.hero) mesh.position.x += slotOffsets[j] * (SPACING - 1.73);
+          // Blender XYZ is extrinsic X→Y→Z; Three's matching Euler order is ZYX.
+          poseEuler.set(r[0], r[1], r[2], "ZYX");
+          mesh.quaternion.setFromEuler(poseEuler).premultiply(basis).multiply(inverseBasis);
+          const scale = c.scale.map((keys) => channelAt(keys, frame));
+          mesh.scale.set(scale[0], scale[2], scale[1]);
+          if (tile.hero) mesh.scale.multiplyScalar(1 + (HERO_SCALE - 1) * heroProgress);
+          const item = ((((tile.itemIndex + HERO - 3) % COUNT) + COUNT) % COUNT) % ITEMS.length;
+          mesh.material[0] = tile.hero && frame >= 31 ? heroMat : capMats[item];
+          mesh.visible = frame < tile.hideFrame;
+          if (mesh.visible) visibleTiles++;
+          if (tile.hero) {
+            actualPose.hero = mesh.position.toArray();
+            actualPose.heroRotation = r;
+          }
+        }
+        actualPose.frame = frame;
+        actualPose.camera = camera.position.toArray();
+        actualPose.visibleTiles = visibleTiles;
+        renderer.toneMappingExposure = 1;
+        renderer.render(scene, camera);
+      }
+      window.__cuboidMotion = {
+        source: MOTION.sourceFile,
+        sha256: MOTION.sourceSha256,
+        fps: MOTION.fps,
+        endFrame: MOTION.endFrame,
+        phases: {
+          breakaway: 31,
+          directApproach: 40,
+          centered: 90,
+          exit: 150,
+          clear: 190,
+          end: 200,
+        },
+        get pose() {
+          return { ...actualPose };
+        },
+      };
+
+      /* ---- timeline: paused, seek-safe, no rAF ----
+         cue 1 starts the native move; the hero holds still from frame 150 until cue 2,
+         then the native fly-through (exit fly) or a fade of the whole block (exit fade). */
+      const cues = String(VM.cues || "")
+        .split(",")
+        .map(parseFloat);
+      const C0 = Number.isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+      const C1 = Number.isFinite(cues[1]) && cues[1] >= C0 + T_OUT ? cues[1] : C0 + T_OUT;
+      const EXIT = VM.exit === "fade" ? "fade" : "fly";
+      const sceneTime = (t) => {
+        const l = t - C0;
+        if (l < T_OUT) return l;
+        if (EXIT === "fade" || t < C1) return T_OUT;
+        return T_OUT + (t - C1);
+      };
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: 30, duration: 30, ease: "none" }, 0);
+      tl.eventCallback("onUpdate", () => renderAt(sceneTime(clock.t)));
+      if (EXIT === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, C1);
+
+      window.addEventListener("hf-seek", function (event) {
+        const d = event && event.detail;
+        if (d && typeof d.time === "number") tl.totalTime(Math.min(d.time, tl.totalDuration()), true);
+        const fn = tl.eventCallback("onUpdate");
+        if (fn) fn();
+      });
+      window.__timelines["cuboid-carousel"] = tl;
+
+      renderAt(0);
+      /* Draw across the timeline and flush the GPU before ready, so shader links
+         and texture uploads land in the readiness gate, not the first visible frames. */
+      async function warmGpu() {
+        for (const f of [0.25, 0.5, 0.75]) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+          renderAt(DUR * f);
+        }
+        renderAt(sceneTime(clock.t));
+        renderer.getContext().finish();
+      }
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady["cuboid-carousel"] = (
+        document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()
+      )
+        .then(() => {
+          buildChain();
+          renderAt(sceneTime(clock.t));
+          return warmGpu();
+        })
+        .catch(() => {});
+    </script>
+  </body>
+</html>

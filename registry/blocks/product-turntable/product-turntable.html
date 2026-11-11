@@ -1,0 +1,401 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "model_url", "type": "string", "role": "content", "label": "Model URL (.glb or .gltf)", "description": "Leave empty for the built-in drink can.", "default": "" },
+    { "id": "product_name", "type": "string", "role": "content", "label": "Label wordmark", "description": "Bebas Neue on the can label, twice around.", "default": "MATINTELLECT", "maxLength": 12 },
+    { "id": "flavor", "type": "string", "role": "content", "label": "Label line", "description": "Line under the wordmark, on the front face.", "default": "Для монтажа", "maxLength": 11 },
+    { "id": "volume", "type": "string", "role": "content", "label": "Label volume", "description": "Small line on the label seams.", "default": "355 мл", "maxLength": 8 },
+    { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Line in the lower left corner. Empty hides it.", "default": "Для монтажа · 355 мл", "maxLength": 32 },
+    { "id": "turns", "type": "number", "role": "motion", "label": "Turns per 6 s", "description": "Revolutions every 6 seconds; the turn never stops, so any mount length loops seamlessly.", "default": 1, "min": 1, "max": 4, "step": 1 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the turn starts (the label faces the camera before it), 2 the block fades out (only when exit is fade). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps turning to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #ptt-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #ptt-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(1100px 760px at 50% 38%, color-mix(in srgb, var(--fg, #f2f2f2) 7%, transparent), transparent 70%),
+          var(--bg, #0c1014);
+      }
+      #ptt-canvas {
+        position: absolute;
+        left: 0;
+        display: block;
+      }
+      #ptt-caption {
+        position: absolute;
+        left: 96px;
+        bottom: 96px;
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.01em;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+      }
+      #ptt-fontload {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="ptt-root" data-composition-id="product-turntable" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div id="ptt-stage">
+        <canvas id="ptt-canvas" class="clip" data-start="0" data-duration="30" data-track-index="1"></canvas>
+        <div id="ptt-caption"></div>
+      </div>
+      <div id="ptt-fontload" aria-hidden="true">
+        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span style="font-weight: 700">Аа</span>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var V =
+          (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        var root = document.getElementById("ptt-root");
+        var str = function (v, d) {
+          return typeof v === "string" ? v : d;
+        };
+
+        // layout: canvas size and offset, px per world unit kept from the native 1920x1080 frame
+        var W = 1920,
+          H = 1080,
+          top0 = 0,
+          fit = 1;
+        
+        var cv = document.getElementById("ptt-canvas");
+        cv.width = W;
+        cv.height = H;
+        cv.style.cssText = "top:" + top0 + "px;width:" + W + "px;height:" + H + "px";
+        var caption = str(V.caption, "Для монтажа · 355 мл");
+        var capEl = document.getElementById("ptt-caption");
+        capEl.textContent = caption;
+        if (!caption.trim()) capEl.style.display = "none";
+
+        // theme colours and fonts for the label canvas and three.js
+        var cs = getComputedStyle(root);
+        var css = function (name, d) {
+          var probe = document.createElement("i");
+          probe.style.color = cs.getPropertyValue(name).trim() || d;
+          root.appendChild(probe);
+          var c = getComputedStyle(probe).color;
+          probe.remove();
+          return c;
+        };
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var host = {
+          vars: V,
+          W: W,
+          H: H,
+          fit: fit,
+          start: c0,
+          surface: css("--surface", "#18181a"),
+          fg: css("--fg", "#f2f2f2"),
+          accent: css("--accent", "#ff0000"),
+          display: (cs.getPropertyValue("--font-display").trim() || '"Bebas Neue"').split(",")[0],
+          body: (cs.getPropertyValue("--font-body").trim() || '"Montserrat"').split(",")[0],
+          clock: { t: 0 },
+          render: null,
+        };
+        window.pttHost = host;
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["product-turntable"] = new Promise(function (resolve) {
+          host.ready = resolve;
+        });
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(host.clock, {
+          t: 30,
+          duration: 30,
+          ease: "none",
+          onUpdate: function () {
+            if (host.render) host.render(host.clock.t);
+          },
+        });
+        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 5.5);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["product-turntable"] = tl;
+      })();
+    </script>
+
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.184.0/+esm";
+      import { RoomEnvironment } from "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/environments/RoomEnvironment.js/+esm";
+      import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/loaders/GLTFLoader.js/+esm";
+
+      const host = window.pttHost;
+      const V = host.vars;
+      const turns = Math.max(1, Math.min(4, Math.round(Number(V.turns) || 1)));
+      const str = (v, d) => (typeof v === "string" && v.trim() ? v : d);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById("ptt-canvas"),
+        antialias: true,
+        alpha: true,
+        preserveDrawingBuffer: true,
+      });
+      renderer.setPixelRatio(1);
+      renderer.setSize(host.W, host.H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.3;
+
+      const scene = new THREE.Scene();
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      // Studio: two tall softbox strips (key 35 deg left, rim 120 deg right at 1.6x) over a dimmed room fill.
+      const studio = new THREE.Scene();
+      const room = new RoomEnvironment();
+      room.traverse((o) => {
+        if (o.isLight) o.intensity *= 0.3;
+        if (o.material && o.material.emissiveIntensity) o.material.emissiveIntensity *= 0.3;
+      });
+      studio.add(room);
+      for (const [deg, intensity] of [
+        [-35, 5],
+        [120, 8],
+      ]) {
+        const strip = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.2, 8),
+          new THREE.MeshLambertMaterial({
+            color: 0x000000,
+            emissive: 0xffffff,
+            emissiveIntensity: intensity,
+            side: THREE.DoubleSide,
+          }),
+        );
+        const a = THREE.MathUtils.degToRad(deg);
+        strip.position.set(6 * Math.sin(a), 1, 6 * Math.cos(a));
+        strip.lookAt(0, 1, 0);
+        studio.add(strip);
+      }
+      scene.environment = pmrem.fromScene(studio, 0.02).texture;
+
+      // Can and plinth vertically centred; the same px per world unit as the native frame (card: 0.75 of it).
+      const vfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(12)) * (host.H / 1080) / host.fit);
+      const camera = new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(vfov), host.W / host.H, 0.1, 100);
+      camera.position.set(0, 2.1, 9.4);
+      camera.lookAt(0, 0.9, 0);
+
+      const key = new THREE.DirectionalLight(0xffffff, 1.6);
+      key.position.set(-3.5, 5, 4);
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0xfff1dc, 2.2);
+      rim.position.set(4, 3, -4);
+      scene.add(rim);
+
+      // Plinth with a soft baked contact shadow: no shadow maps, no per-frame cost.
+      const plinth = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.42, 1.46, 0.2, 96),
+        new THREE.MeshStandardMaterial({ color: new THREE.Color(host.surface), roughness: 0.55, metalness: 0 }),
+      );
+      plinth.position.y = -0.1;
+      scene.add(plinth);
+
+      function radialTexture(inner, outer) {
+        const c = document.createElement("canvas");
+        c.width = c.height = 256;
+        const g = c.getContext("2d");
+        const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+        grad.addColorStop(0, inner);
+        grad.addColorStop(1, outer);
+        g.fillStyle = grad;
+        g.fillRect(0, 0, 256, 256);
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+      }
+      const shadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.4, 2.4),
+        new THREE.MeshBasicMaterial({
+          map: radialTexture("rgba(0,0,0,0.55)", "rgba(0,0,0,0)"),
+          transparent: true,
+          depthWrite: false,
+        }),
+      );
+      shadow.rotation.x = -Math.PI / 2;
+      shadow.position.y = 0.002;
+      scene.add(shadow);
+
+      const turntable = new THREE.Group();
+      scene.add(turntable);
+
+      // the label front faces about 0.56 of its texture on screen (0.42 in the card): 70 px of texture stays at 29 px or more
+      async function labelTexture() {
+        await Promise.all([
+          document.fonts.load("700 100px " + host.display, "АБВ"),
+          document.fonts.load("700 70px " + host.body, "АБВ"),
+        ]).catch(() => {});
+        const c = document.createElement("canvas");
+        // 2.35:1 matches the label's circumference to height, so type is not stretched.
+        c.width = 2048;
+        c.height = 872;
+        const g = c.getContext("2d");
+        g.fillStyle = host.accent;
+        g.fillRect(0, 0, 2048, 872);
+        g.fillStyle = host.fg;
+        g.fillRect(0, 70, 2048, 12);
+        g.fillRect(0, 790, 2048, 12);
+        const name = str(V.product_name, "MATINTELLECT").toUpperCase();
+        const flavor = str(V.flavor, "Для монтажа").toUpperCase();
+        // Two faces, front and back, so the wordmark reads twice per revolution.
+        for (const cx of [512, 1536]) {
+          g.save();
+          g.textAlign = "center";
+          g.textBaseline = "middle";
+          let size = 320;
+          g.font = `700 ${size}px ${host.display}, sans-serif`;
+          // the wordmark takes the face width: a longer word gets a smaller size, never a squeezed one
+          while (g.measureText(name).width > 600 && size > 100) {
+            size -= 10;
+            g.font = `700 ${size}px ${host.display}, sans-serif`;
+          }
+          g.fillText(name, cx, 400);
+          g.font = `700 70px ${host.body}, sans-serif`;
+          g.fillText(flavor, cx, 620);
+          g.restore();
+        }
+        g.save();
+        g.textAlign = "center";
+        g.textBaseline = "middle";
+        g.font = `700 70px ${host.body}, sans-serif`;
+        const vol = str(V.volume, "355 мл").toUpperCase();
+        for (const cx of [0, 1024, 2048]) g.fillText(vol, cx, 450);
+        g.restore();
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        return tex;
+      }
+
+      async function builtInCan() {
+        const can = new THREE.Group();
+        const metal = new THREE.MeshStandardMaterial({
+          color: 0xd4d7dc,
+          metalness: 1,
+          roughness: 0.24,
+        });
+        // Lathe profile (radius, height): domed base, straight wall, necked shoulder, rolled lip.
+        const profile = [
+          [0.0, 0.1],
+          [0.46, 0.06],
+          [0.6, 0.0],
+          [0.66, 0.06],
+          [0.67, 0.16],
+          [0.67, 2.02],
+          [0.63, 2.14],
+          [0.56, 2.24],
+          [0.555, 2.29],
+          [0.575, 2.31],
+          [0.56, 2.33],
+          [0.5, 2.3],
+          [0.0, 2.27],
+        ].map(([x, y]) => new THREE.Vector2(x, y));
+        can.add(new THREE.Mesh(new THREE.LatheGeometry(profile, 128), metal));
+        const labelMat = new THREE.MeshPhysicalMaterial({
+          map: await labelTexture(),
+          metalness: 0.45,
+          roughness: 0.32,
+          clearcoat: 1,
+          clearcoatRoughness: 0.12,
+        });
+        const label = new THREE.Mesh(new THREE.CylinderGeometry(0.674, 0.674, 1.8, 128, 1, true), labelMat);
+        label.position.y = 1.1;
+        can.add(label);
+        // Pull tab: a thin rounded plate on the lid.
+        const tab = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.22, 4, 12), metal);
+        tab.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+        tab.scale.set(1, 1, 0.25);
+        tab.position.set(0.1, 2.285, 0);
+        can.add(tab);
+        return can;
+      }
+
+      function fitModel(object) {
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const scale = Math.min(2.3 / size.y, 2.6 / Math.max(size.x, size.z));
+        object.scale.setScalar(scale);
+        object.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
+        const wrapper = new THREE.Group();
+        wrapper.add(object);
+        return wrapper;
+      }
+
+      // A model_url that fails to load fails the render; it never swaps in a different product.
+      async function product() {
+        const url = String(V.model_url || "").trim();
+        if (!url) return builtInCan();
+        const gltf = await new GLTFLoader().loadAsync(url);
+        return fitModel(gltf.scene);
+      }
+
+      turntable.add(await product());
+
+      host.render = (t) => {
+        turntable.rotation.y = (Math.max(0, t - host.start) / 6) * turns * Math.PI * 2;
+        renderer.render(scene, camera);
+      };
+      host.render(host.clock.t);
+      host.ready();
+    </script>
+  </body>
+</html>

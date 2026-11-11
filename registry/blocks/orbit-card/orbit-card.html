@@ -1,0 +1,150 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "feature1Title", "type": "string", "role": "content", "label": "Card title", "description": "Bebas Neue, one line.", "default": "Всегда синхронно", "maxLength": 24 },
+    { "id": "feature1Desc", "type": "string", "role": "content", "label": "Card description", "description": "Montserrat, up to two lines.", "default": "Изменения сразу на каждом экране", "maxLength": 44 },
+    { "id": "cardOrbitDegrees", "type": "number", "role": "style", "label": "Card orbit degrees", "description": "Total card-only vertical orbit during Blender frames 150–180 (5–6 s after the start). Enter 180, 360, 720, or any angle. The sphere keeps its independent spin. The final angle holds after frame 180.", "default": 360, "min": -36000, "max": 36000, "step": 1 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the Blender move starts (the card enters, orbits at 5–6 s and flies out left at 7.35–8.55 s after it), 2 the block fades out (only when exit is fade, before the fly-out). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fly: the native Blender exit, the card leaves the frame to the left. fade: the block fades out at cue 2 instead.", "default": "fly", "options": [{ "value": "fade", "label": "Fade" }, { "value": "fly", "label": "Fly out" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap-3.14.2.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #orc-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #orc-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #orc-stage canvas {
+        display: block;
+      }
+      #orc-fontload {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="orc-root" data-composition-id="orbit-card" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <section id="orc-stage" class="clip" data-start="0" data-duration="30" data-track-index="1"></section>
+      <div id="orc-fontload" aria-hidden="true">
+        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span>Аа</span>
+      </div>
+    </div>
+    <script type="importmap">
+      { "imports": { "orbit-card/scene": "./assets/orbit-scene.js" } }
+    </script>
+    <script type="module">
+      import { createOrbitScene } from "orbit-card/scene";
+      // Bare __hyperframes is this composition's own in a module.
+      const V = (typeof __hyperframes !== "undefined" && __hyperframes.getVariables?.()) || {};
+      // в модуле корень берётся от сцены: свой id у смонтированного корня не сохраняется
+      const stage = document.getElementById("orc-stage");
+      const root = stage.closest("[data-composition-id]");
+      let width = 1920,
+        height = 1080,
+        vScale =  1  ;
+      
+      // цвета и шрифты темы: в three.js и на холст – готовыми значениями
+      const cs = getComputedStyle(root);
+      const css = (name, d) => {
+        const probe = document.createElement("i");
+        probe.style.color = cs.getPropertyValue(name).trim() || d;
+        root.appendChild(probe);
+        const c = getComputedStyle(probe).color;
+        probe.remove();
+        return c;
+      };
+      const font = (name, d) => (cs.getPropertyValue(name).trim() || d).split(",")[0];
+      const cues = String(V.cues || "")
+        .split(",")
+        .map(parseFloat);
+      const start = Number.isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+      const renderAt = createOrbitScene(V, {
+        stage,
+        width,
+        height,
+        vScale,
+        start,
+        bg: css("--bg", "#0c1014"),
+        surface: css("--surface", "#18181a"),
+        border: css("--border", "#2e2e32"),
+        fg: css("--fg", "#f2f2f2"),
+        muted: css("--muted", "#8a8a90"),
+        accent: css("--accent", "#ff0000"),
+        display: font("--font-display", '"Bebas Neue"'),
+        body: font("--font-body", '"Montserrat"'),
+      });
+      const state = { time: 0 };
+      const timeline = gsap.timeline({ paused: true });
+      timeline.to(state, {
+        time: 30,
+        duration: 30,
+        ease: "none",
+        onUpdate: () => renderAt(state.time),
+      });
+      if (V.exit === "fade") timeline.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, Number.isFinite(cues[1]) && cues[1] > start ? Math.min(cues[1], start + 6.85) : start + 6.85);
+      window.addEventListener("hf-seek", (event) => {
+        if (typeof event.detail?.time === "number") {
+          timeline.totalTime(Math.max(0, Math.min(30, event.detail.time)), true);
+          renderAt(event.detail.time);
+        }
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["orbit-card"] = timeline;
+    </script>
+  </body>
+</html>

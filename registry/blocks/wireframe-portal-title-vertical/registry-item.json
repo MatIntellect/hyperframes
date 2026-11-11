@@ -1,0 +1,50 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "wireframe-portal-title-vertical",
+  "type": "hyperframes:block",
+  "title": "Wireframe Portal Title (vertical)",
+  "description": "Vertical wireframe portal: the light title card bursts open on the field, the Bebas title comes through in 3D and swaps into a wrapped second phrase. Title, kicker, subtitle, phrase and cues are variables; placement full, top or bottom card; pushes through, fades or holds.",
+  "tags": [
+    "3d-motion",
+    "title-card",
+    "wireframe",
+    "portal",
+    "burst",
+    "typography",
+    "post-processing",
+    "phrase-swap",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "wireframe-portal-title-vertical.html",
+      "target": "compositions/wireframe-portal-title-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-Bold.ttf",
+      "target": "assets/fonts/BebasNeue-Bold.ttf",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-OFL.txt",
+      "target": "assets/fonts/BebasNeue-OFL.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/Montserrat-OFL.txt",
+      "target": "assets/fonts/Montserrat-OFL.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/Montserrat-SemiBold.ttf",
+      "target": "assets/fonts/Montserrat-SemiBold.ttf",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

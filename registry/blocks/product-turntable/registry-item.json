@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "product-turntable",
+  "type": "hyperframes:block",
+  "title": "Product Turntable",
+  "description": "A product turns on a studio plinth on the brand ground in a seamless loop: drop in a GLB or glTF model or keep the built-in can with its accent label. Label words, caption, turns and cues are variables; turns on or fades.",
+  "tags": ["3d-object", "three-js", "webgl", "product", "turntable", "glb", "loop", "packshot"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "product-turntable.html",
+      "target": "compositions/product-turntable.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "extruded-logo-vertical",
+  "type": "hyperframes:block",
+  "title": "Extruded Logo (vertical)",
+  "description": "Vertical extruded logo: beveled 3D Bebas letters flip up and settle inside the 780 field, tagline under the word. Chrome, gold or matte; placement full, top or bottom card; word, tagline, cues and exit are variables.",
+  "tags": ["3d-object", "three-js", "webgl", "logo", "text", "extruded", "title-card", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "extruded-logo-vertical.html",
+      "target": "compositions/extruded-logo-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-Bold.typeface.json",
+      "target": "assets/fonts/BebasNeue-Bold.typeface.json",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-OFL.txt",
+      "target": "assets/fonts/BebasNeue-OFL.txt",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

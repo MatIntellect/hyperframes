@@ -1,0 +1,49 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "wireframe-portal-title",
+  "type": "hyperframes:block",
+  "title": "Wireframe Portal Title",
+  "description": "A light title card bursts open into a dark wireframe world: the Bebas title comes through extruded, then its letters swap into a second phrase, and the camera pushes through to the light ground. Title, kicker, subtitle, phrase and cues are variables.",
+  "tags": [
+    "3d-motion",
+    "title-card",
+    "wireframe",
+    "portal",
+    "burst",
+    "typography",
+    "post-processing",
+    "phrase-swap"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "wireframe-portal-title.html",
+      "target": "compositions/wireframe-portal-title.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-Bold.ttf",
+      "target": "assets/fonts/BebasNeue-Bold.ttf",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/BebasNeue-OFL.txt",
+      "target": "assets/fonts/BebasNeue-OFL.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/Montserrat-OFL.txt",
+      "target": "assets/fonts/Montserrat-OFL.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/fonts/Montserrat-SemiBold.ttf",
+      "target": "assets/fonts/Montserrat-SemiBold.ttf",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "tagline", "type": "string", "role": "content", "label": "Left phone headline", "description": "Bebas Neue, up to three lines on the accent screen.", "maxLength": 24, "default": "Раскрой свой потенциал" },
+    { "id": "cta", "type": "string", "role": "content", "label": "Left phone button", "description": "Button under the headline.", "maxLength": 10, "default": "Начать" },
+
+    { "id": "userName", "type": "string", "role": "content", "label": "User name", "description": "Centre phone header; the avatar shows its first letter.", "maxLength": 10, "default": "Мат" },
+    { "id": "goalLabel", "type": "string", "role": "content", "label": "Goal label", "description": "Label over the progress ring.", "maxLength": 14, "default": "Цель недели" },
+    { "id": "goalDone", "type": "number", "role": "content", "label": "Goal done", "description": "Done count: fills the ring and marks that many days.", "default": 2, "min": 0, "max": 7, "step": 1 },
+    { "id": "goalTotal", "type": "number", "role": "content", "label": "Goal total", "description": "Target count under the ring.", "default": 3, "min": 1, "max": 7, "step": 1 },
+    { "id": "progressTitle", "type": "string", "role": "content", "label": "Progress title", "description": "Heading over the three bars.", "maxLength": 14, "default": "Прогресс" },
+    { "id": "bar1Name", "type": "string", "role": "content", "label": "Bar 1 name", "description": "First activity.", "maxLength": 7, "default": "Бег" },
+    { "id": "bar1Value", "type": "string", "role": "content", "label": "Bar 1 value", "description": "Shown right of the name.", "maxLength": 6, "default": "5,2 км" },
+    { "id": "bar1Level", "type": "number", "role": "content", "label": "Bar 1 fill", "description": "Percent of the bar filled.", "default": 75, "min": 0, "max": 100, "step": 1 },
+    { "id": "bar2Name", "type": "string", "role": "content", "label": "Bar 2 name", "description": "Second activity.", "maxLength": 7, "default": "Вело" },
+    { "id": "bar2Value", "type": "string", "role": "content", "label": "Bar 2 value", "description": "Shown right of the name.", "maxLength": 6, "default": "13 км" },
+    { "id": "bar2Level", "type": "number", "role": "content", "label": "Bar 2 fill", "description": "Percent of the bar filled.", "default": 50, "min": 0, "max": 100, "step": 1 },
+    { "id": "bar3Name", "type": "string", "role": "content", "label": "Bar 3 name", "description": "Third activity.", "maxLength": 7, "default": "Сила" },
+    { "id": "bar3Value", "type": "string", "role": "content", "label": "Bar 3 value", "description": "Shown right of the name.", "maxLength": 6, "default": "45 мин" },
+    { "id": "bar3Level", "type": "number", "role": "content", "label": "Bar 3 fill", "description": "Percent of the bar filled.", "default": 90, "min": 0, "max": 100, "step": 1 },
+    { "id": "rightTitle", "type": "string", "role": "content", "label": "Right phone title", "description": "Label over the big number.", "maxLength": 14, "default": "Сожжено" },
+    { "id": "rightValue", "type": "string", "role": "content", "label": "Right phone number", "description": "Big number.", "maxLength": 4, "default": "740" },
+    { "id": "rightUnit", "type": "string", "role": "content", "label": "Right phone unit", "description": "Unit after the number.", "maxLength": 5, "default": "ккал" },
+    { "id": "stat1", "type": "string", "role": "content", "label": "Pill 1", "description": "First pill under the graph, accent dot.", "maxLength": 12, "default": "Активно 540" },
+    { "id": "stat2", "type": "string", "role": "content", "label": "Pill 2", "description": "Second pill under the graph, grey dot.", "maxLength": 12, "default": "Отдых 200" },
+
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the build starts (native 5.5 s: the centre phone rises, the side phones fan out, the ring, bars and graph fill), 2 the block fades out (only when exit is fade). Empty keeps 0, 5.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the finished fan to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #aps-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #aps-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #aps-glow {
+        position: absolute;
+        width: 900px;
+        height: 900px;
+        border-radius: 50%;
+        background: radial-gradient(circle, color-mix(in srgb, var(--accent, #ff0000) 16%, transparent) 0%, transparent 70%);
+      }
+      /* phone units: 320x650, scaled as a whole; every text is at least 30 units */
+      #aps-fan {
+        position: absolute;
+        width: 320px;
+        height: 650px;
+      }
+      .aps-phone {
+        position: absolute;
+        inset: 0;
+      }
+      .aps-bezel {
+        width: 100%;
+        height: 100%;
+        border-radius: 42px;
+        background: var(--bg, #0c1014);
+        border: 2px solid var(--border, #2e2e32);
+        padding: 6px;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+        position: relative;
+        overflow: hidden;
+      }
+      .aps-notch {
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 24px;
+        background: var(--bg, #0c1014);
+        border-radius: 0 0 16px 16px;
+        z-index: 5;
+      }
+      .aps-screen {
+        width: 100%;
+        height: 100%;
+        border-radius: 36px;
+        overflow: hidden;
+        position: relative;
+      }
+      /* left: accent screen */
+      #aps-left .aps-screen {
+        background: var(--accent, #ff0000);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 22px 34px;
+      }
+      #aps-shapes {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        width: 200px;
+        height: 280px;
+        margin-left: -100px;
+      }
+      #aps-tagline {
+        position: relative;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 0.95;
+        color: var(--fg, #f2f2f2);
+        overflow-wrap: break-word;
+        margin-bottom: 18px;
+      }
+      #aps-cta {
+        position: relative;
+        align-self: flex-start;
+        background: var(--bg, #0c1014);
+        color: var(--fg, #f2f2f2);
+        font-size: 30px;
+        font-weight: 700;
+        padding: 10px 26px;
+        border-radius: 30px;
+        white-space: nowrap;
+      }
+      /* centre: dashboard */
+      #aps-center {
+        z-index: 3;
+      }
+      #aps-left,
+      #aps-right {
+        z-index: 2;
+      }
+      #aps-center .aps-screen {
+        background: var(--surface, #18181a);
+        padding: 40px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      #aps-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #aps-avatar {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: var(--accent, #ff0000);
+        color: var(--fg, #f2f2f2);
+        font-size: 30px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      #aps-name {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--fg, #f2f2f2);
+        white-space: nowrap;
+      }
+      #aps-goal {
+        background: var(--bg, #0c1014);
+        border-radius: 20px;
+        padding: 12px 6px 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      #aps-goal-label {
+        align-self: flex-start;
+        padding-left: 8px;
+        font-size: 30px;
+        font-weight: 500;
+        color: var(--muted, #8a8a90);
+        white-space: nowrap;
+      }
+      #aps-ring-wrap {
+        position: relative;
+        width: 120px;
+        height: 120px;
+      }
+      #aps-ring-wrap svg {
+        width: 100%;
+        height: 100%;
+      }
+      #aps-count {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        padding-top: 30px;
+        color: var(--muted, #8a8a90);
+        font-size: 30px;
+      }
+      #aps-count b {
+        font-size: 52px;
+        font-weight: 700;
+        color: var(--fg, #f2f2f2);
+        margin-right: 2px;
+      }
+      #aps-days {
+        display: flex;
+        gap: 4px;
+      }
+      .aps-day {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1;
+        color: var(--muted, #8a8a90);
+        background: var(--surface, #18181a);
+      }
+      .aps-day.aps-done {
+        background: var(--accent, #ff0000);
+        color: var(--fg, #f2f2f2);
+      }
+      #aps-progress-title {
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--fg, #f2f2f2);
+        white-space: nowrap;
+      }
+      #aps-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .aps-bar-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        font-size: 30px;
+        line-height: 1.15;
+        white-space: nowrap;
+      }
+      .aps-bar-name {
+        font-weight: 600;
+        color: var(--fg, #f2f2f2);
+      }
+      .aps-bar-val {
+        color: var(--muted, #8a8a90);
+      }
+      .aps-track {
+        height: 8px;
+        margin-top: 4px;
+        background: var(--bg, #0c1014);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .aps-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 4px;
+        background: var(--accent, #ff0000);
+      }
+      /* right: light screen */
+      #aps-right .aps-screen {
+        background: var(--fg, #f2f2f2);
+        color: var(--bg, #0c1014);
+        padding: 40px 18px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #aps-right-title {
+        font-size: 30px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      #aps-right-value {
+        font-size: 72px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        white-space: nowrap;
+      }
+      #aps-right-unit {
+        font-size: 30px;
+        font-weight: 500;
+        letter-spacing: 0;
+        margin-left: 6px;
+      }
+      #aps-graph-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-height: 0;
+      }
+      #aps-graph {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+      }
+      #aps-labels {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2px;
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1.1;
+      }
+      .aps-pill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        align-self: flex-start;
+        background: color-mix(in srgb, var(--bg, #0c1014) 8%, var(--fg, #f2f2f2));
+        border-radius: 26px;
+        padding: 6px 16px;
+        margin-top: 8px;
+        font-size: 30px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .aps-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="aps-root" data-composition-id="app-showcase" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="aps-stage">
+        <div id="aps-glow"></div>
+        <div id="aps-fan">
+          <div class="aps-phone" id="aps-left">
+            <div class="aps-bezel">
+              <div class="aps-notch"></div>
+              <div class="aps-screen">
+                <svg id="aps-shapes" viewBox="0 0 200 280" fill="none">
+                  <g stroke="var(--fg, #f2f2f2)" stroke-width="6" stroke-linecap="round" opacity="0.35">
+                    <circle cx="100" cy="40" r="26" fill="var(--fg, #f2f2f2)" stroke="none" />
+                    <line x1="100" y1="68" x2="100" y2="160" />
+                    <line x1="100" y1="105" x2="63" y2="135" />
+                    <line x1="100" y1="105" x2="143" y2="125" />
+                    <line x1="100" y1="160" x2="68" y2="220" />
+                    <line x1="100" y1="160" x2="138" y2="215" />
+                  </g>
+                </svg>
+                
+                <div id="aps-tagline">Раскрой свой потенциал</div>
+                <div id="aps-cta">Начать</div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="aps-phone" id="aps-right">
+            <div class="aps-bezel">
+              <div class="aps-notch"></div>
+              <div class="aps-screen">
+                
+                <div id="aps-right-title">Сожжено</div>
+                <div id="aps-right-value"><span id="aps-right-num">740</span><span id="aps-right-unit">ккал</span></div>
+                
+                <div id="aps-graph-wrap">
+                  <svg id="aps-graph" viewBox="0 0 260 130" preserveAspectRatio="none">
+                    <g stroke="var(--muted, #8a8a90)" stroke-width="0.6" opacity="0.6">
+                      <line x1="6" y1="25" x2="254" y2="25" />
+                      <line x1="6" y1="55" x2="254" y2="55" />
+                      <line x1="6" y1="85" x2="254" y2="85" />
+                      <line x1="6" y1="115" x2="254" y2="115" />
+                    </g>
+                    <path id="aps-area" d="M10,105 L50,80 90,90 130,45 170,60 210,25 250,35 250,115 10,115 Z" fill="var(--accent, #ff0000)" opacity="0.15" />
+                    <polyline id="aps-line" points="10,105 50,80 90,90 130,45 170,60 210,25 250,35" fill="none" stroke="var(--accent, #ff0000)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                  </svg>
+                  
+                  <div id="aps-labels"><span>П</span><span>В</span><span>С</span><span>Ч</span><span>П</span><span>С</span><span>В</span></div>
+                  
+                </div>
+                
+                <div class="aps-pill"><span class="aps-dot" style="background: var(--accent, #ff0000)"></span><span id="aps-stat1">Активно 540</span></div>
+                <div class="aps-pill"><span class="aps-dot" style="background: var(--muted, #8a8a90)"></span><span id="aps-stat2">Отдых 200</span></div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="aps-phone" id="aps-center">
+            <div class="aps-bezel">
+              <div class="aps-notch"></div>
+              <div class="aps-screen">
+                <div id="aps-head">
+                  <div id="aps-avatar">М</div>
+                  <div id="aps-name">Мат</div>
+                </div>
+                <div id="aps-goal">
+                  <div id="aps-goal-label">Цель недели</div>
+                  <div id="aps-ring-wrap">
+                    <svg viewBox="0 0 140 140">
+                      <circle cx="70" cy="70" r="52" fill="none" stroke="var(--border, #2e2e32)" stroke-width="12" />
+                      <circle id="aps-ring" cx="70" cy="70" r="52" fill="none" stroke="var(--accent, #ff0000)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 70 70)" />
+                    </svg>
+                    <div id="aps-count"><b id="aps-done">2</b>/<span id="aps-total">3</span></div>
+                  </div>
+                  <div id="aps-days"></div>
+                </div>
+                <div id="aps-progress-title">Прогресс</div>
+                <div id="aps-bars"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("aps-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(id) {
+          return document.getElementById("aps-" + id);
+        }
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v : d;
+        }
+        function num(v, d, lo, hi) {
+          v = Number(v);
+          return isFinite(v) ? Math.max(lo, Math.min(hi, Math.round(v))) : d;
+        }
+
+        // layout: stage size, fan centre, phone scale, side spread in phone units
+        var sw = 1920,
+          sh = 1080,
+          cy = 1080 / 2,
+          k =  1.4  ,
+          d =  340  ;
+        
+        var cx = sw / 2;
+        gsap.set($("fan"), { left: cx - 160, top: cy - 325, scale: k, transformOrigin: "50% 50%" });
+        gsap.set($("glow"), { left: cx - 450, top: cy - 450 });
+
+        // words
+        
+        $("tagline").textContent = str(V.tagline, "Раскрой свой потенциал");
+        $("cta").textContent = str(V.cta, "Начать");
+        
+        var name = str(V.userName, "Мат");
+        $("name").textContent = name;
+        $("avatar").textContent = name.trim().charAt(0).toUpperCase();
+        $("goal-label").textContent = str(V.goalLabel, "Цель недели");
+        var total = num(V.goalTotal, 3, 1, 7);
+        var done = Math.min(num(V.goalDone, 2, 0, 7), total);
+        $("done").textContent = done;
+        $("total").textContent = total;
+        "ПВСЧПСВ".split("").forEach(function (ch, i) {
+          var el = document.createElement("span");
+          el.className = "aps-day" + (i < done ? " aps-done" : "");
+          el.textContent = ch;
+          $("days").appendChild(el);
+        });
+        $("progress-title").textContent = str(V.progressTitle, "Прогресс");
+        var bars = [
+          [str(V.bar1Name, "Бег"), str(V.bar1Value, "5,2 км"), num(V.bar1Level, 75, 0, 100)],
+          [str(V.bar2Name, "Вело"), str(V.bar2Value, "13 км"), num(V.bar2Level, 50, 0, 100)],
+          [str(V.bar3Name, "Сила"), str(V.bar3Value, "45 мин"), num(V.bar3Level, 90, 0, 100)],
+        ];
+        var fills = bars.map(function (b) {
+          var row = document.createElement("div");
+          row.innerHTML =
+            '<div class="aps-bar-line"><span class="aps-bar-name"></span><span class="aps-bar-val"></span></div><div class="aps-track"><div class="aps-fill"></div></div>';
+          row.querySelector(".aps-bar-name").textContent = b[0];
+          row.querySelector(".aps-bar-val").textContent = b[1];
+          $("bars").appendChild(row);
+          return row.querySelector(".aps-fill");
+        });
+        
+        $("right-title").textContent = str(V.rightTitle, "Сожжено");
+        $("right-num").textContent = str(V.rightValue, "740");
+        $("right-unit").textContent = str(V.rightUnit, "ккал");
+        $("stat1").textContent = str(V.stat1, "Активно 540");
+        $("stat2").textContent = str(V.stat2, "Отдых 200");
+        
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var c1 = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 5;
+
+        // native timeline, shifted to cue 1
+        var line = $("line"),
+          lineLen = line.getTotalLength(),
+          CIRC = 2 * Math.PI * 52;
+        gsap.set(line, { strokeDasharray: lineLen, strokeDashoffset: lineLen });
+        gsap.set($("area"), { opacity: 0 });
+        gsap.set($("ring"), { strokeDasharray: CIRC, strokeDashoffset: CIRC });
+        gsap.set($("stage"), { opacity: 0 });
+        gsap.set($("glow"), { opacity: 0 });
+        gsap.set($("center"), { opacity: 0, scale: 0.85 });
+        gsap.set([$("left"), $("right")], { opacity: 0, x: 0, rotation: 0 });
+        
+        gsap.set($("tagline"), { opacity: 0, y: 20 });
+        gsap.set($("cta"), { opacity: 0, y: 12 });
+        
+
+        var tl = gsap.timeline({ paused: true });
+        var t = function (s) {
+          return c0 + s;
+        };
+        tl.to($("stage"), { opacity: 1, duration: 0.8, ease: "power1.out" }, t(0));
+        tl.to($("glow"), { opacity: 1, duration: 1.2, ease: "power1.out" }, t(0.2));
+        tl.to($("center"), { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.4)" }, t(0.2));
+        tl.to($("left"), { opacity: 1, duration: 0.7, ease: "back.out(1.4)" }, t(0.3));
+        tl.to($("left"), { x: -d, rotation: -12, duration: 1.2, ease: "expo.out" }, t(0.3));
+        tl.to($("right"), { opacity: 1, duration: 0.7, ease: "back.out(1.4)" }, t(0.4));
+        tl.to($("right"), { x: d, rotation: 12, duration: 1.2, ease: "expo.out" }, t(0.4));
+        tl.to($("ring"), { strokeDashoffset: CIRC * (1 - done / total), duration: 1.2, ease: "circ.out" }, t(1.8));
+        fills.forEach(function (f, i) {
+          tl.to(f, { width: bars[i][2] + "%", duration: 0.8, ease: "power3.out" }, t(2.1 + i * 0.2));
+        });
+        tl.to(line, { strokeDashoffset: 0, duration: 1.4, ease: "sine.inOut" }, t(2.0));
+        tl.to($("area"), { opacity: 0.15, duration: 0.8, ease: "power1.out" }, t(2.6));
+        
+        tl.to($("tagline"), { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, t(2.2));
+        tl.to($("cta"), { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, t(2.5));
+        
+        tl.to($("fan"), { scale: k * 1.02, duration: 3.5, ease: "sine.inOut" }, t(2.0));
+        tl.to($("ring"), { opacity: 0.65, duration: 0.6, ease: "sine.inOut" }, t(4.0));
+        tl.to($("ring"), { opacity: 1, duration: 0.6, ease: "sine.inOut" }, t(4.6));
+        tl.to(fills, { opacity: 0.7, duration: 0.6, ease: "sine.inOut" }, t(4.1));
+        tl.to(fills, { opacity: 1, duration: 0.6, ease: "sine.inOut" }, t(4.7));
+        tl.to(line, { opacity: 0.65, duration: 0.6, ease: "sine.inOut" }, t(4.05));
+        tl.to(line, { opacity: 1, duration: 0.6, ease: "sine.inOut" }, t(4.65));
+        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, c1);
+        tl.set({}, {}, 30);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["app-showcase"] = tl;
+      })();
+    </script>
+  </body>
+</html>

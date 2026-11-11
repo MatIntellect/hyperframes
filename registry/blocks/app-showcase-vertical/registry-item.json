@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "app-showcase-vertical",
+  "type": "hyperframes:block",
+  "title": "App Showcase (vertical)",
+  "description": "Vertical app showcase: three phones fan out inside the 780 field, the side screens wordless behind the dashboard, and the ring, bars and graph fill. Words and numbers are variables; placement full, top or bottom card; cues set the build; holds or fades.",
+  "tags": ["showcase", "app", "3d", "phones", "mock-ui", "dashboard", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "app-showcase-vertical.html",
+      "target": "compositions/app-showcase-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

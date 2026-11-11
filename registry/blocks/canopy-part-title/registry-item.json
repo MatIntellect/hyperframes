@@ -1,0 +1,38 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "canopy-part-title",
+  "type": "hyperframes:block",
+  "title": "Canopy Part Title",
+  "description": "A dense canopy of textured leaves sweeps across the brand ground with shallow depth of field and parts to uncover the first Bebas headline; a depth-lifted second batch carries the second headline in, a few leaves stay on a breeze. Headlines and cues are variables.",
+  "tags": [
+    "3d-motion",
+    "title-card",
+    "leaves",
+    "organic",
+    "depth-of-field",
+    "two-headlines",
+    "sweep"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "canopy-part-title.html",
+      "target": "compositions/canopy-part-title.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/leaf-surface-color.webp",
+      "target": "assets/leaf-surface-color.webp",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/leaf-surface-normal.webp",
+      "target": "assets/leaf-surface-normal.webp",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

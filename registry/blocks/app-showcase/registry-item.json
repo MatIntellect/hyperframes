@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "app-showcase",
+  "type": "hyperframes:block",
+  "title": "App Showcase",
+  "description": "Three app phones fan out on the brand ground: the dashboard rises in the centre, the side phones swing out, then the goal ring, activity bars and calorie graph fill. Every word and number is a variable; cues set the build; holds or fades.",
+  "tags": ["showcase", "app", "3d", "phones", "mock-ui", "dashboard"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "app-showcase.html",
+      "target": "compositions/app-showcase.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

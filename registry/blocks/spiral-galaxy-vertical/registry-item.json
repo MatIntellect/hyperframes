@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "spiral-galaxy-vertical",
+  "type": "hyperframes:block",
+  "title": "Spiral Galaxy (vertical)",
+  "description": "Vertical spiral galaxy: the whole winding disc across the frame, centred on the field. Stars, arms, rate, glow, colours and cues are variables; placement full, top or bottom card; holds or fades.",
+  "tags": [
+    "space",
+    "galaxy",
+    "particles",
+    "three-js",
+    "webgl",
+    "background",
+    "ambient",
+    "loopable",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "spiral-galaxy-vertical.html",
+      "target": "compositions/spiral-galaxy-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

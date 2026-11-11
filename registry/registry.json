@@ -20,6 +20,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "app-showcase",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "app-showcase-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "apple-money-count",
       "type": "hyperframes:block"
     },
@@ -57,6 +65,14 @@
     },
     {
       "name": "camera-dolly-zoom-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "canopy-part-title",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "canopy-part-title-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -324,6 +340,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "cuboid-carousel",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "cuboid-carousel-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "data-chart",
       "type": "hyperframes:block"
     },
@@ -348,6 +372,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "extruded-logo",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "extruded-logo-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "flowchart",
       "type": "hyperframes:block"
     },
@@ -364,11 +396,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "gallery-tunnel",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "gallery-tunnel-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "glass-hero",
       "type": "hyperframes:block"
     },
     {
       "name": "glass-hero-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "glass-shard-title",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "glass-shard-title-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -588,6 +636,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "orbit-card",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "orbit-card-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "organic-light-leak-overlay",
       "type": "hyperframes:block"
     },
@@ -601,6 +657,14 @@
     },
     {
       "name": "oscilloscope-trace-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "product-turntable",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "product-turntable-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -649,6 +713,14 @@
     },
     {
       "name": "spain-map-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "spiral-galaxy",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "spiral-galaxy-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -729,6 +801,14 @@
     },
     {
       "name": "week-in-merges-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "wireframe-portal-title",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "wireframe-portal-title-vertical",
       "type": "hyperframes:block"
     },
     {

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "orbit-card-vertical",
+  "type": "hyperframes:block",
+  "title": "Orbit Card (vertical)",
+  "description": "Vertical orbit card: a grey feature card with a Bebas title orbits a dot sphere on the approved Blender camera motion, sized to the 780 field. Title, description and orbit angle are variables; placement full, top or bottom card; native fly-out or fade.",
+  "tags": [
+    "3d-motion",
+    "cards",
+    "feature-reveal",
+    "dots",
+    "orbit",
+    "blender-motion",
+    "sphere",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "orbit-card-vertical.html",
+      "target": "compositions/orbit-card-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/GSAP-NOTICE.txt",
+      "target": "assets/GSAP-NOTICE.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/Three-LICENSE.txt",
+      "target": "assets/Three-LICENSE.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/gsap-3.14.2.min.js",
+      "target": "assets/gsap-3.14.2.min.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/orbit-motion.js",
+      "target": "assets/orbit-motion.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/orbit-scene.js",
+      "target": "assets/orbit-scene.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/three.core.min.js",
+      "target": "assets/three.core.min.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/three.module.min.js",
+      "target": "assets/three.module.min.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

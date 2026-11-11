@@ -1,0 +1,39 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "canopy-part-title-vertical",
+  "type": "hyperframes:block",
+  "title": "Canopy Part Title (vertical)",
+  "description": "Vertical canopy title: the leaf sweep fills the 780 field and parts to uncover two Bebas headlines in turn. Headlines and cues are variables; placement full, top or bottom card; holds or fades.",
+  "tags": [
+    "3d-motion",
+    "title-card",
+    "leaves",
+    "organic",
+    "depth-of-field",
+    "two-headlines",
+    "sweep",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "canopy-part-title-vertical.html",
+      "target": "compositions/canopy-part-title-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/leaf-surface-color.webp",
+      "target": "assets/leaf-surface-color.webp",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/leaf-surface-normal.webp",
+      "target": "assets/leaf-surface-normal.webp",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

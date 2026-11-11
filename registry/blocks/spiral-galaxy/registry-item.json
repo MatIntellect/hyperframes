@@ -1,0 +1,29 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "spiral-galaxy",
+  "type": "hyperframes:block",
+  "title": "Spiral Galaxy",
+  "description": "A spiral galaxy seen from outside on the brand ground, turning with real differential rotation: inner stars orbit faster than outer ones, so the arms wind up over the shot. Stars, arms, rate, glow, colours and cues are variables; holds or fades.",
+  "tags": [
+    "space",
+    "galaxy",
+    "particles",
+    "three-js",
+    "webgl",
+    "background",
+    "ambient",
+    "loopable"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "spiral-galaxy.html",
+      "target": "compositions/spiral-galaxy.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "glass-shard-title",
+  "type": "hyperframes:block",
+  "title": "Glass Shard Title",
+  "description": "Glass shards fly in through fog on the brand ground and tile themselves into a Bebas headline, hold with a slight drift, then fly out past the camera. Headline, shard look, flight and cues are variables; flies out, fades or holds.",
+  "tags": ["3d-motion", "title-card", "glass", "voronoi", "shards", "fog", "hdr"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "glass-shard-title.html",
+      "target": "compositions/glass-shard-title.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/Three-LICENSE.txt",
+      "target": "assets/Three-LICENSE.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ferndale_studio_01_1k.hdr",
+      "target": "assets/ferndale_studio_01_1k.hdr",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/glass-main.js",
+      "target": "assets/glass-main.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/matcap-1.png",
+      "target": "assets/matcap-1.png",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/8a4ba0deaf2bafb4.png"
+    }
+  ]
+}

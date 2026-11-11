@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "product-turntable-vertical",
+  "type": "hyperframes:block",
+  "title": "Product Turntable (vertical)",
+  "description": "Vertical product turntable: the can or your GLB turns on its plinth inside the 780 field, caption at the field bottom. Label words, caption, turns and cues are variables; placement full, top or bottom card; turns on or fades.",
+  "tags": [
+    "3d-object",
+    "three-js",
+    "webgl",
+    "product",
+    "turntable",
+    "glb",
+    "loop",
+    "packshot",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "product-turntable-vertical.html",
+      "target": "compositions/product-turntable-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

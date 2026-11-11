@@ -1,0 +1,390 @@
+<!doctype html>
+<!--
+  Extruded Logo: beveled 3D letters flip up one by one, the word swings slowly so light runs
+  across the bevels, then settles facing the camera for a readable hold.
+  Seek-safe: every frame is render(t), driven by one linear GSAP clock.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the word and the tagline in the 780x1180 field (y 180-1360). top / bottom: the word on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "text", "type": "string", "role": "content", "label": "Word or lettermark", "description": "Bebas Neue in 3D, Latin and Cyrillic letters, digits and punctuation; other characters render as ?. A word wider than the frame scales down as one piece.", "default": "MATINTELLECT", "maxLength": 12 },
+    { "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the word. Empty hides it.", "default": "Монтаж роликов с ИИ", "maxLength": 40 },
+    { "id": "finish", "type": "enum", "role": "style", "label": "Finish", "default": "chrome", "options": [ { "value": "chrome", "label": "Chrome" }, { "value": "gold", "label": "Gold" }, { "value": "matte", "label": "Matte clay" } ] },
+    { "id": "rim_color", "type": "color", "role": "style", "label": "Rim light", "default": "#fff4e6" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first letter flips up (the word stands and settles 4.3 s later), 2 the block fades out (only when exit is fade). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the settled word to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #exlv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #exlv-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(900px 560px at 50% 46%, color-mix(in srgb, var(--fg, #f2f2f2) 9%, transparent), transparent 70%),
+          var(--bg, #0c1014);
+      }
+      #exlv-canvas {
+        position: absolute;
+        left: 0;
+        display: block;
+      }
+      #exlv-tagline {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 790px;
+        text-align: center;
+        font-size: 38px;
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        color: var(--muted, #8a8a90);
+        opacity: 0;
+      }
+      #exlv-fontload {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      #exlv-stage {
+        background:
+          radial-gradient(900px 760px at 50% 40%, color-mix(in srgb, var(--fg, #f2f2f2) 9%, transparent), transparent 70%),
+          var(--bg, #0c1014);
+      }
+      #exlv-tagline {
+        left: 150px;
+        right: 150px;
+        top: 1020px;
+      }
+      #exlv-stage.exlv-card {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+        background:
+          radial-gradient(600px 460px at 50% 50%, color-mix(in srgb, var(--fg, #f2f2f2) 9%, transparent), transparent 70%),
+          var(--bg, #0c1014);
+      }
+      #exlv-stage.exlv-bottom {
+        top: 600px;
+      }
+      #exlv-stage.exlv-card #exlv-tagline {
+        left: 40px;
+        right: 40px;
+        top: 590px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="exlv-root" data-composition-id="extruded-logo-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <div id="exlv-stage">
+        <canvas id="exlv-canvas" class="clip" data-start="0" data-duration="30" data-track-index="1"></canvas>
+        <div id="exlv-tagline"></div>
+      </div>
+      <div id="exlv-fontload" aria-hidden="true"><span style="font-weight: 500">Аа</span></div>
+    </div>
+
+    <script>
+      (function () {
+        var V =
+          (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        var root = document.getElementById("exlv-root");
+        var stage = document.getElementById("exlv-stage");
+        var str = function (v, d) {
+          return typeof v === "string" ? v : d;
+        };
+
+        // layout: canvas size and offset, px per world unit kept from the native 1920x1080 frame;
+        // maxW is the widest word in world units before it scales down (native 7.4)
+        var W = 1080,
+          H = 1920,
+          top0 = 0,
+          maxW = 7.4;
+        
+        var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+        top0 = 770 - H / 2;
+        maxW = 3.5; // 742 px inside the 780 field
+        if (placement !== "full") {
+          stage.classList.add("exlv-card", "exlv-" + placement);
+          W = 780;
+          H = 760;
+          top0 = 0;
+          maxW = 3.3; // 700 px inside the card
+        }
+        
+        var cv = document.getElementById("exlv-canvas");
+        cv.width = W;
+        cv.height = H;
+        cv.style.cssText = "top:" + top0 + "px;width:" + W + "px;height:" + H + "px";
+        var tagline = document.getElementById("exlv-tagline");
+        tagline.textContent = str(V.tagline, "Монтаж роликов с ИИ");
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var clock = { t: 0 };
+        var host = { vars: V, W: W, H: H, maxW: maxW, start: c0, duration: 5, clock: clock, render: null };
+        window.exlvHost = host;
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["extruded-logo-vertical"] = new Promise(function (resolve) {
+          host.ready = resolve;
+        });
+
+        var tl = gsap.timeline({ paused: true });
+        tl.to(clock, {
+          t: 30,
+          duration: 30,
+          ease: "none",
+          onUpdate: function () {
+            if (host.render) host.render(clock.t - c0);
+          },
+        });
+        tl.fromTo(tagline, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, c0 + 1.7);
+        if (V.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 5.5);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["extruded-logo-vertical"] = tl;
+      })();
+    </script>
+
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.184.0/+esm";
+      import { FontLoader } from "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/loaders/FontLoader.js/+esm";
+      import { TextGeometry } from "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/geometries/TextGeometry.js/+esm";
+
+      const host = window.exlvHost;
+      const V = host.vars;
+      const hex = (v, fallback) => (/^#[0-9a-f]{6}$/i.test(String(v)) ? String(v) : fallback);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById("exlv-canvas"),
+        antialias: true,
+        alpha: true,
+        preserveDrawingBuffer: true,
+      });
+      renderer.setPixelRatio(1);
+      renderer.setSize(host.W, host.H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+      const scene = new THREE.Scene();
+      // Softbox studio: bright strips on black, so chrome shows crisp bands instead of grey.
+      const studio = new THREE.Scene();
+      studio.background = new THREE.Color(0x040406);
+      const softbox = (w, h, x, y, z, color, power) => {
+        const mat = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(color).multiplyScalar(power),
+          side: THREE.DoubleSide,
+        });
+        const panel = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+        panel.position.set(x, y, z);
+        panel.lookAt(0, 0, 0);
+        studio.add(panel);
+      };
+      softbox(10, 2.2, 0, 7, 1, 0xffffff, 3);
+      softbox(1.2, 7, -7, 1, 2, 0xffffff, 2.2);
+      softbox(1.2, 7, 7, 1, -1, 0xffffff, 1.6);
+      // Behind the camera: the panel the letter faces mirror. Vertical bars sweep across
+      // the faces as the word swings.
+      const bars = document.createElement("canvas");
+      bars.width = 1024;
+      bars.height = 256;
+      const bg = bars.getContext("2d");
+      const fade = bg.createLinearGradient(0, 0, 0, 256);
+      fade.addColorStop(0, "#9a9ca3");
+      fade.addColorStop(1, "#15161a");
+      bg.fillStyle = fade;
+      bg.fillRect(0, 0, 1024, 256);
+      bg.fillStyle = "#ffffff";
+      for (const [x, w] of [
+        [150, 60],
+        [430, 140],
+        [760, 36],
+      ])
+        bg.fillRect(x, 0, w, 256);
+      const mirror = new THREE.Mesh(
+        new THREE.PlaneGeometry(22, 8),
+        new THREE.MeshBasicMaterial({
+          map: new THREE.CanvasTexture(bars),
+          color: new THREE.Color(2.2, 2.2, 2.2),
+          side: THREE.DoubleSide,
+        }),
+      );
+      mirror.position.set(0, 1, 9);
+      mirror.lookAt(0, 1, 0);
+      studio.add(mirror);
+      softbox(9, 1.4, 0, 0.5, -7, hex(V.rim_color, "#fff4e6"), 2);
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(studio, 0.01).texture;
+
+      // Native 26 deg over 1080 px; a taller canvas keeps the same px per world unit.
+      const vfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(13)) * (host.H / 1080));
+      const camera = new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(vfov), host.W / host.H, 0.1, 100);
+      camera.position.set(0, 0.9, 11);
+      camera.lookAt(0, 0.35, 0);
+
+      const rim = new THREE.DirectionalLight(new THREE.Color(hex(V.rim_color, "#fff4e6")), 5);
+      rim.position.set(0, 3, -6);
+      scene.add(rim);
+      const key = new THREE.DirectionalLight(0xffffff, 1.4);
+      key.position.set(-5, 4, 6);
+      scene.add(key);
+
+      const finishes = {
+        chrome: { color: 0xe9ecf2, metalness: 1, roughness: 0.16 },
+        gold: { color: 0xe7bf6a, metalness: 1, roughness: 0.2 },
+        matte: { color: 0xe8e2d8, metalness: 0, roughness: 0.62 },
+      };
+      const material = new THREE.MeshStandardMaterial(finishes[V.finish] || finishes.chrome);
+
+      // Bebas Neue Bold (OFL), Latin and Cyrillic, converted to three.js typeface JSON with TTFLoader.
+      const font = await new FontLoader().loadAsync("assets/fonts/BebasNeue-Bold.typeface.json");
+      const text = String(V.text || "MATINTELLECT")
+        .toUpperCase()
+        .slice(0, 12)
+        .split("");
+      const SIZE = 1.5;
+      const scale = SIZE / font.data.resolution;
+      const tracking = 0.08;
+      const word = new THREE.Group();
+      scene.add(word);
+
+      // One mesh per letter, pivoting on its baseline so each can flip up on its own beat.
+      const letters = [];
+      let cursor = 0;
+      for (const ch of text) {
+        const advance = ((font.data.glyphs[ch] || font.data.glyphs["?"]).ha || 600) * scale;
+        if (ch.trim()) {
+          const geometry = new TextGeometry(ch, {
+            font,
+            size: SIZE,
+            depth: 0.42,
+            curveSegments: 10,
+            bevelEnabled: true,
+            bevelThickness: 0.06,
+            bevelSize: 0.035,
+            bevelSegments: 5,
+          });
+          geometry.computeBoundingBox();
+          const b = geometry.boundingBox;
+          geometry.translate(-(b.min.x + b.max.x) / 2, 0, -0.21);
+          const pivot = new THREE.Group();
+          pivot.position.x = cursor + advance / 2;
+          pivot.add(new THREE.Mesh(geometry, material));
+          word.add(pivot);
+          letters.push(pivot);
+        }
+        cursor += advance + tracking;
+      }
+      const width = cursor - tracking;
+      for (const p of letters) p.position.x -= width / 2;
+      // Longer words shrink to keep a margin either side.
+      word.scale.setScalar(Math.min(1, host.maxW / width));
+
+      const shadowCanvas = document.createElement("canvas");
+      shadowCanvas.width = 512;
+      shadowCanvas.height = 128;
+      const sg = shadowCanvas.getContext("2d");
+      const grad = sg.createRadialGradient(256, 64, 0, 256, 64, 256);
+      grad.addColorStop(0, "rgba(0,0,0,0.6)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      sg.setTransform(1, 0, 0, 0.25, 0, 48);
+      sg.fillStyle = grad;
+      sg.fillRect(0, 0, 512, 512);
+      const shadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(Math.min(width, host.maxW) * 1.25, 1.4),
+        new THREE.MeshBasicMaterial({
+          map: new THREE.CanvasTexture(shadowCanvas),
+          transparent: true,
+          depthWrite: false,
+        }),
+      );
+      shadow.rotation.x = -Math.PI / 2;
+      shadow.position.y = -0.02;
+      scene.add(shadow);
+
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+      const easeOutBack = (x) => {
+        const u = clamp01(x) - 1;
+        return 1 + 2.2 * u * u * u + 1.2 * u * u;
+      };
+      const easeInOut = (x) => {
+        const u = clamp01(x);
+        return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+      };
+
+      // t: seconds since cue 1; the native 5 s motion, then the settled word holds.
+      host.render = (t) => {
+        const D = host.duration;
+        const k = Math.min(1, D / 5);
+        letters.forEach((p, i) => {
+          const u = easeOutBack((t - 0.1 * k - i * 0.13 * k) / (0.9 * k));
+          // Lying face-down behind the baseline at 0, standing at 1.
+          p.rotation.x = (1 - u) * (-Math.PI / 2);
+          p.position.y = (1 - clamp01(u)) * -0.2;
+          p.visible = t >= 0.1 * k + i * 0.13 * k;
+        });
+        const swing = easeInOut((t - 0.9 * k) / (D - 0.9 * k - 0.7 * k));
+        word.rotation.y = -0.42 + swing * 0.42;
+        word.rotation.x = 0.04 - swing * 0.04;
+        renderer.render(scene, camera);
+      };
+      host.render(host.clock.t - host.start);
+      host.ready();
+    </script>
+  </body>
+</html>

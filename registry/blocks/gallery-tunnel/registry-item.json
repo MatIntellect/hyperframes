@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "gallery-tunnel",
+  "type": "hyperframes:block",
+  "title": "Gallery Tunnel",
+  "description": "An endless corridor of panels on the brand ground: a square tunnel receding to a vanishing point, floor, ceiling and walls tiled with colour slabs and your images that swell toward camera and pass you, the far end lost in fog. Images, palette, speed and cues are variables.",
+  "tags": ["webgl", "3d", "background", "showcase", "depth", "loop", "tunnel"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "gallery-tunnel.html",
+      "target": "compositions/gallery-tunnel.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
