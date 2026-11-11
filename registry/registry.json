@@ -4,6 +4,14 @@
   "homepage": "https://hyperframes.heygen.com",
   "items": [
     {
+      "name": "ai-answer-rank",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "ai-answer-rank-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "ai-chat-reveal",
       "type": "hyperframes:block"
     },

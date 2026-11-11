@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "ai-answer-rank",
+  "type": "hyperframes:block",
+  "title": "AI Answer Rank",
+  "description": "Is your brand in the AI answer? A question types into a chat card, the assistant answers with three ranked picks, then the brand slides into its slot, the rest step down and the brand row lands with the red highlight and a check. Words are variables; cues set start, re-rank and exit.",
+  "tags": ["mock-ui", "ai", "chat", "ranking", "list", "marketing"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "ai-answer-rank.html",
+      "target": "compositions/ai-answer-rank.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

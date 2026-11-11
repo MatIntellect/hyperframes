@@ -1,0 +1,507 @@
+<!doctype html>
+<!--
+  ai-answer-rank: "Is your brand in the AI answer?"
+  A question types into a chat card, the assistant answers with three ranked
+  picks, then re-ranks: the brand slides into its slot, the picks below step
+  down, the last one drops out, and the brand row lands with the accent
+  highlight and a check. Rank numbers belong to the slots, not the rows.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the card centred in the 780 column on y 770. top / bottom: the card hangs from y 180 / sits on y 1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "The question typed into the user bubble, up to two lines.", "maxLength": 50, "default": "Кто смонтирует ролик без монтажёра?" },
+    { "id": "lead", "type": "string", "role": "content", "label": "Answer lead-in", "description": "The assistant line above the ranked list.", "maxLength": 26, "default": "Вот лучшие варианты:" },
+    { "id": "rowA", "type": "string", "role": "content", "label": "Pick 1", "description": "First pick in the original answer: a product other than the brand this video promotes.", "portrays": ["competitor_name"], "maxLength": 16, "default": "Студия А" },
+    { "id": "rowB", "type": "string", "role": "content", "label": "Pick 2", "description": "Second pick in the original answer: a product other than the brand this video promotes.", "portrays": ["competitor_name"], "maxLength": 16, "default": "Фрилансер Б" },
+    { "id": "rowC", "type": "string", "role": "content", "label": "Pick 3", "description": "Third pick in the original answer. It drops out of the top three when the brand lands.", "portrays": ["competitor_name"], "maxLength": 16, "default": "Агентство В" },
+    { "id": "brand", "type": "string", "role": "content", "label": "Brand", "description": "The brand this video promotes, by its real name. It slides into the answer and takes the highlight.", "portrays": ["subject_name"], "maxLength": 16, "default": "MatIntellect" },
+    { "id": "brandRank", "type": "enum", "role": "content", "label": "Brand rank", "description": "The slot the brand lands in. Picks at and below it step down one place.", "portrays": ["recommended_position"], "default": "1", "options": [{ "value": "1", "label": "1st" }, { "value": "2", "label": "2nd" }, { "value": "3", "label": "3rd" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands and typing starts, 2 the brand slides in (holds the list until then; never before the list has been read), 3 the card fades (only when exit is fade). Empty keeps 0.1 and the re-rank about 4.3 s later.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #aarv-root {
+        --aarv-ink: var(--fg, #f2f2f2);
+        --aarv-ground: var(--surface, #18181a);
+        --aarv-accent: var(--accent, #ff0000);
+        --aarv-l1: color-mix(in srgb, var(--aarv-ink) 72%, transparent);
+        --aarv-l2: color-mix(in srgb, var(--aarv-ink) 45%, transparent);
+        --aarv-l3: color-mix(in srgb, var(--aarv-ink) 18%, transparent);
+        --aarv-l4: color-mix(in srgb, var(--aarv-ink) 8%, transparent);
+        --aarv-hair: var(--border, #2e2e32);
+        color: var(--aarv-ink);
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      .aarv-page {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #aarv-card {
+        position: absolute;
+        border-radius: 44px;
+        background: var(--aarv-ground);
+        border: 1px solid var(--aarv-hair);
+        box-shadow:
+          0 2px 6px rgba(0, 0, 0, 0.2),
+          0 30px 80px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* the bubble is sized by an invisible copy of the whole prompt, so typing never reflows the card */
+      #aarv-bubble {
+        position: relative;
+        align-self: flex-end;
+        padding: 22px 32px;
+        border-radius: 32px 32px 10px 32px;
+        background: var(--aarv-l4);
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 44px;
+        transform-origin: 100% 100%;
+      }
+      #aarv-sizer {
+        visibility: hidden;
+      }
+      #aarv-typing {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        top: 22px;
+      }
+      #aarv-caret {
+        display: inline-block;
+        width: 3px;
+        height: 34px;
+        margin-left: 2px;
+        border-radius: 2px;
+        background: var(--aarv-ink);
+        vertical-align: -6px;
+      }
+
+      #aarv-answer {
+        position: relative;
+      }
+      #aarv-lead {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 48px;
+        font-size: 34px;
+        font-weight: 700;
+      }
+      #aarv-star {
+        flex: 0 0 auto;
+        width: 30px;
+        height: 30px;
+      }
+      #aarv-star path {
+        fill: var(--aarv-ink);
+      }
+      .aarv-w {
+        opacity: 0;
+      }
+      #aarv-thinking {
+        position: absolute;
+        left: 4px;
+        top: 17px;
+        display: flex;
+        gap: 10px;
+      }
+      .aarv-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--aarv-l2);
+      }
+
+      /* 40px of runway under slot three, masked, so the pick pushed out fades instead of being cut */
+      #aarv-list {
+        position: relative;
+        overflow: hidden;
+      }
+      .aarv-rank {
+        position: absolute;
+        left: 0;
+        width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--aarv-l1);
+      }
+      .aarv-row {
+        position: absolute;
+        left: 68px;
+        right: 0;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 0 26px;
+        border-radius: 28px;
+        border: 1.5px solid var(--aarv-hair);
+      }
+      .aarv-hl {
+        position: absolute;
+        inset: -1.5px;
+        border-radius: 28px;
+        border: 3px solid var(--aarv-accent);
+        background: color-mix(in srgb, var(--aarv-accent) 12%, transparent);
+      }
+      .aarv-tile {
+        position: relative;
+        flex: 0 0 auto;
+        width: 68px;
+        height: 68px;
+        border-radius: 18px;
+        background: var(--aarv-l1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .aarv-tile-accent {
+        position: absolute;
+        inset: 0;
+        background: var(--aarv-accent);
+      }
+      .aarv-mono {
+        position: relative;
+        color: var(--aarv-ground);
+        font-size: 28px;
+        font-weight: 800;
+      }
+      .aarv-meta {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .aarv-name {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 44px;
+        white-space: nowrap;
+      }
+      .aarv-skel {
+        height: 12px;
+        margin-top: 12px;
+        border-radius: 6px;
+        background: var(--aarv-l3);
+      }
+      #aarv-check {
+        position: relative;
+        flex: 0 0 auto;
+        width: 56px;
+        height: 56px;
+      }
+      #aarv-check circle {
+        fill: var(--aarv-accent);
+      }
+      #aarv-check-path {
+        fill: none;
+        stroke: var(--aarv-ink);
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .aarv-hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      
+      #aarv-card {
+        left: 150px;
+        width: 780px;
+        padding: 40px 40px 16px;
+      }
+      #aarv-root.aarv-full #aarv-card {
+        top: 770px;
+        translate: 0 -50%;
+      }
+      #aarv-root.aarv-top #aarv-card {
+        top: 180px;
+      }
+      #aarv-root.aarv-bottom #aarv-card {
+        bottom: 560px;
+      }
+      #aarv-bubble {
+        max-width: 640px;
+      }
+      #aarv-answer {
+        margin-top: 40px;
+      }
+      #aarv-list {
+        height: 420px;
+        margin-top: 24px;
+        -webkit-mask-image: linear-gradient(to bottom, #000 380px, transparent 420px);
+        mask-image: linear-gradient(to bottom, #000 380px, transparent 420px);
+      }
+      .aarv-rank,
+      .aarv-row {
+        height: 116px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="aarv-root" data-composition-id="ai-answer-rank-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="aarv-page"></div>
+      <div id="aarv-card" class="aarv-hidden">
+        <div id="aarv-bubble" class="aarv-hidden">
+          <span id="aarv-sizer">Кто смонтирует ролик без монтажёра?</span>
+          <div id="aarv-typing"><span id="aarv-typed"></span><span id="aarv-caret"></span></div>
+        </div>
+
+        <div id="aarv-answer">
+          <div id="aarv-thinking" class="aarv-hidden">
+            <div class="aarv-dot"></div>
+            <div class="aarv-dot"></div>
+            <div class="aarv-dot"></div>
+          </div>
+          <div id="aarv-lead">
+            <svg id="aarv-star" class="aarv-hidden" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 0 C12.9 7 17 11.1 24 12 C17 12.9 12.9 17 12 24 C11.1 17 7 12.9 0 12 C7 11.1 11.1 7 12 0 Z" />
+            </svg>
+            <span id="aarv-lead-text">Вот лучшие варианты:</span>
+          </div>
+
+          <div id="aarv-list">
+            <div class="aarv-rank aarv-hidden" id="aarv-rank-1">1</div>
+            <div class="aarv-rank aarv-hidden" id="aarv-rank-2">2</div>
+            <div class="aarv-rank aarv-hidden" id="aarv-rank-3">3</div>
+
+            <div class="aarv-row aarv-hidden" id="aarv-row-a" data-layout-allow-overflow>
+              <div class="aarv-tile"><span class="aarv-mono">СА</span></div>
+              <div class="aarv-meta">
+                <div class="aarv-name">Студия А</div>
+                <div class="aarv-skel" style="width: 58%"></div>
+              </div>
+            </div>
+            <div class="aarv-row aarv-hidden" id="aarv-row-b" data-layout-allow-overflow>
+              <div class="aarv-tile"><span class="aarv-mono">ФБ</span></div>
+              <div class="aarv-meta">
+                <div class="aarv-name">Фрилансер Б</div>
+                <div class="aarv-skel" style="width: 44%"></div>
+              </div>
+            </div>
+            <div class="aarv-row aarv-hidden" id="aarv-row-c" data-layout-allow-overflow>
+              <div class="aarv-tile"><span class="aarv-mono">АВ</span></div>
+              <div class="aarv-meta">
+                <div class="aarv-name">Агентство В</div>
+                <div class="aarv-skel" style="width: 51%"></div>
+              </div>
+            </div>
+
+            <div class="aarv-row aarv-hidden" id="aarv-row-brand" data-layout-allow-overflow>
+              <div class="aarv-hl aarv-hidden" id="aarv-hl"></div>
+              <div class="aarv-tile">
+                <div class="aarv-tile-accent aarv-hidden" id="aarv-tile-accent"></div>
+                <span class="aarv-mono">M</span>
+              </div>
+              <div class="aarv-meta">
+                <div class="aarv-name">MatIntellect</div>
+                <div class="aarv-skel" style="width: 62%"></div>
+              </div>
+              <svg id="aarv-check" class="aarv-hidden" viewBox="0 0 56 56" aria-hidden="true">
+                <circle cx="28" cy="28" r="28" />
+                <path id="aarv-check-path" d="M17 29 L24.5 36.5 L39 21" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var root = document.getElementById("aarv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function monogram(name) {
+          var words = name.split(/\s+/).filter(Boolean);
+          return (words.length > 1 ? words[0][0] + words[words.length - 1][0] : name.slice(0, 1)).toUpperCase();
+        }
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        root.classList.add("aarv-" + placement);
+        if (placement !== "full") root.querySelector(".aarv-page").remove();
+        
+
+        var prompt = str(V.prompt, "Кто смонтирует ролик без монтажёра?");
+        var lead = str(V.lead, "Вот лучшие варианты:");
+        var names = [str(V.rowA, "Студия А"), str(V.rowB, "Фрилансер Б"), str(V.rowC, "Агентство В")];
+        var brand = str(V.brand, "MatIntellect");
+        var slot = ["1", "2", "3"].indexOf(String(V.brandRank));
+        if (slot < 0) slot = 0;
+
+        /* slot pitch and row height follow the version: 142/124 wide, 132/116 vertical */
+        var SLOT = 142;
+        
+        SLOT = 132;
+        
+        [1, 2, 3].forEach(function (n) {
+          document.getElementById("aarv-rank-" + n).style.top = (n - 1) * SLOT + "px";
+        });
+        var rows = ["#aarv-row-a", "#aarv-row-b", "#aarv-row-c"].map(function (sel, i) {
+          var el = document.querySelector(sel);
+          el.style.top = i * SLOT + "px";
+          el.querySelector(".aarv-name").textContent = names[i];
+          el.querySelector(".aarv-mono").textContent = monogram(names[i]);
+          return el;
+        });
+        var brandRow = document.getElementById("aarv-row-brand");
+        brandRow.querySelector(".aarv-name").textContent = brand;
+        brandRow.querySelector(".aarv-mono").textContent = monogram(brand);
+        brandRow.style.top = slot * SLOT + "px";
+
+        document.getElementById("aarv-sizer").textContent = prompt;
+        var leadEl = document.getElementById("aarv-lead-text");
+        leadEl.textContent = "";
+        var words = lead.split(/\s+/).map(function (word, i) {
+          if (i > 0) leadEl.appendChild(document.createTextNode(" "));
+          var span = document.createElement("span");
+          span.className = "aarv-w";
+          span.textContent = word;
+          leadEl.appendChild(span);
+          return span;
+        });
+
+        var checkPath = document.getElementById("aarv-check-path");
+        var checkLen = checkPath.getTotalLength();
+        checkPath.style.strokeDasharray = String(checkLen);
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo("#aarv-card", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, c0);
+        tl.fromTo("#aarv-bubble", { autoAlpha: 0, scale: 0.9 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, c0 + 0.25);
+
+        /* uneven keystrokes read as a person typing; the budget keeps any prompt inside 0.9 s */
+        var KEY_GAPS = [0.05, 0.035, 0.06, 0.04, 0.03, 0.055, 0.045, 0.07, 0.035, 0.05, 0.04, 0.065];
+        var raw = 0;
+        for (var n = 1; n < prompt.length; n += 1) raw += KEY_GAPS[n % KEY_GAPS.length];
+        var squeeze = Math.min(1, 0.9 / Math.max(raw, 0.001));
+        var TYPE_START = c0 + 0.5;
+        var t = TYPE_START;
+        tl.set("#aarv-typed", { textContent: "" }, 0.001);
+        tl.set("#aarv-caret", { autoAlpha: 0 }, 0.001);
+        tl.set("#aarv-caret", { autoAlpha: 1 }, TYPE_START - 0.15);
+        for (var c = 1; c <= prompt.length; c += 1) {
+          tl.set("#aarv-typed", { textContent: prompt.slice(0, c) }, t);
+          t += KEY_GAPS[c % KEY_GAPS.length] * squeeze;
+        }
+        var typeEnd = t;
+        tl.set("#aarv-caret", { autoAlpha: 0 }, typeEnd + 0.2);
+
+        var THINK = typeEnd + 0.25;
+        tl.fromTo("#aarv-thinking", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15, ease: "none" }, THINK);
+        gsap.utils.toArray(".aarv-dot").forEach(function (dot, i) {
+          var at = THINK + 0.1 + i * 0.08;
+          tl.to(dot, { y: -9, duration: 0.14, ease: "sine.out" }, at);
+          tl.to(dot, { y: 0, duration: 0.14, ease: "sine.in" }, at + 0.14);
+        });
+        var LEAD = THINK + 0.5;
+        tl.to("#aarv-thinking", { autoAlpha: 0, duration: 0.12, ease: "none" }, LEAD - 0.12);
+        tl.fromTo("#aarv-star", { autoAlpha: 0, scale: 0.3, rotation: -90 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, LEAD);
+        words.forEach(function (w, i) {
+          tl.set(w, { opacity: 1 }, LEAD + 0.12 + i * 0.07);
+        });
+
+        var ROWS = LEAD + 0.25 + words.length * 0.07;
+        rows.forEach(function (row, i) {
+          var at = ROWS + i * 0.16;
+          tl.fromTo("#aarv-rank-" + (i + 1), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: "none" }, at);
+          tl.fromTo(row, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" }, at);
+        });
+
+        /* every pick is read before it moves (native hold 0.95 s), later only by cue 2; picks step down rather than trade places */
+        var shown = ROWS + 0.32 + 0.45;
+        var RERANK = Math.max(shown + 0.95, isFinite(cues[1]) ? cues[1] : 0);
+        rows.forEach(function (row, i) {
+          if (i < slot) return;
+          tl.to(row, { y: SLOT, duration: 0.55, ease: "power3.inOut" }, RERANK);
+          /* the pick pushed out is gone before it reaches the card edge */
+          if (i === 2) tl.to(row, { autoAlpha: 0, duration: 0.3, ease: "power1.in" }, RERANK);
+        });
+        /* the brand waits until its slot is mostly clear, so it never lands on the row leaving it */
+        tl.fromTo(brandRow, { autoAlpha: 0, x: 96 }, { autoAlpha: 1, x: 0, duration: 0.55, ease: "power3.out" }, RERANK + 0.34);
+
+        var LAND = RERANK + 0.9;
+        tl.fromTo("#aarv-hl", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: "power1.out" }, LAND);
+        tl.fromTo("#aarv-tile-accent", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: "power1.out" }, LAND);
+        tl.fromTo("#aarv-check", { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, duration: 0.42, ease: "back.out(2.2)" }, LAND + 0.05);
+        tl.fromTo(checkPath, { strokeDashoffset: checkLen }, { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" }, LAND + 0.2);
+
+        if (exit === "fade") tl.to("#aarv-card", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : LAND + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["ai-answer-rank-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
