@@ -12,6 +12,22 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "apple-money-count",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "apple-money-count-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "bar-chart-race",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "bar-chart-race-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "chatgpt-exchange",
       "type": "hyperframes:block"
     },
@@ -28,6 +44,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "data-chart",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "data-chart-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "instagram-follow",
       "type": "hyperframes:block"
     },
@@ -36,11 +60,59 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "lt-dark-card",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lt-dark-card-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lt-kicker-name",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lt-kicker-name-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "message-thread-reveal",
       "type": "hyperframes:block"
     },
     {
       "name": "message-thread-reveal-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-callout-highlight",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-callout-highlight-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-line-graph",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-line-graph-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-progress-stat",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-progress-stat-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-specs-list",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mk-specs-list-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -73,6 +145,14 @@
     },
     {
       "name": "slack-notification-ad-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "split-flap-board",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "split-flap-board-vertical",
       "type": "hyperframes:block"
     },
     {
