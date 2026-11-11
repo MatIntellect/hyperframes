@@ -1,0 +1,21 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "chatgpt-exchange-landscape",
+  "type": "hyperframes:block",
+  "title": "ChatGPT Exchange (landscape)",
+  "description": "A dark ChatGPT exchange types and sends a prompt, streams an answer, assembles a four-row comparison table and scrolls back through the result: the app's black to the frame edge, the app column with header and Russian keyboard in the middle. Prompt, answer, table and six beat times are variables; holds the read-back frame to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "ai", "chat", "chatgpt", "landscape"],
+  "author": "Jake Moran",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "chatgpt-exchange-landscape.html",
+      "target": "compositions/chatgpt-exchange-landscape.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

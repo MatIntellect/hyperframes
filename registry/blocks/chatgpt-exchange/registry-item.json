@@ -3,48 +3,19 @@
   "name": "chatgpt-exchange",
   "type": "hyperframes:block",
   "title": "ChatGPT Exchange",
-  "description": "A portrait ChatGPT-style exchange types and sends a prompt, streams an answer, assembles a comparison table, and scrolls back through the result",
-  "tags": ["showcase", "mock-ui", "ai", "chat", "vertical", "ad-template"],
+  "description": "A dark ChatGPT exchange types and sends a prompt, streams an answer, assembles a four-row comparison table and scrolls back through the result. Prompt, answer, table and six beat times are variables; placement full (app with header and Russian keyboard) or top / bottom (a black chat card); holds the read-back frame to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "ai", "chat", "chatgpt", "vertical"],
   "author": "Jake Moran",
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 14.9,
+  "duration": 30,
   "files": [
     {
       "path": "chatgpt-exchange.html",
       "target": "compositions/chatgpt-exchange.html",
       "type": "hyperframes:composition"
-    },
-    {
-      "path": "assets/fonts/inter-latin-400-normal.woff2",
-      "target": "assets/fonts/inter-latin-400-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-latin-500-normal.woff2",
-      "target": "assets/fonts/inter-latin-500-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-latin-600-normal.woff2",
-      "target": "assets/fonts/inter-latin-600-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-LICENSE.txt",
-      "target": "assets/fonts/inter-LICENSE.txt",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "TEMPLATE.md",
-      "target": "TEMPLATE.md",
-      "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/chatgpt-exchange/preview.mp4",
-    "poster": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/chatgpt-exchange/poster.jpg"
-  }
+  ]
 }
