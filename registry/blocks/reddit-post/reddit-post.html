@@ -1,0 +1,273 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "subreddit", "type": "string", "role": "content", "label": "Subreddit", "description": "Community name with r/.", "maxLength": 22, "default": "r/matintellect" },
+    { "id": "author", "type": "string", "role": "content", "label": "Author line", "description": "Grey line under the community: user and age.", "maxLength": 26, "default": "u/matjester · 3 ч" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Post title, bold; up to three lines.", "maxLength": 80, "default": "Собрал систему, которая монтирует ролики без человека" },
+    { "id": "body", "type": "string", "role": "content", "label": "Body", "description": "Grey text under the title. Empty hides it.", "maxLength": 120, "default": "Запись приходит в Telegram, через шесть минут готовый ролик с графикой и субтитрами. Спрашивайте, как устроено" },
+    { "id": "votes", "type": "string", "role": "content", "label": "Votes", "description": "Vote count before the upvote, up to 7 characters.", "maxLength": 7, "default": "4,2 тыс" },
+    { "id": "votesAfter", "type": "string", "role": "content", "label": "Votes after", "description": "Vote count after the upvote, shown in orange.", "maxLength": 7, "default": "4,3 тыс" },
+    { "id": "comments", "type": "string", "role": "content", "label": "Comments", "description": "Comment count.", "maxLength": 7, "default": "328" },
+    { "id": "shareLabel", "type": "string", "role": "content", "label": "Share button", "description": "Text of the share button.", "maxLength": 10, "default": "Поделиться" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 card lands, 2 the upvote is pressed, 3 card leaves (only when exit is not none). Empty keeps 0.1, 1.5, 4.2.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the upvoted post to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "down", "label": "Slide down" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      /* Reddit in its dark theme: the card colours of the original block, Inter for Russian letters */
+      #rdp-root {
+        font-family: "Inter", sans-serif;
+      }
+      .rdp-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #rdp-field {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #rdp-card {
+        background: #1a1a2e;
+        box-shadow: 0 12px 60px rgba(0, 0, 0, 0.6);
+      }
+      #rdp-head {
+        display: flex;
+        align-items: center;
+      }
+      #rdp-icon {
+        display: block;
+        flex-shrink: 0;
+      }
+      #rdp-meta {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      #rdp-sub {
+        font-weight: 700;
+        color: #d7dadc;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+      #rdp-author {
+        color: #818384;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+      #rdp-title {
+        font-weight: 700;
+        color: #d7dadc;
+        line-height: 1.3;
+        overflow-wrap: break-word;
+      }
+      #rdp-body {
+        color: #818384;
+        line-height: 1.4;
+        overflow-wrap: break-word;
+      }
+      #rdp-bar {
+        display: flex;
+        align-items: center;
+        border-top: 1px solid #343536;
+      }
+      .rdp-pill {
+        display: flex;
+        align-items: center;
+        background: #272729;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .rdp-pill svg {
+        display: block;
+        flex-shrink: 0;
+      }
+      #rdp-up {
+        display: block;
+      }
+      /* the count before and after the upvote share one cell */
+      #rdp-votebox {
+        display: inline-grid;
+        justify-items: center;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      #rdp-votes,
+      #rdp-votes2 {
+        grid-area: 1 / 1;
+      }
+      #rdp-votes {
+        color: #d7dadc;
+      }
+      #rdp-votes2 {
+        color: #ff4500;
+        opacity: 0;
+      }
+      .rdp-label {
+        color: #818384;
+      }
+      
+      #rdp-field {
+        inset: 0;
+      }
+      #rdp-card {
+        width: 860px;
+        border-radius: 16px;
+        padding: 32px;
+      }
+      #rdp-head {
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+      #rdp-icon {
+        width: 52px;
+        height: 52px;
+      }
+      #rdp-sub {
+        font-size: 28px;
+      }
+      #rdp-author {
+        font-size: 28px;
+      }
+      #rdp-title {
+        font-size: 38px;
+        margin-bottom: 14px;
+      }
+      #rdp-body {
+        font-size: 28px;
+        margin-bottom: 26px;
+      }
+      #rdp-bar {
+        gap: 24px;
+        padding-top: 20px;
+      }
+      .rdp-pill {
+        gap: 10px;
+        padding: 10px 18px;
+      }
+      .rdp-pill svg {
+        width: 30px;
+        height: 30px;
+      }
+      #rdp-votebox,
+      .rdp-label {
+        font-size: 28px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="rdp-root" data-composition-id="reddit-post" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="rdp-field">
+        <div id="rdp-card">
+          <div id="rdp-head">
+            <svg id="rdp-icon" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="24" fill="#4A90D9" />
+              <text data-layout-ignore x="24" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#fff">r/</text>
+            </svg>
+            <div id="rdp-meta">
+              <span id="rdp-sub">r/matintellect</span>
+              <span id="rdp-author">u/matjester · 3 ч</span>
+            </div>
+          </div>
+          <div id="rdp-title"></div>
+          <div id="rdp-body"></div>
+          <div id="rdp-bar">
+            <div class="rdp-pill">
+              <svg id="rdp-up" viewBox="0 0 24 24" fill="none"><path id="rdp-arrow" d="M12 4L3 14h5v6h8v-6h5L12 4z" fill="#818384" /></svg>
+              <span id="rdp-votebox"><span id="rdp-votes">4,2 тыс</span><span id="rdp-votes2">4,3 тыс</span></span>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 20l9-10h-5V4H8v6H3l9 10z" fill="#818384" /></svg>
+            </div>
+            <div class="rdp-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#818384" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
+              <span id="rdp-comments" class="rdp-label">328</span>
+            </div>
+            <div class="rdp-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#818384" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+              <span id="rdp-share" class="rdp-label">Поделиться</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("rdp-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+
+        document.getElementById("rdp-sub").textContent = str(V.subreddit, "r/matintellect");
+        document.getElementById("rdp-author").textContent = str(V.author, "u/matjester · 3 ч");
+        document.getElementById("rdp-title").textContent = str(V.title, "Собрал систему, которая монтирует ролики без человека");
+        var body = typeof V.body === "string" ? V.body.trim() : "Запись приходит в Telegram, через шесть минут готовый ролик с графикой и субтитрами. Спрашивайте, как устроено";
+        var bodyEl = document.getElementById("rdp-body");
+        if (body) bodyEl.textContent = body;
+        else bodyEl.remove();
+        document.getElementById("rdp-votes").textContent = str(V.votes, "4,2 тыс");
+        document.getElementById("rdp-votes2").textContent = str(V.votesAfter, "4,3 тыс");
+        document.getElementById("rdp-comments").textContent = str(V.comments, "328");
+        document.getElementById("rdp-share").textContent = str(V.shareLabel, "Поделиться");
+        if (!body) document.getElementById("rdp-title").style.marginBottom = "26px";
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var c1 = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : c0 + 1.4;
+        var exit = oneOf(V.exit, ["none", "fade", "down"], "none");
+
+        /* how far the card travels: from under the frame edge in the wide version, a short lift in the vertical one */
+        var RISE = 400;
+        
+        var card = document.getElementById("rdp-card");
+        var up = document.getElementById("rdp-up");
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(card, { y: RISE, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, c0);
+        tl.to(up, { scale: 0.85, duration: 0.12, ease: "power2.out" }, c1);
+        tl.to(up, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.4)" }, c1 + 0.12);
+        tl.to("#rdp-arrow", { attr: { fill: "#ff4500" }, duration: 0.12, ease: "none" }, c1 + 0.12);
+        tl.to("#rdp-votes", { opacity: 0, duration: 0.08, ease: "none" }, c1 + 0.12);
+        tl.to("#rdp-votes2", { opacity: 1, duration: 0.12, ease: "none" }, c1 + 0.12);
+        var tOut = isFinite(cues[2]) ? cues[2] : c1 + 2.7;
+        if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.4, ease: "power2.in" }, tOut);
+        if (exit === "down") tl.to(card, { y: RISE, opacity: 0, duration: 0.3, ease: "power3.in" }, tOut);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["reddit-post"] = tl;
+      })();
+    </script>
+  </body>
+</html>

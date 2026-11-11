@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "reddit-post",
+  "type": "hyperframes:block",
+  "title": "Reddit Post Card",
+  "description": "Reddit post card in its dark theme: the card lands, the upvote is pressed, the arrow and the count turn orange. Community, author, title, body and counts are variables; cues set landing, upvote and exit.",
+  "tags": ["social", "overlay", "reddit"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "reddit-post.html",
+      "target": "compositions/reddit-post.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

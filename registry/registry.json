@@ -204,6 +204,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "reddit-post",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "reddit-post-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "share-sheet-carousel",
       "type": "hyperframes:block"
     },

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "reddit-post-vertical",
+  "type": "hyperframes:block",
+  "title": "Reddit Post Card (vertical)",
+  "description": "Vertical Reddit post card in its dark theme: the card lands, the upvote is pressed, the arrow and the count turn orange. Words and counts are variables; placement full (brand ground), top or bottom; cues set landing, upvote and exit.",
+  "tags": ["social", "overlay", "reddit", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "reddit-post-vertical.html",
+      "target": "compositions/reddit-post-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
