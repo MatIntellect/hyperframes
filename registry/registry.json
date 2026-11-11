@@ -140,6 +140,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "macos-notification",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "macos-notification-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "message-thread-reveal",
       "type": "hyperframes:block"
     },

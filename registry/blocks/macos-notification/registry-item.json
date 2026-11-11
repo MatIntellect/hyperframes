@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "macos-notification",
+  "type": "hyperframes:block",
+  "title": "macOS Notification",
+  "description": "macOS notification banner in its native look, scaled so the body reads at 28 px: slides in from the right in the top right corner. App name, icon, time, title and body are variables; cues set entrance and exit.",
+  "tags": ["social", "overlay", "notification"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "macos-notification.html",
+      "target": "compositions/macos-notification.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

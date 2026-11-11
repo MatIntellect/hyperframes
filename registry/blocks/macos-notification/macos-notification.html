@@ -1,0 +1,165 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "appName", "type": "string", "role": "content", "label": "App name", "description": "Small grey app name, upper case as macOS writes it.", "maxLength": 16, "default": "MatIntellect" },
+    { "id": "icon", "type": "image", "role": "content", "label": "App icon", "description": "Square app icon, rounded like macOS.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "time", "type": "string", "role": "content", "label": "Time", "description": "Grey time on the right.", "maxLength": 10, "default": "сейчас" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Bold first line.", "maxLength": 36, "default": "Ролик готов" },
+    { "id": "body", "type": "string", "role": "content", "label": "Body", "description": "Grey text under the title, up to three lines.", "maxLength": 90, "default": "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the banner slides in from the right, 2 it slides back out (only when exit is out). Empty keeps 0.2, 4.2.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the banner to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      /* the macOS banner is drawn at its own size and scaled whole, so the 13 px body lands on 28 px */
+      #mno-root {
+        font-family: "Inter", sans-serif;
+      }
+      #mno-scale {
+        position: absolute;
+        transform: scale(2.155);
+      }
+      #mno-card {
+        background: rgba(30, 30, 30, 0.82);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      #mno-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        object-fit: cover;
+      }
+      #mno-content {
+        flex: 1;
+        min-width: 0;
+      }
+      #mno-headrow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 2px;
+      }
+      #mno-app {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      #mno-time {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        white-space: nowrap;
+      }
+      #mno-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.3;
+        margin-bottom: 2px;
+        overflow-wrap: break-word;
+      }
+      #mno-body {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.35;
+        overflow-wrap: break-word;
+      }
+      
+      /* top right corner, 48 px from the edges; 380 x 2.155 = 819 px wide */
+      #mno-scale {
+        top: 48px;
+        right: 48px;
+        width: 380px;
+        transform-origin: top right;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="mno-root" data-composition-id="macos-notification" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="mno-scale">
+        <div id="mno-card">
+          <img id="mno-icon" src="assets/img/matintellect-avatar.svg" alt="" />
+          <div id="mno-content">
+            <div id="mno-headrow">
+              <span id="mno-app">MatIntellect</span>
+              <span id="mno-time">сейчас</span>
+            </div>
+            <div id="mno-title">Ролик готов</div>
+            <div id="mno-body">Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mno-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        document.getElementById("mno-app").textContent = str(V.appName, "MatIntellect");
+        document.getElementById("mno-icon").src = str(V.icon, "assets/img/matintellect-avatar.svg");
+        document.getElementById("mno-time").textContent = str(V.time, "сейчас");
+        document.getElementById("mno-title").textContent = str(V.title, "Ролик готов");
+        document.getElementById("mno-body").textContent = str(V.body, "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»");
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.2;
+        var exit = oneOf(V.exit, ["none", "out"], "none");
+        /* macOS slides the banner in from the right screen edge; in the vertical version a short slide keeps it off the frame edge */
+        var SLIDE = 420;
+        
+        var card = document.getElementById("mno-card");
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(card, { x: SLIDE, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, c0);
+        if (exit === "out") tl.to(card, { x: SLIDE, opacity: 0, duration: 0.3, ease: "power3.in" }, isFinite(cues[1]) ? cues[1] : c0 + 4);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["macos-notification"] = tl;
+      })();
+    </script>
+  </body>
+</html>

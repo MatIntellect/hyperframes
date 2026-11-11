@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "macos-notification-vertical",
+  "type": "hyperframes:block",
+  "title": "macOS Notification (vertical)",
+  "description": "Vertical macOS notification banner in its native look, 780 wide, centred over footage: slides in from the right. Words and icon are variables; placement top, centre or bottom (above the caption band); cues set entrance and exit.",
+  "tags": ["social", "overlay", "notification", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "macos-notification-vertical.html",
+      "target": "compositions/macos-notification-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
