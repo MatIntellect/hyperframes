@@ -1,0 +1,866 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "contactName", "type": "string", "role": "content", "label": "Contact name", "description": "Name pill in the chat header; the avatar shows its first letter.", "maxLength": 16, "default": "Аня" },
+    { "id": "questionMessage", "type": "string", "role": "content", "label": "Opening question", "description": "First incoming message, up to two lines.", "maxLength": 60, "default": "чем ты монтируешь свои ролики??" },
+    { "id": "teaserMessage", "type": "string", "role": "content", "label": "Teaser reply", "description": "First typed outgoing reply before the shared link card, one line.", "maxLength": 28, "default": "смотри 👀" },
+    { "id": "cardImage", "type": "image", "role": "content", "label": "Link card image", "description": "Preview image on the shared link card.", "default": "assets/link-card.jpg" },
+    { "id": "cardTitle", "type": "string", "role": "content", "label": "Link card title", "description": "Title of the shared link card, up to three lines.", "maxLength": 54, "default": "MatIntellect | Монтаж рилсов с ИИ без монтажёра" },
+    { "id": "cardDomain", "type": "string", "role": "content", "label": "Link card domain", "description": "Domain under the card title.", "maxLength": 22, "default": "matintellect.com" },
+    { "id": "reactionMessage", "type": "string", "role": "content", "label": "Link reaction", "description": "Incoming reaction right after the shared link, up to two lines.", "maxLength": 60, "default": "ЧЕГО, ОНО САМО МОНТИРУЕТ?" },
+    { "id": "reactionEmoji", "type": "string", "role": "content", "label": "Reaction emoji", "description": "Emoji-only reaction after the shared link, up to four emoji.", "maxLength": 8, "default": "🤯🤯🤯" },
+    { "id": "benefitMessage", "type": "string", "role": "content", "label": "Benefit reply", "description": "Typed outgoing reply that names the main benefit, one line.", "maxLength": 28, "default": "субтитры и графика сами" },
+    { "id": "discoveryMessage", "type": "string", "role": "content", "label": "Discovery question", "description": "Incoming question, up to two lines.", "maxLength": 60, "default": "где ты это нашёл" },
+    { "id": "sourceMessage", "type": "string", "role": "content", "label": "Source reply", "description": "Typed outgoing reply naming where to find it, one line.", "maxLength": 28, "default": "на matintellect.com" },
+    { "id": "workflowMessage", "type": "string", "role": "content", "label": "Workflow reply", "description": "Typed outgoing reply describing how it works, one line.", "maxLength": 28, "default": "просто кидаешь запись" },
+    { "id": "ownershipMessage", "type": "string", "role": "content", "label": "Closing reply", "description": "Typed outgoing reply that closes the explanation, one line.", "maxLength": 28, "default": "ролик готов за минуты" },
+    { "id": "installMessage", "type": "string", "role": "content", "label": "Intent reply", "description": "Incoming message with the intent to try it, up to two lines.", "maxLength": 60, "default": "уже пробую" },
+    { "id": "thanksMessage", "type": "string", "role": "content", "label": "Thanks", "description": "Final incoming message, up to two lines.", "maxLength": 60, "default": "спасибо 💚" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the opening question lands, 2 the teaser is sent, 3 the reaction lands, 4 the discovery question lands, 5 the closing reply is sent, 6 the thanks lands, 7 the chat fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 0.3, 3.27, 7.6, 12.67, 20.2, 21.73.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last message to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Message Thread Reveal</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #mtr-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      #mtr-ground {
+        position: absolute;
+        inset: 0;
+        background: #000;
+      }
+      /* the field: the Messages screen, authored 800 px wide and scaled 0.975 to 780 */
+      #mtr-field {
+        position: absolute;
+        left: 570px;
+        top: 40px;
+        width: 780px;
+        height: 1000px;
+        overflow: hidden;
+      }
+      #mtr-screen {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 800px;
+        height: var(--mtr-h, 1026px);
+        transform: scale(0.975);
+        transform-origin: top left;
+        background: #000;
+        overflow: hidden;
+      }
+      /* header */
+      #mtr-hdr-back {
+        position: absolute;
+        left: 48px;
+        top: 36px;
+      }
+      #mtr-hdr-badge {
+        position: absolute;
+        left: 112px;
+        top: 39px;
+        height: 46px;
+        padding: 0 22px;
+        background: #262628;
+        border-radius: 23px;
+        color: #fff;
+        font-size: 29px;
+        line-height: 46px;
+      }
+      #mtr-hdr-avatar {
+        position: absolute;
+        left: 357px;
+        top: 0;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        background: #9ce474;
+        color: #12300c;
+        font-size: 44px;
+        font-weight: 600;
+        display: grid;
+        place-items: center;
+      }
+      #mtr-hdr-name {
+        position: absolute;
+        left: 400px;
+        top: 91px;
+        transform: translateX(-50%);
+        height: 46px;
+        padding: 0 20px;
+        background: #232325;
+        border-radius: 23px;
+        color: #fff;
+        font-size: 29px;
+        line-height: 46px;
+        white-space: nowrap;
+      }
+      #mtr-hdr-name .chev {
+        color: #8e8e93;
+        font-size: 28px;
+        margin-left: 8px;
+      }
+      #mtr-hdr-cam {
+        position: absolute;
+        left: 699px;
+        top: 44px;
+      }
+      /* chat viewport */
+      #mtr-chatview {
+        position: absolute;
+        left: 0;
+        top: var(--mtr-chat-top, 143px);
+        width: 800px;
+        height: var(--mtr-chat-h, 766px);
+        overflow: hidden;
+      }
+      .item {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        visibility: hidden;
+      }
+      .item.recv {
+        padding-left: 44px;
+        text-align: left;
+      }
+      .item.sent {
+        padding-right: 45px;
+        text-align: right;
+      }
+      .pop {
+        display: inline-block;
+        position: relative;
+      }
+      .pop-recv {
+        transform-origin: left bottom;
+      }
+      .pop-sent {
+        transform-origin: right bottom;
+      }
+      .bubble {
+        display: inline-block;
+        position: relative;
+        max-width: 640px;
+        padding: 18px 28px;
+        line-height: 45px;
+        border-radius: 40px;
+        font-size: 32.9px;
+        color: #fff;
+        text-align: left;
+      }
+      .bubble.recv {
+        background: #242428;
+      }
+      .bubble.sent {
+        background: #0a80f8;
+      }
+      /* iMessage tails (screen bg is pure black: cover-circle trick) */
+      .tail-recv::before {
+        content: "";
+        position: absolute;
+        left: -10px;
+        bottom: 0;
+        width: 26px;
+        height: 26px;
+        background: #242428;
+        border-bottom-right-radius: 20px 18px;
+      }
+      .tail-recv::after {
+        content: "";
+        position: absolute;
+        left: -26px;
+        bottom: -2px;
+        width: 20px;
+        height: 30px;
+        background: #000;
+        border-bottom-right-radius: 16px;
+      }
+      .tail-sent::before {
+        content: "";
+        position: absolute;
+        right: -10px;
+        bottom: 0;
+        width: 26px;
+        height: 26px;
+        background: #0a80f8;
+        border-bottom-left-radius: 20px 18px;
+      }
+      .tail-sent::after {
+        content: "";
+        position: absolute;
+        right: -26px;
+        bottom: -2px;
+        width: 20px;
+        height: 30px;
+        background: #000;
+        border-bottom-left-radius: 16px;
+      }
+      .delivered {
+        color: #8e8e93;
+        font-size: 29px;
+        margin-top: 10px;
+        padding-right: 7px;
+        text-align: right;
+      }
+      .emojirow {
+        font-size: 105.5px;
+        line-height: 140px;
+        letter-spacing: 2px;
+        margin-left: 12px;
+        white-space: nowrap;
+        color: #fff;
+      }
+      /* typing indicator */
+      .dotswrap {
+        position: relative;
+        display: inline-block;
+      }
+      .dotsbubble {
+        width: 124px;
+        height: 67px;
+        background: #242428;
+        border-radius: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .dot {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #8e8e93;
+        display: inline-block;
+      }
+      .dtail1 {
+        position: absolute;
+        left: -2px;
+        bottom: -4px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #242428;
+      }
+      .dtail2 {
+        position: absolute;
+        left: -14px;
+        bottom: -14px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #242428;
+      }
+      /* link card */
+      .card {
+        display: inline-block;
+        width: 443px;
+        border-radius: 36px;
+        overflow: hidden;
+        text-align: left;
+      }
+      .cardimg {
+        display: block;
+        width: 443px;
+        height: 380px;
+        object-fit: cover;
+      }
+      .cardmeta {
+        min-height: 150px;
+        background: #28282c;
+        display: flex;
+        align-items: center;
+        padding: 18px 18px 18px 26px;
+      }
+      .cardtxt {
+        flex: 1;
+        min-width: 0;
+      }
+      .cardtitle {
+        color: #fff;
+        font-size: 29px;
+        font-weight: 600;
+        line-height: 36px;
+      }
+      .carddomain {
+        color: #8e8e93;
+        font-size: 29px;
+        margin-top: 4px;
+      }
+      .cardchev {
+        color: #8e8e93;
+        font-size: 48px;
+        padding-left: 8px;
+      }
+      /* input bar */
+      #mtr-inputbar {
+        position: absolute;
+        left: 0;
+        top: var(--mtr-input-top, 923px);
+        width: 800px;
+        height: 93px;
+      }
+      #mtr-plusbtn {
+        position: absolute;
+        left: 12px;
+        top: 7px;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        background: #262628;
+        color: #8e8e93;
+        font-size: 52px;
+        font-weight: 300;
+        display: grid;
+        place-items: center;
+      }
+      #mtr-inputfield {
+        position: absolute;
+        left: 124px;
+        top: 0;
+        width: 665px;
+        height: 93px;
+        border: 2px solid #202022;
+        border-radius: 47px;
+      }
+      #mtr-ph {
+        position: absolute;
+        left: 158px;
+        top: 22px;
+        color: #8e8e93;
+        font-size: 35px;
+        line-height: 48px;
+      }
+      #mtr-typed {
+        position: absolute;
+        left: 158px;
+        top: 22px;
+        width: 530px;
+        color: #fff;
+        font-size: 35px;
+        line-height: 48px;
+        white-space: pre;
+        visibility: hidden;
+      }
+      .caret {
+        display: inline-block;
+        width: 4px;
+        height: 42px;
+        background: #0a80f8;
+        vertical-align: -8px;
+        margin-left: 2px;
+        border-radius: 2px;
+      }
+      #mtr-mic {
+        position: absolute;
+        left: 724px;
+        top: 18px;
+      }
+      #mtr-sendbtn {
+        position: absolute;
+        left: 718px;
+        top: 14px;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: #0a80f8;
+        visibility: hidden;
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="mtr-root"
+      data-composition-id="message-thread-reveal-landscape"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="30"
+    >
+      <section id="scene-chat" class="clip" data-start="0" data-duration="30" data-track-index="1">
+        <div id="mtr-ground"></div>
+        <div id="mtr-field">
+          <div id="mtr-screen">
+            <div id="mtr-header">
+              <svg id="mtr-hdr-back" width="26" height="48" viewBox="0 0 26 48">
+                <path
+                  d="M23 3 L4 24 L23 45"
+                  stroke="#E4E4E4"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div id="mtr-hdr-badge">12</div>
+              <div id="mtr-hdr-avatar">А</div>
+              <div id="mtr-hdr-name">Аня<span class="chev">›</span></div>
+              <svg id="mtr-hdr-cam" width="52" height="34" viewBox="0 0 52 34">
+                <rect x="0" y="1" width="36" height="32" rx="9" fill="#fff" />
+                <path d="M38 12 L50 4 V30 L38 22 Z" fill="#fff" />
+              </svg>
+            </div>
+            <div id="mtr-chatview">
+              <div
+                class="item recv"
+                id="mtr-it-m1"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="bubble recv" id="mtr-message-question"></div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-dots"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="dotswrap">
+                    <div class="dotsbubble">
+                      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    </div>
+                    <div class="dtail1"></div>
+                    <div class="dtail2"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m2"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="bubble sent tail-sent" id="mtr-message-teaser"></div>
+                  <div class="delivered">Доставлено</div>
+                </div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m3"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="card">
+                    <img
+                      class="cardimg"
+                      data-var-src="cardImage"
+                      src="assets/link-card.jpg"
+                      alt=""
+                    />
+                    <div class="cardmeta">
+                      <div class="cardtxt">
+                        <div class="cardtitle"></div>
+                        <div class="carddomain"></div>
+                      </div>
+                      <div class="cardchev">›</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-m4"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="bubble recv" id="mtr-message-reaction"></div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-m5"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv"><div class="emojirow" id="mtr-message-emoji"></div></div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m6"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="bubble sent tail-sent" id="mtr-message-benefit"></div>
+                  <div class="delivered">Доставлено</div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-dots2"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="dotswrap">
+                    <div class="dotsbubble">
+                      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    </div>
+                    <div class="dtail1"></div>
+                    <div class="dtail2"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-m7"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="bubble recv tail-recv" id="mtr-message-discovery"></div>
+                </div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m8"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="bubble sent" id="mtr-message-source"></div>
+                </div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m9"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="bubble sent" id="mtr-message-workflow"></div>
+                </div>
+              </div>
+              <div
+                class="item sent"
+                id="mtr-it-m10"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-sent">
+                  <div class="bubble sent tail-sent" id="mtr-message-ownership"></div>
+                  <div class="delivered">Доставлено</div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-m11"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="bubble recv" id="mtr-message-install"></div>
+                </div>
+              </div>
+              <div
+                class="item recv"
+                id="mtr-it-m12"
+                data-layout-allow-overflow
+                data-layout-allow-overlap
+                data-layout-allow-occlusion
+              >
+                <div class="pop pop-recv">
+                  <div class="bubble recv tail-recv" id="mtr-message-thanks"></div>
+                </div>
+              </div>
+            </div>
+            <div id="mtr-inputbar">
+              <div id="mtr-plusbtn">+</div>
+              <div id="mtr-inputfield"></div>
+              <div id="mtr-ph">iMessage</div>
+              <div id="mtr-typed"><span id="mtr-typed-text"></span><span class="caret"></span></div>
+              <svg id="mtr-mic" width="26" height="42" viewBox="0 0 26 42">
+                <rect x="8" y="0" width="10" height="22" rx="5" fill="#8E8E93" />
+                <path
+                  d="M2 16 A11 11 0 0 0 24 16"
+                  stroke="#8E8E93"
+                  stroke-width="3.5"
+                  fill="none"
+                  transform="translate(0,2)"
+                />
+                <line x1="13" y1="30" x2="13" y2="38" stroke="#8E8E93" stroke-width="3.5" />
+                <line x1="6" y1="39" x2="20" y2="39" stroke="#8E8E93" stroke-width="3.5" />
+              </svg>
+              <div id="mtr-sendbtn">
+                <svg width="26" height="30" viewBox="0 0 26 30">
+                  <path
+                    d="M13 28 V4 M3 13 L13 3 L23 13"
+                    stroke="#fff"
+                    stroke-width="5"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script>
+      (function () {
+        "use strict";
+        var vars =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function text(value, fallback) {
+          return typeof value === "string" && value.trim() ? value.trim() : fallback;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        /* ---- placement: screen height = field height / 0.975 */
+        var root = document.getElementById("mtr-root");
+        var full = true;
+        var H = 1026; // field height 1000 / 0.975
+        var CHAT_TOP = 143;
+        var INPUT_TOP = H - 103;
+        var CHAT_H = INPUT_TOP - 14 - CHAT_TOP;
+        root.style.setProperty("--mtr-h", H + "px");
+        root.style.setProperty("--mtr-chat-top", CHAT_TOP + "px");
+        root.style.setProperty("--mtr-chat-h", CHAT_H + "px");
+        root.style.setProperty("--mtr-input-top", INPUT_TOP + "px");
+
+        /* ---- texts */
+        var contact = text(vars.contactName, "Аня");
+        if (full) {
+          document.getElementById("mtr-hdr-avatar").textContent = contact.charAt(0).toUpperCase();
+          var namePill = document.getElementById("mtr-hdr-name");
+          namePill.textContent = contact;
+          var chev = document.createElement("span");
+          chev.className = "chev";
+          chev.textContent = "›";
+          namePill.appendChild(chev);
+        }
+        function setText(id, value) {
+          document.getElementById(id).textContent = value;
+        }
+        var typedMessages = [
+          text(vars.teaserMessage, "смотри 👀"),
+          text(vars.benefitMessage, "субтитры и графика сами"),
+          text(vars.sourceMessage, "на matintellect.com"),
+          text(vars.workflowMessage, "просто кидаешь запись"),
+          text(vars.ownershipMessage, "ролик готов за минуты"),
+        ];
+        setText(
+          "mtr-message-question",
+          text(vars.questionMessage, "чем ты монтируешь свои ролики??"),
+        );
+        setText("mtr-message-teaser", typedMessages[0]);
+        setText("mtr-message-reaction", text(vars.reactionMessage, "ЧЕГО, ОНО САМО МОНТИРУЕТ?"));
+        setText("mtr-message-emoji", text(vars.reactionEmoji, "🤯🤯🤯"));
+        setText("mtr-message-benefit", typedMessages[1]);
+        setText("mtr-message-discovery", text(vars.discoveryMessage, "где ты это нашёл"));
+        setText("mtr-message-source", typedMessages[2]);
+        setText("mtr-message-workflow", typedMessages[3]);
+        setText("mtr-message-ownership", typedMessages[4]);
+        setText("mtr-message-install", text(vars.installMessage, "уже пробую"));
+        setText("mtr-message-thanks", text(vars.thanksMessage, "спасибо 💚"));
+        document.querySelector(".cardtitle").textContent = text(
+          vars.cardTitle,
+          "MatIntellect | Монтаж рилсов с ИИ без монтажёра",
+        );
+        document.querySelector(".carddomain").textContent = text(
+          vars.cardDomain,
+          "matintellect.com",
+        );
+
+        /* ---- the measured beat sheet, shifted 0.3 s so the first bubble pops in on screen.
+           add: items that land (pop style), drop: items that leave (typing dots). */
+        var O = 0.3;
+        var BEATS_SHEET = [
+          { t: 0.0, add: "m1", pop: "recv" },
+          { t: 0.7662, add: "dots", pop: "dots" },
+          { t: 2.9662, add: "m2", pop: "sent" },
+          { t: 3.6995, add: "m3", pop: "sent" },
+          { t: 7.2995, add: "m4", pop: "sent", drop: "dots" },
+          { t: 8.0328, add: "m5", pop: "emoji" },
+          { t: 10.5995, add: "m6", pop: "sent" },
+          { t: 11.3662, add: "dots2", pop: "dots" },
+          { t: 12.3662, add: "m7", pop: "sent", drop: "dots2" },
+          { t: 14.0662, add: "m8", pop: "sent" },
+          { t: 17.0995, add: "m9", pop: "sent" },
+          { t: 19.8995, add: "m10", pop: "sent" },
+          { t: 20.6662, add: "m11", pop: "sent" },
+          { t: 21.4328, add: "m12", pop: "sent" },
+        ];
+        /* typing in the input bar: start, then send on the item that carries the text */
+        var TYPING = [
+          { from: 2.0328, to: 2.9662 },
+          { from: 8.8662, to: 10.5995 },
+          { from: 13.3995, to: 14.0662 },
+          { from: 15.1662, to: 17.0995 },
+          { from: 18.1662, to: 19.8995 },
+        ];
+        var POP = {
+          recv: { from: { scale: 0.75, autoAlpha: 0.6 }, dur: 0.12, ease: "power2.out" },
+          dots: { from: { scale: 0.6, autoAlpha: 0.4 }, dur: 0.1, ease: "power2.out" },
+          emoji: { from: { scale: 0.5, autoAlpha: 0.3 }, dur: 0.1, ease: "power2.out" },
+          sent: { from: { autoAlpha: 0.55 }, dur: 0.0667, ease: "none" },
+        };
+        var SIDE = {
+          dots: "recv",
+          dots2: "recv",
+          m1: "recv",
+          m4: "recv",
+          m5: "recv",
+          m7: "recv",
+          m11: "recv",
+          m12: "recv",
+        };
+        function side(id) {
+          return SIDE[id] || "sent";
+        }
+        function el(id) {
+          return document.getElementById("mtr-it-" + id);
+        }
+
+        var tl = gsap.timeline({ paused: true });
+        function build() {
+          tl.clear();
+          /* stack the visible items bottom-up: newest bottom 22 px above the viewport edge,
+             10 px between bubbles of one sender, 18 px where the sender changes */
+          var heights = {};
+          BEATS_SHEET.forEach(function (b) {
+            heights[b.add] = el(b.add).offsetHeight;
+          });
+          var visible = [];
+          BEATS_SHEET.forEach(function (b) {
+            var at = b.t + O;
+            if (b.drop) {
+              visible = visible.filter(function (id) {
+                return id !== b.drop;
+              });
+              tl.set(el(b.drop), { autoAlpha: 0 }, at);
+            }
+            visible.push(b.add);
+            var y = CHAT_H - 22;
+            for (var i = visible.length - 1; i >= 0; i--) {
+              var id = visible[i];
+              if (i < visible.length - 1) y -= side(id) === side(visible[i + 1]) ? 10 : 18;
+              y -= heights[id];
+              tl.set(el(id), { y: y }, at);
+            }
+            var p = POP[b.pop];
+            tl.fromTo(
+              el(b.add).querySelector(".pop"),
+              p.from,
+              { scale: 1, autoAlpha: 1, duration: p.dur, ease: p.ease },
+              at,
+            );
+            tl.set(el(b.add), { autoAlpha: 1 }, at);
+          });
+
+          /* typing: characters land evenly across the measured typing window */
+          var typedEl = document.getElementById("mtr-typed");
+          TYPING.forEach(function (w, g) {
+            var from = w.from + O;
+            var to = w.to + O;
+            var chars = Array.from(typedMessages[g]);
+            tl.set(["#mtr-ph", "#mtr-mic"], { autoAlpha: 0 }, from);
+            tl.set("#mtr-sendbtn", { autoAlpha: 1 }, from);
+            tl.set(typedEl, { autoAlpha: 1 }, from);
+            var step = (to - from - 0.1667) / chars.length;
+            tl.set("#mtr-typed-text", { textContent: "" }, from);
+            chars.forEach(function (c, i) {
+              tl.set(
+                "#mtr-typed-text",
+                { textContent: chars.slice(0, i + 1).join("") },
+                from + i * step,
+              );
+            });
+            tl.set(typedEl, { autoAlpha: 0 }, to);
+            tl.set(["#mtr-ph", "#mtr-mic"], { autoAlpha: 1 }, to);
+            tl.set("#mtr-sendbtn", { autoAlpha: 0 }, to);
+          });
+          tl.set({}, {}, 30);
+        }
+        build();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(build);
+
+        /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
+        var exit = oneOf(vars.exit, ["none", "fade"], "none");
+        var BEATS = [0.0, 2.9662, 7.2995, 12.3662, 19.8995, 21.4328].map(function (t) {
+          return t + O;
+        });
+        var cues = String(vars.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = BEATS.map(function (b, i) {
+          return isFinite(cues[i]) ? cues[i] : b;
+        });
+        var ordered = at.every(function (x, i) {
+          return x >= 0 && (i === 0 || x > at[i - 1]);
+        });
+        if (!ordered) at = BEATS.slice();
+        var master = gsap.timeline({ paused: true });
+        var from = 0;
+        BEATS.forEach(function (b, i) {
+          master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
+          from = at[i];
+        });
+        master.to(tl, { time: 30, duration: 30 - BEATS[BEATS.length - 1], ease: "none" }, from);
+        if (exit === "fade") {
+          var out = isFinite(cues[6]) ? cues[6] : from + 2;
+          master.to("#scene-chat", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+        }
+        master.set({}, {}, 30);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["message-thread-reveal-landscape"] = master;
+      })();
+    </script>
+  </body>
+</html>

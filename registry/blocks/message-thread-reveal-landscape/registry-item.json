@@ -1,0 +1,26 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "message-thread-reveal-landscape",
+  "type": "hyperframes:block",
+  "title": "Message Thread Reveal (landscape)",
+  "description": "A text conversation plays out in iMessage: bubbles popping in, typing indicators, a typed reply in the input bar, a shared link card, emoji, delivered receipts, the thread stacking up from the bottom. The app black to the frame edge, the chat column with the contact header in the middle. Every message, the link card and six beat times are variables; holds the last message to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "chat", "imessage", "landscape"],
+  "author": "Miao Yang",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "message-thread-reveal-landscape.html",
+      "target": "compositions/message-thread-reveal-landscape.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/link-card.jpg",
+      "target": "assets/link-card.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
