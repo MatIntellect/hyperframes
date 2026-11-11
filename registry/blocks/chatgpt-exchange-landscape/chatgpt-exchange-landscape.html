@@ -964,7 +964,9 @@
         rowEls.forEach((re) => (re.anchor = anchorOf(re.row)));
         // read-back rest: in full the bubble tucks under the frosted header (the source frame);
         // a half card is too short for that, so it rests on the table head, the payoff
-        const Y_FINAL = full ? -17 - bubble.offsetTop : 8 - tbl.offsetTop;
+        // the short screen rests on the table head just under the app header, so the MatIntellect
+        // row stays above the composer however long the introduction runs
+        const Y_FINAL = 60 - tbl.offsetTop;
 
         /* ====================================================== initial state */
         const COMP_UP = full ? -309 : 0; // composer rides the keyboard in full only
@@ -1020,8 +1022,9 @@
         const typeEnd = t;
 
         // composer grows to two rows on the first keystroke
-        tl.to(composer, { height: 92, duration: 0.24, ease: "power2.out" }, t0 - 0.02);
-        tl.to(document.getElementById("cge-comp-ph"), { autoAlpha: 0, duration: 0.12 }, t0 - 0.02);
+        // the composer opens its text row before the caret lands, so the caret never sits on the +
+        tl.to(composer, { height: 92, duration: 0.24, ease: "power2.out" }, t0 - 0.28);
+        tl.to(document.getElementById("cge-comp-ph"), { autoAlpha: 0, duration: 0.12 }, t0 - 0.28);
         tl.to(curEls[0], { autoAlpha: 1, duration: 0.01 }, t0 - 0.02);
         tl.to(
           document.getElementById("cge-face-wave"),

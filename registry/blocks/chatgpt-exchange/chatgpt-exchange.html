@@ -1049,8 +1049,9 @@
         const typeEnd = t;
 
         // composer grows to two rows on the first keystroke
-        tl.to(composer, { height: 92, duration: 0.24, ease: "power2.out" }, t0 - 0.02);
-        tl.to(document.getElementById("cge-comp-ph"), { autoAlpha: 0, duration: 0.12 }, t0 - 0.02);
+        // the composer opens its text row before the caret lands, so the caret never sits on the +
+        tl.to(composer, { height: 92, duration: 0.24, ease: "power2.out" }, t0 - 0.28);
+        tl.to(document.getElementById("cge-comp-ph"), { autoAlpha: 0, duration: 0.12 }, t0 - 0.28);
         tl.to(curEls[0], { autoAlpha: 1, duration: 0.01 }, t0 - 0.02);
         if (full) {
           sugEls.forEach((n, i) => {
