@@ -124,6 +124,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "lt-neon-border",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lt-neon-border-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "lt-side-rule",
       "type": "hyperframes:block"
     },

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-neon-border",
+  "type": "hyperframes:block",
+  "title": "Lower Third Neon Border",
+  "description": "Two arcs of brand-red light travel the edge of a dark rounded panel and snap corner to corner with a soft bloom, for the whole mount; the name and role rise inside. Words, movement and light shape are variables; cues set entrance and exit.",
+  "tags": ["lower-third", "glow", "loop", "name"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-neon-border.html",
+      "target": "compositions/lt-neon-border.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
