@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, both shots in the 780x1180 field (y 180-1360), shot two stacked. top / bottom: inside a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent; the card has no room for the paragraph, it is hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "intro", "type": "string", "role": "content", "label": "Intro label", "description": "Spaced pill shown before the first beat.", "maxLength": 18, "default": "В такт" },
+    { "id": "intro", "type": "string", "role": "content", "label": "Intro label", "description": "Spaced pill shown from the start until the first beat; it needs beat 1 at 1.5 s or later to be read.", "maxLength": 18, "default": "В такт" },
     { "id": "hit", "type": "string", "role": "content", "label": "Hit word", "description": "Big Bebas word slammed on the freeze.", "maxLength": 10, "default": "Дроп" },
     { "id": "kicker", "type": "string", "role": "content", "label": "Card kicker", "description": "Spaced line at the foot of the shot one card.", "maxLength": 14, "default": "Промо" },
     { "id": "pill", "type": "string", "role": "content", "label": "Card pill", "description": "Red pill next to the kicker.", "maxLength": 8, "default": "Эфир" },
@@ -15,7 +15,7 @@
     { "id": "card2", "type": "string", "role": "content", "label": "Card 2", "description": "Label|value of the second stat card; it pulses on the third beat.", "maxLength": 22, "default": "Стоп|0,8 с" },
     { "id": "card3", "type": "string", "role": "content", "label": "Card 3", "description": "Label|value of the third stat card, value in red.", "maxLength": 22, "default": "Склейка|3,00" },
     { "id": "intensity", "type": "number", "role": "style", "label": "Intensity", "description": "Strength of the punch-ins and the flash.", "default": 1, "min": 0.6, "max": 1.4, "step": 0.05 },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start, put them on the music: 1 first beat (punch-in; the speed ramp starts 0.65 s later), 2 freeze with the hit word, 3 hard cut to shot two, 4 third beat (card two pulses), 5 the block fades out (only when exit is fade). Empty keeps 0.7, 2.2, 3, 4.7.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start, put them on the music: 1 first beat (punch-in; the speed ramp starts 0.65 s later), 2 freeze with the hit word, 3 hard cut to shot two, 4 third beat (card two pulses), 5 the block fades out (only when exit is fade). Empty keeps 1.6, 3.1, 3.9, 5.6.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds shot two to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -357,9 +357,21 @@
         top: 180px;
         height: 1180px;
       }
+      /* увеличение сцены при читаемом тексте доходит до 1,125 (удар 3 при силе 1,4): раскладка в 780/1,125 и 1180/1,125, после увеличения – ровно поле */
+      #bfcv-stage {
+        inset: 72px 44px 78px;
+      }
+      #bfcv-root.bfcv-cardmode #bfcv-stage {
+        inset: 42px 44px 46px;
+      }
       #bfcv-a-card {
         width: 640px;
         height: 700px;
+      }
+      #bfcv-a-meta {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 14px;
       }
       #bfcv-b-layout {
         flex-direction: column;
@@ -410,12 +422,7 @@
       }
       #bfcv-root.bfcv-cardmode #bfcv-a-card {
         width: 560px;
-        height: 620px;
-      }
-      #bfcv-root.bfcv-cardmode #bfcv-a-meta {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 14px;
+        height: 560px;
       }
       #bfcv-root.bfcv-cardmode #bfcv-b-layout {
         padding: 40px 36px;
@@ -441,6 +448,10 @@
       }
       #bfcv-root.bfcv-cardmode #bfcv-f-outline {
         inset: 16px;
+      }
+      /* слово удара (10 знаков Bebas) в 200 px шире карточки 780 – в карточке 170 px */
+      #bfcv-root.bfcv-cardmode #bfcv-hit span {
+        font-size: 170px;
       }
       
     </style>
@@ -560,13 +571,14 @@
           .map(function (v) {
             return parseFloat(v);
           });
-        var beat1 = isFinite(cues[0]) && cues[0] >= 0.3 ? cues[0] : 0.7;
+        var beat1 = isFinite(cues[0]) && cues[0] >= 0.3 ? cues[0] : 1.6;
         var freezeAt = isFinite(cues[1]) && cues[1] > beat1 + 0.4 ? cues[1] : beat1 + 1.5;
         var cutAt = isFinite(cues[2]) && cues[2] > freezeAt + 0.4 ? cues[2] : freezeAt + 0.8;
         var beat3 = isFinite(cues[3]) && cues[3] > cutAt + 0.5 ? cues[3] : cutAt + 1.7;
         var holdAt = beat3 + 0.5;
         var exit = oneOf(V.exit, ["none", "fade"], "none");
-        var introAt = Math.max(0, beat1 - 0.58);
+        // вводная стоит с начала до первого удара (у разработчиков 0,12–0,7 с – прочитать нельзя)
+        var introAt = Math.max(0, Math.min(0.12, beat1 - 0.4));
 
         var stage = $("stage"),
           shotA = $("shot-a"),
@@ -584,6 +596,8 @@
           bLeft = $("b-left");
 
         var tl = gsap.timeline({ paused: true });
+        // фильтр сцены всегда одним набором, как у разработчиков: иначе GSAP проходит разгон через нулевую яркость
+        gsap.set(stage, { filter: "blur(0px) brightness(1)" });
         gsap.set(aCard, { scale: 0.9, y: 20 });
         gsap.set(intro, { y: -12 });
         gsap.set(hit, { scale: 1.15 });
@@ -609,7 +623,7 @@
         var rampStart = Math.min(beat1 + 0.65, freezeAt - 0.2);
         var rampDur = Math.max(0.2, freezeAt - rampStart);
         tl.to(aCrop, { scale: 1.28 * (0.9 + 0.1 * intensity), x: 28 * intensity, y: -12 * intensity, duration: rampDur, ease: "power3.in" }, rampStart);
-        tl.to(stage, { scale: 1.12, filter: "brightness(1.08)", duration: rampDur, ease: "power2.in" }, rampStart);
+        tl.to(stage, { scale: 1.12, filter: "blur(0px) brightness(1.08)", duration: rampDur, ease: "power2.in" }, rampStart);
         tl.to(bars, { scaleY: 1.55, duration: rampDur * 0.85, ease: "power2.in", stagger: { each: 0.012, from: "center" } }, rampStart);
         // стоп-кадр
         tl.set(freeze, { visibility: "visible", opacity: 1 }, freezeAt);
@@ -617,7 +631,7 @@
         tl.set(fCont, { opacity: 0.85 }, freezeAt);
         tl.set(badge, { opacity: 1 }, freezeAt);
         tl.set(hit, { visibility: "visible", opacity: 1, scale: 1 }, freezeAt);
-        tl.to(stage, { scale: 1.12, filter: "brightness(1.15)", duration: 0.05, ease: "power4.out" }, freezeAt);
+        tl.to(stage, { scale: 1.12, filter: "blur(0px) brightness(1.15)", duration: 0.05, ease: "power4.out" }, freezeAt);
         tl.fromTo(fFlash, { opacity: 0.55 * intensity }, { opacity: 0, duration: 0.28, ease: "power2.out" }, freezeAt);
         tl.to(hit, { opacity: 0, scale: 0.96, duration: 0.2, ease: "power2.in" }, freezeAt + 0.55);
         tl.set(hit, { visibility: "hidden" }, freezeAt + 0.78);

@@ -65,11 +65,12 @@
         font-family: var(--font-body, "Montserrat"), sans-serif;
       }
       /* Окно сцены. Внутри – только preserve-3d, без overflow: hidden, иначе глубина сплющится */
+      /* фон окна – цвет задней стены: у стены нет края на любых значениях полей (иначе на пределе видна коробка сцены) */
       #cdzv-win {
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: var(--bg, #0c1014);
+        background: var(--surface, #18181a);
       }
       #cdzv-stage {
         position: absolute;
@@ -182,18 +183,26 @@
         var W = 1920,
           H = 1080,
           k = 1,
-          subTop = 300;
+          subTop = 300,
+          OY = 540,
+          portalH = 1500,
+          portalDy = 350;
         
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         W = 1080;
         H = 1920;
         subTop = 460;
+        // точка схода, стена и проём – в центре поля y 770; проём короче и по центру, чтобы при самой длинной фокусной (камера 12000 px) он оставался в y 180–1360
+        OY = 770;
+        portalH = 1400;
+        portalDy = 0;
         if (placement !== "full") {
           root.classList.add("cdzv-card", "cdzv-" + placement);
           W = 780;
           H = 760;
           k = 0.75;
           subTop = 70;
+          OY = 380;
         }
         
         var label = typeof V.label === "string" ? V.label.trim() : "Эффект Хичкока";
@@ -207,8 +216,8 @@
           a.style.cssText = "left:-140px;top:-80px;width:" + (W + 280) + "px;height:" + (H + 160) + "px;transform:translateZ(" + a.getAttribute("data-z") + "px);border-color:color-mix(in srgb, var(--muted, #8a8a90) " + Math.round(t * 100) + "%, var(--border, #2e2e32))";
         });
         var bw = document.getElementById("cdzv-backwall");
-        bw.style.cssText = "left:" + (W / 2 - 4000) + "px;top:" + (H / 2 - 2250) + "px;width:8000px;height:4500px;transform:translateZ(-3200px)";
-        document.getElementById("cdzv-portal").style.cssText = "left:3300px;top:1850px;width:1400px;height:1500px";
+        bw.style.cssText = "left:" + (W / 2 - 4000) + "px;top:" + (OY - 2250) + "px;width:8000px;height:4500px;transform:translateZ(-3200px)";
+        document.getElementById("cdzv-portal").style.cssText = "left:3300px;top:" + (2250 + portalDy - portalH / 2) + "px;width:1400px;height:" + portalH + "px";
         var sub = document.getElementById("cdzv-subject");
         sub.style.cssText = "left:" + (W / 2 - 120 * k) + "px;top:" + subTop + "px;width:" + 240 * k + "px;height:" + 620 * k + "px;transform:translateZ(0px)";
         sub.firstChild.style.cssText = "width:" + 120 * k + "px;height:" + 120 * k + "px";
@@ -221,6 +230,7 @@
         var d1 = direction === "in" ? d0 / strength : d0 * strength;
         var stage = document.getElementById("cdzv-stage"),
           rig = document.getElementById("cdzv-rig");
+        stage.style.perspectiveOrigin = "50% " + OY + "px";
         // фигура держит размер, пока d * tan(FOV/2) постоянно: перспектива = расстояние
         function applyCamera(u) {
           var d = d0 + (d1 - d0) * u;

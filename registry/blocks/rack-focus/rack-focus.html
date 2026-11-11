@@ -140,11 +140,14 @@
           P.push(x, y, z, r0, b, c[0], c[1], c[2]);
         }
 
-        var TUNGSTEN = [1.0, 0.74, 0.45];
-        var FILAMENT = [1.0, 0.9, 0.74];
-        var WIRE = [0.86, 0.74, 0.6];
-        var WARM_WIN = [1.0, 0.79, 0.52];
-        var COOL_WIN = [0.6, 0.75, 1.0];
+        // свет – метки темы: лампы, нити и светлые окна – --fg, провод и тёмные окна – --muted
+        var FG = hexToRgb(CS.getPropertyValue("--fg").trim() || "#f2f2f2");
+        var MUTED = hexToRgb(CS.getPropertyValue("--muted").trim() || "#8a8a90");
+        var TUNGSTEN = FG;
+        var FILAMENT = FG;
+        var WIRE = MUTED;
+        var WARM_WIN = FG;
+        var COOL_WIN = MUTED;
         var SIGN_A = hexToRgb(CS.getPropertyValue("--accent").trim() || "#ff0000");
         var SIGN_B = SIGN_A.map(function (c) {
           return c + (1 - c) * 0.55;
