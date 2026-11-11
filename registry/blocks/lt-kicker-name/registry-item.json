@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-kicker-name",
+  "type": "hyperframes:block",
+  "title": "Lower Third Kicker Name",
+  "description": "Cardless lower third over footage: a red kicker tag drops in, a heavy upper-case name rises and a red baseline draws under it. Kicker and name are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "kicker", "bold"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-kicker-name.html",
+      "target": "compositions/lt-kicker-name.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

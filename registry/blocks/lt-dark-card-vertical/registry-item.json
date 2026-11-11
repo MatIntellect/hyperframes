@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-dark-card-vertical",
+  "type": "hyperframes:block",
+  "title": "Lower Third Dark Card (vertical)",
+  "description": "Vertical lower third on a dark brand card, centred on the frame over footage: name, red underline, role. Name and role are variables; placement bottom (above the caption band), top or centre; cues set entrance and exit; holds.",
+  "tags": ["lower-third", "overlay", "name", "interview", "card", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-dark-card-vertical.html",
+      "target": "compositions/lt-dark-card-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

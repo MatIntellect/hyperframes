@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-kicker-name-vertical",
+  "type": "hyperframes:block",
+  "title": "Lower Third Kicker Name (vertical)",
+  "description": "Vertical cardless lower third, centred on the frame over footage: red kicker tag, heavy upper-case name, red baseline. Kicker and name are variables; placement bottom (above the caption band), top or centre; cues set entrance and exit; holds.",
+  "tags": ["lower-third", "overlay", "name", "kicker", "bold", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-kicker-name-vertical.html",
+      "target": "compositions/lt-kicker-name-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

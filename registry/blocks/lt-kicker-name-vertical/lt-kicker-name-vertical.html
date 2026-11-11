@@ -1,0 +1,167 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small red tag above the name, upper case. Empty hides it.", "maxLength": 24, "default": "Выпуск 47" },
+    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Heavy upper-case name; wraps to two lines in the vertical version.", "maxLength": 24, "default": "Мат Джестер" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the kicker drops in and the name and red baseline follow, 2 the plate leaves (only when exit is not none). Empty keeps 0.1, 4.25.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the plate to the end of the mount; retract pulls the baseline back and lifts the words out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "retract", "label": "Retract" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #lknv-root {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #lknv-lt {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      #lknv-kickwrap {
+        overflow: hidden;
+      }
+      #lknv-kicker {
+        display: inline-block;
+        font-weight: 700;
+        color: #ffffff;
+        background: var(--accent, #ff0000);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #lknv-name {
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+        text-shadow: 0 2px 22px rgba(0, 0, 0, 0.6);
+      }
+      #lknv-baseline {
+        height: 6px;
+        background: var(--accent, #ff0000);
+        border-radius: 3px;
+      }
+      
+      
+      #lknv-lt {
+        left: 150px;
+        width: 780px;
+        align-items: center;
+        text-align: center;
+      }
+      #lknv-root.lknv-bottom #lknv-lt {
+        bottom: 560px;
+      }
+      #lknv-root.lknv-top #lknv-lt {
+        top: 180px;
+      }
+      #lknv-root.lknv-center #lknv-lt {
+        top: 770px;
+        transform: translateY(-50%);
+      }
+      #lknv-kicker {
+        font-size: 32px;
+        padding: 8px 18px;
+      }
+      #lknv-name {
+        font-size: 92px;
+        max-width: 780px;
+      }
+      #lknv-baseline {
+        width: 420px;
+        transform-origin: 50% 50%;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="lknv-root" data-composition-id="lt-kicker-name-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="lknv-lt">
+        <div id="lknv-kickwrap"><span id="lknv-kicker">Выпуск 47</span></div>
+        <div id="lknv-name">Мат Джестер</div>
+        <div id="lknv-baseline"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("lknv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        root.classList.add("lknv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
+        
+        var kicker = typeof V.kicker === "string" ? V.kicker : "Выпуск 47";
+        document.getElementById("lknv-kicker").textContent = kicker;
+        if (!kicker) document.getElementById("lknv-kickwrap").style.display = "none";
+        document.getElementById("lknv-name").textContent = typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.1;
+        var exit = oneOf(V.exit, ["none", "retract"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo("#lknv-kicker", { y: -60 }, { y: 0, duration: 0.42, ease: "back.out(2)" }, c0);
+        tl.fromTo("#lknv-name", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "back.out(1.5)" }, c0 + 0.22);
+        tl.fromTo("#lknv-baseline", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power4.out" }, c0 + 0.4);
+        if (exit === "retract") {
+          var out = isFinite(cues[1]) ? cues[1] : c0 + 4.15;
+          tl.to("#lknv-baseline", { scaleX: 0, duration: 0.3, ease: "power2.in" }, out);
+          tl.to("#lknv-name", { y: -16, opacity: 0, duration: 0.32, ease: "power2.in" }, out + 0.05);
+          tl.to("#lknv-kicker", { y: -60, duration: 0.3, ease: "power2.in" }, out + 0.07);
+        }
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["lt-kicker-name-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lt-dark-card",
+  "type": "hyperframes:block",
+  "title": "Lower Third Dark Card",
+  "description": "Lower third on a dark brand card over footage: the card slides up, the bold name, a red underline drawing under it and the role line follow. Name and role are variables; cues set the entrance and the exit; holds to the end of the mount.",
+  "tags": ["lower-third", "overlay", "name", "interview", "card"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lt-dark-card.html",
+      "target": "compositions/lt-dark-card.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
