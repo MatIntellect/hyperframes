@@ -244,6 +244,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "x-post",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "x-post-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "yt-lower-third",
       "type": "hyperframes:block"
     },
