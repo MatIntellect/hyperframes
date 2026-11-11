@@ -921,6 +921,8 @@
         hdrScrim.setAttribute("data-layout-allow-occlusion", "true");
         hdrScrim.id = "cge-hdr-scrim";
         const header = el("header");
+        // the thread scrolls under the app header, as in the app
+        header.setAttribute("data-layout-allow-occlusion", "true");
         header.innerHTML =
           `<div class="circle-btn hdr-left">${ICO.burger}</div>` +
           `<div class="seg" id="cge-seg"><div class="seg-item on">Чат</div><div class="seg-item">Работа</div></div>` +
