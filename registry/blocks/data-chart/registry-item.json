@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "data-chart",
+  "type": "hyperframes:block",
+  "title": "Data Chart",
+  "description": "Bar chart with an optional red line series: headline writes in, bars grow one by one with their values, the line draws across. Labels, values, names and source are variables; holds to the end of the mount.",
+  "tags": ["data", "chart", "statistics", "bar", "line"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "data-chart.html",
+      "target": "compositions/data-chart.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

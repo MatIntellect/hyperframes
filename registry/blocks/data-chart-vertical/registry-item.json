@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "data-chart-vertical",
+  "type": "hyperframes:block",
+  "title": "Data Chart (vertical)",
+  "description": "Vertical bar chart with an optional red line series: headline writes in, bars grow one by one with their values, the line draws across. Labels, values and names are variables; placement full, top or bottom; holds to the end of the mount.",
+  "tags": ["data", "chart", "statistics", "bar", "line", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "data-chart-vertical.html",
+      "target": "compositions/data-chart-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
