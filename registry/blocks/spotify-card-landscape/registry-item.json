@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "spotify-card-landscape",
+  "type": "hyperframes:block",
+  "title": "Spotify Now Playing (landscape)",
+  "description": "Spotify mini-player card centred in a landscape frame: cover, track, artist, a moving progress bar. Words and cover are variables; holds to the end of the mount.",
+  "tags": ["social", "overlay", "spotify", "music", "landscape"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "spotify-card-landscape.html",
+      "target": "compositions/spotify-card-landscape.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
