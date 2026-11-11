@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "x-post",
+  "type": "hyperframes:block",
+  "title": "X Post Card",
+  "description": "X post card in its native dark theme: the card lands, the like is pressed, the heart fills pink and the count steps up. Name, handle, avatar, text, time and counts are variables; cues set landing, like and exit.",
+  "tags": ["social", "overlay", "twitter"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "x-post.html",
+      "target": "compositions/x-post.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

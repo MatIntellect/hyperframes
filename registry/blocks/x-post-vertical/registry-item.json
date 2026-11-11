@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "x-post-vertical",
+  "type": "hyperframes:block",
+  "title": "X Post Card (vertical)",
+  "description": "Vertical X post card in its native dark theme: the card lands, the like is pressed, the heart fills pink and the count steps up. Words and counts are variables; placement full (brand ground), top or bottom; cues set landing, like and exit.",
+  "tags": ["social", "overlay", "twitter", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "x-post-vertical.html",
+      "target": "compositions/x-post-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
