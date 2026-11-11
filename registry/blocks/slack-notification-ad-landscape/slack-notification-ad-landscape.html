@@ -1,0 +1,577 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-resolution="landscape"
+  data-composition-variables='[
+    { "id": "request1Title", "type": "string", "role": "content", "label": "Request 1 sender", "description": "First Slack notification sender or channel.", "maxLength": 26, "default": "Аня Смирнова" },
+    { "id": "request1Text", "type": "string", "role": "content", "label": "Request 1 message", "description": "First Slack notification message, up to two lines.", "maxLength": 70, "default": "Привет! Успеешь смонтировать ролик к запуску до пятницы?" },
+    { "id": "request2Title", "type": "string", "role": "content", "label": "Request 2 sender", "description": "Second Slack notification sender or channel.", "maxLength": 26, "default": "Максим Белов" },
+    { "id": "request2Text", "type": "string", "role": "content", "label": "Request 2 message", "description": "Second Slack notification message, up to two lines.", "maxLength": 70, "default": "ещё нужна нарезка на 30 секунд для презентации" },
+    { "id": "request3Title", "type": "string", "role": "content", "label": "Request 3 sender", "description": "Third Slack notification sender or channel.", "maxLength": 26, "default": "#соцсети" },
+    { "id": "request3Text", "type": "string", "role": "content", "label": "Request 3 message", "description": "Third Slack notification message, up to two lines.", "maxLength": 70, "default": "Оля: переделаем ролик под Reels и TikTok?" },
+    { "id": "request4Title", "type": "string", "role": "content", "label": "Request 4 sender", "description": "Fourth Slack notification sender or channel.", "maxLength": 26, "default": "Даша Орлова" },
+    { "id": "request4Text", "type": "string", "role": "content", "label": "Request 4 message", "description": "Fourth Slack notification message, up to two lines.", "maxLength": 70, "default": "обучающее видео надо обновить под новый интерфейс" },
+    { "id": "request5Title", "type": "string", "role": "content", "label": "Request 5 sender", "description": "Fifth Slack notification sender or channel.", "maxLength": 26, "default": "#продажи" },
+    { "id": "request5Text", "type": "string", "role": "content", "label": "Request 5 message", "description": "Fifth Slack notification message, up to two lines.", "maxLength": 70, "default": "Тимур: клиент ждёт обзор на минуту до вечера" },
+    { "id": "request6Title", "type": "string", "role": "content", "label": "Request 6 sender", "description": "Sixth Slack notification sender or channel.", "maxLength": 26, "default": "Лейла Хасанова" },
+    { "id": "request6Text", "type": "string", "role": "content", "label": "Request 6 message", "description": "Sixth Slack notification message, up to two lines.", "maxLength": 70, "default": "директор просит яркий ролик для совета директоров" },
+    { "id": "request7Title", "type": "string", "role": "content", "label": "Request 7 sender", "description": "Seventh Slack notification sender or channel.", "maxLength": 26, "default": "#события" },
+    { "id": "request7Text", "type": "string", "role": "content", "label": "Request 7 message", "description": "Seventh Slack notification message, up to two lines.", "maxLength": 70, "default": "Женя: а видео с выездной встречи??" },
+    { "id": "request8Title", "type": "string", "role": "content", "label": "Request 8 sender", "description": "Eighth Slack notification sender or channel.", "maxLength": 26, "default": "Михаил Рыбаков" },
+    { "id": "request8Text", "type": "string", "role": "content", "label": "Request 8 message", "description": "Eighth Slack notification message, up to two lines.", "maxLength": 70, "default": "сделаешь ещё английскую версию демо?" },
+    { "id": "request9Title", "type": "string", "role": "content", "label": "Request 9 sender", "description": "Ninth Slack notification sender or channel.", "maxLength": 26, "default": "#маркетинг" },
+    { "id": "request9Text", "type": "string", "role": "content", "label": "Request 9 message", "description": "Ninth Slack notification message, up to two lines.", "maxLength": 70, "default": "Ася: нужны три версии рекламы – вертикаль, квадрат, горизонталь" },
+    { "id": "request10Title", "type": "string", "role": "content", "label": "Request 10 sender", "description": "Tenth Slack notification sender or channel.", "maxLength": 26, "default": "Рустам Пак" },
+    { "id": "request10Text", "type": "string", "role": "content", "label": "Request 10 message", "description": "Tenth Slack notification message, up to two lines.", "maxLength": 70, "default": "отчёт инвесторам тоже нужен коротким видео" },
+    { "id": "request11Title", "type": "string", "role": "content", "label": "Request 11 sender", "description": "Eleventh Slack notification sender or channel.", "maxLength": 26, "default": "Борис Ли" },
+    { "id": "request11Text", "type": "string", "role": "content", "label": "Request 11 message", "description": "Eleventh Slack notification message, up to two lines.", "maxLength": 70, "default": "и последнее: ролик к запуску на Product Hunt" },
+    { "id": "payoffTitle", "type": "string", "role": "content", "label": "Payoff sender", "description": "Sender of the final payoff notification: the brand this video promotes.", "maxLength": 26, "default": "MatIntellect" },
+    { "id": "payoffText", "type": "string", "role": "content", "label": "Payoff message", "description": "Payoff message from the brand, up to two lines.", "maxLength": 70, "default": "Слышал, тебе нужны ролики?" },
+    { "id": "payoffIcon", "type": "image", "role": "content", "label": "Payoff logo", "description": "Mark of the brand, shown only in the final payoff notification on a white app tile.", "default": "assets/img/matintellect-mark.svg" },
+    { "id": "dateLabel", "type": "string", "role": "content", "label": "Date", "description": "Lock-screen date above the clock.", "maxLength": 22, "default": "Четверг, 14 августа" },
+    { "id": "nowLabel", "type": "string", "role": "content", "label": "Time label", "description": "Small grey time label on every notification.", "maxLength": 8, "default": "сейчас" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first request lands, 2 the flood starts (second request), 3 the eleventh request lands, 4 the payoff lands, 5 the stack fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 1.15, 3.75, 8.38, 8.88.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the payoff to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      #sna-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+
+      /* ---- wallpaper: smooth iOS-like gradient to the frame edge, slow push ---- */
+      #sna-wall {
+        position: absolute;
+        inset: 0;
+      }
+      #sna-wall .grad {
+        position: absolute;
+        inset: -6%;
+        background:
+          radial-gradient(90% 62% at 82% 8%, rgba(94, 66, 166, 0.85) 0%, rgba(94, 66, 166, 0) 60%),
+          radial-gradient(110% 70% at 14% 30%, rgba(38, 76, 154, 0.9) 0%, rgba(38, 76, 154, 0) 65%),
+          radial-gradient(
+            120% 85% at 50% 96%,
+            rgba(196, 108, 74, 0.55) 0%,
+            rgba(196, 108, 74, 0) 55%
+          ),
+          radial-gradient(140% 100% at 50% 55%, #17203c 0%, #0d1226 70%, #090d1c 100%);
+      }
+      #sna-wall .grain {
+        position: absolute;
+        inset: -6%;
+        opacity: 0.05;
+        background-image: repeating-radial-gradient(
+          circle at 30% 40%,
+          rgba(255, 255, 255, 0.5) 0 1px,
+          transparent 1px 4px
+        );
+      }
+
+      /* ---- the lock screen column: authored in iOS points, scaled so a card is 780 px wide ---- */
+      .screen {
+        position: absolute;
+        left: var(--sna-left, 550px);
+        top: var(--sna-top, 187px);
+        width: 491.55px;
+        height: 874px;
+        transform-origin: 0 0;
+        transform: scale(1.668);
+      }
+      #sna-chrome {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 30%;
+      }
+      #sna-lockglyph {
+        position: absolute;
+        top: 56px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #sna-date {
+        position: absolute;
+        top: 102px;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+        font-size: 21px;
+        letter-spacing: 0.1px;
+        color: rgba(235, 240, 255, 0.92);
+      }
+      #sna-clockwrap {
+        position: absolute;
+        top: 118px;
+        width: 100%;
+        height: 116px;
+      }
+      .clock {
+        position: absolute;
+        inset: 0;
+        text-align: center;
+        font-weight: 700;
+        font-size: 97px;
+        line-height: 116px;
+        letter-spacing: -1px;
+        color: rgba(238, 243, 255, 0.95);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ---- notifications ---- */
+      #sna-stack {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        top: 254px;
+        height: 0;
+      }
+      .ncard {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 98px; /* uniform card height: every notification the same slab */
+        border-radius: 22px;
+        padding: 12px 16px 12px 14px;
+        background: rgba(43, 44, 51, 0.96);
+        -webkit-backdrop-filter: blur(24px) saturate(1.6);
+        backdrop-filter: blur(24px) saturate(1.6);
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        transform-origin: 50% 0%;
+      }
+      .nicon {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nicon img {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+      .nbody {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .nrow {
+        display: flex;
+        align-items: baseline;
+      }
+      .ntitle {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-weight: 600;
+        font-size: 17px;
+        line-height: 22px;
+        color: rgba(255, 255, 255, 0.98);
+        white-space: nowrap;
+      }
+      .ntime {
+        flex: 0 0 auto;
+        margin-left: 8px;
+        font-size: 17px;
+        line-height: 22px;
+        color: rgba(235, 235, 245, 0.6);
+      }
+      .ntext {
+        font-size: 17px;
+        line-height: 22px;
+        color: rgba(255, 255, 255, 0.96);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="sna-root"
+      data-composition-id="slack-notification-ad-landscape"
+      data-fps="60"
+      data-start="0"
+      data-duration="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="sna-scene" class="clip" data-start="0" data-duration="30" data-track-index="1">
+        <div id="sna-wall" data-layout-allow-overflow="">
+          <div class="grad"></div>
+          <div class="grain"></div>
+        </div>
+        <div class="screen">
+          <div id="sna-chrome">
+            <div id="sna-lockglyph">
+              <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
+                <rect
+                  x="3.5"
+                  y="9"
+                  width="14"
+                  height="10.5"
+                  rx="3.4"
+                  fill="rgba(235,240,255,0.92)"
+                />
+                <path
+                  d="M6.2 9V6.8a4.3 4.3 0 0 1 8.6 0V9"
+                  stroke="rgba(235,240,255,0.92)"
+                  stroke-width="2.1"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <div id="sna-date" data-layout-allow-overlap="">Четверг, 14 августа</div>
+            <div id="sna-clockwrap">
+              <div class="clock" data-t="0">9:41</div>
+              <div class="clock" data-t="1">9:42</div>
+              <div class="clock" data-t="2">9:45</div>
+              <div class="clock" data-t="3">9:51</div>
+            </div>
+          </div>
+          <div id="sna-stack"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var variables =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function content(id, fallback) {
+          return typeof variables[id] === "string" && variables[id].trim()
+            ? variables[id]
+            : fallback;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+
+        /* ---------------- placement ---------------- */
+        var S = 1.668; /* iOS points to frame pixels: a 467.55 pt card is 780 px wide */
+        /* left / top of the screen column; the newest card's bottom starts its roll-in at enterBottom */
+        var LAYOUT = { left: 550, top: 187, enterBottom: 1040 };
+        var root = document.getElementById("sna-root");
+        root.style.setProperty("--sna-left", LAYOUT.left + "px");
+        root.style.setProperty("--sna-top", LAYOUT.top + "px");
+        var full = true;
+        document.getElementById("sna-date").textContent = content(
+          "dateLabel",
+          "Четверг, 14 августа",
+        );
+        var nowLabel = content("nowLabel", "сейчас");
+
+        var CONFIG = {
+          icon: "assets/img/slack-mark.svg",
+          notifs: [
+            {
+              title: content("request1Title", "Аня Смирнова"),
+              text: content(
+                "request1Text",
+                "Привет! Успеешь смонтировать ролик к запуску до пятницы?",
+              ),
+            },
+            {
+              title: content("request2Title", "Максим Белов"),
+              text: content("request2Text", "ещё нужна нарезка на 30 секунд для презентации"),
+            },
+            {
+              title: content("request3Title", "#соцсети"),
+              text: content("request3Text", "Оля: переделаем ролик под Reels и TikTok?"),
+            },
+            {
+              title: content("request4Title", "Даша Орлова"),
+              text: content("request4Text", "обучающее видео надо обновить под новый интерфейс"),
+            },
+            {
+              title: content("request5Title", "#продажи"),
+              text: content("request5Text", "Тимур: клиент ждёт обзор на минуту до вечера"),
+            },
+            {
+              title: content("request6Title", "Лейла Хасанова"),
+              text: content("request6Text", "директор просит яркий ролик для совета директоров"),
+            },
+            {
+              title: content("request7Title", "#события"),
+              text: content("request7Text", "Женя: а видео с выездной встречи??"),
+            },
+            {
+              title: content("request8Title", "Михаил Рыбаков"),
+              text: content("request8Text", "сделаешь ещё английскую версию демо?"),
+            },
+            {
+              title: content("request9Title", "#маркетинг"),
+              text: content(
+                "request9Text",
+                "Ася: нужны три версии рекламы – вертикаль, квадрат, горизонталь",
+              ),
+            },
+            {
+              title: content("request10Title", "Рустам Пак"),
+              text: content("request10Text", "отчёт инвесторам тоже нужен коротким видео"),
+            },
+            {
+              title: content("request11Title", "Борис Ли"),
+              text: content("request11Text", "и последнее: ролик к запуску на Product Hunt"),
+            },
+            {
+              title: content("payoffTitle", "MatIntellect"),
+              text: content("payoffText", "Слышал, тебе нужны ролики?"),
+              icon: content("payoffIcon", "assets/img/matintellect-mark.svg"),
+            },
+          ],
+        };
+
+        /* ---------------- beat clock ---------------- */
+        var T = {
+          wake: 0.1,
+          /* 11 Slack arrivals with shrinking gaps, then the payoff 0.5s after the last one */
+          arrivals: [1.15, 3.75, 4.6, 5.34, 5.98, 6.54, 7.02, 7.44, 7.8, 8.11, 8.38, 8.88],
+          clockSwaps: [4.6, 6.54, 8.11], // 9:42 / 9:45 / 9:51
+          end: 30,
+        };
+
+        var PEEK = 8; // pt each depth level peeks below the front card
+        var DEPTH_SCALE = 0.045;
+        var MAX_PEEKS = 2; // depths 1..2 visible, deeper hidden
+        var STACK_TOP = 254; // screen y of the stack anchor (below the clock)
+        var CARD_H = 98;
+        /* roll-in from below: the card's bottom starts on the field's bottom edge */
+        var ENTER_FROM = (LAYOUT.enterBottom - (LAYOUT.top + STACK_TOP * S)) / S - CARD_H;
+        var ENTER_DUR = 0.65;
+        var REDEPTH_DUR = 0.5;
+
+        /* ---------------- build cards ---------------- */
+        var stackEl = document.getElementById("sna-stack");
+        CONFIG.notifs.forEach(function (n, i) {
+          var card = document.createElement("div");
+          card.className = "ncard";
+          card.id = "sna-n" + i;
+          card.setAttribute("data-layout-allow-overlap", ""); // iOS stack: front card occludes the cards tucked behind it
+          card.setAttribute("data-layout-allow-occlusion", "");
+          card.innerHTML =
+            '<div class="nicon"><img alt=""></div>' +
+            '<div class="nbody"><div class="nrow"><span class="ntitle"></span><span class="ntime"></span></div>' +
+            '<div class="ntext"></div></div>';
+          card.querySelector("img").src = n.icon || CONFIG.icon;
+          card.querySelector(".ntitle").textContent = n.title;
+          card.querySelector(".ntime").textContent = nowLabel;
+          card.querySelector(".ntext").textContent = n.text;
+          stackEl.appendChild(card);
+        });
+        var cards = CONFIG.notifs.map(function (_, i) {
+          return document.getElementById("sna-n" + i);
+        });
+
+        /* Heights are measured inside build(): they must be read under the real webfont. */
+        var H = [];
+
+        /* state of card i when card k is the front card: behind cards keep their top at the
+           front card's top and squash on Y so their bottom peeks PEEK*d below it, like iOS */
+        function stateAt(i, k) {
+          var d = k - i;
+          if (d === 0) return { y: 0, sx: 1, sy: 1, alpha: 1 };
+          return {
+            y: 0,
+            sx: Math.max(0.001, 1 - DEPTH_SCALE * d),
+            sy: (H[k] + PEEK * d) / H[i],
+            alpha: d <= MAX_PEEKS ? 1 : 0,
+          };
+        }
+
+        var wall = document.getElementById("sna-wall");
+        var chrome = document.getElementById("sna-chrome");
+        var clocks = Array.prototype.slice.call(document.querySelectorAll(".clock"));
+        var chromeBits = full
+          ? [
+              document.getElementById("sna-date"),
+              document.getElementById("sna-clockwrap"),
+              document.getElementById("sna-lockglyph"),
+            ]
+          : [];
+
+        var tl = gsap.timeline({ paused: true });
+
+        function build() {
+          tl.clear();
+          gsap.set(cards, { clearProps: "transform,opacity,visibility" });
+          H = cards.map(function (c) {
+            return c.offsetHeight;
+          });
+
+          if (full) {
+            gsap.set(wall, { autoAlpha: 0, scale: 1, transformOrigin: "50% 42%" });
+            gsap.set(chrome, { scale: 1.045 });
+            gsap.set(chromeBits, { autoAlpha: 0, y: 16 });
+            gsap.set(clocks, { autoAlpha: 0 });
+          }
+          cards.forEach(function (c, i) {
+            gsap.set(c, {
+              autoAlpha: 0,
+              y: ENTER_FROM,
+              scaleX: 0.97,
+              scaleY: 0.97,
+              zIndex: 10 + i,
+            });
+          });
+
+          if (full) {
+            /* wake: wallpaper up, chrome cascade */
+            tl.to(wall, { autoAlpha: 1, duration: 0.55, ease: "power2.out" }, T.wake);
+            tl.to(chrome, { scale: 1, duration: 0.8, ease: "expo.out" }, T.wake + 0.15);
+            var wakeAt = [0.28, 0.3, 0.4];
+            chromeBits.forEach(function (el, i) {
+              tl.to(
+                el,
+                { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" },
+                T.wake + wakeAt[i],
+              );
+            });
+            tl.set(clocks[0], { autoAlpha: 1 }, T.wake + 0.3);
+            /* one slow push on the wallpaper, wake to out point */
+            tl.fromTo(
+              wall,
+              { scale: 1 },
+              { scale: 1.08, duration: T.end - T.wake, ease: "none", immediateRender: false },
+              T.wake,
+            );
+            /* clock ticks under the flood (hard swaps, faithful iOS) */
+            T.clockSwaps.forEach(function (t, i) {
+              tl.set(clocks[i], { autoAlpha: 0 }, t);
+              tl.set(clocks[i + 1], { autoAlpha: 1 }, t);
+            });
+          }
+
+          /* arrivals: new card springs in at the front; everyone behind re-depths the same frame */
+          T.arrivals.forEach(function (t, k) {
+            var card = cards[k];
+            tl.fromTo(
+              card,
+              { y: ENTER_FROM, scaleX: 0.97, scaleY: 0.97, autoAlpha: 0 },
+              {
+                y: 0,
+                scaleX: 1,
+                scaleY: 1,
+                autoAlpha: 1,
+                duration: ENTER_DUR,
+                ease: "expo.out",
+                immediateRender: false,
+              },
+              t,
+            );
+            tl.fromTo(
+              card,
+              { autoAlpha: 0 },
+              {
+                autoAlpha: 1,
+                duration: 0.12,
+                ease: "none",
+                immediateRender: false,
+                overwrite: false,
+              },
+              t,
+            );
+            for (var i = 0; i < k; i++) {
+              var from = stateAt(i, k - 1);
+              var to = stateAt(i, k);
+              tl.fromTo(
+                cards[i],
+                { y: from.y, scaleX: from.sx, scaleY: from.sy },
+                {
+                  y: to.y,
+                  scaleX: to.sx,
+                  scaleY: to.sy,
+                  duration: REDEPTH_DUR,
+                  ease: "power3.out",
+                  immediateRender: false,
+                },
+                t,
+              );
+              if (from.alpha !== to.alpha) {
+                tl.fromTo(
+                  cards[i],
+                  { autoAlpha: from.alpha },
+                  { autoAlpha: to.alpha, duration: 0.3, ease: "power2.in", immediateRender: false },
+                  t,
+                );
+              }
+            }
+          });
+
+          tl.set({}, {}, T.end);
+        }
+
+        /* Build once synchronously so the timeline exists at parse time, then rebuild when the
+           fonts report ready; the renderer only seeks after fonts are loaded. */
+        build();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () {
+            build();
+          });
+        }
+
+        /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
+        var exit = oneOf(variables.exit, ["none", "fade"], "none");
+        var BEATS = [1.15, 3.75, 8.38, 8.88];
+        var cues = String(variables.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = BEATS.map(function (b, i) {
+          return isFinite(cues[i]) ? cues[i] : b;
+        });
+        var ordered = at.every(function (t, i) {
+          return t >= 0 && (i === 0 || t > at[i - 1]);
+        });
+        if (!ordered) at = BEATS.slice();
+        var master = gsap.timeline({ paused: true });
+        var from = 0;
+        BEATS.forEach(function (b, i) {
+          master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
+          from = at[i];
+        });
+        master.to(
+          tl,
+          { time: T.end, duration: T.end - BEATS[BEATS.length - 1], ease: "none" },
+          from,
+        );
+        if (exit === "fade") {
+          var out = isFinite(cues[4]) ? cues[4] : from + 2;
+          master.to("#sna-scene", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+        }
+        master.set({}, {}, 30);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["slack-notification-ad-landscape"] = master;
+      })();
+    </script>
+  </body>
+</html>

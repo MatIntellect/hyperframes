@@ -3,14 +3,14 @@
   "name": "slack-notification-ad",
   "type": "hyperframes:block",
   "title": "Slack Notification Ad",
-  "description": "A portrait lock screen fills with escalating Slack video requests before HeyGen delivers the payoff",
-  "tags": ["showcase", "mock-ui", "notification", "vertical", "ad-template"],
+  "description": "An iOS lock screen fills with escalating Slack video requests before the brand's own notification delivers the payoff. Senders, messages and four beat times are variables; placement full (wallpaper, date and clock) or top / bottom (the stack alone); holds to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "notification", "slack", "vertical", "ad-template"],
   "author": "HeyGen",
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 12,
+  "duration": 30,
   "files": [
     {
       "path": "slack-notification-ad.html",
@@ -18,43 +18,14 @@
       "type": "hyperframes:composition"
     },
     {
-      "path": "assets/img/heygen-mark.svg",
-      "target": "assets/img/heygen-mark.svg",
-      "type": "hyperframes:asset"
-    },
-    {
       "path": "assets/img/slack-mark.svg",
       "target": "assets/img/slack-mark.svg",
       "type": "hyperframes:asset"
     },
     {
-      "path": "assets/fonts/inter-latin-400-normal.woff2",
-      "target": "assets/fonts/inter-latin-400-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-latin-500-normal.woff2",
-      "target": "assets/fonts/inter-latin-500-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-latin-600-normal.woff2",
-      "target": "assets/fonts/inter-latin-600-normal.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/fonts/inter-LICENSE.txt",
-      "target": "assets/fonts/inter-LICENSE.txt",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "TEMPLATE.md",
-      "target": "TEMPLATE.md",
+      "path": "assets/img/matintellect-mark.svg",
+      "target": "assets/img/matintellect-mark.svg",
       "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/slack-notification-ad/preview.mp4",
-    "poster": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/slack-notification-ad/poster.jpg"
-  }
+  ]
 }

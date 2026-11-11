@@ -1,0 +1,31 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "slack-notification-ad-landscape",
+  "type": "hyperframes:block",
+  "title": "Slack Notification Ad (landscape)",
+  "description": "An iOS lock screen fills with escalating Slack video requests before the brand's own notification delivers the payoff: wallpaper to the frame edge, date, clock and the stack in the middle. Senders, messages and four beat times are variables; holds to the end of the mount.",
+  "tags": ["showcase", "mock-ui", "notification", "slack", "landscape", "ad-template"],
+  "author": "HeyGen",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "slack-notification-ad-landscape.html",
+      "target": "compositions/slack-notification-ad-landscape.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/slack-mark.svg",
+      "target": "assets/img/slack-mark.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/img/matintellect-mark.svg",
+      "target": "assets/img/matintellect-mark.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
