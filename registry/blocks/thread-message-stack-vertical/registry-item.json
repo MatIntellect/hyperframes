@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "thread-message-stack-vertical",
+  "type": "hyperframes:block",
+  "title": "Thread Message Stack (vertical)",
+  "description": "Vertical message thread in the 780 column: bubbles pop in at the bottom, yours on the right in blue, theirs on the left, pushing the earlier ones up to fade. Messages and sender are variables; placement full (brand ground), top or bottom; cues set first and last.",
+  "tags": ["social", "conversation", "messages", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "thread-message-stack-vertical.html",
+      "target": "compositions/thread-message-stack-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

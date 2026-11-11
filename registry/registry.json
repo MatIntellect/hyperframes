@@ -252,6 +252,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "thread-message-stack",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "thread-message-stack-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "tiktok-follow",
       "type": "hyperframes:block"
     },

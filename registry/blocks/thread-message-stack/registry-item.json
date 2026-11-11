@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "thread-message-stack",
+  "type": "hyperframes:block",
+  "title": "Thread Message Stack",
+  "description": "Message thread on the brand ground: bubbles pop in one by one at the bottom, yours on the right in blue, theirs on the left, and push the earlier ones up until they fade at the top. Messages and sender are variables; cues set the first and last message.",
+  "tags": ["social", "conversation", "messages"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "thread-message-stack.html",
+      "target": "compositions/thread-message-stack.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
