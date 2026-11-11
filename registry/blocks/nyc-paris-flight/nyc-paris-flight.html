@@ -12,7 +12,7 @@
     { "id": "toCode", "type": "string", "role": "content", "label": "To code", "description": "Grey line under the destination name in its pin label. Empty hides it.", "maxLength": 12, "default": "CDG / FR" },
     { "id": "toPoint", "type": "string", "role": "content", "label": "To point", "description": "Destination as latitude, longitude (decimal point). The map is framed on the two cities; it reads best when they lie mostly east-west of each other.", "maxLength": 24, "default": "48.86, 2.35" },
     { "id": "badge", "type": "string", "role": "content", "label": "Landing badge", "description": "Red pill that pops up by the destination on landing.", "maxLength": 12, "default": "Прилетели" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The flight keeps its native 6 s rhythm, tied to its sound. Comma-separated seconds from mount start: 1 the exit (only when exit is fade or flash). Empty keeps 5.5.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The flight keeps its native 6 s rhythm, tied to its sound. Comma-separated seconds from mount start: 1 the exit (only when exit is fade or flash). Empty keeps 7.2: the landing badge (5.02 s) reads 2 s. The native cut to light falls on its sound at 5.5 s – put 5.5 for it, the badge then stays only 0.5 s.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed map to the end of the mount; fade fades it out; flash cuts to a solid light frame and stays, as in the native block.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "flash", "label": "Cut to light" }] }
   ]'
 >
@@ -510,7 +510,8 @@
         var cues = String(V.cues || "")
           .split(",")
           .map(parseFloat);
-        var tExit = isFinite(cues[0]) && cues[0] > 0 ? cues[0] : 5.5;
+        // по умолчанию плашка прилёта (5,02 с) стоит 2 с – норма HF для последней строки; родной обрыв на 5,5 – меткой
+        var tExit = isFinite(cues[0]) && cues[0] > 0 ? cues[0] : 7.2;
         var exit = oneOf(V.exit, ["none", "fade", "flash"], "none");
         if (exit === "flash") tl.set("#npf-flash", { opacity: 1 }, tExit);
         if (exit === "fade") tl.to("#npf-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, tExit);

@@ -12,7 +12,7 @@
     { "id": "layer_2", "type": "string", "role": "content", "label": "Layer 2", "default": "API-шлюз", "maxLength": 22 },
     { "id": "layer_3", "type": "string", "role": "content", "label": "Layer 3", "default": "Сервисы", "maxLength": 22 },
     { "id": "layer_4", "type": "string", "role": "content", "label": "Bottom layer", "default": "Данные", "maxLength": 22 },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the plates explode apart (the labels land 0.95 s later, one every 0.7 s, each lighting its layer red), 2 the stack collapses or fades (only when exit is collapse or fade). Empty keeps 0.3 and 4.05.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the plates explode apart (the labels land 0.95 s later, one every 0.7 s, each lighting its layer red), 2 the stack collapses or fades (only when exit is collapse or fade). Empty keeps 0.3, and the collapse 2 s after the last label lands (5.35).", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the exploded stack with its labels to the end of the mount; collapse closes it back into one stack, as in the native block; fade fades it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "collapse", "label": "Collapse" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -174,7 +174,8 @@
           .map(parseFloat);
         var open = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
         var exit = ["none", "collapse", "fade"].indexOf(V.exit) >= 0 ? V.exit : "none";
-        var close = isFinite(cues[1]) && cues[1] > open ? cues[1] : open + 3.75;
+        // по умолчанию – через 2 с после последней подписи (0,95 + 3 × 0,7 после раскрытия): её надо успеть прочитать
+        var close = isFinite(cues[1]) && cues[1] > open ? cues[1] : open + 5.05;
 
         var clock = { t: 0 };
         var scene = {
