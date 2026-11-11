@@ -5,14 +5,14 @@
     { "id": "shareTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Heading at the top of the share sheet.", "maxLength": 20, "default": "Поделиться" },
     { "id": "senderName", "type": "string", "role": "content", "label": "Sender", "description": "Who offers the item, bold, before \"хочет поделиться\".", "maxLength": 16, "default": "MatIntellect" },
     { "id": "itemLabel", "type": "string", "role": "content", "label": "Item", "description": "What is offered, after \"хочет поделиться\".", "maxLength": 14, "default": "видео" },
-    { "id": "stripText", "type": "string", "role": "content", "label": "Brand strip", "description": "Small caps line beside the logo under the preview.", "maxLength": 40, "default": "MATINTELLECT.COM" },
+    { "id": "stripText", "type": "string", "role": "content", "label": "Brand strip", "description": "Small caps line beside the logo under the preview.", "maxLength": 24, "default": "MATINTELLECT.COM" },
     { "id": "acceptLabel", "type": "string", "role": "content", "label": "Accept label", "description": "Right-hand action button.", "maxLength": 12, "default": "Принять" },
     { "id": "declineLabel", "type": "string", "role": "content", "label": "Decline label", "description": "Left-hand action button.", "maxLength": 12, "default": "Отклонить" },
     { "id": "slideImage1", "type": "image", "role": "content", "label": "Slide image 1", "description": "First carousel image; also fills the blurred ground.", "default": "assets/slide-01.jpg" },
     { "id": "slideImage2", "type": "image", "role": "content", "label": "Slide image 2", "description": "Second carousel image.", "default": "assets/slide-02.jpg" },
     { "id": "slideImage3", "type": "image", "role": "content", "label": "Slide image 3", "description": "Third carousel image.", "default": "assets/slide-03.jpg" },
     { "id": "slideImage4", "type": "image", "role": "content", "label": "Slide image 4", "description": "Fourth carousel image.", "default": "assets/slide-04.jpg" },
-    { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent horizontal wordmark in the preview strip.", "default": "assets/hyperframes-logo-black.svg" },
+    { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent brand mark in the preview strip, 56 px tall (square or horizontal).", "default": "assets/img/matintellect-mark.svg" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sheet springs up, 2 the previews start cutting, 3 the accept tap, 4 the sheet leaves (only when exit is not none). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 0.06, 0.99, 6.32.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the accepted sheet to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -136,13 +136,14 @@
         gap: 14px;
       }
       #ssc-strip img {
-        height: 38px;
+        height: 56px;
         display: block;
       }
       #ssc-strip-text {
-        font-size: 17px;
+        font-size: 28px;
         font-weight: 600;
-        letter-spacing: 2.4px;
+        letter-spacing: 2px;
+        white-space: nowrap;
         color: #4a4438;
         text-transform: uppercase;
       }
@@ -241,13 +242,7 @@
       data-duration="30"
       data-fps="30"
     >
-      <section
-        id="ssc-scene"
-        class="clip"
-        data-start="0"
-        data-duration="30"
-        data-track-index="1"
-      >
+      <section id="ssc-scene" class="clip" data-start="0" data-duration="30" data-track-index="1">
         <img
           class="ssc-bg"
           id="ssc-bg-1"
@@ -320,7 +315,7 @@
               <div id="ssc-strip">
                 <img
                   data-var-src="brandLogo"
-                  src="assets/hyperframes-logo-black.svg"
+                  src="assets/img/matintellect-mark.svg"
                   alt="Brand logo"
                 />
                 <div id="ssc-strip-text">MATINTELLECT.COM</div>
@@ -448,7 +443,11 @@
           master.to(tl, { time: b, duration: Math.max(at[i] - from, 0.001), ease: "none" }, from);
           from = at[i];
         });
-        master.to(tl, { time: tl.duration(), duration: tl.duration() - BEATS[BEATS.length - 1], ease: "none" }, from);
+        master.to(
+          tl,
+          { time: tl.duration(), duration: tl.duration() - BEATS[BEATS.length - 1], ease: "none" },
+          from,
+        );
         if (exit === "fade") {
           var out = isFinite(cues[3]) ? cues[3] : from + 1;
           master.to("#ssc-card", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);

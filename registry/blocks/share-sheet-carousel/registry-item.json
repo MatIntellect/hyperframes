@@ -44,7 +44,8 @@
       "label": "Brand strip",
       "description": "Positioning line of the brand this video promotes, in small caps beside its logo.",
       "portrays": ["subject_tagline"],
-      "default": "OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML"
+      "default": "OPEN-SOURCE VIDEO ENGINE · SHIP FROM HTML",
+      "maxLength": 24
     },
     {
       "id": "acceptLabel",
@@ -101,7 +102,7 @@
       "label": "Brand logo",
       "description": "Transparent horizontal wordmark of the brand this video promotes, in the preview strip.",
       "portrays": ["subject_logo"],
-      "default": "assets/hyperframes-logo-black.svg"
+      "default": "assets/img/matintellect-mark.svg"
     }
   ],
   "files": [
@@ -131,8 +132,8 @@
       "type": "hyperframes:asset"
     },
     {
-      "path": "assets/hyperframes-logo-black.svg",
-      "target": "assets/hyperframes-logo-black.svg",
+      "path": "assets/img/matintellect-mark.svg",
+      "target": "assets/img/matintellect-mark.svg",
       "type": "hyperframes:asset"
     }
   ]
