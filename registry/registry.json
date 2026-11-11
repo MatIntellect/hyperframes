@@ -170,6 +170,14 @@
     {
       "name": "tiktok-follow-landscape",
       "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-lower-third",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "yt-lower-third-vertical",
+      "type": "hyperframes:block"
     }
   ]
 }
