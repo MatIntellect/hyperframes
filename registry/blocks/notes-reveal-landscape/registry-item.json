@@ -1,0 +1,131 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "notes-reveal-landscape",
+  "type": "hyperframes:block",
+  "title": "Notes Reveal Landscape",
+  "description": "Landscape 1920x1080 version of notes-reveal: the Russian note typed in a white notes app, a centred 780x1000 column without the keyboard, cues and an exit",
+  "tags": ["showcase", "mock-ui", "notes", "typing", "landscape", "ad-template"],
+  "author": "Miao Yang",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "variables": [
+    {
+      "id": "titleL1",
+      "type": "string",
+      "role": "content",
+      "label": "Note title line 1",
+      "description": "First line of the bold note title.",
+      "maxLength": 20,
+      "default": "Что я понял"
+    },
+    {
+      "id": "titleL2",
+      "type": "string",
+      "role": "content",
+      "label": "Note title line 2",
+      "description": "Second line of the note title.",
+      "maxLength": 20,
+      "default": "про ролики."
+    },
+    {
+      "id": "noteLine1",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 1",
+      "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes.",
+      "maxLength": 30,
+      "default": "ролики выходили скучными"
+    },
+    {
+      "id": "noteLine2",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 2",
+      "description": "Second typed line.",
+      "maxLength": 30,
+      "default": "монтажёр стоил дорого"
+    },
+    {
+      "id": "noteLine3",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 3",
+      "description": "Third typed line.",
+      "maxLength": 30,
+      "default": "и правки не кончались."
+    },
+    {
+      "id": "noteLine4",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 4",
+      "description": "Fourth typed line: the turn, where the brand enters.",
+      "maxLength": 30,
+      "default": "потом отдал запись ИИ"
+    },
+    {
+      "id": "noteLine5",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 5",
+      "description": "Fifth typed line: name the brand here.",
+      "portrays": ["subject_name"],
+      "maxLength": 30,
+      "default": "три недели с MatIntellect"
+    },
+    {
+      "id": "noteLine6",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 6",
+      "description": "Sixth typed line.",
+      "maxLength": 30,
+      "default": "рутина ушла, а главное –"
+    },
+    {
+      "id": "noteLine7",
+      "type": "string",
+      "role": "content",
+      "label": "Note body line 7",
+      "description": "Last typed line: the payoff.",
+      "maxLength": 30,
+      "default": "ролики выходят каждую неделю."
+    },
+    {
+      "id": "cues",
+      "type": "string",
+      "role": "timing",
+      "label": "Cues",
+      "description": "Comma-separated seconds from mount start: 1 typing starts, 2-8 body lines 1-7 finish typing, 9 the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.",
+      "default": ""
+    },
+    {
+      "id": "exit",
+      "type": "enum",
+      "role": "timing",
+      "label": "Exit",
+      "description": "none holds the finished note to the end of the mount.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "Hold"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "notes-reveal-landscape.html",
+      "target": "compositions/notes-reveal-landscape.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

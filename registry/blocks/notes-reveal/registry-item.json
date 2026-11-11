@@ -3,22 +3,45 @@
   "name": "notes-reveal",
   "type": "hyperframes:block",
   "title": "Notes Reveal",
-  "description": "A personal note is typed character by character in a notes app - caret riding every letter, the page scrolling up on measured settle curves as each line lands - then cuts to a hand-lettered paper card with a marker headline and a ticked checklist",
+  "description": "A note in Russian is typed character by character in a notes app, caret riding every letter and the page scrolling up as each line lands; full screen with the Russian keyboard or a top/bottom note card, with cues and an exit",
   "tags": ["showcase", "mock-ui", "notes", "typing", "vertical", "ad-template"],
   "author": "Miao Yang",
   "dimensions": {
     "width": 1080,
     "height": 1920
   },
-  "duration": 24.85,
+  "duration": 30,
   "variables": [
+    {
+      "id": "placement",
+      "type": "enum",
+      "role": "layout",
+      "label": "Placement",
+      "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1180 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x760 at y 180-940 / 600-1360 with the nav and the note (no keyboard), rest of the frame transparent.",
+      "default": "full",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
     {
       "id": "titleL1",
       "type": "string",
       "role": "content",
       "label": "Note title line 1",
-      "description": "First line of the note title.",
-      "default": "Things nobody told me"
+      "description": "First line of the bold note title.",
+      "maxLength": 20,
+      "default": "Что я понял"
     },
     {
       "id": "titleL2",
@@ -26,153 +49,98 @@
       "role": "content",
       "label": "Note title line 2",
       "description": "Second line of the note title.",
-      "default": "about video."
+      "maxLength": 20,
+      "default": "про ролики."
     },
     {
       "id": "noteLine1",
       "type": "string",
       "role": "content",
       "label": "Note body line 1",
-      "description": "First typed line of the note. The seven body lines are the bulk of the video: they must be about the brand this video promotes, not about video-making.",
-      "default": "my videos sucked"
+      "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes.",
+      "maxLength": 30,
+      "default": "ролики выходили скучными"
     },
     {
       "id": "noteLine2",
       "type": "string",
       "role": "content",
       "label": "Note body line 2",
-      "description": "Second typed line of the note.",
-      "default": "my tools cost $$$"
+      "description": "Second typed line.",
+      "maxLength": 30,
+      "default": "монтажёр стоил дорого"
     },
     {
       "id": "noteLine3",
       "type": "string",
       "role": "content",
       "label": "Note body line 3",
-      "description": "Third typed line of the note.",
-      "default": "and re-edits never end."
+      "description": "Third typed line.",
+      "maxLength": 30,
+      "default": "и правки не кончались."
     },
     {
       "id": "noteLine4",
       "type": "string",
       "role": "content",
       "label": "Note body line 4",
-      "description": "Fourth typed line of the note — the turn, where the brand enters.",
-      "default": "then i tried writing html only"
+      "description": "Fourth typed line: the turn, where the brand enters.",
+      "maxLength": 30,
+      "default": "потом отдал запись ИИ"
     },
     {
       "id": "noteLine5",
       "type": "string",
       "role": "content",
       "label": "Note body line 5",
-      "description": "Fifth typed line of the note — name the brand here.",
-      "default": "started HyperFrames three weeks ago"
+      "description": "Fifth typed line: name the brand here.",
+      "portrays": ["subject_name"],
+      "maxLength": 30,
+      "default": "три недели с MatIntellect"
     },
     {
       "id": "noteLine6",
       "type": "string",
       "role": "content",
       "label": "Note body line 6",
-      "description": "Sixth typed line of the note.",
-      "default": "the grind is gone, but more than that —"
+      "description": "Sixth typed line.",
+      "maxLength": 30,
+      "default": "рутина ушла, а главное –"
     },
     {
       "id": "noteLine7",
       "type": "string",
       "role": "content",
       "label": "Note body line 7",
-      "description": "Last typed line of the note — the payoff.",
-      "default": "I ship videos weekly."
+      "description": "Last typed line: the payoff.",
+      "maxLength": 30,
+      "default": "ролики выходят каждую неделю."
     },
     {
-      "id": "cardTop",
+      "id": "cues",
       "type": "string",
-      "role": "content",
-      "label": "Card headline top",
-      "description": "First marker line on the closing card. The underline follows its last word.",
-      "default": "THE POWER"
+      "role": "timing",
+      "label": "Cues",
+      "description": "Comma-separated seconds from mount start: 1 typing starts, 2-8 body lines 1-7 finish typing, 9 the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.",
+      "default": ""
     },
     {
-      "id": "cardMid",
-      "type": "string",
-      "role": "content",
-      "label": "Card headline middle",
-      "description": "Short connector line between the two headline lines, centred on the card.",
-      "default": "OF"
-    },
-    {
-      "id": "cardBottom",
-      "type": "string",
-      "role": "content",
-      "label": "Card headline bottom",
-      "description": "Last marker line on the closing card. Its first word is ringed.",
-      "default": "ONE FILE"
-    },
-    {
-      "id": "check1Label",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 1 label",
-      "description": "Typewriter label of the first checklist row.",
-      "default": "WRITE"
-    },
-    {
-      "id": "check1Value",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 1 value",
-      "description": "Marker value of the first checklist row.",
-      "default": "HTML"
-    },
-    {
-      "id": "check2Label",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 2 label",
-      "description": "Typewriter label of the second checklist row.",
-      "default": "RENDER"
-    },
-    {
-      "id": "check2Value",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 2 value",
-      "description": "Marker value of the second checklist row.",
-      "default": "IN 4K"
-    },
-    {
-      "id": "check3Label",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 3 label",
-      "description": "Typewriter label of the third checklist row.",
-      "default": "SHIP"
-    },
-    {
-      "id": "check3Value",
-      "type": "string",
-      "role": "content",
-      "label": "Checklist 3 value",
-      "description": "Marker value of the third checklist row.",
-      "default": "TODAY"
-    },
-    {
-      "id": "brandLogo",
-      "type": "image",
-      "role": "content",
-      "label": "Brand logo",
-      "description": "Transparent mark of the brand this video promotes, in the sign-off strip under the card.",
-      "portrays": ["subject_logo"],
-      "default": "assets/hyperframes-logo-black.svg"
-    },
-    {
-      "id": "brandDomain",
-      "type": "string",
-      "role": "content",
-      "label": "Sign-off domain",
-      "description": "Domain of the brand this video promotes, closing the sign-off strip. Use the real domain, or a call to action when no domain fits.",
-      "portrays": ["subject_domain"],
-      "default": "hyperframes.heygen.com"
+      "id": "exit",
+      "type": "enum",
+      "role": "timing",
+      "label": "Exit",
+      "description": "none holds the finished note to the end of the mount.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "Hold"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ]
     }
   ],
   "files": [
@@ -180,35 +148,6 @@
       "path": "notes-reveal.html",
       "target": "compositions/notes-reveal.html",
       "type": "hyperframes:composition"
-    },
-    {
-      "path": "assets/permanent-marker-400.woff2",
-      "target": "assets/permanent-marker-400.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/courier-prime-400.woff2",
-      "target": "assets/courier-prime-400.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/courier-prime-700.woff2",
-      "target": "assets/courier-prime-700.woff2",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/hyperframes-logo-black.svg",
-      "target": "assets/hyperframes-logo-black.svg",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "TEMPLATE.md",
-      "target": "TEMPLATE.md",
-      "type": "hyperframes:asset"
     }
-  ],
-  "preview": {
-    "video": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/notes-reveal/preview.mp4",
-    "poster": "https://static.heygen.ai/hyperframes/templates/promoted/254fe4bd8a3f00c1e70ac5e38a1bce25060f7590/notes-reveal/poster.jpg"
-  }
+  ]
 }
