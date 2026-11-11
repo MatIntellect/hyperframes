@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-comment-card-vertical",
+  "type": "hyperframes:block",
+  "title": "YouTube Comment Card (vertical)",
+  "description": "Vertical YouTube comments over footage in the 780 column: avatar pops, the text types letter by letter, the like row follows; up to three comments. Words, likes and avatars are variables; placement top, centre or bottom; cues set each start.",
+  "tags": ["social", "comments", "creator", "overlay", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-comment-card-vertical.html",
+      "target": "compositions/yt-comment-card-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

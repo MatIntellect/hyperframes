@@ -1,0 +1,276 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
+    { "id": "time1", "type": "string", "role": "content", "label": "Comment 1 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "2 дня назад" },
+    { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Как ты это смонтировал так быстро?" },
+    { "id": "likes1", "type": "string", "role": "content", "label": "Comment 1 likes", "description": "Like count.", "maxLength": 8, "default": "47" },
+    { "id": "avatar1", "type": "image", "role": "content", "label": "Comment 1 avatar", "description": "Round picture; empty draws a coloured circle with the first letter of the handle.", "default": "" },
+    { "id": "user2", "type": "string", "role": "content", "label": "Comment 2 user", "description": "Handle of the second commenter. Empty hides the comment.", "maxLength": 20, "default": "@framerate" },
+    { "id": "time2", "type": "string", "role": "content", "label": "Comment 2 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "1 день назад" },
+    { "id": "text2", "type": "string", "role": "content", "label": "Comment 2 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Графика как у больших каналов, жду разбор" },
+    { "id": "likes2", "type": "string", "role": "content", "label": "Comment 2 likes", "description": "Like count.", "maxLength": 8, "default": "12" },
+    { "id": "avatar2", "type": "image", "role": "content", "label": "Comment 2 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
+    { "id": "user3", "type": "string", "role": "content", "label": "Comment 3 user", "description": "Handle of the third commenter. Empty hides the comment.", "maxLength": 20, "default": "" },
+    { "id": "time3", "type": "string", "role": "content", "label": "Comment 3 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "" },
+    { "id": "text3", "type": "string", "role": "content", "label": "Comment 3 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "" },
+    { "id": "likes3", "type": "string", "role": "content", "label": "Comment 3 likes", "description": "Like count.", "maxLength": 8, "default": "" },
+    { "id": "avatar3", "type": "image", "role": "content", "label": "Comment 3 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
+    { "id": "replyLabel", "type": "string", "role": "content", "label": "Reply label", "description": "Word after the like count.", "maxLength": 12, "default": "Ответить" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: when each comment starts (avatar pops, then the text types), then when the comments leave (only when exit is fade). Empty starts at 0.3 and runs them one after another.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the comments to the end of the mount; fade lifts them out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      /* YouTube comments in the dark theme: native text colours and Roboto, shadowed for footage */
+      #ycc-root {
+        font-family: "Roboto", sans-serif;
+      }
+      #ycc-col {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+      .ycc-card {
+        display: flex;
+        align-items: flex-start;
+      }
+      .ycc-av {
+        flex: none;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        color: #ffffff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      }
+      .ycc-av img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .ycc-body {
+        min-width: 0;
+        flex: 1;
+      }
+      .ycc-meta {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        column-gap: 14px;
+      }
+      .ycc-user,
+      .ycc-text {
+        color: #f1f1f1;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+      }
+      .ycc-user {
+        font-weight: 500;
+      }
+      .ycc-time,
+      .ycc-row {
+        color: #aaaaaa;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      }
+      .ycc-text {
+        line-height: 1.35;
+        overflow-wrap: break-word;
+      }
+      .ycc-text .ycc-ch {
+        opacity: 0;
+      }
+      .ycc-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        opacity: 0;
+      }
+      .ycc-row svg {
+        stroke: #aaaaaa;
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+        flex-shrink: 0;
+      }
+      .ycc-reply {
+        margin-left: 18px;
+      }
+      
+      #ycc-col {
+        left: 140px;
+        top: 540px;
+        width: 960px;
+        gap: 40px;
+        transform: translateY(-50%);
+      }
+      .ycc-card {
+        gap: 22px;
+      }
+      .ycc-av {
+        width: 64px;
+        height: 64px;
+        font-size: 28px;
+      }
+      .ycc-user,
+      .ycc-time {
+        font-size: 28px;
+      }
+      .ycc-text {
+        margin-top: 8px;
+        font-size: 36px;
+      }
+      .ycc-row {
+        margin-top: 12px;
+        font-size: 28px;
+      }
+      .ycc-row svg {
+        width: 28px;
+        height: 28px;
+      }
+      
+      
+    </style>
+  </head>
+  <body>
+    <div id="ycc-root" data-composition-id="yt-comment-card" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="ycc-col"></div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("ycc-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function get(id, d) {
+          var v = V[id];
+          return typeof v === "string" ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+
+        var DEF = [
+          ["@pixelwaves", "2 дня назад", "Как ты это смонтировал так быстро?", "47"],
+          ["@framerate", "1 день назад", "Графика как у больших каналов, жду разбор", "12"],
+          ["", "", "", ""],
+        ];
+        var comments = [];
+        for (var k = 1; k <= 3; k++) {
+          var d = DEF[k - 1];
+          var c = { user: get("user" + k, d[0]), time: get("time" + k, d[1]), text: get("text" + k, d[2]), likes: get("likes" + k, d[3]), avatar: get("avatar" + k, "") };
+          if (c.user && c.text) comments.push(c);
+        }
+        var reply = get("replyLabel", "") || "Ответить";
+        var THUMB = '<svg viewBox="0 0 24 24"><path d="M7 11v9M7 11l3.2-6.4a2 2 0 0 1 3.6 1.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6a2 2 0 0 1-2 1.6H7M7 11H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/></svg>';
+        /* YouTube's default avatars: a coloured circle with the first letter */
+        var HUES = [210, 340, 150];
+
+        var col = document.getElementById("ycc-col");
+        var parts = comments.map(function (c, i) {
+          var card = document.createElement("div");
+          card.className = "ycc-card";
+          var av = document.createElement("div");
+          av.className = "ycc-av";
+          if (c.avatar) {
+            var img = document.createElement("img");
+            img.src = c.avatar;
+            av.appendChild(img);
+          } else {
+            av.textContent = c.user.replace(/^@/, "").charAt(0).toUpperCase() || "?";
+            av.style.background = "linear-gradient(135deg, hsl(" + HUES[i] + ", 58%, 40%), hsl(" + (HUES[i] + 40) + ", 58%, 32%))";
+          }
+          card.appendChild(av);
+          var body = document.createElement("div");
+          body.className = "ycc-body";
+          var meta = document.createElement("div");
+          meta.className = "ycc-meta";
+          var user = document.createElement("span");
+          user.className = "ycc-user";
+          user.textContent = c.user;
+          var time = document.createElement("span");
+          time.className = "ycc-time";
+          time.textContent = c.time;
+          meta.appendChild(user);
+          meta.appendChild(time);
+          body.appendChild(meta);
+          var text = document.createElement("div");
+          text.className = "ycc-text";
+          var chars = Array.from(c.text).map(function (ch) {
+            var s = document.createElement("span");
+            s.className = "ycc-ch";
+            s.textContent = ch;
+            text.appendChild(s);
+            return s;
+          });
+          body.appendChild(text);
+          var row = document.createElement("div");
+          row.className = "ycc-row";
+          row.innerHTML = THUMB;
+          var n = document.createElement("span");
+          n.textContent = c.likes;
+          var r = document.createElement("span");
+          r.className = "ycc-reply";
+          r.textContent = reply;
+          row.appendChild(n);
+          row.appendChild(r);
+          body.appendChild(row);
+          card.appendChild(body);
+          col.appendChild(card);
+          return { av: av, meta: meta, chars: chars, row: row };
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+        var tl = gsap.timeline({ paused: true });
+        /* each comment: avatar pops, handle fades, text types at most 2.2 s, like row fades; the next starts at its cue or right after */
+        var t = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        parts.forEach(function (p, i) {
+          if (i > 0 && isFinite(cues[i]) && cues[i] >= t) t = cues[i];
+          var next = isFinite(cues[i + 1]) ? cues[i + 1] : Infinity;
+          var room = Math.max(0.4, Math.min(2.2, next - t - 1));
+          var step = Math.min(0.024, room / Math.max(1, p.chars.length));
+          tl.fromTo(p.av, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, t);
+          tl.fromTo(p.meta, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, t + 0.12);
+          t += 0.4;
+          tl.to(p.chars, { opacity: 1, duration: 0.02, stagger: step, ease: "none" }, t);
+          t += p.chars.length * step + 0.15;
+          tl.to(p.row, { opacity: 1, duration: 0.35, ease: "power2.out" }, t);
+          t += 0.5;
+        });
+        if (exit === "fade") tl.to(col, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, isFinite(cues[parts.length]) ? cues[parts.length] : t + 3);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["yt-comment-card"] = tl;
+      })();
+    </script>
+  </body>
+</html>

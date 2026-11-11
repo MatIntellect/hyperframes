@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "yt-comment-card",
+  "type": "hyperframes:block",
+  "title": "YouTube Comment Card",
+  "description": "YouTube comments over footage in the native dark-theme colours: avatar pops, handle and age fade in, the text types letter by letter, the like row follows; up to three comments. Words, likes and avatars are variables; cues set when each comment starts.",
+  "tags": ["social", "comments", "creator", "overlay"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "yt-comment-card.html",
+      "target": "compositions/yt-comment-card.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
