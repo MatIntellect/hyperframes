@@ -193,7 +193,8 @@
             }
           }
         });
-        if (exit === "fade") tl.to(view, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c0 + (rows.length - 1) * step + 3);
+        /* the exit takes the whole block, ground included */
+        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c0 + (rows.length - 1) * step + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["thread-message-stack-vertical"] = tl;

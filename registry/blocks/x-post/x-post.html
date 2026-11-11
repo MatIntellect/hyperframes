@@ -305,8 +305,12 @@
         tl.to(likes, { opacity: 0, duration: 0.08, ease: "none" }, c1 + 0.12);
         tl.to("#xpo-likes2", { opacity: 1, duration: 0.12, ease: "none" }, c1 + 0.12);
         var tOut = isFinite(cues[2]) ? cues[2] : c1 + 2.7;
-        if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.4, ease: "power2.in" }, tOut);
-        if (exit === "down") tl.to(card, { y: RISE, opacity: 0, duration: 0.3, ease: "power3.in" }, tOut);
+        /* the exit takes the whole block, ground included; the card's own slide rides on top */
+        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, tOut);
+        if (exit === "down") {
+          tl.to(card, { y: RISE, duration: 0.3, ease: "power3.in" }, tOut);
+          tl.to(root, { autoAlpha: 0, duration: 0.3, ease: "power3.in" }, tOut);
+        }
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["x-post"] = tl;

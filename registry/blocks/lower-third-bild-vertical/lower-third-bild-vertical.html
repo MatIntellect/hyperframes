@@ -156,7 +156,8 @@
         var wraps = sub ? ["#ltbv-mainwrap", "#ltbv-subwrap"] : ["#ltbv-mainwrap"];
         var tl = gsap.timeline({ paused: true });
         tl.to(wraps, { clipPath: "inset(-20px -4% -20px 0)", duration: 0.45, stagger: 0.14, ease: "power3.out" }, c0);
-        if (exit === "out") tl.to(wraps.slice().reverse(), { clipPath: "inset(-20px -4% -20px 100%)", duration: 0.3, stagger: 0.08, ease: "power3.in" }, isFinite(cues[1]) ? cues[1] : c0 + 4.4);
+        /* the wipe closes past the shadow edge, so nothing of the plate is left */
+        if (exit === "out") tl.to(wraps.slice().reverse(), { clipPath: "inset(-20px -4% -20px 104%)", duration: 0.3, stagger: 0.08, ease: "power3.in" }, isFinite(cues[1]) ? cues[1] : c0 + 4.4);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["lower-third-bild-vertical"] = tl;

@@ -12,7 +12,7 @@
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Bebas Neue headline.", "maxLength": 30, "default": "Ролики за неделю" },
     { "id": "period", "type": "string", "role": "content", "label": "Period", "description": "Grey line under the title. Empty hides it.", "maxLength": 34, "default": "3–9 ноября 2026" },
     { "id": "total", "type": "string", "role": "content", "label": "Total", "description": "Bold total on the right of the period. Empty hides it.", "maxLength": 16, "default": "26 роликов" },
-    { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "JSON array of {name, merges, avatar}: name up to 12 characters, merges is the count that sets the speed, avatar an optional image path (empty draws initials). Sorted highest first.", "maxLength": 600, "default": "[{\"name\":\"Монтажёр\",\"merges\":12,\"avatar\":\"\"},{\"name\":\"Дизайнер\",\"merges\":7,\"avatar\":\"\"},{\"name\":\"Копирайтер\",\"merges\":4,\"avatar\":\"\"},{\"name\":\"Маркетолог\",\"merges\":2,\"avatar\":\"\"},{\"name\":\"Кот\",\"merges\":1,\"avatar\":\"\"}]" },
+    { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "JSON array of {name, merges, avatar}: name up to 12 characters, merges is the count that sets the speed, avatar an optional image path (empty draws the first letter). Sorted highest first.", "maxLength": 600, "default": "[{\"name\":\"Монтажёр\",\"merges\":12,\"avatar\":\"\"},{\"name\":\"Дизайнер\",\"merges\":7,\"avatar\":\"\"},{\"name\":\"Копирайтер\",\"merges\":4,\"avatar\":\"\"},{\"name\":\"Маркетолог\",\"merges\":2,\"avatar\":\"\"},{\"name\":\"Кот\",\"merges\":1,\"avatar\":\"\"}]" },
     { "id": "units", "type": "string", "role": "content", "label": "Count word", "description": "The word after each count in three Russian forms, one|few|many, e.g. ролик|ролика|роликов.", "maxLength": 40, "default": "ролик|ролика|роликов" },
     { "id": "rows_max", "type": "number", "role": "content", "label": "Maximum rows", "description": "Rows drawn, highest count first; the rest go to the overflow line.", "default": 7, "min": 1, "max": 7, "step": 1 },
     { "id": "overflow", "type": "string", "role": "content", "label": "Overflow line", "description": "Line for everyone past the cap. Empty writes it from the rows left out.", "maxLength": 44, "default": "" },
@@ -335,9 +335,9 @@
           });
           return "и ещё " + hidden.length + ": " + (lo === hi ? counted(lo) : lo + "–" + counted(hi));
         }
+        /* one letter: two wide capitals at 28 px and up do not fit a running circle */
         function initials(name) {
-          var parts = name.split(/\s+/);
-          return (parts.length >= 2 ? parts[0].charAt(0) + parts[parts.length - 1].charAt(0) : parts[0].charAt(0)).toUpperCase();
+          return name.charAt(0).toUpperCase();
         }
         /* distance tracks count / the leader's count; the floor is only for a genuine zero */
         function speedFor(merges, maxM) {
@@ -414,15 +414,15 @@
           return { el: avatar, nameEl: nameEl, lane: lane, speed: speedFor(row.merges, maxM) };
         });
 
-        /* avatars follow the row height; words stay at their size, never under 28 px */
+        /* avatars follow the row height, never under 76 px */
         var rowH = mount.firstChild ? mount.firstChild.clientHeight : 120;
-        var avatarPx = Math.max(64, Math.min(96, Math.floor(rowH * 0.62)));
+        var avatarPx = Math.max(76, Math.min(96, Math.floor(rowH * 0.62)));
         var namePx = NAME_PX;
         root.style.setProperty("--wimv-avatar", avatarPx + "px");
         avatars.forEach(function (a) {
           a.nameEl.style.fontSize = namePx + "px";
           var ini = a.el.querySelector(".wimv-initials");
-          if (ini) ini.style.fontSize = Math.max(28, Math.round(avatarPx * 0.4)) + "px";
+          if (ini) ini.style.fontSize = Math.max(28, Math.round(avatarPx * 0.45)) + "px";
         });
         var span = Math.max(0, (avatars.length ? avatars[0].lane.clientWidth : 560) - avatarPx);
 

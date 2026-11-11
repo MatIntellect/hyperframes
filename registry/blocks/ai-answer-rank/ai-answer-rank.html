@@ -482,7 +482,8 @@
         tl.fromTo("#aar-check", { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, duration: 0.42, ease: "back.out(2.2)" }, LAND + 0.05);
         tl.fromTo(checkPath, { strokeDashoffset: checkLen }, { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" }, LAND + 0.2);
 
-        if (exit === "fade") tl.to("#aar-card", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : LAND + 3);
+        /* the exit takes the whole block, ground included */
+        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : LAND + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["ai-answer-rank"] = tl;
