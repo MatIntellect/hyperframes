@@ -1,0 +1,191 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the sentence centred in the 780x1180 field (y 180-1360). top / bottom: the sentence on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "text", "type": "string", "role": "content", "label": "Sentence", "description": "The sentence; its words light up one by one from grey to white as the sweep runs.", "maxLength": 90, "default": "Монтаж делает система, а не человек за ночь" },
+    { "id": "accentWords", "type": "string", "role": "content", "label": "Red words", "description": "Words of the sentence that light up red instead of white, separated by commas. Empty: none.", "maxLength": 40, "default": "система" },
+    { "id": "align", "type": "enum", "role": "layout", "label": "Align", "default": "center", "options": [{ "value": "center", "label": "Centre" }, { "value": "left", "label": "Left" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sentence appears in grey, 2 the sweep starts (the first word lights up), 3 the sweep reaches the last word, 4 the sentence fades out (only when exit is fade). Set 2 and 3 to the phrase as it is spoken to follow speech. Empty keeps 0.3, 1.2, 5.2.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the lit sentence to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #mchv-root .mchv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #mchv-field {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #mchv-box {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+        text-align: center;
+      }
+      
+      
+      #mchv-field {
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 1180px;
+      }
+      #mchv-box {
+        width: 780px;
+        font-size: 80px;
+      }
+      #mchv-root.mchv-card #mchv-field {
+        height: 760px;
+        padding: 48px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        border-radius: 32px;
+      }
+      #mchv-root.mchv-bottom #mchv-field {
+        top: 600px;
+      }
+      #mchv-root.mchv-card #mchv-box {
+        width: 684px;
+        font-size: 64px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="mchv-root" data-composition-id="mk-callout-highlight-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div class="mchv-ground"></div>
+      <div id="mchv-field">
+        <div id="mchv-box"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("mchv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        if (placement !== "full") {
+          root.classList.add("mchv-card", "mchv-" + placement);
+          root.querySelector(".mchv-ground").remove();
+        }
+        
+
+        var box = document.getElementById("mchv-box");
+        box.style.textAlign = oneOf(V.align, ["center", "left"], "center");
+        var text = str(V.text, "Монтаж делает система, а не человек за ночь");
+        var red = String(typeof V.accentWords === "string" ? V.accentWords : "система")
+          .toLowerCase()
+          .split(",")
+          .map(function (s) {
+            return s.trim();
+          })
+          .filter(Boolean);
+        function bare(w) {
+          return w.toLowerCase().replace(/[^0-9a-zа-яё-]/gi, "");
+        }
+
+        var FAINT = "rgb(138, 138, 144)";
+        var words = [];
+        text.split(/\s+/).forEach(function (w, i) {
+          if (i > 0) box.appendChild(document.createTextNode(" "));
+          var span = document.createElement("span");
+          span.id = "mchv-w-" + i;
+          span.textContent = w;
+          span.style.color = FAINT;
+          box.appendChild(span);
+          words.push({ el: span, mix: gsap.utils.interpolate(FAINT, red.indexOf(bare(w)) >= 0 ? "rgb(255, 0, 0)" : "rgb(242, 242, 242)") });
+        });
+
+        var st = { _p: 0 };
+        function render() {
+          var k = st._p * words.length;
+          for (var i = 0; i < words.length; i++) words[i].el.style.color = words[i].mix(Math.max(0, Math.min(1, k - i)));
+        }
+
+        /* a property setter drives the colours: it runs on every seek, back or forth */
+        Object.defineProperty(st, "p", {
+          get: function () {
+            return this._p;
+          },
+          set: function (v) {
+            this._p = v;
+            render();
+          },
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        var c1 = isFinite(cues[1]) && cues[1] >= c0 ? cues[1] : c0 + 0.9;
+        var c2 = isFinite(cues[2]) && cues[2] > c1 ? cues[2] : c1 + 4;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(box, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, c0);
+        tl.fromTo(st, { p: 0 }, { p: 1, duration: c2 - c1, ease: "none", immediateRender: false }, c1);
+        if (exit === "fade") tl.to(box, { opacity: 0, y: -16, duration: 0.4, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : c2 + 3);
+        tl.set({}, {}, 30);
+        render();
+        window.__timelines = window.__timelines || {};
+        window.__timelines["mk-callout-highlight-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

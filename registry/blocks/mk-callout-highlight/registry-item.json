@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "mk-callout-highlight",
+  "type": "hyperframes:block",
+  "title": "Callout Highlight",
+  "description": "A sentence whose words light up one by one from grey to white (chosen words to red) as the speaker says them. Sentence, red words and alignment are variables; cues set when the sweep starts and ends to follow speech; holds to the end of the mount.",
+  "tags": ["text", "callout", "quote", "highlight", "karaoke"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "mk-callout-highlight.html",
+      "target": "compositions/mk-callout-highlight.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
