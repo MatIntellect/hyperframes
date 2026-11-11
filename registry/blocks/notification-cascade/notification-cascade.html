@@ -12,13 +12,8 @@
     { "id": "nowLabel", "type": "string", "role": "content", "label": "Time label", "description": "Small time label in the banner corner.", "maxLength": 8, "default": "сейчас" },
     { "id": "pillLabel", "type": "string", "role": "content", "label": "Pill label", "description": "Label of the collapse pill above the stack.", "maxLength": 10, "default": "Свернуть" },
     { "id": "backdrop", "type": "image", "role": "content", "label": "Backdrop", "description": "Photo behind the stack in full placement, slowly pushed in.", "default": "assets/desk-backdrop.jpg" },
-    { "id": "endCard", "type": "boolean", "role": "content", "label": "End card", "description": "Full placement only: after the stack lifts away, a dark card with the two headline lines, the logo and the footer.", "default": false },
-    { "id": "headlineTop", "type": "string", "role": "content", "label": "End-card line 1", "description": "First line of the closing card.", "maxLength": 16, "default": "МОНТАЖ С ИИ" },
-    { "id": "headlineAccent", "type": "string", "role": "content", "label": "End-card line 2", "description": "Accented second line of the closing card.", "maxLength": 20, "default": "БЕЗ МОНТАЖЁРА" },
-    { "id": "footerText", "type": "string", "role": "content", "label": "End-card footer", "description": "Domain or call to action under the logo.", "maxLength": 28, "default": "matintellect.com" },
-    { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent mark centred on the closing card.", "default": "assets/matintellect-logo.svg" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1-4 each banner lands (the earlier ones slide up to make room), 5 the stack lifts away (end card follows when endCard is on; ignored when exit is none and endCard is off). Empty keeps 1.6, 3.6, 5.6, 7.6, 9.2.", "default": "" },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the stack to the end of the mount (unless endCard is on).", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "lift", "label": "Lift away" }] }
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1-4 each banner lands (the earlier ones slide up to make room), 5 the stack lifts away (only when exit is lift). Empty keeps 1.6, 3.6, 5.6, 7.6, 9.2.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the stack to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "lift", "label": "Lift away" }] }
   ]'
 >
   <head>
@@ -49,8 +44,6 @@
         --nc-ink: var(--hf-ui-text, #464040);
         --nc-ink-faint: var(--hf-ui-text-faint, #5a5450);
         --nc-accent: var(--hf-ui-accent, #0a9c6b);
-        --nc-endcard-ink: #f7ece5;
-        --nc-endcard-accent: #3ce6ac;
       }
       #nc-field {
         position: absolute;
@@ -193,64 +186,6 @@
         justify-content: center;
         box-shadow: 0 8px 20px rgba(50, 25, 8, 0.14);
       }
-
-      /* ---------------- end card ---------------- */
-      /* the source cut to dark footage under its card; the scrim below is that
-         ground, faded in on the same beat */
-      #nc-endcard-scrim {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, #14110e 0%, #221b13 100%);
-      }
-      #nc-endcard-inner {
-        position: absolute;
-        inset: 0;
-        text-align: center;
-      }
-      #nc-ec-top {
-        position: absolute;
-        left: 150px;
-        white-space: nowrap;
-        top: 662px;
-        width: 780px;
-        font-family: "EB Garamond", serif;
-        font-weight: 700;
-        font-size: 93px;
-        letter-spacing: 4px;
-        color: var(--nc-endcard-ink);
-        text-shadow: 2.5px 3px 1px rgba(0, 0, 0, 0.66);
-      }
-      #nc-ec-accent {
-        position: absolute;
-        left: 150px;
-        white-space: nowrap;
-        top: 784px;
-        width: 780px;
-        font-family: "EB Garamond", serif;
-        font-weight: 700;
-        font-size: 67px;
-        letter-spacing: 3px;
-        color: var(--nc-endcard-accent);
-        text-shadow: 2.5px 3px 1px rgba(0, 0, 0, 0.64);
-      }
-      #nc-ec-mark {
-        position: absolute;
-        left: 450px;
-        top: 950px;
-        width: 180px;
-        height: 180px;
-        object-fit: contain;
-      }
-      #nc-ec-footer {
-        position: absolute;
-        left: 150px;
-        white-space: nowrap;
-        top: 1190px;
-        width: 780px;
-        font-size: 35px;
-        font-weight: 600;
-        color: var(--nc-endcard-accent);
-      }
     </style>
   </head>
   <body>
@@ -356,22 +291,6 @@
           </div>
         </section>
       </div>
-
-      <!-- end card -->
-      <section id="nc-endcard" class="clip" data-start="0" data-duration="30" data-track-index="3">
-        <div id="nc-endcard-scrim"></div>
-        <div id="nc-endcard-inner">
-          <div id="nc-ec-top">МОНТАЖ С ИИ</div>
-          <div id="nc-ec-accent">БЕЗ МОНТАЖЁРА</div>
-          <img
-            id="nc-ec-mark"
-            data-var-src="brandLogo"
-            src="assets/matintellect-logo.svg"
-            alt="Brand logo"
-          />
-          <div id="nc-ec-footer">matintellect.com</div>
-        </div>
-      </section>
     </div>
 
     <script>
@@ -399,8 +318,6 @@
         root.style.setProperty("--nc-base-top", baseTop + "px");
         root.style.setProperty("--nc-pill-top", baseTop - 96 + "px");
         if (!full) document.getElementById("nc-base").remove();
-        var endCard = full && vars.endCard === true;
-        if (!endCard) document.getElementById("nc-endcard").remove();
 
         function setAll(selector, value) {
           document.querySelectorAll(selector).forEach(function (el) {
@@ -421,23 +338,6 @@
         document.querySelectorAll(".nc-subtitle").forEach(function (el, i) {
           el.textContent = messages[i] || messages[messages.length - 1];
         });
-        if (endCard) {
-          document.getElementById("nc-ec-top").textContent = text(vars.headlineTop, "МОНТАЖ С ИИ");
-          document.getElementById("nc-ec-accent").textContent = text(
-            vars.headlineAccent,
-            "БЕЗ МОНТАЖЁРА",
-          );
-          document.getElementById("nc-ec-footer").textContent = text(
-            vars.footerText,
-            "matintellect.com",
-          );
-          /* headline sizes follow the letter count so the longest allowed line still fits 780 px */
-          var ecTop = document.getElementById("nc-ec-top");
-          var ecAccent = document.getElementById("nc-ec-accent");
-          ecTop.style.fontSize = Math.min(93, Math.floor(880 / ecTop.textContent.length)) + "px";
-          ecAccent.style.fontSize =
-            Math.min(67, Math.floor(1040 / ecAccent.textContent.length)) + "px";
-        }
 
         /* -------- timeline: every decisive number is measured from the reference -------- */
         var tl = gsap.timeline({ paused: true });
@@ -464,8 +364,6 @@
         var RISE = 22; /* entry micro-rise, px */
         var RESTACK_D = 1.0; /* expo.out slide when the stack makes room */
         var EXIT_T = at[4]; /* group exit */
-        var ENDCARD_T = EXIT_T + 0.7;
-        var ENDCARD_D = 0.5667;
 
         /* baselines at t=0.001 so every span is covered at any seek */
         tl.set(
@@ -473,7 +371,6 @@
           { autoAlpha: 0 },
           0.001,
         );
-        if (endCard) tl.set(["#nc-endcard-inner", "#nc-endcard-scrim"], { autoAlpha: 0 }, 0.001);
 
         /* backdrop push-in: linear, scale 1 -> 1.105 across the whole mount */
         if (full)
@@ -531,30 +428,10 @@
           );
 
         /* group exit: rise + fade */
-        if (exit === "lift" || endCard) {
+        if (exit === "lift") {
           tl.to("#nc-stack-inner", { y: -560, duration: 0.5, ease: "expo.out" }, EXIT_T);
           tl.to("#nc-stack-inner", { autoAlpha: 0, duration: 0.37, ease: "none" }, EXIT_T);
         }
-        if (!endCard) {
-          tl.set({}, {}, 30);
-          window.__timelines = window.__timelines || {};
-          window.__timelines["notification-cascade"] = tl;
-          return;
-        }
-
-        /* end card: dark scrim and card fade in together, then hold */
-        tl.fromTo(
-          "#nc-endcard-scrim",
-          { autoAlpha: 0 },
-          { autoAlpha: 1, duration: 0.2, ease: "none" },
-          ENDCARD_T,
-        );
-        tl.fromTo(
-          "#nc-endcard-inner",
-          { autoAlpha: 0 },
-          { autoAlpha: 1, duration: ENDCARD_D, ease: "none" },
-          ENDCARD_T,
-        );
 
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};

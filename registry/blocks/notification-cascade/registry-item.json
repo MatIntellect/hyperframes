@@ -3,7 +3,7 @@
   "name": "notification-cascade",
   "type": "hyperframes:block",
   "title": "Notification Cascade",
-  "description": "Phone notifications land one after another and stack up, each new banner pushing the earlier ones up. Texts and the four landing times are variables; placement full (desk photo behind), top or bottom; holds to the end of the mount, or lifts away into an optional closing card.",
+  "description": "Phone notifications land one after another and stack up, each new banner pushing the earlier ones up. Texts and the four landing times are variables; placement full (desk photo behind), top or bottom; holds to the end of the mount, or lifts away.",
   "tags": ["showcase", "mock-ui", "notification", "vertical", "ad-template"],
   "author": "Miao Yang",
   "dimensions": {
@@ -20,11 +20,6 @@
     {
       "path": "assets/desk-backdrop.jpg",
       "target": "assets/desk-backdrop.jpg",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/matintellect-logo.svg",
-      "target": "assets/matintellect-logo.svg",
       "type": "hyperframes:asset"
     }
   ]
