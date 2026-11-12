@@ -1143,8 +1143,8 @@
         gsap.set(document.getElementById("cle-comp-ph2"), { autoAlpha: 0 });
         gsap.set(document.getElementById("cle-send-btn"), { autoAlpha: 0, scale: 0.6 });
         gsap.set(document.getElementById("cle-stop-btn"), { autoAlpha: 0, scale: 0.6 });
-        gsap.set(document.getElementById("cle-hdr-actions"), { autoAlpha: 0 });
-        gsap.set(document.getElementById("cle-hdr-right"), { width: 44 });
+        gsap.set(header.querySelector("#cle-hdr-actions"), { autoAlpha: 0 });
+        gsap.set(header.querySelector("#cle-hdr-right"), { width: 44 });
         gsap.set(emptyMark, { autoAlpha: 0, scale: 0.72, transformOrigin: "50% 50%" });
         gsap.set(headWords, { autoAlpha: 0, y: 12 });
         gsap.set(keyboard, { y: 0, autoAlpha: 1 });
@@ -1249,17 +1249,17 @@
         });
         // header: incognito circle widens into the actions pill
         tl.to(
-          document.getElementById("cle-hdr-ghost"),
+          header.querySelector("#cle-hdr-ghost"),
           { autoAlpha: 0, duration: 0.12 },
           tGo + 0.02,
         );
         tl.to(
-          document.getElementById("cle-hdr-right"),
+          header.querySelector("#cle-hdr-right"),
           { width: 100, duration: 0.26, ease: "power2.out" },
           tGo + 0.06,
         );
         tl.to(
-          document.getElementById("cle-hdr-actions"),
+          header.querySelector("#cle-hdr-actions"),
           { autoAlpha: 1, duration: 0.18 },
           tGo + 0.16,
         );
@@ -1326,7 +1326,7 @@
         scrollTo(anchorTools, tw, 0.6);
 
         /* ---- 6. the two tool rows collapse into "2 steps" */
-        tw += 0.85;
+        tw += 1.85; // the search query and the lead stay long enough to read before they fold
         tl.to([boxThink, boxSearch, leadPara], { autoAlpha: 0, duration: 0.16 }, tw);
         tl.to(
           [boxThink, boxSearch, leadPara],

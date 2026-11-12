@@ -608,7 +608,7 @@
         sendReact: 0.03,
         spinLead: 0.45,
         toolStep: 0.5,
-        wordStep: 0.04,
+        wordStep: 0.05, // the first answer paragraph stays readable before the stream scrolls it away
         paraGap: 0.12,
         collapseAt: 0.55,
         tailStep: 0.4,
@@ -1306,7 +1306,7 @@
         scrollTo(anchorTools, tw, 0.6);
 
         /* ---- 6. the two tool rows collapse into "2 steps" */
-        tw += 0.85;
+        tw += 1.85; // the search query and the lead stay long enough to read before they fold
         tl.to([boxThink, boxSearch, leadPara], { autoAlpha: 0, duration: 0.16 }, tw);
         tl.to(
           [boxThink, boxSearch, leadPara],

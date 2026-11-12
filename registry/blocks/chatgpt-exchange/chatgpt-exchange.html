@@ -654,6 +654,7 @@
           tableLead: 0.2,
           rowStep: 0.7,
           readbackDur: 1.1,
+          readHold: 0.6, // the last row stays put long enough to read before the read-back scroll moves it
         };
 
         /* =========================================================== icon set */
@@ -1253,7 +1254,7 @@
           tw + 0.06,
         );
 
-        const tRead = tw + 0.24;
+        const tRead = tw + 0.24 + T.readHold;
         tl.to(sbar, { autoAlpha: 1, duration: 0.14 }, tRead);
         tl.to(thread, { y: Y_FINAL, duration: T.readbackDur, ease: "power2.inOut" }, tRead);
         tl.to(sbar, { y: 0, duration: T.readbackDur, ease: "power2.inOut" }, tRead);

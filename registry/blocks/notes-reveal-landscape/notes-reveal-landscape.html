@@ -809,9 +809,11 @@
         });
 
         // the note viewport runs to the field bottom; the text scrolls only once the typed line
-        // reaches it (VIEW_EXTRA is how much taller it is than the app's 593)
+        // reaches it. The five scrolls add up to 720; the threshold leaves exactly one line
+        // pitch (150) for the last one, so the hold frame ends on whole lines: the first title
+        // line leaves completely instead of stopping cut in half under the toolbar
         document.getElementById("note-viewport").style.height = "1193px";
-        VIEW_EXTRA = 1193 - 593;
+        VIEW_EXTRA = 720 - 150;
         EXIT = vars.exit === "fade" ? "fade" : "none";
         CUES = String(vars.cues || "")
           .split(",")

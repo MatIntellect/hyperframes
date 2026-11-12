@@ -30,7 +30,7 @@
     { "id": "payoffIcon", "type": "image", "role": "content", "label": "Payoff logo", "description": "Mark of the brand, shown only in the final payoff notification on a white app tile.", "default": "assets/img/matintellect-mark.svg" },
     { "id": "dateLabel", "type": "string", "role": "content", "label": "Date", "description": "Lock-screen date above the clock.", "maxLength": 22, "default": "Четверг, 14 августа" },
     { "id": "nowLabel", "type": "string", "role": "content", "label": "Time label", "description": "Small grey time label on every notification.", "maxLength": 8, "default": "сейчас" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first request lands, 2 the flood starts (second request), 3 the eleventh request lands, 4 the payoff lands, 5 the stack fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 1.15, 3.75, 8.38, 8.88.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first request lands, 2 the flood starts (second request), 3 the eleventh request lands, 4 the payoff lands, 5 the stack fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 1.15, 3.75, 10.42, 11.12.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the payoff to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -379,9 +379,11 @@
         /* ---------------- beat clock ---------------- */
         var T = {
           wake: 0.1,
-          /* 11 Slack arrivals with shrinking gaps, then the payoff 0.5s after the last one */
-          arrivals: [1.15, 3.75, 4.6, 5.34, 5.98, 6.54, 7.02, 7.44, 7.8, 8.11, 8.38, 8.88],
-          clockSwaps: [4.6, 6.54, 8.11], // 9:42 / 9:45 / 9:51
+          /* 11 Slack arrivals with gaps shrinking 0.85 -> 0.7, then the payoff 0.7s after the last
+             one. A card leaves when three more land on it, so three gaps of about 0.7 keep every
+             request readable (0.5 s + 0.3 s a word); the old 0.27 s gaps hid them after 1.1 s */
+          arrivals: [1.15, 3.75, 4.6, 5.4, 6.16, 6.9, 7.62, 8.32, 9.02, 9.72, 10.42, 11.12],
+          clockSwaps: [4.6, 6.9, 9.72], // 9:42 / 9:45 / 9:51
           end: 30,
         };
 
@@ -566,7 +568,7 @@
 
         /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
         var exit = oneOf(variables.exit, ["none", "fade"], "none");
-        var BEATS = [1.15, 3.75, 8.38, 8.88];
+        var BEATS = [1.15, 3.75, 10.42, 11.12];
         var cues = String(variables.cues || "")
           .split(",")
           .map(function (v) {
