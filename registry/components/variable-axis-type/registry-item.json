@@ -1,0 +1,50 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "variable-axis-type",
+  "type": "hyperframes:component",
+  "title": "Variable Axis Type",
+  "description": "A locked one-line headline whose weight axis morphs into a decisive emphasis beat. Montserrat on purpose: the brand display face Bebas Neue has no axes, Montserrat has weight.",
+  "tags": ["typography", "variable-font", "kinetic-type", "axis", "emphasize"],
+  "jobs": ["emphasize"],
+  "family": "typography",
+  "profile": "burst",
+  "files": [
+    {
+      "path": "variable-axis-type.html",
+      "target": "compositions/components/variable-axis-type.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Text",
+      "description": "Word or short headline to emphasize.",
+      "default": "УДАР"
+    },
+    {
+      "id": "fromValue",
+      "type": "number",
+      "role": "motion",
+      "label": "From value",
+      "description": "Starting weight, 100-900.",
+      "default": 200,
+      "min": 100,
+      "max": 900,
+      "step": 1
+    },
+    {
+      "id": "toValue",
+      "type": "number",
+      "role": "motion",
+      "label": "To value",
+      "description": "Ending weight, 100-900.",
+      "default": 900,
+      "min": 100,
+      "max": 900,
+      "step": 1
+    }
+  ]
+}

@@ -1496,6 +1496,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "mk-emphasis-type",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "morph-text",
       "type": "hyperframes:component"
     },
@@ -1536,11 +1540,31 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "slot-machine-roll",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "soft-blur-in",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "staggered-fade-up",
       "type": "hyperframes:component"
     },
     {
+      "name": "strikethrough-replace",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "text-shimmer",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "text-stagger",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "text-state-swap",
       "type": "hyperframes:component"
     },
     {
@@ -1556,7 +1580,19 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "top-down-letters",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "tracking-in",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "typewriter",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "variable-axis-type",
       "type": "hyperframes:component"
     }
   ]
