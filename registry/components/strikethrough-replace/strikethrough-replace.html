@@ -35,7 +35,7 @@
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Colour of both words: ink for light frames, paper for dark ones.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }] }
   ]'
 >
-  <span>Долго</span><i></i><strong>Быстро</strong>
+  <span>Долго<i></i></span><strong>Быстро</strong>
 </div>
 
 <style>
@@ -88,15 +88,18 @@
   .hf-catalog-strikethrough-replace i {
     position: absolute;
     left: 0;
-    /* the first word's grid cell is the containing block: the line spans exactly the struck word, any pair of words */
-    grid-column: 1;
-    grid-row: 1;
+    top: 50%;
     width: 100%;
+    margin-top: calc(var(--hf-strike-thickness, 6px) / -2);
     height: var(--hf-strike-thickness, 6px);
     border-radius: 999px;
     background: var(--hf-strike-color, var(--brand, #ff0000));
     transform: scaleX(var(--hf-strike-progress, 1));
     transform-origin: var(--hf-strike-origin, left center);
+  }
+  /* the line lives inside the struck word: it spans exactly that word, any pair of words */
+  .hf-catalog-strikethrough-replace span {
+    position: relative;
   }
   .hf-catalog-strikethrough-replace strong {
     opacity: var(--hf-replace-opacity, 1);
