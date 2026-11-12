@@ -1,0 +1,356 @@
+<!doctype html>
+<!--
+  store-badge-lockup: HyperFrames video primitive (ui-props / holdable / ask)
+
+  Concept: a short headline settles first, followed by equal-size App Store
+  and Google Play download badges that rise and fade into a standard mobile
+  end-card lockup. The badges use generic CSS glyphs and token paint only.
+
+  Compiled-from evidence: GAP B1 mobile close. The B1 consumer simulation
+  needed a mobile-native close, while the coverage audit found no registry
+  item that presents and animates the two store badges as one download CTA.
+
+  Use when: an app launch or mobile product film needs to end with store
+  destinations instead of a web URL.
+
+  Variables:
+    - headline (string, default "Скачай приложение"): end-card action line.
+    - showApple (yes | no, default yes): include the App Store badge.
+    - showGoogle (yes | no, default yes): include the Google Play badge.
+
+  Envelope (holdable):
+    IN   1.20s fixed headline-first settle and staggered badge entrance.
+    HOLD elastic and deliberately still so the CTA remains readable.
+    OUT  0.45s fixed release fade.
+    If D is shorter than 1.65s, IN and OUT scale together. HOLD is the only
+    elastic phase, and the timeline is never time-scaled.
+
+  Sync point:
+    - lockup-settled at 1.00s into IN. This fixed offset compresses only for
+      short durations and never enters HOLD.
+
+  Sound cues: none. The lockup has no discrete impact event.
+
+  Mount contract: this file is a template-wrapped sub-composition. The host
+  owns dimensions. #root fills the host box with inset:0 and container-type:
+  size, carries no data-width or data-height, and registers one paused GSAP
+  timeline under the hardcoded id "store-badge-lockup".
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Short action line shown above the store badges.", "default": "Скачай приложение" },
+    { "id": "showApple", "type": "enum", "role": "content", "label": "Show App Store", "description": "Show or hide the App Store badge.", "default": "yes", "options": [{ "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }] },
+    { "id": "showGoogle", "type": "enum", "role": "content", "label": "Show Google Play", "description": "Show or hide the Google Play badge.", "default": "yes", "options": [{ "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Store Badge Lockup</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="store-badge-lockup" data-duration="4" data-fps="30">
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+              U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+              U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+              U+2113, U+2C60-2C7F, U+A720-A7FF;
+          }
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          #root {
+            position: absolute;
+            inset: 0;
+            container-type: size;
+            isolation: isolate;
+            overflow: hidden;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          .sbl-clip {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: var(--space-3, 4.8cqh);
+            overflow: hidden;
+            background: var(--bg, #0c1014);
+          }
+
+          .sbl-lockup {
+            width: min(88cqw, 154cqh);
+            display: grid;
+            justify-items: center;
+            gap: min(6cqw, 7cqh);
+          }
+
+          .sbl-headline {
+            margin: 0;
+            max-width: 82cqw;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-display, "Bebas Neue", sans-serif);
+            font-size: max(28px, min(8.2cqw, 12.5cqh));
+            font-weight: 750;
+            line-height: 1;
+            letter-spacing: -0.045em;
+            text-align: center;
+            text-wrap: balance;
+            will-change: transform, opacity;
+          }
+
+          .sbl-badges {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap; /* a 780 px reel field stacks the two badges */
+            gap: var(--space-2, 2.4cqh);
+          }
+
+          /* EDIT ZONE: both destinations share one badge geometry and one
+             text hierarchy. This single rule owns sizing, spacing, and order
+             so the pair cannot drift into mismatched lockups. */
+          .sbl-badge {
+            width: min(
+              72cqw,
+              67cqh
+            ); /* one badge per row in a vertical field, two side by side in a landscape frame */
+            aspect-ratio: 3.12 / 1;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: var(--space-1, 1.2cqh);
+            padding: min(2.2cqw, 3.2cqh) min(3cqw, 4.8cqh);
+            border: 0.16cqh solid var(--border, #2e2e32);
+            border-radius: calc(var(--radius, 2.4cqh) * 4);
+            background: var(--surface, #18181a);
+            color: var(--fg, #f2f2f2);
+            box-shadow: 0 1.5cqh 3.8cqh color-mix(in srgb, var(--bg, #0c1014) 70%, transparent);
+            will-change: transform, opacity;
+          }
+
+          .sbl-glyph {
+            width: min(6.7cqw, 10.5cqh);
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            flex: none;
+            border: 0.16cqh solid color-mix(in srgb, var(--fg, #f2f2f2) 28%, transparent);
+            border-radius: calc(var(--radius, 2.4cqh) * 0.72);
+            background: color-mix(in srgb, var(--brand, #ff0000) 20%, var(--surface, #18181a));
+            color: var(--fg, #f2f2f2);
+          }
+
+          .sbl-apple-mark {
+            font-family: var(--font-body, "Montserrat", sans-serif);
+            font-size: max(28px, min(3.2cqw, 5.2cqh));
+            font-weight: 800;
+            line-height: 1;
+          }
+
+          .sbl-play-mark {
+            width: 42%;
+            aspect-ratio: 0.88;
+            clip-path: polygon(8% 0, 100% 50%, 8% 100%);
+            background: currentColor;
+          }
+
+          .sbl-copy {
+            min-width: 0;
+            display: grid;
+            gap: min(0.4cqw, 0.6cqh);
+          }
+
+          .sbl-microcopy {
+            color: var(--muted, #8a8a90);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+            font-size: max(28px, min(1.65cqw, 2.65cqh));
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+          }
+
+          .sbl-label {
+            color: var(--fg, #f2f2f2);
+            font-family: var(
+              --font-body,
+              "Montserrat",
+              sans-serif
+            ); /* store names are labels (Mat 11.11) */
+            font-size: max(28px, min(3.75cqw, 5.8cqh));
+            font-weight: 720;
+            line-height: 1;
+            letter-spacing: -0.025em;
+            white-space: nowrap;
+          }
+        </style>
+
+        <div
+          id="store-badge-lockup-clip"
+          class="sbl-clip clip"
+          data-start="0"
+          data-duration="4"
+          data-track-index="0"
+        >
+          <section class="sbl-lockup" aria-label="Скачай приложение">
+            <h1 class="sbl-headline"></h1>
+            <div class="sbl-badges">
+              <div class="sbl-badge sbl-apple" role="img" aria-label="Загрузите в App Store">
+                <span class="sbl-glyph" aria-hidden="true">
+                  <span class="sbl-apple-mark">A</span>
+                </span>
+                <span class="sbl-copy" aria-hidden="true">
+                  <span class="sbl-microcopy">Загрузите в</span>
+                  <span class="sbl-label">App Store</span>
+                </span>
+              </div>
+
+              <div class="sbl-badge sbl-google" role="img" aria-label="Доступно в Google Play">
+                <span class="sbl-glyph" aria-hidden="true">
+                  <span class="sbl-play-mark"></span>
+                </span>
+                <span class="sbl-copy" aria-hidden="true">
+                  <span class="sbl-microcopy">Доступно в</span>
+                  <span class="sbl-label">Google Play</span>
+                </span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("store-badge-lockup-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.getElementById("root");
+            var compositionId = "store-badge-lockup";
+            var lockup = root.querySelector(".sbl-lockup");
+            var headlineElement = root.querySelector(".sbl-headline");
+            var appleBadge = root.querySelector(".sbl-apple");
+            var googleBadge = root.querySelector(".sbl-google");
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+
+            /* INVARIANT: getVariables() owns all three public decisions.
+               Missing values use the declared defaults. Only an explicit
+               "no" removes a badge, while an empty headline remains empty. */
+            var headline = vars.headline == null ? "Скачай приложение" : String(vars.headline);
+            var showApple = vars.showApple === "no" ? "no" : "yes";
+            var showGoogle = vars.showGoogle === "no" ? "no" : "yes";
+
+            headlineElement.textContent = headline;
+            if (showApple === "no") {
+              appleBadge.remove();
+            }
+            if (showGoogle === "no") {
+              googleBadge.remove();
+            }
+
+            var badgeElements = root.querySelectorAll(".sbl-badge");
+
+            /* RETIME RANGE: these constants own the complete lifecycle. The
+               headline finishes first. Both badges then rise and fade on
+               --ease-standard's GSAP owner, power2.out, with a small stagger. */
+            var IN_BASE = 1.2;
+            var OUT_BASE = 0.45;
+            var HEADLINE_START_BASE = 0.05;
+            var HEADLINE_DURATION_BASE = 0.48;
+            var BADGE_START_BASE = 0.22;
+            var BADGE_DURATION_BASE = 0.68;
+            var BADGE_STAGGER_BASE = 0.1;
+            var durationValue = Number(
+              ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                .dataset.duration,
+            );
+            var duration = Number.isFinite(durationValue) && durationValue > 0 ? durationValue : 4;
+            var scale = duration < IN_BASE + OUT_BASE ? duration / (IN_BASE + OUT_BASE) : 1;
+            var IN = IN_BASE * scale;
+            var OUT = OUT_BASE * scale;
+            var HOLD = Math.max(0, duration - IN - OUT);
+            var OUT_START = IN + HOLD;
+
+            var timeline = gsap.timeline({ paused: true });
+
+            timeline.fromTo(
+              headlineElement,
+              { y: "22%", opacity: 0 },
+              {
+                y: "0%",
+                opacity: 1,
+                duration: HEADLINE_DURATION_BASE * scale,
+                ease: "power2.out",
+              },
+              HEADLINE_START_BASE * scale,
+            );
+
+            if (badgeElements.length > 0) {
+              timeline.fromTo(
+                badgeElements,
+                { y: "28%", opacity: 0 },
+                {
+                  y: "0%",
+                  opacity: 1,
+                  duration: BADGE_DURATION_BASE * scale,
+                  stagger: BADGE_STAGGER_BASE * scale,
+                  ease: "power2.out",
+                },
+                BADGE_START_BASE * scale,
+              );
+            }
+
+            timeline.to(lockup, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
+            timeline.seek(0);
+
+            window.__timelines = window.__timelines || {};
+            window.__timelines[compositionId] = timeline;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

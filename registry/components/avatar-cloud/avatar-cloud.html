@@ -1,0 +1,529 @@
+<!doctype html>
+<!--
+  avatar-cloud: HyperFrames video primitive (effects / holdable / prove)
+
+  Concept: lettermark avatars populate a loose elliptical cloud around a
+  central proof label. Fine SVG links draw from the hub to every avatar, plus
+  selected avatar-to-avatar edges, so the beat communicates connection rather
+  than quantity alone. One mechanic, one job: prove community participation.
+
+  Compiled-from evidence: consumer-sim fixture plus the
+  avatar-cloud-network animation rule. The rule establishes the elliptical
+  cluster, layered hub, staggered avatar arrival, outward SVG link draw, and
+  readable climax dwell.
+
+  Use when: a scene needs to show an active builder, customer, creator, or
+  collaborator community without external photos or brand assets.
+
+  Variables (declared in data-composition-variables below):
+    - avatarCount (number, default 10, range 6 to 16): visible lettermarks.
+    - showLinks ("yes" | "no", default "yes"): include network links.
+    - label (string, default "50 000+ авторов"): proof copy in the center hub.
+
+  Envelope (fixed IN/OUT, elastic HOLD only, never gsap.timeScale()):
+    IN_BASE  = 2.20s  hub settles, avatars cascade in, then links draw.
+    HOLD     = elastic = max(0, D - (IN_BASE + OUT_BASE)); deterministic,
+               out-of-phase sine drift keeps the formed network alive.
+    OUT_BASE = 0.50s  the complete proof beat accelerates into a clean fade.
+    If D is shorter than IN_BASE + OUT_BASE, IN and OUT scale together so
+    IN + OUT equals D and HOLD equals 0.
+
+  Sync point: network-formed at 2.15s into IN. It is a fixed offset before the
+  elastic HOLD and scales proportionally only when the envelope is compressed.
+
+  Sound cue: none. The distributed community assembly has no truthful single
+  impact, so this primitive does not dispatch an hf:sfx event.
+
+  Mount contract: this file is a mountable sub-composition. A host loads it via
+  data-composition-src, and the runtime clones only <template> contents. Styles,
+  markup, GSAP, and registration therefore live inside <template>. #root fills
+  the host with inset:0 and container-type:size and has no data-width or
+  data-height. The hardcoded id "avatar-cloud" matches the host id and timeline
+  key after mount flattening. Variables come from
+  window.__hyperframes.getVariables(), which merges declarations with host
+  data-variable-values overrides.
+-->
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "avatarCount", "type": "number", "role": "layout", "label": "Avatar count", "description": "Number of lettermark avatars in the network cloud.", "default": 10, "min": 6, "max": 16, "step": 1 },
+    { "id": "showLinks", "type": "enum", "role": "content", "label": "Show links", "description": "Show or hide the connecting network lines.", "default": "yes", "options": [{ "value": "yes", "label": "Yes" }, { "value": "no", "label": "No" }] },
+    { "id": "label", "type": "string", "role": "content", "label": "Proof label", "description": "Community proof copy shown in the center hub.", "default": "50 000+ авторов" }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Avatar Cloud</title>
+    <!-- Metadata only. Mounting discards everything outside <template>. -->
+  </head>
+  <body>
+    <template>
+      <div
+        id="root"
+        data-composition-id="avatar-cloud"
+        data-start="0"
+        data-duration="5"
+        data-fps="30"
+      >
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+              U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+              U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+              U+2113, U+2C60-2C7F, U+A720-A7FF;
+          }
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          /* INVARIANT: the host owns the box. The primitive owns one isolated,
+             position-blind size container and no viewport-relative geometry. */
+          #root {
+            position: absolute;
+            inset: 0;
+            container-type: size;
+            isolation: isolate;
+            overflow: hidden;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          .ac-clip,
+          .ac-stage,
+          .ac-avatar-layer,
+          .ac-links {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+          }
+
+          .ac-clip {
+            overflow: hidden;
+            background:
+              radial-gradient(
+                ellipse at 50% 47.5%,
+                color-mix(in srgb, var(--fg, #f2f2f2) 8%, transparent),
+                transparent 48%
+              ),
+              var(--bg, #0c1014);
+          }
+
+          .ac-stage {
+            overflow: hidden;
+            transform-origin: center;
+          }
+
+          /* EDIT ZONE: lines use the same token pair as the avatars and hub.
+             The SVG viewBox owns all endpoints, so links and positions cannot
+             derive independently. */
+          .ac-links {
+            z-index: 1;
+            overflow: visible;
+            pointer-events: none;
+          }
+
+          .ac-link {
+            fill: none;
+            stroke: color-mix(in srgb, var(--fg, #f2f2f2) 22%, transparent);
+            stroke-width: 1.8;
+            vector-effect: non-scaling-stroke;
+          }
+
+          .ac-link-secondary {
+            stroke: color-mix(in srgb, var(--fg, #f2f2f2) 14%, transparent);
+            stroke-width: 1.2;
+          }
+
+          .ac-avatar-layer {
+            z-index: 2;
+          }
+
+          .ac-avatar-position {
+            position: absolute;
+            transform: translate(-50%, -50%);
+          }
+
+          .ac-avatar {
+            display: grid;
+            place-items: center;
+            width: min(calc(var(--ac-size) * 1cqw), calc(var(--ac-size) * 1.65cqh));
+            aspect-ratio: 1;
+            border: 0.16cqw solid color-mix(in srgb, var(--fg, #f2f2f2) 32%, transparent);
+            border-radius: 999cqw;
+            background: var(--ac-color, color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent));
+            color: var(--bg, #0c1014);
+            font-family: var(
+              --font-body,
+              "Montserrat",
+              sans-serif
+            ); /* initials, kicker and the figure are Montserrat (Mat 11.11) */
+            font-size: max(
+              28px,
+              min(calc(var(--ac-size) * 0.35cqw), calc(var(--ac-size) * 0.58cqh))
+            );
+            font-weight: 780;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            box-shadow:
+              0 1.2cqh 2.8cqh color-mix(in srgb, var(--bg, #0c1014) 48%, transparent),
+              inset 0 0.12cqw 0 color-mix(in srgb, var(--fg, #f2f2f2) 26%, transparent);
+            will-change: transform, opacity;
+          }
+
+          /* Tones are depth steps of the ink, not hues: near faces sit at L1,
+             mid at L2, far at L3. Value alone separates the cloud. */
+          .ac-avatar[data-tone="0"] {
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
+          }
+
+          .ac-avatar[data-tone="1"] {
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent);
+          }
+
+          .ac-avatar[data-tone="2"] {
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
+          }
+
+          .ac-avatar[data-tone="3"] {
+            /* far step 40 %, not 30: dark initials on a 30 % disc read at 2.35:1, the large-text floor 3:1
+               starts near 37 % over #0c1014 (stand 027); still the dimmest step */
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 40%, transparent);
+          }
+
+          .ac-avatar[data-tone="4"] {
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent);
+          }
+
+          .ac-hub {
+            position: absolute;
+            left: 50%;
+            top: 47.5%;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 24cqw;
+            max-width: 60cqw; /* a vertical field: the hub may grow, the avatar ellipse stays clear at 0.356 W */
+            min-height: 16cqh;
+            padding: var(--space-2, 2cqh) var(--space-3, 3cqw);
+            overflow: hidden;
+            border: 0.16cqw solid color-mix(in srgb, var(--border, #2e2e32) 82%, transparent);
+            border-radius: var(--radius, 2.4cqw);
+            background: var(--surface, #18181a);
+            box-shadow:
+              0 2cqh 5cqh color-mix(in srgb, var(--bg, #0c1014) 56%, transparent),
+              inset 0 0.14cqw 0 color-mix(in srgb, var(--fg, #f2f2f2) 18%, transparent);
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+          }
+
+          .ac-kicker {
+            color: var(--muted, #8a8a90);
+            font-family: var(
+              --font-body,
+              "Montserrat",
+              sans-serif
+            ); /* initials, kicker and the figure are Montserrat (Mat 11.11) */
+            font-size: max(28px, min(1.6cqw, 2.8cqh));
+            font-weight: 720;
+            letter-spacing: 0.16em;
+            line-height: 1;
+            text-transform: uppercase;
+          }
+
+          .ac-label {
+            max-width: 54cqw;
+            /* wraps instead of an ellipsis: the floor-sized figure must read whole (clipped_text in a 780 px field) */
+            color: var(--fg, #f2f2f2);
+            font-family: var(
+              --font-body,
+              "Montserrat",
+              sans-serif
+            ); /* initials, kicker and the figure are Montserrat (Mat 11.11) */
+            font-size: max(28px, min(5.2cqw, 9cqh));
+            font-weight: 820;
+            letter-spacing: -0.045em;
+            line-height: 1.05;
+            text-align: center;
+            text-wrap: balance;
+          }
+        </style>
+
+        <div
+          id="avatar-cloud-clip"
+          class="ac-clip clip"
+          data-start="0"
+          data-duration="5"
+          data-track-index="0"
+        >
+          <section class="ac-stage" aria-label="Сообщество">
+            <svg
+              class="ac-links"
+              viewBox="0 0 1000 600"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+              focusable="false"
+            ></svg>
+            <div class="ac-avatar-layer" aria-hidden="true"></div>
+            <div class="ac-hub">
+              <span class="ac-kicker">Сообщество</span>
+              <span class="ac-label"></span>
+            </div>
+          </section>
+        </div>
+
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("avatar-cloud-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.currentScript.closest("#root") || document.getElementById("root");
+            var compositionId = "avatar-cloud";
+            var stage = root.querySelector(".ac-stage");
+            var linksLayer = root.querySelector(".ac-links");
+            var avatarLayer = root.querySelector(".ac-avatar-layer");
+            var hub = root.querySelector(".ac-hub");
+            var labelElement = root.querySelector(".ac-label");
+
+            // EDIT ZONE: getVariables is the only owner of declared defaults
+            // plus host overrides. Values are normalized exactly once here.
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+
+            var rawCount = Number(vars.avatarCount);
+            var avatarCount = Number.isFinite(rawCount) ? Math.round(rawCount) : 10;
+            avatarCount = Math.max(6, Math.min(16, avatarCount));
+            var showLinks = vars.showLinks === "no" ? "no" : "yes";
+            var label = vars.label == null ? "50 000+ авторов" : String(vars.label);
+            labelElement.textContent = label;
+
+            // One normalized coordinate table owns both DOM placement and SVG
+            // endpoints. Index-based sine offsets make the ellipse loose while
+            // remaining identical under every seek and render.
+            var CENTER = { x: 500, y: 285 };
+            var positions = [];
+            var avatars = [];
+            var lettermarks = [
+              "AK",
+              "BM",
+              "CR",
+              "DL",
+              "ES",
+              "FT",
+              "GN",
+              "HP",
+              "IV",
+              "JO",
+              "KQ",
+              "LU",
+              "MW",
+              "NX",
+              "OY",
+              "PZ",
+            ];
+            var avatarFragment = document.createDocumentFragment();
+
+            for (var index = 0; index < avatarCount; index += 1) {
+              var angle = -Math.PI / 2 + (index / avatarCount) * Math.PI * 2;
+              var radiusX = 356 + Math.sin((index + 1) * 2.37) * 24;
+              var radiusY = 194 + Math.sin((index + 1) * 1.61) * 18;
+              var x = CENTER.x + Math.cos(angle) * radiusX;
+              var y = CENTER.y + Math.sin(angle) * radiusY;
+              var size = 7.5 + Math.sin((index + 1) * 1.93) * 0.8;
+
+              positions.push({ x: x, y: y });
+
+              var positionElement = document.createElement("div");
+              positionElement.className = "ac-avatar-position";
+              positionElement.style.left = x / 10 + "%";
+              positionElement.style.top = y / 6 + "%";
+
+              var avatar = document.createElement("div");
+              avatar.className = "ac-avatar";
+              avatar.dataset.tone = String(index % 5);
+              avatar.style.setProperty("--ac-size", size.toFixed(2));
+              avatar.textContent = lettermarks[index];
+              positionElement.appendChild(avatar);
+              avatarFragment.appendChild(positionElement);
+              avatars.push(avatar);
+            }
+
+            avatarLayer.replaceChildren(avatarFragment);
+
+            var lines = [];
+
+            function appendLine(from, to, secondary) {
+              var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+              var length = Math.hypot(to.x - from.x, to.y - from.y);
+              line.setAttribute("x1", String(from.x));
+              line.setAttribute("y1", String(from.y));
+              line.setAttribute("x2", String(to.x));
+              line.setAttribute("y2", String(to.y));
+              line.setAttribute("class", secondary ? "ac-link ac-link-secondary" : "ac-link");
+              line.style.strokeDasharray = length + " " + length;
+              line.dataset.length = String(length);
+              linksLayer.appendChild(line);
+              lines.push(line);
+            }
+
+            if (showLinks === "yes") {
+              positions.forEach(function (position) {
+                appendLine(CENTER, position, false);
+              });
+
+              positions.forEach(function (position, positionIndex) {
+                if (positionIndex % 3 === 0) {
+                  appendLine(position, positions[(positionIndex + 2) % avatarCount], true);
+                }
+              });
+            }
+
+            // RETIME RANGE: these values own the complete lifecycle. The link
+            // wave fits the maximum 22-line network before the fixed sync point.
+            var IN_BASE = 2.2;
+            var OUT_BASE = 0.5;
+            var HUB_START_BASE = 0.05;
+            var HUB_DURATION_BASE = 0.5;
+            var AVATAR_START_BASE = 0.24;
+            var AVATAR_DURATION_BASE = 0.5;
+            var AVATAR_STAGGER_BASE = 0.055;
+            var LINES_START_BASE = 1.02;
+            var LINES_DURATION_BASE = 0.55;
+            var LINE_STAGGER_BASE = 0.025;
+
+            var durationValue = Number(
+              ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                .dataset.duration,
+            );
+            var duration = Number.isFinite(durationValue) && durationValue > 0 ? durationValue : 5;
+            var envelopeScale = duration < IN_BASE + OUT_BASE ? duration / (IN_BASE + OUT_BASE) : 1;
+            var IN = IN_BASE * envelopeScale;
+            var OUT = OUT_BASE * envelopeScale;
+            var HOLD = Math.max(0, duration - IN - OUT);
+            var HOLD_START = IN;
+            var OUT_START = IN + HOLD;
+            var HUB_START = HUB_START_BASE * envelopeScale;
+            var HUB_DURATION = HUB_DURATION_BASE * envelopeScale;
+            var AVATAR_START = AVATAR_START_BASE * envelopeScale;
+            var AVATAR_DURATION = AVATAR_DURATION_BASE * envelopeScale;
+            var AVATAR_STAGGER = AVATAR_STAGGER_BASE * envelopeScale;
+            var LINES_START = LINES_START_BASE * envelopeScale;
+            var LINES_DURATION = LINES_DURATION_BASE * envelopeScale;
+            var LINE_STAGGER = LINE_STAGGER_BASE * envelopeScale;
+
+            gsap.set(stage, { opacity: 1, scale: 1 });
+            gsap.set(hub, { opacity: 0, scale: 0.94 });
+            gsap.set(avatars, { opacity: 0, scale: 0.92, x: 0, y: 0 });
+            lines.forEach(function (line) {
+              gsap.set(line, { opacity: 0, strokeDashoffset: Number(line.dataset.length) });
+            });
+
+            var timeline = gsap.timeline({ paused: true });
+
+            // IN: --ease-standard maps to GSAP power2.out in the shared easing
+            // vocabulary. No entrance starts at scale zero.
+            timeline.to(
+              hub,
+              { opacity: 1, scale: 1, duration: HUB_DURATION, ease: "power2.out" },
+              HUB_START,
+            );
+            timeline.to(
+              avatars,
+              {
+                opacity: 1,
+                scale: 1,
+                duration: AVATAR_DURATION,
+                ease: "power2.out",
+                stagger: { each: AVATAR_STAGGER, from: "start" },
+              },
+              AVATAR_START,
+            );
+
+            lines.forEach(function (line, lineIndex) {
+              timeline.to(
+                line,
+                {
+                  opacity: 1,
+                  strokeDashoffset: 0,
+                  duration: LINES_DURATION,
+                  ease: "power2.out",
+                },
+                LINES_START + lineIndex * LINE_STAGGER,
+              );
+            });
+
+            // HOLD: deterministic index-derived endpoints with --ease-drift's
+            // sine.inOut curve. One finite leg fills the elastic hold exactly.
+            if (HOLD > 0) {
+              avatars.forEach(function (avatar, avatarIndex) {
+                var driftX = Math.sin((avatarIndex + 1) * 1.73) * 0.85;
+                var driftY = Math.sin((avatarIndex + 1) * 2.41) * 1.15;
+                timeline.fromTo(
+                  avatar,
+                  { x: -driftX + "cqw", y: -driftY + "cqh" },
+                  {
+                    x: driftX + "cqw",
+                    y: driftY + "cqh",
+                    duration: HOLD,
+                    ease: "sine.inOut",
+                    immediateRender: false,
+                  },
+                  HOLD_START,
+                );
+              });
+            }
+
+            // OUT: the complete network leaves once with the asymmetric exit
+            // curve. HOLD motion resolves before this phase begins.
+            timeline.to(stage, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
+
+            timeline.seek(0);
+
+            window.__timelines = window.__timelines || {};
+            window.__timelines[compositionId] = timeline;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

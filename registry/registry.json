@@ -1400,6 +1400,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "avatar-cloud",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "before-after-wipe",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "blur-in",
       "type": "hyperframes:component"
     },
@@ -1536,6 +1544,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "logo-wall",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "marker-highlight",
       "type": "hyperframes:component"
     },
@@ -1604,11 +1616,27 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "social-proof-card",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "soft-blur-in",
       "type": "hyperframes:component"
     },
     {
+      "name": "split-tilt-cards",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "staggered-fade-up",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "star-rating-fill",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "store-badge-lockup",
       "type": "hyperframes:component"
     },
     {
@@ -1617,6 +1645,14 @@
     },
     {
       "name": "strikethrough-replace",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "testimonial-card",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "testimonial-proof-card",
       "type": "hyperframes:component"
     },
     {
@@ -1657,6 +1693,10 @@
     },
     {
       "name": "tracking-in",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "trust-strip",
       "type": "hyperframes:component"
     },
     {
