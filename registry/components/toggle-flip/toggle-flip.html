@@ -158,9 +158,11 @@
 
           .tf-label {
             color: var(--muted, #8a8a90);
-            font-family: var(--font-display, "Bebas Neue", sans-serif);
+            /* A UI caption, not a reel heading: Montserrat; it grows with the toggle (34 px at
+               the default size 40), never under the 28 px floor. */
+            font-family: var(--font-body, "Montserrat", sans-serif);
             font-weight: 650;
-            font-size: clamp(28px, 2.4cqw, 28px);
+            font-size: max(28px, calc(var(--tf-size, 40) * 0.11cqw));
             letter-spacing: 0.01em;
             text-align: center;
           }
@@ -210,7 +212,7 @@
             border-radius: 999px;
             background: radial-gradient(
               closest-side,
-              color-mix(in srgb, var(--accent, #ff0000) 55%, transparent),
+              color-mix(in srgb, var(--brand, #ff0000) 55%, transparent),
               transparent 72%
             );
             opacity: 0;
@@ -224,8 +226,10 @@
             width: calc(var(--tf-size, 40) * 0.3636cqw);
             aspect-ratio: 1;
             border-radius: 50%;
-            background: var(--surface, #18181a);
-            box-shadow: 0 0.35cqw 0.7cqw rgba(2, 6, 23, 0.4);
+            /* Light knob on both tracks: on the dark surface track (off) and on brand red (on),
+               like the switch knobs in settings-toggle-flow. */
+            background: var(--fg, #f2f2f2);
+            box-shadow: 0 0.35cqw 0.7cqw rgba(0, 0, 0, 0.4);
             /* RETIME RANGE ends here for geometry; 150% is the exact travel a
                2.2:1 track / 80%-of-height knob pair produces -- see header. GSAP
                tweens x/scale directly below; no CSS transform authored here. */
@@ -311,6 +315,7 @@
 
             labelEl.textContent = labelText;
             toggleEl.style.setProperty("--tf-size", String(sizePct));
+            labelEl.style.setProperty("--tf-size", String(sizePct));
 
             // A project's own --dur-beat sets this primitive's ambient pace, so
             // the HOLD breathing feels native to whatever theme is compiled in.

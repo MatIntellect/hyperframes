@@ -37,7 +37,10 @@
       "role": "style",
       "label": "From scale",
       "description": "Multiplies the authored card footprint, clamped 0.5 to 1.5.",
-      "default": 1
+      "default": 1,
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.05
     },
     {
       "id": "expand_at",
@@ -45,7 +48,10 @@
       "role": "timing",
       "label": "Expand at",
       "description": "Seconds after mount when the card grows into the panel.",
-      "default": 1.2
+      "default": 1.2,
+      "min": 0.2,
+      "max": 30,
+      "step": 0.1
     },
     {
       "id": "register",

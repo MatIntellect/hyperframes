@@ -22,8 +22,8 @@
   The slot content is cloned into BOTH the card body and the panel head.
   Descendants carrying data-morph-key are paired across the two layouts;
   slot content without keys is wrapped as one keyed block. With no slot,
-  the primitive renders token defaults (accent dot, display title line,
-  mono meta line) that re-flow from a stacked card to an inline panel
+  the primitive renders token defaults (brand dot, title bar and meta bar
+  placeholders) that re-flow from a stacked card to an inline panel
   header row.
 
   Variables (declared in data-composition-variables below):
@@ -33,8 +33,6 @@
     - register ("calm" | "snappy", default "calm"): calm is a smooth
       inOut cubic; snappy is faster with a small settle that never
       overshoots the target rect beyond 1.02.
-    - accent ("green" | "blue" | "violet", default "green"): green rides
-      --brand, blue rides --accent, violet rides --accent-2.
     - exit ("none" | "fade" | "up", default "none").
 
   Envelope, fixed IN and OUT with elastic HOLD only (never timeScale):
@@ -57,8 +55,8 @@
   data-composition-id="modal-morph"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "from_scale", "type": "number", "role": "style", "label": "From scale", "description": "Multiplies the authored card footprint, clamped 0.5 to 1.5.", "default": 1},
-    {"id": "expand_at", "type": "number", "role": "timing", "label": "Expand at", "description": "Seconds after mount when the card grows into the panel.", "default": 1.2},
+    {"id": "from_scale", "type": "number", "role": "style", "label": "From scale", "description": "Multiplies the authored card footprint, clamped 0.5 to 1.5.", "default": 1, "min": 0.5, "max": 1.5, "step": 0.05},
+    {"id": "expand_at", "type": "number", "role": "timing", "label": "Expand at", "description": "Seconds after mount when the card grows into the panel.", "default": 1.2, "min": 0.2, "max": 30, "step": 0.1},
     {"id": "register", "type": "enum", "role": "timing", "label": "Register", "description": "Morph feel. Snappy is faster with a settle capped at 1.02 of the target rect.", "default": "calm", "options": [{"value": "calm", "label": "Calm"}, {"value": "snappy", "label": "Snappy"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the settled panel holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
@@ -337,17 +335,9 @@
             var expandRaw = parseFloat(vars.expand_at);
             var expandVar = isFinite(expandRaw) ? Math.max(0.2, expandRaw) : 1.2;
             var register = vars.register === "snappy" ? "snappy" : "calm";
-            var accentColors = {
-              green: "var(--brand, #ff0000)",
-              blue: "var(--brand, #ff0000)",
-              violet: "var(--accent-2, #ff0000)",
-            };
-            var accent = Object.prototype.hasOwnProperty.call(accentColors, vars.accent)
-              ? vars.accent
-              : "green";
             var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
 
-            root.style.setProperty("--mm-accent", accentColors[accent]);
+            root.style.setProperty("--mm-accent", "var(--brand, #ff0000)");
             root.style.setProperty("--mm-from-scale", String(fromScale));
 
             // SLOT: same content cloned into BOTH layouts so measured
