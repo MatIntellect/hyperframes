@@ -545,7 +545,8 @@
         h + 0.5,
       );
       if (exit === "fade")
-        tl.to("#apc-card", { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, at(1, 9.5));
+        // the ground layer leaves with the card: after the exit the frame is transparent, like every other block
+        tl.to([root.querySelector("#apc-card"), root.querySelector(".bgfill")].filter(Boolean), { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, at(1, 9.5));
       tl.set({}, {}, 30);
 
       window.__timelines = window.__timelines || {};

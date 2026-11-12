@@ -244,6 +244,10 @@
         // envMapIntensity 0.08: the white bands of the environment map painted the metal floor light grey
         new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.9, roughness: 0.2, envMapIntensity: 0.08 }),
       );
+      
+      // vertical: the metal floor still showed a grey strip beside the laptop (x 975+, y 1280-1370) – the floor is the flat brand ground
+      floor.material = new THREE.MeshBasicMaterial({ color: bgCol.clone().convertSRGBToLinear(), toneMapped: false });
+      
       floor.rotation.x = -PI / 2;
       floor.position.y = -2.5;
       scene.add(floor);
