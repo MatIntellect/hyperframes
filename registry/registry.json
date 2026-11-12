@@ -1404,6 +1404,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "aurora-drift",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "avatar-cloud",
       "type": "hyperframes:component"
     },
@@ -1413,6 +1417,10 @@
     },
     {
       "name": "badge-pop",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "beat-pulse-background",
       "type": "hyperframes:component"
     },
     {
@@ -1552,6 +1560,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "dynamic-grid",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "extended-keyframe",
       "type": "hyperframes:component"
     },
@@ -1573,6 +1585,14 @@
     },
     {
       "name": "gloss-sweep",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "grain-field",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "grain-overlay",
       "type": "hyperframes:component"
     },
     {
@@ -1628,6 +1648,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "light-sweep-pass",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "line-by-line-slide",
       "type": "hyperframes:component"
     },
@@ -1661,6 +1685,10 @@
     },
     {
       "name": "menu-morph",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "mesh-gradient-bg",
       "type": "hyperframes:component"
     },
     {
@@ -1984,7 +2012,19 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "vignette",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "wordmark-tiles",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "yt-feather-highlight",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "yt-screen-warp",
       "type": "hyperframes:component"
     }
   ]

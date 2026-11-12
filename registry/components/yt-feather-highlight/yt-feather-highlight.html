@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      /* ---- yt-feather-highlight --------------------------------------------
+         Spotlight part of the frame: a dim layer with a feathered ellipse
+         hole. The hole's position/size are CSS variables, so the helpers
+         tween them directly (GSAP animates CSS vars). */
+      .yt-hl {
+        --yt-hl-x: 50%;
+        --yt-hl-y: 50%;
+        --yt-hl-rx: 22%;
+        --yt-hl-ry: 26%;
+        --yt-hl-dim: 0.55;
+
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: color-mix(
+          in srgb,
+          var(--bg, #0c1014) calc(var(--yt-hl-dim) * 100%),
+          transparent
+        );
+        -webkit-mask-image: radial-gradient(
+          ellipse var(--yt-hl-rx) var(--yt-hl-ry) at var(--yt-hl-x) var(--yt-hl-y),
+          transparent 0%,
+          transparent 52%,
+          black 88%
+        );
+        mask-image: radial-gradient(
+          ellipse var(--yt-hl-rx) var(--yt-hl-ry) at var(--yt-hl-x) var(--yt-hl-y),
+          transparent 0%,
+          transparent 52%,
+          black 88%
+        );
+      }
+      /* The scene fills the host box; what it spotlights is the host's
+         frame underneath (the source baked a blue-violet stand-in scene). */
+      #yt-hl-root {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Self-preview wrapper. WIRING: copy the .yt-hl CSS and drop
+         <div class="yt-hl" id="yt-my-hl"></div> ABOVE the content to spotlight
+         (same region). Then:
+
+           ytHighlightIn(tl, "#yt-my-hl", 3.0, { x: "28%", y: "50%", rx: "20%", ry: "30%" });
+           ytHighlightTo(tl, "#yt-my-hl", 5.0, { x: "72%" }, 0.8);   // glide to the next target
+           ytHighlightOut(tl, "#yt-my-hl", 8.0);
+    -->
+    <div
+      id="yt-hl-root"
+      data-composition-id="yt-feather-highlight"
+      data-start="0"
+      data-duration="5"
+    >
+      <div class="yt-hl" id="yt-hl-demo" data-layout-allow-occlusion></div>
+      <div
+        id="yt-hl-drv"
+        class="clip"
+        data-start="0"
+        data-duration="5"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+      (function () {
+        var c = document.getElementById("yt-hl-drv");
+        var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+        if (h) c.dataset.duration = h.dataset.duration;
+      })();
+    </script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // ---- copy these helpers into the host script ----
+        window.ytHighlightIn = function (tl, target, at, opts) {
+          opts = opts || {};
+          var vars = { opacity: 1, duration: 0.5, ease: "power2.out" };
+          if (opts.x !== undefined) vars["--yt-hl-x"] = opts.x;
+          if (opts.y !== undefined) vars["--yt-hl-y"] = opts.y;
+          if (opts.rx !== undefined) vars["--yt-hl-rx"] = opts.rx;
+          if (opts.ry !== undefined) vars["--yt-hl-ry"] = opts.ry;
+          gsap.set(target, {
+            "--yt-hl-x": opts.x !== undefined ? opts.x : "50%",
+            "--yt-hl-y": opts.y !== undefined ? opts.y : "50%",
+            "--yt-hl-rx": opts.rx !== undefined ? opts.rx : "22%",
+            "--yt-hl-ry": opts.ry !== undefined ? opts.ry : "26%",
+          });
+          tl.to(target, { opacity: 1, duration: 0.5, ease: "power2.out" }, at);
+        };
+        window.ytHighlightTo = function (tl, target, at, opts, dur) {
+          opts = opts || {};
+          var vars = { duration: dur === undefined ? 0.8 : dur, ease: "power2.inOut" };
+          if (opts.x !== undefined) vars["--yt-hl-x"] = opts.x;
+          if (opts.y !== undefined) vars["--yt-hl-y"] = opts.y;
+          if (opts.rx !== undefined) vars["--yt-hl-rx"] = opts.rx;
+          if (opts.ry !== undefined) vars["--yt-hl-ry"] = opts.ry;
+          tl.to(target, vars, at);
+        };
+        window.ytHighlightOut = function (tl, target, at) {
+          tl.to(target, { opacity: 0, duration: 0.4, ease: "power2.in" }, at);
+        };
+
+        // Self-preview timeline (vertical reel): spotlight the upper part of
+        // the frame, glide down to the lower part, release.
+        var tl = gsap.timeline({ paused: true });
+        window.ytHighlightIn(tl, "#yt-hl-demo", 0.5, { x: "50%", y: "30%", rx: "42%", ry: "16%" });
+        window.ytHighlightTo(tl, "#yt-hl-demo", 2.2, { y: "70%" }, 0.9);
+        window.ytHighlightOut(tl, "#yt-hl-demo", 4.2);
+        tl.set("#yt-hl-root", { visibility: "hidden" }, 4.98);
+        window.__timelines["yt-feather-highlight"] = tl;
+      })();
+    </script>
+  </body>
+</html>

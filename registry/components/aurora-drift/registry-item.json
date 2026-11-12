@@ -1,0 +1,38 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "aurora-drift",
+  "type": "hyperframes:component",
+  "title": "Aurora Drift",
+  "description": "Three soft accent-derived aurora fields drift in an exact ambient loop over a deep base and faint vignette.",
+  "tags": ["motion-primitive", "background", "aurora", "gradient", "ambient", "loopable"],
+  "jobs": ["orient"],
+  "family": "backgrounds",
+  "profile": "ambient",
+  "files": [
+    {
+      "path": "aurora-drift.html",
+      "target": "compositions/components/aurora-drift.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "mood",
+      "type": "enum",
+      "role": "style",
+      "label": "Mood",
+      "description": "Base luminance and aurora field strength.",
+      "default": "deep",
+      "options": [
+        {
+          "value": "deep",
+          "label": "Deep"
+        },
+        {
+          "value": "bright",
+          "label": "Bright"
+        }
+      ]
+    }
+  ]
+}

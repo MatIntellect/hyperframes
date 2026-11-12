@@ -1,0 +1,38 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "grain-field",
+  "type": "hyperframes:component",
+  "title": "Grain Field",
+  "description": "Quiet background texture: a fixed neutral dot field drifts slowly over the reel's dark ground with a soft brand-red wash; copy over it stays readable.",
+  "tags": ["motion-primitive", "background", "grain", "dots", "texture", "ambient", "loopable"],
+  "jobs": ["orient"],
+  "family": "backgrounds",
+  "profile": "ambient",
+  "files": [
+    {
+      "path": "grain-field.html",
+      "target": "compositions/components/grain-field.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "density",
+      "type": "enum",
+      "role": "style",
+      "label": "Density",
+      "description": "Dot size and spacing across the grain field.",
+      "default": "fine",
+      "options": [
+        {
+          "value": "fine",
+          "label": "Fine"
+        },
+        {
+          "value": "coarse",
+          "label": "Coarse"
+        }
+      ]
+    }
+  ]
+}

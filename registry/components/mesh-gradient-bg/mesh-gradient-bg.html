@@ -1,0 +1,122 @@
+<!--
+  Mesh Gradient Background - full-bleed brand background for HyperFrames.
+
+  Mount it on the bottom track under the content, in a clip with
+  data-composition-id="mesh-gradient-bg": it fills the clip, and three soft
+  blurred blobs (muted brand red, a light haze, red over the line colour)
+  drift on the reel's dark ground for the whole clip, so the copy above it
+  stays readable. The source was a demo card (English title, blue, pink and
+  green blobs) - the card, its spotlight and particles are gone.
+-->
+
+<div class="hf-catalog-mesh-gradient-bg">
+  <div class="mesh" data-layout-allow-overflow></div>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-catalog-mesh-gradient-bg {
+    color: var(--fg, #f2f2f2);
+  }
+  .hf-catalog-mesh-gradient-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--bg, #0c1014);
+  }
+  .hf-catalog-mesh-gradient-bg .mesh {
+    position: absolute;
+    inset: -22%;
+    filter: blur(44px);
+    opacity: 0.88;
+    background:
+      radial-gradient(
+        circle at var(--hf-x1, 20%) var(--hf-y1, 30%),
+        color-mix(in srgb, var(--brand, #ff0000) 20%, transparent) 0 18%,
+        transparent 32%
+      ),
+      radial-gradient(
+        circle at var(--hf-x2, 76%) var(--hf-y2, 52%),
+        color-mix(in srgb, var(--fg, #f2f2f2) 10%, transparent) 0 16%,
+        transparent 34%
+      ),
+      radial-gradient(
+        circle at var(--hf-x3, 46%) var(--hf-y3, 78%),
+        color-mix(in srgb, var(--brand, #ff0000) 12%, var(--border, #2e2e32)) 0 18%,
+        transparent 34%
+      );
+  }
+</style>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["mesh-gradient-bg"]; mount the snippet inside a clip with data-composition-id="mesh-gradient-bg"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="mesh-gradient-bg" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    var hostClip = document.querySelector('[data-composition-id="mesh-gradient-bg"]');
+    var clipDur = hostClip ? parseFloat(hostClip.getAttribute("data-duration")) || 4 : 4;
+    tl.fromTo(
+      ".hf-catalog-mesh-gradient-bg .mesh",
+      {
+        "--hf-x1": "18%",
+        "--hf-y1": "28%",
+        "--hf-x2": "78%",
+        "--hf-y2": "46%",
+        "--hf-x3": "44%",
+        "--hf-y3": "80%",
+      },
+      {
+        "--hf-x1": "34%",
+        "--hf-y1": "42%",
+        "--hf-x2": "62%",
+        "--hf-y2": "60%",
+        "--hf-x3": "58%",
+        "--hf-y3": "64%",
+        duration: 4,
+        ease: "sine.inOut",
+        repeat: Math.max(0, Math.ceil(clipDur / 4) - 1),
+        yoyo: true,
+      },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["mesh-gradient-bg"] = tl;
+  })();
+</script>
