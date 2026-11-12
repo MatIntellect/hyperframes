@@ -68,7 +68,7 @@
             background: var(--plate, #000);
             border-radius: 2.5926cqw;
             color: var(--fg, #f2f2f2);
-            font-family: var(--font-display, "Bebas Neue"), sans-serif;
+            font-family: "Bebas Neue", sans-serif;
             font-weight: 700;
             font-size: 78px;
             line-height: 1.08;
@@ -106,7 +106,7 @@
             // Words come from outside in one variable "word|start|end;...". Groups of up to 3 words, broken at a
             // sentence mark, a pause of 150 ms, or where the next word would not fit the line at 78 px; one group on
             // screen at a time, hard-killed after it ends (captions.md "Groups"). Every group is one upper-case
-            // line at 78 px on a black plate within 780 of 1080; only a single word wider than the line steps
+            // line at 78 px on a black plate within 780 of 1080; a group goes off no later than the next one comes on; only a single word wider than the line steps
             // down ("cut words, never shrink type", spec.md:48). Built after the font loads; render waits on buildReady.
             var root = document.getElementById("root");
             var stage = document.getElementById("caption-pill-karaoke-clip");
@@ -210,10 +210,7 @@
                 var nextOpen = groups[gi + 1]
                   ? Math.max(0, groups[gi + 1][0].start - LEAD)
                   : Infinity;
-                var close = Math.max(
-                  g[g.length - 1].end,
-                  Math.min(nextOpen, g[g.length - 1].end + HOLD),
-                );
+                var close = Math.min(nextOpen, g[g.length - 1].end + HOLD);
                 tl.set(el, { opacity: 1, visibility: "visible" }, open);
                 if (STYLE.group)
                   STYLE.group(tl, {
