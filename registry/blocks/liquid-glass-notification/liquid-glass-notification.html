@@ -369,8 +369,8 @@
         renderer.setPixelRatio(1);
         var scene = new THREE.Scene();
         var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        // the native aurora shader; its colour constants became the theme colours, dimmed so the ground stays
-        // dark and the red stays an accent
+        // the native aurora shader; its ridges are drawn as thin lines in the theme colours over the theme ground
+        // (zones only decide where a ridge shows), so the ground stays dark and the red stays an accent
         var fs = [
           "precision highp float;",
           "varying vec2 vUv;",
@@ -412,22 +412,19 @@
           "  float crease1=pow(abs(ridge1),0.35)*sign(ridge1)*0.5+0.5;",
           "  float crease2=pow(abs(ridge2),0.4)*sign(ridge2)*0.5+0.5;",
           "  float crease3=pow(abs(ridge3),0.5)*sign(ridge3)*0.5+0.5;",
-          "  vec3 warm=mix(uWarm*0.3,uWarm*0.62,crease1);",
           "  float warmZone=smoothstep(0.15,0.75,uv.x+uv.y*0.4+snoise(vec3(uv*2.0,t))*0.3);",
-          "  vec3 cool=mix(uCool*0.18,uCool*0.42,crease2);",
           "  float coolZone=smoothstep(0.25,0.85,1.2-uv.x+uv.y*0.5+snoise(vec3(uv*2.0+40.0,t*0.8))*0.25);",
-          "  vec3 hot=mix(uWarm*0.2,uWarm*0.4,crease3);",
           "  float hotZone=smoothstep(0.5,0.9,snoise(vec3(uv*2.5+20.0,t*0.6))*0.5+0.5);",
+          "  float e1=pow(1.0-abs(ridge1),9.0);float e2=pow(1.0-abs(ridge2),7.0);float e3=pow(1.0-abs(ridge3),12.0);",
           "  vec3 col=base;",
-          "  col=mix(col,warm,warmZone*0.75*smoothstep(0.3,0.7,crease1));",
-          "  col=mix(col,cool,coolZone*0.65*smoothstep(0.2,0.65,crease2));",
-          "  col=mix(col,hot,hotZone*0.5*smoothstep(0.35,0.8,crease3));",
-          "  float edgeGlow=pow(1.0-abs(ridge1),6.0)*0.4+pow(1.0-abs(ridge2),5.0)*0.25;",
-          "  col+=edgeGlow*mix(warm,cool,uv.x)*0.8;",
-          "  col*=1.0-pow(abs(ridge1),4.0)*0.15;",
+          "  col=mix(col,uCool*0.22,coolZone*0.3*smoothstep(0.2,0.65,crease2));",
+          "  col+=uWarm*e1*warmZone*0.85;",
+          "  col+=uWarm*e3*hotZone*0.35;",
+          "  col+=uCool*e2*coolZone*0.3;",
+          "  col*=1.0-pow(abs(ridge1),4.0)*0.1;",
           "  float vig=1.0-smoothstep(0.5,1.5,length((uv-0.5)*vec2(1.3,1.0)));",
-          "  col*=0.65+vig*0.5;",
-          "  float luma=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(luma),col,1.5);",
+          "  col*=0.75+vig*0.35;",
+          "  float luma=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(luma),col,1.2);",
           "  col=clamp(col,0.0,1.0);col=pow(col,vec3(0.9));",
           "  gl_FragColor=vec4(col,1.0);",
           "}",

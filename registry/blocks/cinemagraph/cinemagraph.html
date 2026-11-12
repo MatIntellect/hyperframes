@@ -2,6 +2,13 @@
 <html
   lang="ru"
   data-composition-variables='[
+    { "id": "loop", "type": "string", "role": "content", "label": "Loop video", "description": "Project path of a muted looping video (e.g. assets/loop.mp4), the base layer that lives inside the window; it repeats to the end of the mount. Empty keeps the drawn cup with rising steam.", "default": "" },
+    { "id": "still", "type": "image", "role": "content", "label": "Freeze-frame", "description": "The first frame of the loop video as an image; it covers the frame except the window, so only the window moves. Empty with a loop video – the loop plays over the whole frame.", "default": "" },
+    { "id": "wx", "type": "number", "role": "layout", "label": "Window centre x", "description": "Centre of the living window, % of the frame width (in the vertical card – of the card).", "default": 50, "min": 0, "max": 100, "step": 1, "unit": "%" },
+    { "id": "wy", "type": "number", "role": "layout", "label": "Window centre y", "description": "Centre of the living window, % of the frame height.", "default": 40, "min": 0, "max": 100, "step": 1, "unit": "%" },
+    { "id": "ww", "type": "number", "role": "layout", "label": "Window width", "description": "Width of the living window, % of the frame width.", "default": 30, "min": 5, "max": 100, "step": 1, "unit": "%" },
+    { "id": "wh", "type": "number", "role": "layout", "label": "Window height", "description": "Height of the living window, % of the frame height.", "default": 40, "min": 5, "max": 100, "step": 1, "unit": "%" },
+    { "id": "feather", "type": "number", "role": "style", "label": "Window feather", "description": "Soft edge of the window, % of its radius: 0 – hard oval edge, 100 – fades from the centre.", "default": 40, "min": 0, "max": 100, "step": 1, "unit": "%" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Seconds from mount start when the scene fades out (only when exit is fade; empty – 9.5 s, the end of the first 10 s loop). The steam loops every 10 s.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the looping scene to the end of the mount; fade fades it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -239,6 +246,15 @@
         );
         pointer-events: none;
       }
+      /* своё видео: петля под стоп-кадром, окно движения прорезано в стоп-кадре (родной способ из комментария выше) */
+      #cmg-loop,
+      #cmg-still {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     </style>
   </head>
   <body>
@@ -261,6 +277,8 @@
           </div>
         </div>
         <div class="cmg-vignette"></div>
+        <video id="cmg-loop" class="clip" data-var-src="loop" data-start="0" data-duration="30" data-track-index="1" muted playsinline loop></video>
+        <img id="cmg-still" data-var-src="still" alt="" />
       </div>
       <div
         id="drv-cmg"
@@ -281,6 +299,33 @@
         var clip = document.getElementById("cmg-clip"),
           scene = document.getElementById("cmg-scene");
         
+        // своё видео: петля под стоп-кадром, в стоп-кадре – мягкое овальное окно; без видео – родная сцена с паром
+        var loopEl = document.getElementById("cmg-loop"),
+          stillEl = document.getElementById("cmg-still");
+        var hasLoop = typeof V.loop === "string" && V.loop.trim() !== "";
+        var stillUrl = V.still && typeof V.still === "object" ? V.still.url : V.still;
+        if (!hasLoop) loopEl.remove();
+        if (!hasLoop || !stillUrl) stillEl.remove();
+        if (hasLoop) {
+          scene.style.display = "none";
+          clip.querySelector(".cmg-vignette").style.display = "none";
+        }
+        if (hasLoop && stillUrl) {
+          var num = function (v, d, lo, hi) {
+            v = parseFloat(v);
+            return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d;
+          };
+          var wx = num(V.wx, 50, 0, 100),
+            wy = num(V.wy, 40, 0, 100),
+            ww = num(V.ww, 30, 5, 100),
+            wh = num(V.wh, 40, 5, 100),
+            fe = num(V.feather, 40, 0, 100);
+          var mask =
+            "radial-gradient(ellipse " + ww / 2 + "% " + wh / 2 + "% at " + wx + "% " + wy + "%, transparent " + (100 - fe) + "%, #000 100%)";
+          stillEl.style.webkitMaskImage = mask;
+          stillEl.style.maskImage = mask;
+        }
+
         // цвет пара – из темы (у разработчиков тот же светлый цвет, что у предметов)
         var probe = document.createElement("i");
         probe.style.color = "var(--fg, #f2f2f2)";

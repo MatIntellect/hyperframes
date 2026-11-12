@@ -5,7 +5,7 @@
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the character walks in at the foot of the 780x1180 field and points at the card beside it. top / bottom: the same scene on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Card title", "description": "Card title in Bebas Neue.", "maxLength": 28, "default": "Это ваш гид" },
     { "id": "body", "type": "string", "role": "content", "label": "Card text", "description": "Grey text under the title. Empty hides it.", "maxLength": 90, "default": "Входит уверенным шагом, останавливается и показывает, куда смотреть" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The character keeps its native 7.5 s acting from the mount start (the runtime seeks the Lottie file to composition time): walks in, stops and points at 5.2 s, when the card lands. Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). Empty keeps 11 – the card text reads 5 s.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The character plays the native acting from 2.5 s, so it walks in from the frame edge at the mount start, stops and points at 2.7 s, when the card lands. Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). Empty keeps 8.5 – the card text reads 5 s.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the pointing character and the card to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -137,7 +137,7 @@
         top: 1330px;
       }
       #lcwv-card {
-        left: 480px;
+        left: 476px;
         bottom: 590px;
         width: 450px;
         padding: 44px 40px 48px;
@@ -210,10 +210,12 @@
         // в карточке – в 0,75 и обрезан окном карточки (не идёт по прозрачной части кадра)
         var mx = 0,
           my = 0,
-          k = 1;
+          k = 1,
+          T0 = 0;
         
         var placement = ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0 ? String(V.placement) : "full";
         // бедро после остановки – x 764, земля – y 906 в сцене Lottie
+        T0 = 2.5;
         mx = 300 - 764;
         my = 1330 - 906;
         if (placement !== "full") {
@@ -234,6 +236,9 @@
           autoplay: false,
           // файл ставится в assets/ проекта – путь от корня проекта (contributing.md:96-97: assetUrl искал бы рядом с файлом)
           path: "assets/mascot.json",
+          // вертикаль: родной путь шага рассчитан на широкий кадр, первые 2,5 с персонаж за краем кадра –
+          // файл играется с 2,5 с (кадр 75 из 225), время карточки сдвинуто на столько же
+          initialSegment: [T0 * 30, 225],
         });
         var PARTS = {
           near: ["arm.near.fore", "arm.near.upper", "head", "torso", "leg.near.foot", "leg.near.shin", "leg.near.thigh"],
@@ -261,10 +266,10 @@
 
         // карточка – на родной жест (5,2 с)
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#lcwv-card", { opacity: 0, x: 40, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 5.2);
-        tl.fromTo(["#lcwv-title", "#lcwv-body"], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 5.3);
-        tl.fromTo("#lcwv-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 5.5);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 5.8 ? cues[0] : 11);
+        tl.fromTo("#lcwv-card", { opacity: 0, x: 40, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 5.2 - T0);
+        tl.fromTo(["#lcwv-title", "#lcwv-body"], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 5.3 - T0);
+        tl.fromTo("#lcwv-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 5.5 - T0);
+        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 5.8 - T0 ? cues[0] : 11 - T0);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["lottie-character-walk-vertical"] = tl;

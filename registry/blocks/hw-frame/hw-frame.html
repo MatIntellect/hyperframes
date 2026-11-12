@@ -278,7 +278,8 @@
         tl.eventCallback("onUpdate", boil);
         boil();
 
-        if (exit === "fade") tl.to(unit, { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8);
+        // the exit fades the whole stage with its ground, not only the framed unit (the ground stayed on the full frame)
+        if (exit === "fade") tl.to("#hwf-stage", { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["hw-frame"] = tl;

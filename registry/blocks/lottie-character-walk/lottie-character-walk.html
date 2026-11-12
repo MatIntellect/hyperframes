@@ -182,7 +182,8 @@
         // в карточке – в 0,75 и обрезан окном карточки (не идёт по прозрачной части кадра)
         var mx = 0,
           my = 0,
-          k = 1;
+          k = 1,
+          T0 = 0;
         
         var box = document.getElementById("lcw-mascot");
         box.style.transform = "translate(" + mx + "px, " + my + "px) scale(" + k + ")";
@@ -195,6 +196,9 @@
           autoplay: false,
           // файл ставится в assets/ проекта – путь от корня проекта (contributing.md:96-97: assetUrl искал бы рядом с файлом)
           path: "assets/mascot.json",
+          // вертикаль: родной путь шага рассчитан на широкий кадр, первые 2,5 с персонаж за краем кадра –
+          // файл играется с 2,5 с (кадр 75 из 225), время карточки сдвинуто на столько же
+          initialSegment: [T0 * 30, 225],
         });
         var PARTS = {
           near: ["arm.near.fore", "arm.near.upper", "head", "torso", "leg.near.foot", "leg.near.shin", "leg.near.thigh"],
@@ -222,10 +226,10 @@
 
         // карточка – на родной жест (5,2 с)
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#lcw-card", { opacity: 0, x: 40, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 5.2);
-        tl.fromTo(["#lcw-title", "#lcw-body"], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 5.3);
-        tl.fromTo("#lcw-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 5.5);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 5.8 ? cues[0] : 11);
+        tl.fromTo("#lcw-card", { opacity: 0, x: 40, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 5.2 - T0);
+        tl.fromTo(["#lcw-title", "#lcw-body"], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 5.3 - T0);
+        tl.fromTo("#lcw-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 5.5 - T0);
+        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 5.8 - T0 ? cues[0] : 11 - T0);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["lottie-character-walk"] = tl;

@@ -2,10 +2,10 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "n1", "type": "string", "role": "content", "label": "Step 1", "description": "First box label, Montserrat, up to two lines.", "maxLength": 18, "default": "Идея" },
-    { "id": "n2", "type": "string", "role": "content", "label": "Step 2", "description": "Second box label. Empty drops the box.", "maxLength": 18, "default": "Съёмка" },
-    { "id": "n3", "type": "string", "role": "content", "label": "Step 3", "description": "Third box label. Empty drops the box.", "maxLength": 18, "default": "Монтаж" },
-    { "id": "n4", "type": "string", "role": "content", "label": "Step 4", "description": "Fourth box label. Empty (default) drops the box.", "maxLength": 18, "default": "" },
+    { "id": "n1", "type": "string", "role": "content", "label": "Step 1", "description": "First box label, Montserrat 46 px, wraps between words only; boxes widen to the longest word.", "maxLength": 10, "default": "Идея" },
+    { "id": "n2", "type": "string", "role": "content", "label": "Step 2", "description": "Second box label. Empty drops the box.", "maxLength": 10, "default": "Съёмка" },
+    { "id": "n3", "type": "string", "role": "content", "label": "Step 3", "description": "Third box label. Empty drops the box.", "maxLength": 10, "default": "Монтаж" },
+    { "id": "n4", "type": "string", "role": "content", "label": "Step 4", "description": "Fourth box label. Empty (default) drops the box.", "maxLength": 10, "default": "" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first box starts to draw (each box 0.7 s with its label, each arrow 0.5 s), 2 the scheme fades out (only when exit is fade; empty – 2 s after the last label lands). Empty keeps 0.3.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the scheme to the end of the mount; fade fades it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -88,12 +88,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 12px;
+        padding: 0 24px;
         text-align: center;
         font-weight: 700;
         font-size: 46px;
         line-height: 1.1;
-        overflow-wrap: anywhere; /* длинное слово режется, шрифт не ужимается */
+        overflow-wrap: normal; /* перенос только между словами: коробка шире самого длинного слова */
         color: var(--fg, #f2f2f2);
         opacity: 0;
         text-shadow: 0 2px 14px rgb(0 0 0 / 40%);
@@ -106,7 +106,8 @@
       <div id="hwp-labels"></div>
     </div>
     <script>
-      (function () {
+      // ширина коробки – от самого длинного слова, поэтому строим после загрузки шрифта подписей (runtimes.md)
+      document.fonts.load('700 46px "Montserrat"').then(function () {
         var V =
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
@@ -128,12 +129,20 @@
           BOIL = { amp: 1.6, rot: 0.4, frameDrop: 3 },
           OUT = 0.42;
 
+        // самое длинное слово подписей – шире него коробка не бывает (поля по 10 знаков: 4 коробки с самым длинным словом и стрелками встают в ряд 1760, шрифт не ужимается)
+        var ctx = document.createElement("canvas").getContext("2d");
+        ctx.font = '700 46px "Montserrat"';
+        var need = 0;
+        nodes.join(" ").split(/\s+/).forEach(function (w) {
+          need = Math.max(need, Math.ceil(ctx.measureText(w).width) + 48); // поля по 24 – слово не липнет к дрожащей рамке
+        });
+
         // раскладка: ряд по горизонтали (родной: блок 320x170, промежуток 190, ряд с y 455, по центру кадра)
         var B = [];
         
-        var bw = Math.min(320, 1760 / (n + 0.59 * (n - 1))),
+        var bw = Math.max(need, Math.min(320, 1760 / (n + 0.59 * (n - 1)))),
           bh = 170,
-          gap = bw * 0.59;
+          gap = n > 1 ? Math.min(bw * 0.59, (1760 - n * bw) / (n - 1)) : 0;
         var x0 = (1920 - (n * bw + (n - 1) * gap)) / 2;
         for (var i = 0; i < n; i++) B.push({ x: x0 + i * (bw + gap), y: 455, w: bw, h: bh });
         
@@ -287,7 +296,7 @@
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["hw-pipeline"] = tl;
-      })();
+      });
     </script>
   </body>
 </html>
