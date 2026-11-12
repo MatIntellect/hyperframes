@@ -4,9 +4,9 @@
   data-composition-variables='[
     {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
-    {"id": "colorA", "type": "color", "role": "style", "label": "Base", "description": "Base background color of the marble", "default": "#ffffff"},
-    {"id": "colorB", "type": "color", "role": "style", "label": "Tone", "description": "Secondary marble tone", "default": "#3a2d54"},
-    {"id": "colorC", "type": "color", "role": "style", "label": "Depth", "description": "Deepest marble color", "default": "#0f0f0f"},
+    {"id": "colorA", "type": "color", "role": "style", "label": "Base", "description": "Base background color of the marble", "default": "#18181a"},
+    {"id": "colorB", "type": "color", "role": "style", "label": "Tone", "description": "Secondary marble tone", "default": "#8a8a90"},
+    {"id": "colorC", "type": "color", "role": "style", "label": "Depth", "description": "Deepest marble color", "default": "#0c1014"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
@@ -88,7 +88,7 @@
         var COMP_ID = "marble-vertical";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"colorA": "#ffffff", "colorB": "#3a2d54", "colorC": "#0f0f0f"};
+        var COLORS = {"colorA": "#18181a", "colorB": "#8a8a90", "colorC": "#0c1014"};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = null;
@@ -124,11 +124,6 @@
           stage.classList.add("shmarblev-card", "shmarblev-" + placement);
           W = 780;
           H = 760;
-        } else if (false) {
-          // the object's size follows the canvas height: 1920 would make it wider than the frame.
-          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 770).
-          props.scale = 0.5625;
-          props.center = { x: 0.5, y: 770 / 1920 };
         }
         
         cv.width = W;

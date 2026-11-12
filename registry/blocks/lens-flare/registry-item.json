@@ -3,7 +3,7 @@
   "name": "lens-flare",
   "type": "hyperframes:block",
   "title": "Lens Flare",
-  "description": "A camera lens flare: a bright star burst and a faint rainbow halo that slowly shimmer on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "A camera lens flare: a bright star burst and a faint rainbow halo that slowly shimmer on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; the flare keeps its optical colours (white star, rainbow halo) – only the ground is a variable. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "background", "light", "flare", "glow", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

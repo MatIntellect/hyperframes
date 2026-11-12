@@ -123,11 +123,6 @@
           stage.classList.add("shsunburstv-card", "shsunburstv-" + placement);
           W = 780;
           H = 760;
-        } else if (false) {
-          // the object's size follows the canvas height: 1920 would make it wider than the frame.
-          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 770).
-          props.scale = 0.5625;
-          props.center = { x: 0.5, y: 770 / 1920 };
         }
         
         cv.width = W;

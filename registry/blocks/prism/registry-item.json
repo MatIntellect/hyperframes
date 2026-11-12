@@ -3,7 +3,7 @@
   "name": "prism",
   "type": "hyperframes:block",
   "title": "Prism",
-  "description": "A white beam of light splits into a slowly turning rainbow. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "A white beam of light splits into a slowly turning rainbow. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; the beam colour is a variable, the rainbow is optical. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "background", "light", "prism", "rainbow", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

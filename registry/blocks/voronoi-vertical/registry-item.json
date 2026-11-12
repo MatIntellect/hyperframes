@@ -3,7 +3,7 @@
   "name": "voronoi-vertical",
   "type": "hyperframes:block",
   "title": "Voronoi (vertical)",
-  "description": "Vertical: red cells with dark grey centres shift and reshape across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "description": "Vertical: cells with red centres fading to dark edges shift and reshape across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
   "tags": [
     "webgpu",
     "webgpu-shader",

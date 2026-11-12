@@ -3,7 +3,7 @@
   "name": "prism-vertical",
   "type": "hyperframes:block",
   "title": "Prism (vertical)",
-  "description": "Vertical: a white beam of light splits into a slowly turning rainbow. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "description": "Vertical: a white beam of light splits into a slowly turning rainbow. A WebGPU shader from the Shaders library (shaders.com, MIT); the beam colour is a variable, the rainbow is optical. Placement full, top or bottom card; fades in and out on cues.",
   "tags": [
     "webgpu",
     "webgpu-shader",

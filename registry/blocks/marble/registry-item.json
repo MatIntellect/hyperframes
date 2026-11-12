@@ -3,7 +3,7 @@
   "name": "marble",
   "type": "hyperframes:block",
   "title": "Marble",
-  "description": "Ink-dark veins wind through white in a marbled pattern that slowly shifts. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; keeps its own material colour; every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "Dark marble with grey veins slowly flows across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "background", "marble", "texture", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

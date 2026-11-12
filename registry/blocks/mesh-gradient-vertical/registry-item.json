@@ -3,7 +3,7 @@
   "name": "mesh-gradient-vertical",
   "type": "hyperframes:block",
   "title": "Mesh Gradient (vertical)",
-  "description": "Vertical: dark, red, grey and white fields blend and drift in a mesh gradient. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "description": "Vertical: dark, red and grey fields blend and drift in a mesh gradient. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
   "tags": ["webgpu", "webgpu-shader", "background", "gradient", "color", "loopable", "vertical"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

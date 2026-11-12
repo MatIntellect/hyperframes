@@ -3,7 +3,7 @@
   "name": "mesh-gradient",
   "type": "hyperframes:block",
   "title": "Mesh Gradient",
-  "description": "Dark, red, grey and white fields blend and drift in a mesh gradient. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "Dark, red and grey fields blend and drift in a mesh gradient. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "background", "gradient", "color", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {
