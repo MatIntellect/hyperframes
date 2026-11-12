@@ -54,6 +54,7 @@
 >
   <div
     class="hf-filmed-screen-scene"
+    data-layout-ignore
     style="
       position: absolute;
       left: 0;
@@ -82,7 +83,7 @@
     <p
       style="
         margin: 0;
-        max-width: 50%;
+        max-width: 90%;
         font: 500 44px/1.3 var(--font-body, &quot;Montserrat&quot;, sans-serif);
         color: var(--muted, #8a8a90);
       "
@@ -716,42 +717,91 @@ void main() {
     scene.style.height = H + "px";
     var tpl = document.querySelector('template[data-slot="filmed-screen-scene"]');
     if (tpl) scene.replaceChildren(document.importNode(tpl.content, true));
-    else {
-      // Default scene type follows the screen width: 140/44 px were set for 1920, and in a
-      // standing 780 px screen the zoomed shots cut the title at both edges.
-      scene.querySelector("h1").style.fontSize = Math.min(140, Math.round(W * 0.12)) + "px";
-      scene.querySelector("p").style.fontSize =
-        Math.max(28, Math.min(44, Math.round(W * 0.05))) + "px";
-    }
   })();
 </script>
 
 <script>
   // An orbit across two shots: a wide establishing shot, then a close-up that follows the
   // headline and the paragraph while the camera swings to the same angle on the other side.
-  HFFilmedScreen.mount({
-    canvas: document.querySelectorAll(".hf-filmed-screen"),
-    shots: [
+  // Shot lengths follow the host clip (caret-swap:219). Each shot's zoom is capped so what it
+  // frames fits the screen: fixed zooms cut a host scene at both edges (second head, 039).
+  // Widths exist only after the fonts load (runtimes.md:7, path-tracing.md:27).
+  (function () {
+    var cv = document.querySelector(".hf-filmed-screen");
+    var host = cv && cv.parentElement && cv.parentElement.closest("[data-duration]");
+    var D = Number(host && host.getAttribute("data-duration")) || 6;
+    function scene() {
+      return document.querySelector(".hf-filmed-screen-scene");
+    }
+    function pick(sel) {
+      var s = scene();
+      return s && s.querySelector(sel);
+    }
+    function box(els) {
+      var x0 = Infinity,
+        y0 = Infinity,
+        x1 = -Infinity,
+        y1 = -Infinity;
+      els.forEach(function (el) {
+        var b = el.getBoundingClientRect();
+        if (!b.width || !b.height) return;
+        x0 = Math.min(x0, b.left);
+        y0 = Math.min(y0, b.top);
+        x1 = Math.max(x1, b.right);
+        y1 = Math.max(y1, b.bottom);
+      });
+      return x1 > x0 ? { w: x1 - x0, h: y1 - y0 } : null;
+    }
+    var shots = [
       {
-        until: 2.5,
+        until: D * 0.42,
         palette: null,
         tilt: [0.06, 0.24, -0.02],
         tiltTo: [0.08, 0.14, -0.012],
         zoom: [1.28, 1.38],
+        frame: function () {
+          var s = scene();
+          return s ? Array.prototype.slice.call(s.children) : [];
+        },
         focus: function () {
-          return document.querySelector(".hf-filmed-screen-scene h1");
+          return pick("h1");
         },
       },
       {
-        until: 6,
+        until: D,
         palette: null,
         tilt: [0.1, 0.14, -0.012],
         tiltTo: [0.06, -0.24, 0.02],
-        zoom: [1.6, 1.8],
+        zoom: [2.0, 2.4],
+        frame: function () {
+          var p = pick("p");
+          return p ? [p] : shots[0].frame();
+        },
         focus: function () {
-          return document.querySelector(".hf-filmed-screen-scene p");
+          return pick("p");
         },
       },
-    ],
-  });
+    ];
+    var asked = shots.map(function (sh) {
+      return sh.zoom.slice();
+    });
+    function fitZoom() {
+      var s = scene(),
+        sb = s && s.getBoundingClientRect();
+      if (!sb || !sb.width) return;
+      shots.forEach(function (sh, i) {
+        var b = box(sh.frame());
+        if (!b) return;
+        var cap = Math.max(1, Math.min((0.9 * sb.width) / b.w, (0.9 * sb.height) / b.h));
+        sh.zoom = asked[i].map(function (z) {
+          return Math.min(z, cap);
+        });
+      });
+    }
+    fitZoom();
+    window.__hf = window.__hf || {};
+    window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["filmed-screen"] = document.fonts.ready.then(fitZoom);
+    HFFilmedScreen.mount({ canvas: document.querySelectorAll(".hf-filmed-screen"), shots: shots });
+  })();
 </script>
