@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "settings-toggle-flow",
+  "type": "hyperframes:component",
+  "title": "Settings Toggle Flow",
+  "description": "Settings card for vertical reels: three rows with a title, a muted hint and a toggle (on = brand red), entering row by row. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"settings-toggle-flow\": its own timeline nests there.",
+  "tags": ["ui-flow", "settings", "toggle"],
+  "files": [
+    {
+      "path": "settings-toggle-flow.html",
+      "target": "compositions/components/settings-toggle-flow.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

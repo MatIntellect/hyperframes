@@ -1,0 +1,147 @@
+<!--
+  Signup Flow - Composed UI flow for HyperFrames.
+
+  Paste the markup and CSS into a composition. Use the timeline integration
+  note at the bottom as the starting point for deterministic GSAP animation.
+-->
+
+<div class="hf-ui-signup-flow">
+  <h3>Создать аккаунт</h3>
+  <button class="hf-ui-signup-social" type="button">Войти через Google</button>
+  <div class="hf-ui-signup-divider"><span></span><em>или</em><span></span></div>
+  <div class="hf-ui-signup-field">anna@studio.ru</div>
+  <div class="hf-ui-signup-field muted">Пароль</div>
+  <button class="hf-ui-signup-submit" type="button">Начать</button>
+</div>
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  /* Vertical reel: sized for the 780 px graphics field (text 28 px and up), brand palette tokens.
+     A generic sign-up form is own graphics: the brand card, the primary button in brand red. */
+  .hf-ui-signup-flow {
+    display: grid;
+    gap: 20px;
+    width: 640px;
+    max-width: 100%;
+    padding: 40px;
+    border: 2px solid var(--border, #2e2e32);
+    border-radius: 36px;
+    background: var(--surface, #18181a);
+    color: var(--fg, #f2f2f2);
+    font-family: "Montserrat", system-ui, sans-serif;
+    box-shadow: 0 28px 84px rgba(0, 0, 0, 0.35);
+  }
+  .hf-ui-signup-flow h3 {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 44px;
+    line-height: 1.1;
+  }
+  .hf-ui-signup-flow button,
+  .hf-ui-signup-field {
+    min-height: 88px;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: 30px;
+    font-weight: 700;
+  }
+  .hf-ui-signup-social,
+  .hf-ui-signup-field {
+    border: 2px solid var(--border, #2e2e32);
+    background: color-mix(in srgb, var(--fg, #f2f2f2) 6%, var(--surface, #18181a));
+    color: var(--fg, #f2f2f2);
+  }
+  .hf-ui-signup-field {
+    display: flex;
+    align-items: center;
+    padding: 0 26px;
+    font-weight: 600;
+  }
+  .hf-ui-signup-field.muted {
+    color: var(--muted, #8a8a90);
+  }
+  .hf-ui-signup-divider {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    color: var(--muted, #8a8a90);
+    font-size: 28px;
+    font-weight: 600;
+  }
+  .hf-ui-signup-divider em {
+    font-style: normal;
+  }
+  .hf-ui-signup-divider span {
+    height: 2px;
+    background: var(--border, #2e2e32);
+  }
+  .hf-ui-signup-submit {
+    border: 0;
+    background: var(--brand, #ff0000);
+    color: var(--fg, #f2f2f2);
+  }
+</style>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["signup-flow"]; mount the snippet inside a clip with data-composition-id="signup-flow"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="signup-flow" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-ui-signup-flow",
+      { opacity: 0, y: 26 },
+      { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" },
+      0.25,
+    );
+    tl.fromTo(
+      ".hf-ui-signup-flow > *",
+      { y: 14, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.24, stagger: 0.05, ease: "power2.out" },
+      0.48,
+    );
+    tl.to(
+      ".hf-ui-signup-submit",
+      { scale: 0.97, duration: 0.12, yoyo: true, repeat: 1, ease: "power1.inOut" },
+      1.2,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["signup-flow"] = tl;
+  })();
+</script>

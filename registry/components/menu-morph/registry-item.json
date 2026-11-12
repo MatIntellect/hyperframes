@@ -1,0 +1,37 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "menu-morph",
+  "type": "hyperframes:component",
+  "title": "Menu Morph",
+  "description": "Menu button morph for vertical reels: a brand-red round button pops, its bars cross into a close mark and action pills fan out beneath. Actions and button size are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"menu-morph\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "menu", "morph"],
+  "files": [
+    {
+      "path": "menu-morph.html",
+      "target": "compositions/components/menu-morph.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "actions",
+      "type": "string",
+      "role": "content",
+      "label": "Actions",
+      "description": "Comma separated labels for the pills that fan out under the button. Up to six.",
+      "default": "Текст, Картинка, Звук"
+    },
+    {
+      "id": "size",
+      "type": "number",
+      "role": "layout",
+      "label": "Button size",
+      "description": "Diameter of the round button in pixels. The bars scale with it.",
+      "default": 120,
+      "min": 96,
+      "max": 180,
+      "step": 4,
+      "unit": "px"
+    }
+  ]
+}

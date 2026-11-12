@@ -1,0 +1,83 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "success-check",
+  "type": "hyperframes:component",
+  "title": "Success Check",
+  "description": "Success check for vertical reels: a brand-red tick pops and draws inside a deep red halo with a soft ring. Size, ring and spin are fields; colour is the reel palette. Sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"success-check\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "success", "check"],
+  "files": [
+    {
+      "path": "success-check.html",
+      "target": "compositions/components/success-check.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "size",
+      "type": "enum",
+      "role": "layout",
+      "label": "Size",
+      "description": "Diameter of the halo and of the mark inside it.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "id": "ring",
+      "type": "enum",
+      "role": "style",
+      "label": "Ring",
+      "description": "Opacity of the circle the tick sits in.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "id": "spin",
+      "type": "enum",
+      "role": "motion",
+      "label": "Spin",
+      "description": "Multiplies the rotation the timeline drives, so the mark swings less or more into place.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "onboarding-stepper-flow",
+  "type": "hyperframes:component",
+  "title": "Onboarding Stepper Flow",
+  "description": "Onboarding step for vertical reels: a three-step progress row (done and active in brand red) over a card with step label, heading, hint and a brand-red button. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"onboarding-stepper-flow\": its own timeline nests there.",
+  "tags": ["ui-flow", "onboarding", "stepper"],
+  "files": [
+    {
+      "path": "onboarding-stepper-flow.html",
+      "target": "compositions/components/onboarding-stepper-flow.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

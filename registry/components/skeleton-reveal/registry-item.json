@@ -1,0 +1,33 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "skeleton-reveal",
+  "type": "hyperframes:component",
+  "title": "Skeleton Reveal",
+  "description": "Skeleton reveal for vertical reels: a shimmering placeholder card cross-fades into a name and a detail line. Name and detail are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"skeleton-reveal\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "skeleton", "reveal"],
+  "files": [
+    {
+      "path": "skeleton-reveal.html",
+      "target": "compositions/components/skeleton-reveal.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "name",
+      "type": "string",
+      "role": "content",
+      "label": "Name",
+      "description": "Primary line revealed once the skeleton fades out.",
+      "default": "Анна Смирнова"
+    },
+    {
+      "id": "detail",
+      "type": "string",
+      "role": "content",
+      "label": "Detail",
+      "description": "Secondary line under the name, such as an email or a role.",
+      "default": "anna@studio.ru"
+    }
+  ]
+}

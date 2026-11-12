@@ -1,0 +1,69 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "tabs-slide-indicator",
+  "type": "hyperframes:component",
+  "title": "Tabs Slide Indicator",
+  "description": "Segmented tabs for vertical reels: a brand-red pill slides one tab to the right and the active label lights up as it passes. Tab width, shape and labels are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"tabs-slide-indicator\": its own timeline nests there.",
+  "tags": ["transition-primitive", "transitions-dev-port", "tabs", "indicator"],
+  "files": [
+    {
+      "path": "tabs-slide-indicator.html",
+      "target": "compositions/components/tabs-slide-indicator.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "width",
+      "type": "enum",
+      "role": "layout",
+      "label": "Tab width",
+      "description": "Width of one tab. The slide the timeline drives is scaled to match, so the pill still lands on the next tab.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "id": "shape",
+      "type": "enum",
+      "role": "style",
+      "label": "Shape",
+      "description": "Corner radius of the track and the pill.",
+      "default": "pill",
+      "options": [
+        {
+          "value": "pill",
+          "label": "Pill"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "type": "string",
+      "role": "content",
+      "label": "Labels",
+      "description": "The tab names, separated by commas. Two or more names rebuild the row.",
+      "default": "План,Отладка,Вопрос"
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+<!--
+  Onboarding Stepper Flow - Composed UI flow for HyperFrames.
+
+  Paste the markup and CSS into a composition. Use the timeline integration
+  note at the bottom as the starting point for deterministic GSAP animation.
+-->
+
+<div class="hf-ui-onboarding-flow">
+  <div class="hf-ui-onboarding-steps">
+    <span class="done">1</span><span class="active">2</span><span>3</span>
+  </div>
+  <div class="hf-ui-onboarding-card">
+    <small>Шаг 2 из 3</small>
+    <strong>Выберите стиль роликов</strong>
+    <p>По нему агент подберёт графику и движение</p>
+    <button type="button">Дальше</button>
+  </div>
+</div>
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  /* Vertical reel: sized for the 780 px graphics field (text 28 px and up), brand palette tokens.
+     A generic onboarding mock is own graphics: the brand card, done and active steps in brand red. */
+  .hf-ui-onboarding-flow {
+    display: grid;
+    gap: 28px;
+    width: 660px;
+    max-width: 100%;
+    color: var(--fg, #f2f2f2);
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+  .hf-ui-onboarding-steps {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .hf-ui-onboarding-steps span {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border: 3px solid var(--border, #2e2e32);
+    border-radius: 999px;
+    background: var(--surface, #18181a);
+    color: var(--muted, #8a8a90);
+    font-size: 32px;
+    font-weight: 800;
+  }
+  .hf-ui-onboarding-steps .done,
+  .hf-ui-onboarding-steps .active {
+    border-color: var(--brand, #ff0000);
+    background: var(--brand, #ff0000);
+    color: var(--fg, #f2f2f2);
+  }
+  .hf-ui-onboarding-card {
+    display: grid;
+    gap: 18px;
+    padding: 44px;
+    border: 2px solid var(--border, #2e2e32);
+    border-radius: 36px;
+    background: var(--surface, #18181a);
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.35);
+  }
+  .hf-ui-onboarding-card small {
+    color: var(--muted, #8a8a90);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .hf-ui-onboarding-card strong {
+    font-size: 44px;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  .hf-ui-onboarding-card p {
+    margin: 0;
+    color: var(--muted, #8a8a90);
+    font-size: 30px;
+    line-height: 1.35;
+  }
+  .hf-ui-onboarding-card button {
+    justify-self: start;
+    min-height: 84px;
+    margin-top: 8px;
+    padding: 0 36px;
+    border: 0;
+    border-radius: 20px;
+    background: var(--brand, #ff0000);
+    color: var(--fg, #f2f2f2);
+    font-family: inherit;
+    font-size: 30px;
+    font-weight: 700;
+  }
+</style>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["onboarding-stepper-flow"]; mount the snippet inside a clip with data-composition-id="onboarding-stepper-flow"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="onboarding-stepper-flow" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-ui-onboarding-steps span",
+      { scale: 0.7, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.28, stagger: 0.08, ease: "back.out(1.8)" },
+      0.3,
+    );
+    tl.fromTo(
+      ".hf-ui-onboarding-card",
+      { y: 28, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+      0.62,
+    );
+    tl.to(
+      ".hf-ui-onboarding-steps .active",
+      { scale: 1.16, duration: 0.16, yoyo: true, repeat: 1, ease: "power1.inOut" },
+      1.1,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["onboarding-stepper-flow"] = tl;
+  })();
+</script>

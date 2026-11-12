@@ -1552,6 +1552,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "input-feedback",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "kinetic-center-build",
       "type": "hyperframes:component"
     },
@@ -1580,11 +1584,19 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "menu-morph",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "mk-emphasis-type",
       "type": "hyperframes:component"
     },
     {
       "name": "mk-usage-arc",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "modal-morph",
       "type": "hyperframes:component"
     },
     {
@@ -1617,6 +1629,10 @@
     },
     {
       "name": "number-wheel",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "onboarding-stepper-flow",
       "type": "hyperframes:component"
     },
     {
@@ -1660,6 +1676,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "settings-toggle-flow",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "shared-axis-y",
       "type": "hyperframes:component"
     },
@@ -1673,6 +1693,14 @@
     },
     {
       "name": "shimmer-sweep",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "signup-flow",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "skeleton-reveal",
       "type": "hyperframes:component"
     },
     {
@@ -1712,7 +1740,15 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "success-check",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "swipe-rail",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "tabs-slide-indicator",
       "type": "hyperframes:component"
     },
     {
@@ -1753,6 +1789,10 @@
     },
     {
       "name": "titlecard-lockup",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "toggle-flip",
       "type": "hyperframes:component"
     },
     {
