@@ -7,11 +7,14 @@
   Variables. The script reads each one, falls back to the declared default on
   anything missing or unrecognised, and writes the result either into the
   markup or into a custom property the CSS above consumes. The timeline recipe
-  below is untouched by them: it keeps driving one type progress and one caret
-  opacity, and these decide what is typed, in what colour, and behind which
-  caret.
+  below keeps driving one type progress and one caret opacity, one step per
+  character of the line: the script writes the count to data-steps and the
+  recipe reads it, so no letter is ever cut in half. These decide what is
+  typed, in what colour, and behind which caret. Monospace on purpose: a typed
+  command is code, and code stays monospace (brand: Bebas Neue and Montserrat
+  for words, monospace for code).
 
-    - text (string, default монтаж с ИИ за минуту): the line that types
+    - text (string, default hyperframes add typewriter): the line that types
       itself out. It is written into the existing span, so the reveal keeps
       running character by character over whatever is set. Anything that is
       not a non-empty string keeps the shipped line.
@@ -30,12 +33,12 @@
 <div
   class="hf-catalog-typewriter"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Line that types itself out character by character.", "default": "монтаж с ИИ за минуту" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Line that types itself out character by character.", "default": "hyperframes add typewriter" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Colour of the text and the caret: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] },
     { "id": "caret", "type": "enum", "role": "style", "label": "Caret", "description": "Caret shape: a thin rule, a terminal-style block, or no caret at all.", "default": "line", "options": [{ "value": "line", "label": "Line" }, { "value": "block", "label": "Block" }, { "value": "none", "label": "None" }] }
   ]'
 >
-  <span>монтаж с ИИ за минуту</span><i></i>
+  <span>hyperframes add typewriter</span><i></i>
 </div>
 
 <style>
@@ -82,7 +85,7 @@
     align-items: center;
     gap: 4px;
     font:
-      800 42px/1 ui-monospace,
+      800 42px/1.25 ui-monospace,
       Menlo,
       monospace;
   }
@@ -142,11 +145,12 @@
       if (text !== null && line) {
         line.textContent = text;
       }
+      if (line) root.dataset.steps = String(Array.from(line.textContent).length);
     }
   })();
 </script>
 
 <!--
   Timeline integration:
-  tl.fromTo('.hf-catalog-typewriter', { '--hf-type-progress': 0 }, { '--hf-type-progress': 1, duration: 1.2, ease: 'steps(28)' }, startTime); tl.to('.hf-catalog-typewriter i', { '--hf-caret-opacity': 0.2, duration: 0.24, repeat: 7, yoyo: true, ease: 'none' }, startTime + 0.2);
+  tl.fromTo('.hf-catalog-typewriter', { '--hf-type-progress': 0 }, { '--hf-type-progress': 1, duration: 1.2, ease: 'steps(' + document.querySelector('.hf-catalog-typewriter').dataset.steps + ')' }, startTime); tl.to('.hf-catalog-typewriter i', { '--hf-caret-opacity': 0.2, duration: 0.24, repeat: 7, yoyo: true, ease: 'none' }, startTime + 0.2);
 -->

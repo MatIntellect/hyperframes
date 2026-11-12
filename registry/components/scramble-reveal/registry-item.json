@@ -3,7 +3,7 @@
   "name": "scramble-reveal",
   "type": "hyperframes:component",
   "title": "Scramble Reveal",
-  "description": "A deterministic hacker-style text reveal that cycles fixed glyph rows and locks the target string from left to right.",
+  "description": "A deterministic hacker-style text reveal that cycles fixed glyph rows and locks the target string from left to right. Monospace on purpose: a terminal look is code, and code stays monospace (brand: Bebas Neue and Montserrat for words, monospace for code).",
   "tags": ["motion-primitive", "text-effects", "scramble", "reveal", "deterministic"],
   "jobs": ["reveal"],
   "family": "text-effects",

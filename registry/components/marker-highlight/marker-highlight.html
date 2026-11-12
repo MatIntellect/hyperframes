@@ -124,11 +124,13 @@
             font-size: var(--mh-font-size, min(8cqw, 15cqh));
             font-weight: 600;
             line-height: 1.14;
-            letter-spacing: -0.03em;
+            letter-spacing: 0;
           }
 
           .mh-em {
+            --mh-out: 0.1em;
             position: relative;
+            margin-inline: var(--mh-out);
             display: inline-block;
             white-space: nowrap;
             will-change: transform;
@@ -150,34 +152,39 @@
              fall back to its intrinsic viewBox ratio); then
              preserveAspectRatio="none" stretches the authored path (and its
              stroke) into the box, which is exactly the marker-nib distortion
-             we want on a dashed path. */
+             we want on a dashed path. The box reaches --mh-out past the word
+             on each side and the word keeps the same margin, so a marker never
+             lands on the neighbouring words (Bebas spaces are narrow). */
+          .mh-em[data-marker-style="circle"] {
+            --mh-out: 0.4em;
+          }
           .mh-em[data-marker-style="highlight"] .mh-mark {
-            left: -3%;
+            left: calc(-1 * var(--mh-out));
             top: 14%;
-            width: 106%;
+            width: calc(100% + 2 * var(--mh-out));
             height: 76%;
           }
 
           .mh-em[data-marker-style="underline"] .mh-mark {
-            left: -2%;
+            left: calc(-1 * var(--mh-out));
             bottom: -14%;
-            width: 105%;
+            width: calc(100% + 2 * var(--mh-out));
             height: 22%;
             z-index: 2;
           }
 
           .mh-em[data-marker-style="circle"] .mh-mark {
-            left: -13%;
+            left: calc(-1 * var(--mh-out));
             top: -26%;
-            width: 126%;
+            width: calc(100% + 2 * var(--mh-out));
             height: 152%;
             z-index: 2;
           }
 
           .mh-em[data-marker-style="scribble"] .mh-mark {
-            left: -2%;
+            left: calc(-1 * var(--mh-out));
             top: 12%;
-            width: 104%;
+            width: calc(100% + 2 * var(--mh-out));
             height: 76%;
             z-index: 2;
           }

@@ -1396,10 +1396,6 @@
       "type": "hyperframes:block"
     },
     {
-      "name": "blur-out-up",
-      "type": "hyperframes:component"
-    },
-    {
       "name": "caption-clip-wipe",
       "type": "hyperframes:component"
     },

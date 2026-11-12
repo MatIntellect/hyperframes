@@ -19,7 +19,7 @@
       "role": "content",
       "label": "Text",
       "description": "Line that types itself out character by character.",
-      "default": "монтаж с ИИ за минуту"
+      "default": "hyperframes add typewriter"
     },
     {
       "id": "tone",

@@ -135,7 +135,7 @@
             font-size: var(--kts-font-size);
             font-weight: 760;
             line-height: 1.08;
-            letter-spacing: -0.045em;
+            letter-spacing: 0;
             white-space: nowrap;
           }
 
@@ -264,7 +264,9 @@
             }, 1);
             var sentenceLength =
               Array.from(prefix).length + widestOptionLength + Array.from(suffix).length + 2;
-            var fittedCqw = Math.min(12, 122 / Math.max(1, sentenceLength));
+            // Bebas Neue, the brand display face: 0.51em per glyph at worst (Щ Ш Ж), no tracking;
+            // the line fills 96% of the 94cqw stage.
+            var fittedCqw = Math.min(12, (94 * 0.96) / (0.51 * Math.max(1, sentenceLength)));
             root.style.setProperty(
               "--kts-font-size",
               "min(" + fittedCqw.toFixed(3) + "cqw, 22cqh)",
