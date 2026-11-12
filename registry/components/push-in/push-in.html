@@ -1,0 +1,224 @@
+<!doctype html>
+<!--
+  push-in: HyperFrames video primitive (camera / holdable / emphasize)
+
+  Concept: a centered headline stays composed while the full stage makes one
+  slow camera push. The intensity variable owns the final scale, and a soft
+  vignette keeps attention on the subject.
+
+  Variables:
+    - text (string, default "Главное"): the centered headline.
+    - intensity (subtle | standard | bold, default "standard"): maps to a
+      final stage scale of 1.08, 1.12, or 1.18.
+
+  Envelope: fixed 0.80s IN eases the camera into motion, elastic HOLD carries
+  a continuous linear creep, and fixed 0.65s OUT gently fades the completed
+  push. If the duration is shorter than IN plus OUT, both fixed phases
+  compress proportionally and HOLD becomes zero. Longer durations stretch
+  HOLD only, so the same total camera travel happens more slowly. The
+  timeline is never time-scaled.
+
+  Mount contract: the runtime clones only this template. #root fills the
+  host box, establishes the container query basis, has no data-width or
+  data-height, and registers one paused timeline under the hardcoded push-in
+  id.
+-->
+<html
+  lang="en"
+  data-composition-id="push-in"
+  data-composition-duration="4"
+  data-composition-variables='[
+    { "id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text centered in the camera frame.", "default": "Главное" },
+    { "id": "intensity", "type": "enum", "role": "motion", "label": "Push intensity", "description": "Final camera scale reached by the push.", "default": "standard", "options": [{ "value": "subtle", "label": "Subtle" }, { "value": "standard", "label": "Standard" }, { "value": "bold", "label": "Bold" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Push In</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="push-in" data-duration="4" data-fps="30">
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+              U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+              U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+              U+2113, U+2C60-2C7F, U+A720-A7FF;
+          }
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          #root {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            container-type: size;
+            isolation: isolate;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-display, "Bebas Neue", sans-serif);
+            pointer-events: none;
+          }
+
+          .pi-clip {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+          }
+
+          .pi-camera {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background:
+              radial-gradient(
+                ellipse at 50% 48%,
+                color-mix(in srgb, var(--surface, #18181a) 92%, white) 0%,
+                var(--surface, #18181a) 27%,
+                var(--bg, #0c1014) 100%
+              ),
+              var(--bg, #0c1014);
+            transform-origin: 50% 50%;
+            will-change: transform, opacity;
+          }
+
+          .pi-camera::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+              ellipse at 50% 48%,
+              transparent 24%,
+              color-mix(in srgb, var(--bg, #0c1014) 20%, transparent) 58%,
+              color-mix(in srgb, var(--bg, #0c1014) 88%, transparent) 100%
+            );
+          }
+
+          .pi-headline {
+            position: relative;
+            z-index: 1;
+            width: min(78cqw, 116cqh);
+            color: var(--fg, #f2f2f2);
+            font-size: clamp(28px, 12cqw, 144px);
+            font-weight: 740;
+            line-height: 0.94;
+            letter-spacing: -0.055em;
+            text-align: center;
+            overflow-wrap: anywhere;
+            text-shadow: 0 1.5cqh 5cqh color-mix(in srgb, var(--bg, #0c1014) 62%, transparent);
+          }
+        </style>
+
+        <div
+          id="push-in-clip"
+          class="pi-clip clip"
+          data-start="0"
+          data-duration="4"
+          data-track-index="0"
+        >
+          <div class="pi-camera">
+            <div class="pi-headline"></div>
+          </div>
+        </div>
+
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("push-in-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.getElementById("root");
+            var camera = root.querySelector(".pi-camera");
+            var headline = root.querySelector(".pi-headline");
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+
+            var text = vars.text == null ? "Главное" : String(vars.text);
+            var intensity =
+              vars.intensity === "subtle" || vars.intensity === "bold"
+                ? vars.intensity
+                : "standard";
+            var scales = { subtle: 1.08, standard: 1.12, bold: 1.18 };
+            var finalScale = scales[intensity];
+
+            headline.textContent = text;
+
+            var IN_BASE = 0.8;
+            var OUT_BASE = 0.65;
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "4",
+              ),
+            );
+            var fixedDuration = IN_BASE + OUT_BASE;
+            var phaseScale = duration < fixedDuration ? duration / fixedDuration : 1;
+            var IN = IN_BASE * phaseScale;
+            var OUT = OUT_BASE * phaseScale;
+            var HOLD = Math.max(0, duration - IN - OUT);
+            var OUT_START = IN + HOLD;
+            var inScale = HOLD > 0 ? 1 + (finalScale - 1) * 0.24 : finalScale;
+
+            var tl = gsap.timeline({ paused: true });
+
+            tl.fromTo(
+              camera,
+              { scale: 1, opacity: 1 },
+              { scale: inScale, opacity: 1, duration: IN, ease: "sine.inOut" },
+              0,
+            );
+            if (HOLD > 0) {
+              tl.to(camera, { scale: finalScale, duration: HOLD, ease: "none" }, IN);
+            }
+            tl.to(camera, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
+
+            tl.seek(0);
+            window.__timelines = window.__timelines || {};
+            window.__timelines["push-in"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

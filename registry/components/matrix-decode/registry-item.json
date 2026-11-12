@@ -1,0 +1,59 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "matrix-decode",
+  "type": "hyperframes:component",
+  "title": "Matrix Decode",
+  "description": "A deterministic matrix-style decode: one glowing monospace cell per character staggers in and resolves the target word. Monospace on purpose: a decode is a code look, and code stays monospace (brand: Bebas Neue and Montserrat for words, monospace for code). Mount it inside a clip with data-composition-id=\"matrix-decode\": its own timeline nests there.",
+  "tags": ["motion-primitive", "typography"],
+  "files": [
+    {
+      "path": "matrix-decode.html",
+      "target": "compositions/components/matrix-decode.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Target text",
+      "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.",
+      "default": "МОНТАЖ"
+    },
+    {
+      "id": "size",
+      "type": "number",
+      "role": "style",
+      "label": "Size",
+      "description": "Type size of the cells in pixels. Cell width follows it.",
+      "default": 64,
+      "min": 24,
+      "max": 160,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "id": "glow",
+      "type": "enum",
+      "role": "style",
+      "label": "Glow",
+      "description": "Strength of the halo behind the cells, from none to a heavy bloom.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ]
+    }
+  ]
+}

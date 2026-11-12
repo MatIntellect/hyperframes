@@ -1,0 +1,318 @@
+<!doctype html>
+<!--
+  variable-font-flex: HyperFrames video primitive (type / Wave M experiment M5)
+
+  A word lands while its variable-font weight flexes: each character rises
+  from hairline to black (weight 120 to 840) with
+  a per-character stagger and a small carve-in overshoot, then settles. The
+  word's font-size eases INVERSELY to the mean axis progress (optical
+  compensation), so the letterforms gain mass while the word's box barely
+  grows: ink swells, layout holds.
+
+  Font: the brand's Montserrat (local variable woff2, wght 100..900, Latin
+  and Cyrillic). The source pinned Roboto Flex from a CDN for a width axis:
+  a render-time network fetch with a Latin-only subset, so a Russian word
+  fell back to a system face. Montserrat has no width axis, so the unit
+  flexes weight only. The landing weight (840) is the animated mechanic, not
+  static register styling.
+
+  Variables (declared in data-composition-variables below):
+    - text (string, default "FLEX"): the word.
+    - stagger (number seconds, default 0.06, clamped 0 to 0.25): per-char
+      offset between axis flex starts.
+    - exit ("none" | "fade" | "up", default "none").
+
+  Envelope, fixed IN and OUT with elastic HOLD only (never timeScale):
+    IN_BASE  = 0.12 lead + (chars - 1) * stagger + 1.15 flex + 0.15 margin
+    HOLD     = max(0, D - IN - OUT), truly still
+    OUT_BASE = 0.45s only when exit != none
+    If D < IN_BASE + OUT_BASE the whole envelope compresses together.
+
+  Determinism and seek-safety: NO tween ever touches the
+  font-variation-settings string. One inert anchor tween spans [0, D]; on
+  every update a painter recomputes each character's axis numbers as a pure
+  function of tl.time() (a number proxy per char) and composes the
+  '"wght" W, "wdth" D' string from those numbers, plus the word-level
+  compensated font-size. Writes are idempotent; eventful seeks
+  (suppressEvents=false) land identical frames in any order and direction.
+
+  Mount contract: the runtime clones only this template. #root fills the
+  host box (no data-width/data-height, container-type: size, cqmin units),
+  is styled via #root only, and registers one paused timeline under the
+  LITERAL "variable-font-flex" key.
+-->
+<html
+  lang="en"
+  data-composition-id="variable-font-flex"
+  data-composition-duration="3.5"
+  data-composition-variables='[
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The word whose weight flexes.", "default": "Сила" },
+    { "id": "stagger", "type": "number", "role": "timing", "label": "Stagger", "description": "Seconds between per-character flex starts, clamped 0 to 0.25.", "default": 0.06 },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the carved word holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Variable Font Flex</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="variable-font-flex" data-duration="3.5" data-fps="30">
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+              U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+              U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+              U+2113, U+2C60-2C7F, U+A720-A7FF;
+          }
+
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          #root {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            container-type: size;
+            isolation: isolate;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+            pointer-events: none;
+          }
+
+          .vff-clip {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: var(--bg, transparent);
+          }
+
+          .vff-stage {
+            display: block;
+            max-width: 94cqw;
+            will-change: transform, opacity;
+          }
+
+          .vff-word {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            color: var(--fg, #f2f2f2);
+            line-height: 1;
+            white-space: pre;
+          }
+
+          .vff-char {
+            position: relative;
+            display: inline-block;
+            white-space: pre;
+            /* No will-change and no transform on chars: per-char compositor
+               layer promotion makes glyph antialiasing depend on seek
+               history (paint-level nondeterminism); the rise rides
+               relative top instead. */
+          }
+        </style>
+
+        <div
+          id="variable-font-flex-clip"
+          class="vff-clip clip"
+          data-start="0"
+          data-duration="3.5"
+          data-track-index="0"
+        >
+          <div class="vff-stage" role="img">
+            <div class="vff-word" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("variable-font-flex-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.getElementById("root");
+            var stage = root.querySelector(".vff-stage");
+            var word = root.querySelector(".vff-word");
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+
+            var text = vars.text == null || vars.text === "" ? "Сила" : String(vars.text);
+            var axis = "weight"; // Montserrat carries a weight axis only
+            var staggerRaw = parseFloat(vars.stagger);
+            var stagger = isFinite(staggerRaw) ? Math.min(0.25, Math.max(0, staggerRaw)) : 0.06;
+            var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
+
+            stage.setAttribute("aria-label", text);
+
+            // Axis endpoints. Non-animated axes hold a fixed value so the
+            // composed string is always complete and orderable.
+            var WGHT_FROM = axis === "width" ? 620 : 120;
+            var WGHT_TO = axis === "width" ? 620 : 840;
+            var WDTH_FROM = axis === "weight" ? 100 : 40;
+            var WDTH_TO = axis === "weight" ? 100 : 128;
+            // Optical compensation strength per mode: how much of the mass
+            // gain the font-size gives back so the box barely grows.
+            var COMP = axis === "both" ? 0.16 : axis === "width" ? 0.12 : 0.08;
+
+            // Build one span per character; spaces stay in flow (white-space:
+            // pre) but never animate.
+            var characters = Array.from(text);
+            var hostDoc = root.ownerDocument;
+            var chars = [];
+            var fragment = hostDoc.createDocumentFragment();
+            for (var i = 0; i < characters.length; i += 1) {
+              var span = hostDoc.createElement("span");
+              span.className = "vff-char";
+              span.textContent = characters[i];
+              fragment.appendChild(span);
+              if (!/\s/.test(characters[i])) chars.push({ el: span, index: i });
+            }
+            word.appendChild(fragment);
+
+            // Fit for the FINAL (wide, black) state; compensation only ever
+            // shrinks below this. cqw base capped by cqh so short words on
+            // wide hosts stay inside the frame.
+            var fitted = Math.min(21, 118 / Math.max(3, characters.length));
+            var BASE_SIZE = "min(" + fitted.toFixed(3) + "cqw, 30cqh)";
+            root.style.setProperty("--vff-size", BASE_SIZE);
+            word.style.fontSize = "var(--vff-size)";
+
+            // Envelope: fixed IN/OUT, elastic HOLD, never time-scaled.
+            var LEAD = 0.12;
+            var FLEX = 1.15;
+            var MARGIN = 0.15;
+            var IN_BASE = LEAD + Math.max(0, chars.length - 1) * stagger + FLEX + MARGIN;
+            var OUT_BASE = exit === "none" ? 0 : 0.45;
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
+            var totalBase = Math.max(0.001, IN_BASE + OUT_BASE);
+            var scale = duration < totalBase ? duration / totalBase : 1;
+            var lead = LEAD * scale;
+            var flex = FLEX * scale;
+            var staggerEff = stagger * scale;
+            var IN = IN_BASE * scale;
+            var OUT = OUT_BASE * scale;
+            var HOLD = Math.max(0, duration - (IN + OUT));
+            var OUT_START = IN + HOLD;
+
+            function clamp01(v) {
+              return v < 0 ? 0 : v > 1 ? 1 : v;
+            }
+            // Carve ease: overshoots ~6% past the target, then settles. The
+            // painter clamps composed axis values to the font's real ranges.
+            function carve(u) {
+              var c1 = 0.9;
+              var c3 = c1 + 1;
+              var x = u - 1;
+              return 1 + c3 * x * x * x + c1 * x * x;
+            }
+            function clampAxis(v, lo, hi) {
+              return v < lo ? lo : v > hi ? hi : v;
+            }
+
+            // Pure per-update painter: every character's axis NUMBERS are a
+            // function of tl.time() alone; the font-variation-settings
+            // string is composed from those numbers (the number proxy; the
+            // string itself is never tweened). The word-level font-size
+            // eases inversely to the mean settled progress: optical
+            // compensation, mass grows while the box holds.
+            function applyTime(timeSeconds) {
+              var settledSum = 0;
+              for (var c = 0; c < chars.length; c += 1) {
+                var start = lead + c * staggerEff;
+                var u = clamp01(flex > 0 ? (timeSeconds - start) / flex : 1);
+                var e = u <= 0 ? 0 : u >= 1 ? 1 : carve(u);
+                var settled = e > 1 ? 1 : e;
+                settledSum += settled;
+                var wght = clampAxis(WGHT_FROM + (WGHT_TO - WGHT_FROM) * e, 100, 1000);
+                var wdth = clampAxis(WDTH_FROM + (WDTH_TO - WDTH_FROM) * e, 25, 151);
+                var el = chars[c].el;
+                el.style.fontVariationSettings =
+                  '"wght" ' + wght.toFixed(1) + ', "wdth" ' + wdth.toFixed(2);
+                var oIn = clamp01(flex > 0 ? (timeSeconds - start) / (flex * 0.22) : 1);
+                el.style.opacity = (oIn * oIn * (3 - 2 * oIn)).toFixed(4);
+                el.style.top = ((1 - settled) * 0.14).toFixed(4) + "em";
+              }
+              var mean = chars.length > 0 ? settledSum / chars.length : 1;
+              word.style.fontSize = "calc(var(--vff-size) * " + (1 - COMP * mean).toFixed(4) + ")";
+            }
+
+            gsap.set(stage, { opacity: 1, y: "0cqh" });
+
+            var tl = gsap.timeline({
+              paused: true,
+              onUpdate: function () {
+                applyTime(tl.time());
+              },
+            });
+
+            // Anchor tween: an inert plain-object tween spanning [0, D] so
+            // onUpdate fires for every eventful seek and holds never clamp.
+            tl.to({ p: 0 }, { p: 1, duration: duration, ease: "none" }, 0);
+
+            // HOLD: truly still; repeated repaints write identical values.
+
+            // OUT: optional departure; exit none holds until the frame cuts.
+            if (exit === "up") {
+              tl.to(stage, { y: "-4cqh", duration: OUT, ease: "power2.in" }, OUT_START);
+              tl.to(stage, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
+            } else if (exit === "fade") {
+              tl.to(stage, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
+            }
+
+            tl.seek(0);
+            applyTime(0);
+            window.__timelines = window.__timelines || {};
+            window.__timelines["variable-font-flex"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

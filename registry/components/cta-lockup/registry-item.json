@@ -1,0 +1,51 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "cta-lockup",
+  "type": "hyperframes:component",
+  "title": "CTA Lockup",
+  "description": "A canonical closing lockup that reveals an action line, pops in an accent CTA capsule, settles supporting microcopy, and holds with confidence.",
+  "tags": ["motion-primitive", "ui-props", "cta", "end-card", "lockup", "ask"],
+  "jobs": ["ask"],
+  "family": "ui-props",
+  "profile": "holdable",
+  "syncPoints": [
+    {
+      "id": "lockup-settled",
+      "phase": "in",
+      "offset": 1.6
+    }
+  ],
+  "files": [
+    {
+      "path": "cta-lockup.html",
+      "target": "compositions/components/cta-lockup.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "action_line",
+      "type": "string",
+      "role": "content",
+      "label": "Action line",
+      "description": "Primary action statement shown above the CTA.",
+      "default": "Начните сегодня"
+    },
+    {
+      "id": "button_label",
+      "type": "string",
+      "role": "content",
+      "label": "Button label",
+      "description": "Text displayed inside the CTA capsule.",
+      "default": "Оставить заявку"
+    },
+    {
+      "id": "microcopy",
+      "type": "string",
+      "role": "content",
+      "label": "Microcopy",
+      "description": "Supporting detail shown below the CTA capsule.",
+      "default": "Ответим в течение дня"
+    }
+  ]
+}

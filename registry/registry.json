@@ -1528,6 +1528,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "cta-close",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "cta-lockup",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "cursor-annotate",
       "type": "hyperframes:component"
     },
@@ -1628,6 +1636,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "logo-brand-close",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "logo-sting",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "logo-wall",
       "type": "hyperframes:component"
     },
@@ -1637,6 +1653,10 @@
     },
     {
       "name": "marker-highlight",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "matrix-decode",
       "type": "hyperframes:component"
     },
     {
@@ -1732,7 +1752,15 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "pull-back-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "pull-to-refresh",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "push-in",
       "type": "hyperframes:component"
     },
     {
@@ -1769,6 +1797,10 @@
     },
     {
       "name": "shimmer-sweep",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "shutter-slam",
       "type": "hyperframes:component"
     },
     {
@@ -1825,6 +1857,10 @@
     },
     {
       "name": "sticky-mock-swap",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "stitched-text-draw",
       "type": "hyperframes:component"
     },
     {
@@ -1937,6 +1973,10 @@
     },
     {
       "name": "variable-axis-type",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "variable-font-flex",
       "type": "hyperframes:component"
     },
     {

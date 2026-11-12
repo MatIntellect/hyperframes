@@ -1,0 +1,65 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "variable-font-flex",
+  "type": "hyperframes:component",
+  "title": "Variable Font Flex",
+  "description": "A word lands while its weight flexes from hairline to black with a per-character stagger; font-size eases inversely so the letterforms gain mass while the box holds. Brand Montserrat (local variable font, Cyrillic), word in --fg.",
+  "tags": ["motion-primitive", "experiment", "type", "variable-font", "deterministic"],
+  "jobs": ["emphasize"],
+  "family": "text-effects",
+  "profile": "axis-flex",
+  "syncPoints": [
+    {
+      "id": "flex-settled",
+      "phase": "in",
+      "offset": 1.6
+    }
+  ],
+  "files": [
+    {
+      "path": "variable-font-flex.html",
+      "target": "compositions/components/variable-font-flex.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Text",
+      "description": "The word whose weight flexes.",
+      "default": "Сила"
+    },
+    {
+      "id": "stagger",
+      "type": "number",
+      "role": "timing",
+      "label": "Stagger",
+      "description": "Seconds between per-character flex starts, clamped 0 to 0.25.",
+      "default": 0.06
+    },
+    {
+      "id": "exit",
+      "type": "enum",
+      "role": "timing",
+      "label": "Exit",
+      "description": "Optional departure. Default none: the carved word holds until the frame cuts.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "up",
+          "label": "Up"
+        }
+      ]
+    }
+  ]
+}

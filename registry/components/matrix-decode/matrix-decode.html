@@ -1,0 +1,198 @@
+<!--
+  Matrix Decode - typography primitive for HyperFrames.
+
+  Paste the markup, CSS and script into a composition. Drive the timeline
+  integration from a paused GSAP timeline so renders remain deterministic.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or invalid, and writes the result as a custom property the
+  CSS consumes (or, for the target text, as the cells themselves). The
+  timeline below staggers the cells in, then decodes them: each cell scrambles
+  and locks left to right into its letter of data-final.
+
+    - text (text, default МОНТАЖ): the word the scramble resolves into.
+      One scrambling cell per character, up to 32. Also written to data-final,
+      which the decode reads. Cells and glow ride the reel's brand red.
+    - size (24 to 160 px, default 64): type size of the cells. The per-cell
+      minimum width is a fixed fraction of it, so the row scales as a whole.
+    - glow (none | standard | strong, default standard): halo strength behind
+      the cells, from no shadow at all to a heavy bloom.
+
+  Monospace on purpose: a decode is a code look.
+-->
+
+<div
+  class="hf-catalog-matrix-decode"
+  data-final="МОНТАЖ"
+  data-composition-variables='[
+    {"id": "text", "type": "string", "role": "content", "label": "Target text", "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.", "default": "МОНТАЖ"},
+    {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. Cell width follows it.", "default": 64, "min": 24, "max": 160, "step": 4, "unit": "px"},
+    {"id": "glow", "type": "enum", "role": "style", "label": "Glow", "description": "Strength of the halo behind the cells, from none to a heavy bloom.", "default": "standard", "options": [{"value": "none", "label": "None"}, {"value": "standard", "label": "Standard"}, {"value": "strong", "label": "Strong"}]}
+  ]'
+>
+  <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span
+  ><span>0</span><span>0</span><span>0</span><span>0</span>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-catalog-matrix-decode {
+    color: var(--fg, #f2f2f2);
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+  .hf-catalog-matrix-decode {
+    display: inline-flex;
+    gap: 3px;
+    font:
+      900 64px/1 ui-monospace,
+      Menlo,
+      monospace;
+    font-size: var(--hf-matrix-size, 64px);
+    color: var(--hf-matrix-color, var(--brand, #ff0000));
+    text-shadow: 0 0 var(--hf-matrix-glow-radius, 18px)
+      rgba(var(--hf-matrix-glow-rgb, 255, 0, 0), var(--hf-matrix-glow-alpha, 0.28));
+  }
+  .hf-catalog-matrix-decode span {
+    display: inline-block;
+    min-width: 0.64em;
+    opacity: var(--hf-matrix-opacity, 1);
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Anything missing or invalid returns to its declared default.
+    var glows = {
+      none: { radius: "0px", alpha: "0" },
+      standard: { radius: "18px", alpha: "0.28" },
+      strong: { radius: "34px", alpha: "0.55" },
+    };
+
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var text = typeof vars.text === "string" ? vars.text.trim().slice(0, 32) : "";
+    if (!text) {
+      text = "МОНТАЖ";
+    }
+
+    var size =
+      typeof vars.size === "number" || typeof vars.size === "string" ? Number(vars.size) : NaN;
+    size = isFinite(size) && size > 0 ? Math.min(160, Math.max(24, size)) : 64;
+
+    // One palette: the cells and their glow ride the reel's brand red.
+    var accent = { color: "var(--brand, #ff0000)", rgb: "255, 0, 0" };
+    var glow = glows[pick(glows, vars.glow, "standard")];
+
+    var roots = document.querySelectorAll(".hf-catalog-matrix-decode");
+    for (var i = 0; i < roots.length; i += 1) {
+      roots[i].style.setProperty("--hf-matrix-size", size + "px");
+      roots[i].style.setProperty("--hf-matrix-color", accent.color);
+      roots[i].style.setProperty("--hf-matrix-glow-rgb", accent.rgb);
+      roots[i].style.setProperty("--hf-matrix-glow-radius", glow.radius);
+      roots[i].style.setProperty("--hf-matrix-glow-alpha", glow.alpha);
+      roots[i].setAttribute("data-final", text);
+      while (roots[i].firstChild) {
+        roots[i].removeChild(roots[i].firstChild);
+      }
+      for (var j = 0; j < text.length; j += 1) {
+        var cell = document.createElement("span");
+        cell.textContent = text.charAt(j) === " " ? "\u00a0" : "0";
+        roots[i].appendChild(cell);
+      }
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["matrix-decode"]; mount the snippet inside a clip with data-composition-id="matrix-decode"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="matrix-decode" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-matrix-decode span",
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.18, stagger: 0.035, ease: "power2.out" },
+      startTime,
+    );
+    // The decode itself (the source shipped only the cell entrance, the cells
+    // stayed "0" forever): every cell scrambles through seeded glyphs and locks
+    // left to right into its letter of data-final. The glyph is a pure function
+    // of the decode progress, so any seek renders the same frame.
+    var decodeRoot = document.querySelector(".hf-catalog-matrix-decode");
+    var decodeCells = decodeRoot ? decodeRoot.querySelectorAll("span") : [];
+    var decodeFinal = decodeRoot ? decodeRoot.getAttribute("data-final") || "" : "";
+    var GLYPHS = "0123456789АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЭЮЯ#%&*+";
+    var decode = { p: 0 };
+    function renderDecode() {
+      var tick = Math.floor(decode.p * 48);
+      for (var c = 0; c < decodeCells.length; c += 1) {
+        var letter = decodeFinal.charAt(c);
+        if (letter === " " || letter === "") continue;
+        if (decode.p >= (c + 1) / (decodeCells.length + 1)) {
+          decodeCells[c].textContent = letter;
+          continue;
+        }
+        var h = Math.imul(c + 1, 2654435761) ^ Math.imul(tick + 7, 40503);
+        h = (h ^ (h >>> 15)) >>> 0;
+        decodeCells[c].textContent = GLYPHS.charAt(h % GLYPHS.length);
+      }
+    }
+    renderDecode();
+    tl.fromTo(
+      decode,
+      { p: 0 },
+      { p: 1, duration: 1.4, ease: "none", immediateRender: false, onUpdate: renderDecode },
+      startTime + 0.15,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["matrix-decode"] = tl;
+  })();
+</script>
