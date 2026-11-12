@@ -148,8 +148,9 @@
   (function () {
     var startTime = 0;
     var tl = gsap.timeline({ paused: true });
-    tl.to(
+    tl.fromTo(
       ".hf-transition-icon-swap .from",
+      { opacity: 1, "--hf-icon-scale": 1, "--hf-icon-blur": "0px", "--hf-icon-rotate": "0deg" },
       {
         opacity: 0,
         "--hf-icon-scale": 0.55,
@@ -158,7 +159,7 @@
         duration: 0.18,
         ease: "power2.in",
       },
-      startTime,
+      startTime + 0.45,
     );
     tl.fromTo(
       ".hf-transition-icon-swap .to",
@@ -171,7 +172,7 @@
         duration: 0.26,
         ease: "back.out(1.7)",
       },
-      startTime + 0.12,
+      startTime + 0.57,
     );
     window.__timelines = window.__timelines || {};
     window.__timelines["icon-swap"] = tl;
