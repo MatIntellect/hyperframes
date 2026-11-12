@@ -3,7 +3,7 @@
   "name": "shared-axis-y",
   "type": "hyperframes:component",
   "title": "Shared Axis Y",
-  "description": "Per-word vertical shared-axis transition for sharp editorial swaps.",
+  "description": "Words rise into place one after another along the vertical axis, for sharp editorial entrances. Entrance only; the clip end takes it off.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

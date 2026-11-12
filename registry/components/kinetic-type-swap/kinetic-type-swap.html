@@ -303,7 +303,13 @@
             var SWAP_START_BASE = 0.48;
             var ROLL_BASE = 0.46;
             var SETTLE_TAIL_BASE = 0.18;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "4"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "4",
+              ),
+            );
             var totalBase = Math.max(0.001, IN_BASE + OUT_BASE);
             var scale = duration < totalBase ? duration / totalBase : 1;
             var IN = IN_BASE * scale;

@@ -221,7 +221,13 @@
             var OUT_BASE = 0.46;
             var LAND_AT_BASE = 0.58;
             var SHAKE_FRAME_BASE = 1 / 30;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "3.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
             var baseTotal = IN_BASE + OUT_BASE;
             var envelopeScale = duration < baseTotal ? duration / baseTotal : 1;
             var IN = IN_BASE * envelopeScale;

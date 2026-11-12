@@ -147,7 +147,7 @@
       </svg>
 
       <div id="morph-wrapper">
-        <div id="morph-display">
+        <div id="morph-display" data-layout-allow-overlap>
           <span id="morph-a"></span>
           <span id="morph-b"></span>
         </div>
@@ -210,7 +210,12 @@
 
         var morphSpeed = parseFloat(container.dataset.morphSpeed || "1");
         var morphPause = parseFloat(container.dataset.morphPause || "1.5");
-        var duration = parseFloat(container.dataset.duration || "9");
+        var duration = parseFloat(
+          (
+            (container.parentElement && container.parentElement.closest("[data-duration]")) ||
+            container
+          ).dataset.duration || "9",
+        );
         var stepDur = morphSpeed + morphPause;
         var totalWordDur = words.length * stepDur;
 

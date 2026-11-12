@@ -25,6 +25,7 @@
 
 <div
   class="hf-catalog-rgb-glitch-text"
+  data-layout-allow-overlap
   data-composition-variables='[
     { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The word shown on all three stacked copies.", "default": "СБОЙ", "maxLength": 24 },
     { "id": "intensity", "type": "enum", "role": "motion", "label": "Intensity", "description": "Scales the red and cyan offsets the timeline drives, so the split reads as a hairline or a hard tear.", "default": "standard", "options": [{ "value": "subtle", "label": "Subtle" }, { "value": "standard", "label": "Standard" }, { "value": "extreme", "label": "Extreme" }] },
@@ -75,15 +76,21 @@
   }
   .hf-catalog-rgb-glitch-text {
     position: relative;
-    width: 420px;
-    height: 82px;
+    width: max-content;
+    max-width: 100%;
+    text-align: center;
     font-size: 72px;
     line-height: 1;
   }
-  .hf-catalog-rgb-glitch-text span,
-  .hf-catalog-rgb-glitch-text strong {
+  .hf-catalog-rgb-glitch-text span {
     position: absolute;
     inset: 0;
+  }
+  /* the solid copy sits in flow and sizes the box: a long word wraps inside the space the host gives, the two
+     ghosts above it are the same width and wrap the same way */
+  .hf-catalog-rgb-glitch-text strong {
+    position: relative;
+    display: block;
   }
   .hf-catalog-rgb-glitch-text span:first-child {
     color: var(--accent, #ff0000);

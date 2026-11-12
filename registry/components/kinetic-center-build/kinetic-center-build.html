@@ -238,7 +238,13 @@
 
               gsap.registerPlugin(CustomEase);
               var entryEase = CustomEase.create("kcb-entry-ease", "M0,0 C0.2,0.8 0.2,1 1,1");
-              var duration = Math.max(0.001, parseFloat(root.dataset.duration || "2"));
+              var duration = Math.max(
+                0.001,
+                parseFloat(
+                  ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                    .dataset.duration || "2",
+                ),
+              );
               var firstDuration = 10 / 30;
               var pushDuration = 13 / 30;
               var authoredBuildDuration =

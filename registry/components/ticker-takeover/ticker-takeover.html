@@ -290,7 +290,13 @@
 
             var IN_BASE = 3.15;
             var OUT_BASE = 0.45;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "4.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "4.5",
+              ),
+            );
             var envelopeScale = duration < IN_BASE + OUT_BASE ? duration / (IN_BASE + OUT_BASE) : 1;
             var IN = IN_BASE * envelopeScale;
             var OUT = OUT_BASE * envelopeScale;

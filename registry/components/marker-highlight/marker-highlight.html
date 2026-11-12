@@ -327,7 +327,13 @@
             var DRAW_BASE = 0.6;
             var POP_BASE = 0.32;
             var OUT_BASE = exit === "none" ? 0 : 0.45;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "3.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
             var totalBase = IN_BASE + DRAW_BASE + OUT_BASE;
             var scale = duration < totalBase ? duration / totalBase : 1;
             var IN = IN_BASE * scale;

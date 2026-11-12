@@ -3,7 +3,7 @@
   "name": "shared-axis-z",
   "type": "hyperframes:component",
   "title": "Shared Axis Z",
-  "description": "Scale-based shared-axis transition for focus shifts and context depth.",
+  "description": "Words scale into place one after another along the depth axis, swelling up from small or settling down from large. Entrance only; the clip end takes it off.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

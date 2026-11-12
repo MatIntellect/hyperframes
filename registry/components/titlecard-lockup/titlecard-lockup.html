@@ -272,7 +272,10 @@
 
             var IN_BASE = 1.8;
             var OUT_BASE = exit === "none" ? 0 : 0.5;
-            var parsedDuration = Number.parseFloat(root.dataset.duration);
+            var parsedDuration = Number.parseFloat(
+              ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                .dataset.duration,
+            );
             var duration = Number.isFinite(parsedDuration) ? Math.max(0.001, parsedDuration) : 4;
             var totalBase = IN_BASE + OUT_BASE;
             var phaseScale = duration < totalBase ? duration / totalBase : 1;

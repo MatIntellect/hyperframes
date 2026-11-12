@@ -3,7 +3,7 @@
   "name": "focus-blur-resolve",
   "type": "hyperframes:component",
   "title": "Focus Blur Resolve",
-  "description": "A premium focus pull from heavy blur to crisp text, then a soft blur-out exit.",
+  "description": "A premium focus pull: words resolve one after another from heavy blur to crisp text. Entrance only; the clip end takes it off.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

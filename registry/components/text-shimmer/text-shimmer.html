@@ -175,7 +175,10 @@
             headline.style.setProperty("--ts-accent", accentColor);
 
             var SWEEP_BASE = 0.9;
-            var durationValue = parseFloat(root.dataset.duration || "3");
+            var durationValue = parseFloat(
+              ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                .dataset.duration || "3",
+            );
             var duration = Number.isFinite(durationValue) ? Math.max(0.001, durationValue) : 3;
             var SWEEP = Math.min(SWEEP_BASE, duration);
             var SWEEP_START = Math.min(sweepAt, Math.max(0, duration - SWEEP));

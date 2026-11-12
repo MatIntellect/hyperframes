@@ -282,7 +282,13 @@
             var UL_BEAT_BASE = 0.15;
             var UL_BASE = underlineEl ? 0.45 : 0;
             var OUT_BASE = exit === "none" ? 0 : 0.45;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "3.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
             var swapSpanBase = LAG_BASE + IN_B_BASE;
             var ulSpanBase = underlineEl ? UL_BEAT_BASE + UL_BASE : 0;
             var totalBase = IN_A_BASE + swapSpanBase + ulSpanBase + OUT_BASE;

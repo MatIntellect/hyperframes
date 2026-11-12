@@ -230,7 +230,13 @@
             var IN_BASE = 0.45;
             var OUT_BASE = 0.45;
             var SWEEP_BASE = 1.65;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "3.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
             var fixedTotal = IN_BASE + OUT_BASE;
             var phaseScale = duration < fixedTotal ? duration / fixedTotal : 1;
             var IN = IN_BASE * phaseScale;

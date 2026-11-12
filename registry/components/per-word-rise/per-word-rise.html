@@ -240,7 +240,13 @@
             var RISE_BASE = 0.74;
             var STAGGER_BASE = 0.62;
             var EXIT_STAGGER_BASE = 0.14;
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "3.5"));
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "3.5",
+              ),
+            );
             var totalBase = Math.max(0.001, IN_BASE + OUT_BASE);
             var scale = duration < totalBase ? duration / totalBase : 1;
             var IN = IN_BASE * scale;
