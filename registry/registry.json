@@ -1396,6 +1396,10 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "bottom-up-letters",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "caption-clip-wipe",
       "type": "hyperframes:component"
     },
@@ -1444,6 +1448,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "caret-swap",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "char-slam-explode",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "headline-slam",
       "type": "hyperframes:component"
     },
@@ -1456,7 +1468,15 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "kinetic-center-build",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "kinetic-type-swap",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "line-swap",
       "type": "hyperframes:component"
     },
     {
@@ -1468,11 +1488,31 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "scan-band",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "scramble-reveal",
       "type": "hyperframes:component"
     },
     {
       "name": "staggered-fade-up",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "text-shimmer",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "ticker-takeover",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "titlecard-calm",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "titlecard-lockup",
       "type": "hyperframes:component"
     },
     {
