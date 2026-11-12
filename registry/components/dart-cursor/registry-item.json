@@ -33,7 +33,7 @@
       "type": "enum",
       "role": "style",
       "label": "Tone",
-      "default": "dark",
+      "default": "light",
       "options": [
         {
           "value": "dark",

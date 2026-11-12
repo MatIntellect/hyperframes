@@ -11,7 +11,7 @@
 
   variables:
     shape (circle|underline|arrow)   the mark the pen draws
-    color                            marker ink
+    marker ink: --brand of the reel palette (set on the reel root)
     target_x, target_y, target_w, target_h (% of host box)  the region being marked
 
   envelope (default 2.95s): glide in 0-0.5s, touch down, draw 0.7-1.8s, lift and step
@@ -24,7 +24,6 @@
   data-composition-duration="2.95"
   data-composition-variables='[
     { "id": "shape", "type": "enum", "role": "style", "label": "Mark", "default": "circle", "options": [ { "value": "circle", "label": "Loose loop" }, { "value": "underline", "label": "Underline" }, { "value": "arrow", "label": "Arrow" } ] },
-    { "id": "color", "type": "color", "role": "style", "label": "Ink", "default": "#ff0000" },
     { "id": "target_x", "type": "number", "role": "layout", "label": "Region left", "default": 40, "min": 0, "max": 95, "step": 1, "unit": "%" },
     { "id": "target_y", "type": "number", "role": "layout", "label": "Region top", "default": 38, "min": 0, "max": 95, "step": 1, "unit": "%" },
     { "id": "target_w", "type": "number", "role": "layout", "label": "Region width", "default": 20, "min": 2, "max": 90, "step": 1, "unit": "%" },
@@ -151,10 +150,12 @@
           );
           var shape =
             ["circle", "underline", "arrow"].indexOf(vars.shape) >= 0 ? vars.shape : "circle";
-          var color = /^#[0-9a-f]{3,8}$/i.test(String(vars.color)) ? vars.color : "#ff0000"; // brand accent (frame.md)
+          var color = /^#[0-9a-f]{3,8}$/i.test(String(vars.color))
+            ? vars.color
+            : "var(--brand, #ff0000)"; // unset: the reel palette
           var W = root.clientWidth || 1920;
           var H = root.clientHeight || 1080;
-          var unit = W / 1920;
+          var unit = Math.min(W, root.clientHeight || W) / 780;
           var box = {
             x: (num(vars.target_x, 40, 0, 100) / 100) * W,
             y: (num(vars.target_y, 38, 0, 100) / 100) * H,
@@ -164,8 +165,8 @@
 
           ink.setAttribute("viewBox", "0 0 " + W + " " + H);
           root.style.setProperty("--ca-ink", color);
-          document.getElementById("ca-pen-tip").setAttribute("fill", color);
-          document.getElementById("ca-pen-band").setAttribute("fill", color);
+          document.getElementById("ca-pen-tip").style.fill = color;
+          document.getElementById("ca-pen-band").style.fill = color;
 
           // Each mark is one or more strokes; a stroke maps u in [0,1] to a point on the page.
           // A hand loop: starts upper-left, runs a little past its start and wider on the way out.

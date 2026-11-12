@@ -21,7 +21,7 @@
     target_x, target_y: zone center as a percent of the host box
     press_at: seconds from mount start when the compression begins
     cursor: light or dark pointer
-    accent: green, blue, or violet ink (click rings + confirmation check)
+    ink (click rings + confirmation check): --brand of the reel palette
     exit: none, fade, or up (default none; holds end films)
 
   Envelope (elastic HOLD, never time-scaled):
@@ -151,8 +151,9 @@
 
           .pr-pill {
             position: relative;
-            display: inline-flex;
+            display: inline-grid; /* label and done share one cell: the pill fits the wider */
             align-items: center;
+            justify-items: center;
             padding: var(--space-2, 2.6cqmin) calc(var(--space-2, 2.6cqmin) * 2.1);
             border: 0.22cqmin solid var(--border, #2e2e32);
             border-radius: 999px;
@@ -170,11 +171,11 @@
              state is layered over it and cross-fades in. */
           .pr-label {
             display: inline-block;
+            grid-area: 1 / 1;
           }
 
           .pr-done {
-            position: absolute;
-            inset: 0;
+            grid-area: 1 / 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -360,7 +361,7 @@
             }
 
             // Sizes are authored at 1920 wide and scale with the stage.
-            var u = stageW / 1920;
+            var u = Math.min(stageW, root.clientHeight || stageW) / 780;
             var ARROW = 64 * u;
             cursor.style.width = cursor.style.height = ARROW + "px";
             cursor.style.left = (-5 / 24) * ARROW + "px";
@@ -371,7 +372,7 @@
               rings[i].setAttribute("cx", xAt(landX));
               rings[i].setAttribute("cy", yAt(landY));
               rings[i].setAttribute("r", 16 * u);
-              rings[i].setAttribute("stroke-width", 2 * u);
+              rings[i].setAttribute("stroke-width", 3 * u);
             }
 
             var tl = gsap.timeline({ paused: true });

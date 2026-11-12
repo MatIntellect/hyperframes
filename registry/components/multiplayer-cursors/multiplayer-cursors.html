@@ -141,7 +141,7 @@
               transparent 70%
             );
             box-shadow:
-              0 0 8cqw color-mix(in srgb, var(--accent, #ff0000) 16%, transparent),
+              0 0 8cqw color-mix(in srgb, var(--brand, #ff0000) 16%, transparent),
               inset 0 0 2.4cqw color-mix(in srgb, var(--brand, #ff0000) 16%, transparent);
             transform: translate(-50%, -50%);
             opacity: 0.78;
@@ -183,14 +183,16 @@
           }
 
           .mc-cursor[data-tone="1"] {
-            --mc-color: var(--accent, #ff0000);
+            --mc-color: #38bdf8
+              /* presence colours: people must differ (interface-native, like real collaborative editors) */;
           }
 
           .mc-cursor[data-tone="2"] {
             --mc-color: color-mix(
               in oklch longer hue,
               var(--brand, #ff0000) 72%,
-              var(--accent, #ff0000)
+              #38bdf8
+                /* presence colours: people must differ (interface-native, like real collaborative editors) */
             );
           }
 
@@ -198,16 +200,28 @@
             --mc-color: color-mix(
               in oklch longer hue,
               var(--brand, #ff0000) 44%,
-              var(--accent, #ff0000)
+              #38bdf8
+                /* presence colours: people must differ (interface-native, like real collaborative editors) */
             );
           }
 
           .mc-cursor[data-tone="4"] {
-            --mc-color: color-mix(in oklch, var(--brand, #ff0000) 38%, var(--accent, #ff0000));
+            --mc-color: color-mix(
+              in oklch,
+              var(--brand, #ff0000) 38%,
+              #38bdf8
+                /* presence colours: people must differ (interface-native, like real collaborative editors) */
+            );
           }
 
           .mc-cursor[data-tone="5"] {
-            --mc-color: color-mix(in srgb, var(--accent, #ff0000) 68%, var(--fg, #f2f2f2));
+            --mc-color: color-mix(
+              in srgb,
+              #38bdf8
+                /* presence colours: people must differ (interface-native, like real collaborative editors) */
+                68%,
+              var(--fg, #f2f2f2)
+            );
           }
 
           .mc-glow {
@@ -251,24 +265,22 @@
             left: 3.45cqw;
             top: 3.55cqw;
             display: block;
-            max-width: 15cqw;
-            overflow: hidden;
+            max-width: 44cqw;
             padding: var(--space-1, 0.7cqw) var(--space-2, 1.25cqw);
             border: 0.12cqw solid color-mix(in srgb, var(--fg, #f2f2f2) 30%, transparent);
             border-radius: var(--radius, 1.2cqw);
             border-top-left-radius: 0.32cqw;
             background: color-mix(
               in srgb,
-              var(--mc-color, var(--brand, #ff0000)) 84%,
-              var(--surface, #18181a)
+              var(--mc-color, var(--brand, #ff0000)) 58%,
+              /* deep enough for white text on light presence colours */ var(--surface, #18181a)
             );
             color: var(--fg, #f2f2f2);
-            font-family: var(--font-display, "Bebas Neue", sans-serif);
+            font-family: var(--font-body, "Montserrat", sans-serif);
             font-size: max(28px, 2.15cqw);
             font-weight: 720;
             line-height: 1;
             letter-spacing: 0.01em;
-            text-overflow: ellipsis;
             white-space: nowrap;
             box-shadow:
               0 0.65cqw 1.5cqw color-mix(in srgb, var(--bg, #0c1014) 32%, transparent),
@@ -337,6 +349,15 @@
               { start: [20, 76], gather: [43, 60], drift: [38, 55], rotation: [9, -4, 5] },
               { start: [7, 46], gather: [38, 50], drift: [42, 45], rotation: [-12, 3, -5] },
             ];
+            // A portrait box (the reel graphics field): the centre zone authored for 16:9 spreads out from the
+            // centre, the name tags keep their size and would stack on each other otherwise.
+            if (root.clientHeight > root.clientWidth) {
+              WAYPOINTS.forEach(function (w) {
+                ["gather", "drift"].forEach(function (k) {
+                  w[k] = [50 + (w[k][0] - 50) * 1.8, 50 + (w[k][1] - 50) * 2.6];
+                });
+              });
+            }
             var POINTER_SVG =
               '<svg class="mc-pointer" viewBox="0 0 24 24" fill="none"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.48 0 .72-.58.38-.92L5.94 2.47a.5.5 0 0 0-.44.74Z" /></svg>';
             var cursors = [];

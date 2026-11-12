@@ -24,18 +24,11 @@
   ],
   "variables": [
     {
-      "id": "accent",
-      "type": "color",
-      "role": "style",
-      "label": "Accent",
-      "default": "#ff0000"
-    },
-    {
       "id": "tone",
       "type": "enum",
       "role": "style",
       "label": "Tone",
-      "default": "light",
+      "default": "dark",
       "options": [
         {
           "value": "light",

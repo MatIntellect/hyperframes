@@ -55,13 +55,6 @@
       "label": "Click targets",
       "description": "Semicolon-separated x,y points in percent of the frame.",
       "default": "25,47;76,30"
-    },
-    {
-      "id": "accent",
-      "type": "color",
-      "role": "style",
-      "label": "Accent",
-      "default": "#ff0000"
     }
   ]
 }

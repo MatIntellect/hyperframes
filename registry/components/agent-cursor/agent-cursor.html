@@ -13,7 +13,7 @@
     agent_name (string)   the name on the tag
     steps (string)        comma-separated: a reading line, one line per target, a done line
     targets (string)      semicolon-separated "x,y" click points in % of the host box
-    accent (color)        label fill and click ring color
+    label fill and click ring: --brand of the reel palette (set on the reel root)
 
   envelope (default 4.8s, two targets): enter and read 0-0.95s, then per target 1.35s
   (type 0.35s, move 0.5s, dwell 0.2s, click), done line, exit in the last 0.5s.
@@ -25,8 +25,7 @@
   data-composition-variables='[
     { "id": "agent_name", "type": "string", "role": "content", "label": "Agent name", "default": "Агент" },
     { "id": "steps", "type": "string", "role": "content", "label": "Status steps", "description": "Comma-separated: a reading line, one line per target, then a done line.", "default": "Читаю страницу,Открываю настройки,Включаю копии,Готово" },
-    { "id": "targets", "type": "string", "role": "layout", "label": "Click targets", "description": "Semicolon-separated x,y points in percent of the frame.", "default": "25,47;76,30" },
-    { "id": "accent", "type": "color", "role": "style", "label": "Accent", "default": "#ff0000" }
+    { "id": "targets", "type": "string", "role": "layout", "label": "Click targets", "description": "Semicolon-separated x,y points in percent of the frame.", "default": "25,47;76,30" }
   ]'
 >
   <head>
@@ -103,7 +102,7 @@
           top: 0;
           box-sizing: border-box;
           border-radius: 50%;
-          border: 1.5px solid var(--ag-accent);
+          border: 3px solid var(--ag-accent);
           opacity: 0;
         }
         .ag-tag {
@@ -123,8 +122,8 @@
         }
         .ag-mark {
           position: relative;
-          width: 1cqw;
-          height: 1cqw;
+          width: 0.8em;
+          height: 0.8em;
           flex: none;
         }
         .ag-dot,
@@ -226,12 +225,12 @@
           );
           var W = root.clientWidth || 1920;
           var H = root.clientHeight || 1080;
-          var ARROW = 64 * (W / 1920);
+          var ARROW = 64 * (Math.min(W, root.clientHeight || W) / 780);
           arrow.style.width = arrow.style.height = ARROW + "px";
           arrow.style.left = (-5 / 24) * ARROW + "px";
           arrow.style.top = (-3 / 24) * ARROW + "px";
-          var accent = /^#[0-9a-f]{3,8}$/i.test(String(vars.accent)) ? vars.accent : "#ff0000"; // brand accent (frame.md)
-          root.style.setProperty("--ag-accent", accent);
+          if (/^#[0-9a-f]{3,8}$/i.test(String(vars.accent)))
+            root.style.setProperty("--ag-accent", vars.accent); // unset: --brand
           document.getElementById("ag-name").textContent = String(vars.agent_name || "Агент");
 
           var steps = String(vars.steps || "")
@@ -358,7 +357,7 @@
               var u = (t - b.click) / (0.28 * k);
               if (u < 0 || u >= 1) return;
               var e = fade(u);
-              var r = ((0.6 + 1.8 * e) * W) / 100;
+              var r = (0.6 + 1.8 * e) * ARROW * 0.3; // W/100 at 1920: scales with the arrow
               opacity = 1 - e;
               ring.style.width = ring.style.height = (2 * r).toFixed(2) + "px";
               ring.style.transform =

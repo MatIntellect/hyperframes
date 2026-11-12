@@ -11,7 +11,7 @@
   #root fills the host clip (inset:0) and centres its own toolbar. See demo.html.
 
   variables:
-    accent (color)          icon colour of the pressed, now active, button
+    pressed (active) icon: --brand of the reel palette (set on the reel root)
     tone (light|dark)       toolbar and pointer pairing
     visits (string)         comma-separated button indexes 0-5 the pointer visits, in order
     press (number 1-3)      which visit presses its button
@@ -24,8 +24,7 @@
   data-composition-id="magnetic-cursor"
   data-composition-duration="3.6"
   data-composition-variables='[
-    { "id": "accent", "type": "color", "role": "style", "label": "Accent", "default": "#ff0000" },
-    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "default": "light", "options": [ { "value": "light", "label": "Light toolbar" }, { "value": "dark", "label": "Dark toolbar" } ] },
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "default": "dark", "options": [ { "value": "light", "label": "Light toolbar" }, { "value": "dark", "label": "Dark toolbar" } ] },
     { "id": "visits", "type": "string", "role": "content", "label": "Buttons visited", "description": "Comma-separated indexes 0-5: bold, italic, underline, link, list, image.", "default": "0,3" },
     { "id": "press", "type": "number", "role": "timing", "label": "Pressed visit", "default": 2, "min": 1, "max": 3, "step": 1 }
   ]'
@@ -85,9 +84,9 @@
           --mc-pointer: 90, 94, 106;
         }
         #root[data-tone="dark"] {
-          --mc-bar: #1d1e22;
-          --mc-ink: #e9eaee;
-          --mc-edge: rgba(255, 255, 255, 0.1);
+          --mc-bar: var(--surface, #18181a); /* own graphics: the brand card */
+          --mc-ink: var(--fg, #f2f2f2);
+          --mc-edge: var(--border, #2e2e32);
           --mc-pointer: 235, 237, 242;
         }
 
@@ -95,9 +94,9 @@
         .mc-bar {
           position: relative;
           display: flex;
-          gap: 0.6cqw;
-          padding: 0.9cqw;
-          border-radius: 2.5cqw;
+          gap: 1.1cqw;
+          padding: 1.7cqw;
+          border-radius: 4.6cqw;
           background: var(--mc-bar);
           box-shadow:
             0 0 0 1px var(--mc-edge),
@@ -105,22 +104,22 @@
         }
         .mc-btn {
           position: relative;
-          width: 6.2cqw;
-          height: 6.2cqw;
+          width: 11cqw; /* a vertical field: the toolbar spans it */
+          height: 11cqw;
           z-index: 2;
         }
         .mc-sep {
           width: 1px;
-          margin: 1.2cqw 0.3cqw;
+          margin: 2.2cqw 0.6cqw;
           background: var(--mc-edge);
         }
         .mc-icon {
           position: absolute;
           left: 50%;
           top: 50%;
-          width: 2.8cqw;
-          height: 2.8cqw;
-          margin: -1.4cqw 0 0 -1.4cqw;
+          width: 5cqw;
+          height: 5cqw;
+          margin: -2.5cqw 0 0 -2.5cqw;
           fill: none;
           stroke: var(--mc-ink);
           stroke-width: 2;
@@ -138,7 +137,7 @@
         }
       </style>
 
-      <div id="root" data-composition-id="magnetic-cursor" data-duration="3.6" data-tone="light">
+      <div id="root" data-composition-id="magnetic-cursor" data-duration="3.6" data-tone="dark">
         <svg class="mc-layer" id="mc-layer" aria-hidden="true">
           <rect id="mc-plate" x="0" y="0" width="0" height="0" rx="0" />
         </svg>
@@ -223,7 +222,9 @@
             ),
           );
           var tone = vars.tone === "dark" ? "dark" : "light";
-          var accent = String(vars.accent || "#ff0000");
+          var accent = /^#[0-9a-f]{3,8}$/i.test(String(vars.accent))
+            ? vars.accent
+            : "var(--brand, #ff0000)";
           root.setAttribute("data-tone", tone);
 
           var visits = String(vars.visits || "0,3")

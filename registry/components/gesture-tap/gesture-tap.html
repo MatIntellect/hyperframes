@@ -9,7 +9,7 @@
   Variables:
     - tap_label (string, default "Подписаться"): button label before release.
     - response_label (string, default "Подписан"): button label after release.
-    - accent (enum, green | blue | violet, default green): response color.
+    - response color: --brand of the reel palette.
 
   Envelope: fixed IN and OUT with elastic HOLD only.
     IN_BASE = 1.35s. The stage fades in, contact fades up at the target,
@@ -192,19 +192,22 @@
 
           .gt-button-shell {
             position: relative;
-            width: 34cqw;
+            width: fit-content; /* the pill fits its label, nothing is cut */
+            min-width: 34cqw;
+            max-width: 54cqw;
             height: 11cqh;
             margin: 0 auto;
           }
 
           .gt-button {
-            position: absolute;
-            inset: 0;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: 0 1em;
             z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             border: 0.16cqmin solid #273449;
             border-radius: 999cqw;
             background: #172033;
@@ -219,8 +222,10 @@
 
           .gt-button-label {
             display: block;
-            max-width: 48cqw;
-            white-space: nowrap;
+            max-width: 46cqw;
+            text-align: center;
+            text-wrap: balance;
+            line-height: 1.1; /* a long label wraps by words, never cut */
           }
 
           .gt-response-pulse {
