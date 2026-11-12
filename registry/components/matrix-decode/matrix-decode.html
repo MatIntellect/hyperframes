@@ -13,8 +13,9 @@
     - text (text, default МОНТАЖ): the word the scramble resolves into.
       One scrambling cell per character, up to 32. Also written to data-final,
       which the decode reads. Cells and glow ride the reel's brand red.
-    - size (24 to 160 px, default 64): type size of the cells. The per-cell
-      minimum width is a fixed fraction of it, so the row scales as a whole.
+    - size (28 to 160 px, default 64): type size of the cells. Cell width and
+      gap are fractions of it, so the row scales as a whole; a row wider than
+      its space shrinks to fit (never under 28 px), then wraps.
     - glow (none | standard | strong, default standard): halo strength behind
       the cells, from no shadow at all to a heavy bloom.
 
@@ -26,7 +27,7 @@
   data-final="МОНТАЖ"
   data-composition-variables='[
     {"id": "text", "type": "string", "role": "content", "label": "Target text", "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.", "default": "МОНТАЖ"},
-    {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. Cell width follows it.", "default": 64, "min": 24, "max": 160, "step": 4, "unit": "px"},
+    {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. A row wider than its space shrinks to fit, never under 28 px, then wraps.", "default": 64, "min": 28, "max": 160, "step": 4, "unit": "px"},
     {"id": "glow", "type": "enum", "role": "style", "label": "Glow", "description": "Strength of the halo behind the cells, from none to a heavy bloom.", "default": "standard", "options": [{"value": "none", "label": "None"}, {"value": "standard", "label": "Standard"}, {"value": "strong", "label": "Strong"}]}
   ]'
 >
@@ -68,14 +69,12 @@
       U+A720-A7FF;
   }
   .hf-catalog-matrix-decode {
-    color: var(--fg, #f2f2f2);
-    font-family: "Montserrat", system-ui, sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-  }
-  .hf-catalog-matrix-decode {
     display: inline-flex;
-    gap: 3px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    gap: 0.05em;
+    letter-spacing: -0.04em;
     font:
       900 64px/1 ui-monospace,
       Menlo,
@@ -119,7 +118,7 @@
 
     var size =
       typeof vars.size === "number" || typeof vars.size === "string" ? Number(vars.size) : NaN;
-    size = isFinite(size) && size > 0 ? Math.min(160, Math.max(24, size)) : 64;
+    size = isFinite(size) && size > 0 ? Math.min(160, Math.max(28, size)) : 64;
 
     // One palette: the cells and their glow ride the reel's brand red.
     var accent = { color: "var(--brand, #ff0000)", rgb: "255, 0, 0" };
@@ -140,6 +139,21 @@
         var cell = document.createElement("span");
         cell.textContent = text.charAt(j) === " " ? "\u00a0" : "0";
         roots[i].appendChild(cell);
+      }
+      // Fit the row to the space it sits in: measured once on one line, the
+      // size shrinks to that width (never under 28 px, the reel floor); a row
+      // still too long at 28 px wraps, so no cell is ever cut by an edge.
+      var room = roots[i].parentElement ? roots[i].parentElement.clientWidth : 0;
+      roots[i].style.maxWidth = "none";
+      roots[i].style.flexWrap = "nowrap";
+      var wide = roots[i].scrollWidth;
+      roots[i].style.removeProperty("max-width");
+      roots[i].style.removeProperty("flex-wrap");
+      if (room > 0 && wide > room) {
+        roots[i].style.setProperty(
+          "--hf-matrix-size",
+          Math.max(28, Math.floor((size * room) / wide)) + "px",
+        );
       }
     }
   })();

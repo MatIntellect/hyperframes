@@ -26,9 +26,9 @@
       "type": "number",
       "role": "style",
       "label": "Size",
-      "description": "Type size of the cells in pixels. Cell width follows it.",
+      "description": "Type size of the cells in pixels. A row wider than its space shrinks to fit, never under 28 px, then wraps.",
       "default": 64,
-      "min": 24,
+      "min": 28,
       "max": 160,
       "step": 4,
       "unit": "px"

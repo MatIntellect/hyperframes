@@ -25,8 +25,10 @@
   the painter primes and updates the attribute via setAttribute.
 
   Variables (declared in data-composition-variables below):
-    - text (string, default "СТЕЖОК"): uppercased; А-Я, Ё, A-Z, 0-9 and
-      space; other characters render as spaces; up to 16 characters.
+    - text (string, default "СТЕЖОК"): uppercased; А-Я, Ё, A-Z, 0-9,
+      space and . , ! ? : - –; any other character renders as a space.
+      Words wrap into lines, the line count that keeps letters largest wins;
+      the thread never thins under 4 px (6 px coarse).
     - stitch ("fine" | "coarse", default "fine"): dash/gap scale, thread
       width, and jitter amplitude.
     - exit ("none" | "fade" | "up", default "none").
@@ -61,7 +63,7 @@
   data-composition-id="stitched-text-draw"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Uppercased А-Я, Ё, A-Z, 0-9 and space, up to 16 characters.", "default": "СТЕЖОК"},
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Uppercased А-Я, Ё, A-Z, 0-9, space and . , ! ? : - –. Words wrap into lines; the thread never thins under 4 px.", "default": "СТЕЖОК"},
     {"id": "stitch", "type": "enum", "role": "style", "label": "Stitch", "description": "Dash/gap scale, thread width, and jitter amplitude.", "default": "fine", "options": [{"value": "fine", "label": "Fine"}, {"value": "coarse", "label": "Coarse"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the stitched word holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
@@ -184,9 +186,9 @@
                 ? window.__hyperframes.getVariables()
                 : {};
 
-            var text = (vars.text == null || vars.text === "" ? "СТЕЖОК" : String(vars.text))
-              .toUpperCase()
-              .slice(0, 16);
+            var text = (
+              vars.text == null || vars.text === "" ? "СТЕЖОК" : String(vars.text)
+            ).toUpperCase();
             var stitch = vars.stitch === "coarse" ? "coarse" : "fine";
             var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
 
@@ -771,6 +773,38 @@
                 [8, 98],
               ],
             ];
+            // Punctuation: the source drew none (a "!" became a silent space).
+            var DOT_LOW = arcPts(35, 92, 5, 5, 0, 360);
+            GLYPHS["."] = [DOT_LOW];
+            GLYPHS[","] = [
+              [
+                [39, 88],
+                [31, 110],
+              ],
+            ];
+            GLYPHS["!"] = [
+              [
+                [35, 2],
+                [35, 68],
+              ],
+              DOT_LOW,
+            ];
+            GLYPHS["?"] = [
+              join(arcPts(35, 26, 26, 24, 200, 405), [
+                [35, 58],
+                [35, 70],
+              ]),
+              DOT_LOW,
+            ];
+            GLYPHS[":"] = [arcPts(35, 40, 5, 5, 0, 360), DOT_LOW];
+            GLYPHS["-"] = [
+              [
+                [14, 56],
+                [56, 56],
+              ],
+            ];
+            GLYPHS["–"] = GLYPHS["-"];
+            GLYPHS["—"] = GLYPHS["-"];
             var GLYPH_W = 70;
             var SPACE_W = 40;
             var GAP = 24;
@@ -814,36 +848,88 @@
               return out;
             }
 
-            // ---- Layout: bake letter x-offsets into the points so every
-            // path shares ONE flat coordinate space (the global needle can
-            // then read getPointAtLength coordinates directly). -----------
-            var characters = Array.from(text);
-            var letters = [];
-            var cursor = 0;
-            for (var ci = 0; ci < characters.length; ci += 1) {
-              var ch = characters[ci];
-              var glyph = GLYPHS[ch];
-              if (!glyph) {
-                cursor += SPACE_W + GAP;
-                continue;
-              }
-              var strokes = [];
-              for (var si = 0; si < glyph.length; si += 1) {
-                var jittered = resampleJitter(glyph[si]);
-                var shifted = [];
-                for (var pi = 0; pi < jittered.length; pi += 1) {
-                  shifted.push([jittered[pi][0] + cursor, jittered[pi][1]]);
-                }
-                strokes.push({ points: shifted });
-              }
-              letters.push({ strokes: strokes });
-              cursor += GLYPH_W + GAP;
+            // ---- Layout: words wrap into lines (the line count that keeps
+            // the letters largest in the stage box wins), and letter x/y
+            // offsets are baked into the points so every path shares ONE
+            // flat coordinate space (the global needle can then read
+            // getPointAtLength coordinates directly). ---------------------
+            function advance(line) {
+              var w = 0;
+              Array.from(line).forEach(function (c) {
+                w += (GLYPHS[c] ? GLYPH_W : SPACE_W) + GAP;
+              });
+              return Math.max(GLYPH_W, w - GAP);
             }
-            var totalWidth = Math.max(GLYPH_W, cursor - GAP);
+            var words = text.split(/\s+/).filter(Boolean);
+            if (!words.length) words = ["СТЕЖОК"];
+            var LINE_H = 100;
+            var LINE_GAP = 40;
             var PAD = 14;
+            var boxW = svg.clientWidth || 920;
+            var boxH = svg.clientHeight || 560;
+            var longest = Math.max.apply(null, words.map(advance));
+            var best = null;
+            for (var k = 1; k <= words.length; k += 1) {
+              var limit = Math.max(longest, advance(words.join(" ")) / k);
+              var rows = [[]];
+              for (var wi = 0; wi < words.length; wi += 1) {
+                var row = rows[rows.length - 1];
+                if (row.length && advance(row.concat(words[wi]).join(" ")) > limit + 0.5) {
+                  rows.push([words[wi]]);
+                } else {
+                  row.push(words[wi]);
+                }
+              }
+              var lineTexts = rows.map(function (r) {
+                return r.join(" ");
+              });
+              var width = Math.max.apply(null, lineTexts.map(advance));
+              var height = lineTexts.length * LINE_H + (lineTexts.length - 1) * LINE_GAP;
+              var fit = Math.min(boxW / (width + 2 * PAD), boxH / (height + 2 * PAD));
+              if (!best || fit > best.fit + 1e-9) {
+                best = { fit: fit, lines: lineTexts, width: width, height: height };
+              }
+            }
+
+            // Thread never thinner than 4 px on screen (6 px coarse): a long
+            // line shrinks the glyph units, so the stitch register grows to
+            // match, dash and gap with it (round caps eat width from the gap).
+            var minPx = stitch === "coarse" ? 6 : 4;
+            var grow = Math.max(1, minPx / best.fit / reg.width);
+            reg = {
+              dash: reg.dash * grow,
+              gap: reg.gap * grow,
+              width: reg.width * grow,
+              jitter: reg.jitter,
+            };
+
+            var letters = [];
+            for (var ln = 0; ln < best.lines.length; ln += 1) {
+              var characters = Array.from(best.lines[ln]);
+              var cursor = (best.width - advance(best.lines[ln])) / 2;
+              var top = ln * (LINE_H + LINE_GAP);
+              for (var ci = 0; ci < characters.length; ci += 1) {
+                var glyph = GLYPHS[characters[ci]];
+                if (!glyph) {
+                  cursor += SPACE_W + GAP;
+                  continue;
+                }
+                var strokes = [];
+                for (var si = 0; si < glyph.length; si += 1) {
+                  var jittered = resampleJitter(glyph[si]);
+                  var shifted = [];
+                  for (var pi = 0; pi < jittered.length; pi += 1) {
+                    shifted.push([jittered[pi][0] + cursor, jittered[pi][1] + top]);
+                  }
+                  strokes.push({ points: shifted });
+                }
+                letters.push({ strokes: strokes });
+                cursor += GLYPH_W + GAP;
+              }
+            }
             svg.setAttribute(
               "viewBox",
-              -PAD + " " + -PAD + " " + (totalWidth + 2 * PAD) + " " + (100 + 2 * PAD),
+              -PAD + " " + -PAD + " " + (best.width + 2 * PAD) + " " + (best.height + 2 * PAD),
             );
 
             // ---- Build DOM + per-stroke dash/hole tables ----------------

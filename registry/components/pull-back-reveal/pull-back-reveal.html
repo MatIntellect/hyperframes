@@ -172,9 +172,10 @@
             color: var(--muted, #8a8a90);
             font-size: max(28px, 1.35cqw);
             font-weight: 680;
-            line-height: 1;
-            letter-spacing: 0.1em;
+            line-height: 1.05;
+            letter-spacing: 0.02em;
             text-transform: uppercase;
+            overflow-wrap: anywhere;
           }
 
           .pbr-detail-chip {
@@ -383,6 +384,25 @@
 
             detail.textContent = detailText;
             headline.textContent = headlineText;
+            // A long headline steps down (never under 28 px) until its lines
+            // clear the detail card. Lines are estimated from the character
+            // count (Bebas is condensed, about 0.45 em a character), so the
+            // size never depends on whether the font has loaded yet.
+            var headStyle = getComputedStyle(headline);
+            var headSize = parseFloat(headStyle.fontSize);
+            var headLead = parseFloat(headStyle.lineHeight) / headSize || 0.95;
+            var headRoom =
+              root.querySelector(".pbr-detail-card").offsetTop - headline.offsetTop - 12;
+            var headWidth = headline.offsetWidth || 1;
+            var fitSize = headSize;
+            while (
+              fitSize > 28 &&
+              Math.ceil((headlineText.length * 0.45 * fitSize) / headWidth) * fitSize * headLead >
+                headRoom
+            ) {
+              fitSize -= 1;
+            }
+            if (fitSize < headSize) headline.style.fontSize = fitSize + "px";
             // One palette: the highlight rides the reel's brand red.
             root.style.setProperty("--pbr-accent", "var(--brand, #ff0000)");
             // Card words are fields: the host never edits this file.

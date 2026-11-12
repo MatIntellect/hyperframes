@@ -17,7 +17,8 @@
   static register styling.
 
   Variables (declared in data-composition-variables below):
-    - text (string, default "FLEX"): the word.
+    - text (string, default "Сила"): the word or short line. The size
+      fits the box, never under 28 px; a longer line wraps between words.
     - stagger (number seconds, default 0.06, clamped 0 to 0.25): per-char
       offset between axis flex starts.
     - exit ("none" | "fade" | "up", default "none").
@@ -47,7 +48,7 @@
   data-composition-duration="3.5"
   data-composition-variables='[
     { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The word whose weight flexes.", "default": "Сила" },
-    { "id": "stagger", "type": "number", "role": "timing", "label": "Stagger", "description": "Seconds between per-character flex starts, clamped 0 to 0.25.", "default": 0.06 },
+    { "id": "stagger", "type": "number", "role": "timing", "label": "Stagger", "description": "Seconds between per-character flex starts, clamped 0 to 0.25.", "default": 0.06, "min": 0, "max": 0.25, "step": 0.01, "unit": "s" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the carved word holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
   ]'
 >
@@ -127,9 +128,17 @@
           .vff-word {
             display: flex;
             align-items: baseline;
+            flex-wrap: wrap;
             justify-content: center;
+            max-width: 100%;
             color: var(--fg, #f2f2f2);
-            line-height: 1;
+            line-height: 1.1;
+            white-space: pre;
+          }
+
+          .vff-group {
+            display: inline-flex;
+            align-items: baseline;
             white-space: pre;
           }
 
@@ -201,12 +210,25 @@
             var hostDoc = root.ownerDocument;
             var chars = [];
             var fragment = hostDoc.createDocumentFragment();
+            // Letters of one word sit in one unbreakable group, so a line too
+            // long for the box wraps between words, never inside one.
+            var group = null;
             for (var i = 0; i < characters.length; i += 1) {
               var span = hostDoc.createElement("span");
               span.className = "vff-char";
               span.textContent = characters[i];
-              fragment.appendChild(span);
-              if (!/\s/.test(characters[i])) chars.push({ el: span, index: i });
+              if (/\s/.test(characters[i])) {
+                group = null;
+                fragment.appendChild(span);
+                continue;
+              }
+              if (!group) {
+                group = hostDoc.createElement("span");
+                group.className = "vff-group";
+                fragment.appendChild(group);
+              }
+              group.appendChild(span);
+              chars.push({ el: span, index: i });
             }
             word.appendChild(fragment);
 
@@ -214,7 +236,14 @@
             // shrinks below this. cqw base capped by cqh so short words on
             // wide hosts stay inside the frame.
             var fitted = Math.min(21, 118 / Math.max(3, characters.length));
-            var BASE_SIZE = "min(" + fitted.toFixed(3) + "cqw, 30cqh)";
+            // Never under 28 px (the reel floor) even after the optical
+            // compensation shrinks it by COMP; a long line wraps instead.
+            var BASE_SIZE =
+              "max(" +
+              (28 / (1 - COMP)).toFixed(1) +
+              "px, min(" +
+              fitted.toFixed(3) +
+              "cqw, 30cqh))";
             root.style.setProperty("--vff-size", BASE_SIZE);
             word.style.fontSize = "var(--vff-size)";
 

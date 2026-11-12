@@ -28,7 +28,7 @@
       "type": "string",
       "role": "content",
       "label": "Text",
-      "description": "Uppercased А-Я, Ё, A-Z, 0-9 and space, up to 16 characters.",
+      "description": "Uppercased А-Я, Ё, A-Z, 0-9, space and . , ! ? : - –. Words wrap into lines; the thread never thins under 4 px.",
       "default": "СТЕЖОК"
     },
     {
