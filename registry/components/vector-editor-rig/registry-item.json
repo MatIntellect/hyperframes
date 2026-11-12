@@ -1,0 +1,59 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vector-editor-rig",
+  "type": "hyperframes:component",
+  "title": "Vector Editor Rig",
+  "description": "Vector editor for vertical reels: a dark brand editor restacked for a portrait field – title bar, a tool row, a canvas where a brand-red bezier path draws on with anchors, handles and a selection frame, then layers and properties side by side. The active tool and path name are fields. Montserrat 28 px, sized for the 780 px graphics field.",
+  "tags": [
+    "prop",
+    "ui-props",
+    "demonstrate",
+    "vector",
+    "design-tool",
+    "pen-tool",
+    "bezier",
+    "app-chrome"
+  ],
+  "jobs": ["demonstrate"],
+  "family": "ui-props",
+  "profile": "holdable",
+  "files": [
+    {
+      "path": "vector-editor-rig.html",
+      "target": "compositions/components/vector-editor-rig.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "tool",
+      "type": "enum",
+      "role": "content",
+      "label": "Active tool",
+      "description": "Tool highlighted in the editor toolbar.",
+      "default": "pen",
+      "options": [
+        {
+          "value": "pen",
+          "label": "Pen"
+        },
+        {
+          "value": "shape",
+          "label": "Shape"
+        },
+        {
+          "value": "type",
+          "label": "Type"
+        }
+      ]
+    },
+    {
+      "id": "pathLabel",
+      "type": "string",
+      "role": "content",
+      "label": "Path label",
+      "description": "Name shown for the active vector path.",
+      "default": "Логотип"
+    }
+  ]
+}

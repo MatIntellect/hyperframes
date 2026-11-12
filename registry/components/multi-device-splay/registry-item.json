@@ -1,0 +1,19 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "multi-device-splay",
+  "type": "hyperframes:component",
+  "title": "Multi Device Splay",
+  "description": "Multi-device splay for vertical reels: a monitor, a tablet and a phone fan out around one product, each showing a dark brand skeleton of the same app suited to its form factor, with one brand-red accent. Brand palette, sized for the 780 px graphics field.",
+  "tags": ["motion-primitive", "device", "phone", "tablet", "desktop", "splay"],
+  "jobs": ["demonstrate"],
+  "family": "ui-props",
+  "profile": "holdable",
+  "files": [
+    {
+      "path": "multi-device-splay.html",
+      "target": "compositions/components/multi-device-splay.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": []
+}

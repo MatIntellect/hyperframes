@@ -1428,6 +1428,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "browser-device-stage",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "camera-scan-gate",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "caption-clip-wipe",
       "type": "hyperframes:component"
     },
@@ -1500,6 +1508,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "code-terminal-run",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "colorama-wipe",
       "type": "hyperframes:component"
     },
@@ -1521,6 +1533,10 @@
     },
     {
       "name": "decline-chart",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "device-frame-stage",
       "type": "hyperframes:component"
     },
     {
@@ -1628,6 +1644,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "multi-device-splay",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "multiplayer-cursors",
       "type": "hyperframes:component"
     },
@@ -1708,6 +1728,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "screen-flow-carousel",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "settings-toggle-flow",
       "type": "hyperframes:component"
     },
@@ -1764,6 +1788,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "sticky-mock-swap",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "store-badge-lockup",
       "type": "hyperframes:component"
     },
@@ -1785,6 +1813,10 @@
     },
     {
       "name": "tabs-slide-indicator",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "terminal-simulator",
       "type": "hyperframes:component"
     },
     {
@@ -1864,7 +1896,15 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "ui-focus-zoom",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "variable-axis-type",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "vector-editor-rig",
       "type": "hyperframes:component"
     },
     {

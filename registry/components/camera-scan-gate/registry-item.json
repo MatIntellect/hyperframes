@@ -1,0 +1,52 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "camera-scan-gate",
+  "type": "hyperframes:component",
+  "title": "Camera Scan Gate",
+  "description": "Camera scan gate for vertical reels: a viewfinder sweeps once, its four corner brackets tighten onto the target, then a pulse, check flash and a Montserrat confirmation chip lock it in. Scan line, brackets and glow ride the reel's brand red; the label and sweep speed are fields. Sized for the 780 px graphics field.",
+  "tags": ["prop", "ui-props", "camera", "qr", "scan", "recognition", "interaction", "demonstrate"],
+  "jobs": ["demonstrate"],
+  "family": "ui-props",
+  "profile": "interaction",
+  "syncPoints": [
+    {
+      "id": "scan-landed",
+      "phase": "in",
+      "offset": 0.5
+    },
+    {
+      "id": "recognition-lock",
+      "phase": "in",
+      "offset": 0.68
+    }
+  ],
+  "files": [
+    {
+      "path": "camera-scan-gate.html",
+      "target": "compositions/components/camera-scan-gate.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "targetLabel",
+      "type": "string",
+      "role": "content",
+      "label": "Target label",
+      "description": "Confirmation label revealed at recognition lock. Blank hides the line.",
+      "default": "Проверено"
+    },
+    {
+      "id": "sweepSpeed",
+      "type": "number",
+      "role": "timing",
+      "label": "Sweep speed",
+      "description": "Speed multiplier for the scan sweep phase only.",
+      "default": 1,
+      "min": 0.8,
+      "max": 1.6,
+      "step": 0.1,
+      "unit": "x"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "screen-flow-carousel",
+  "type": "hyperframes:component",
+  "title": "Screen Flow Carousel",
+  "description": "Screen flow carousel for vertical reels: two to five app-screen skeletons slide through a centred stage one by one, the active screen ringed in brand red with a Montserrat caption under it. Screens count, captions and cues are fields; captions wrap instead of being cut. Brand palette, sized for the 780 px graphics field.",
+  "tags": ["product-demo", "feature-tour", "carousel", "rail", "slot", "screens"],
+  "jobs": ["feature-tour"],
+  "family": "product-demo",
+  "profile": "carousel",
+  "files": [
+    {
+      "path": "screen-flow-carousel.html",
+      "target": "compositions/components/screen-flow-carousel.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "screens",
+      "type": "number",
+      "role": "content",
+      "label": "Screens",
+      "description": "How many screens ride the rail.",
+      "default": 3,
+      "min": 2,
+      "max": 5,
+      "step": 1
+    },
+    {
+      "id": "captions",
+      "type": "string",
+      "role": "content",
+      "label": "Captions",
+      "description": "Comma-separated caption per screen. Blank entries use the authored defaults.",
+      "default": ""
+    },
+    {
+      "id": "cues",
+      "type": "string",
+      "role": "timing",
+      "label": "Cues",
+      "description": "Comma-separated advance times in seconds from mount start. Blank entries use the authored even rhythm.",
+      "default": ""
+    },
+    {
+      "id": "exit",
+      "type": "enum",
+      "role": "timing",
+      "label": "Exit",
+      "description": "Optional departure. Default none: the final screen holds until the cut.",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "up",
+          "label": "Up"
+        }
+      ]
+    }
+  ]
+}
