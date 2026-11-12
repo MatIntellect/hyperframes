@@ -1,0 +1,179 @@
+<!--
+  Icon Swap - transitions.dev-inspired primitive for HyperFrames.
+
+  Paste the markup, CSS and script into a composition. Use the timeline integration
+  note at the bottom as the starting point for deterministic GSAP animation.
+
+  Variables. The script reads each one, falls back to the declared default on anything
+  missing or unrecognised, and writes the result as a custom property the CSS above
+  consumes. The timeline recipe below is untouched by them.
+
+    - tone (dark | light | accent, default dark): button fill and glyph colour. dark is the
+      matte chip, light inverts it for bright frames, accent rides --brand.
+    - size (small | standard | large, default standard): the button box and the glyph inside
+      it, 120px, 150px or 190px (a 780 px reel field).
+    - shape (rounded | circle | square, default rounded): corner radius of the box.
+    - blur (soft | standard | heavy, default standard): scales the blur radius the timeline
+      drives through the swap, from a light haze to a full smear.
+
+  On every default: a 150px brand-card chip with 36px corners and an 8px swap blur.
+-->
+
+<button
+  class="hf-transition-icon-swap"
+  type="button"
+  data-composition-variables='[
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Button fill and glyph colour. Accent rides --brand.", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "light", "label": "Light" }, { "value": "accent", "label": "Accent" }] },
+    { "id": "size", "type": "enum", "role": "layout", "label": "Size", "description": "Button box and glyph size, from a toolbar chip to a hero action.", "default": "standard", "options": [{ "value": "small", "label": "Small" }, { "value": "standard", "label": "Standard" }, { "value": "large", "label": "Large" }] },
+    { "id": "shape", "type": "enum", "role": "style", "label": "Shape", "description": "Corner treatment of the button box.", "default": "rounded", "options": [{ "value": "rounded", "label": "Rounded" }, { "value": "circle", "label": "Circle" }, { "value": "square", "label": "Square" }] },
+    { "id": "blur", "type": "enum", "role": "motion", "label": "Blur", "description": "Scales the blur radius the timeline drives through the swap, from a light haze to a full smear.", "default": "standard", "options": [{ "value": "soft", "label": "Soft" }, { "value": "standard", "label": "Standard" }, { "value": "heavy", "label": "Heavy" }] }
+  ]'
+>
+  <span class="from">+</span><span class="to">ОК</span>
+</button>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-transition-icon-swap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--hf-icon-size, 150px);
+    height: var(--hf-icon-size, 150px);
+    border: 0;
+    border-radius: var(--hf-icon-radius, 36px);
+    background: var(--hf-icon-bg, var(--surface, #18181a));
+    color: var(--hf-icon-fg, var(--fg, #f2f2f2));
+    font:
+      900 28px/1 "Montserrat",
+      system-ui,
+      sans-serif;
+    font-size: var(--hf-icon-font-size, 60px);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+  }
+  .hf-transition-icon-swap span {
+    position: absolute;
+    filter: blur(calc(var(--hf-icon-blur, 0px) * var(--hf-icon-blur-scale, 1)));
+    transform: scale(var(--hf-icon-scale, 1)) rotate(var(--hf-icon-rotate, 0deg));
+    will-change: transform, filter, opacity;
+  }
+  .hf-transition-icon-swap .to {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var tones = {
+      dark: { bg: "var(--surface, #18181a)", fg: "var(--fg, #f2f2f2)" },
+      light: { bg: "var(--fg, #f2f2f2)", fg: "var(--bg, #0c1014)" },
+      accent: { bg: "var(--brand, #ff0000)", fg: "var(--fg, #f2f2f2)" },
+    };
+    var sizes = {
+      small: { box: "120px", font: "48px" },
+      standard: { box: "150px", font: "60px" },
+      large: { box: "190px", font: "76px" },
+    };
+    var shapes = { rounded: "36px", circle: "50%", square: "14px" };
+    var blurScales = { soft: 0.45, standard: 1, heavy: 2.2 };
+
+    var tone = tones[pick(tones, vars.tone, "dark")];
+    var size = sizes[pick(sizes, vars.size, "standard")];
+    var shape = shapes[pick(shapes, vars.shape, "rounded")];
+    var blurScale = blurScales[pick(blurScales, vars.blur, "standard")];
+
+    var roots = document.querySelectorAll(".hf-transition-icon-swap");
+    for (var i = 0; i < roots.length; i += 1) {
+      roots[i].style.setProperty("--hf-icon-bg", tone.bg);
+      roots[i].style.setProperty("--hf-icon-fg", tone.fg);
+      roots[i].style.setProperty("--hf-icon-size", size.box);
+      roots[i].style.setProperty("--hf-icon-font-size", size.font);
+      roots[i].style.setProperty("--hf-icon-radius", shape);
+      roots[i].style.setProperty("--hf-icon-blur-scale", String(blurScale));
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["icon-swap"]; mount the snippet inside a clip with data-composition-id="icon-swap"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="icon-swap" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.to(
+      ".hf-transition-icon-swap .from",
+      {
+        opacity: 0,
+        "--hf-icon-scale": 0.55,
+        "--hf-icon-blur": "8px",
+        "--hf-icon-rotate": "-18deg",
+        duration: 0.18,
+        ease: "power2.in",
+      },
+      startTime,
+    );
+    tl.fromTo(
+      ".hf-transition-icon-swap .to",
+      { opacity: 0, "--hf-icon-scale": 1.35, "--hf-icon-blur": "8px", "--hf-icon-rotate": "18deg" },
+      {
+        opacity: 1,
+        "--hf-icon-scale": 1,
+        "--hf-icon-blur": "0px",
+        "--hf-icon-rotate": "0deg",
+        duration: 0.26,
+        ease: "back.out(1.7)",
+      },
+      startTime + 0.12,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["icon-swap"] = tl;
+  })();
+</script>

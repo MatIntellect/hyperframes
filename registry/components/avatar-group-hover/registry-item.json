@@ -1,0 +1,61 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "avatar-group-hover",
+  "type": "hyperframes:component",
+  "title": "Avatar Group Hover",
+  "description": "Avatar group for vertical reels: overlapping brand-gradient avatars lift from the centre and bounce back, like a hover on a team row. Size and overlap are fields. Brand palette, Montserrat initials, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"avatar-group-hover\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "avatar", "hover"],
+  "files": [
+    {
+      "path": "avatar-group-hover.html",
+      "target": "compositions/components/avatar-group-hover.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "size",
+      "type": "enum",
+      "role": "style",
+      "label": "Size",
+      "description": "Avatar diameter, with the initials scaling alongside it.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "id": "overlap",
+      "type": "enum",
+      "role": "style",
+      "label": "Overlap",
+      "description": "How far each avatar tucks under the one before it, as a share of its own diameter.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "tight",
+          "label": "Tight"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "loose",
+          "label": "Loose"
+        }
+      ]
+    }
+  ]
+}

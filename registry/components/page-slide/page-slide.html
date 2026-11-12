@@ -1,0 +1,191 @@
+<!--
+  Page Slide - transitions.dev-inspired primitive for HyperFrames.
+
+  Paste the markup, CSS and script into a composition. Use the timeline
+  integration note at the bottom as the starting point for deterministic GSAP
+  animation.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or unrecognised, and either writes a label or writes a custom
+  property the CSS above consumes. The timeline recipe stays untouched: it keeps
+  sliding the incoming page over the outgoing one.
+
+    - label_a (any text, default Главная): the outgoing page label.
+    - label_b (any text, default Аналитика): the incoming page label.
+    - colour: the outgoing page is the brand card, the incoming page brand red
+      (--brand of the reel palette), so the two always read apart.
+    - corner (square | soft | round, default round): the corner radius of the
+      frame the pages slide inside.
+
+  On every default: Главная sliding out, a brand-red Аналитика sliding in, inside a
+  700x440 frame with 40px corners (a 780 px reel field).
+-->
+
+<div
+  class="hf-transition-page-slide"
+  data-composition-variables='[
+    {"id": "label_a", "type": "string", "role": "content", "label": "Outgoing label", "description": "Label printed on the page that slides out.", "default": "Главная"},
+    {"id": "label_b", "type": "string", "role": "content", "label": "Incoming label", "description": "Label printed on the page that slides in.", "default": "Аналитика"},
+    {"id": "corner", "type": "enum", "role": "style", "label": "Corner", "description": "Corner radius of the frame the pages slide inside.", "default": "round", "options": [{"value": "square", "label": "Square"}, {"value": "soft", "label": "Soft"}, {"value": "round", "label": "Round"}]}
+  ]'
+>
+  <section class="hf-transition-page old" data-layout-allow-overflow><span>Главная</span></section>
+  <section class="hf-transition-page new" data-layout-allow-overflow data-layout-allow-occlusion>
+    <span data-layout-allow-overlap>Аналитика</span>
+  </section>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  /* Vertical reel: sized for the 780 px graphics field (labels 32 px), brand palette: the outgoing page
+     is the brand card, the incoming page runs deep red into brand red. */
+  .hf-transition-page-slide {
+    position: relative;
+    width: 700px;
+    max-width: 100%;
+    height: 440px;
+    overflow: hidden;
+    border-radius: var(--hf-page-radius, 40px);
+    background: var(--bg, #0c1014);
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.35);
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+  .hf-transition-page {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 32px;
+  }
+  .hf-transition-page span {
+    max-width: 100%;
+    padding: 18px 30px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--fg, #f2f2f2) 14%, transparent);
+    color: var(--fg, #f2f2f2);
+    font-size: 32px;
+    font-weight: 800;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .hf-transition-page.old {
+    background: linear-gradient(
+      135deg,
+      var(--surface, #18181a),
+      color-mix(in srgb, var(--fg, #f2f2f2) 10%, var(--surface, #18181a))
+    );
+  }
+  .hf-transition-page.new {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--brand, #ff0000) 35%, var(--surface, #18181a)),
+      var(--brand, #ff0000)
+    );
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    // One accent: the reel palette (the CSS above).
+    var corners = { square: "0px", soft: "20px", round: "40px" };
+
+    function text(value, fallback) {
+      return typeof value === "string" && value !== "" ? value : fallback;
+    }
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var labelA = text(vars.label_a, "Главная");
+    var labelB = text(vars.label_b, "Аналитика");
+    var corner = corners[pick(corners, vars.corner, "round")];
+
+    var roots = document.querySelectorAll(".hf-transition-page-slide");
+    for (var i = 0; i < roots.length; i += 1) {
+      var root = roots[i];
+      root.style.setProperty("--hf-page-radius", corner);
+      var oldLabel = root.querySelector(".hf-transition-page.old span");
+      var newLabel = root.querySelector(".hf-transition-page.new span");
+      if (oldLabel) oldLabel.textContent = labelA;
+      if (newLabel) newLabel.textContent = labelB;
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["page-slide"]; mount the snippet inside a clip with data-composition-id="page-slide"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="page-slide" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-transition-page-slide",
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+      0.25,
+    );
+    tl.fromTo(
+      ".hf-transition-page.new",
+      { xPercent: 100 },
+      { xPercent: 0, duration: 0.74, ease: "power3.inOut" },
+      0.78,
+    );
+    tl.to(
+      ".hf-transition-page.old",
+      { xPercent: -28, scale: 0.94, duration: 0.74, ease: "power3.inOut" },
+      0.78,
+    );
+    tl.fromTo(
+      ".hf-transition-page.new span",
+      { y: 24, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.28, ease: "power2.out" },
+      1.24,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["page-slide"] = tl;
+  })();
+</script>

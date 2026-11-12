@@ -1,0 +1,193 @@
+<!--
+  Tilt Card - transitions.dev-inspired primitive for HyperFrames.
+
+  Paste the markup, CSS and script into a composition. Use the timeline
+  integration note at the bottom as the starting point for deterministic GSAP
+  animation.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or unrecognised, and writes the result into the markup or
+  into a custom property the CSS above consumes. The timeline recipe below is
+  untouched by them: it keeps driving the same rise and the same tilt angles.
+
+    - eyebrow (string, default "Движение"): the small uppercase kicker above
+      the headline. Blank falls back to the default.
+    - headline (string, default "Графика для роликов"): the large card
+      headline. Blank falls back to the default.
+    - glow (tight | standard | wide, default standard): how far the corner
+      glow reaches past the card edges. A wider glow spreads more light at
+      rest, and because the timeline drifts it by a percentage of its own box,
+      a wider glow also carries that drift further across the card.
+    - colour: the brand accent of the reel palette (gradient, glow, kicker).
+  On every default: a 640x420 card from the brand card into deep brand red with a
+  brand-red corner glow reaching 30% past every edge (a 780 px reel field).
+-->
+
+<div
+  class="hf-transition-tilt-card"
+  data-composition-variables='[
+    {"id": "eyebrow", "type": "string", "role": "content", "label": "Eyebrow", "description": "Small uppercase kicker above the headline.", "default": "Движение"},
+    {"id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Large card headline.", "default": "Графика для роликов"},
+    {"id": "glow", "type": "enum", "role": "motion", "label": "Glow", "description": "How far the corner glow reaches past the card edges, which sets both its spread at rest and how far the timeline drift carries it.", "default": "standard", "options": [{"value": "tight", "label": "Tight"}, {"value": "standard", "label": "Standard"}, {"value": "wide", "label": "Wide"}]}
+  ]'
+>
+  <div class="hf-transition-tilt-glow"></div>
+  <div class="hf-transition-tilt-content">
+    <span>Движение</span>
+    <strong>Графика для роликов</strong>
+  </div>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  /* Vertical reel: sized for the 780 px graphics field (kicker 28 px, headline 52 px), one accent:
+     the card runs from the brand card into deep brand red, a brand-red corner glow. */
+  .hf-transition-tilt-card {
+    position: relative;
+    width: 640px;
+    max-width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border: 2px solid color-mix(in srgb, var(--fg, #f2f2f2) 18%, transparent);
+    border-radius: 40px;
+    background: linear-gradient(
+      135deg,
+      var(--surface, #18181a),
+      color-mix(in srgb, var(--brand, #ff0000) 55%, var(--surface, #18181a))
+    );
+    color: var(--fg, #f2f2f2);
+    font-family: "Montserrat", system-ui, sans-serif;
+    transform-style: preserve-3d;
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.45);
+  }
+  .hf-transition-tilt-glow {
+    position: absolute;
+    inset: var(--hf-tilt-glow-inset, -30%);
+    background: radial-gradient(
+      circle at 30% 20%,
+      color-mix(in srgb, var(--brand, #ff0000) 45%, transparent),
+      transparent 36%
+    );
+  }
+  .hf-transition-tilt-content {
+    position: relative;
+    display: grid;
+    align-content: end;
+    gap: 14px;
+    height: 100%;
+    padding: 48px;
+    transform: translateZ(38px);
+  }
+  .hf-transition-tilt-content span {
+    color: color-mix(in srgb, var(--brand, #ff0000) 30%, var(--fg, #f2f2f2));
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .hf-transition-tilt-content strong {
+    max-width: 100%;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    var insets = { tight: "-18%", standard: "-30%", wide: "-46%" };
+    // One accent: the reel palette (the CSS above).
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    function text(value, fallback) {
+      var resolved = value == null ? "" : String(value).trim();
+      return resolved.length > 0 ? resolved : fallback;
+    }
+
+    var eyebrow = text(vars.eyebrow, "Движение");
+    var headline = text(vars.headline, "Графика для роликов");
+    var inset = insets[pick(insets, vars.glow, "standard")];
+
+    var roots = document.querySelectorAll(".hf-transition-tilt-card");
+    for (var i = 0; i < roots.length; i += 1) {
+      var root = roots[i];
+      root.style.setProperty("--hf-tilt-glow-inset", inset);
+      root.querySelector(".hf-transition-tilt-content span").textContent = eyebrow;
+      root.querySelector(".hf-transition-tilt-content strong").textContent = headline;
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["tilt-card"]; mount the snippet inside a clip with data-composition-id="tilt-card"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="tilt-card" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-transition-tilt-card",
+      { opacity: 0, y: 30, rotateX: 0, rotateY: 0 },
+      { opacity: 1, y: 0, duration: 0.38, ease: "power2.out" },
+      0.3,
+    );
+    tl.to(
+      ".hf-transition-tilt-card",
+      { rotateX: -7, rotateY: 10, duration: 0.72, ease: "power3.inOut" },
+      0.75,
+    );
+    tl.to(
+      ".hf-transition-tilt-glow",
+      { xPercent: 12, yPercent: 10, duration: 0.72, ease: "power3.inOut" },
+      0.75,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["tilt-card"] = tl;
+  })();
+</script>

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "panel-reveal",
+  "type": "hyperframes:component",
+  "title": "Panel Reveal",
+  "description": "Panel reveal for vertical reels: a titled card opens its body by height while the lines fade in. Title, width and reveal style are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"panel-reveal\": its own timeline nests there.",
+  "tags": ["transition-primitive", "transitions-dev-port", "panel", "reveal"],
+  "files": [
+    {
+      "path": "panel-reveal.html",
+      "target": "compositions/components/panel-reveal.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "title",
+      "type": "string",
+      "role": "content",
+      "label": "Title",
+      "description": "The header line that sits above the folded body.",
+      "default": "Параметры движения"
+    },
+    {
+      "id": "width",
+      "type": "enum",
+      "role": "layout",
+      "label": "Width",
+      "description": "How wide the panel sits, 520, 640 or 720 px.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "id": "reveal",
+      "type": "enum",
+      "role": "motion",
+      "label": "Reveal",
+      "description": "Whether the body fades in with the height. fade is the shipped motion, solid opens the height only.",
+      "default": "fade",
+      "options": [
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ]
+    }
+  ]
+}

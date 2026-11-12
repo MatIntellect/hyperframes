@@ -1,0 +1,61 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "card-resize",
+  "type": "hyperframes:component",
+  "title": "Card Resize",
+  "description": "Card resize for vertical reels: a compact status card grows into a detailed one and its hint fades in. Thumbnail treatment and elevation are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"card-resize\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "card", "layout"],
+  "files": [
+    {
+      "path": "card-resize.html",
+      "target": "compositions/components/card-resize.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "accent",
+      "type": "enum",
+      "role": "style",
+      "label": "Accent",
+      "description": "Treatment of the media thumbnail: a plain plate, a hatched surface, or an image plate with a horizon-and-disc glyph.",
+      "default": "ocean",
+      "options": [
+        {
+          "value": "ocean",
+          "label": "Ocean"
+        },
+        {
+          "value": "forest",
+          "label": "Forest"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        }
+      ]
+    },
+    {
+      "id": "elevation",
+      "type": "enum",
+      "role": "style",
+      "label": "Elevation",
+      "description": "How far the card lifts off the frame, from a contact shadow to a deep drop.",
+      "default": "raised",
+      "options": [
+        {
+          "value": "flat",
+          "label": "Flat"
+        },
+        {
+          "value": "raised",
+          "label": "Raised"
+        },
+        {
+          "value": "floating",
+          "label": "Floating"
+        }
+      ]
+    }
+  ]
+}

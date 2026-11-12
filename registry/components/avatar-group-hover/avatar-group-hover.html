@@ -1,0 +1,168 @@
+<!--
+  Avatar Group Hover - transitions.dev-inspired primitive for HyperFrames.
+
+  Paste the markup and CSS into a composition. Use the timeline integration
+  note at the bottom as the starting point for deterministic GSAP animation.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or unrecognised, and writes the result as a custom property
+  the CSS consumes. The timeline recipe below is untouched by them: it still
+  drives one lift offset, and these decide what it lifts.
+
+    - size (small | standard | large, default standard): avatar diameter,
+      96px, 120px or 150px (a 780 px reel field). The initials scale with it.
+    - overlap (tight | standard | loose, default standard): how far each
+      avatar tucks under the one before it, as a share of its own diameter:
+      half, a third, or barely an eighth.
+    - colour: the gradient resolves into the brand accent (--brand of the reel palette).
+
+  On every default: 120px avatars overlapping by 29px in the brand gradient
+  (brand card into brand red).
+-->
+
+<div
+  class="hf-transition-avatar-group-hover"
+  data-composition-variables='[
+    {"id": "size", "type": "enum", "role": "style", "label": "Size", "description": "Avatar diameter, with the initials scaling alongside it.", "default": "standard", "options": [{"value": "small", "label": "Small"}, {"value": "standard", "label": "Standard"}, {"value": "large", "label": "Large"}]},
+    {"id": "overlap", "type": "enum", "role": "style", "label": "Overlap", "description": "How far each avatar tucks under the one before it, as a share of its own diameter.", "default": "standard", "options": [{"value": "tight", "label": "Tight"}, {"value": "standard", "label": "Standard"}, {"value": "loose", "label": "Loose"}]}
+  ]'
+>
+  <span>А</span><span>М</span><span>О</span><span>С</span>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  /* Vertical reel: avatars sized for the 780 px graphics field (initials 34 px and up), brand palette:
+     the gradient runs from the brand card into brand red, light rim. */
+  .hf-transition-avatar-group-hover {
+    display: inline-flex;
+    align-items: center;
+    padding-left: var(--hf-avatar-overlap, 29px);
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+  .hf-transition-avatar-group-hover span {
+    display: grid;
+    place-items: center;
+    width: var(--hf-avatar-size, 120px);
+    height: var(--hf-avatar-size, 120px);
+    margin-left: calc(-1 * var(--hf-avatar-overlap, 29px));
+    border: 5px solid var(--fg, #f2f2f2);
+    border-radius: 999px;
+    background: linear-gradient(
+      135deg,
+      var(--surface, #18181a),
+      var(--hf-avatar-accent, var(--brand, #ff0000))
+    );
+    color: var(--fg, #f2f2f2);
+    font-size: var(--hf-avatar-font, 42px);
+    font-weight: 800;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    transform: translateY(var(--hf-avatar-y, 0px));
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    var sizes = { small: 96, standard: 120, large: 150 };
+    var fonts = { small: "34px", standard: "42px", large: "52px" };
+    // Overlap is a share of the diameter, so the two knobs stay independent.
+    // Tucks are capped so the next avatar never covers the previous avatar's initial
+    // (at 0.5 the neighbour's edge sat on the centred letter).
+    var overlaps = { tight: 0.3, standard: 0.24, loose: 0.1 };
+    var accents = { brand: "var(--brand, #ff0000)" }; // one accent: the reel palette
+
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var sizeName = pick(sizes, vars.size, "standard");
+    var overlapName = pick(overlaps, vars.overlap, "standard");
+    var accent = accents.brand;
+    var diameter = sizes[sizeName];
+    var overlap = Math.round(diameter * overlaps[overlapName]);
+
+    var roots = document.querySelectorAll(".hf-transition-avatar-group-hover");
+    for (var i = 0; i < roots.length; i += 1) {
+      var style = roots[i].style;
+      style.setProperty("--hf-avatar-size", diameter + "px");
+      style.setProperty("--hf-avatar-font", fonts[sizeName]);
+      style.setProperty("--hf-avatar-overlap", overlap + "px");
+      style.setProperty("--hf-avatar-accent", accent);
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["avatar-group-hover"]; mount the snippet inside a clip with data-composition-id="avatar-group-hover"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="avatar-group-hover" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.to(
+      ".hf-transition-avatar-group-hover span",
+      {
+        "--hf-avatar-y": "-36px",
+        duration: 0.28,
+        stagger: { each: 0.035, from: "center" },
+        ease: "back.out(1.8)",
+      },
+      startTime,
+    );
+    tl.to(
+      ".hf-transition-avatar-group-hover span",
+      {
+        "--hf-avatar-y": "0px",
+        duration: 0.42,
+        stagger: { each: 0.035, from: "center" },
+        ease: "bounce.out",
+      },
+      startTime + 0.36,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["avatar-group-hover"] = tl;
+  })();
+</script>

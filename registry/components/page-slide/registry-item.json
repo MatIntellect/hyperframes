@@ -1,0 +1,55 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "page-slide",
+  "type": "hyperframes:component",
+  "title": "Page Slide",
+  "description": "Page slide for vertical reels: a brand-red page slides in over the brand-card page, which steps back. Labels and corner are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"page-slide\": its own timeline nests there.",
+  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "page", "slide"],
+  "files": [
+    {
+      "path": "page-slide.html",
+      "target": "compositions/components/page-slide.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "label_a",
+      "type": "string",
+      "role": "content",
+      "label": "Outgoing label",
+      "description": "Label printed on the page that slides out.",
+      "default": "Главная"
+    },
+    {
+      "id": "label_b",
+      "type": "string",
+      "role": "content",
+      "label": "Incoming label",
+      "description": "Label printed on the page that slides in.",
+      "default": "Аналитика"
+    },
+    {
+      "id": "corner",
+      "type": "enum",
+      "role": "style",
+      "label": "Corner",
+      "description": "Corner radius of the frame the pages slide inside.",
+      "default": "round",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "soft",
+          "label": "Soft"
+        },
+        {
+          "value": "round",
+          "label": "Round"
+        }
+      ]
+    }
+  ]
+}

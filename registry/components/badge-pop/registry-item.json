@@ -1,0 +1,32 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "badge-pop",
+  "type": "hyperframes:component",
+  "title": "Badge Pop",
+  "description": "Notification badge pop for vertical reels: a dark bell tile rises and a brand-red count badge pops onto its corner with an elastic bump. The count is a field. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"badge-pop\": its own timeline nests there.",
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "badge",
+    "microinteraction"
+  ],
+  "files": [
+    {
+      "path": "badge-pop.html",
+      "target": "compositions/components/badge-pop.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "count",
+      "type": "string",
+      "role": "style",
+      "label": "Count",
+      "description": "Text shown inside the notification badge, up to four characters.",
+      "default": "3",
+      "maxLength": 4
+    }
+  ]
+}

@@ -1408,6 +1408,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "avatar-group-hover",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "badge-pop",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "before-after-wipe",
       "type": "hyperframes:component"
     },
@@ -1465,6 +1473,10 @@
     },
     {
       "name": "caption-weight-shift",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "card-resize",
       "type": "hyperframes:component"
     },
     {
@@ -1548,6 +1560,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "icon-morph-beat",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "icon-swap",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "inline-highlight",
       "type": "hyperframes:component"
     },
@@ -1585,6 +1605,10 @@
     },
     {
       "name": "menu-morph",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "micro-transitions",
       "type": "hyperframes:component"
     },
     {
@@ -1637,6 +1661,14 @@
     },
     {
       "name": "oversized-cursor",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "page-slide",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "panel-reveal",
       "type": "hyperframes:component"
     },
     {
@@ -1720,6 +1752,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "spring-pop",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "staggered-fade-up",
       "type": "hyperframes:component"
     },
@@ -1781,6 +1817,10 @@
     },
     {
       "name": "ticker-takeover",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "tilt-card",
       "type": "hyperframes:component"
     },
     {
