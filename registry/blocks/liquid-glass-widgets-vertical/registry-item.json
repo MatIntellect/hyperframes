@@ -1,0 +1,37 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-glass-widgets-vertical",
+  "type": "hyperframes:block",
+  "title": "Liquid Glass Widgets (vertical)",
+  "description": "Vertical liquid glass widgets in a 780 column on the field over a moving glow: three counting stat cards, a showcase card with a progress bar that turns done, and chips; top or bottom card keeps stats and showcase. Words, numbers, glow colours, cues and exit are variables.",
+  "tags": [
+    "html-in-canvas",
+    "liquid-glass-html-in-canvas",
+    "webgpu",
+    "stats",
+    "widgets",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-glass-widgets-vertical.html",
+      "target": "compositions/liquid-glass-widgets-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/liquid-glass.iife.js",
+      "target": "assets/lib/liquid-glass.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

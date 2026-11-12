@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-glass-notification-vertical",
+  "type": "hyperframes:block",
+  "title": "Liquid Glass Notification (vertical)",
+  "description": "Vertical liquid glass notifications: two glass cards 780 wide from the top of the field over a moving glow, or inside a 780x760 card. Words, icon, glow colours, cues and exit are variables; placement full, top or bottom; holds, slides out or fades.",
+  "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu", "notification", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-glass-notification-vertical.html",
+      "target": "compositions/liquid-glass-notification-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/liquid-glass.iife.js",
+      "target": "assets/lib/liquid-glass.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

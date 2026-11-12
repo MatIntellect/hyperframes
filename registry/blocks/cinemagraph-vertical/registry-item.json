@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "cinemagraph-vertical",
+  "type": "hyperframes:block",
+  "title": "Cinemagraph (vertical)",
+  "description": "Vertical cinemagraph: the frozen still scene enlarged so the cup and its rising steam sit centred on the field, only the steam moves and loops every 10 s. Placement full, top or bottom card; holds or fades.",
+  "tags": ["effect", "cinemagraph", "photo", "loop", "freeze-frame", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "cinemagraph-vertical.html",
+      "target": "compositions/cinemagraph-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

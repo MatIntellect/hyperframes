@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-glass-notification",
+  "type": "hyperframes:block",
+  "title": "Liquid Glass Notification",
+  "description": "Two liquid glass notification cards slide into the top right corner over a moving glow shader: a work card with a progress bar that turns done, and a message card with typing dots and action chips. Words, icon, glow colours, cues and exit are variables.",
+  "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu", "notification"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-glass-notification.html",
+      "target": "compositions/liquid-glass-notification.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/liquid-glass.iife.js",
+      "target": "assets/lib/liquid-glass.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

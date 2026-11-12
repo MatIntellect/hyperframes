@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-glass-widgets",
+  "type": "hyperframes:block",
+  "title": "Liquid Glass Widgets",
+  "description": "Liquid glass widgets rise over a moving glow shader: three stat cards (meter, battery, ring) count up, a showcase card fills its progress bar and turns done, three chips pulse. Labels, numbers, units, icon, words, glow colours, cues and exit are variables.",
+  "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu", "stats", "widgets"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-glass-widgets.html",
+      "target": "compositions/liquid-glass-widgets.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/liquid-glass.iife.js",
+      "target": "assets/lib/liquid-glass.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

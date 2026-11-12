@@ -1,0 +1,36 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lottie-character-walk-vertical",
+  "type": "hyperframes:block",
+  "title": "Lottie Character Walk (vertical)",
+  "description": "Vertical Lottie character: walks in at the foot of the field, stops and points at a brand card beside it with a Bebas title and a grey line. Title and text are variables; placement full, top or bottom card; holds or fades.",
+  "tags": [
+    "character",
+    "character-animation",
+    "mascot",
+    "walk-cycle",
+    "gesture",
+    "pointing",
+    "puppet",
+    "lottie",
+    "explainer",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lottie-character-walk-vertical.html",
+      "target": "compositions/lottie-character-walk-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/mascot.json",
+      "target": "assets/mascot.json",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

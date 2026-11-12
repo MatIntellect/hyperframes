@@ -1,0 +1,563 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "icon", "type": "image", "role": "content", "label": "First card icon", "description": "Square app icon of the first card, rounded.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "title", "type": "string", "role": "content", "label": "First card title", "description": "Bold name of the first card.", "maxLength": 18, "default": "Монтаж" },
+    { "id": "busy", "type": "string", "role": "content", "label": "Status while working", "description": "Grey word next to the title until cue 3.", "maxLength": 10, "default": "идёт" },
+    { "id": "done", "type": "string", "role": "content", "label": "Status when done", "description": "Grey word next to the title from cue 3.", "maxLength": 10, "default": "готово" },
+    { "id": "busytext", "type": "string", "role": "content", "label": "First card text while working", "description": "Up to three lines; the progress bar under it fills from cue 2 to cue 3.", "maxLength": 70, "default": "Собираю рилс: графика, субтитры и звук" },
+    { "id": "donetext", "type": "string", "role": "content", "label": "First card text when done", "description": "Replaces the working text at cue 3, up to three lines.", "maxLength": 70, "default": "reels-mat.mp4 готов, файл в ветке «Видео»" },
+    { "id": "letter", "type": "string", "role": "content", "label": "Second card avatar letter", "maxLength": 2, "default": "А" },
+    { "id": "sender", "type": "string", "role": "content", "label": "Second card name", "maxLength": 20, "default": "Сообщения" },
+    { "id": "time", "type": "string", "role": "content", "label": "Second card time", "maxLength": 10, "default": "сейчас" },
+    { "id": "message", "type": "string", "role": "content", "label": "Second card message", "description": "Up to three lines, typing dots after it.", "maxLength": 70, "default": "Аня: а можно живее, но без перебора?" },
+    { "id": "reply", "type": "string", "role": "content", "label": "First action", "maxLength": 12, "default": "Ответить" },
+    { "id": "read", "type": "string", "role": "content", "label": "Second action", "maxLength": 12, "default": "Прочитано" },
+    { "id": "warm", "type": "color", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass.", "default": "#ff0000" },
+    { "id": "cool", "type": "color", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow.", "default": "#8a8a90" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first card slides in, 2 the second card slides in and the progress bar starts, 3 the work is done (status, text and dot change, bar full), 4 the exit (only when exit is not none). Empty keeps 0.2, 0.8, 4.25, 6.75.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the cards and the glow to the end of the mount. out: the cards slide back out at cue 4, then the glow fades. fade: everything fades at cue 4.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu"
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/lib/liquid-glass.iife.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1920px;
+        height: 1080px;
+      }
+      #lgn-root {
+        font-family: "Montserrat", sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      /* the glow, the glass and the words share one stage: the whole frame, or a card in the vertical */
+      #lgn-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #lgn-three,
+      #lgn-glass {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+      }
+      #lgn-glass {
+        z-index: 1;
+      }
+      #lgn-words {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+      }
+      
+
+      /* glass panels: the library reads left, top, width and height of each .liquid-glass child */
+      .lgn-gp {
+        position: absolute;
+        border-radius: 40px;
+        background: rgba(255, 255, 255, 0.06);
+        --lg-blur: 0.22;
+        --lg-refraction: 0.6;
+        --lg-corner-radius: 40;
+        --lg-z-radius: 38;
+        --lg-specular: 0.2;
+        --lg-fresnel: 0.9;
+        --lg-edge-highlight: 0.1;
+        --lg-chrom-aberration: 0.05;
+        --lg-shadow-opacity: 0.35;
+        --lg-shadow-spread: 14;
+        --lg-shadow-offset-y: 4;
+        --lg-saturation: 0.25;
+      }
+
+      /* a dark tint under the words, like a real notification: white reads over any glow ridge */
+      .lgn-note {
+        position: absolute;
+        padding: 24px 28px;
+        border-radius: 40px;
+        background: rgba(12, 16, 20, 0.32);
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .lgn-avatar {
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          0 10px 24px rgba(0, 0, 0, 0.24);
+      }
+      #lgn-icon-box {
+        border-radius: 18px;
+      }
+      #lgn-icon {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      #lgn-letter {
+        border-radius: 50%;
+        background: rgba(12, 16, 20, 0.72);
+        font-size: 30px;
+        font-weight: 800;
+      }
+      .lgn-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .lgn-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 12px;
+        margin-bottom: 4px;
+      }
+      .lgn-name {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+      .lgn-muted {
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.25;
+        color: var(--fg, #f2f2f2);
+        opacity: 0.66;
+        white-space: nowrap;
+      }
+      #lgn-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--muted, #8a8a90);
+        align-self: center;
+      }
+      /* two states in one grid cell: the card keeps the height of the longer one */
+      .lgn-swap {
+        display: grid;
+      }
+      .lgn-swap > * {
+        grid-area: 1 / 1;
+      }
+      .lgn-text {
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+      #lgn-bar {
+        margin-top: 16px;
+        height: 6px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.18);
+      }
+      #lgn-fill {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent, #ff0000);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+      #lgn-typing {
+        display: inline-flex;
+        gap: 5px;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+      #lgn-typing span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--fg, #f2f2f2);
+        opacity: 0.35;
+      }
+      #lgn-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .lgn-chip {
+        padding: 6px 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.25;
+        white-space: nowrap;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="lgn-root" data-composition-id="liquid-glass-notification" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div id="lgn-stage">
+        <canvas id="lgn-three"></canvas>
+        <canvas id="lgn-glass" layoutsubtree>
+          <div class="lgn-gp liquid-glass" id="lgn-gp1"></div>
+          <div class="lgn-gp liquid-glass" id="lgn-gp2"></div>
+        </canvas>
+        <div id="lgn-words">
+          <div class="lgn-note" id="lgn-c1">
+            <div class="lgn-avatar" id="lgn-icon-box"><img id="lgn-icon" src="assets/img/matintellect-avatar.svg" alt="" /></div>
+            <div class="lgn-body">
+              <div class="lgn-head">
+                <span class="lgn-name" id="lgn-title">Монтаж</span>
+                <span id="lgn-dot"></span>
+                <span class="lgn-swap">
+                  <span class="lgn-muted" id="lgn-busy">идёт</span>
+                  <span class="lgn-muted" id="lgn-done">готово</span>
+                </span>
+              </div>
+              <div class="lgn-swap">
+                <div class="lgn-text" id="lgn-busytext">Собираю рилс: графика, субтитры и звук</div>
+                <div class="lgn-text" id="lgn-donetext">reels-mat.mp4 готов, файл в ветке «Видео»</div>
+              </div>
+              <div id="lgn-bar"><div id="lgn-fill"></div></div>
+            </div>
+          </div>
+          <div class="lgn-note" id="lgn-c2">
+            <div class="lgn-avatar" id="lgn-letter">А</div>
+            <div class="lgn-body">
+              <div class="lgn-head">
+                <span class="lgn-name" id="lgn-sender">Сообщения</span>
+                <span class="lgn-muted" id="lgn-time">сейчас</span>
+              </div>
+              <div class="lgn-text"><span id="lgn-message">Аня: а можно живее, но без перебора?</span><span id="lgn-typing"><span></span><span></span><span></span></span></div>
+              <div id="lgn-actions">
+                <span class="lgn-chip" id="lgn-reply">Ответить</span>
+                <span class="lgn-chip" id="lgn-read">Прочитано</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("lgn-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(id) {
+          return document.getElementById("lgn-" + id);
+        }
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var stage = $("stage");
+        
+
+        $("icon").src = str(V.icon, "assets/img/matintellect-avatar.svg");
+        $("title").textContent = str(V.title, "Монтаж");
+        $("busy").textContent = str(V.busy, "идёт");
+        $("done").textContent = str(V.done, "готово");
+        $("busytext").textContent = str(V.busytext, "Собираю рилс: графика, субтитры и звук");
+        $("donetext").textContent = str(V.donetext, "reels-mat.mp4 готов, файл в ветке «Видео»");
+        $("letter").textContent = str(V.letter, "А");
+        $("sender").textContent = str(V.sender, "Сообщения");
+        $("time").textContent = str(V.time, "сейчас");
+        $("message").textContent = str(V.message, "Аня: а можно живее, но без перебора?");
+        $("reply").textContent = str(V.reply, "Ответить");
+        $("read").textContent = str(V.read, "Прочитано");
+
+        // stage size and card column: wide – top right corner like the native block; vertical full – the field
+        // from y 180; vertical card – inside the 780x760 card
+        var SW = stage.clientWidth,
+          SH = stage.clientHeight,
+          CW = 760,
+          CX = SW - 64 - 760,
+          CY = 64,
+          GAP = 20;
+        
+
+        var three = $("three"),
+          glass = $("glass");
+        [three, glass].forEach(function (c) {
+          c.width = SW;
+          c.height = SH;
+          c.style.width = SW + "px";
+          c.style.height = SH + "px";
+        });
+
+        // glow colours: the theme ground and two colour fields, as linear 0..1 triples for the shader
+        function rgb(css, d) {
+          var i = document.createElement("i");
+          i.style.color = css || d;
+          root.appendChild(i);
+          var m = getComputedStyle(i).color.match(/[\d.]+/g) || [0, 0, 0];
+          i.remove();
+          return new THREE.Vector3(m[0] / 255, m[1] / 255, m[2] / 255);
+        }
+        var cs = getComputedStyle(root);
+        var uniforms = {
+          uTime: { value: 0 },
+          uAr: { value: SW / SH },
+          uBg: { value: rgb(cs.getPropertyValue("--bg").trim(), "#0c1014") },
+          uWarm: { value: rgb(str(V.warm, "#ff0000"), "#ff0000") },
+          uCool: { value: rgb(str(V.cool, "#8a8a90"), "#8a8a90") },
+        };
+
+        var renderer = new THREE.WebGLRenderer({ canvas: three, antialias: false, preserveDrawingBuffer: true });
+        renderer.setSize(SW, SH, false);
+        renderer.setPixelRatio(1);
+        var scene = new THREE.Scene();
+        var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        // the native aurora shader; its colour constants became the theme colours, dimmed so the ground stays
+        // dark and the red stays an accent
+        var fs = [
+          "precision highp float;",
+          "varying vec2 vUv;",
+          "uniform float uTime;uniform float uAr;uniform vec3 uBg;uniform vec3 uWarm;uniform vec3 uCool;",
+          "vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}",
+          "vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}",
+          "vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}",
+          "vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}",
+          "float snoise(vec3 v){",
+          "  const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);",
+          "  vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);",
+          "  vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;",
+          "  vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);",
+          "  vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;",
+          "  i=mod289(i);",
+          "  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));",
+          "  float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;",
+          "  vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);",
+          "  vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);",
+          "  vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);",
+          "  vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;",
+          "  vec4 sh=-step(h,vec4(0.0));",
+          "  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;",
+          "  vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);",
+          "  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));",
+          "  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;",
+          "  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;",
+          "  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));",
+          "}",
+          "void main(){",
+          "  vec2 uv=vUv;vec2 p=vec2(uv.x*uAr,uv.y);float t=uTime*0.06;",
+          "  float wx=snoise(vec3(p*1.4,t*0.5))*0.2;float wy=snoise(vec3(p*1.4+100.0,t*0.5))*0.2;",
+          "  vec2 wp=p+vec2(wx,wy);",
+          "  vec3 base=mix(uBg,uBg*1.6+0.02,smoothstep(0.0,1.0,uv.x*0.6+uv.y*0.4));",
+          "  float angle=0.65;float ridgeUv=dot(wp,vec2(cos(angle),sin(angle)));",
+          "  float ridge1=sin(ridgeUv*8.0+t*2.0+snoise(vec3(wp*0.8,t))*1.5);",
+          "  float ridge2=sin(ridgeUv*5.5-t*1.4+snoise(vec3(wp*1.2+50.0,t*0.7))*2.0);",
+          "  float ridge3=sin(ridgeUv*12.0+t*3.0+snoise(vec3(wp*0.6+80.0,t*0.4))*1.0);",
+          "  float crease1=pow(abs(ridge1),0.35)*sign(ridge1)*0.5+0.5;",
+          "  float crease2=pow(abs(ridge2),0.4)*sign(ridge2)*0.5+0.5;",
+          "  float crease3=pow(abs(ridge3),0.5)*sign(ridge3)*0.5+0.5;",
+          "  vec3 warm=mix(uWarm*0.3,uWarm*0.62,crease1);",
+          "  float warmZone=smoothstep(0.15,0.75,uv.x+uv.y*0.4+snoise(vec3(uv*2.0,t))*0.3);",
+          "  vec3 cool=mix(uCool*0.18,uCool*0.42,crease2);",
+          "  float coolZone=smoothstep(0.25,0.85,1.2-uv.x+uv.y*0.5+snoise(vec3(uv*2.0+40.0,t*0.8))*0.25);",
+          "  vec3 hot=mix(uWarm*0.2,uWarm*0.4,crease3);",
+          "  float hotZone=smoothstep(0.5,0.9,snoise(vec3(uv*2.5+20.0,t*0.6))*0.5+0.5);",
+          "  vec3 col=base;",
+          "  col=mix(col,warm,warmZone*0.75*smoothstep(0.3,0.7,crease1));",
+          "  col=mix(col,cool,coolZone*0.65*smoothstep(0.2,0.65,crease2));",
+          "  col=mix(col,hot,hotZone*0.5*smoothstep(0.35,0.8,crease3));",
+          "  float edgeGlow=pow(1.0-abs(ridge1),6.0)*0.4+pow(1.0-abs(ridge2),5.0)*0.25;",
+          "  col+=edgeGlow*mix(warm,cool,uv.x)*0.8;",
+          "  col*=1.0-pow(abs(ridge1),4.0)*0.15;",
+          "  float vig=1.0-smoothstep(0.5,1.5,length((uv-0.5)*vec2(1.3,1.0)));",
+          "  col*=0.65+vig*0.5;",
+          "  float luma=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(luma),col,1.5);",
+          "  col=clamp(col,0.0,1.0);col=pow(col,vec3(0.9));",
+          "  gl_FragColor=vec4(col,1.0);",
+          "}",
+        ].join("\n");
+        scene.add(
+          new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 2),
+            new THREE.ShaderMaterial({
+              vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }",
+              fragmentShader: fs,
+              uniforms: uniforms,
+            }),
+          ),
+        );
+        renderer.render(scene, camera);
+
+        var gctx = glass.getContext("2d");
+        var lg = new LiquidGlass.LiquidGlassCanvas(glass);
+        var lgReady = false;
+        function paintGlass() {
+          gctx.clearRect(0, 0, SW, SH);
+          gctx.drawImage(three, 0, 0, SW, SH);
+          lg.renderGlassElements();
+        }
+        lg.waitForInit().then(function (ok) {
+          if (!ok) return;
+          lgReady = true;
+          glass.onpaint = paintGlass;
+          if (glass.requestPaint) glass.requestPaint();
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        function cue(i, d, min) {
+          return Math.max(min, isFinite(cues[i]) && cues[i] >= 0 ? cues[i] : d);
+        }
+        var exit = oneOf(V.exit, ["none", "out", "fade"], "none");
+
+        // the cards are measured with the brand fonts loaded: each glass panel takes the height of its words
+        // (runtimes.md:7 – build inside document.fonts.ready, register at the end)
+        void document.body.offsetHeight;
+        document.fonts.ready.then(function () {
+          // glass is tweened by selector string: the lint exempts left/top only on targets it resolves inside
+          // canvas[layoutsubtree] (packages/lint/src/rules/gsap.ts:1940)
+          var c1 = $("c1"),
+            c2 = $("c2");
+          c1.style.width = c2.style.width = CW + "px";
+          var h1 = c1.offsetHeight,
+            h2 = c2.offsetHeight,
+            y2 = CY + h1 + GAP;
+          c1.style.left = c2.style.left = CX + "px";
+          c1.style.top = CY + "px";
+          c2.style.top = y2 + "px";
+          $("gp1").style.cssText = "width:" + CW + "px;height:" + h1 + "px;top:" + CY + "px;left:" + CX + "px";
+          $("gp2").style.cssText = "width:" + CW + "px;height:" + h2 + "px;top:" + y2 + "px;left:" + CX + "px";
+
+          var t1 = cue(0, 0.2, 0),
+            t2 = cue(1, 0.8, t1 + 0.4),
+            t3 = cue(2, 4.25, t2 + 0.6),
+            t4 = cue(3, t3 + 2.5, t3 + 0.5);
+          // cards slide in from beyond the stage's right edge, overshoot 14 px and settle (native motion)
+          var OFF = SW + 60;
+          var tl = gsap.timeline({ paused: true });
+          tl.to(
+            {},
+            {
+              duration: 30,
+              ease: "none",
+              onUpdate: function () {
+                uniforms.uTime.value = tl.time();
+                renderer.render(scene, camera);
+                if (lgReady) {
+                  glass.onpaint = paintGlass;
+                  if (glass.requestPaint) glass.requestPaint();
+                }
+              },
+            },
+            0,
+          );
+          gsap.set("#lgn-gp1, #lgn-gp2", { left: OFF, opacity: 0 });
+          gsap.set([c1, c2], { x: OFF - CX, opacity: 0 });
+          gsap.set($("actions"), { y: 8, opacity: 0 });
+          gsap.set($("done"), { opacity: 0 });
+          gsap.set($("donetext"), { opacity: 0 });
+          tl.to("#lgn-gp1", { left: CX - 14, opacity: 1, duration: 0.38, ease: "power3.out" }, t1);
+          tl.to(c1, { x: -14, opacity: 1, duration: 0.38, ease: "power3.out" }, t1);
+          tl.to("#lgn-gp1", { left: CX, duration: 0.16, ease: "power2.out" }, t1 + 0.38);
+          tl.to(c1, { x: 0, duration: 0.16, ease: "power2.out" }, t1 + 0.38);
+          tl.to("#lgn-gp2", { left: CX - 14, opacity: 1, duration: 0.38, ease: "power3.out" }, t2);
+          tl.to(c2, { x: -14, opacity: 1, duration: 0.38, ease: "power3.out" }, t2);
+          tl.to("#lgn-gp2", { left: CX, duration: 0.16, ease: "power2.out" }, t2 + 0.38);
+          tl.to(c2, { x: 0, duration: 0.16, ease: "power2.out" }, t2 + 0.38);
+          tl.to($("fill"), { scaleX: 1, duration: t3 - t2, ease: "none" }, t2);
+          tl.to($("dot"), { scale: 1.45, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }, t2 + 0.28);
+          tl.to(
+            "#lgn-typing span",
+            { opacity: 1, y: -3, duration: 0.22, ease: "power2.out", stagger: 0.08, yoyo: true, repeat: 5 },
+            t2 + 0.38,
+          );
+          // the second card nods when the action chips arrive
+          tl.to("#lgn-gp2", { top: y2 + 10, duration: 0.18, ease: "power2.out" }, t2 + 1.73);
+          tl.to(c2, { y: 10, duration: 0.18, ease: "power2.out" }, t2 + 1.73);
+          tl.to("#lgn-gp2", { top: y2, duration: 0.22, ease: "power2.out" }, t2 + 1.91);
+          tl.to(c2, { y: 0, duration: 0.22, ease: "power2.out" }, t2 + 1.91);
+          tl.to($("actions"), { y: 0, opacity: 1, duration: 0.24, ease: "power2.out" }, t2 + 1.9);
+          // done: status, text and dot change; the first card nods
+          tl.to($("dot"), { backgroundColor: "var(--accent, #ff0000)", duration: 0.15 }, t3);
+          tl.to($("busy"), { opacity: 0, duration: 0.15 }, t3);
+          tl.to($("done"), { opacity: 1, duration: 0.15 }, t3);
+          tl.to($("busytext"), { opacity: 0, duration: 0.15 }, t3);
+          tl.to($("donetext"), { opacity: 1, duration: 0.15 }, t3);
+          tl.to("#lgn-gp1", { top: CY - 8, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
+          tl.to(c1, { y: -8, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
+          if (exit === "out") {
+            tl.to("#lgn-gp1", { left: OFF, opacity: 0, duration: 0.42, ease: "power2.in" }, t4);
+            tl.to(c1, { x: OFF - CX, opacity: 0, duration: 0.42, ease: "power2.in" }, t4);
+            tl.to("#lgn-gp2", { left: OFF, opacity: 0, duration: 0.42, ease: "power2.in" }, t4 + 0.18);
+            tl.to(c2, { x: OFF - CX, opacity: 0, duration: 0.42, ease: "power2.in" }, t4 + 0.18);
+            tl.to(stage, { opacity: 0, duration: 0.4, ease: "power2.in" }, t4 + 0.6);
+          } else if (exit === "fade") {
+            tl.to(stage, { opacity: 0, duration: 0.5, ease: "power2.in" }, t4);
+          }
+          tl.set({}, {}, 30);
+          window.__timelines = window.__timelines || {};
+          window.__timelines["liquid-glass-notification"] = tl;
+        });
+      })();
+    </script>
+  </body>
+</html>

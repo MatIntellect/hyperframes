@@ -1,0 +1,49 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-slice-hero",
+  "type": "hyperframes:block",
+  "title": "Code Slice Hero",
+  "description": "A tiled light surface carries a Bebas headline; an imaginary cursor sweeps across, nearby tiles lift and tilt, and the cells under the type flip over to reveal the rear headline. One instanced WebGL 2 draw plus a projected-shadow pass. Headlines, sweep, cursor, tiles, shadow, cues and exit are variables.",
+  "tags": [
+    "3d-motion",
+    "transition",
+    "typography",
+    "tiles",
+    "flip",
+    "webgl2",
+    "shadows",
+    "two-headlines"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-slice-hero.html",
+      "target": "compositions/code-slice-hero.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/GSAP-NOTICE.txt",
+      "target": "assets/GSAP-NOTICE.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/code-slice-shadows.js",
+      "target": "assets/code-slice-shadows.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/code-slice-surface.js",
+      "target": "assets/code-slice-surface.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/gsap-3.14.2.min.js",
+      "target": "assets/gsap-3.14.2.min.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

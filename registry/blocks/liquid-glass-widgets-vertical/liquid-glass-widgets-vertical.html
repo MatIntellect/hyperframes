@@ -1,0 +1,764 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the glow to the frame edge; stats, showcase and chips in a 780 column centred on the field (y 180-1360). top / bottom: the glow on a 780x760 card at y 180-940 / 600-1360 with stats and showcase (no chips), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "label1", "type": "string", "role": "content", "label": "Stat 1 label", "description": "Upper-case label of the meter card.", "maxLength": 8, "default": "Охват" },
+    { "id": "from1", "type": "number", "role": "content", "label": "Stat 1 from", "default": 12, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "to1", "type": "number", "role": "content", "label": "Stat 1 to", "description": "The number counts up from cue 2; one decimal when this value has one.", "default": 48, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "unit1", "type": "string", "role": "content", "label": "Stat 1 unit", "description": "After the number; % makes the bar the share itself.", "maxLength": 2, "default": "K" },
+    { "id": "label2", "type": "string", "role": "content", "label": "Stat 2 label", "description": "Upper-case label of the battery card.", "maxLength": 8, "default": "Досмотры" },
+    { "id": "from2", "type": "number", "role": "content", "label": "Stat 2 from", "default": 62, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "to2", "type": "number", "role": "content", "label": "Stat 2 to", "default": 78, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "unit2", "type": "string", "role": "content", "label": "Stat 2 unit", "maxLength": 2, "default": "%" },
+    { "id": "label3", "type": "string", "role": "content", "label": "Stat 3 label", "description": "Upper-case label of the ring card; the number sits in the ring.", "maxLength": 8, "default": "Подписки" },
+    { "id": "from3", "type": "number", "role": "content", "label": "Stat 3 from", "default": 1.2, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "to3", "type": "number", "role": "content", "label": "Stat 3 to", "default": 1.9, "min": 0, "max": 999, "step": 0.1 },
+    { "id": "unit3", "type": "string", "role": "content", "label": "Stat 3 unit", "maxLength": 2, "default": "K" },
+    { "id": "icon", "type": "image", "role": "content", "label": "Showcase icon", "description": "Square icon on top of the showcase card, rounded.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "title", "type": "string", "role": "content", "label": "Showcase title", "description": "Bold, up to two lines.", "maxLength": 24, "default": "Монтаж ролика" },
+    { "id": "desc", "type": "string", "role": "content", "label": "Showcase text", "description": "Centred, up to three lines.", "maxLength": 90, "default": "Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»" },
+    { "id": "busy", "type": "string", "role": "content", "label": "Status while working", "description": "Next to the dot until cue 3; the bar fills from cue 2 to cue 3.", "maxLength": 20, "default": "Собираю кадры" },
+    { "id": "done", "type": "string", "role": "content", "label": "Status when done", "description": "Replaces the working status at cue 3.", "maxLength": 20, "default": "Ролик готов" },
+    { "id": "chip1", "type": "string", "role": "content", "label": "Chip 1", "description": "Full screen only.", "maxLength": 12, "default": "Субтитры" },
+    { "id": "chip2", "type": "string", "role": "content", "label": "Chip 2", "description": "Full screen only.", "maxLength": 12, "default": "Графика" },
+    { "id": "chip3", "type": "string", "role": "content", "label": "Chip 3", "description": "Full screen only.", "maxLength": 12, "default": "Звук" },
+    { "id": "warm", "type": "color", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass.", "default": "#ff0000" },
+    { "id": "cool", "type": "color", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow.", "default": "#8a8a90" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the cards rise in turn (stats, showcase, chips over 1 s), 2 the numbers count up and the bars fill, 3 the work is done (status changes, bar full, cards nod), 4 the exit (only when exit is not none). Empty keeps 0.1, 0.9, 5.2, 6.75.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the cards and the glow to the end of the mount. out: the cards drop out at cue 4, then the glow fades. fade: everything fades at cue 4.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Drop out" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu"
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/lib/liquid-glass.iife.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #lgwv-root {
+        font-family: "Montserrat", sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #lgwv-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #lgwv-three,
+      #lgwv-glass {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+      }
+      #lgwv-glass {
+        z-index: 1;
+      }
+      #lgwv-words {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+      }
+      
+      #lgwv-stage.lgwv-card {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #lgwv-stage.lgwv-bottom {
+        top: 600px;
+      }
+      #lgwv-stage.lgwv-card .lgwv-pill {
+        display: none;
+      }
+      
+
+      /* glass panels: the library reads left, top, width and height of each .liquid-glass child */
+      /* the library has its own opacity (--lg-opacity); the element's opacity does not reach the glass */
+      .lgwv-gp {
+        position: absolute;
+        border-radius: 36px;
+        --lg-opacity: 1;
+        background: rgba(255, 255, 255, 0.025);
+        --lg-blur: 0.42;
+        --lg-refraction: 0.82;
+        --lg-corner-radius: 36;
+        --lg-z-radius: 46;
+        --lg-specular: 0.34;
+        --lg-fresnel: 1.25;
+        --lg-edge-highlight: 0.26;
+        --lg-chrom-aberration: 0.08;
+        --lg-shadow-opacity: 0;
+        --lg-shadow-spread: 0;
+        --lg-shadow-offset-y: 0;
+        --lg-saturation: 0.38;
+      }
+
+      /* the words' own frosted face (native), over a dark tint so white reads on any glow ridge */
+      .lgwv-face {
+        position: absolute;
+        overflow: hidden;
+        border-radius: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background:
+          linear-gradient(150deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 46%, rgba(255, 255, 255, 0.08)),
+          rgba(12, 16, 20, 0.32);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.4),
+          inset 0 -18px 38px rgba(255, 255, 255, 0.05);
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.38);
+      }
+      .lgwv-face::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), transparent 28%, transparent 66%, rgba(255, 255, 255, 0.14));
+        opacity: 0.32;
+        mix-blend-mode: screen;
+      }
+      .lgwv-face > * {
+        position: relative;
+      }
+      .lgwv-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 22px 12px;
+      }
+      .lgwv-label {
+        font-size: 28px;
+        font-weight: 650;
+        text-transform: uppercase;
+        line-height: 1.25;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+      .lgwv-value {
+        font-size: 52px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .lgwv-unit {
+        font-size: 32px;
+        font-weight: 500;
+      }
+      .lgwv-meter {
+        width: 70%;
+        height: 8px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.28);
+      }
+      .lgwv-meter > div,
+      #lgwv-battery > div {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent, #ff0000);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+      #lgwv-battery {
+        width: 118px;
+        height: 44px;
+        padding: 5px;
+        border: 2px solid rgba(255, 255, 255, 0.66);
+        border-radius: 12px;
+      }
+      #lgwv-battery::after {
+        content: "";
+        position: absolute;
+        top: 14px;
+        right: -9px;
+        width: 5px;
+        height: 14px;
+        border-radius: 0 5px 5px 0;
+        background: rgba(255, 255, 255, 0.66);
+      }
+      #lgwv-battery > div {
+        border-radius: 7px;
+      }
+      #lgwv-ring {
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+      }
+      #lgwv-ring-in {
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(7, 10, 18, 0.5);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        font-size: 30px;
+        font-weight: 800;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      #lgwv-show {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 32px;
+        text-align: center;
+      }
+      #lgwv-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        object-fit: cover;
+        display: block;
+      }
+      #lgwv-title {
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+      }
+      #lgwv-desc {
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+      #lgwv-status {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      #lgwv-sdot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: var(--accent, #ff0000);
+      }
+      .lgwv-swap {
+        display: grid;
+      }
+      .lgwv-swap > * {
+        grid-area: 1 / 1;
+      }
+      #lgwv-bar {
+        width: 70%;
+        height: 8px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+      #lgwv-fill {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent, #ff0000);
+        transform-origin: left center;
+      }
+      .lgwv-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 26px;
+        border-radius: 999px;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.25;
+        white-space: nowrap;
+      }
+      .lgwv-pdot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="lgwv-root" data-composition-id="liquid-glass-widgets-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <div id="lgwv-stage">
+        <canvas id="lgwv-three"></canvas>
+        <canvas id="lgwv-glass" layoutsubtree>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gs1" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gs2" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gs3" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gsc" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gp1" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gp2" data-layout-allow-overflow></div>
+          <div class="lgwv-gp liquid-glass" id="lgwv-gp3" data-layout-allow-overflow></div>
+        </canvas>
+        <div id="lgwv-words">
+          <div class="lgwv-face lgwv-stat" id="lgwv-s1">
+            <span class="lgwv-label" id="lgwv-label1">Охват</span>
+            <span class="lgwv-value"><span id="lgwv-v1">12</span><span class="lgwv-unit" id="lgwv-unit1">K</span></span>
+            <div class="lgwv-meter"><div id="lgwv-meter"></div></div>
+          </div>
+          <div class="lgwv-face lgwv-stat" id="lgwv-s2">
+            <span class="lgwv-label" id="lgwv-label2">Досмотры</span>
+            <div id="lgwv-battery"><div id="lgwv-bfill"></div></div>
+            <span class="lgwv-value"><span id="lgwv-v2">62</span><span class="lgwv-unit" id="lgwv-unit2">%</span></span>
+          </div>
+          <div class="lgwv-face lgwv-stat" id="lgwv-s3">
+            <span class="lgwv-label" id="lgwv-label3">Подписки</span>
+            <div id="lgwv-ring"><div id="lgwv-ring-in"><span id="lgwv-v3">1,2K</span></div></div>
+          </div>
+          <div class="lgwv-face" id="lgwv-show">
+            <img id="lgwv-icon" src="assets/img/matintellect-avatar.svg" alt="" />
+            <div id="lgwv-title">Монтаж ролика</div>
+            <div id="lgwv-desc">Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»</div>
+            <div id="lgwv-status">
+              <span id="lgwv-sdot"></span>
+              <span class="lgwv-swap"><span id="lgwv-busy">Собираю кадры</span><span id="lgwv-done">Ролик готов</span></span>
+            </div>
+            <div id="lgwv-bar"><div id="lgwv-fill"></div></div>
+          </div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p1"><span class="lgwv-pdot" style="background: var(--accent, #ff0000)"></span><span id="lgwv-chip1">Субтитры</span></div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p2"><span class="lgwv-pdot" style="background: var(--fg, #f2f2f2)"></span><span id="lgwv-chip2">Графика</span></div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p3"><span class="lgwv-pdot" style="background: var(--muted, #8a8a90)"></span><span id="lgwv-chip3">Звук</span></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("lgwv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(id) {
+          return document.getElementById("lgwv-" + id);
+        }
+        function str(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function num(v, d) {
+          var n = parseFloat(v);
+          return isFinite(n) ? Math.min(999, Math.max(0, n)) : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var stage = $("stage");
+        var card = false;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        card = placement !== "full";
+        if (card) stage.classList.add("lgwv-card", "lgwv-" + placement);
+        
+
+        var S = [
+          { label: str(V.label1, "Охват"), from: num(V.from1, 12), to: num(V.to1, 48), unit: str(V.unit1, "K") },
+          { label: str(V.label2, "Досмотры"), from: num(V.from2, 62), to: num(V.to2, 78), unit: str(V.unit2, "%") },
+          { label: str(V.label3, "Подписки"), from: num(V.from3, 1.2), to: num(V.to3, 1.9), unit: str(V.unit3, "K") },
+        ];
+        S.forEach(function (s, i) {
+          s.dec = Math.round(s.to * 10) % 10 !== 0 || Math.round(s.from * 10) % 10 !== 0 ? 1 : 0;
+          $("label" + (i + 1)).textContent = s.label;
+          if (i < 2) $("unit" + (i + 1)).textContent = s.unit;
+        });
+        function fmt(s, v) {
+          return v.toFixed(s.dec).replace(".", ",");
+        }
+        // bar share: a percentage is the share itself; any other number fills up to 80 % at its end value
+        function share(s, v) {
+          var f = s.unit === "%" ? v / 100 : s.to > 0 ? (0.8 * v) / s.to : 0;
+          return Math.min(1, Math.max(0, f));
+        }
+        $("icon").src = str(V.icon, "assets/img/matintellect-avatar.svg");
+        $("title").textContent = str(V.title, "Монтаж ролика");
+        $("desc").textContent = str(V.desc, "Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»");
+        $("busy").textContent = str(V.busy, "Собираю кадры");
+        $("done").textContent = str(V.done, "Ролик готов");
+        $("chip1").textContent = str(V.chip1, "Субтитры");
+        $("chip2").textContent = str(V.chip2, "Графика");
+        $("chip3").textContent = str(V.chip3, "Звук");
+
+        var SW = stage.clientWidth,
+          SH = stage.clientHeight;
+        var three = $("three"),
+          glass = $("glass");
+        [three, glass].forEach(function (c) {
+          c.width = SW;
+          c.height = SH;
+          c.style.width = SW + "px";
+          c.style.height = SH + "px";
+        });
+
+        // glow colours: the theme ground and two colour fields, as 0..1 triples for the shader
+        function rgb(css, d) {
+          var i = document.createElement("i");
+          i.style.color = css || d;
+          root.appendChild(i);
+          var m = getComputedStyle(i).color.match(/[\d.]+/g) || [0, 0, 0];
+          i.remove();
+          return new THREE.Vector3(m[0] / 255, m[1] / 255, m[2] / 255);
+        }
+        var cs = getComputedStyle(root);
+        var uniforms = {
+          uTime: { value: 0 },
+          uAr: { value: SW / SH },
+          uBg: { value: rgb(cs.getPropertyValue("--bg").trim(), "#0c1014") },
+          uWarm: { value: rgb(str(V.warm, "#ff0000"), "#ff0000") },
+          uCool: { value: rgb(str(V.cool, "#8a8a90"), "#8a8a90") },
+        };
+        var renderer = new THREE.WebGLRenderer({ canvas: three, antialias: false, preserveDrawingBuffer: true });
+        renderer.setSize(SW, SH, false);
+        renderer.setPixelRatio(1);
+        var scene = new THREE.Scene();
+        var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        // the native aurora shader; its colour constants became the theme colours, dimmed so the ground stays
+        // dark and the red stays an accent
+        var fs = [
+          "precision highp float;",
+          "varying vec2 vUv;",
+          "uniform float uTime;uniform float uAr;uniform vec3 uBg;uniform vec3 uWarm;uniform vec3 uCool;",
+          "vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}",
+          "vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}",
+          "vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}",
+          "vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}",
+          "float snoise(vec3 v){",
+          "  const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);",
+          "  vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);",
+          "  vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;",
+          "  vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);",
+          "  vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;",
+          "  i=mod289(i);",
+          "  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));",
+          "  float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;",
+          "  vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);",
+          "  vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);",
+          "  vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);",
+          "  vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;",
+          "  vec4 sh=-step(h,vec4(0.0));",
+          "  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;",
+          "  vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);",
+          "  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));",
+          "  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;",
+          "  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;",
+          "  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));",
+          "}",
+          "void main(){",
+          "  vec2 uv=vUv;vec2 p=vec2(uv.x*uAr,uv.y);float t=uTime*0.06;",
+          "  float wx=snoise(vec3(p*1.4,t*0.5))*0.2;float wy=snoise(vec3(p*1.4+100.0,t*0.5))*0.2;",
+          "  vec2 wp=p+vec2(wx,wy);",
+          "  vec3 base=mix(uBg,uBg*1.6+0.02,smoothstep(0.0,1.0,uv.x*0.6+uv.y*0.4));",
+          "  float angle=0.65;float ridgeUv=dot(wp,vec2(cos(angle),sin(angle)));",
+          "  float ridge1=sin(ridgeUv*8.0+t*2.0+snoise(vec3(wp*0.8,t))*1.5);",
+          "  float ridge2=sin(ridgeUv*5.5-t*1.4+snoise(vec3(wp*1.2+50.0,t*0.7))*2.0);",
+          "  float ridge3=sin(ridgeUv*12.0+t*3.0+snoise(vec3(wp*0.6+80.0,t*0.4))*1.0);",
+          "  float crease1=pow(abs(ridge1),0.35)*sign(ridge1)*0.5+0.5;",
+          "  float crease2=pow(abs(ridge2),0.4)*sign(ridge2)*0.5+0.5;",
+          "  float crease3=pow(abs(ridge3),0.5)*sign(ridge3)*0.5+0.5;",
+          "  vec3 warm=mix(uWarm*0.3,uWarm*0.62,crease1);",
+          "  float warmZone=smoothstep(0.15,0.75,uv.x+uv.y*0.4+snoise(vec3(uv*2.0,t))*0.3);",
+          "  vec3 cool=mix(uCool*0.18,uCool*0.42,crease2);",
+          "  float coolZone=smoothstep(0.25,0.85,1.2-uv.x+uv.y*0.5+snoise(vec3(uv*2.0+40.0,t*0.8))*0.25);",
+          "  vec3 hot=mix(uWarm*0.2,uWarm*0.4,crease3);",
+          "  float hotZone=smoothstep(0.5,0.9,snoise(vec3(uv*2.5+20.0,t*0.6))*0.5+0.5);",
+          "  vec3 col=base;",
+          "  col=mix(col,warm,warmZone*0.75*smoothstep(0.3,0.7,crease1));",
+          "  col=mix(col,cool,coolZone*0.65*smoothstep(0.2,0.65,crease2));",
+          "  col=mix(col,hot,hotZone*0.5*smoothstep(0.35,0.8,crease3));",
+          "  float edgeGlow=pow(1.0-abs(ridge1),6.0)*0.4+pow(1.0-abs(ridge2),5.0)*0.25;",
+          "  col+=edgeGlow*mix(warm,cool,uv.x)*0.8;",
+          "  col*=1.0-pow(abs(ridge1),4.0)*0.15;",
+          "  float vig=1.0-smoothstep(0.5,1.5,length((uv-0.5)*vec2(1.3,1.0)));",
+          "  col*=0.65+vig*0.5;",
+          "  float luma=dot(col,vec3(0.299,0.587,0.114));col=mix(vec3(luma),col,1.5);",
+          "  col=clamp(col,0.0,1.0);col=pow(col,vec3(0.9));",
+          "  gl_FragColor=vec4(col,1.0);",
+          "}",
+        ].join("\n");
+        scene.add(
+          new THREE.Mesh(
+            new THREE.PlaneGeometry(2, 2),
+            new THREE.ShaderMaterial({
+              vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }",
+              fragmentShader: fs,
+              uniforms: uniforms,
+            }),
+          ),
+        );
+        renderer.render(scene, camera);
+
+        var gctx = glass.getContext("2d");
+        var lg = new LiquidGlass.LiquidGlassCanvas(glass);
+        var lgReady = false;
+        function paintGlass() {
+          gctx.clearRect(0, 0, SW, SH);
+          gctx.drawImage(three, 0, 0, SW, SH);
+          lg.renderGlassElements();
+        }
+        lg.waitForInit().then(function (ok) {
+          if (!ok) return;
+          lgReady = true;
+          glass.onpaint = paintGlass;
+          if (glass.requestPaint) glass.requestPaint();
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        function cue(i, d, min) {
+          return Math.max(min, isFinite(cues[i]) && cues[i] >= 0 ? cues[i] : d);
+        }
+        var exit = oneOf(V.exit, ["none", "out", "fade"], "none");
+
+        // layout from measured words (brand fonts loaded): each glass panel takes the box of its words
+        // (runtimes.md:7 – build inside document.fonts.ready, register at the end)
+        void document.body.offsetHeight;
+        document.fonts.ready.then(function () {
+          // column: wide – stats left, showcase right, chips under the stats; vertical – one 780 column
+          // centred on the field; vertical card – 720 inside the card, no chips
+          var COLX = 165,
+            COLW = 950,
+            GAP = 40,
+            STW = 290,
+            SCX = 1155,
+            SCW = 600;
+          
+          COLX = 150;
+          COLW = 780;
+          GAP = 30;
+          STW = 240;
+          if (card) {
+            COLX = 28;
+            COLW = SW - 56;
+            GAP = 12;
+            STW = (COLW - 24) / 3;
+          }
+          SCX = COLX;
+          SCW = COLW;
+          
+          var ring = Math.min(150, STW - 60);
+          $("ring").style.cssText = "width:" + ring + "px;height:" + ring + "px";
+          $("ring-in").style.cssText = "width:" + (ring - 28) + "px;height:" + (ring - 28) + "px";
+          var B = {};
+          ["s1", "s2", "s3"].forEach(function (id) {
+            $(id).style.width = STW + "px";
+          });
+          var STH = Math.max(STW, $("s1").offsetHeight, $("s2").offsetHeight, $("s3").offsetHeight);
+          $("show").style.width = SCW + "px";
+          var SCH = $("show").offsetHeight;
+          var PH = $("p1").offsetHeight;
+          var top0, showY, pillY;
+          
+          
+          var ROW = card ? 24 : GAP;
+          var total = STH + ROW + SCH + (card ? 0 : ROW + PH);
+          top0 = card ? (SH - total) / 2 : 180 + (1180 - total) / 2;
+          showY = top0 + STH + ROW;
+          pillY = showY + SCH + ROW;
+          
+          [0, 1, 2].forEach(function (i) {
+            B["s" + (i + 1)] = [COLX + i * (STW + GAP), top0, STW, STH];
+          });
+          B.show = [SCX, showY, SCW, SCH];
+          var px = COLX;
+          [1, 2, 3].forEach(function (i) {
+            var w = $("p" + i).offsetWidth;
+            B["p" + i] = [px, pillY, w, PH];
+            px += w + 20;
+          });
+          
+          // chips centred under the column
+          var shift = (COLW - (px - 20 - COLX)) / 2;
+          [1, 2, 3].forEach(function (i) {
+            B["p" + i][0] += shift;
+          });
+          
+          var G = { s1: "gs1", s2: "gs2", s3: "gs3", show: "gsc", p1: "gp1", p2: "gp2", p3: "gp3" };
+          Object.keys(B).forEach(function (k) {
+            var b = B[k];
+            $(k).style.cssText += ";left:" + b[0] + "px;top:" + b[1] + "px;width:" + b[2] + "px;height:" + b[3] + "px";
+            var r = k.charAt(0) === "p" ? b[3] / 2 : 36;
+            $(G[k]).style.cssText =
+              "left:" + b[0] + "px;top:" + b[1] + "px;width:" + b[2] + "px;height:" + b[3] + "px;border-radius:" + r + "px;--lg-corner-radius:" + r;
+            if (k.charAt(0) === "p") $(k).style.borderRadius = r + "px";
+          });
+
+          var t1 = cue(0, 0.1, 0),
+            t2 = cue(1, 0.9, t1),
+            t3 = cue(2, 5.2, t2 + 0.8),
+            t4 = cue(3, t3 + 1.55, t3 + 0.5);
+          var OFF = SH + 80;
+          var tl = gsap.timeline({ paused: true });
+          tl.to(
+            {},
+            {
+              duration: 30,
+              ease: "none",
+              onUpdate: function () {
+                uniforms.uTime.value = tl.time();
+                renderer.render(scene, camera);
+                if (lgReady) {
+                  glass.onpaint = paintGlass;
+                  if (glass.requestPaint) glass.requestPaint();
+                }
+              },
+            },
+            0,
+          );
+          // glass is tweened by selector string: the lint exempts top only on targets it resolves inside
+          // canvas[layoutsubtree] (packages/lint/src/rules/gsap.ts:1940)
+          // wide: rise from below the frame (native); vertical: a short 120 px rise with a fade, so nothing
+          // crosses the caption band on the way in or out
+          var RISE = 0;
+          
+          RISE = 120;
+          
+          var FROM = RISE ? 0 : 1;
+          gsap.set("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", {
+            top: OFF,
+            "--lg-opacity": FROM,
+          });
+          Object.keys(B).forEach(function (k) {
+            gsap.set($(k), { y: RISE || OFF - B[k][1], opacity: FROM });
+          });
+          gsap.set($("done"), { opacity: 0 });
+          gsap.set($("fill"), { scaleX: 0.18 });
+          // rise in turn (native order and pace)
+          // vertical: glass waits beyond the stage edge (the library draws a faint shell even at --lg-opacity 0)
+          // and steps onto its start 120 px below the place only when its rise begins
+          if (RISE) {
+            tl.set("#lgwv-gs1", { top: B.s1[1] + RISE }, t1);
+            tl.set("#lgwv-gs2", { top: B.s2[1] + RISE }, t1 + 0.12);
+            tl.set("#lgwv-gs3", { top: B.s3[1] + RISE }, t1 + 0.24);
+            tl.set("#lgwv-gsc", { top: B.show[1] + RISE }, t1 + 0.38);
+            if (!card) {
+              tl.set("#lgwv-gp1", { top: B.p1[1] + RISE }, t1 + 0.78);
+              tl.set("#lgwv-gp2", { top: B.p2[1] + RISE }, t1 + 0.88);
+              tl.set("#lgwv-gp3", { top: B.p3[1] + RISE }, t1 + 0.98);
+            }
+          }
+          tl.to("#lgwv-gs1", { top: B.s1[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1);
+          tl.to($("s1"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1);
+          tl.to("#lgwv-gs2", { top: B.s2[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1 + 0.12);
+          tl.to($("s2"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1 + 0.12);
+          tl.to("#lgwv-gs3", { top: B.s3[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1 + 0.24);
+          tl.to($("s3"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1 + 0.24);
+          tl.to("#lgwv-gsc", { top: B.show[1], "--lg-opacity": 1, duration: 0.5, ease: "power3.out" }, t1 + 0.38);
+          tl.to($("show"), { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, t1 + 0.38);
+          if (!card) {
+            tl.to("#lgwv-gp1", { top: B.p1[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.78);
+            tl.to($("p1"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.78);
+            tl.to("#lgwv-gp2", { top: B.p2[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.88);
+            tl.to($("p2"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.88);
+            tl.to("#lgwv-gp3", { top: B.p3[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.98);
+            tl.to($("p3"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.98);
+          }
+          // numbers count up and bars fill from cue 2
+          function counter(i, el, at, dur, apply) {
+            var s = S[i],
+              c = { v: s.from };
+            apply(s, s.from);
+            tl.to(c, { v: s.to, duration: dur, ease: "power2.out", onUpdate: function () { apply(s, c.v); } }, at);
+          }
+          counter(0, null, t2, 2.2, function (s, v) {
+            $("v1").textContent = fmt(s, v);
+            gsap.set($("meter"), { scaleX: share(s, v) });
+          });
+          counter(1, null, t2 + 0.15, 2.4, function (s, v) {
+            $("v2").textContent = fmt(s, v);
+            gsap.set($("bfill"), { scaleX: share(s, v) });
+          });
+          counter(2, null, t2 + 0.3, 2.6, function (s, v) {
+            var deg = Math.round(share(s, v) * 360);
+            $("v3").textContent = fmt(s, v) + s.unit;
+            $("ring").style.background =
+              "conic-gradient(var(--accent, #ff0000) 0deg " + deg + "deg, rgba(255, 255, 255, 0.18) " + deg + "deg)";
+          });
+          tl.to($("fill"), { scaleX: 0.92, duration: t3 - t2 - 0.3, ease: "none" }, t2 + 0.3);
+          tl.to($("sdot"), { scale: 1.5, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 7 }, t2 + 0.5);
+          if (!card) tl.to(".lgwv-pdot", { scale: 1.55, duration: 0.2, ease: "power2.out", stagger: 0.12, yoyo: true, repeat: 3 }, t2 + 1.3);
+          // done: status changes, the bar closes, the showcase and then the stats nod
+          tl.to($("busy"), { opacity: 0, duration: 0.15 }, t3);
+          tl.to($("done"), { opacity: 1, duration: 0.15 }, t3);
+          tl.to($("fill"), { scaleX: 1, duration: 0.2, ease: "power2.out" }, t3);
+          tl.to("#lgwv-gsc", { top: B.show[1] - 10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
+          tl.to($("show"), { y: -10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
+          tl.to("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3", { top: top0 - 12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3 + 0.5);
+          tl.to([$("s1"), $("s2"), $("s3")], { y: -12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3 + 0.5);
+          if (exit === "out") {
+            tl.to("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", { top: "+=" + (RISE || SH), "--lg-opacity": FROM, duration: 0.42, ease: "power2.in" }, t4);
+            tl.to($("words").children, { y: "+=" + (RISE || SH), opacity: FROM, duration: 0.42, ease: "power2.in" }, t4);
+            if (RISE) tl.set("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", { top: OFF }, t4 + 0.42);
+            tl.to(stage, { opacity: 0, duration: 0.4, ease: "power2.in" }, t4 + 0.45);
+          } else if (exit === "fade") {
+            tl.to(stage, { opacity: 0, duration: 0.5, ease: "power2.in" }, t4);
+          }
+          tl.set({}, {}, 30);
+          window.__timelines = window.__timelines || {};
+          window.__timelines["liquid-glass-widgets-vertical"] = tl;
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the wave crosses the field at its centre (y 770). top / bottom: the same at the centre of the card zone y 180-940 / 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "What is written along the wave, letter by letter, Montserrat 64 px.", "maxLength": 20, "default": "Поехали со мной!" },
+    { "id": "guide", "type": "enum", "role": "style", "label": "Guide", "description": "show draws a faint dotted line along the path under the text; none writes without it.", "default": "show", "options": [{ "value": "show", "label": "Show" }, { "value": "none", "label": "None" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the text starts to write (the guide draws from 0.5 s earlier; letters every 0.05 s, all within 2.6 s), 2 the text fades out (only when exit is fade; empty – once it has been read: 0.5 s + 0.3 s a word, at least 2 s after the last letter). Empty keeps 0.7.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the text to the end of the mount; fade fades it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #hwtv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: transparent; /* накладка поверх видео */
+      }
+      #hwtv-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      /* путь для textPath – только форма; без fill:none он залит чёрным под текстом (как у разработчиков) */
+      #hwtv-path {
+        fill: none;
+      }
+      #hwtv-guide {
+        fill: none;
+        stroke: var(--fg, #f2f2f2);
+        stroke-opacity: 0.22;
+        stroke-width: 3;
+        stroke-dasharray: 2 14;
+        stroke-linecap: round;
+      }
+      #hwtv-svg text {
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        font-weight: 700;
+        fill: var(--fg, #f2f2f2);
+      }
+      #hwtv-svg tspan {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hwtv-root" data-composition-id="hw-path-text-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <svg id="hwtv-svg" viewBox="0 0 1080 1920" data-layout-ignore>
+        <path id="hwtv-path" d=""></path>
+        <path id="hwtv-guide" d=""></path>
+        <text id="hwtv-text">
+          <textPath id="hwtv-tp" href="#hwtv-path" startOffset="4%"></textPath>
+        </text>
+      </svg>
+    </div>
+    <script>
+      (function () {
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var SEED = 12,
+          BOIL = { amp: 1.4, rot: 0.3, frameDrop: 3 },
+          CHAR_DELAY = 0.05,
+          OUT = 0.36;
+
+        
+        
+        // вертикаль: та же родная волна, ужатая в поле 150-930 (длина пути около 860 px)
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        var zc = placement === "top" ? 560 : placement === "bottom" ? 980 : 770;
+        function y(dy) {
+          return zc + 30 + dy; // буквы поднимаются над линией на 60 px – середина надписи на zc
+        }
+        var DEF_D = "M 160 " + y(70) + " C 320 " + y(-50) + ", 500 " + y(110) + ", 670 " + y(-20) + " S 880 " + y(-110) + ", 920 " + y(-80),
+          FS = 64,
+          DEF_TEXT = "Поехали со мной!";
+        var D = DEF_D;
+        
+
+        var pathEl = document.getElementById("hwtv-path");
+        var guide = document.getElementById("hwtv-guide");
+        pathEl.setAttribute("d", D);
+        var plen = 0;
+        try {
+          plen = pathEl.getTotalLength();
+        } catch (e) {
+          plen = 0;
+        }
+        if (!(plen > 0)) {
+          D = DEF_D;
+          pathEl.setAttribute("d", D);
+        }
+        var showGuide = oneOf(V.guide, ["show", "none"], "show") === "show";
+        if (showGuide) guide.setAttribute("d", D);
+        document.getElementById("hwtv-text").setAttribute("font-size", FS);
+
+        /* по букве на tspan вдоль пути (родное) */
+        var NS = "http://www.w3.org/2000/svg";
+        var tp = document.getElementById("hwtv-tp");
+        var said = typeof V.text === "string" ? V.text.trim() : DEF_TEXT;
+        Array.from(said).forEach(function (ch) {
+          var t = document.createElementNS(NS, "tspan");
+          t.textContent = ch;
+          tp.appendChild(t);
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.7;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        /* сперва пунктир, потом надпись по нему (родной ход) */
+        if (showGuide) {
+          var glen = guide.getTotalLength();
+          gsap.set(guide, { strokeDasharray: "2 14", strokeDashoffset: glen });
+          tl.to(guide, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, Math.max(0, c0 - 0.5));
+        }
+        var chars = tp.querySelectorAll("tspan");
+        var delay = Math.min(CHAR_DELAY, 2.6 / Math.max(1, chars.length));
+        if (chars.length) tl.to(chars, { opacity: 1, duration: 0.03, stagger: delay, ease: "none" }, c0);
+        var typed = c0 + chars.length * delay;
+
+        /* дрожь всей надписи – родная */
+        var svg = document.getElementById("hwtv-svg");
+        function boil() {
+          var step = Math.floor((tl.time() * 30) / BOIL.frameDrop);
+          gsap.set(svg, {
+            x: hash(step * 3) * BOIL.amp,
+            y: hash(step * 3 + 1) * BOIL.amp,
+            rotation: hash(step * 3 + 2) * BOIL.rot,
+          });
+        }
+        function hash(n) {
+          var x = Math.sin(n * 127.1 + SEED * 311.7) * 43758.5453;
+          return (x - Math.floor(x)) * 2 - 1;
+        }
+        tl.eventCallback("onUpdate", boil);
+        boil();
+
+        var words = said ? said.split(/\s+/).length : 0;
+        if (exit === "fade") tl.to(svg, { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : typed + Math.max(2, 0.5 + 0.3 * words));
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["hw-path-text-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

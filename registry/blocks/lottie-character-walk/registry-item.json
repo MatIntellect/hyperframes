@@ -1,0 +1,35 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "lottie-character-walk",
+  "type": "hyperframes:block",
+  "title": "Lottie Character Walk",
+  "description": "A jointed flat character in brand greys walks in on planted feet, stops and points at a brand card with a Bebas title and a grey line; the body acting is the developers' Lottie file, the stage is GSAP. Title and text are variables; holds or fades.",
+  "tags": [
+    "character",
+    "character-animation",
+    "mascot",
+    "walk-cycle",
+    "gesture",
+    "pointing",
+    "puppet",
+    "lottie",
+    "explainer"
+  ],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "lottie-character-walk.html",
+      "target": "compositions/lottie-character-walk.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/mascot.json",
+      "target": "assets/mascot.json",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

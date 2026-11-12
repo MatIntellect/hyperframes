@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "hw-path-text",
+  "type": "hyperframes:block",
+  "title": "Hand-drawn Path Text",
+  "description": "A Montserrat line written letter by letter along any curved SVG path over a faint dotted guide, the whole line boiling. Text, path, guide, cues and exit are variables; transparent overlay, holds or fades.",
+  "tags": ["hand-drawn", "text", "path", "curve", "handwriting", "boil", "overlay"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "hw-path-text.html",
+      "target": "compositions/hw-path-text.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

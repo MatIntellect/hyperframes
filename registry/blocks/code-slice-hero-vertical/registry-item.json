@@ -1,0 +1,50 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-slice-hero-vertical",
+  "type": "hyperframes:block",
+  "title": "Code Slice Hero (vertical)",
+  "description": "Vertical tiled headline flip: the light tile surface fills the frame (or a 780x760 card), the Bebas headline sits centred on the field and a cursor sweep flips the cells under the type to reveal the rear headline. Placement full, top or bottom card; holds or fades.",
+  "tags": [
+    "3d-motion",
+    "transition",
+    "typography",
+    "tiles",
+    "flip",
+    "webgl2",
+    "shadows",
+    "two-headlines",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-slice-hero-vertical.html",
+      "target": "compositions/code-slice-hero-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/GSAP-NOTICE.txt",
+      "target": "assets/GSAP-NOTICE.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/code-slice-shadows.js",
+      "target": "assets/code-slice-shadows.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/code-slice-surface.js",
+      "target": "assets/code-slice-surface.js",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/gsap-3.14.2.min.js",
+      "target": "assets/gsap-3.14.2.min.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

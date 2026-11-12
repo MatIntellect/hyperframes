@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "hw-text-cloud",
+  "type": "hyperframes:block",
+  "title": "Hand-drawn Text Cloud",
+  "description": "Transparent overlay: a hand-drawn speech bubble with a tail from the lower left or right; the outline draws on, the paper fills in brand light, the Montserrat text types letter by letter, the bubble boils. Position, tail, text and cues are variables; holds or fades.",
+  "tags": ["hand-drawn", "speech-bubble", "doodle", "typewriter", "boil", "overlay", "callout"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "hw-text-cloud.html",
+      "target": "compositions/hw-text-cloud.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

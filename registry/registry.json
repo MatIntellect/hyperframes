@@ -260,6 +260,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "cinemagraph",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "cinemagraph-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "claude-exchange",
       "type": "hyperframes:block"
     },
@@ -321,6 +329,14 @@
     },
     {
       "name": "code-shader-dissolve-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-slice-hero",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-slice-hero-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -420,6 +436,46 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "gooey-split",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "gooey-split-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-frame",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-frame-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-path-text",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-path-text-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-pipeline",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-pipeline-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-text-cloud",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hw-text-cloud-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "instagram-follow",
       "type": "hyperframes:block"
     },
@@ -428,11 +484,35 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "liquid-glass-notification",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "liquid-glass-notification-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "liquid-glass-widgets",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "liquid-glass-widgets-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "logo-outro",
       "type": "hyperframes:block"
     },
     {
       "name": "logo-outro-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lottie-character-walk",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lottie-character-walk-vertical",
       "type": "hyperframes:block"
     },
     {

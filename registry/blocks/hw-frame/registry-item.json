@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "hw-frame",
+  "type": "hyperframes:block",
+  "title": "Hand-drawn Frame",
+  "description": "Image in a hand-drawn border with red corner sparks and a Montserrat caption: the border draws on, the picture fades up, the whole unit tilts slightly and boils. Image, caption and cues are variables; images only, live footage stays in the host over the window; holds or fades.",
+  "tags": ["hand-drawn", "frame", "doodle", "photo", "caption", "boil", "media"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "hw-frame.html",
+      "target": "compositions/hw-frame.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

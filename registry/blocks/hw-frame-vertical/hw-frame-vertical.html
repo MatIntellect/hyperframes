@@ -1,0 +1,320 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the framed picture 700x452 with its caption centred on the field (y 770). top / bottom: the same on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "image", "type": "string", "role": "content", "label": "Image", "description": "Path to an IMAGE for the frame window (for example assets/shot.jpg). Media inside a block is not seeked, so live footage stays in the host over the window. Empty shows a stand-in.", "maxLength": 200, "default": "" },
+    { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Line under the frame in Montserrat. Empty hides it.", "maxLength": 36, "default": "Наша поездка" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the border starts to draw (the picture, corner sparks and caption follow in the native 1.4 s), 2 the framed unit fades out (only when exit is fade; empty – 2 s after the caption lands, cue 1 + 3.8). Empty keeps 0.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the framed picture to the end of the mount; fade fades it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      #hwfv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #hwfv-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      #hwfv-media {
+        position: absolute;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+      #hwfv-media img,
+      #hwfv-media .hwfv-fill {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .hwfv-fill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 110px;
+        color: color-mix(in srgb, var(--fg, #f2f2f2) 60%, transparent);
+        background: linear-gradient(150deg, color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%, var(--surface, #18181a) 100%);
+      }
+      #hwfv-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+      }
+      #hwfv-svg path {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      #hwfv-border {
+        stroke: var(--fg, #f2f2f2);
+        stroke-width: 7;
+      }
+      .hwfv-doodle {
+        stroke: var(--accent, #ff0000);
+        stroke-width: 5;
+      }
+      #hwfv-caption {
+        position: absolute;
+        text-align: center;
+        font-weight: 700;
+        font-size: 58px;
+        line-height: 1.15;
+        color: var(--fg, #f2f2f2);
+        overflow-wrap: break-word;
+        opacity: 0;
+        text-shadow: 0 2px 14px rgb(0 0 0 / 40%);
+      }
+      
+      #hwfv-root.hwfv-card #hwfv-stage {
+        left: 150px;
+        width: 780px;
+        height: 760px;
+        top: 180px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #hwfv-root.hwfv-bottom #hwfv-stage {
+        top: 600px;
+      }
+      #hwfv-root.hwfv-card #hwfv-caption {
+        font-size: 48px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="hwfv-root" data-composition-id="hw-frame-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="hwfv-stage">
+        <div id="hwfv-media"></div>
+        <svg id="hwfv-svg" width="1080" height="1920" viewBox="0 0 1080 1920" data-layout-allow-overflow data-layout-ignore><path id="hwfv-border"></path></svg>
+        <div id="hwfv-caption"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("hwfv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function txt(v, d) {
+          return typeof v === "string" ? v.trim() : d;
+        }
+
+        // окно картинки (родное 960x620 в кадре 1920x1080) и размер подписи
+        var S = { x: 480, y: 180, w: 960, h: 620 };
+        var CAP = 58;
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        // окно в пропорции родного, рамка с искрами (до 40 px наружу) – в поле 780; окно и подпись – по центру поля
+        S = { x: 190, y: 0, w: 700, h: 452 };
+        var FY = 770;
+        if (placement !== "full") {
+          root.classList.add("hwfv-card", "hwfv-" + placement);
+          S = { x: 110, y: 0, w: 560, h: 361 };
+          CAP = 48;
+          FY = 380;
+        }
+        
+
+        // родной ход рисунка: рамка, картинка, искры, подпись; наклон и дрожь – как у разработчиков
+        var CONFIG = { tilt: -1.2, seed: 14, boil: { amp: 1.6, rot: 0.35, frameDrop: 3 } };
+        var IN = 0.64,
+          OUT = 0.48;
+
+        /* hw family runtime (родной) */
+        function hash(n, seed) {
+          var x = Math.sin(n * 127.1 + (seed || 1) * 311.7) * 43758.5453;
+          return (x - Math.floor(x)) * 2 - 1;
+        }
+        function wobbleRect(w, h, r, seed, amp) {
+          function wob(n) {
+            return hash(n, seed) * amp;
+          }
+          var d = "M " + (r + wob(1)) + " " + wob(2);
+          d += " L " + (w / 2 + wob(3)) + " " + wob(4);
+          d += " L " + (w - r + wob(5)) + " " + wob(6);
+          d += " Q " + (w + wob(7)) + " " + wob(8) + " " + (w + wob(9)) + " " + (r + wob(10));
+          d += " L " + (w + wob(11)) + " " + (h / 2 + wob(12));
+          d += " L " + (w + wob(13)) + " " + (h - r + wob(14));
+          d += " Q " + (w + wob(15)) + " " + (h + wob(16)) + " " + (w - r + wob(17)) + " " + (h + wob(18));
+          d += " L " + (w / 2 + wob(19)) + " " + (h + wob(20));
+          d += " L " + (r + wob(21)) + " " + (h + wob(22));
+          d += " Q " + wob(23) + " " + (h + wob(24)) + " " + wob(25) + " " + (h - r + wob(26));
+          d += " L " + wob(27) + " " + (h / 2 + wob(28));
+          d += " L " + wob(29) + " " + (r + wob(30));
+          d += " Q " + wob(31) + " " + wob(32) + " " + (r + wob(33)) + " " + wob(34);
+          return d;
+        }
+
+        var media = document.getElementById("hwfv-media");
+        var caption = document.getElementById("hwfv-caption");
+        var capText = txt(V.caption, "Наша поездка");
+        caption.textContent = capText;
+        caption.style.fontSize = CAP + "px";
+        caption.style.width = S.w + 80 + "px";
+        caption.style.left = S.x - 40 + "px";
+        // раскладка зависит от высоты подписи: надпись уже стоит – разметка запускает загрузку её шрифта,
+        // замер и шкала – после неё (runtimes.md:7)
+        void document.body.offsetHeight;
+        document.fonts.ready.then(function () {
+        
+        // по вертикали окно и подпись вместе – по центру поля (высота подписи – настоящая)
+        var capH = capText ? caption.offsetHeight : 0;
+        S.y = Math.round(FY - (S.h + (capText ? 42 + capH : 0)) / 2);
+        
+        caption.style.top = S.y + S.h + 42 + "px";
+        if (!capText) caption.style.display = "none";
+
+        media.style.left = S.x + "px";
+        media.style.top = S.y + "px";
+        media.style.width = S.w + "px";
+        media.style.height = S.h + "px";
+        var src = txt(V.image, "");
+        if (src) {
+          var img = document.createElement("img");
+          img.src = src;
+          media.appendChild(img);
+        } else {
+          var fill = document.createElement("div");
+          fill.className = "hwfv-fill";
+          fill.textContent = "фото";
+          fill.setAttribute("data-layout-ignore", "");
+          media.appendChild(fill);
+        }
+
+        /* рамка чуть снаружи окна */
+        var NS = "http://www.w3.org/2000/svg";
+        var svg = document.getElementById("hwfv-svg");
+        var border = document.getElementById("hwfv-border");
+        var m = 16;
+        border.setAttribute("d", wobbleRect(S.w + m * 2, S.h + m * 2, 18, CONFIG.seed, 5));
+        border.setAttribute("transform", "translate(" + (S.x - m) + " " + (S.y - m) + ")");
+
+        /* искры по трём углам */
+        var doodles = [];
+        [
+          [S.x - 40, S.y - 34],
+          [S.x + S.w + 40, S.y - 26],
+          [S.x + S.w + 36, S.y + S.h + 30],
+        ].forEach(function (pt, i) {
+          var p = document.createElementNS(NS, "path");
+          p.setAttribute("class", "hwfv-doodle");
+          var dd = "";
+          for (var k = 0; k < 3; k++) {
+            var a = -0.6 - k * 0.5 + hash(i * 9 + k, CONFIG.seed) * 0.2;
+            var l = 26 + hash(i * 9 + k + 4, CONFIG.seed) * 8;
+            dd += "M " + pt[0] + " " + pt[1] + " l " + (Math.cos(a) * l).toFixed(1) + " " + (Math.sin(a) * l).toFixed(1) + " ";
+          }
+          p.setAttribute("d", dd);
+          svg.appendChild(p);
+          doodles.push(p);
+        });
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        var tl = gsap.timeline({ paused: true });
+        gsap.set(media, { opacity: 0, scale: 0.96 });
+        tl.to(media, { opacity: 1, scale: 1, duration: IN * 1.4, ease: "power2.out" }, c0 + IN * 0.8);
+        var blen = border.getTotalLength();
+        gsap.set(border, { strokeDasharray: blen, strokeDashoffset: blen });
+        tl.to(border, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, c0 + 0.2);
+        doodles.forEach(function (p, i) {
+          var l = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: l, strokeDashoffset: l });
+          tl.to(p, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, c0 + 1.1 + i * 0.12);
+        });
+        if (capText) tl.to(caption, { opacity: 1, duration: 0.4, ease: "power2.out" }, c0 + 1.4);
+
+        /* весь блок наклонён и дрожит вместе – общий центр поворота: центр окна
+           (у разработчиков у рамки он был в центре кадра; в узком кадре это сдвиг ~5 px) */
+        var unit = [media, svg, caption];
+        var cx = S.x + S.w / 2,
+          cy = S.y + S.h / 2;
+        unit.forEach(function (el) {
+          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - (el.offsetLeft || 0) + "px " + (cy - (el.offsetTop || 0)) + "px" });
+        });
+        function boil() {
+          var step = Math.floor((tl.time() * 30) / CONFIG.boil.frameDrop);
+          for (var i = 0; i < unit.length; i++) {
+            gsap.set(unit[i], {
+              x: hash(step * 3 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
+              y: hash(step * 3 + 1 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
+              rotation: CONFIG.tilt + hash(step * 3 + 2 + i * 97, CONFIG.seed) * CONFIG.boil.rot,
+            });
+          }
+        }
+        tl.eventCallback("onUpdate", boil);
+        boil();
+
+        if (exit === "fade") tl.to(unit, { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["hw-frame-vertical"] = tl;
+        });
+      })();
+    </script>
+  </body>
+</html>
