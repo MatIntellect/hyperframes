@@ -347,15 +347,15 @@
              collide on one element. */
           .stc-badge-pos {
             position: absolute;
-            top: 50%;
+            top: 100%;
             z-index: 3;
             display: flex;
           }
 
           .stc-badge-pos-a {
             right: 0;
-            transform: translate(0, -50%) translateZ(6cqw); /* inside its own card and lifted in front of the tilted plane: pushed
-              out by 32 % the two pills met in a narrow field's gap, flat at z 0 the tilted card cut them (stand 027) */
+            transform: translate(0, -50%) translateZ(6cqw); /* on its own card's bottom edge, half outside, lifted in front of the
+              tilted plane: on the body it covered the card content, pushed out by 32 % the two pills met in a narrow gap (027) */
           }
 
           .stc-badge-pos-b {
@@ -419,7 +419,7 @@
                     </div>
                   </div>
                 </section>
-                <div class="stc-badge-pos stc-badge-pos-a">
+                <div class="stc-badge-pos stc-badge-pos-a" data-layout-allow-overflow>
                   <div class="stc-badge stc-badge-a"></div>
                 </div>
               </div>
@@ -440,7 +440,7 @@
                     </div>
                   </div>
                 </section>
-                <div class="stc-badge-pos stc-badge-pos-b">
+                <div class="stc-badge-pos stc-badge-pos-b" data-layout-allow-overflow>
                   <div class="stc-badge stc-badge-b"></div>
                 </div>
               </div>

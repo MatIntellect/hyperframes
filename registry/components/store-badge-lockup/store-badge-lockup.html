@@ -125,7 +125,7 @@
             font-size: max(28px, min(8.2cqw, 12.5cqh));
             font-weight: 750;
             line-height: 1;
-            letter-spacing: -0.045em;
+            letter-spacing: 0.01em; /* Bebas Neue is already condensed: -0.045em glued the letters (second head 027) */
             text-align: center;
             text-wrap: balance;
             will-change: transform, opacity;
@@ -150,7 +150,9 @@
             ); /* one badge per row in a vertical field, two side by side in a landscape frame */
             aspect-ratio: 3.12 / 1;
             display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
+            /* glyph and copy sit centred in the badge: a full-width badge in a vertical field left them pinned left (second head 027) */
+            grid-template-columns: auto auto;
+            justify-content: center;
             align-items: center;
             gap: var(--space-1, 1.2cqh);
             padding: min(2.2cqw, 3.2cqh) min(3cqw, 4.8cqh);

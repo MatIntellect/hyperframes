@@ -202,25 +202,25 @@
           /* Tones are depth steps of the ink, not hues: near faces sit at L1,
              mid at L2, far at L3. Value alone separates the cloud. */
           .ac-avatar[data-tone="0"] {
-            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 80%, transparent);
           }
 
           .ac-avatar[data-tone="1"] {
-            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent);
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 62%, transparent);
           }
 
           .ac-avatar[data-tone="2"] {
-            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 80%, transparent);
           }
 
           .ac-avatar[data-tone="3"] {
-            /* far step 40 %, not 30: dark initials on a 30 % disc read at 2.35:1, the large-text floor 3:1
-               starts near 37 % over #0c1014 (stand 027); still the dimmest step */
-            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 40%, transparent);
+            /* depth steps 80 / 62 / 50 %, not 72 / 45 / 30: dark initials need 4.5:1 (component-quality-bar X3), on a
+               30 % disc they read 2.35:1 (stand 027, second head 027); 50 % is still the dimmest step */
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 50%, transparent);
           }
 
           .ac-avatar[data-tone="4"] {
-            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent);
+            --ac-color: color-mix(in srgb, var(--fg, #f2f2f2) 62%, transparent);
           }
 
           .ac-hub {
@@ -394,7 +394,13 @@
 
             function appendLine(from, to, secondary) {
               var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-              var length = Math.hypot(to.x - from.x, to.y - from.y);
+              // length in screen px: with preserveAspectRatio=none and non-scaling-stroke Chromium applies the dash in
+              // screen space (the same trap decline-chart documents), and a tall field stretches y about 2x – a viewBox-unit
+              // length drew vertical links only half way (second head 027)
+              var box = linksLayer.ownerSVGElement || linksLayer;
+              var sx = (box.clientWidth || 1000) / 1000;
+              var sy = (box.clientHeight || 600) / 600;
+              var length = Math.hypot((to.x - from.x) * sx, (to.y - from.y) * sy) + 2;
               line.setAttribute("x1", String(from.x));
               line.setAttribute("y1", String(from.y));
               line.setAttribute("x2", String(to.x));
