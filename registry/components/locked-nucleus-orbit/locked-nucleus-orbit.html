@@ -106,7 +106,9 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            width: var(--lno-size);
+            /* the inner orbits move out with a grown nucleus (full and half), the outer one stays
+               inside the field */
+            width: calc(var(--lno-size) + var(--lno-grow, 0cqmin) * var(--lno-share, 0));
             aspect-ratio: 1;
             border: 0.12cqmin solid color-mix(in srgb, var(--lno-accent) 34%, transparent);
             border-radius: 50%;
@@ -118,10 +120,12 @@
 
           .lno-ring:nth-child(1) {
             --lno-size: 46cqmin;
+            --lno-share: 1;
           }
 
           .lno-ring:nth-child(2) {
             --lno-size: 58cqmin;
+            --lno-share: 0.5;
           }
 
           .lno-ring:nth-child(3) {
@@ -221,16 +225,13 @@
           .lno-copy {
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
-            font-size: clamp(28px, 1.8cqmin, 18px);
+            font-size: max(28px, 1.8cqmin);
             font-weight: 650;
             letter-spacing: 0.04em;
             /* line-height 1 with overflow hidden cut Cyrillic caps at their own box */
             line-height: 1.2;
             text-transform: uppercase;
             white-space: normal;
-            /* a word wider than the largest nucleus (30cqmin at the 28 px floor) wraps inside
-               the circle instead of running across the first orbit */
-            overflow-wrap: anywhere;
           }
         </style>
 
@@ -246,7 +247,7 @@
             <div class="lno-ring" aria-hidden="true"></div>
             <div class="lno-ring" aria-hidden="true"></div>
             <div class="lno-satellites"></div>
-            <div class="lno-nucleus">
+            <div class="lno-nucleus" data-layout-allow-occlusion>
               <span class="lno-nucleus-label"></span>
             </div>
           </div>
@@ -313,6 +314,7 @@
               probe.remove();
               var core = Math.min(30, Math.max(22, longest / 0.78 / cqmin + 1));
               root.style.setProperty("--lno-core", core.toFixed(2) + "cqmin");
+              root.style.setProperty("--lno-grow", (core - 22).toFixed(2) + "cqmin");
             }
             fitNucleus();
             window.__hf = window.__hf || {};
@@ -332,7 +334,14 @@
               chip.className = "lno-chip";
               marker.className = "lno-marker";
               chipCopy.className = "lno-copy";
-              arm.style.setProperty("--lno-radius", radii[index % radii.length] + "cqmin");
+              arm.style.setProperty(
+                "--lno-radius",
+                "calc(" +
+                  radii[index % radii.length] +
+                  "cqmin + var(--lno-grow, 0cqmin) * " +
+                  [0.5, 0.25, 0][index % radii.length] +
+                  ")",
+              );
               chipCopy.textContent = copy[index];
 
               chip.appendChild(marker);
