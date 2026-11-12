@@ -2,8 +2,11 @@
 <!--
   hook-plate: the opening hook headline of a vertical reel, one line on a black plate.
 
-  The hook is the speaker's first phrase, word for word, in one upper-case line, set as
-  large as fits the readable width (72.2% of the box: 780 px of a 1080 x 1920 frame). The
+  The hook is the speaker's first phrase, word for word, never cut, upper case, one size for
+  every hook: 6% of the frame height (115 px of 1920; motion.md: titles 4-9%, one or two
+  lines). One line when it fits the readable width (72.2% of the box: 780 px of 1080), else a
+  second line at a whole word, on the same plate with the same padding; only a hook too long
+  for two lines steps the size down. The
   plate is centred in the hook band (y 70.8%-80.2%: 1360-1540 px); a taller plate keeps its
   bottom on 1540 and rises over the lower edge of the opening circle, never above y 65.8%
   (1264 px), so it can cover the beard but not the face. The letters sit dead centre in the
@@ -25,7 +28,7 @@
   data-composition-id="hook-plate"
   data-composition-duration="30"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The hook: the first phrase of the recording, word for word, one line. Upper case on screen; the longer the line, the smaller the letters.", "maxLength": 30, "default": "Монтаж с ИИ" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The hook: the first phrase of the recording, word for word, never cut. Upper case on screen, one size for every hook (6% of the frame height, 115 px of 1920); one line when it fits 780, else wraps to a second line at a whole word, on the same plate.", "default": "Монтаж с ИИ" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the plate pops in (empty: on screen from 0 s, the thumbnail frame), 2 the plate leaves (only with exit fade).", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the plate to the end of the mount; fade takes it out at cue 2 (or 0.3 s before the mount ends).", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -126,25 +129,56 @@
             window.__timelines = window.__timelines || {};
             window.__timelines["hook-plate"] = tl;
 
-            // As large as fits: one line, plate (text + 0.3em padding each side) within 780 of 1080,
-            // plate no taller than 1264-1540. Measured after the font loads; render waits on buildReady.
+            // One size for every hook (Mat 12.11): 6% of the frame height (115 px of 1920), the largest
+            // at which two lines still keep the plate below y 1264; titles 4-9%, one or two lines
+            // (motion.md:23). One line if it fits 780 with the plate padding; else two lines split at
+            // a whole word, the most even split first, same size. Only when two lines do not fit
+            // either does the size step down. Measured after the font loads; render waits on buildReady.
             function fit() {
               var H = root.clientHeight;
               var maxW = root.clientWidth * 0.72222;
-              var probe = plate.offsetHeight / parseFloat(getComputedStyle(plate).fontSize);
-              var fs = Math.floor((H * (0.80208 - 0.65833)) / probe);
-              for (; fs > 42; fs--) {
-                var r = window.__hyperframes.fitTextFontSize(text.toUpperCase(), {
-                  fontFamily: "Bebas Neue",
-                  fontWeight: 700,
-                  maxWidth: maxW - 0.6 * fs,
-                  baseFontSize: fs,
-                  minFontSize: fs,
-                  step: 1,
+              var maxH = H * (0.80208 - 0.65833);
+              function set(lines, fs) {
+                plate.textContent = "";
+                lines.forEach(function (l, i) {
+                  if (i) plate.appendChild(document.createElement("br"));
+                  plate.appendChild(document.createTextNode(l));
                 });
-                if (r.fits) break;
+                plate.style.fontSize = fs + "px";
               }
-              plate.style.fontSize = fs + "px";
+              function fits(lines, fs) {
+                var wide = lines.every(function (l) {
+                  return window.__hyperframes.fitTextFontSize(l.toUpperCase(), {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: maxW - 0.6 * fs,
+                    baseFontSize: fs,
+                    minFontSize: fs,
+                  }).fits;
+                });
+                if (!wide) return false;
+                set(lines, fs);
+                return plate.offsetHeight <= maxH;
+              }
+              var words = text.split(/\s+/);
+              var splits = [];
+              for (var k = 1; k < words.length; k++)
+                splits.push([words.slice(0, k).join(" "), words.slice(k).join(" ")]);
+              // a one-letter word (с, в, и, к, у, о, а, я) never hangs at the end of the first line
+              splits = splits.filter(function (l) {
+                return !/(^|\s)\S$/.test(l[0]);
+              });
+              splits.sort(function (a, b) {
+                return Math.abs(a[0].length - a[1].length) - Math.abs(b[0].length - b[1].length);
+              });
+              var choices = [[text]].concat(splits);
+              var pick = null;
+              for (var fs = Math.round(H * 0.06); fs >= 42 && !pick; fs--) {
+                for (var i = 0; i < choices.length && !pick; i++)
+                  if (fits(choices[i], fs)) pick = { lines: choices[i], fs: fs };
+              }
+              pick = pick || { lines: choices[choices.length > 1 ? 1 : 0], fs: 42 };
+              set(pick.lines, pick.fs);
               // centred in the band 1360-1540; taller – bottom on 1540, rising over the circle
               var h = plate.offsetHeight;
               plate.style.top = Math.min(H * 0.75521 - h / 2, H * 0.80208 - h) + "px";

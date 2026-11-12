@@ -3,7 +3,7 @@
   "name": "hook-plate",
   "type": "hyperframes:component",
   "title": "Hook Plate",
-  "description": "Opening hook of a vertical reel: the speaker's first phrase in one upper-case line, as large as fits the readable width, centred on a black rounded plate with equal padding on all sides, under the opening circle (a tall plate rises onto its lower edge); on screen from the first frame. Text, cues and exit are variables; mount over the whole frame.",
+  "description": "Opening hook of a vertical reel: the speaker's first phrase in upper case, one size for every hook (6% of the frame height), one line within the readable width or two at a whole word, centred on a black rounded plate with equal padding on all sides, under the opening circle (a tall plate rises onto its lower edge); on screen from the first frame. Text, cues and exit are variables; mount over the whole frame.",
   "tags": ["hook", "title", "headline", "plate", "typography", "vertical"],
   "files": [
     {

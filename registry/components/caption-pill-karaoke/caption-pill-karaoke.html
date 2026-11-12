@@ -5,10 +5,12 @@
 
   Words come from outside in one variable, so the file is never edited: "word|start|end;..."
   with seconds from mount start (the transcript's words in order; empty shows nothing).
-  Groups of up to 3 words and 30 letters (high energy, captions.md "Groups"), broken at a
-  sentence mark or a pause of 150 ms; one group on screen at a time, hard-killed after it ends. Each group is one
-  upper-case line sized with fitTextFontSize (base 78, minimum 42) to the readable width (72.2%
-  of the box: 780 px of 1080) and centred in the caption band (y 71.9%-80.2%: 1380-1540 px).
+  Groups of up to 3 words (high energy, captions.md "Groups"), broken at a sentence mark, a
+  pause of 150 ms, or where the next word would not fit the line; one group on screen at a
+  time, hard-killed after it ends. Every group is one upper-case line at one size, 78 px
+  (captions.md base), within the readable width (72.2% of the box: 780 px of 1080); words go
+  to the next group instead of shrinking the type (spec.md:48), only a single word wider than
+  the line steps down and centred in the caption band (y 71.9%-80.2%: 1380-1540 px).
   The letters sit dead centre in the plate with equal padding on all four sides (text-box
   trim to cap height and baseline, one padding value). A word lights from muted to full ink as
   it is spoken.
@@ -97,7 +99,7 @@
             var DEFAULT =
               "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10";
             var MAX_WORDS = 3;
-            var MAX_CHARS = 30; // 30 widest letters with no space still fit 780 at the 42 px floor
+            var SIZE = 78; // captions.md "Fit and place": base 78; every group at this size
             var PAUSE = 0.15;
             var HOLD = 0.3;
             var LEAD = 0.05;
@@ -122,112 +124,97 @@
                 return w.text && isFinite(w.start) && isFinite(w.end);
               });
 
-            var groups = [];
-            var cur = [];
-            words.forEach(function (w, i) {
-              var len = cur
-                .map(function (x) {
-                  return x.text;
-                })
-                .concat(w.text)
-                .join(" ").length;
-              if (cur.length && len > MAX_CHARS) {
-                groups.push(cur);
-                cur = [];
-              }
-              cur.push(w);
-              var next = words[i + 1];
-              if (
-                !next ||
-                cur.length >= MAX_WORDS ||
-                /[.,:;!?…]$/.test(w.text) ||
-                next.start - w.end >= PAUSE
-              ) {
-                groups.push(cur);
-                cur = [];
-              }
-            });
-
             var tl = gsap.timeline({ paused: true });
-            var plates = [];
-            groups.forEach(function (g, gi) {
-              var el = document.createElement("div");
-              el.className = "pk-group";
-              var plate = document.createElement("div");
-              plate.className = "pk-plate";
-              g.forEach(function (w, wi) {
-                if (wi) plate.appendChild(document.createTextNode(" "));
-                var s = document.createElement("span");
-                s.className = "pk-word";
-                s.textContent = w.text;
-                plate.appendChild(s);
-                w.el = s;
-              });
-              el.appendChild(plate);
-              stage.appendChild(el);
-              plates.push({
-                plate: plate,
-                text: g
-                  .map(function (w) {
-                    return w.text;
-                  })
-                  .join(" "),
-              });
-
-              var open = Math.max(0, g[0].start - LEAD);
-              var nextOpen = groups[gi + 1]
-                ? Math.max(0, groups[gi + 1][0].start - LEAD)
-                : Infinity;
-              var close = Math.max(
-                g[g.length - 1].end,
-                Math.min(nextOpen, g[g.length - 1].end + HOLD),
-              );
-              tl.set(el, { opacity: 1, visibility: "visible" }, open);
-              g.forEach(function (w, wi) {
-                if (wi === 0) tl.set(w.el, { color: INK }, open);
-                else
-                  tl.to(
-                    w.el,
-                    { color: INK, duration: 0.1, ease: "none" },
-                    Math.max(open, w.start - LEAD),
-                  );
-              });
-              tl.set(el, { opacity: 0, visibility: "hidden" }, close);
-            });
             tl.set({}, {}, 600);
             window.__timelines = window.__timelines || {};
             window.__timelines["caption-pill-karaoke"] = tl;
 
-            // One line per group: plate (text + 0.3em padding each side) within 780 of 1080, from 78 px
-            // down to 42 (captions.md "Fit and place"); measured after the font loads.
-            function fit() {
-              var maxW = root.clientWidth * 0.72222;
-              plates.forEach(function (p) {
-                for (var fs = 78; fs > 42; fs -= 2) {
-                  var r = window.__hyperframes.fitTextFontSize(p.text.toUpperCase(), {
-                    fontFamily: "Bebas Neue",
-                    fontWeight: 700,
-                    maxWidth: maxW - 0.6 * fs,
-                    baseFontSize: fs,
-                    minFontSize: fs,
-                  });
-                  if (r.fits) break;
+            // A line fits when the plate (text + 0.3em padding each side) is within 780 of 1080.
+            function fits(text, fs) {
+              return window.__hyperframes.fitTextFontSize(text.toUpperCase(), {
+                fontFamily: "Bebas Neue",
+                fontWeight: 700,
+                maxWidth: root.clientWidth * 0.72222 - 0.6 * fs,
+                baseFontSize: fs,
+                minFontSize: fs,
+              }).fits;
+            }
+            function join(g) {
+              return g
+                .map(function (w) {
+                  return w.text;
+                })
+                .join(" ");
+            }
+
+            // Built after the font loads (render waits on buildReady). Words that would not fit one
+            // line at 78 go to the next group, never a smaller size ("cut words, never shrink type",
+            // spec.md:48); only a single word wider than 780 by itself steps down.
+            function build() {
+              var groups = [];
+              var cur = [];
+              words.forEach(function (w, i) {
+                if (cur.length && !fits(join(cur.concat(w)), SIZE)) {
+                  groups.push(cur);
+                  cur = [];
                 }
-                p.plate.style.fontSize = fs + "px";
+                cur.push(w);
+                var next = words[i + 1];
+                if (
+                  !next ||
+                  cur.length >= MAX_WORDS ||
+                  /[.,:;!?…]$/.test(w.text) ||
+                  next.start - w.end >= PAUSE
+                ) {
+                  groups.push(cur);
+                  cur = [];
+                }
+              });
+              groups.forEach(function (g, gi) {
+                var el = document.createElement("div");
+                el.className = "pk-group";
+                var plate = document.createElement("div");
+                plate.className = "pk-plate";
+                g.forEach(function (w, wi) {
+                  if (wi) plate.appendChild(document.createTextNode(" "));
+                  var s = document.createElement("span");
+                  s.className = "pk-word";
+                  s.textContent = w.text;
+                  plate.appendChild(s);
+                  w.el = s;
+                });
+                var fs = SIZE;
+                while (fs > 42 && !fits(join(g), fs)) fs -= 2;
+                plate.style.fontSize = fs + "px";
+                el.appendChild(plate);
+                stage.appendChild(el);
+
+                var open = Math.max(0, g[0].start - LEAD);
+                var nextOpen = groups[gi + 1]
+                  ? Math.max(0, groups[gi + 1][0].start - LEAD)
+                  : Infinity;
+                var close = Math.max(
+                  g[g.length - 1].end,
+                  Math.min(nextOpen, g[g.length - 1].end + HOLD),
+                );
+                tl.set(el, { opacity: 1, visibility: "visible" }, open);
+                g.forEach(function (w, wi) {
+                  if (wi === 0) tl.set(w.el, { color: INK }, open);
+                  else
+                    tl.to(
+                      w.el,
+                      { color: INK, duration: 0.1, ease: "none" },
+                      Math.max(open, w.start - LEAD),
+                    );
+                });
+                tl.set(el, { opacity: 0, visibility: "hidden" }, close);
               });
             }
             window.__hf = window.__hf || {};
             window.__hf.buildReady = window.__hf.buildReady || {};
             window.__hf.buildReady["caption-pill-karaoke"] = document.fonts
-              .load(
-                '700 100px "Bebas Neue"',
-                words
-                  .map(function (w) {
-                    return w.text;
-                  })
-                  .join(" ") || "А",
-              )
-              .then(fit);
+              .load('700 100px "Bebas Neue"', join(words) || "А")
+              .then(build);
           })();
         </script>
       </div>
