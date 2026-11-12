@@ -2,7 +2,8 @@
 <!--
   focus-swap: HyperFrames video primitive (ui-props / holdable / demonstrate)
 
-  Concept: attention moves between two side-by-side cards. The card losing
+  Concept: attention moves between two cards (side by side in a landscape
+  field, one above the other in a portrait field). The card losing
   focus recedes to 0.92 scale, softens, and dims while the other card advances
   to full scale, sharpness, and opacity. Both sides move together as one clean
   swap.
@@ -18,6 +19,8 @@
     - focus ("a" | "b", default "b"): the card that ends focused.
     - blurPx (number, default 6): blur applied to the unfocused card.
     - dim (number from 0 to 1, default 0.5): unfocused card opacity.
+    - status_a, title_a, detail_a / status_b, title_b, detail_b (strings):
+      the words of card A and card B; long words wrap.
 
   Envelope (holdable):
     IN = 0.90s at the standard duration, including a 0.20s readable lead.
@@ -41,7 +44,13 @@
   data-composition-variables='[
     { "id": "focus", "type": "enum", "role": "motion", "label": "Final focus", "description": "Card that ends sharp, full-size, and fully opaque.", "default": "b", "options": [{ "value": "a", "label": "Card A" }, { "value": "b", "label": "Card B" }] },
     { "id": "blurPx", "type": "number", "role": "style", "label": "Unfocused blur", "description": "Blur applied to the card outside the viewer focus.", "default": 6, "min": 0, "max": 20, "step": 1, "unit": "px" },
-    { "id": "dim", "type": "number", "role": "style", "label": "Unfocused opacity", "description": "Opacity of the card outside the viewer focus.", "default": 0.5, "min": 0, "max": 1, "step": 0.05 }
+    { "id": "dim", "type": "number", "role": "style", "label": "Unfocused opacity", "description": "Opacity of the card outside the viewer focus.", "default": 0.5, "min": 0, "max": 1, "step": 0.05 },
+    { "id": "status_a", "type": "string", "role": "content", "label": "Card A status", "description": "Short status word above the title of card A.", "default": "План" },
+    { "id": "title_a", "type": "string", "role": "content", "label": "Card A title", "description": "Title of card A.", "default": "Придумать идею" },
+    { "id": "detail_a", "type": "string", "role": "content", "label": "Card A detail", "description": "One line under the title of card A; wraps by words.", "default": "Собрать задачу и договориться с командой" },
+    { "id": "status_b", "type": "string", "role": "content", "label": "Card B status", "description": "Short status word above the title of card B.", "default": "Запуск" },
+    { "id": "title_b", "type": "string", "role": "content", "label": "Card B title", "description": "Title of card B.", "default": "Выпустить ролик" },
+    { "id": "detail_b", "type": "string", "role": "content", "label": "Card B detail", "description": "One line under the title of card B; wraps by words.", "default": "От согласованного монтажа к публикации" }
   ]'
 >
   <head>
@@ -284,6 +293,28 @@
 
             // INVARIANT: focus is the only owner of which card advances and
             // which recedes. Invalid input resolves to the declared default.
+            // Card words are fields: the host never edits this file.
+            [
+              ["a", "status", ".fs-status"],
+              ["a", "title", ".fs-title"],
+              ["a", "detail", ".fs-detail"],
+              ["b", "status", ".fs-status"],
+              ["b", "title", ".fs-title"],
+              ["b", "detail", ".fs-detail"],
+            ].forEach(function (field) {
+              var value = vars[field[1] + "_" + field[0]];
+              var card = field[0] === "a" ? cardA : cardB;
+              if (typeof value === "string") card.querySelector(field[2]).textContent = value;
+            });
+            [cardA, cardB].forEach(function (card) {
+              card.setAttribute(
+                "aria-label",
+                card.querySelector(".fs-title").textContent +
+                  ", " +
+                  card.querySelector(".fs-status").textContent,
+              );
+            });
+
             var targetIsB = vars.focus !== "a";
             var initialFocused = targetIsB ? cardA : cardB;
             var targetFocused = targetIsB ? cardB : cardA;

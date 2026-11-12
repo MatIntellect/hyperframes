@@ -1612,10 +1612,6 @@
       "type": "hyperframes:component"
     },
     {
-      "name": "keyframe-scrub-stack",
-      "type": "hyperframes:component"
-    },
-    {
       "name": "kinetic-center-build",
       "type": "hyperframes:component"
     },

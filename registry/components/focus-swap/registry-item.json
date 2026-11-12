@@ -3,7 +3,7 @@
   "name": "focus-swap",
   "type": "hyperframes:component",
   "title": "Focus Swap",
-  "description": "Moves attention between two side-by-side cards as one recedes with scale, blur, and dimming while the other advances to full focus.",
+  "description": "Moves attention between two cards (side by side in a landscape field, stacked in a portrait field) as one recedes with scale, blur and dimming while the other advances to full focus. Card words (status, title, detail) are fields.",
   "tags": ["effect", "ui-props", "focus", "blur", "attention", "demonstrate"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
@@ -63,6 +63,54 @@
       "min": 0,
       "max": 1,
       "step": 0.05
+    },
+    {
+      "id": "status_a",
+      "type": "string",
+      "role": "content",
+      "label": "Card A status",
+      "description": "Short status word above the title of card A.",
+      "default": "План"
+    },
+    {
+      "id": "title_a",
+      "type": "string",
+      "role": "content",
+      "label": "Card A title",
+      "description": "Title of card A.",
+      "default": "Придумать идею"
+    },
+    {
+      "id": "detail_a",
+      "type": "string",
+      "role": "content",
+      "label": "Card A detail",
+      "description": "One line under the title of card A; wraps by words.",
+      "default": "Собрать задачу и договориться с командой"
+    },
+    {
+      "id": "status_b",
+      "type": "string",
+      "role": "content",
+      "label": "Card B status",
+      "description": "Short status word above the title of card B.",
+      "default": "Запуск"
+    },
+    {
+      "id": "title_b",
+      "type": "string",
+      "role": "content",
+      "label": "Card B title",
+      "description": "Title of card B.",
+      "default": "Выпустить ролик"
+    },
+    {
+      "id": "detail_b",
+      "type": "string",
+      "role": "content",
+      "label": "Card B detail",
+      "description": "One line under the title of card B; wraps by words.",
+      "default": "От согласованного монтажа к публикации"
     }
   ]
 }

@@ -516,15 +516,23 @@
                 return b.depth > a.depth ? b : a;
               });
               cards.forEach(function (card) {
+                // A cue cuts every layer change still pending from an
+                // interrupted throw: its apex and its landing alike.
                 if (card.landing && card.landing.t > cue) card.landing.canceled = true;
                 card.landing = null;
+                if (card.apex && card.apex.t > cue) card.apex.canceled = true;
+                card.apex = null;
                 card.depth = card === back ? 0 : card.depth + 1;
-                zEvents.push({
-                  t: cue,
+                // The thrown card passes over the stack at its apex, so it
+                // takes the top layer there, not at the cue (still behind).
+                var zEvent = {
+                  t: card === back ? cue + RISE : cue,
                   el: card.el,
                   z: card === back ? 60 : 40 - card.depth,
                   canceled: false,
-                });
+                };
+                zEvents.push(zEvent);
+                if (card === back) card.apex = zEvent;
               });
 
               cards.forEach(function (card) {
@@ -610,6 +618,9 @@
                   var to = toProps(seg.to);
                   to.duration = dur;
                   to.ease = easeFn(seg.ease);
+                  // A later segment must not paint its start value at build
+                  // time (the ring lit the back card during the entrance).
+                  to.immediateRender = false;
                   tl.fromTo(track.el, toProps(seg.from), to, seg.t0);
                 });
               });

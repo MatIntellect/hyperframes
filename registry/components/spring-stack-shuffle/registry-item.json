@@ -3,7 +3,7 @@
   "name": "spring-stack-shuffle",
   "type": "hyperframes:component",
   "title": "Spring Stack Shuffle",
-  "description": "Spring stack shuffle for vertical reels: a stack of three to five dark brand cards enters back to front, then the top card is thrown to the back on each cue with a spring, the active card ringed in brand red. Cards are slots; count, cues and exit are fields. Sized for the 780 px graphics field.",
+  "description": "Spring stack shuffle for vertical reels: a stack of three to five dark brand cards enters back to front, then on each cue the back card is thrown over the top and lands at the front with a spring, the active card ringed in brand red. Cards are slots; count, cues and exit are fields. Sized for the 780 px graphics field.",
   "tags": ["motion-primitive", "product-demo", "physics", "stack", "interruptible-spring"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
