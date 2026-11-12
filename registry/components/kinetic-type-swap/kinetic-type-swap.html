@@ -217,7 +217,7 @@
 
             var accentColors = {
               green: "var(--brand, #ff0000)",
-              blue: "var(--accent, #ff0000)",
+              blue: "var(--brand, #ff0000)",
               violet: "var(--accent-2, #ff0000)",
             };
             var accent = Object.prototype.hasOwnProperty.call(accentColors, vars.accent)
@@ -264,13 +264,38 @@
             }, 1);
             var sentenceLength =
               Array.from(prefix).length + widestOptionLength + Array.from(suffix).length + 2;
-            // Bebas Neue, the brand display face: 0.51em per glyph at worst (Щ Ш Ж), no tracking;
-            // the line fills 96% of the 94cqw stage.
-            var fittedCqw = Math.min(12, (94 * 0.96) / (0.51 * Math.max(1, sentenceLength)));
-            root.style.setProperty(
-              "--kts-font-size",
-              "min(" + fittedCqw.toFixed(3) + "cqw, 22cqh)",
-            );
+            // Size: the largest that keeps every line on one line, measured in Bebas Neue once the face has
+            // loaded (fitTextFontSize – contributing.md:66 «Overflow»), never under 28px (vertical.md:18).
+            // Render waits on buildReady.
+            var fitTexts = options.map(function (option) {
+              return [prefix, option, suffix]
+                .filter(function (part) {
+                  return part.length > 0;
+                })
+                .join(" ");
+            });
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["kinetic-type-swap"] = document.fonts
+              .load('700 100px "Bebas Neue"', fitTexts.join(" "))
+              .then(function () {
+                var base = Math.max(
+                  28,
+                  Math.round(Math.min(root.clientWidth * 0.12, root.clientHeight * 0.22)),
+                );
+                var size = fitTexts.reduce(function (smallest, line) {
+                  var fit = window.__hyperframes.fitTextFontSize(line, {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: root.clientWidth * 0.94,
+                    baseFontSize: base,
+                    minFontSize: 28,
+                    step: 1,
+                  });
+                  return Math.min(smallest, fit.fontSize);
+                }, base);
+                root.style.setProperty("--kts-font-size", size + "px");
+              });
 
             var IN_BASE = 2.25;
             var OUT_BASE = exit === "none" ? 0 : 0.45;

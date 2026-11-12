@@ -169,7 +169,7 @@
             var text = vars.text == null ? "Монтаж" : String(vars.text);
             var accentColors = {
               green: "var(--brand, #ff0000)",
-              blue: "var(--accent, #ff0000)",
+              blue: "var(--brand, #ff0000)",
               violet: "var(--accent-2, #ff0000)",
             };
             var accent = Object.prototype.hasOwnProperty.call(accentColors, vars.accent)
@@ -194,15 +194,32 @@
               headline.appendChild(glyph);
             });
 
-            // Bebas Neue, the brand display face: 0.51em per glyph at worst (Щ Ш Ж),
-            // no tracking, keeps any glyph mix inside the 60cqw composed width. The height cap protects short,
-            // wide mounts, while the surrounding clearance protects wild
-            // scatter and the return overshoot.
-            var fittedCqw = Math.min(13.5, 60 / (0.51 * Math.max(1, characters.length)));
-            root.style.setProperty(
-              "--cse-font-size",
-              "min(" + fittedCqw.toFixed(3) + "cqw, 27cqh)",
-            );
+            // Size: the largest that keeps every line on one line, measured in Bebas Neue once the face has
+            // loaded (fitTextFontSize – contributing.md:66 «Overflow»), never under 28px (vertical.md:18).
+            // Render waits on buildReady.
+            var fitTexts = [characters.join("")];
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["char-slam-explode"] = document.fonts
+              .load('700 100px "Bebas Neue"', fitTexts.join(" "))
+              .then(function () {
+                var base = Math.max(
+                  28,
+                  Math.round(Math.min(root.clientWidth * 0.135, root.clientHeight * 0.27)),
+                );
+                var size = fitTexts.reduce(function (smallest, line) {
+                  var fit = window.__hyperframes.fitTextFontSize(line, {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: root.clientWidth * 0.6,
+                    baseFontSize: base,
+                    minFontSize: 28,
+                    step: 1,
+                  });
+                  return Math.min(smallest, fit.fontSize);
+                }, base);
+                root.style.setProperty("--cse-font-size", size + "px");
+              });
 
             // Fixed-seed LCG table, generated at build time. Each row stores
             // normalized x, y, and rotation values. Long strings wrap the

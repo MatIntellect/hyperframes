@@ -109,10 +109,10 @@
 
           .sb-wordmark,
           .sb-clone {
-            font-size: clamp(28px, 13cqw, 150px);
+            font-size: var(--sb-size, clamp(28px, 13cqw, 150px));
             font-weight: 850;
             line-height: 0.86;
-            letter-spacing: -0.065em;
+            letter-spacing: 0;
             white-space: nowrap;
           }
 
@@ -196,6 +196,29 @@
               : 12;
 
             wordmark.textContent = text;
+            // Size: the largest that keeps every line on one line, measured in Bebas Neue once the face has
+            // loaded (fitTextFontSize – contributing.md:66 «Overflow»), never under 28px (vertical.md:18).
+            // Render waits on buildReady.
+            var fitTexts = [text];
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["scan-band"] = document.fonts
+              .load('700 100px "Bebas Neue"', fitTexts.join(" "))
+              .then(function () {
+                var base = Math.max(28, Math.round(Math.min(root.clientWidth * 0.13, 150)));
+                var size = fitTexts.reduce(function (smallest, line) {
+                  var fit = window.__hyperframes.fitTextFontSize(line, {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: root.clientWidth * 0.92,
+                    baseFontSize: base,
+                    minFontSize: 28,
+                    step: 1,
+                  });
+                  return Math.min(smallest, fit.fontSize);
+                }, base);
+                root.style.setProperty("--sb-size", size + "px");
+              });
             stage.setAttribute("aria-label", text);
             clones.forEach(function (clone) {
               clone.textContent = text;

@@ -96,8 +96,12 @@
           .tt-ticker {
             position: absolute;
             top: 55cqh;
-            left: 12cqw;
-            width: 76cqw;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: fit-content; /* the window grows to the longest option */
+            min-width: 76cqw;
+            max-width: 92cqw;
             height: 18cqh;
             display: grid;
             grid-template-columns: max-content 1fr; /* the label column fits its word */
@@ -168,7 +172,7 @@
             overflow: hidden;
             color: var(--tt-accent, var(--brand, #ff0000));
             font-family: var(--font-display, "Bebas Neue", sans-serif);
-            font-size: 15cqh;
+            font-size: var(--tt-size, 15cqh);
             font-weight: 820;
             line-height: 0.9;
             letter-spacing: -0.065em;
@@ -250,7 +254,7 @@
             var finalItem = reel.lastElementChild;
             var accentColors = {
               green: "var(--brand, #ff0000)",
-              blue: "var(--accent, #ff0000)",
+              blue: "var(--brand, #ff0000)",
               violet: "var(--accent-2, #ff0000)",
             };
             var accentName = Object.prototype.hasOwnProperty.call(accentColors, vars.accent)
@@ -260,6 +264,29 @@
 
             root.style.setProperty("--tt-accent", accentColor);
             headline.textContent = finalWord;
+            // Size: the largest that keeps every line on one line, measured in Bebas Neue once the face has
+            // loaded (fitTextFontSize – contributing.md:66 «Overflow»), never under 28px (vertical.md:18).
+            // Render waits on buildReady.
+            var fitTexts = [finalWord];
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["ticker-takeover"] = document.fonts
+              .load('700 100px "Bebas Neue"', fitTexts.join(" "))
+              .then(function () {
+                var base = Math.max(28, Math.round(root.clientHeight * 0.15));
+                var size = fitTexts.reduce(function (smallest, line) {
+                  var fit = window.__hyperframes.fitTextFontSize(line, {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: root.clientWidth * 0.86,
+                    baseFontSize: base,
+                    minFontSize: 28,
+                    step: 1,
+                  });
+                  return Math.min(smallest, fit.fontSize);
+                }, base);
+                root.style.setProperty("--tt-size", size + "px");
+              });
 
             var IN_BASE = 3.15;
             var OUT_BASE = 0.45;

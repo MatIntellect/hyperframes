@@ -101,7 +101,6 @@
             place-items: center;
             overflow: hidden;
             padding: var(--space-3, 4cqmin);
-            background: var(--surface, transparent);
           }
 
           .ts-headline {
@@ -113,7 +112,7 @@
             font-size: clamp(28px, 16cqmin, 176px);
             font-weight: 780;
             line-height: 0.96;
-            letter-spacing: -0.055em;
+            letter-spacing: 0;
             overflow-wrap: anywhere;
             text-align: center;
             background-image: linear-gradient(
@@ -162,7 +161,7 @@
             var accent = vars.accent === "blue" || vars.accent === "violet" ? vars.accent : "green";
             var accentTokens = {
               green: "var(--brand, #ff0000)",
-              blue: "var(--accent, #ff0000)",
+              blue: "var(--brand, #ff0000)",
               violet: "var(--accent-2, #ff0000)",
             };
             var accentColor = accentTokens[accent];

@@ -48,11 +48,6 @@
   </head>
   <body>
     <template>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700;800&amp;display=block"
-      />
-
       <style>
         @font-face {
           font-family: "Bebas Neue";
@@ -175,139 +170,149 @@
             stage.style.fontWeight = fontWeight;
             stage.setAttribute("aria-label", text);
 
-            var canvas = document.createElement("canvas");
-            var context = canvas.getContext("2d");
-            var measureFont = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            var gapRatio = 10 / 72;
+            // Word widths are measured in the face that draws them (Bebas Neue) once it has loaded;
+            // the timeline is registered at the end of that callback (format.md:151) and render waits
+            // on buildReady.
+            function build() {
+              var canvas = document.createElement("canvas");
+              var context = canvas.getContext("2d");
+              var measureFont = '"Bebas Neue", sans-serif';
+              var gapRatio = 10 / 72;
 
-            function measure(fontSize) {
-              if (!context) {
+              function measure(fontSize) {
+                if (!context) {
+                  return words.map(function (word) {
+                    return word.length * fontSize * 0.55;
+                  });
+                }
+                context.font = fontWeight + " " + fontSize + "px " + measureFont;
                 return words.map(function (word) {
-                  return word.length * fontSize * 0.55;
+                  return context.measureText(word).width;
                 });
               }
-              context.font = fontWeight + " " + fontSize + "px " + measureFont;
-              return words.map(function (word) {
-                return context.measureText(word).width;
-              });
-            }
 
-            var fontSize = requestedFontSize;
-            var widths = measure(fontSize);
-            var gap = fontSize * gapRatio;
-            var fullWidth = widths.reduce(
-              function (total, width) {
-                return total + width;
-              },
-              gap * Math.max(0, words.length - 1),
-            );
-            var maxWidth = Math.max(1, root.clientWidth * 0.9);
-
-            if (fullWidth > maxWidth) {
-              fontSize = Math.max(24, fontSize * (maxWidth / fullWidth));
-              widths = measure(fontSize);
-              gap = fontSize * gapRatio;
-            }
-
-            stage.style.fontSize = fontSize + "px";
-
-            var positionsAt = [];
-            for (var count = 1; count <= words.length; count += 1) {
-              var total = gap * (count - 1);
-              for (var widthIndex = 0; widthIndex < count; widthIndex += 1) {
-                total += widths[widthIndex];
-              }
-
-              var cursor = -total / 2;
-              var positions = [];
-              for (var positionIndex = 0; positionIndex < count; positionIndex += 1) {
-                positions.push(cursor + widths[positionIndex] / 2);
-                cursor += widths[positionIndex] + gap;
-              }
-              positionsAt.push(positions);
-            }
-
-            var elements = words.map(function (word, index) {
-              var element = document.createElement("span");
-              element.id = "kcb-word-" + index;
-              element.className = "kcb-word";
-              element.textContent = word;
-              element.setAttribute("aria-hidden", "true");
-              stage.appendChild(element);
-              return element;
-            });
-
-            gsap.registerPlugin(CustomEase);
-            var entryEase = CustomEase.create("kcb-entry-ease", "M0,0 C0.2,0.8 0.2,1 1,1");
-            var duration = Math.max(0.001, parseFloat(root.dataset.duration || "2"));
-            var firstDuration = 10 / 30;
-            var pushDuration = 13 / 30;
-            var authoredBuildDuration =
-              firstDuration + Math.max(0, words.length - 1) * pushDuration;
-            var availableBuildDuration = Math.max(0.25, duration - 0.5);
-            var timingScale = Math.min(1, availableBuildDuration / authoredBuildDuration);
-            firstDuration *= timingScale;
-            pushDuration *= timingScale;
-
-            var tl = gsap.timeline({ paused: true });
-
-            elements.forEach(function (element, index) {
-              var targetX = positionsAt[index][index];
-              var start = index === 0 ? 0 : firstDuration + (index - 1) * pushDuration;
-              var moveDuration = index === 0 ? firstDuration : pushDuration;
-              var fromX = index === 0 ? targetX : targetX + entryOffset;
-              var fromY = index === 0 ? 6 : 0;
-
-              tl.fromTo(
-                element,
-                {
-                  x: fromX,
-                  y: fromY,
-                  xPercent: -50,
-                  yPercent: -50,
-                  scale: 0.992,
-                  opacity: 0,
-                  "--kcb-blur": "3.5px",
+              var fontSize = requestedFontSize;
+              var widths = measure(fontSize);
+              var gap = fontSize * gapRatio;
+              var fullWidth = widths.reduce(
+                function (total, width) {
+                  return total + width;
                 },
-                {
-                  x: targetX,
-                  y: 0,
-                  xPercent: -50,
-                  yPercent: -50,
-                  scale: 1,
-                  opacity: 1,
-                  "--kcb-blur": "0px",
-                  duration: moveDuration,
-                  ease: entryEase,
-                  immediateRender: index === 0,
-                },
-                start,
+                gap * Math.max(0, words.length - 1),
               );
+              var maxWidth = Math.max(1, root.clientWidth * 0.9);
 
-              if (index === 0) return;
+              if (fullWidth > maxWidth) {
+                fontSize = Math.max(24, fontSize * (maxWidth / fullWidth));
+                widths = measure(fontSize);
+                gap = fontSize * gapRatio;
+              }
 
-              for (var priorIndex = 0; priorIndex < index; priorIndex += 1) {
-                var priorElement = elements[priorIndex];
-                var nextX = positionsAt[index][priorIndex];
-                var blurPeak = start + moveDuration / 2;
+              stage.style.fontSize = fontSize + "px";
 
-                tl.to(priorElement, { x: nextX, duration: moveDuration, ease: entryEase }, start);
-                tl.to(
-                  priorElement,
-                  { "--kcb-blur": "0.8px", duration: moveDuration / 2, ease: "none" },
+              var positionsAt = [];
+              for (var count = 1; count <= words.length; count += 1) {
+                var total = gap * (count - 1);
+                for (var widthIndex = 0; widthIndex < count; widthIndex += 1) {
+                  total += widths[widthIndex];
+                }
+
+                var cursor = -total / 2;
+                var positions = [];
+                for (var positionIndex = 0; positionIndex < count; positionIndex += 1) {
+                  positions.push(cursor + widths[positionIndex] / 2);
+                  cursor += widths[positionIndex] + gap;
+                }
+                positionsAt.push(positions);
+              }
+
+              var elements = words.map(function (word, index) {
+                var element = document.createElement("span");
+                element.id = "kcb-word-" + index;
+                element.className = "kcb-word";
+                element.textContent = word;
+                element.setAttribute("aria-hidden", "true");
+                stage.appendChild(element);
+                return element;
+              });
+
+              gsap.registerPlugin(CustomEase);
+              var entryEase = CustomEase.create("kcb-entry-ease", "M0,0 C0.2,0.8 0.2,1 1,1");
+              var duration = Math.max(0.001, parseFloat(root.dataset.duration || "2"));
+              var firstDuration = 10 / 30;
+              var pushDuration = 13 / 30;
+              var authoredBuildDuration =
+                firstDuration + Math.max(0, words.length - 1) * pushDuration;
+              var availableBuildDuration = Math.max(0.25, duration - 0.5);
+              var timingScale = Math.min(1, availableBuildDuration / authoredBuildDuration);
+              firstDuration *= timingScale;
+              pushDuration *= timingScale;
+
+              var tl = gsap.timeline({ paused: true });
+
+              elements.forEach(function (element, index) {
+                var targetX = positionsAt[index][index];
+                var start = index === 0 ? 0 : firstDuration + (index - 1) * pushDuration;
+                var moveDuration = index === 0 ? firstDuration : pushDuration;
+                var fromX = index === 0 ? targetX : targetX + entryOffset;
+                var fromY = index === 0 ? 6 : 0;
+
+                tl.fromTo(
+                  element,
+                  {
+                    x: fromX,
+                    y: fromY,
+                    xPercent: -50,
+                    yPercent: -50,
+                    scale: 0.992,
+                    opacity: 0,
+                    "--kcb-blur": "3.5px",
+                  },
+                  {
+                    x: targetX,
+                    y: 0,
+                    xPercent: -50,
+                    yPercent: -50,
+                    scale: 1,
+                    opacity: 1,
+                    "--kcb-blur": "0px",
+                    duration: moveDuration,
+                    ease: entryEase,
+                    immediateRender: index === 0,
+                  },
                   start,
                 );
-                tl.to(
-                  priorElement,
-                  { "--kcb-blur": "0px", duration: moveDuration / 2, ease: "none" },
-                  blurPeak,
-                );
-              }
-            });
 
-            tl.seek(0);
-            window.__timelines = window.__timelines || {};
-            window.__timelines["kinetic-center-build"] = tl;
+                if (index === 0) return;
+
+                for (var priorIndex = 0; priorIndex < index; priorIndex += 1) {
+                  var priorElement = elements[priorIndex];
+                  var nextX = positionsAt[index][priorIndex];
+                  var blurPeak = start + moveDuration / 2;
+
+                  tl.to(priorElement, { x: nextX, duration: moveDuration, ease: entryEase }, start);
+                  tl.to(
+                    priorElement,
+                    { "--kcb-blur": "0.8px", duration: moveDuration / 2, ease: "none" },
+                    start,
+                  );
+                  tl.to(
+                    priorElement,
+                    { "--kcb-blur": "0px", duration: moveDuration / 2, ease: "none" },
+                    blurPeak,
+                  );
+                }
+              });
+
+              tl.seek(0);
+              window.__timelines = window.__timelines || {};
+              window.__timelines["kinetic-center-build"] = tl;
+            }
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["kinetic-center-build"] = document.fonts
+              .load(fontWeight + ' 72px "Bebas Neue"', text)
+              .then(build);
           })();
         </script>
       </div>

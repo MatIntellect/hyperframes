@@ -208,7 +208,7 @@
             var underlineWord = asLine(vars.underline_word, "контроль");
             var accentColors = {
               green: "var(--brand, #ff0000)",
-              blue: "var(--accent, #ff0000)",
+              blue: "var(--brand, #ff0000)",
               violet: "var(--accent-2, #ff0000)",
             };
             var accent = Object.prototype.hasOwnProperty.call(accentColors, vars.accent)
@@ -247,13 +247,32 @@
             }
             stage.setAttribute("aria-label", lineA + " " + lineB);
 
-            // Deterministic character-count fit against the longer line; both
-            // lines are nowrap, so the fit keeps them inside the stage. Bebas Neue,
-            // the brand display face: 0.51em per glyph at worst (Щ Ш Ж), no tracking,
-            // the line fills 96% of the 94cqw stage.
-            var characters = Math.max(1, Array.from(lineA).length, Array.from(lineB).length);
-            var fitted = Math.max(3.4, Math.min(9, (94 * 0.96) / (0.51 * characters)));
-            root.style.setProperty("--ls-font-size", "min(" + fitted.toFixed(3) + "cqw, 16cqh)");
+            // Size: the largest that keeps every line on one line, measured in Bebas Neue once the face has
+            // loaded (fitTextFontSize – contributing.md:66 «Overflow»), never under 28px (vertical.md:18).
+            // Render waits on buildReady.
+            var fitTexts = [lineA, lineB];
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["line-swap"] = document.fonts
+              .load('700 100px "Bebas Neue"', fitTexts.join(" "))
+              .then(function () {
+                var base = Math.max(
+                  28,
+                  Math.round(Math.min(root.clientWidth * 0.09, root.clientHeight * 0.16)),
+                );
+                var size = fitTexts.reduce(function (smallest, line) {
+                  var fit = window.__hyperframes.fitTextFontSize(line, {
+                    fontFamily: "Bebas Neue",
+                    fontWeight: 700,
+                    maxWidth: root.clientWidth * 0.94,
+                    baseFontSize: base,
+                    minFontSize: 28,
+                    step: 1,
+                  });
+                  return Math.min(smallest, fit.fontSize);
+                }, base);
+                root.style.setProperty("--ls-font-size", size + "px");
+              });
 
             // RETIME RANGE: fixed phases; HOLD is the only elastic span.
             var IN_A_BASE = 0.5;
