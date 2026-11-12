@@ -127,6 +127,28 @@
             width: 44cqw;
           }
 
+          /* Portrait field (a vertical reel's graphics field is 780 x 1180): a
+             side-by-side fan of three devices cannot fit across it, the phone
+             leaves the field and the monitor hides behind the tablet. The fan
+             restacks: monitor across the top, tablet and phone side by side
+             below it, every device whole and in view. */
+          .mds-portrait .mds-phone,
+          .mds-portrait .mds-tablet {
+            height: 40cqh;
+          }
+
+          .mds-portrait .mds-desktop {
+            width: 80cqw;
+          }
+
+          .mds-portrait .mds-stand-neck {
+            width: 8.7cqw;
+          }
+
+          .mds-portrait .mds-stand-foot {
+            width: 27cqw;
+          }
+
           .mds-monitor {
             width: 100%;
             aspect-ratio: 16 / 10;
@@ -673,9 +695,34 @@
               },
             ];
 
+            // Portrait restack (see .mds-portrait): monitor on top, tablet left,
+            // phone right, each fully inside the field.
+            if (root.clientHeight > root.clientWidth) {
+              root.classList.add("mds-portrait");
+              var PORTRAIT = {
+                phone: { x: 22, y: 24, rotation: 8 },
+                tablet: { x: -14, y: 20, rotation: -5 },
+                desktop: { x: 0, y: -22, rotation: 0 },
+              };
+              devices.forEach(function (device) {
+                var pose = PORTRAIT[device.element.getAttribute("data-device")];
+                device.x = pose.x;
+                device.y = pose.y;
+                device.rotation = pose.rotation;
+              });
+            }
+
+            // The scene fades in and out as ONE plate: per-device opacity let
+            // the devices show through each other on the way in and out.
+            var stage = root.querySelector(".mds-stage");
+
             var CASCADE = 0.12 * envelopeScale;
             var FAN_DURATION = 0.9 * envelopeScale;
             var tl = gsap.timeline({ paused: true });
+
+            gsap.set(stage, { opacity: 0 });
+            tl.to(stage, { opacity: 1, duration: 0.35 * envelopeScale, ease: "power1.out" }, 0);
+            tl.to(stage, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);
 
             devices.forEach(function (device, index) {
               gsap.set(device.element, {
@@ -683,7 +730,6 @@
                 y: "9cqh",
                 rotation: 0,
                 scale: 0.9,
-                opacity: 0,
               });
               tl.to(
                 device.element,
@@ -692,7 +738,6 @@
                   y: device.y + "cqh",
                   rotation: device.rotation,
                   scale: 1,
-                  opacity: 1,
                   duration: FAN_DURATION,
                   ease: "back.out(1.7)",
                 },
@@ -731,7 +776,6 @@
                 {
                   y: device.y + 5 + "cqh",
                   scale: 0.96,
-                  opacity: 0,
                   duration: OUT,
                   ease: "power2.in",
                 },

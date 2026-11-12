@@ -283,12 +283,15 @@
             align-items: center;
             max-width: 34cqw;
             color: var(--fg, #f2f2f2);
-            font-family: var(--font-display, "Bebas Neue", sans-serif);
-            font-size: max(28px, 5.8cqmin);
-            font-weight: 720;
-            line-height: 1.04;
-            letter-spacing: -0.04em;
-            overflow-wrap: anywhere;
+            /* Feature captions are interface copy, not reel headings: Montserrat,
+               wrapping at word boundaries (a long word breaks only as a last resort). */
+            font-family: var(--font-body, "Montserrat", sans-serif);
+            font-size: max(28px, 4.6cqmin);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
             opacity: 0;
             will-change: transform, opacity;
           }

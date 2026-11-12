@@ -15,12 +15,13 @@
   the command element's text nodes in document order, so the same character
   count always renders the same colored string in either seek direction.
 
-  Slot (see README.md for a worked example):
-    - [data-slot="content"]: the authored command + output lines. Replace the
-      children of this element in your installed copy. It must contain one
-      [data-terminal="command"] element (inline spans allowed) and any number
-      of [data-terminal="output"] elements, in print order. Default: a generic
-      build-tool sample, no product branding.
+  Slot "content": the command + output lines come from an inert template
+  anywhere in the HOST page, no edit of this file:
+      <template data-slot="code-terminal-run-content"> ... </template>
+    It holds one [data-terminal="command"] element (inline spans allowed) and
+    any number of [data-terminal="output"] elements, in print order. Without
+    the template: a short generic build-tool sample, no product branding. A
+    long command types longer: give the clip the duration it needs.
 
   Variables (declared in data-composition-variables below):
     - prompt_glyph (string, default "$"): leading glyph on the command and the
@@ -232,26 +233,23 @@
               </div>
               <div class="ctr-body">
                 <div class="ctr-slot" data-slot="content">
-                  <!-- SLOT "content": replace the children of this element with
-                       your own command + output lines. Keep one
-                       [data-terminal="command"] and any number of
-                       [data-terminal="output"] elements, in print order. -->
+                  <!-- Default content; a host template
+                       data-slot="code-terminal-run-content" replaces it. -->
                   <div data-terminal="command">
-                    run build <span class="ct-path">src/app</span>
-                    <span class="ct-flag">--minify</span> <span class="ct-flag">--out</span>
-                    <span class="ct-str">"dist/app"</span>
+                    build <span class="ct-path">src</span> <span class="ct-flag">--out</span>
+                    <span class="ct-str">"dist"</span>
                   </div>
                   <div data-terminal="output">
                     <span class="ct-muted">-</span> resolving 128 modules
                   </div>
                   <div data-terminal="output">
-                    <span class="ct-muted">-</span> bundling <span class="ct-path">src/app</span>
+                    <span class="ct-muted">-</span> bundling <span class="ct-path">src</span>
                   </div>
                   <div data-terminal="output">
                     <span class="ct-ok">ok</span> 128 modules in 412 ms
                   </div>
                   <div data-terminal="output">
-                    <span class="ct-ok">ok</span> wrote <span class="ct-path">dist/app</span>
+                    <span class="ct-ok">ok</span> wrote <span class="ct-path">dist</span>
                     <span class="ct-muted">(96 kB)</span>
                   </div>
                 </div>
@@ -277,6 +275,20 @@
             var root = document.getElementById("root");
             var stage = root.querySelector(".ctr-stage");
             var slot = root.querySelector('[data-slot="content"]');
+            // SLOT. The caller's lines live in an inert template at HOST
+            // DOCUMENT level (the mount wipes the host clip's children and
+            // templates never render); the scoped document only sees this
+            // composition, so the lookup goes through ownerDocument.
+            var hostDoc = root.ownerDocument;
+            var contentTpl = null;
+            try {
+              contentTpl = hostDoc.querySelector('template[data-slot="code-terminal-run-content"]');
+            } catch (error) {
+              contentTpl = null;
+            }
+            if (slot && contentTpl) {
+              slot.replaceChildren(hostDoc.importNode(contentTpl.content, true));
+            }
             var commandElement = slot ? slot.querySelector('[data-terminal="command"]') : null;
             var outputElements = slot
               ? Array.prototype.slice.call(slot.querySelectorAll('[data-terminal="output"]'))

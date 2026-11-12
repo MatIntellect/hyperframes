@@ -38,6 +38,13 @@
     product (hero product demo, gesture-led interaction, screen swap) rather
     than a bare floating screenshot.
 
+    Screen slot: the caller puts the screen in an inert template anywhere in
+    the HOST page, no edit of this file:
+      <template data-slot="device-frame-stage-screen"> ... </template>
+    Content is authored at the device's logical viewport (390x844 phone,
+    768x1024 tablet); img/video children fill it. Without the template the
+    screen shows a dark brand skeleton of an app.
+
     Variables (data-composition-variables above):
       device  enum phone|tablet          default "phone"     canonical outer ratio + logical viewport
       cutout  enum none|island|notch     default "none"      camera cutout; must match the installed screen content's safe area
@@ -244,24 +251,80 @@
           height: 100%;
         }
 
-        /* Visible only while the slot is empty (comments do not count toward
-           :empty); vanishes the moment an installing agent drops real content
-           in, no cleanup required. */
-        .device-screen-slot:empty {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 1px dashed var(--border, #2e2e32);
-          border-radius: calc(var(--screen-radius) * 0.4);
+        .device-screen-slot > img,
+        .device-screen-slot > video {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
 
-        .device-screen-slot:empty::before {
-          content: "screen slot: replace with reconstructed UI";
-          padding: var(--space-2, 16px);
-          color: var(--muted, #8a8a90);
-          font-family: var(--font-body, "Montserrat", sans-serif);
-          font-size: 15px;
-          text-align: center;
+        /* Default screen: a dark brand skeleton of an app (header with the
+           one red mark, hero block, three list rows), drawn in logical screen
+           pixels as percentages so it fits the phone and the tablet viewport.
+           A host template with data-slot="device-frame-stage-screen" replaces
+           it (see the SLOT note in the script). */
+        .dfs-skel {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 3%;
+          padding: 8% 7%;
+          background: var(--surface, #18181a);
+        }
+
+        .dfs-skel-top {
+          display: flex;
+          align-items: center;
+          gap: 5%;
+          height: 5%;
+        }
+
+        .dfs-skel-mark {
+          height: 100%;
+          aspect-ratio: 1;
+          border-radius: 28%;
+          background: var(--brand, #ff0000);
+        }
+
+        .dfs-skel-line {
+          height: 34%;
+          border-radius: 999px;
+          background: color-mix(in srgb, var(--fg, #f2f2f2) 22%, var(--surface, #18181a));
+        }
+
+        .dfs-skel-top .dfs-skel-line {
+          width: 46%;
+        }
+
+        .dfs-skel-hero {
+          flex: 0 0 26%;
+          border-radius: 18px;
+          background: color-mix(in srgb, var(--fg, #f2f2f2) 6%, var(--surface, #18181a));
+        }
+
+        .dfs-skel-row {
+          display: flex;
+          align-items: center;
+          gap: 6%;
+          flex: 0 0 11%;
+          padding: 0 6%;
+          border-radius: 16px;
+          background: color-mix(in srgb, var(--fg, #f2f2f2) 6%, var(--surface, #18181a));
+        }
+
+        .dfs-skel-row::before {
+          content: "";
+          height: 46%;
+          aspect-ratio: 1;
+          border-radius: 26%;
+          background: color-mix(in srgb, var(--fg, #f2f2f2) 14%, var(--surface, #18181a));
+        }
+
+        .dfs-skel-row .dfs-skel-line {
+          width: 52%;
+          background: color-mix(in srgb, var(--muted, #8a8a90) 40%, var(--surface, #18181a));
         }
 
         .device-cutout {
@@ -313,12 +376,15 @@
               <div class="screen-viewport">
                 <div class="screen-safe-area">
                   <div class="device-screen-slot" data-screen-slot>
-                    <!-- EDIT ZONE: replace with reconstructed product UI, or
-                         nest a <div data-composition-src="..." data-duration="...">
-                         sub-composition host. Author content at the device's
-                         logical viewport (390x844 phone, 768x1024 tablet);
-                         this slot is pre-scaled for you, so keep coordinates
-                         in logical screen pixels, never canvas pixels. -->
+                    <div class="dfs-skel" aria-hidden="true">
+                      <div class="dfs-skel-top">
+                        <i class="dfs-skel-mark"></i><i class="dfs-skel-line"></i>
+                      </div>
+                      <div class="dfs-skel-hero"></div>
+                      <div class="dfs-skel-row"><i class="dfs-skel-line"></i></div>
+                      <div class="dfs-skel-row"><i class="dfs-skel-line"></i></div>
+                      <div class="dfs-skel-row"><i class="dfs-skel-line"></i></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -337,6 +403,24 @@
           var frame = root.querySelector(".device-frame");
           var screen = root.querySelector(".device-screen");
           var viewport = root.querySelector(".screen-viewport");
+          var slot = root.querySelector("[data-screen-slot]");
+
+          // SLOT. The caller's screen lives in an inert template at HOST
+          // DOCUMENT level (the mount wipes the host clip's children and
+          // templates never render); the scoped document only sees this
+          // composition, so the lookup goes through ownerDocument. Author the
+          // content at the device's logical viewport (390x844 phone, 768x1024
+          // tablet): the slot is pre-scaled, keep logical screen pixels.
+          var hostDoc = root.ownerDocument;
+          var screenTpl = null;
+          try {
+            screenTpl = hostDoc.querySelector('template[data-slot="device-frame-stage-screen"]');
+          } catch (error) {
+            screenTpl = null;
+          }
+          if (screenTpl) {
+            slot.replaceChildren(hostDoc.importNode(screenTpl.content, true));
+          }
 
           var declared = {};
           try {

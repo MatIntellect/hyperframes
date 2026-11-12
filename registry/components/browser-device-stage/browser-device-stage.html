@@ -198,31 +198,31 @@
             max-width: 62%;
             margin: 0 auto;
             padding: 0.75cqmin 2.6cqmin;
-            overflow: hidden;
             border: 0.14cqmin solid color-mix(in srgb, var(--border, #2e2e32) 50%, transparent);
             border-radius: 999px;
             background: color-mix(in srgb, var(--bg, #0c1014) 55%, var(--surface, #18181a));
             color: var(--muted, #8a8a90);
-            font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+            /* An address is interface copy, not code: Montserrat. A long one
+               wraps (an address has no spaces, so any break point is fair). */
+            font-family: var(--font-body, "Montserrat", sans-serif);
             font-size: max(28px, 2cqmin);
-            line-height: 1.5;
-            white-space: nowrap;
+            line-height: 1.3;
             text-align: center;
-            text-overflow: ellipsis;
+            overflow-wrap: anywhere;
           }
 
           .bds-bartitle {
             display: block;
             margin: 0 auto;
             padding: 0.4cqmin 0;
-            overflow: hidden;
             color: color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent);
             font-size: max(28px, 2.15cqmin);
             font-weight: 600;
             letter-spacing: 0.02em;
-            line-height: 1.5;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            line-height: 1.3;
+            text-align: center;
+            text-wrap: balance;
+            overflow-wrap: break-word;
           }
 
           .bds-browser .bds-bartitle,
