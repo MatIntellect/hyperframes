@@ -1,0 +1,41 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-metal-vertical",
+  "type": "hyperframes:block",
+  "title": "Liquid Metal (vertical)",
+  "description": "Vertical: a chrome sphere ripples and flows like molten metal on the dark ground, the object centred on the field. A WebGPU shader from the Shaders library (shaders.com, MIT); keeps its own material colour; every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "tags": [
+    "webgpu",
+    "webgpu-shader",
+    "object",
+    "metal",
+    "chrome",
+    "liquid",
+    "sphere",
+    "loopable",
+    "vertical"
+  ],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-metal-vertical.html",
+      "target": "compositions/liquid-metal-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

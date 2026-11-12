@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "cosmic-orb",
+  "type": "hyperframes:block",
+  "title": "Cosmic Orb",
+  "description": "An iridescent soap-bubble planet on the brand ground: a slowly spinning sphere of nebula bands, dust lanes and twinkling stars wrapped in a refracting glass limb with chromatic aberration at the edge; keeps its own nebula colours. Hues, spin, glow, size, beat pulse and cues are variables; holds 30 s or fades.",
+  "tags": ["webgl", "shader", "background", "showcase", "3d", "loopable"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "cosmic-orb.html",
+      "target": "compositions/cosmic-orb.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

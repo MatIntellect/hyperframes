@@ -1,0 +1,31 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "liquid-metal",
+  "type": "hyperframes:block",
+  "title": "Liquid Metal",
+  "description": "A chrome sphere ripples and flows like molten metal on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; keeps its own material colour; every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "tags": ["webgpu", "webgpu-shader", "object", "metal", "chrome", "liquid", "sphere", "loopable"],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "liquid-metal.html",
+      "target": "compositions/liquid-metal.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

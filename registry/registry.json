@@ -284,6 +284,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "chrome-orb",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "chrome-orb-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "cinemagraph",
       "type": "hyperframes:block"
     },
@@ -404,6 +412,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "cosmic-orb",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "cosmic-orb-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "cuboid-carousel",
       "type": "hyperframes:block"
     },
@@ -484,11 +500,19 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "frost",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "frost-sequence-camera-orbit",
       "type": "hyperframes:block"
     },
     {
       "name": "frost-sequence-camera-orbit-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "frost-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -532,6 +556,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "goo",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "goo-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "gooey-split",
       "type": "hyperframes:block"
     },
@@ -548,11 +580,35 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "heatmap",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "heatmap-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "heygen-avatar-promo-card",
       "type": "hyperframes:block"
     },
     {
       "name": "heygen-avatar-promo-card-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hologram",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "hologram-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "holographic",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "holographic-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -612,6 +668,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "light-edge",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "light-edge-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "liquid-glass-notification",
       "type": "hyperframes:block"
     },
@@ -625,6 +689,14 @@
     },
     {
       "name": "liquid-glass-widgets-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "liquid-metal",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "liquid-metal-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -828,6 +900,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "nebula",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "nebula-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "news-ticker",
       "type": "hyperframes:block"
     },
@@ -868,6 +948,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "obsidian",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "obsidian-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "orbit-card",
       "type": "hyperframes:block"
     },
@@ -897,6 +985,14 @@
     },
     {
       "name": "plasma-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "plastic",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "plastic-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -1052,6 +1148,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "thin-film",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "thin-film-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "thread-message-stack",
       "type": "hyperframes:block"
     },
@@ -1177,6 +1281,14 @@
     },
     {
       "name": "vpn-youtube-spot-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "water",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "water-vertical",
       "type": "hyperframes:block"
     },
     {

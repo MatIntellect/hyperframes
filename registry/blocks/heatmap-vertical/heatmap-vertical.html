@@ -1,0 +1,156 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object about 760 px across, centred on the field (y 770). top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
+    {"id": "stop1", "type": "color", "role": "style", "label": "Gradient 1", "description": "Gradient stop at 0%.", "default": "#0c1014"},
+    {"id": "stop2", "type": "color", "role": "style", "label": "Gradient 2", "description": "Gradient stop at 20%.", "default": "#2e2e32"},
+    {"id": "stop3", "type": "color", "role": "style", "label": "Gradient 3", "description": "Gradient stop at 45%.", "default": "#7a0000"},
+    {"id": "stop4", "type": "color", "role": "style", "label": "Gradient 4", "description": "Gradient stop at 70%.", "default": "#ff0000"},
+    {"id": "stop5", "type": "color", "role": "style", "label": "Gradient 5", "description": "Gradient stop at 90%.", "default": "#ff8a80"},
+    {"id": "stop6", "type": "color", "role": "style", "label": "Gradient 6", "description": "Gradient stop at 100%.", "default": "#f2f2f2"},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #shheatmapv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      /* Full-bleed child carries the ground; never the composition root. */
+      #shheatmapv-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #0c1014;
+      }
+      #shheatmapv-stage canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      
+      #shheatmapv-stage.shheatmapv-card {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid #2e2e32;
+      }
+      #shheatmapv-stage.shheatmapv-bottom {
+        top: 600px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="shheatmapv-root" data-composition-id="heatmap-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-requires-webgpu>
+      <div id="shheatmapv-stage">
+        <canvas data-shader="Heatmap" width="1080" height="1920"></canvas>
+      </div>
+      <!-- Driver clip: gives the block a timed element for the host timeline. -->
+      <div
+        id="shheatmapv-drv"
+        class="clip"
+        data-start="0"
+        data-duration="30"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      // The shared library (assets/lib/shaders.iife.js, below) draws the canvas from HyperFrames time and reads
+      // the canvas's data-shader-props once at start (its driver: JSON.parse(canvas.dataset.shaderProps || "{}")).
+      // This script runs first: it turns the variables into those props and sizes the canvas.
+      (function () {
+        var COMP_ID = "heatmap-vertical";
+        var DURATION = 30;
+        // colour variables: id -> default (the same default as in the variables list above)
+        var COLORS = {};
+        // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
+        var STOPS = [{"color": "#0c1014", "position": 0}, {"color": "#2e2e32", "position": 0.2}, {"color": "#7a0000", "position": 0.45}, {"color": "#ff0000", "position": 0.7}, {"color": "#ff8a80", "position": 0.9}, {"color": "#f2f2f2", "position": 1}];
+        var MODE = null;
+        // settings the brand fixes that are not variables (colour blending)
+        var FIXED = {};
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        function colour(id, fallback) {
+          var v = vars[id];
+          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+        }
+        var props = Object.assign({}, FIXED);
+        Object.keys(COLORS).forEach(function (id) {
+          props[id] = colour(id, COLORS[id]);
+        });
+        if (STOPS)
+          props.stops = STOPS.map(function (s, i) {
+            return { color: colour("stop" + (i + 1), s.color), position: s.position };
+          });
+        if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
+
+        var root = document.getElementById("shheatmapv-root");
+        var stage = document.getElementById("shheatmapv-stage");
+        var cv = stage.querySelector("canvas");
+        stage.style.background = colour("bg", "#0c1014");
+        var W = 1080,
+          H = 1920;
+        
+        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+        if (placement !== "full") {
+          stage.classList.add("shheatmapv-card", "shheatmapv-" + placement);
+          W = 780;
+          H = 760;
+        } else if (true) {
+          // the object's size follows the canvas height: 1920 would make it wider than the frame.
+          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 770).
+          props.scale = 0.5625;
+          props.center = { x: 0.5, y: 770 / 1920 };
+        }
+        
+        cv.width = W;
+        cv.height = H;
+        cv.dataset.shaderProps = JSON.stringify(props);
+
+        var cues = String(vars.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DURATION;
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (vars.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        tl.set({}, {}, DURATION);
+        window.__timelines[COMP_ID] = tl;
+      })();
+    </script>
+    <script src="assets/lib/shaders.iife.js"></script>
+  </body>
+</html>
