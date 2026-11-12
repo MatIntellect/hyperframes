@@ -1480,6 +1480,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "chat-message",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "chat-thread",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "colorama-wipe",
       "type": "hyperframes:component"
     },
@@ -1588,6 +1596,22 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "native-notification-pop",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "notes-typing",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "notification-pileup",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "notification-stack",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "number-pop-in",
       "type": "hyperframes:component"
     },
@@ -1620,6 +1644,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "pull-to-refresh",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "rgb-glitch-text",
       "type": "hyperframes:component"
     },
@@ -1637,6 +1665,10 @@
     },
     {
       "name": "shared-axis-z",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "sheet-spring-up",
       "type": "hyperframes:component"
     },
     {
@@ -1677,6 +1709,10 @@
     },
     {
       "name": "strikethrough-replace",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "swipe-rail",
       "type": "hyperframes:component"
     },
     {
@@ -1741,6 +1777,10 @@
     },
     {
       "name": "typewriter",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "typing-indicator",
       "type": "hyperframes:component"
     },
     {
