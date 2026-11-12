@@ -1432,6 +1432,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "beat-timeline",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "before-after-wipe",
       "type": "hyperframes:component"
     },
@@ -1453,6 +1457,10 @@
     },
     {
       "name": "camera-scan-gate",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "camera-shake",
       "type": "hyperframes:component"
     },
     {
@@ -1576,6 +1584,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "drift-hold",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "dynamic-grid",
       "type": "hyperframes:component"
     },
@@ -1589,6 +1601,14 @@
     },
     {
       "name": "extended-keyframe",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "facet-morph",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "filmed-screen",
       "type": "hyperframes:component"
     },
     {
@@ -1800,6 +1820,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "pan-stations",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "panel-reveal",
       "type": "hyperframes:component"
     },
@@ -1861,6 +1885,10 @@
     },
     {
       "name": "screen-flow-carousel",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "scroll-camera-story",
       "type": "hyperframes:component"
     },
     {
@@ -2121,6 +2149,14 @@
     },
     {
       "name": "wordmark-tiles",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "x-follow-card",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "yt-camera-move",
       "type": "hyperframes:component"
     },
     {

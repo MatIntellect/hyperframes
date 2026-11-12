@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "x-follow-card",
+  "type": "hyperframes:component",
+  "title": "X Follow Card",
+  "description": "A social follow card with avatar, handle, and follower motion. Mount it inside a clip with data-composition-id=\"x-follow-card\": its own timeline nests there.",
+  "tags": ["social-overlay"],
+  "files": [
+    {
+      "path": "x-follow-card.html",
+      "target": "compositions/components/x-follow-card.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}
