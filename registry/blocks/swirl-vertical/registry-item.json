@@ -1,0 +1,40 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "swirl-vertical",
+  "type": "hyperframes:block",
+  "title": "Swirl (vertical)",
+  "description": "Vertical: red and dark grey colour fields swirl and flow into each other across the whole frame. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "tags": [
+    "webgpu",
+    "webgpu-shader",
+    "background",
+    "gradient",
+    "flow",
+    "abstract",
+    "loopable",
+    "vertical"
+  ],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "swirl-vertical.html",
+      "target": "compositions/swirl-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

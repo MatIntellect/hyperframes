@@ -1,0 +1,129 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
+    {"id": "colorA", "type": "color", "role": "style", "label": "Color A", "description": "Deep background color", "default": "#0c1014"},
+    {"id": "colorB", "type": "color", "role": "style", "label": "Color B", "description": "Primary accent color", "default": "#2e2e32"},
+    {"id": "colorC", "type": "color", "role": "style", "label": "Color C", "description": "Secondary accent color", "default": "#ff0000"},
+    {"id": "colorD", "type": "color", "role": "style", "label": "Color D", "description": "Tertiary accent color", "default": "#8a8a90"},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #shflowinggradient-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      /* Full-bleed child carries the ground; never the composition root. */
+      #shflowinggradient-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #0c1014;
+      }
+      #shflowinggradient-stage canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div id="shflowinggradient-root" data-composition-id="flowing-gradient" data-start="0" data-duration="30" data-width="1920" data-height="1080" data-requires-webgpu>
+      <div id="shflowinggradient-stage">
+        <canvas data-shader="FlowingGradient" width="1920" height="1080"></canvas>
+      </div>
+      <!-- Driver clip: gives the block a timed element for the host timeline. -->
+      <div
+        id="shflowinggradient-drv"
+        class="clip"
+        data-start="0"
+        data-duration="30"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      // The shared library (assets/lib/shaders.iife.js, below) draws the canvas from HyperFrames time and reads
+      // the canvas's data-shader-props once at start (its driver: JSON.parse(canvas.dataset.shaderProps || "{}")).
+      // This script runs first: it turns the variables into those props and sizes the canvas.
+      (function () {
+        var COMP_ID = "flowing-gradient";
+        var DURATION = 30;
+        // colour variables: id -> default (the same default as in the variables list above)
+        var COLORS = {"colorA": "#0c1014", "colorB": "#2e2e32", "colorC": "#ff0000", "colorD": "#8a8a90"};
+        // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
+        var STOPS = null;
+        var MODE = null;
+        // settings the brand fixes that are not variables (colour blending)
+        var FIXED = {"colorSpace": "oklab"};
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        function colour(id, fallback) {
+          var v = vars[id];
+          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+        }
+        var props = Object.assign({}, FIXED);
+        Object.keys(COLORS).forEach(function (id) {
+          props[id] = colour(id, COLORS[id]);
+        });
+        if (STOPS)
+          props.stops = STOPS.map(function (s, i) {
+            return { color: colour("stop" + (i + 1), s.color), position: s.position };
+          });
+        if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
+
+        var root = document.getElementById("shflowinggradient-root");
+        var stage = document.getElementById("shflowinggradient-stage");
+        var cv = stage.querySelector("canvas");
+        stage.style.background = colour("bg", "#0c1014");
+        var W = 1920,
+          H = 1080;
+        
+        cv.width = W;
+        cv.height = H;
+        cv.dataset.shaderProps = JSON.stringify(props);
+
+        var cues = String(vars.cues || "")
+          .split(",")
+          .map(parseFloat);
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DURATION;
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (vars.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        tl.set({}, {}, DURATION);
+        window.__timelines[COMP_ID] = tl;
+      })();
+    </script>
+    <script src="assets/lib/shaders.iife.js"></script>
+  </body>
+</html>

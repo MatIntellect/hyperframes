@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "halftone-field",
+  "type": "hyperframes:block",
+  "title": "Halftone Field",
+  "description": "A full-bleed halftone light field on the brand ground: a grid of dots whose size and colour track a slow flowing simplex-noise field, so broad bands of grey, red and white light sweep across a mostly dark frame like an LED wall. Built to run under type. Palette, cell size, flow and cues are variables; holds 30 s or fades.",
+  "tags": ["webgl", "shader", "background", "texture", "halftone", "loopable"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "halftone-field.html",
+      "target": "compositions/halftone-field.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

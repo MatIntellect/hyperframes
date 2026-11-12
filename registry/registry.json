@@ -36,6 +36,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "aurora",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "aurora-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "bar-chart-race",
       "type": "hyperframes:block"
     },
@@ -49,6 +57,14 @@
     },
     {
       "name": "beat-freeze-cut-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "blob",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "blob-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -380,6 +396,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "color-wheel",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "color-wheel-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "cuboid-carousel",
       "type": "hyperframes:block"
     },
@@ -420,11 +444,35 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "falling-lines",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "falling-lines-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "flowchart",
       "type": "hyperframes:block"
     },
     {
       "name": "flowchart-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "flowing-gradient",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "flowing-gradient-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "fractal-noise",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "fractal-noise-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -441,6 +489,14 @@
     },
     {
       "name": "frost-sequence-camera-orbit-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "gabor-noise",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "gabor-noise-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -468,11 +524,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "godrays",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "godrays-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "gooey-split",
       "type": "hyperframes:block"
     },
     {
       "name": "gooey-split-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "halftone-field",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "halftone-field-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -529,6 +601,14 @@
     },
     {
       "name": "ios26-liquid-glass-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lens-flare",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "lens-flare-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -676,6 +756,22 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "marble",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "marble-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mesh-gradient",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "mesh-gradient-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "message-thread-reveal",
       "type": "hyperframes:block"
     },
@@ -796,6 +892,22 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "plasma",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "plasma-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "prism",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "prism-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "product-turntable",
       "type": "hyperframes:block"
     },
@@ -820,11 +932,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "ripples",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "ripples-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "share-sheet-carousel",
       "type": "hyperframes:block"
     },
     {
       "name": "share-sheet-carousel-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "sine-wave",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "sine-wave-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -852,11 +980,19 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "spiral",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "spiral-galaxy",
       "type": "hyperframes:block"
     },
     {
       "name": "spiral-galaxy-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "spiral-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -881,6 +1017,38 @@
     },
     {
       "name": "starfield-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "strands",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "strands-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "stripes",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "stripes-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "sun-burst",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "sun-burst-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "swirl",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "swirl-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -996,11 +1164,27 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "voronoi",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "voronoi-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "vpn-youtube-spot",
       "type": "hyperframes:block"
     },
     {
       "name": "vpn-youtube-spot-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "waveform",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "waveform-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -1033,6 +1217,14 @@
     },
     {
       "name": "world-map-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "worley-noise",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "worley-noise-vertical",
       "type": "hyperframes:block"
     },
     {

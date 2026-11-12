@@ -1,0 +1,31 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "color-wheel",
+  "type": "hyperframes:block",
+  "title": "Color Wheel",
+  "description": "A wide gradient slides slowly through red, dark grey and grey (rainbow is a mode). A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "tags": ["webgpu", "webgpu-shader", "background", "gradient", "rainbow", "color", "loopable"],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "color-wheel.html",
+      "target": "compositions/color-wheel.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "godrays",
+  "type": "hyperframes:block",
+  "title": "Godrays",
+  "description": "Red rays of light fan out from a corner and drift across the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "tags": ["webgpu", "webgpu-shader", "background", "light", "rays", "loopable"],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "godrays.html",
+      "target": "compositions/godrays.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

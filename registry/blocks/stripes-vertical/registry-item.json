@@ -1,0 +1,40 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "stripes-vertical",
+  "type": "hyperframes:block",
+  "title": "Stripes (vertical)",
+  "description": "Vertical: bold dark and grey diagonal stripes slide across the frame. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "tags": [
+    "webgpu",
+    "webgpu-shader",
+    "background",
+    "pattern",
+    "stripes",
+    "monochrome",
+    "loopable",
+    "vertical"
+  ],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "stripes-vertical.html",
+      "target": "compositions/stripes-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "halftone-field-vertical",
+  "type": "hyperframes:block",
+  "title": "Halftone Field (vertical)",
+  "description": "Vertical halftone light field: dots in grey, red and white sweep across the dark frame like an LED wall, built to run under type. Palette, cell size, flow and cues are variables; placement full, top or bottom card; holds or fades.",
+  "tags": ["webgl", "shader", "background", "texture", "halftone", "loopable", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "halftone-field-vertical.html",
+      "target": "compositions/halftone-field-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

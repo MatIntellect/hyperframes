@@ -1,0 +1,40 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "fractal-noise-vertical",
+  "type": "hyperframes:block",
+  "title": "Fractal Noise (vertical)",
+  "description": "Vertical: soft grey fractal noise drifts across the dark frame like slow clouds. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "tags": [
+    "webgpu",
+    "webgpu-shader",
+    "background",
+    "noise",
+    "texture",
+    "clouds",
+    "loopable",
+    "vertical"
+  ],
+  "license": "Apache-2.0 AND MIT",
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "fractal-noise-vertical.html",
+      "target": "compositions/fractal-noise-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "target": "assets/lib/shaders.THIRD-PARTY-LICENSES.txt",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/lib/shaders.iife.js",
+      "target": "assets/lib/shaders.iife.js",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
