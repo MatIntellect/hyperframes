@@ -270,11 +270,14 @@
           rrect(x + PAD, iy, ICON, ICON, 12);
           g.fillStyle = C.accent;
           g.fill();
-          g.font = '700 ' + Math.round(ICON * 0.72) + 'px "Bebas Neue"';
+          // badge digit – Montserrat (owner rule: digits are not Bebas), centred in the badge
+          g.font = '700 ' + Math.round(ICON * 0.56) + 'px "Montserrat"';
           g.fillStyle = C.fg;
           g.textAlign = "center";
-          g.fillText(String(i + 1), x + PAD + ICON / 2, iy + ICON * 0.78);
+          g.textBaseline = "middle";
+          g.fillText(String(i + 1), x + PAD + ICON / 2, iy + ICON / 2);
           g.textAlign = "left";
+          g.textBaseline = "alphabetic";
           g.font = TITLE;
           g.fillStyle = C.fg;
           c.t.forEach(function (l) {

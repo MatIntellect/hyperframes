@@ -3,18 +3,18 @@
   lang="ru"
   data-composition-variables='[
     { "id": "label", "type": "string", "role": "content", "label": "Stats label", "description": "Small caps label above the big number of the stats page.", "maxLength": 24, "default": "Просмотры за месяц" },
-    { "id": "number", "type": "string", "role": "content", "label": "Big number", "description": "The big number, Bebas Neue, one line.", "maxLength": 11, "default": "2 847 391" },
+    { "id": "number", "type": "string", "role": "content", "label": "Big number", "description": "The big number, Montserrat, one line; set no wider than the field.", "maxLength": 11, "default": "2 847 391" },
     { "id": "change", "type": "string", "role": "content", "label": "Change badge", "description": "Red badge next to the number.", "maxLength": 8, "default": "+12,4%" },
     { "id": "stat1", "type": "string", "role": "content", "label": "Card 1 label", "description": "Label of the first stats card (wide and full vertical only).", "maxLength": 14, "default": "Ролики" },
-    { "id": "value1", "type": "string", "role": "content", "label": "Card 1 value", "description": "Value of the first stats card, Bebas Neue.", "maxLength": 8, "default": "148" },
+    { "id": "value1", "type": "string", "role": "content", "label": "Card 1 value", "description": "Value of the first stats card, Montserrat.", "maxLength": 8, "default": "148" },
     { "id": "stat2", "type": "string", "role": "content", "label": "Card 2 label", "description": "Label of the second stats card.", "maxLength": 14, "default": "Подписчики" },
-    { "id": "value2", "type": "string", "role": "content", "label": "Card 2 value", "description": "Value of the second stats card, Bebas Neue.", "maxLength": 8, "default": "+3 210" },
+    { "id": "value2", "type": "string", "role": "content", "label": "Card 2 value", "description": "Value of the second stats card, Montserrat.", "maxLength": 8, "default": "+3 210" },
     { "id": "stat3", "type": "string", "role": "content", "label": "Card 3 label", "description": "Label of the third stats card.", "maxLength": 14, "default": "Досмотры" },
-    { "id": "value3", "type": "string", "role": "content", "label": "Card 3 value", "description": "Value of the third stats card, Bebas Neue.", "maxLength": 8, "default": "71%" },
+    { "id": "value3", "type": "string", "role": "content", "label": "Card 3 value", "description": "Value of the third stats card, Montserrat.", "maxLength": 8, "default": "71%" },
     { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round avatar of the post the stats page melts into.", "default": "assets/img/matintellect-avatar.svg" },
     { "id": "name", "type": "string", "role": "content", "label": "Author name", "description": "Post author name.", "portrays": ["subject_name"], "maxLength": 18, "default": "MatIntellect" },
     { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Grey handle next to the name.", "maxLength": 18, "default": "@MatIntellect" },
-    { "id": "post", "type": "string", "role": "content", "label": "Post text", "description": "Post text, Montserrat, up to four lines (three on a top / bottom card).", "maxLength": 110, "default": "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%" },
+    { "id": "post", "type": "string", "role": "content", "label": "Post text", "description": "Post text, Montserrat, up to four lines in every layout.", "maxLength": 110, "default": "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%" },
     { "id": "stats", "type": "string", "role": "content", "label": "Post numbers", "description": "Grey line of numbers under the post.", "maxLength": 34, "default": "1,2 тыс. репостов · 8,4 тыс. лайков" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the surface starts to flow (stats page melts into the post 5-7 s later, waves settle by 12 s), 2 the block fades out (only when exit is fade). Empty keeps 0 and 12.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the still post to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -153,7 +153,7 @@
         // поле содержимого (в пикселях кадра) и размеры шрифтов на каждую раскладку
         var W = 1920,
           H = 1080,
-          L = { x: 200, y: 130, w: 1520, h: 820, num: 190, lab: 32, badge: 34, cards: 3, cardRow: true, statLab: 30, statVal: 84, name: 40, handle: 32, post: 48, postLines: 4, small: 30 };
+          L = { x: 200, y: 130, w: 1520, h: 820, num: 190, lab: 32, badge: 34, cards: 3, cardRow: true, statLab: 30, statVal: 84, name: 40, handle: 32, post: 48, small: 30 };
         
         canvas.width = W;
         canvas.height = H;
@@ -210,10 +210,14 @@
           g.fillStyle = C.muted;
           g.fillText(txt(V.label, "Просмотры за месяц").toUpperCase(), x, y + L.lab);
           y += L.lab * 1.6;
-          g.font = '700 ' + L.num + 'px "Bebas Neue"';
-          g.fillStyle = C.fg;
+          // digits are Montserrat (owner rule: Bebas only for headlines and captions); wider than Bebas,
+          // so the number is measured and set no wider than the field
           var num = txt(V.number, "2 847 391");
-          g.fillText(num, x, y + L.num * 0.86);
+          g.font = '700 ' + L.num + 'px "Montserrat"';
+          var ns = Math.min(L.num, Math.floor((L.num * L.w) / g.measureText(num).width));
+          g.font = '700 ' + ns + 'px "Montserrat"';
+          g.fillStyle = C.fg;
+          g.fillText(num, x, y + ns * 0.86);
           var nw = g.measureText(num).width;
           var bt = txt(V.change, "+12,4%");
           g.font = '600 ' + L.badge + 'px "Montserrat"';
@@ -221,10 +225,10 @@
             bh = L.badge * 1.8;
           // значок – справа от числа, а если не влезает в ширину поля – под ним
           var bx = x + nw + 28,
-            by = y + L.num * 0.86 - bh;
+            by = y + ns * 0.86 - bh;
           if (bx + bw > x + L.w) {
             bx = x;
-            by = y + L.num * 0.95 + 12;
+            by = y + ns * 0.95 + 12;
             y += bh + 12;
           }
           rr(g, bx, by, bw, bh, bh / 2);
@@ -232,7 +236,7 @@
           g.fill();
           g.fillStyle = C.fg;
           g.fillText(bt, bx + L.badge * 0.6, by + bh / 2 + L.badge * 0.36);
-          y += L.num * 0.95 + 36;
+          y += ns * 0.95 + 36;
           // карточки снизу поля; график – между числом и карточками
           var cardsH = 0,
             ch = L.statLab * 1.4 + L.statVal * 0.95 + 56,
@@ -295,7 +299,7 @@
             g.font = '400 ' + L.statLab + 'px "Montserrat"';
             g.fillStyle = C.muted;
             g.fillText(c[0], cx + 28, yy + 28 + L.statLab);
-            g.font = '700 ' + L.statVal + 'px "Bebas Neue"';
+            g.font = '700 ' + L.statVal + 'px "Montserrat"';
             g.fillStyle = C.fg;
             g.fillText(c[1], cx + 28, yy + 28 + L.statLab * 1.4 + L.statVal * 0.85);
           });
@@ -310,7 +314,8 @@
             HAND = '400 ' + L.handle + 'px "Montserrat"',
             POST = '400 ' + L.post + 'px "Montserrat"',
             SM = '400 ' + L.small + 'px "Montserrat"';
-          var pl = wrap(g, txt(V.post, "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%"), POST, L.w).slice(0, L.postLines);
+          // the whole post is drawn: 110 characters wrap to at most four lines in every layout, nothing is cut
+          var pl = wrap(g, txt(V.post, "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%"), POST, L.w);
           var PLH = L.post * 1.4;
           var total = AV + 40 + pl.length * PLH + 30 + L.small * 1.3;
           var y = L.y + (L.h - total) / 2;
