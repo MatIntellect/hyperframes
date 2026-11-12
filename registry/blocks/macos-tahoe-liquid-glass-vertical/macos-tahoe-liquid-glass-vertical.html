@@ -7,7 +7,6 @@
     { "id": "app", "type": "string", "role": "content", "label": "Notification app", "description": "Bold app name of the notification.", "maxLength": 14, "default": "Сообщения" },
     { "id": "time", "type": "string", "role": "content", "label": "Notification time", "description": "Time on the right of the notification.", "maxLength": 6, "default": "сейчас" },
     { "id": "text", "type": "string", "role": "content", "label": "Notification text", "description": "Text of the notification, up to three lines.", "maxLength": 50, "default": "Аня: ролик собран, можно выкладывать" },
-    { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title of the Finder window on the desktop (texture, small).", "maxLength": 20, "default": "MatIntellect" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the glass notification slides in from the right; 2 the block fades out (only when exit is fade). The camera pulls back and the MacBook breathes for 13 s, then rests. Empty keeps 0.45.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the MacBook to the end of the mount; fade fades the block out at cue 2.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -83,6 +82,19 @@
       #mtgv-root.mtgv-card.mtgv-bottom #mtgv-frame {
         top: 600px;
       }
+      /* full: the laptop body below the field fades into the brand ground – the subtitle band stays dark */
+      #mtgv-ground {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1300px;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent, var(--bg, #0c1014) 80px);
+        pointer-events: none;
+      }
+      #mtgv-root.mtgv-card #mtgv-ground {
+        display: none;
+      }
       
       #mtgv-theater {
         position: absolute;
@@ -101,6 +113,7 @@
     <div id="mtgv-root" data-composition-id="macos-tahoe-liquid-glass-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
       <div id="mtgv-frame">
         <canvas id="mtgv-theater" width="1080" height="1920"></canvas>
+        <div id="mtgv-ground"></div>
         <img id="mtgv-icon" data-var-src="icon" src="assets/tahoe/icons/toast-messages.jpg" alt="" />
       </div>
     </div>
@@ -131,8 +144,11 @@
       // раскладка: широкая – родная камера (отъезд от всего ноутбука); вертикаль – крупно правый верхний угол экрана
       var W = 1920,
         H = 1080,
-        CLOSE = null;
+        CLOSE = null,
+        FINDER_X = 112;
       
+      // the close-up shows the screen from x ~700: the Finder window (620 wide) moves 60 left, out of the frame
+      FINDER_X = 52;
       var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
       W = 1080;
       H = 1920;
@@ -151,7 +167,8 @@
       theater.style.height = H + "px";
 
       var NOTE = { app: txt(V.app, "Сообщения"), time: txt(V.time, "сейчас"), text: txt(V.text, "Аня: ролик собран, можно выкладывать") };
-      var TITLE = txt(V.title, "MatIntellect");
+      // заголовок окна Finder – узор интерфейса (13 px экрана), не поле: прочесть его нельзя
+      var TITLE = "MatIntellect";
       var cues = String(V.cues || "")
         .split(",")
         .map(function (v) {
@@ -224,7 +241,8 @@
       scene.add(bgPlane);
       var floor = new THREE.Mesh(
         new THREE.PlaneGeometry(30, 30),
-        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.9, roughness: 0.2 }),
+        // envMapIntensity 0.08: the white bands of the environment map painted the metal floor light grey
+        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.9, roughness: 0.2, envMapIntensity: 0.08 }),
       );
       floor.rotation.x = -PI / 2;
       floor.position.y = -2.5;
@@ -421,7 +439,7 @@
         ctx.restore();
       }
       function drawFinder(ctx) {
-        var x = 112,
+        var x = FINDER_X,
           y = 236,
           w = 620,
           h = 338;
@@ -531,8 +549,11 @@
         var lines = wrap(sctx, NOTE.text, tw);
         sctx.font = font(700, F);
         var tmW = sctx.measureText(NOTE.time).width;
-        var app = fit(sctx, NOTE.app, tw - tmW - 12);
-        TN = { w: w, h: pad * 2 + F * 1.25 + lines.length * F * 1.22, pad: pad, ic: ic, tx: tx, app: app, lines: lines, x: 1440 - 24 - w, y: 48 };
+        // the app name shares its line with the time; a name too long for that keeps the whole width
+        // and the time takes its own line on the right (nothing is cut while the name fits the width)
+        var below = sctx.measureText(NOTE.app).width > tw - tmW - 12;
+        var app = fit(sctx, NOTE.app, below ? tw : tw - tmW - 12);
+        TN = { w: w, h: pad * 2 + F * 1.25 + (lines.length + (below ? 1 : 0)) * F * 1.22, pad: pad, ic: ic, tx: tx, app: app, below: below, lines: lines, x: 1440 - 24 - w, y: 48 };
       }
       function drawNote(ctx, p, hop) {
         if (p <= 0.001) return;
@@ -555,12 +576,13 @@
         ctx.fillText(n.app, x + n.tx, y + n.pad);
         ctx.globalAlpha *= 0.75;
         ctx.textAlign = "right";
-        ctx.fillText(NOTE.time, x + n.w - n.pad, y + n.pad);
+        var row = n.below ? 1 : 0;
+        ctx.fillText(NOTE.time, x + n.w - n.pad, y + n.pad + row * F * 1.25);
         ctx.textAlign = "left";
         ctx.globalAlpha = Math.min(1, p * 1.4);
         ctx.font = font(600, F);
         n.lines.forEach(function (l, i) {
-          ctx.fillText(l, x + n.tx, y + n.pad + F * 1.25 + i * F * 1.22);
+          ctx.fillText(l, x + n.tx, y + n.pad + F * 1.25 + (i + row) * F * 1.22);
         });
         ctx.restore();
       }

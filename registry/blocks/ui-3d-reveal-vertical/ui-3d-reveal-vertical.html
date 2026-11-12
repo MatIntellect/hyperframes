@@ -17,7 +17,7 @@
         width: 1080px;
         height: 1920px;
         overflow: hidden;
-        background-color: #0c1014;
+        background-color: transparent;
       }
     </style>
   </head>
@@ -28,8 +28,11 @@
       data-height="1920"
       data-start="0"
       data-duration="30"
-      data-composition-variables='[{ "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the mark at the end, typed in letter by letter.", "maxLength": 28, "default": "Ролик из записи за минуты." }, { "id": "url", "type": "string", "role": "content", "label": "Address pill", "description": "Address in the pill under the tagline.", "maxLength": 24, "default": "matintellect.com" }, { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the screen flies away and the closing mark starts drawing, 2 the block fades out (only when exit is fade). The motion before the first cue is sped up or slowed to land on it. Empty keeps 7.3 and 14.5.", "default": "" }, { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the mark, tagline and address to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }]'
+      data-composition-variables='[{ "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, the scene on the 780 field centred at y 770. top / bottom: the same scene on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+{ "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the mark at the end, typed in letter by letter.", "maxLength": 28, "default": "Ролик из записи за минуты." }, { "id": "url", "type": "string", "role": "content", "label": "Address pill", "description": "Address in the pill under the tagline.", "maxLength": 24, "default": "matintellect.com" }, { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the screen flies away and the closing mark starts drawing, 2 the block fades out (only when exit is fade). The motion before the first cue is sped up or slowed to land on it. Empty keeps 7.3 and 14.5.", "default": "" }, { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the mark, tagline and address to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }]'
     >
+      <!-- one wrapper for every layer: the vertical card moves it to the card centre -->
+      <div class="pl">
       <!-- Background: Figma outer canvas dark -->
       <div class="bg-base"></div>
       <div class="bg-glow" id="bgGlow"></div>
@@ -994,6 +997,8 @@
           <text class="url-text" x="540" y="956" text-anchor="middle" fill="#a0a0a6" font-size="28" font-weight="500" opacity="0"></text>
         </svg>
       </div>
+      </div>
+      <div class="card-edge"></div>
 
 
       <style>
@@ -1053,6 +1058,44 @@
         }
 
         /* ── Background ── */
+        [data-composition-id="ui-3d-reveal-vertical"] .pl {
+          position: absolute;
+          inset: 0;
+        }
+        
+        /* top / bottom: the frame is clipped to the card, the layers move to its centre (y 560 / 980) */
+        [data-composition-id="ui-3d-reveal-vertical"].card {
+          background: transparent;
+          clip-path: inset(180px 150px 980px 150px round 32px);
+        }
+        [data-composition-id="ui-3d-reveal-vertical"].card.bottom {
+          clip-path: inset(600px 150px 560px 150px round 32px);
+        }
+        [data-composition-id="ui-3d-reveal-vertical"].card .pl {
+          transform: translateY(-210px);
+        }
+        [data-composition-id="ui-3d-reveal-vertical"].card.bottom .pl {
+          transform: translateY(210px);
+        }
+        [data-composition-id="ui-3d-reveal-vertical"] .card-edge {
+          display: none;
+        }
+        [data-composition-id="ui-3d-reveal-vertical"].card .card-edge {
+          display: block;
+          position: absolute;
+          left: 150px;
+          top: 180px;
+          width: 780px;
+          height: 760px;
+          border-radius: 32px;
+          border: 2px solid #2e2e32;
+          pointer-events: none;
+        }
+        [data-composition-id="ui-3d-reveal-vertical"].card.bottom .card-edge {
+          top: 600px;
+        }
+        
+
         [data-composition-id="ui-3d-reveal-vertical"] .bg-base {
           position: absolute;
           inset: 0;
@@ -2196,6 +2239,8 @@
           var wrapper = document.querySelector(S + " .card-wrapper");
           var scene = document.querySelector(S + " .scene");
           
+          var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+          if (placement !== "full") document.querySelector(S).classList.add("card", placement);
           // vertical: the 1100 px program window fits the 780 field and sits on its centre y 770
           gsap.set(scene, { y: -190, scale: 0.6 });
           

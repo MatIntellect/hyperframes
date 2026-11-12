@@ -30,6 +30,8 @@
       data-duration="30"
       data-composition-variables='[{ "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the mark at the end, typed in letter by letter.", "maxLength": 28, "default": "Ролик из записи за минуты." }, { "id": "url", "type": "string", "role": "content", "label": "Address pill", "description": "Address in the pill under the tagline.", "maxLength": 24, "default": "matintellect.com" }, { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the screen flies away and the closing mark starts drawing, 2 the block fades out (only when exit is fade). The motion before the first cue is sped up or slowed to land on it. Empty keeps 7.3 and 14.5.", "default": "" }, { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the mark, tagline and address to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }]'
     >
+      <!-- one wrapper for every layer: the vertical card moves it to the card centre -->
+      <div class="pl">
       <!-- Background: Figma outer canvas dark -->
       <div class="bg-base"></div>
       <div class="bg-glow" id="bgGlow"></div>
@@ -994,6 +996,8 @@
           <text class="url-text" x="960" y="726" text-anchor="middle" fill="#a0a0a6" font-size="28" font-weight="500" opacity="0"></text>
         </svg>
       </div>
+      </div>
+      
 
 
       <style>
@@ -1053,6 +1057,12 @@
         }
 
         /* ── Background ── */
+        [data-composition-id="ui-3d-reveal"] .pl {
+          position: absolute;
+          inset: 0;
+        }
+        
+
         [data-composition-id="ui-3d-reveal"] .bg-base {
           position: absolute;
           inset: 0;

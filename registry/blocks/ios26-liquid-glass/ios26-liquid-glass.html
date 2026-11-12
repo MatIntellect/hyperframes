@@ -435,7 +435,9 @@
       scene.add(bgPlane);
       var floor = new THREE.Mesh(
         new THREE.PlaneGeometry(30, 30),
-        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.86, roughness: 0.22 }),
+        // envMapIntensity 0.08: the white bands of the environment map painted the metal floor light grey
+        // (#7d8185–#b0b2b4, in the vertical under the subtitle band) – as on vfx-iphone-device
+        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.86, roughness: 0.22, envMapIntensity: 0.08 }),
       );
       floor.rotation.x = -PI / 2;
       floor.position.y = -2.5;
@@ -554,9 +556,12 @@
           var lines = wrap(scrCtx, n.text, tw);
           scrCtx.font = "700 " + F + 'px "Montserrat"';
           var timeW = scrCtx.measureText(n.time).width;
-          var app = fit(scrCtx, n.app, tw - timeW - 12);
-          var h = PAD * 2 + F * 1.2 + 3 + lines.length * F * 1.2;
-          var o = { app: app, time: n.time, lines: lines, icon: n.icon, top: top, h: h, tx: tx };
+          // the app name shares its line with the time; a name too long for that keeps the whole width
+          // and the time takes its own line on the right (nothing is cut while the name fits the width)
+          var below = scrCtx.measureText(n.app).width > tw - timeW - 12;
+          var app = fit(scrCtx, n.app, below ? tw : tw - timeW - 12);
+          var h = PAD * 2 + F * 1.2 + 3 + (lines.length + (below ? 1 : 0)) * F * 1.2;
+          var o = { app: app, time: n.time, below: below, lines: lines, icon: n.icon, top: top, h: h, tx: tx };
           top += h + GAP;
           return o;
         });
@@ -628,11 +633,12 @@
         ctx.font = "700 " + F + 'px "Montserrat"';
         ctx.fillText(n.app, n.tx, y + PAD);
         ctx.globalAlpha = q * 0.85;
-        ctx.fillText(n.time, x + w - ctx.measureText(n.time).width - 14, y + PAD);
+        var row = n.below ? 1 : 0;
+        ctx.fillText(n.time, x + w - ctx.measureText(n.time).width - 14, y + PAD + row * (F * 1.2 + 3));
         ctx.globalAlpha = q;
         ctx.font = "600 " + F + 'px "Montserrat"';
         n.lines.forEach(function (l, i) {
-          ctx.fillText(l, n.tx, y + PAD + F * 1.2 + 3 + i * F * 1.2);
+          ctx.fillText(l, n.tx, y + PAD + F * 1.2 + 3 + (i + row) * F * 1.2);
         });
         ctx.restore();
       }

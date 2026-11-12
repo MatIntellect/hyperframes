@@ -422,6 +422,7 @@
       }
 
       .detail-title {
+        color: #111111;
         font-size: 31px;
         line-height: 1;
         font-weight: 900;
@@ -830,6 +831,7 @@
       const cues = String(V.cues || "")
         .split(",")
         .map((v) => parseFloat(v));
+      
       const put = (sel, v) => document.querySelectorAll(sel).forEach((el) => (el.textContent = v));
       put(".headline .l1", text(V.line1, "МОНТАЖ"));
       put(".headline .l2", text(V.line2, "ЗА МИНУТЫ"));
