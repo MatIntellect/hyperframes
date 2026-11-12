@@ -3,7 +3,7 @@
   "name": "caption-clip-wipe",
   "type": "hyperframes:component",
   "title": "Clip Wipe",
-  "description": "Reel captions on a black rounded plate: each word is wiped on from left to right as it is spoken, lands in the red accent and settles to ink. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "description": "Reel captions on a black rounded plate: the whole line waits in muted grey and each word is wiped over from left to right as it is spoken, lands in the red accent and settles to ink. All words and timings come in one variable; mount over the whole frame for the speech.",
   "tags": ["captions", "caption-style", "wipe", "reveal", "plate", "vertical"],
   "files": [
     {

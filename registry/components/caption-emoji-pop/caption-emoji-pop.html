@@ -99,19 +99,16 @@
               tl.fromTo(
                 o.plate,
                 { scaleX: 0.8 },
-                { scaleX: 1.05, duration: 0.12, ease: "power2.out" },
+                { scaleX: Math.min(1.05, o.room), duration: 0.12, ease: "power2.out" },
                 o.open,
               );
               tl.to(o.plate, { scaleX: 1, duration: 0.12, ease: "power2.inOut" }, o.open + 0.12);
             },
             word: function (tl, o) {
-              if (/\p{Extended_Pictographic}/u.test(o.w.text))
-                tl.fromTo(
-                  o.el,
-                  { scale: 0 },
-                  { scale: 1, duration: 0.3, ease: "back.out(3)" },
-                  o.at,
-                );
+              if (!/\p{Extended_Pictographic}/u.test(o.w.text)) return;
+              // an emoji is taller than a capital: set it to cap height so the plate padding stays equal
+              o.el.style.fontSize = "0.72em";
+              tl.fromTo(o.el, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, o.at);
             },
           };
           (function () {
@@ -119,7 +116,7 @@
             // Words come from outside in one variable "word|start|end;...". Groups of up to 3 words, broken at a
             // sentence mark, a pause of 150 ms, or where the next word would not fit the line at 78 px; one group on
             // screen at a time, hard-killed after it ends (captions.md "Groups"). Every group is one upper-case
-            // line at 78 px on a black plate within 780 of 1080; a group goes off no later than the next one comes on; only a single word wider than the line steps
+            // line at 78 px on a black plate within 780 of 1080 (entrances grow it no further: room); a group goes off no later than the next one comes on; only a single word wider than the line steps
             // down ("cut words, never shrink type", spec.md:48). Built after the font loads; render waits on buildReady.
             var root = document.getElementById("root");
             var stage = document.getElementById("caption-emoji-pop-clip");
@@ -218,6 +215,8 @@
                 plate.style.fontSize = fs + "px";
                 el.appendChild(plate);
                 stage.appendChild(el);
+                // room: how far the plate may grow in an entrance and still stay inside the 780 of 1080
+                var room = Math.max(1, (root.clientWidth * 0.72222) / plate.offsetWidth);
 
                 var open = Math.max(0, g[0].start - LEAD);
                 var nextOpen = groups[gi + 1]
@@ -233,6 +232,7 @@
                     open: open,
                     close: close,
                     index: gi,
+                    room: room,
                     C: C,
                   });
                 g.forEach(function (w, wi) {
@@ -244,6 +244,7 @@
                     at: Math.max(open, w.start - LEAD),
                     close: close,
                     index: wi,
+                    room: room,
                     C: C,
                   });
                 });

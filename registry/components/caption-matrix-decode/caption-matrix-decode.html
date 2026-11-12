@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  caption-matrix-decode: captions of a vertical reel on a black rounded plate – each word decodes from scrambled letters into the real word as it is spoken.
+  caption-matrix-decode: captions of a vertical reel on a black rounded plate – words wait in muted grey and each decodes through scrambled red letters into the real word as it is spoken.
 
   Words come from outside in one variable, so the file is never edited: "word|start|end;..."
   with seconds from mount start (the transcript's words in order; empty shows nothing).
@@ -104,7 +104,7 @@
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
         <script>
           window.mdStyle = {
-            // each word decodes from scrambled letters into the real word as it is spoken
+            // words wait in muted grey; each decodes through scrambled red letters into the real word as it is spoken
             wordInner: function (s, text) {
               var A = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЭЮЯ0123456789";
               var seed = 0;
@@ -132,13 +132,14 @@
               var real = o.el.children[0],
                 s0 = o.el.children[1],
                 s1 = o.el.children[2];
-              tl.set(real, { autoAlpha: 0 }, o.open);
+              tl.set(real, { autoAlpha: 1, color: o.C.muted }, o.open);
+              tl.set(real, { autoAlpha: 0 }, o.at);
               tl.set([s0, s1], { autoAlpha: 0 }, o.open);
               tl.set(s0, { autoAlpha: 1, color: o.C.accent }, o.at);
               tl.set(s0, { autoAlpha: 0 }, o.at + 0.08);
               tl.set(s1, { autoAlpha: 1, color: o.C.accent }, o.at + 0.08);
               tl.set(s1, { autoAlpha: 0 }, o.at + 0.16);
-              tl.set(real, { autoAlpha: 1 }, o.at + 0.16);
+              tl.set(real, { autoAlpha: 1, color: o.C.fg }, o.at + 0.16);
             },
           };
           (function () {
@@ -146,7 +147,7 @@
             // Words come from outside in one variable "word|start|end;...". Groups of up to 3 words, broken at a
             // sentence mark, a pause of 150 ms, or where the next word would not fit the line at 78 px; one group on
             // screen at a time, hard-killed after it ends (captions.md "Groups"). Every group is one upper-case
-            // line at 78 px on a black plate within 780 of 1080; a group goes off no later than the next one comes on; only a single word wider than the line steps
+            // line at 78 px on a black plate within 780 of 1080 (entrances grow it no further: room); a group goes off no later than the next one comes on; only a single word wider than the line steps
             // down ("cut words, never shrink type", spec.md:48). Built after the font loads; render waits on buildReady.
             var root = document.getElementById("root");
             var stage = document.getElementById("caption-matrix-decode-clip");
@@ -245,6 +246,8 @@
                 plate.style.fontSize = fs + "px";
                 el.appendChild(plate);
                 stage.appendChild(el);
+                // room: how far the plate may grow in an entrance and still stay inside the 780 of 1080
+                var room = Math.max(1, (root.clientWidth * 0.72222) / plate.offsetWidth);
 
                 var open = Math.max(0, g[0].start - LEAD);
                 var nextOpen = groups[gi + 1]
@@ -260,6 +263,7 @@
                     open: open,
                     close: close,
                     index: gi,
+                    room: room,
                     C: C,
                   });
                 g.forEach(function (w, wi) {
@@ -271,6 +275,7 @@
                     at: Math.max(open, w.start - LEAD),
                     close: close,
                     index: wi,
+                    room: room,
                     C: C,
                   });
                 });
