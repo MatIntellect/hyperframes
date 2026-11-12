@@ -5,7 +5,7 @@
     { "id": "appName", "type": "string", "role": "content", "label": "App name", "description": "Small grey app name, upper case as macOS writes it.", "maxLength": 16, "default": "MatIntellect" },
     { "id": "icon", "type": "image", "role": "content", "label": "App icon", "description": "Square app icon, rounded like macOS.", "default": "assets/img/matintellect-avatar.svg" },
     { "id": "time", "type": "string", "role": "content", "label": "Time", "description": "Grey time on the right.", "maxLength": 10, "default": "сейчас" },
-    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Bold first line.", "maxLength": 36, "default": "Ролик готов" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Bold first line.", "maxLength": 28, "default": "Ролик готов" },
     { "id": "body", "type": "string", "role": "content", "label": "Body", "description": "Grey text under the title, up to three lines.", "maxLength": 90, "default": "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the banner slides in from the right, 2 it slides back out (only when exit is out). Empty keeps 0.2, 4.2.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the banner to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }] }
@@ -16,6 +16,33 @@
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
       * {
         margin: 0;
         padding: 0;
@@ -32,7 +59,7 @@
       }
       /* the macOS banner is drawn at its own size and scaled whole, so the 13 px body lands on 28 px */
       #mno-root {
-        font-family: "Inter", sans-serif;
+        font-family: "Montserrat", sans-serif;
       }
       #mno-scale {
         position: absolute;
