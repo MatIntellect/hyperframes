@@ -7,7 +7,8 @@
   the sweep position for deterministic frame-by-frame rendering.
 
   Customize:
-  - --shimmer-color: highlight color (default rgba(255,255,255,0.6))
+  - --shimmer-color: colour of the pass (default the brand red; multiplied into the text, so it shows on
+    light type and leaves the dark ground untouched)
   - --shimmer-width: highlight band width as % (default 20%)
   - --shimmer-angle: sweep angle (default 120deg)
   - Timeline duration/ease: adjust in the script below
@@ -30,11 +31,13 @@
       var(--shimmer-angle, 120deg),
       transparent 0%,
       transparent calc(var(--shimmer-pos, -20%) - var(--shimmer-width, 20%) / 2),
-      var(--shimmer-color, rgba(255, 255, 255, 0.6)) var(--shimmer-pos, -20%),
+      var(--shimmer-color, var(--brand, #ff0000)) var(--shimmer-pos, -20%),
       transparent calc(var(--shimmer-pos, -20%) + var(--shimmer-width, 20%) / 2),
       transparent 100%
     );
-    mix-blend-mode: overlay;
+    /* multiply: a white overlay pass is invisible on the light type of a dark reel; a colour multiplied
+       into the letters reads, and over the dark ground it changes nothing */
+    mix-blend-mode: multiply;
   }
 </style>
 
