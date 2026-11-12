@@ -1456,6 +1456,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "extended-keyframe",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "focus-blur-resolve",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "headline-slam",
       "type": "hyperframes:component"
     },
@@ -1476,6 +1484,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "line-by-line-slide",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "line-swap",
       "type": "hyperframes:component"
     },
@@ -1484,7 +1496,23 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "morph-text",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "per-word-crossfade",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "per-word-rise",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "perspective-marquee",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "rgb-glitch-text",
       "type": "hyperframes:component"
     },
     {
@@ -1493,6 +1521,18 @@
     },
     {
       "name": "scramble-reveal",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "shared-axis-y",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "shared-axis-z",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "shimmer-sweep",
       "type": "hyperframes:component"
     },
     {

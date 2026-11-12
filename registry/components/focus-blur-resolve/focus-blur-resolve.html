@@ -1,0 +1,127 @@
+<!--
+  Focus Blur Resolve - typography primitive for HyperFrames.
+
+  Paste the markup and CSS into a composition. Drive the timeline integration
+  from a paused GSAP timeline so renders remain deterministic.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or unrecognised, and writes the result as a custom property
+  the CSS consumes. The timeline recipe below is untouched by them: it keeps
+  driving one scale and one blur, and these decide how big the words are, what
+  colour they resolve to, and how deep the blur they resolve from goes.
+
+    - tone (ink | paper | accent, default paper: the reels are dark): word colour. ink is near-black
+      for light frames, paper near-white for dark ones, accent rides --brand.
+    - size (compact | standard | display, default standard): type size, 40px,
+      56px or 84px.
+    - blur (soft | standard | heavy, default standard): scales the blur radius,
+      so the pull starts as a light haze or a full smear over the same run.
+
+  On every default the result is identical to the original: near-black 56px
+  words resolving out of a 16px blur.
+-->
+
+<div
+  class="hf-catalog-focus-blur-resolve"
+  data-composition-variables='[
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Word colour: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] },
+    { "id": "size", "type": "enum", "role": "style", "label": "Size", "description": "Type size of the words, from a caption-scale line to a full display card.", "default": "standard", "options": [{ "value": "compact", "label": "Compact" }, { "value": "standard", "label": "Standard" }, { "value": "display", "label": "Display" }] },
+    { "id": "blur", "type": "enum", "role": "style", "label": "Blur", "description": "Scales the blur radius the timeline drives, so the focus pull starts as a light haze or a full smear.", "default": "standard", "options": [{ "value": "soft", "label": "Soft" }, { "value": "standard", "label": "Standard" }, { "value": "heavy", "label": "Heavy" }] }
+  ]'
+>
+  <span>Кристально</span><span>чисто</span>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-catalog-focus-blur-resolve {
+    color: var(--hf-word-color, var(--fg, #f2f2f2));
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+  .hf-catalog-focus-blur-resolve {
+    display: inline-flex;
+    gap: 12px;
+    font-size: var(--hf-word-size, 56px);
+    line-height: 1;
+  }
+  .hf-catalog-focus-blur-resolve span {
+    display: inline-block;
+    transform: translate(var(--hf-word-x, 0px), var(--hf-word-y, 0px))
+      scale(var(--hf-word-scale, 1));
+    filter: blur(calc(var(--hf-word-blur, 0px) * var(--hf-word-blur-scale, 1)));
+    will-change: transform, filter, opacity;
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var tones = {
+      ink: "var(--bg, #0c1014)",
+      paper: "var(--fg, #f2f2f2)",
+      accent: "var(--brand, #ff0000)",
+    };
+    var sizes = { compact: "40px", standard: "56px", display: "84px" };
+    var blurScales = { soft: 0.45, standard: 1, heavy: 2.2 };
+
+    var tone = tones[pick(tones, vars.tone, "paper")];
+    var size = sizes[pick(sizes, vars.size, "standard")];
+    var blurScale = blurScales[pick(blurScales, vars.blur, "standard")];
+
+    var roots = document.querySelectorAll(".hf-catalog-focus-blur-resolve");
+    for (var i = 0; i < roots.length; i += 1) {
+      roots[i].style.setProperty("--hf-word-color", tone);
+      roots[i].style.setProperty("--hf-word-size", size);
+      roots[i].style.setProperty("--hf-word-blur-scale", String(blurScale));
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration:
+  tl.fromTo('.hf-catalog-focus-blur-resolve span', { opacity: 0, '--hf-word-scale': 1.08, '--hf-word-blur': '16px' }, { opacity: 1, '--hf-word-scale': 1, '--hf-word-blur': '0px', duration: 0.52, stagger: 0.05, ease: 'power3.out' }, startTime);
+-->
