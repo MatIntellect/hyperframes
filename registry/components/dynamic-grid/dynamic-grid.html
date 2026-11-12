@@ -100,12 +100,14 @@
   (function () {
     var startTime = 0;
     var tl = gsap.timeline({ paused: true });
+    var hostClip = document.querySelector('[data-composition-id="dynamic-grid"]');
+    var clipDur = hostClip ? parseFloat(hostClip.getAttribute("data-duration")) || 6 : 6;
     tl.to(
       ".hf-dynamic-grid",
       {
-        "--hf-grid-x": "72px",
-        "--hf-grid-y": "-72px",
-        duration: 6,
+        "--hf-grid-x": 12 * clipDur + "px",
+        "--hf-grid-y": -12 * clipDur + "px",
+        duration: clipDur,
         ease: "none",
       },
       0,

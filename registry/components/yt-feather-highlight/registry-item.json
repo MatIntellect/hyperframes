@@ -11,5 +11,43 @@
       "target": "compositions/components/yt-feather-highlight.html",
       "type": "hyperframes:snippet"
     }
+  ],
+  "variables": [
+    {
+      "id": "x",
+      "type": "number",
+      "role": "layout",
+      "label": "Across",
+      "description": "Horizontal centre of the spotlight, percent of the frame width.",
+      "default": 50,
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "id": "first_y",
+      "type": "number",
+      "role": "layout",
+      "label": "First target",
+      "description": "Vertical centre of the first spotlit area, percent of the frame height.",
+      "default": 30,
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "id": "second_y",
+      "type": "number",
+      "role": "layout",
+      "label": "Second target",
+      "description": "Vertical centre the spotlight glides to, percent of the frame height.",
+      "default": 70,
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "unit": "%"
+    }
   ]
 }

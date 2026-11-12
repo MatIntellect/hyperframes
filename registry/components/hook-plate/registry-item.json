@@ -11,5 +11,41 @@
       "target": "compositions/components/hook-plate.html",
       "type": "hyperframes:snippet"
     }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Text",
+      "description": "The hook: the first phrase of the recording, word for word, never cut. Upper case on screen, one size for every hook (6% of the frame height, 115 px of 1920); one line when it fits 780, else wraps to a second line at a whole word, on the same plate.",
+      "default": "Монтаж с ИИ"
+    },
+    {
+      "id": "cues",
+      "type": "string",
+      "role": "timing",
+      "label": "Cues",
+      "description": "Comma-separated seconds from mount start: 1 the plate pops in (empty: on screen from 0 s, the thumbnail frame), 2 the plate leaves (only with exit fade).",
+      "default": ""
+    },
+    {
+      "id": "exit",
+      "type": "enum",
+      "role": "timing",
+      "label": "Exit",
+      "description": "none holds the plate to the end of the mount; fade takes it out at cue 2 (or 0.3 s before the mount ends).",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ]
+    }
   ]
 }

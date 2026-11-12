@@ -175,9 +175,17 @@
         gsap.set("#yt-sw-wrap", { opacity: 0, scale: 0.96 });
         tl.to("#yt-sw-wrap", { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }, 0.2);
         window.ytScreenOn(tl, "#yt-sw-fx", 0.8);
-        window.ytScreenOff(tl, "#yt-sw-fx", 3.1);
-        tl.to("#yt-sw-wrap", { opacity: 0, duration: 0.35, ease: "power2.in" }, 3.5);
-        tl.set("#yt-sw-root", { visibility: "hidden" }, 3.98);
+        // The leave rides the host clip length (the driver clip took it from
+        // the host slot above): the source pinned it to 3.5 s, so a longer
+        // clip lost its screen mid-shot.
+        var clipEnd = parseFloat(document.getElementById("yt-sw-drv").dataset.duration) || 4;
+        window.ytScreenOff(tl, "#yt-sw-fx", Math.max(1.4, clipEnd - 0.9));
+        tl.to(
+          "#yt-sw-wrap",
+          { opacity: 0, duration: 0.35, ease: "power2.in" },
+          Math.max(1.8, clipEnd - 0.5),
+        );
+        tl.set("#yt-sw-root", { visibility: "hidden" }, Math.max(2.2, clipEnd - 0.02));
         window.__timelines["yt-screen-warp"] = tl;
       })();
     </script>

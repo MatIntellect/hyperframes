@@ -100,6 +100,7 @@
     <div
       id="yt-hl-root"
       data-composition-id="yt-feather-highlight"
+      data-composition-variables='[{"id": "x", "type": "number", "role": "layout", "label": "Across", "description": "Horizontal centre of the spotlight, percent of the frame width.", "default": 50, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "first_y", "type": "number", "role": "layout", "label": "First target", "description": "Vertical centre of the first spotlit area, percent of the frame height.", "default": 30, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "second_y", "type": "number", "role": "layout", "label": "Second target", "description": "Vertical centre the spotlight glides to, percent of the frame height.", "default": 70, "min": 10, "max": 90, "step": 1, "unit": "%"}]'
       data-start="0"
       data-duration="5"
     >
@@ -157,10 +158,35 @@
         // Self-preview timeline (vertical reel): spotlight the upper part of
         // the frame, glide down to the lower part, release.
         var tl = gsap.timeline({ paused: true });
-        window.ytHighlightIn(tl, "#yt-hl-demo", 0.5, { x: "50%", y: "30%", rx: "42%", ry: "16%" });
-        window.ytHighlightTo(tl, "#yt-hl-demo", 2.2, { y: "70%" }, 0.9);
-        window.ytHighlightOut(tl, "#yt-hl-demo", 4.2);
-        tl.set("#yt-hl-root", { visibility: "hidden" }, 4.98);
+        // Targets are fields (the reel is assembled from fields, not host
+        // scripts); the glide sits mid-clip and the release rides the host
+        // clip length (the source pinned 2.2 s and 4.2 s, so a longer clip
+        // lost the spotlight mid-shot).
+        var hlVars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        function hlPercent(raw, fallback) {
+          var value = Number(raw);
+          return (Number.isFinite(value) ? Math.max(10, Math.min(90, value)) : fallback) + "%";
+        }
+        var hlX = hlPercent(hlVars.x, 50);
+        var hlEnd = parseFloat(document.getElementById("yt-hl-drv").dataset.duration) || 5;
+        window.ytHighlightIn(tl, "#yt-hl-demo", 0.5, {
+          x: hlX,
+          y: hlPercent(hlVars.first_y, 30),
+          rx: "42%",
+          ry: "16%",
+        });
+        window.ytHighlightTo(
+          tl,
+          "#yt-hl-demo",
+          Math.max(1.1, hlEnd * 0.44),
+          { y: hlPercent(hlVars.second_y, 70) },
+          0.9,
+        );
+        window.ytHighlightOut(tl, "#yt-hl-demo", Math.max(2.1, hlEnd - 0.8));
+        tl.set("#yt-hl-root", { visibility: "hidden" }, Math.max(2.6, hlEnd - 0.02));
         window.__timelines["yt-feather-highlight"] = tl;
       })();
     </script>

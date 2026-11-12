@@ -11,5 +11,16 @@
       "target": "compositions/components/caption-particle-burst.html",
       "type": "hyperframes:snippet"
     }
+  ],
+  "variables": [
+    {
+      "id": "words",
+      "type": "string",
+      "role": "content",
+      "label": "Words",
+      "description": "Every caption word with its timing, in order: word|start|end separated by ; (seconds from mount start, e.g. Такой|0.20|0.48;монтаж|0.48|0.90). Build it from transcript.json words.",
+      "maxLength": 40000,
+      "default": "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10"
+    }
   ]
 }

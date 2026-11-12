@@ -41,5 +41,81 @@
       "default": "calm",
       "drives": "boil amp/rot as authored pairs over the family-locked frameDrop 3; seed locked"
     }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Text",
+      "description": "The phrase in the box.",
+      "default": "Главное"
+    },
+    {
+      "id": "entrance",
+      "type": "enum",
+      "role": "motion",
+      "label": "Entrance",
+      "description": "draw: the box draws on and the phrase fades in; drop: box and phrase drop in and land with a squash.",
+      "default": "draw",
+      "options": [
+        {
+          "value": "draw",
+          "label": "Draw"
+        },
+        {
+          "value": "drop",
+          "label": "Drop"
+        }
+      ]
+    },
+    {
+      "id": "strokeType",
+      "type": "enum",
+      "role": "style",
+      "label": "Stroke",
+      "description": "Texture of the box line: plain, soft, sharp or spray.",
+      "default": "plain",
+      "options": [
+        {
+          "value": "plain",
+          "label": "Plain"
+        },
+        {
+          "value": "soft",
+          "label": "Soft"
+        },
+        {
+          "value": "sharp",
+          "label": "Sharp"
+        },
+        {
+          "value": "spray",
+          "label": "Spray"
+        }
+      ]
+    },
+    {
+      "id": "boil",
+      "type": "enum",
+      "role": "motion",
+      "label": "Boil",
+      "description": "Hand-drawn jitter: off, calm or lively.",
+      "default": "calm",
+      "options": [
+        {
+          "value": "off",
+          "label": "Off"
+        },
+        {
+          "value": "calm",
+          "label": "Calm"
+        },
+        {
+          "value": "lively",
+          "label": "Lively"
+        }
+      ]
+    }
   ]
 }
