@@ -722,15 +722,15 @@
       var ptr = { x: 0.16, y: 0.04 };
       var REVEAL_R = 2.18;
       // покой: стекло расходится над страницей. Окно – прямоугольник текста (пиксели текстуры на экране в 1.18 раза
-      // крупнее), переведённый в мир на глубину осколков, с запасом в полосколка; rest.k – доля раскрытия
+      // крупнее), переведённый в мир на глубину осколков, с запасом на осколок, его качание и поворот; rest.k – доля раскрытия
       var rest = { k: 0 };
       var VPG = viewportAtZ(0.4),
         PXW = (1.18 * VPG.h) / H,
         WIN = {
           x: 0,
           y: -SHIFT * PXW,
-          ax: ((inner.offsetWidth || T.w) / 2) * PXW + 0.55,
-          ay: ((inner.offsetHeight || T.h1 * 2) / 2) * PXW + 0.55,
+          ax: ((inner.offsetWidth || T.w) / 2) * PXW + 0.85,
+          ay: ((inner.offsetHeight || T.h1 * 2) / 2) * PXW + 0.85,
         };
       var PTR_WORLD = new THREE.Vector2();
 
