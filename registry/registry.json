@@ -1432,6 +1432,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "camera-rig-depth-stack",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "camera-scan-gate",
       "type": "hyperframes:component"
     },
@@ -1548,7 +1552,23 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "focus-rack",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "focus-swap",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "gesture-tap",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "gloss-sweep",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "grid-card-assemble",
       "type": "hyperframes:component"
     },
     {
@@ -1589,6 +1609,10 @@
     },
     {
       "name": "input-feedback",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "keyframe-scrub-stack",
       "type": "hyperframes:component"
     },
     {
@@ -1776,7 +1800,23 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "spotlight-card",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "spring-pop",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "spring-stack-shuffle",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "stagger-cascade",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "stagger-lattice",
       "type": "hyperframes:component"
     },
     {

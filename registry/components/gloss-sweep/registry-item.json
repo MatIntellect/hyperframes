@@ -1,0 +1,47 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "gloss-sweep",
+  "type": "hyperframes:component",
+  "title": "Gloss Sweep",
+  "description": "Gloss sweep for vertical reels: a brand-red payoff card lands with a restrained slam, takes one diagonal specular sweep and holds still. The label is a field (Bebas, wraps by words); the sweep angle is a field. Sized for the 780 px graphics field.",
+  "tags": ["motion-primitive", "celebration", "gloss", "card", "badge", "payoff"],
+  "jobs": ["celebrate"],
+  "family": "celebrations",
+  "profile": "payoff",
+  "syncPoints": [
+    {
+      "id": "gloss-complete",
+      "phase": "in",
+      "offset": 1.35
+    }
+  ],
+  "files": [
+    {
+      "path": "gloss-sweep.html",
+      "target": "compositions/components/gloss-sweep.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "text",
+      "type": "string",
+      "role": "content",
+      "label": "Label",
+      "description": "Text displayed on the card.",
+      "default": "Готово"
+    },
+    {
+      "id": "sweep_angle",
+      "type": "number",
+      "role": "style",
+      "label": "Sweep angle",
+      "description": "Angle of the specular gloss in degrees.",
+      "default": 25,
+      "min": -60,
+      "max": 60,
+      "step": 1,
+      "unit": "deg"
+    }
+  ]
+}

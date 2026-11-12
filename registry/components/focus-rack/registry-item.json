@@ -1,0 +1,36 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "focus-rack",
+  "type": "hyperframes:component",
+  "title": "Focus Rack",
+  "description": "Focus rack for vertical reels: two dark brand cards at different depths; the first starts sharp, then focus racks once to the second with blur, scale and parallax together. Card labels are fields and wrap by words. Brand palette, Montserrat, sized for the 780 px graphics field.",
+  "tags": ["motion-primitive", "camera", "focus", "focus-rack", "depth", "parallax", "emphasize"],
+  "jobs": ["emphasize"],
+  "family": "camera",
+  "profile": "holdable",
+  "files": [
+    {
+      "path": "focus-rack.html",
+      "target": "compositions/components/focus-rack.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "label_a",
+      "type": "string",
+      "role": "content",
+      "label": "Card A label",
+      "description": "Label on the card that begins in focus.",
+      "default": "Черновик"
+    },
+    {
+      "id": "label_b",
+      "type": "string",
+      "role": "content",
+      "label": "Card B label",
+      "description": "Label on the card that receives focus.",
+      "default": "Опубликовано"
+    }
+  ]
+}

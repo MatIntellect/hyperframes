@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "camera-rig-depth-stack",
+  "type": "hyperframes:component",
+  "title": "Camera Rig Depth Stack",
+  "description": "Depth panel for vertical reels: a brand card rises out of depth inside a dark brand-tinted stage and turns toward the viewer in 3D. Brand palette, Montserrat 28-44 px, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"camera-rig-depth-stack\": its own timeline nests there.",
+  "tags": ["advanced-motion", "hyperframes-native"],
+  "files": [
+    {
+      "path": "camera-rig-depth-stack.html",
+      "target": "compositions/components/camera-rig-depth-stack.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}
