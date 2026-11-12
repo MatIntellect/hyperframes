@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      /* ---- yt-circle-pointer -----------------------------------------------
+         Annotation tools: a hand-drawn-feel circle that draws on around a
+         target, and a countdown chip. Position instances via top/left with
+         explicit width/height. */
+      .yt-circle {
+        --yt-red: var(--brand, #ff0000);
+        position: absolute;
+        pointer-events: none;
+      }
+      .yt-circle svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .yt-circle ellipse {
+        fill: none;
+        stroke: var(--yt-ptr-color, var(--yt-red));
+        stroke-width: 6;
+        stroke-linecap: round;
+        transform: rotate(-6deg);
+        transform-origin: 50% 50%;
+      }
+      .yt-count {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 32px;
+        border-radius: 999px;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+        font-weight: 700;
+        font-size: 40px;
+        /* --yt-red lives on .yt-circle only, so the chip fell back to no fill */
+        background: var(--yt-count-bg, var(--brand, #ff0000));
+        color: var(--fg, #f2f2f2);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+        opacity: 0;
+      }
+      .yt-count .num {
+        font-variant-numeric: tabular-nums;
+        min-width: 1.2em;
+        text-align: center;
+      }
+      /* The scene fills the host box; the ring circles a target in the
+         host's frame underneath (the source baked a cyan-blue scene). */
+      #yt-ptr-root {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Self-preview wrapper. WIRING: copy the .yt-circle / .yt-count CSS and
+         markup patterns, position over your target, then:
+
+           ytCircleOn(tl, "#yt-my-circle", 3.0);          // draws the ring
+           ytCircleOff(tl, "#yt-my-circle", 6.0);
+           ytCountIn(tl, "#yt-my-count", 2.0);
+           ytCountdown(tl, "#yt-my-count", 2.4, 5);       // 5 -> 0, pulsing each tick
+    -->
+    <div id="yt-ptr-root" data-composition-id="yt-circle-pointer" data-start="0" data-duration="5">
+      <div
+        class="yt-circle"
+        id="yt-ptr-circle"
+        data-layout-allow-occlusion
+        style="left: calc(50% - 260px); top: calc(50% - 130px); width: 520px; height: 260px"
+      >
+        <svg viewBox="0 0 520 260"><ellipse cx="260" cy="130" rx="244" ry="110"></ellipse></svg>
+      </div>
+      <div class="yt-count" id="yt-ptr-count" style="right: 12%; top: 14%">
+        <span class="num">3</span><span>сек</span>
+      </div>
+      <div
+        id="yt-ptr-drv"
+        class="clip"
+        data-start="0"
+        data-duration="5"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+      (function () {
+        var c = document.getElementById("yt-ptr-drv");
+        var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+        if (h) c.dataset.duration = h.dataset.duration;
+      })();
+    </script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // ---- copy these helpers into the host script ----
+        window.ytCircleOn = function (tl, target, at, dur) {
+          var el = document.querySelector(target + " ellipse");
+          var len = el.getTotalLength();
+          gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
+          tl.to(
+            el,
+            { strokeDashoffset: 0, duration: dur === undefined ? 0.7 : dur, ease: "power2.inOut" },
+            at,
+          );
+        };
+        window.ytCircleOff = function (tl, target, at) {
+          tl.to(target, { opacity: 0, duration: 0.35, ease: "power2.in" }, at);
+        };
+        window.ytCountIn = function (tl, target, at) {
+          gsap.set(target, { y: -18, scale: 0.9 });
+          tl.to(target, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.5)" }, at);
+        };
+        window.ytCountdown = function (tl, target, at, from) {
+          var num = document.querySelector(target + " .num");
+          var st = { v: from };
+          tl.to(
+            st,
+            {
+              v: 0,
+              duration: from,
+              ease: "none",
+              onUpdate: function () {
+                num.textContent = String(Math.ceil(st.v));
+              },
+            },
+            at,
+          );
+          for (var i = 1; i <= from; i++) {
+            tl.to(target, { scale: 1.07, duration: 0.09, ease: "sine.out" }, at + i - 0.09);
+            tl.to(target, { scale: 1, duration: 0.14, ease: "sine.in" }, at + i);
+          }
+        };
+
+        // Self-preview timeline.
+        var tl = gsap.timeline({ paused: true });
+        window.ytCountIn(tl, "#yt-ptr-count", 0.3);
+        window.ytCountdown(tl, "#yt-ptr-count", 0.7, 3);
+        window.ytCircleOn(tl, "#yt-ptr-circle", 1.0);
+        window.ytCircleOff(tl, "#yt-ptr-circle", 4.2);
+        tl.to("#yt-ptr-count", { opacity: 0, duration: 0.3, ease: "power2.in" }, 4.3);
+        tl.set("#yt-ptr-root", { visibility: "hidden" }, 4.98);
+        window.__timelines["yt-circle-pointer"] = tl;
+      })();
+    </script>
+  </body>
+</html>

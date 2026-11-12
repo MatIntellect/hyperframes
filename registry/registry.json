@@ -1748,6 +1748,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "outline-draw",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "oversized-cursor",
       "type": "hyperframes:component"
     },
@@ -1908,6 +1912,18 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "svg-line-draw-loader",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "svg-mask-reveal",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "svg-stroke-trace",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "swipe-rail",
       "type": "hyperframes:component"
     },
@@ -1976,6 +1992,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "tracing-beam",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "tracking-in",
       "type": "hyperframes:component"
     },
@@ -2016,7 +2036,19 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "vox-annotate",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "whiteboard-ink",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "wordmark-tiles",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "yt-circle-pointer",
       "type": "hyperframes:component"
     },
     {
