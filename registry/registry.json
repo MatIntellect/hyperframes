@@ -1394,6 +1394,14 @@
     {
       "name": "yt-vertical-fill-vertical",
       "type": "hyperframes:block"
+    },
+    {
+      "name": "caption-pill-karaoke",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "hook-plate",
+      "type": "hyperframes:component"
     }
   ]
 }

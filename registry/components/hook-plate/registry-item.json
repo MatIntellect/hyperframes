@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "hook-plate",
+  "type": "hyperframes:component",
+  "title": "Hook Plate",
+  "description": "Opening hook of a vertical reel: the speaker's first phrase in one upper-case line, as large as fits the readable width, centred on a black rounded plate with equal padding on all sides, under the opening circle (a tall plate rises onto its lower edge); on screen from the first frame. Text, cues and exit are variables; mount over the whole frame.",
+  "tags": ["hook", "title", "headline", "plate", "typography", "vertical"],
+  "files": [
+    {
+      "path": "hook-plate.html",
+      "target": "compositions/components/hook-plate.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}
