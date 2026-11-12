@@ -1,0 +1,175 @@
+<!--
+  Arc Motion Path - advanced HyperFrames primitive.
+
+  This is intentionally seekable: drive it from a paused GSAP timeline.
+  MotionPath examples require GSAP MotionPathPlugin. Three.js examples expose
+  a render(progress) adapter instead of a free-running requestAnimationFrame loop.
+-->
+
+<div class="hf-advanced-arc-motion-path">
+  <svg viewBox="0 0 760 700" aria-hidden="true">
+    <path id="arc-motion-path-path-a" class="path" d="M130 230 C160 60, 600 60, 630 230" />
+    <path id="arc-motion-path-path-b" class="path" d="M130 470 C160 640, 600 640, 630 470" />
+  </svg>
+  <div class="core">Маршрут</div>
+  <div class="chip chip-a"><span class="dot"></span>Сценарий</div>
+  <div class="chip chip-b"><span class="dot"></span>Монтаж</div>
+</div>
+
+<!-- The chips ride GSAP MotionPathPlugin, loaded from the same CDN and version as
+     the host gsap (kinetic-center-build loads CustomEase the same way). -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-advanced-arc-motion-path {
+    color: var(--fg, #f2f2f2);
+    font-family: var(--font-body, "Montserrat", sans-serif);
+  }
+  .hf-advanced-arc-motion-path {
+    position: relative;
+    width: 700px;
+    max-width: 100%;
+    /* standing stage for the vertical field: one chip arcs over the core, one under it,
+       they land apart on the right (the source crossed both through the core and
+       landed them on one spot) */
+    height: 645px;
+    border-radius: var(--radius, 30px);
+    overflow: hidden;
+    background: radial-gradient(
+      circle at 50% 20%,
+      var(--bg, #0c1014),
+      var(--bg, #0c1014) 54%,
+      var(--bg, #0c1014)
+    );
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+  }
+  .hf-advanced-arc-motion-path svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .hf-advanced-arc-motion-path .path {
+    fill: none;
+    stroke: color-mix(in srgb, var(--fg, #f2f2f2) 18%, transparent);
+    stroke-width: 3;
+    stroke-dasharray: 10 12;
+  }
+  .hf-advanced-arc-motion-path .core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    font-size: 36px;
+    border-radius: 42px;
+    background: var(--brand, #ff0000);
+    color: var(--fg, #f2f2f2);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.25);
+  }
+  .hf-advanced-arc-motion-path .chip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1, 8px);
+    height: 56px;
+    font-size: 28px;
+    white-space: nowrap;
+    padding: 0 var(--space-2, 16px);
+    border-radius: var(--radius, 999px);
+    background: var(--surface, #18181a);
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.14);
+    font-weight: 800;
+    transform-origin: 50% 50%;
+  }
+  .hf-advanced-arc-motion-path .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: var(--radius, 999px);
+    background: var(--accent, #ff0000);
+  }
+</style>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["arc-motion-path"]; mount the snippet inside a clip with data-composition-id="arc-motion-path"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="arc-motion-path" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    if (window.MotionPathPlugin) gsap.registerPlugin(MotionPathPlugin);
+    tl.to(
+      ".hf-advanced-arc-motion-path .chip-a",
+      {
+        motionPath: {
+          path: "#arc-motion-path-path-a",
+          align: "#arc-motion-path-path-a",
+          alignOrigin: [0.5, 0.5],
+        },
+        duration: 2.4,
+        ease: "power1.inOut",
+      },
+      startTime,
+    );
+    tl.to(
+      ".hf-advanced-arc-motion-path .chip-b",
+      {
+        motionPath: {
+          path: "#arc-motion-path-path-b",
+          align: "#arc-motion-path-path-b",
+          alignOrigin: [0.5, 0.5],
+        },
+        duration: 2.1,
+        ease: "sine.inOut",
+      },
+      startTime + 0.25,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["arc-motion-path"] = tl;
+  })();
+</script>

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "arc-motion-path",
+  "type": "hyperframes:component",
+  "title": "Arc Motion Path",
+  "description": "Two brand chips travel along curved dashed arcs around a central card, rotating with the path (GSAP MotionPathPlugin, loaded with the unit). Mount it inside a clip with data-composition-id=\"arc-motion-path\": its own timeline nests there.",
+  "tags": ["video-primitive", "motionpath", "gsap-plugin", "hyperframes-native"],
+  "files": [
+    {
+      "path": "arc-motion-path.html",
+      "target": "compositions/components/arc-motion-path.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

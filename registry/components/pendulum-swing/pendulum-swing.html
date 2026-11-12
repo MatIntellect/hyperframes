@@ -1,0 +1,184 @@
+<!--
+  Pendulum Swing - motion primitive for HyperFrames.
+
+  Paste the markup, CSS and script into a composition. Drive the timeline
+  integration from a paused GSAP timeline so renders remain deterministic.
+
+  Variables. The script reads each one, falls back to the declared default on
+  anything missing or unrecognised, and writes the result as a custom property
+  the CSS below consumes. The timeline recipe stays untouched by them: it keeps
+  easing one unitless swing value from 1 down to 0, and these decide where the
+  content hangs from, how far the first swing reaches, which way it enters and
+  what colour it is.
+
+    - pivot (top-center | top-left | top-right, default top-center): where the
+      content hangs from. The swing rotates about this point, so the pinned top
+      edge never drifts.
+    - amplitude (gentle | standard | wide, default standard): how far the first
+      swing reaches, 18deg, 34deg or 52deg. Every later swing scales with it, so
+      whatever the reach the pendulum still comes to rest upright.
+    - direction (right | left, default right): which side the pendulum swings in
+      from. right lifts the first swing clockwise, left mirrors it.
+    - text (string, default «Мы открыты»): words on the sign; a long line
+      wraps inside 640px.
+    - tone (ink | paper | accent, default ink): sign colour, all from the
+      palette: ink is the card colour with light text, paper the light text
+      colour with dark text, accent the brand red with light text.
+
+  On every default the result is identical to the original: a near-black sign
+  hanging from its top centre, entering from the right through a 34deg swing.
+
+  Motion note. The swing is a damped oscillation about the pivot: the content
+  passes through upright several times, each pass smaller, until it settles.
+  It rides a single unitless custom property (--hf-swing-angle) that the recipe
+  eases 1 -> 0, so rotation interpolates sub-pixel and stays smooth under the
+  seek-by-frame capture engine; nothing here animates a layout or reflow
+  property.
+-->
+
+<div
+  class="hf-catalog-pendulum-swing"
+  data-composition-variables='[
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Words on the hanging sign. A long line wraps inside 640px.", "default": "Мы открыты" },
+    { "id": "pivot", "type": "enum", "role": "layout", "label": "Pivot", "description": "Where the content hangs from. The swing rotates about this point, so the top edge stays pinned.", "default": "top-center", "options": [{ "value": "top-center", "label": "Top center" }, { "value": "top-left", "label": "Top left" }, { "value": "top-right", "label": "Top right" }] },
+    { "id": "amplitude", "type": "enum", "role": "motion", "label": "Amplitude", "description": "How far the first swing reaches before it settles. Every later swing scales with it, so the pendulum still comes to rest upright.", "default": "standard", "options": [{ "value": "gentle", "label": "Gentle" }, { "value": "standard", "label": "Standard" }, { "value": "wide", "label": "Wide" }] },
+    { "id": "direction", "type": "enum", "role": "motion", "label": "Direction", "description": "Which side the pendulum swings in from: right lifts the first swing clockwise, left mirrors it.", "default": "right", "options": [{ "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }] },
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Sign colour from the palette: ink the card colour, paper the light text colour, accent the brand red.", "default": "ink", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] }
+  ]'
+>
+  <span class="hf-catalog-pendulum-swing__body">Мы открыты</span>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-catalog-pendulum-swing {
+    display: inline-block;
+    /* The pendulum swings about the hanging pivot. The angle stays a unitless
+       factor so the timeline can ease it 1 -> 0 (a damped oscillation through
+       upright) while amplitude and direction, set once from the variables,
+       decide the reach and the side. */
+    transform-origin: var(--hf-swing-origin, 50% 0%);
+    transform: rotate(
+      calc(var(--hf-swing-angle, 0) * var(--hf-swing-dir, 1) * var(--hf-swing-max, 34deg))
+    );
+  }
+  .hf-catalog-pendulum-swing__body {
+    display: inline-block;
+    padding: 22px 40px;
+    border-radius: 14px;
+    /* Tone sets a background/foreground pair so the sign stays legible whatever
+       the frame: the fill is the tone colour, the text its paired contrast. */
+    max-width: 640px;
+    background: var(--hf-swing-bg, var(--surface, #18181a));
+    color: var(--hf-swing-fg, var(--fg, #f2f2f2));
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 54px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-align: center;
+    text-wrap: balance;
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides return to their declared defaults.
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var pivots = {
+      "top-center": "50% 0%",
+      "top-left": "0% 0%",
+      "top-right": "100% 0%",
+    };
+    var amplitudes = { gentle: "18deg", standard: "34deg", wide: "52deg" };
+    var directions = { right: 1, left: -1 };
+    // Each tone is a fill/text pair so the sign keeps AA contrast on any frame.
+    var tones = {
+      ink: { bg: "var(--surface, #18181a)", fg: "var(--fg, #f2f2f2)" },
+      paper: { bg: "var(--fg, #f2f2f2)", fg: "var(--bg, #0c1014)" },
+      accent: { bg: "var(--brand, #ff0000)", fg: "var(--fg, #f2f2f2)" },
+    };
+
+    var origin = pivots[pick(pivots, vars.pivot, "top-center")];
+    var maxAngle = amplitudes[pick(amplitudes, vars.amplitude, "standard")];
+    var dir = directions[pick(directions, vars.direction, "right")];
+    var tone = tones[pick(tones, vars.tone, "ink")];
+
+    var roots = document.querySelectorAll(".hf-catalog-pendulum-swing");
+    for (var i = 0; i < roots.length; i += 1) {
+      var root = roots[i];
+      root.style.setProperty("--hf-swing-origin", origin);
+      root.style.setProperty("--hf-swing-max", maxAngle);
+      root.style.setProperty("--hf-swing-dir", String(dir));
+      root.style.setProperty("--hf-swing-bg", tone.bg);
+      root.style.setProperty("--hf-swing-fg", tone.fg);
+      if (typeof vars.text === "string" && vars.text.trim()) {
+        root.querySelector(".hf-catalog-pendulum-swing__body").textContent = vars.text.trim();
+      }
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["pendulum-swing"]; mount the snippet inside a clip with data-composition-id="pendulum-swing"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="pendulum-swing" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    const swingSettle = (p) => 1 - Math.exp(-2.3 * p) * Math.cos(3.5 * Math.PI * p);
+    tl.fromTo(
+      ".hf-catalog-pendulum-swing",
+      { "--hf-swing-angle": 1 },
+      { "--hf-swing-angle": 0, duration: 2.9, ease: swingSettle },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["pendulum-swing"] = tl;
+  })();
+</script>
