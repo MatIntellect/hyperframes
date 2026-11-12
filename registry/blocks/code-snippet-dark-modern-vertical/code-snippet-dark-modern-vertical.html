@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Dark Modern VS Code Theme Composition</title>
+  </head>
+  <body>
+    <template id="code-snippet-dark-modern-vertical-template">
+      <div
+        id="root"
+        class="vscode-theme-scene"
+        data-composition-id="code-snippet-dark-modern-vertical"
+        data-width="1080"
+        data-height="1920"
+        data-start="0"
+        data-duration="30"
+        data-composition-variables='[
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, title and the editor in the 780x1180 field. top / bottom: the editor window alone as a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}], "default": "full"},
+    {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the title.", "maxLength": 26, "default": "Встроенная тема VS Code"},
+    {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "Big Bebas title; empty keeps the theme name.", "maxLength": 18, "default": "Dark Modern"},
+    {"id": "file", "type": "string", "role": "content", "label": "File name", "description": "File in the tab, the tree, the path and the window title.", "maxLength": 24, "default": "functional_toolkit.py"},
+    {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The typed file, lines split by a line break: up to 14 lines of 38 characters (18 in full), Python colours; a longer file scrolls like the editor.", "maxLength": 560, "default": "# A small functional toolkit\ndef compose(*fns):\n    def run(x):\n        for fn in fns:\n            x = fn(x)\n        return x\n    return run\n\ndef unfold(f, seed):\n    acc = []\n    while (r := f(seed)):\n        acc.append(r[0])\n        seed = r[1]\n    return acc"},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts (12 ms a character, 45 ms a line), 2 the terminal rises (not before typing ends), 3 the block fades out (only when exit is fade). Empty keeps 0.95, typing end + 0.35 and terminal + 4.5.", "default": ""},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the typed file to the end of the mount; fade fades the block out.", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}], "default": "none"}
+  ]'
+      >
+        <main class="scene-content">
+          <section class="header">
+            <div>
+              <p class="kicker"></p>
+              <h1 class="title"><span class="theme-label"></span></h1>
+            </div>
+            
+          </section>
+
+          <section class="workbench">
+            <div class="titlebar" data-layout-ignore>
+              <div class="traffic"><span></span><span></span><span></span></div>
+              <div class="window-title"><span class="fname"></span> – functional-toolkit – Visual Studio Code</div>
+              <div class="command-center">Search</div>
+            </div>
+
+            <aside class="activity" data-layout-ignore aria-label="Activity bar">
+              <svg class="activity-icon active" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"
+                />
+              </svg>
+              <svg class="activity-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="m21 21-5.2-5.2M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                />
+              </svg>
+              <svg class="activity-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M8 18 3 12l5-6m8 12 5-6-5-6"
+                />
+              </svg>
+              <svg class="activity-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M12 3v18m0-18 6 6m-6-6L6 9m6 12 6-6m-6 6-6-6"
+                />
+              </svg>
+            </aside>
+
+            <aside class="sidebar" data-layout-ignore>
+              <div class="sidebar-title">Explorer</div>
+              <div class="section-title">⌄ Functional Toolkit</div>
+              <div class="tree">
+                <div class="tree-row">⌄ src</div>
+                <div class="tree-row child selected">◇ <span class="fname"></span></div>
+                <div class="tree-row child">◇ test_toolkit.py</div>
+                <div class="tree-row">◇ pyproject.toml</div>
+                <div class="tree-row">◇ README.md</div>
+              </div>
+            </aside>
+
+            <section class="editor-area">
+              <div class="tabs" data-layout-ignore>
+                <div class="tab">◇ <span class="fname"></span></div>
+                <div class="tab inactive">README.md</div>
+              </div>
+              <div class="breadcrumbs" data-layout-ignore>functional-toolkit › src › <span class="fname"></span></div>
+              <div class="editor">
+                <div class="active-line"></div>
+                <div class="code" data-layout-allow-overflow></div>
+              </div>
+              <div class="terminal" data-layout-ignore>
+                <div class="panel-tabs">
+                  <span class="active">Terminal</span><span>Problems</span><span>Output</span>
+                </div>
+                <div class="terminal-body">
+                  <div><span class="prompt">functional-toolkit %</span> python -m pytest</div>
+                  <div>collected 3 items</div>
+                  <div>tests/test_toolkit.py ... <span class="tok-comment">passed</span></div>
+                </div>
+              </div>
+            </section>
+
+            <footer class="statusbar" data-layout-ignore>
+              <div class="status-left">
+                <span class="remote">main</span>
+                <span>0 errors</span>
+                <span>0 warnings</span>
+              </div>
+              <div class="status-right">
+                <span>Ln 17, Col 1</span>
+                <span>Spaces: 4</span>
+                <span>UTF-8</span>
+                <span>Python 3.12</span>
+              </div>
+            </footer>
+          </section>
+        </main>
+        <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+          * {
+            box-sizing: border-box;
+            letter-spacing: 0;
+          }
+
+          html,
+          body {
+            margin: 0;
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            background: transparent;
+            font-family:
+              "Montserrat",
+              sans-serif;
+          }
+
+          #root {
+            --activity-bg: #181818;
+            --activity-fg: #d7d7d7;
+            --activity-muted: #868686;
+            --activity-active: #0078d4;
+            --sidebar-bg: #181818;
+            --sidebar-fg: #cccccc;
+            --sidebar-border: #2b2b2b;
+            --tab-bg: #181818;
+            --tab-active-bg: #1f1f1f;
+            --tab-active-fg: #ffffff;
+            --tab-inactive-fg: #9d9d9d;
+            --tab-border: #2b2b2b;
+            --editor-bg: #1f1f1f;
+            --editor-fg: #cccccc;
+            --editor-line: rgba(255, 255, 255, 0.04);
+            --gutter-fg: #6e7681;
+            --gutter-active-fg: #cccccc;
+            --panel-bg: #181818;
+            --panel-border: #2b2b2b;
+            --status-bg: #181818;
+            --status-fg: #cccccc;
+            --status-border: #2b2b2b;
+            --title-bg: #181818;
+            --title-fg: #cccccc;
+            --token-comment: #6a9955;
+            --token-keyword: #c586c0;
+            --token-function: #dcdcaa;
+            --token-string: #ce9178;
+            --token-number: #b5cea8;
+            --token-variable: #9cdcfe;
+            --token-parameter: #9cdcfe;
+            --token-operator: #d4d4d4;
+            --token-punctuation: #d4d4d4;
+            --token-class-name: #4ec9b0;
+            position: relative;
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            background:
+              radial-gradient(ellipse 60% 50% at 72% 18%, rgba(255, 0, 0, 0.12), transparent 70%),
+              #0c1014;
+            color: var(--editor-fg);
+          }
+
+          .scene-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            
+            padding: 180px 150px 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            perspective: 2200px;
+            perspective-origin: 56% 52%;
+          }
+
+          .header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            min-height: 66px;
+            text-shadow:
+              0 2px 12px rgba(0, 0, 0, 0.42),
+              0 14px 34px rgba(0, 0, 0, 0.32);
+          }
+
+          .kicker {
+            margin: 0 0 8px;
+            color: #8a8a90;
+            font-size: 28px;
+            font-weight: 650;
+            text-transform: uppercase;
+            text-shadow:
+              0 2px 8px rgba(0, 0, 0, 0.48),
+              0 10px 26px rgba(0, 0, 0, 0.36);
+          }
+
+          .title {
+            margin: 0;
+            color: #f2f2f2;
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 76px;
+            line-height: 0.95;
+            font-weight: 700;
+          }
+
+          .source-note {
+            width: 640px;
+            margin: 0;
+            color: #8a8a90;
+            font-size: 28px;
+            line-height: 1.35;
+            text-align: right;
+            text-shadow:
+              0 2px 10px rgba(0, 0, 0, 0.46),
+              0 12px 30px rgba(0, 0, 0, 0.34);
+          }
+
+          .workbench {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 54px 290px 1fr;
+            grid-template-rows: 36px 1fr 26px;
+            overflow: hidden;
+            border: 1px solid var(--sidebar-border);
+            border-radius: 8px;
+            background: var(--editor-bg);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.42);
+            transform: translateZ(0);
+            transform-origin: 82% 50%;
+            transform-style: preserve-3d;
+            will-change: transform;
+          }
+
+          .titlebar {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 120px 1fr 210px;
+            align-items: center;
+            background: var(--title-bg);
+            color: var(--title-fg);
+            border-bottom: 1px solid var(--tab-border);
+            font-size: 12px;
+          }
+
+          .traffic {
+            display: flex;
+            gap: 8px;
+            padding-left: 18px;
+          }
+
+          .traffic span {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+          }
+
+          .traffic span:nth-child(1) {
+            background: #ff5f57;
+          }
+          .traffic span:nth-child(2) {
+            background: #ffbd2e;
+          }
+          .traffic span:nth-child(3) {
+            background: #28c840;
+          }
+
+          .window-title {
+            justify-self: center;
+            opacity: 0.84;
+          }
+
+          .command-center {
+            justify-self: end;
+            width: 176px;
+            height: 22px;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid color-mix(in srgb, var(--title-fg), transparent 78%);
+            border-radius: 5px;
+            color: color-mix(in srgb, var(--title-fg), transparent 18%);
+          }
+
+          .activity {
+            grid-row: 2 / 3;
+            background: var(--activity-bg);
+            border-right: 1px solid var(--sidebar-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            gap: 18px;
+          }
+
+          .activity-icon {
+            width: 28px;
+            height: 28px;
+            color: var(--activity-muted);
+          }
+
+          .activity-icon.active {
+            color: var(--activity-fg);
+            border-left: 2px solid var(--activity-active);
+            padding-left: 4px;
+          }
+
+          .sidebar {
+            grid-row: 2 / 3;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-fg);
+            border-right: 1px solid var(--sidebar-border);
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+          }
+
+          .sidebar-title {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: var(--sidebar-fg);
+            font-size: 11px;
+            text-transform: uppercase;
+          }
+
+          .section-title {
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 14px;
+            background: color-mix(in srgb, var(--sidebar-bg), var(--sidebar-fg) 5%);
+            border-top: 1px solid var(--sidebar-border);
+            border-bottom: 1px solid var(--sidebar-border);
+            color: var(--sidebar-fg);
+            font-size: 11px;
+            font-weight: 700;
+          }
+
+          .tree {
+            padding: 8px 0;
+            font-size: 13px;
+            line-height: 24px;
+          }
+
+          .tree-row {
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 10px 0 18px;
+            color: color-mix(in srgb, var(--sidebar-fg), transparent 8%);
+            white-space: nowrap;
+          }
+
+          .tree-row.child {
+            padding-left: 34px;
+          }
+
+          .tree-row.selected {
+            background: color-mix(in srgb, var(--sidebar-fg), transparent 88%);
+            color: var(--sidebar-fg);
+          }
+
+          .editor-area {
+            grid-row: 2 / 3;
+            display: grid;
+            grid-template-rows: 36px 30px 1fr 138px;
+            min-height: 0;
+            min-width: 0;
+            background: var(--editor-bg);
+          }
+
+          .tabs {
+            display: flex;
+            background: var(--tab-bg);
+            border-bottom: 1px solid var(--tab-border);
+          }
+
+          .tab {
+            width: 205px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 13px;
+            border-right: 1px solid var(--tab-border);
+            background: var(--tab-active-bg);
+            color: var(--tab-active-fg);
+            border-top: 2px solid var(--activity-active);
+            font-size: 13px;
+          }
+
+          .tab.inactive {
+            background: var(--tab-bg);
+            color: var(--tab-inactive-fg);
+            border-top-color: transparent;
+          }
+
+          .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 18px;
+            color: var(--gutter-fg);
+            border-bottom: 1px solid color-mix(in srgb, var(--tab-border), transparent 20%);
+            font-size: 12px;
+          }
+
+          .editor {
+            position: relative;
+            overflow: hidden;
+            background: var(--editor-bg);
+            color: var(--editor-fg);
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 28px;
+            line-height: 42px;
+          }
+
+          .active-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 42px;
+            background: var(--editor-line);
+            will-change: transform;
+          }
+
+          .code {
+            position: relative;
+            padding: 20px 36px 18px 0;
+          }
+
+          .line {
+            height: 42px;
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            align-items: center;
+          }
+
+          .line-number {
+            padding-right: 18px;
+            color: var(--gutter-fg);
+            text-align: right;
+            user-select: none;
+          }
+
+          .line.is-active .line-number {
+            color: var(--gutter-active-fg);
+          }
+
+          .line-code {
+            white-space: pre;
+          }
+
+          .char {
+            opacity: 0;
+          }
+
+          .tok-comment {
+            color: var(--token-comment);
+          }
+          .tok-keyword {
+            color: var(--token-keyword);
+          }
+          .tok-function {
+            color: var(--token-function);
+          }
+          .tok-string {
+            color: var(--token-string);
+          }
+          .tok-number {
+            color: var(--token-number);
+          }
+          .tok-variable {
+            color: var(--token-variable);
+          }
+          .tok-parameter {
+            color: var(--token-parameter);
+          }
+          .tok-operator {
+            color: var(--token-operator);
+          }
+          .tok-punctuation {
+            color: var(--token-punctuation);
+          }
+          .tok-class-name {
+            color: var(--token-class-name);
+          }
+
+          .caret {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 3;
+            display: block;
+            width: 3px;
+            height: 34px;
+            background: var(--editor-fg);
+            pointer-events: none;
+            will-change: transform, opacity;
+          }
+
+          .terminal {
+            display: grid;
+            grid-template-rows: 32px 1fr;
+            background: var(--panel-bg);
+            border-top: 1px solid var(--panel-border);
+            color: var(--editor-fg);
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 14px;
+          }
+
+          .panel-tabs {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--panel-border);
+            color: var(--gutter-fg);
+            font-family:
+              "Montserrat",
+              sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+          }
+
+          .panel-tabs .active {
+            color: var(--editor-fg);
+            border-bottom: 1px solid var(--activity-active);
+            height: 32px;
+            display: flex;
+            align-items: center;
+          }
+
+          .terminal-body {
+            padding: 12px 20px;
+            color: var(--editor-fg);
+            line-height: 1.8;
+          }
+
+          .prompt {
+            color: var(--token-function);
+          }
+
+          .statusbar {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--status-bg);
+            color: var(--status-fg);
+            border-top: 1px solid var(--status-border);
+            font-size: 12px;
+          }
+
+          .status-left,
+          .status-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 0 12px;
+          }
+
+          .remote {
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            margin-left: -12px;
+            background: var(--status-remote-bg, var(--activity-active));
+            color: var(--status-remote-fg, #ffffff);
+          }
+
+          svg {
+            display: block;
+          }
+          
+          .workbench {
+            grid-template-columns: 1fr;
+          }
+          .activity,
+          .sidebar {
+            display: none;
+          }
+          .titlebar {
+            grid-template-columns: 96px 1fr 0;
+          }
+          .command-center {
+            display: none;
+          }
+          .header {
+            min-height: 0;
+          }
+          #root.cs-half {
+            background: transparent;
+          }
+          #root.cs-half .header,
+          #root.cs-half .terminal {
+            display: none;
+          }
+          #root.cs-half .editor-area {
+            grid-template-rows: 36px 30px 1fr;
+          }
+          #root.cs-top .scene-content {
+            padding: 180px 150px 980px;
+          }
+          #root.cs-bottom .scene-content {
+            padding: 600px 150px 560px;
+          }
+          
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (() => {
+            const V =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : {};
+            const text = (v, fb) => (typeof v === "string" && v.trim() ? v.trim() : fb);
+            const cues = String(V.cues || "")
+              .split(",")
+              .map((v) => parseFloat(v));
+
+            /* Python colours in the theme's own token classes: keywords, strings, numbers, comments,
+               calls and definitions, parameters of def and lambda, constants and Capitalised names */
+            const KW = new Set("def return lambda if elif else while for in is not and or import from as class with try except finally yield pass break continue raise async await global nonlocal del".split(" "));
+            const CONST = new Set(["None", "True", "False"]);
+            function tokenize(line) {
+              const out = [];
+              let rest = line,
+                prevWord = "",
+                params = 0;
+              const push = (t, token) => out.push({ text: t, token });
+              while (rest) {
+                let m;
+                if ((m = rest.match(/^#.*/))) push(m[0], "comment");
+                else if ((m = rest.match(/^("""[^]*?"""|\'\'\'[^]*?\'\'\'|"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?)/))) push(m[0], "string");
+                else if ((m = rest.match(/^\d+(\.\d+)?/))) push(m[0], "number");
+                else if ((m = rest.match(/^[A-Za-z_]\w*/))) {
+                  const w = m[0];
+                  const next = rest.slice(w.length).trimStart()[0];
+                  let token = "variable";
+                  if (KW.has(w)) token = "keyword";
+                  else if (CONST.has(w) || prevWord === "class" || /^[A-Z]/.test(w)) token = "className";
+                  else if (prevWord === "def" || next === "(") token = "function";
+                  else if (params) token = "parameter";
+                  if (w === "lambda") params = 2;
+                  push(w, token);
+                  prevWord = w;
+                } else if ((m = rest.match(/^\s+/))) push(m[0], "plain");
+                else if ((m = rest.match(/^(==|!=|<=|>=|:=|\*\*|\/\/|->|[-+*\/%=<>!&|^~@])/))) push(m[0], "operator");
+                else if ((m = rest.match(/^[()\[\]{}:,.;]/))) {
+                  // parameters: inside the brackets right after def name, or between lambda and its colon
+                  if (m[0] === "(" && out.length > 1 && out[out.length - 1].token === "function" && line.trimStart().startsWith("def ")) params = 1;
+                  else if (m[0] === ")" && params === 1) params = 0;
+                  else if (m[0] === ":" && params === 2) params = 0;
+                  push(m[0], "punctuation");
+                } else (m = [rest[0]]), push(rest[0], "plain");
+                rest = rest.slice(m[0].length);
+              }
+              return out;
+            }
+            const DEFAULT_CODE = "# A small functional toolkit\ndef compose(*fns):\n    def run(x):\n        for fn in fns:\n            x = fn(x)\n        return x\n    return run\n\ndef unfold(f, seed):\n    acc = []\n    while (r := f(seed)):\n        acc.append(r[0])\n        seed = r[1]\n    return acc";
+            const codeLines = text(V.code, DEFAULT_CODE).replace(/\r/g, "").split("\n").map(tokenize);
+
+            const fallback = {
+              "activityBar.background": "#181818",
+              "activityBar.foreground": "#d7d7d7",
+              "activityBar.inactiveForeground": "#868686",
+              "activityBar.activeBorder": "#0078d4",
+              "sideBar.background": "#181818",
+              "sideBar.foreground": "#cccccc",
+              "sideBar.border": "#2b2b2b",
+              "tab.activeBackground": "#1f1f1f",
+              "tab.activeForeground": "#ffffff",
+              "tab.inactiveBackground": "#181818",
+              "tab.inactiveForeground": "#9d9d9d",
+              "tab.border": "#2b2b2b",
+              "editor.background": "#1f1f1f",
+              "editor.foreground": "#cccccc",
+              "editor.lineHighlightBackground": "#ffffff0a",
+              "editorLineNumber.foreground": "#6e7681",
+              "editorLineNumber.activeForeground": "#cccccc",
+              "panel.background": "#181818",
+              "panel.border": "#2b2b2b",
+              "statusBar.background": "#181818",
+              "statusBar.foreground": "#cccccc",
+              "statusBar.border": "#2b2b2b",
+              "titleBar.activeBackground": "#181818",
+              "titleBar.activeForeground": "#cccccc",
+            };
+
+            function color(theme, key) {
+              return theme.colors[key] || fallback[key] || theme.colors.foreground || "#cccccc";
+            }
+
+            function solarizedGrey(theme) {
+              return (
+                theme.colors["tab.inactiveForeground"] ||
+                theme.colors["editor.foreground"] ||
+                "#586E75"
+              );
+            }
+
+            function setVar(root, name, value) {
+              root.style.setProperty(name, value);
+            }
+
+            function applyTheme(root, theme) {
+              const solarizedUiGrey = theme.id === "solarized-light" ? solarizedGrey(theme) : null;
+              setVar(root, "--activity-bg", color(theme, "activityBar.background"));
+              setVar(
+                root,
+                "--activity-fg",
+                solarizedUiGrey || color(theme, "activityBar.foreground"),
+              );
+              setVar(
+                root,
+                "--activity-muted",
+                solarizedUiGrey || color(theme, "activityBar.inactiveForeground"),
+              );
+              setVar(root, "--activity-active", color(theme, "activityBar.activeBorder"));
+              setVar(root, "--sidebar-bg", color(theme, "sideBar.background"));
+              setVar(root, "--sidebar-fg", solarizedUiGrey || color(theme, "sideBar.foreground"));
+              setVar(root, "--sidebar-border", color(theme, "sideBar.border"));
+              setVar(root, "--tab-bg", color(theme, "tab.inactiveBackground"));
+              setVar(root, "--tab-active-bg", color(theme, "tab.activeBackground"));
+              setVar(
+                root,
+                "--tab-active-fg",
+                solarizedUiGrey || color(theme, "tab.activeForeground"),
+              );
+              setVar(
+                root,
+                "--tab-inactive-fg",
+                solarizedUiGrey || color(theme, "tab.inactiveForeground"),
+              );
+              setVar(root, "--tab-border", color(theme, "tab.border"));
+              setVar(root, "--editor-bg", color(theme, "editor.background"));
+              setVar(root, "--editor-fg", color(theme, "editor.foreground"));
+              setVar(root, "--editor-line", color(theme, "editor.lineHighlightBackground"));
+              setVar(root, "--gutter-fg", color(theme, "editorLineNumber.foreground"));
+              setVar(root, "--gutter-active-fg", color(theme, "editorLineNumber.activeForeground"));
+              setVar(root, "--panel-bg", color(theme, "panel.background"));
+              setVar(root, "--panel-border", color(theme, "panel.border"));
+              setVar(root, "--status-bg", color(theme, "statusBar.background"));
+              setVar(root, "--status-fg", color(theme, "statusBar.foreground"));
+              setVar(root, "--status-border", color(theme, "statusBar.border"));
+              setVar(root, "--status-remote-bg", color(theme, "statusBarItem.remoteBackground"));
+              setVar(
+                root,
+                "--status-remote-fg",
+                solarizedUiGrey || color(theme, "statusBarItem.remoteForeground"),
+              );
+              setVar(root, "--title-bg", color(theme, "titleBar.activeBackground"));
+              setVar(
+                root,
+                "--title-fg",
+                solarizedUiGrey || color(theme, "titleBar.activeForeground"),
+              );
+              setVar(root, "--token-comment", theme.tokens.comment);
+              setVar(root, "--token-keyword", theme.tokens.keyword);
+              setVar(root, "--token-function", theme.tokens.function);
+              setVar(root, "--token-string", theme.tokens.string);
+              setVar(root, "--token-number", theme.tokens.number);
+              setVar(root, "--token-variable", theme.tokens.variable);
+              setVar(root, "--token-parameter", theme.tokens.parameter);
+              setVar(root, "--token-operator", theme.tokens.operator);
+              setVar(root, "--token-punctuation", theme.tokens.punctuation);
+              setVar(root, "--token-class-name", theme.tokens.className);
+            }
+
+            function renderCode(root) {
+              const code = root.querySelector(".code");
+              codeLines.forEach((segments, index) => {
+                const line = document.createElement("div");
+                line.className = "line";
+                line.dataset.lineIndex = String(index);
+
+                const lineNumber = document.createElement("span");
+                lineNumber.className = "line-number";
+                lineNumber.textContent = String(index + 1);
+                line.appendChild(lineNumber);
+
+                const lineCode = document.createElement("span");
+                lineCode.className = "line-code";
+                segments.forEach((segment) => {
+                  [...segment.text].forEach((char) => {
+                    const span = document.createElement("span");
+                    span.className =
+                      segment.token === "plain"
+                        ? "char"
+                        : "char tok-" +
+                          segment.token.replace(/[A-Z]/g, (match) => "-" + match.toLowerCase());
+                    span.dataset.lineIndex = String(index);
+                    span.textContent = char;
+                    lineCode.appendChild(span);
+                  });
+                });
+                line.appendChild(lineCode);
+                code.appendChild(line);
+              });
+
+              const caret = document.createElement("span");
+              caret.className = "caret";
+              root.querySelector(".editor").appendChild(caret);
+            }
+
+            function caretPointForElement(editor, el) {
+              const editorBox = editor.getBoundingClientRect();
+              const charBox = el.getBoundingClientRect();
+              return {
+                x: charBox.right - editorBox.left + 2,
+                y: charBox.top - editorBox.top + 3,
+              };
+            }
+
+            function caretPointForLineStart(editor, line) {
+              const editorBox = editor.getBoundingClientRect();
+              const lineBox = line.getBoundingClientRect();
+              const codeBox = line.querySelector(".line-code").getBoundingClientRect();
+              return {
+                x: codeBox.left - editorBox.left,
+                y: lineBox.top - editorBox.top + 3,
+              };
+            }
+
+            function lineHighlightY(editor, line) {
+              const editorBox = editor.getBoundingClientRect();
+              const lineBox = line.getBoundingClientRect();
+              return lineBox.top - editorBox.top;
+            }
+
+            function buildTimeline(root, compositionId) {
+              const tl = gsap.timeline({ paused: true });
+              const editor = root.querySelector(".editor");
+              const caret = root.querySelector(".caret");
+              const activeLine = root.querySelector(".active-line");
+              const lineEls = gsap.utils.toArray(root.querySelectorAll(".line"));
+              const lineStartTimes = [];
+              const codeEl = root.querySelector(".code");
+              const scrolls = gsap.utils
+                .toArray(root.querySelectorAll(".line"))
+                .map((line) => Math.max(0, line.offsetTop + line.offsetHeight + 18 - editor.clientHeight));
+              const charSchedule = [];
+              let cursorTime = isFinite(cues[0]) && cues[0] >= 0.6 ? cues[0] : 0.95;
+
+              lineEls.forEach((line, lineIndex) => {
+                const lineChars = gsap.utils.toArray(line.querySelectorAll(".char"));
+                lineStartTimes[lineIndex] = cursorTime;
+                lineChars.forEach((char, charIndex) => {
+                  charSchedule.push({ char, line: lineIndex, time: cursorTime + charIndex * 0.012 });
+                });
+                cursorTime += Math.max(lineChars.length * 0.012, 0.08) + 0.045;
+              });
+
+              const typed = cursorTime;
+              // a line exists once typing reaches it, as in a new file: no hidden rows wait below the view
+              gsap.set(lineEls.slice(1), { autoAlpha: 0 });
+              const TERM = isFinite(cues[1]) && cues[1] > typed ? cues[1] : typed + 0.35;
+              gsap.set(activeLine, { y: lineHighlightY(editor, lineEls[0]) });
+              gsap.set(caret, caretPointForLineStart(editor, lineEls[0]));
+
+              tl.from(
+                root.querySelector(".header"),
+                { y: 24, opacity: 0, duration: 0.45, ease: "power3.out" },
+                0,
+              );
+              tl.from(
+                root.querySelector(".workbench"),
+                { y: 42, opacity: 0, scale: 0.986, duration: 0.58, ease: "power3.out" },
+                0.1,
+              );
+              tl.from(activeLine, { opacity: 0, duration: 0.22, ease: "power2.out" }, 0.74);
+              lineStartTimes.forEach((time, lineIndex) => {
+                const line = lineEls[lineIndex];
+                const sy = scrolls[lineIndex];
+                tl.set(line, { autoAlpha: 1 }, time);
+                tl.set(codeEl, { y: -sy }, time);
+                tl.set(activeLine, { y: lineHighlightY(editor, line) - sy }, time);
+                const p0 = caretPointForLineStart(editor, line);
+                tl.set(caret, { x: p0.x, y: p0.y - sy }, time);
+                tl.call(
+                  () => {
+                    lineEls.forEach((item) => item.classList.toggle("is-active", item === line));
+                  },
+                  [],
+                  time,
+                );
+              });
+              charSchedule.forEach(({ char, line, time }) => {
+                const p = caretPointForElement(editor, char);
+                tl.set(char, { opacity: 1 }, time);
+                tl.set(caret, { x: p.x, y: p.y - scrolls[line] }, time + 0.002);
+              });
+              tl.to(
+                root.querySelector(".caret"),
+                { opacity: 0, duration: 0.34, repeat: 43, yoyo: true, ease: "steps(1)" },
+                0.95,
+              );
+              tl.from(
+                root.querySelector(".terminal"),
+                { y: 140, opacity: 0, duration: 0.56, ease: "power3.out" },
+                TERM,
+              );
+              tl.from(
+                root.querySelector(".terminal-body").children,
+                { opacity: 0, y: 8, duration: 0.24, stagger: 0.16, ease: "power2.out" },
+                TERM + 0.5,
+              );
+              tl.to(
+                root.querySelector(".workbench"),
+                { rotateY: -10.5, z: 74, duration: 0.72, ease: "power2.inOut" },
+                TERM + 1.8,
+              );
+              tl.to(
+                root.querySelector(".workbench"),
+                { rotateY: 0, z: 0, duration: 0.62, ease: "power2.inOut" },
+                TERM + 2.53,
+              );
+              if (V.exit === "fade") {
+                const out = isFinite(cues[2]) && cues[2] > TERM + 2 ? cues[2] : TERM + 4.5;
+                tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, out);
+              }
+              tl.set({}, {}, 30);
+
+              window.__timelines = window.__timelines || {};
+              window.__timelines[compositionId] = tl;
+
+              const previewTime = new URLSearchParams(window.location.search).get("t");
+              if (previewTime !== null) {
+                tl.time(Number(previewTime));
+              }
+            }
+
+            window.createVSCodeThemeComposition = (compositionId, themeOrId) => {
+              const root =
+                document.querySelector(
+                  '[data-composition-id="' + compositionId + '"] .vscode-theme-scene',
+                ) ||
+                document.querySelector(
+                  '.vscode-theme-scene[data-composition-id="' + compositionId + '"]',
+                ) ||
+                document.querySelector('[data-composition-id="' + compositionId + '"]');
+              const theme =
+                typeof themeOrId === "string"
+                  ? window.VSCODE_THEME_REGISTRY.find((item) => item.id === themeOrId)
+                  : themeOrId;
+              if (!root || !theme) return;
+              root.querySelector(".kicker").textContent = text(V.kicker, "Встроенная тема VS Code");
+              root.querySelector(".theme-label").textContent = text(V.title, theme.label);
+              const note = root.querySelector(".source-note");
+              if (note) note.textContent = text(V.note, "Цвета из файла " + theme.sourceFile);
+              root.querySelectorAll(".fname").forEach((el) => (el.textContent = text(V.file, "functional_toolkit.py")));
+              
+              const placement = ["full", "top", "bottom"].includes(V.placement) ? V.placement : "full";
+              root.classList.add("cs-" + placement);
+              if (placement !== "full") root.classList.add("cs-half");
+              
+              applyTheme(root, theme);
+              renderCode(root);
+              buildTimeline(root, compositionId);
+            };
+          })();
+        </script>
+        <script>
+          window.__timelines = window.__timelines || {};
+          window.__timelines["code-snippet-dark-modern-vertical"] =
+            window.__timelines["code-snippet-dark-modern-vertical"] || gsap.timeline({ paused: true });
+          window.createVSCodeThemeComposition("code-snippet-dark-modern-vertical", {
+            id: "dark-modern",
+            label: "Dark Modern",
+            sourceFile: "dark_modern.json",
+            uiTheme: "vs-dark",
+            colors: {
+              "activityBar.activeBorder": "#0078D4",
+              "activityBar.background": "#181818",
+              "activityBar.border": "#2B2B2B",
+              "activityBar.foreground": "#D7D7D7",
+              "activityBar.inactiveForeground": "#868686",
+              "editor.background": "#1F1F1F",
+              "editor.foreground": "#CCCCCC",
+              "editorGroup.border": "#FFFFFF17",
+              "editorGroupHeader.tabsBackground": "#181818",
+              "editorGroupHeader.tabsBorder": "#2B2B2B",
+              "editorLineNumber.activeForeground": "#CCCCCC",
+              "editorLineNumber.foreground": "#6E7681",
+              foreground: "#CCCCCC",
+              "icon.foreground": "#CCCCCC",
+              "panel.background": "#181818",
+              "panel.border": "#2B2B2B",
+              "sideBar.background": "#181818",
+              "sideBar.border": "#2B2B2B",
+              "sideBar.foreground": "#CCCCCC",
+              "sideBarSectionHeader.background": "#181818",
+              "sideBarSectionHeader.border": "#2B2B2B",
+              "sideBarSectionHeader.foreground": "#CCCCCC",
+              "sideBarTitle.foreground": "#CCCCCC",
+              "statusBar.background": "#181818",
+              "statusBar.border": "#2B2B2B",
+              "statusBar.foreground": "#CCCCCC",
+              "statusBarItem.remoteBackground": "#0078D4",
+              "statusBarItem.remoteForeground": "#FFFFFF",
+              "tab.activeBackground": "#1F1F1F",
+              "tab.activeBorder": "#1F1F1F",
+              "tab.activeBorderTop": "#0078D4",
+              "tab.activeForeground": "#FFFFFF",
+              "tab.border": "#2B2B2B",
+              "tab.inactiveBackground": "#181818",
+              "tab.inactiveForeground": "#9D9D9D",
+              "terminal.foreground": "#CCCCCC",
+              "titleBar.activeBackground": "#181818",
+              "titleBar.activeForeground": "#CCCCCC",
+            },
+            tokens: {
+              comment: "#6A9955",
+              keyword: "#d7ba7d",
+              function: "#DCDCAA",
+              string: "#d16969",
+              number: "#b5cea8",
+              variable: "#4FC1FF",
+              parameter: "#9CDCFE",
+              operator: "#d7ba7d",
+              punctuation: "#CE9178",
+              className: "#4EC9B0",
+            },
+          });
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

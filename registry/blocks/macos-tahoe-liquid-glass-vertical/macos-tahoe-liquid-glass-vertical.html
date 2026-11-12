@@ -1,0 +1,726 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: a close-up of the top right of the MacBook screen with the notification, the screen corner at x 960, y 180, the scene to the frame edge. top / bottom: the same close-up on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "icon", "type": "image", "role": "content", "label": "Notification icon", "description": "Square app icon of the glass notification, rounded.", "default": "assets/tahoe/icons/toast-messages.jpg" },
+    { "id": "app", "type": "string", "role": "content", "label": "Notification app", "description": "Bold app name of the notification.", "maxLength": 14, "default": "Сообщения" },
+    { "id": "time", "type": "string", "role": "content", "label": "Notification time", "description": "Time on the right of the notification.", "maxLength": 6, "default": "сейчас" },
+    { "id": "text", "type": "string", "role": "content", "label": "Notification text", "description": "Text of the notification, up to three lines.", "maxLength": 50, "default": "Аня: ролик собран, можно выкладывать" },
+    { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title of the Finder window on the desktop (texture, small).", "maxLength": 20, "default": "MatIntellect" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the glass notification slides in from the right; 2 the block fades out (only when exit is fade). The camera pulls back and the MacBook breathes for 13 s, then rests. Empty keeps 0.45.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the MacBook to the end of the mount; fade fades the block out at cue 2.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        background: transparent;
+        overflow: hidden;
+      }
+      #mtgv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #mtgv-frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      
+      #mtgv-root.mtgv-card #mtgv-frame {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #mtgv-root.mtgv-card.mtgv-bottom #mtgv-frame {
+        top: 600px;
+      }
+      
+      #mtgv-theater {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      #mtgv-icon {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mtgv-root" data-composition-id="macos-tahoe-liquid-glass-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="mtgv-frame">
+        <canvas id="mtgv-theater" width="1080" height="1920"></canvas>
+        <img id="mtgv-icon" data-var-src="icon" src="assets/tahoe/icons/toast-messages.jpg" alt="" />
+      </div>
+    </div>
+    <script>
+      // рабочий стол и уведомление рисуются шрифтом бренда на холсте – строим после его загрузки (runtimes.md)
+      Promise.all([document.fonts.load('700 30px "Montserrat"'), document.fonts.load('600 30px "Montserrat"')]).then(function () {
+      var V =
+        window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+          ? window.__hyperframes.getVariables()
+          : {};
+      function txt(v, d) {
+        return typeof v === "string" && v.trim() ? v.trim() : d;
+      }
+      function oneOf(v, list, d) {
+        return list.indexOf(v) >= 0 ? v : d;
+      }
+      var $ = function (id) {
+        return document.getElementById("mtgv-" + id);
+      };
+      var PI = Math.PI;
+      var root = $("root"),
+        frame = $("frame");
+      var css = getComputedStyle(root);
+      var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
+        SURF = css.getPropertyValue("--surface").trim() || "#18181a",
+        ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+
+      // раскладка: широкая – родная камера (отъезд от всего ноутбука); вертикаль – крупно правый верхний угол экрана
+      var W = 1920,
+        H = 1080,
+        CLOSE = null;
+      
+      var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+      W = 1080;
+      H = 1920;
+      CLOSE = { s: 1.3, fx: 960, fy: 180 }; // угол экрана (1440, 0) – в точке кадра; s – точек кадра на точку экрана в конце отъезда
+      if (placement !== "full") {
+        root.classList.add("mtgv-card", "mtgv-" + placement);
+        W = 780;
+        H = 760;
+        CLOSE = { s: 1.0, fx: 760, fy: 40 };
+      }
+      
+      var theater = $("theater");
+      theater.width = W;
+      theater.height = H;
+      theater.style.width = W + "px";
+      theater.style.height = H + "px";
+
+      var NOTE = { app: txt(V.app, "Сообщения"), time: txt(V.time, "сейчас"), text: txt(V.text, "Аня: ролик собран, можно выкладывать") };
+      var TITLE = txt(V.title, "MatIntellect");
+      var cues = String(V.cues || "")
+        .split(",")
+        .map(function (v) {
+          return parseFloat(v);
+        });
+      function cue(i, d) {
+        return isFinite(cues[i]) && cues[i] >= 0 ? cues[i] : d;
+      }
+      var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+      // ── Renderer (родной) ──
+      var renderer = new THREE.WebGLRenderer({ canvas: theater, antialias: true, preserveDrawingBuffer: true });
+      renderer.setSize(W, H, false);
+      renderer.setPixelRatio(1);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      var bgCol = new THREE.Color(BG);
+      renderer.setClearColor(bgCol, 1);
+      var scene = new THREE.Scene();
+      scene.background = bgCol;
+      var camera = new THREE.PerspectiveCamera(34, W / H, 0.1, 100);
+
+      var eC = document.createElement("canvas");
+      eC.width = 1024;
+      eC.height = 512;
+      var ec = eC.getContext("2d");
+      var eg = ec.createLinearGradient(0, 0, 1024, 512);
+      eg.addColorStop(0, "#020307");
+      eg.addColorStop(0.15, "#1a1a1e");
+      eg.addColorStop(0.3, "#ffffff");
+      eg.addColorStop(0.45, "#0a0a0e");
+      eg.addColorStop(0.6, "#ffffff");
+      eg.addColorStop(0.75, "#1e1e22");
+      eg.addColorStop(1, "#020307");
+      ec.fillStyle = eg;
+      ec.fillRect(0, 0, 1024, 512);
+      ec.globalCompositeOperation = "screen";
+      for (var ei = 0; ei < 7; ei++) {
+        ec.fillStyle = "rgba(255,255,255," + (ei % 2 === 0 ? 0.15 : 0.08) + ")";
+        ec.fillRect((ei % 3) * 100, 60 + ei * 56, 700, 3 + (ei % 2) * 2);
+      }
+      var eT = new THREE.CanvasTexture(eC);
+      eT.mapping = THREE.EquirectangularReflectionMapping;
+      var pm = new THREE.PMREMGenerator(renderer);
+      scene.environment = pm.fromEquirectangular(eT).texture;
+      eT.dispose();
+      pm.dispose();
+
+      // ── фон: родные волны в цветах темы ──
+      var bgUniforms = {
+        uTime: { value: 0 },
+        uAspect: { value: W / H },
+        uBg: { value: new THREE.Color(BG) },
+        uSurf: { value: new THREE.Color(SURF) },
+        uAcc: { value: new THREE.Color(ACC) },
+      };
+      var bgPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(28, 16),
+        new THREE.ShaderMaterial({
+          uniforms: bgUniforms,
+          vertexShader: "varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+          fragmentShader:
+            "uniform float uTime;uniform float uAspect;uniform vec3 uBg;uniform vec3 uSurf;uniform vec3 uAcc;varying vec2 v;float wave(vec2 p,float s,float t){return sin(p.x*s+p.y*s*.57+uTime*t);}void main(){vec2 p=v*2.0-1.0;p.x*=uAspect;float w=wave(p,3.0,.22)+.55*wave(p.yx+vec2(.7,-.2),5.1,.16)+.32*wave(p+vec2(-.4,.5),8.0,-.12);float a=smoothstep(-.75,1.05,w);vec3 c=mix(uBg,uSurf*1.8,a);c=mix(c,uAcc*.3,smoothstep(.16,1.1,wave(p+vec2(.8,.1),2.4,.1))*.55);float ribbon=smoothstep(.22,.95,sin(p.x*2.2-p.y*3.1+uTime*.18));c+=uAcc*ribbon*.14;float glow=exp(-dot(p+vec2(.62,-.08),p+vec2(.62,-.08))*1.7);c+=uAcc*.18*glow;float vign=smoothstep(1.85,.25,length(p));gl_FragColor=vec4(c*vign,1.0);}",
+          depthTest: false,
+          depthWrite: false,
+        }),
+      );
+      bgPlane.position.z = -7.5;
+      scene.add(bgPlane);
+      var floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(30, 30),
+        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.9, roughness: 0.2 }),
+      );
+      floor.rotation.x = -PI / 2;
+      floor.position.y = -2.5;
+      scene.add(floor);
+      scene.add(new THREE.AmbientLight(0x222226, 0.5));
+      var kL = new THREE.DirectionalLight(0xffffff, 2.2);
+      kL.position.set(-3, 4, 5);
+      scene.add(kL);
+      var rL = new THREE.PointLight(new THREE.Color(ACC), 3, 15);
+      rL.position.set(4, 2, 3);
+      scene.add(rL);
+      var wL = new THREE.PointLight(0xffc8a8, 1.5, 12);
+      wL.position.set(-3, -1, 4);
+      scene.add(wL);
+
+      // ── экран 1440x900 рисуется на холсте вдвое крупнее: неподвижный стол один раз, уведомление – каждый кадр ──
+      function img(src) {
+        var im = new Image();
+        im.src = src;
+        return im;
+      }
+      var IC = {};
+      ["finder.png", "files.jpg", "safari.jpg", "mail.jpg", "photos.jpg", "music.jpg", "dock-finder.png", "dock-safari.jpg", "dock-mail.jpg", "calendar.jpg", "dock-photos.jpg", "messages.jpg", "dock-music.jpg", "brave.jpg", "slack.jpg"].forEach(function (f) {
+        IC[f] = img("assets/tahoe/icons/" + f);
+      });
+      var iconEl = $("icon");
+      var toastIcon = img(iconEl.currentSrc || iconEl.src);
+      var base = document.createElement("canvas");
+      base.width = 2880;
+      base.height = 1800;
+      var bctx = base.getContext("2d");
+      var scr = document.createElement("canvas");
+      scr.width = 2880;
+      scr.height = 1800;
+      var sctx = scr.getContext("2d");
+      var lapTex = new THREE.CanvasTexture(scr);
+      lapTex.minFilter = THREE.LinearFilter;
+      lapTex.magFilter = THREE.LinearFilter;
+      lapTex.generateMipmaps = false;
+      // экран – картинка в sRGB при выводе sRGB: без пометки тёмные тона поднимаются и стол выходит вымытым
+      lapTex.encoding = THREE.sRGBEncoding;
+
+      function rr(ctx, x, y, w, h, r) {
+        r = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+      function roundImg(ctx, im, x, y, w, h, r) {
+        if (!im || !im.complete || !im.naturalWidth) return;
+        ctx.save();
+        rr(ctx, x, y, w, h, r);
+        ctx.clip();
+        ctx.drawImage(im, x, y, w, h);
+        ctx.restore();
+      }
+      // тёмное стекло (тёмная тема macOS) – родная форма панели
+      function glass(ctx, x, y, w, h, r) {
+        var g = ctx.createLinearGradient(x, y, x + w, y + h);
+        g.addColorStop(0, "rgba(70,70,76,0.66)");
+        g.addColorStop(0.46, "rgba(40,40,46,0.6)");
+        g.addColorStop(1, "rgba(26,26,30,0.6)");
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.35)";
+        ctx.shadowBlur = 24;
+        ctx.shadowOffsetY = 12;
+        rr(ctx, x, y, w, h, r);
+        ctx.fillStyle = g;
+        ctx.fill();
+        ctx.shadowColor = "transparent";
+        ctx.lineWidth = 1.25;
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.stroke();
+        rr(ctx, x + 2, y + 2, w - 4, h - 4, Math.max(0, r - 2));
+        ctx.strokeStyle = "rgba(255,255,255,0.08)";
+        ctx.stroke();
+        ctx.restore();
+      }
+      function font(w, s) {
+        return w + " " + s + 'px "Montserrat"';
+      }
+
+      // обои бренда (у разработчиков – фото без указанного источника): тёмный фон, мягкое красное свечение и световые волны
+      function drawWallpaper(ctx) {
+        var g = ctx.createLinearGradient(0, 0, 0, 900);
+        g.addColorStop(0, SURF);
+        g.addColorStop(1, BG);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 1440, 900);
+        var r1 = ctx.createRadialGradient(330, 760, 0, 330, 760, 760);
+        r1.addColorStop(0, "rgba(255,0,0,0.42)");
+        r1.addColorStop(1, "rgba(255,0,0,0)");
+        ctx.fillStyle = r1;
+        ctx.fillRect(0, 0, 1440, 900);
+        var r2 = ctx.createRadialGradient(1180, 180, 0, 1180, 180, 620);
+        r2.addColorStop(0, "rgba(242,242,242,0.10)");
+        r2.addColorStop(1, "rgba(242,242,242,0)");
+        ctx.fillStyle = r2;
+        ctx.fillRect(0, 0, 1440, 900);
+        ctx.save();
+        ctx.filter = "blur(16px)";
+        for (var i = 0; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(-120, 560 + i * 70);
+          ctx.bezierCurveTo(380, 400 + i * 60, 920, 780 + i * 40, 1560, 470 + i * 60);
+          ctx.strokeStyle = i % 2 ? "rgba(242,242,242," + (0.1 - i * 0.015) + ")" : "rgba(255,40,40," + (0.3 - i * 0.05) + ")";
+          ctx.lineWidth = 70 - i * 12;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+      function drawMenuBar(ctx) {
+        ctx.save();
+        ctx.fillStyle = "rgba(14,14,18,0.5)";
+        ctx.fillRect(0, 0, 1440, 28);
+        ctx.strokeStyle = "rgba(255,255,255,0.14)";
+        ctx.beginPath();
+        ctx.moveTo(0, 28);
+        ctx.lineTo(1440, 28);
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255,255,255,0.96)";
+        ctx.textBaseline = "alphabetic";
+        ctx.font = font(700, 14);
+        ctx.fillText("Finder", 50, 19);
+        ctx.font = font(600, 11);
+        ["Файл", "Правка", "Вид", "Переход", "Окно", "Справка"].forEach(function (t, i) {
+          ctx.fillText(t, 112 + i * 62, 19);
+        });
+        ctx.textAlign = "right";
+        ctx.fillText("92%   Wi-Fi   Ср 12 нояб.  9:41", 1414, 19);
+        ctx.restore();
+      }
+      function drawWidgets(ctx) {
+        ctx.save();
+        ctx.textBaseline = "top";
+        glass(ctx, 28, 48, 100, 112, 18);
+        ctx.fillStyle = ACC;
+        ctx.font = font(700, 8);
+        ctx.fillText("НОЯБРЬ", 42, 60);
+        ctx.font = font(700, 7);
+        ctx.fillStyle = "rgba(242,242,242,0.6)";
+        ["П", "В", "С", "Ч", "П", "С", "В"].forEach(function (d, i) {
+          ctx.fillText(d, 42 + i * 10, 76);
+        });
+        for (var da = 1; da <= 30; da++) {
+          var k = da + 5,
+            dx = 42 + (k % 7) * 10,
+            dy = 88 + Math.floor(k / 7) * 12;
+          if (da === 12) {
+            ctx.fillStyle = ACC;
+            ctx.beginPath();
+            ctx.arc(dx + 3, dy + 4, 6, 0, PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+          } else ctx.fillStyle = "rgba(242,242,242,0.72)";
+          ctx.fillText(String(da), dx - (da > 9 ? 2 : 0), dy);
+        }
+        glass(ctx, 138, 48, 112, 112, 18);
+        var wg = ctx.createLinearGradient(138, 48, 250, 160);
+        wg.addColorStop(0, "rgba(255,0,0,0.42)");
+        wg.addColorStop(1, "rgba(24,24,26,0.2)");
+        rr(ctx, 138, 48, 112, 112, 18);
+        ctx.fillStyle = wg;
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.96)";
+        ctx.font = font(700, 9);
+        ctx.fillText("Погода", 152, 62);
+        ctx.font = font(700, 30);
+        ctx.fillText("+29°", 150, 80);
+        ctx.font = font(600, 8);
+        ctx.fillText("Облачно", 152, 128);
+        ctx.fillText("31° / 25°", 152, 140);
+        glass(ctx, 28, 170, 222, 92, 22);
+        var pg = ctx.createLinearGradient(44, 188, 116, 244);
+        pg.addColorStop(0, ACC);
+        pg.addColorStop(1, BG);
+        rr(ctx, 44, 188, 72, 56, 14);
+        ctx.fillStyle = pg;
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.94)";
+        ctx.font = font(700, 13);
+        ctx.fillText("Сейчас играет", 128, 194);
+        ctx.font = font(600, 10);
+        ctx.fillStyle = "rgba(242,242,242,0.6)";
+        ctx.fillText("Музыка для монтажа", 128, 216);
+        ctx.restore();
+      }
+      function drawFinder(ctx) {
+        var x = 112,
+          y = 236,
+          w = 620,
+          h = 338;
+        ctx.save();
+        ctx.textBaseline = "alphabetic";
+        glass(ctx, x, y, w, h, 18);
+        rr(ctx, x, y, w, 42, 18);
+        ctx.fillStyle = "rgba(255,255,255,0.06)";
+        ctx.fill();
+        [["#ff5f57", 26], ["#febc2e", 46], ["#28c840", 66]].forEach(function (l) {
+          ctx.fillStyle = l[0];
+          ctx.beginPath();
+          ctx.arc(x + l[1], y + 21, 6, 0, PI * 2);
+          ctx.fill();
+        });
+        ctx.fillStyle = "rgba(242,242,242,0.86)";
+        ctx.font = font(700, 13);
+        ctx.textAlign = "center";
+        ctx.fillText(TITLE, x + w / 2, y + 26);
+        ctx.textAlign = "left";
+        ctx.fillStyle = "rgba(0,0,0,0.16)";
+        ctx.fillRect(x, y + 42, 164, h - 42);
+        var side = [["Избранное", "finder.png"], ["Дом", "files.jpg"], ["Рабочий стол", "safari.jpg"], ["Загрузки", "mail.jpg"], ["Картинки", "photos.jpg"], ["Музыка", "music.jpg"]];
+        side.forEach(function (s, i) {
+          var sy = y + 70 + i * 34;
+          if (i === 0) {
+            rr(ctx, x + 16, sy - 17, 136, 26, 8);
+            ctx.fillStyle = "rgba(255,0,0,0.22)";
+            ctx.fill();
+          }
+          roundImg(ctx, IC[s[1]], x + 28, sy - 14, 18, 18, 5);
+          ctx.fillStyle = "rgba(242,242,242,0.86)";
+          ctx.font = font(i === 0 ? 700 : 600, 12);
+          ctx.fillText(s[0], x + 54, sy);
+        });
+        ["ролики", "субтитры", "графика", "звук", "сценарий.md", "план.txt", "обложки", "готово"].forEach(function (f, i) {
+          var fx = x + 226 + (i % 4) * 94,
+            fy = y + 94 + Math.floor(i / 4) * 112,
+            doc = i === 4 || i === 5;
+          if (!doc) {
+            rr(ctx, fx + 4, fy - 8, 28, 13, 6);
+            ctx.fillStyle = "rgba(170,170,178,0.8)";
+            ctx.fill();
+          }
+          rr(ctx, fx, fy, 54, 42, 10);
+          ctx.fillStyle = doc ? "rgba(242,242,242,0.86)" : "rgba(196,196,204,0.82)";
+          ctx.fill();
+          if (doc) {
+            ctx.fillStyle = "rgba(80,80,90,0.5)";
+            ctx.fillRect(fx + 10, fy + 12, 34, 3);
+            ctx.fillRect(fx + 10, fy + 22, 26, 3);
+          }
+          ctx.fillStyle = "rgba(242,242,242,0.9)";
+          ctx.font = font(600, 11);
+          ctx.textAlign = "center";
+          ctx.fillText(f, fx + 27, fy + 62);
+          ctx.textAlign = "left";
+        });
+        ctx.restore();
+      }
+      function drawDock(ctx) {
+        var icons = ["dock-finder.png", "dock-safari.jpg", "dock-mail.jpg", "calendar.jpg", "dock-photos.jpg", "messages.jpg", "dock-music.jpg", "brave.jpg", "slack.jpg"];
+        var size = 46,
+          gap = 8,
+          padX = 14,
+          padY = 9;
+        var w = icons.length * size + (icons.length - 1) * gap + padX * 2;
+        var x = Math.round((1440 - w) / 2),
+          y = 792;
+        glass(ctx, x, y, w, size + padY * 2, 23);
+        icons.forEach(function (f, i) {
+          roundImg(ctx, IC[f], x + padX + i * (size + gap), y + padY, size, size, 13);
+        });
+      }
+
+      // ── уведомление: шрифт F из увеличения экрана в кадре (≥ 28 px), ширина и строки по тексту ──
+      var F = 18,
+        TN = null;
+      function fit(ctx, s, w) {
+        if (ctx.measureText(s).width <= w) return s;
+        while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1);
+        return s + "…";
+      }
+      function wrap(ctx, s, w) {
+        var lines = [],
+          cur = "";
+        s.split(/\s+/).forEach(function (wd) {
+          var t = cur ? cur + " " + wd : wd;
+          if (ctx.measureText(t).width <= w || !cur) cur = t;
+          else {
+            lines.push(cur);
+            cur = wd;
+          }
+        });
+        if (cur) lines.push(cur);
+        return lines.map(function (l) {
+          return fit(ctx, l, w);
+        });
+      }
+      function layoutNote() {
+        var pad = Math.round(F * 0.6),
+          ic = Math.round(F * 1.6),
+          w = Math.min(760, Math.round(F * 15));
+        var tx = pad + ic + Math.round(F * 0.5),
+          tw = w - tx - pad;
+        sctx.font = font(600, F);
+        var lines = wrap(sctx, NOTE.text, tw);
+        sctx.font = font(700, F);
+        var tmW = sctx.measureText(NOTE.time).width;
+        var app = fit(sctx, NOTE.app, tw - tmW - 12);
+        TN = { w: w, h: pad * 2 + F * 1.25 + lines.length * F * 1.22, pad: pad, ic: ic, tx: tx, app: app, lines: lines, x: 1440 - 24 - w, y: 48 };
+      }
+      function drawNote(ctx, p, hop) {
+        if (p <= 0.001) return;
+        var n = TN,
+          x = n.x + (1 - p) * (n.w + 60),
+          y = n.y + hop;
+        ctx.save();
+        ctx.globalAlpha = Math.min(1, p * 1.4);
+        ctx.save();
+        rr(ctx, x, y, n.w, n.h, 26);
+        ctx.clip();
+        ctx.filter = "blur(14px) brightness(0.8)";
+        ctx.drawImage(base, 0, 0, 1440, 900);
+        ctx.restore();
+        glass(ctx, x, y, n.w, n.h, 26);
+        roundImg(ctx, toastIcon, x + n.pad, y + n.pad, n.ic, n.ic, Math.round(n.ic * 0.26));
+        ctx.textBaseline = "top";
+        ctx.fillStyle = "#fff";
+        ctx.font = font(700, F);
+        ctx.fillText(n.app, x + n.tx, y + n.pad);
+        ctx.globalAlpha *= 0.75;
+        ctx.textAlign = "right";
+        ctx.fillText(NOTE.time, x + n.w - n.pad, y + n.pad);
+        ctx.textAlign = "left";
+        ctx.globalAlpha = Math.min(1, p * 1.4);
+        ctx.font = font(600, F);
+        n.lines.forEach(function (l, i) {
+          ctx.fillText(l, x + n.tx, y + n.pad + F * 1.25 + i * F * 1.22);
+        });
+        ctx.restore();
+      }
+      var screenReady = false;
+      function drawScreen() {
+        if (!screenReady) return;
+        sctx.setTransform(2, 0, 0, 2, 0, 0);
+        sctx.clearRect(0, 0, 1440, 900);
+        sctx.drawImage(base, 0, 0, 1440, 900);
+        drawNote(sctx, S.toast, S.hop);
+        sctx.setTransform(1, 0, 0, 1, 0, 0);
+        lapTex.needsUpdate = true;
+      }
+
+      // ── MacBook (родная модель) ──
+      var lapGrp = new THREE.Group();
+      scene.add(lapGrp);
+      var display = null;
+      function planarScreenUv(mesh) {
+        var g = mesh.geometry;
+        g.computeBoundingBox();
+        var bb = g.boundingBox;
+        var pos = g.attributes.position;
+        var w = bb.max.x - bb.min.x || 1;
+        var h = bb.max.y - bb.min.y || 1;
+        var uv = new Float32Array(pos.count * 2);
+        for (var i = 0; i < pos.count; i++) {
+          uv[i * 2] = (pos.getX(i) - bb.min.x) / w;
+          uv[i * 2 + 1] = (pos.getY(i) - bb.min.y) / h;
+        }
+        g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+      }
+
+      var driftEase = (function () {
+        // родная кривая отъезда cubic-bezier(.45,0,.15,1)
+        var ax = 3 * 0.45 - 3 * 0.15 + 1,
+          bx = 3 * 0.15 - 6 * 0.45,
+          cx = 3 * 0.45,
+          ay = 3 * 0 - 3 * 1 + 1,
+          by = 3 * 1 - 0,
+          cy = 0;
+        return function (t) {
+          var s = t;
+          for (var i = 0; i < 12; i++) {
+            var x = ((ax * s + bx) * s + cx) * s - t;
+            var dx = (3 * ax * s + 2 * bx) * s + cx;
+            if (Math.abs(dx) < 1e-10) break;
+            s -= x / dx;
+          }
+          s = Math.max(0, Math.min(1, s));
+          return ((ay * s + by) * s + cy) * s;
+        };
+      })();
+      var breatheEase = "sine.inOut";
+
+      // камера: широкая – родные точки; вертикаль – прицел на угол экрана, считается после загрузки модели
+      var CAM0 = { x: 0, y: 0.4, z: 4.5, ly: -0.1, lx: 0, lz: 0 },
+        CAM1 = { x: 0, y: 0.6, z: 7, ly: -0.1, lx: 0, lz: 0 };
+      var S = { k: 0, lpRY: 0, drift: 0, toast: 0, hop: 0 };
+      function render() {
+        var d = S.drift,
+          k = S.k;
+        drawScreen();
+        lapGrp.position.set(-Math.sin(d * 0.4) * 0.012, -0.2 + Math.sin(d * 0.6) * 0.006, -0.6 + Math.cos(d * 0.35) * 0.008);
+        lapGrp.rotation.set(0, S.lpRY, 0);
+        bgUniforms.uTime.value = d;
+        camera.position.set(CAM0.x + (CAM1.x - CAM0.x) * k, CAM0.y + (CAM1.y - CAM0.y) * k, CAM0.z + (CAM1.z - CAM0.z) * k);
+        camera.lookAt(CAM0.lx + (CAM1.lx - CAM0.lx) * k, CAM0.ly + (CAM1.ly - CAM0.ly) * k, CAM0.lz + (CAM1.lz - CAM0.lz) * k);
+        renderer.render(scene, camera);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+      tl.to(S, { drift: 15, duration: 15, ease: "none" }, 0);
+      tl.to(S, { k: 1, duration: 12, ease: driftEase }, 0.5);
+      tl.to(S, { lpRY: 0.04, duration: 4, ease: breatheEase }, 1);
+      tl.to(S, { lpRY: -0.03, duration: 4, ease: breatheEase }, 5);
+      tl.to(S, { lpRY: 0.02, duration: 4, ease: breatheEase }, 9);
+      var t0 = cue(0, 0.45);
+      tl.to(S, { toast: 1.03, duration: 0.38, ease: "power3.out" }, t0);
+      tl.to(S, { toast: 1, duration: 0.16, ease: "power2.out" }, t0 + 0.38);
+      tl.to(S, { hop: 10, duration: 0.18, ease: "power2.out" }, t0 + 3.8);
+      tl.to(S, { hop: 0, duration: 0.22, ease: "power2.out" }, t0 + 3.98);
+      if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, cue(1, 15));
+      tl.set({}, {}, 30);
+      tl.eventCallback("onUpdate", render);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["macos-tahoe-liquid-glass-vertical"] = tl;
+
+      function loaded(im) {
+        return new Promise(function (res) {
+          if (im.complete) return res();
+          im.onload = res;
+          im.onerror = function () {
+            console.warn("tahoe: image not loaded", im.src);
+            res();
+          };
+        });
+      }
+      var loader = new THREE.GLTFLoader();
+      loader.load("assets/tahoe/macbook.glb", function (gltf) {
+        var m = gltf.scene;
+        var box = new THREE.Box3().setFromObject(m);
+        var sz = box.getSize(new THREE.Vector3());
+        m.scale.setScalar(4.5 / Math.max(sz.x, sz.z));
+        box.setFromObject(m);
+        m.position.sub(box.getCenter(new THREE.Vector3()));
+        m.traverse(function (child) {
+          if (child.isMesh && child.name.replace(/\.\d+$/, "") === "display") {
+            planarScreenUv(child);
+            child.material = new THREE.MeshBasicMaterial({ map: lapTex });
+            display = child;
+          }
+        });
+        lapGrp.add(m);
+        lapGrp.position.set(0, -0.2, -0.6);
+        lapGrp.updateMatrixWorld(true);
+        var db = new THREE.Box3().setFromObject(display || m);
+        var DW = db.max.x - db.min.x,
+          DH = db.max.y - db.min.y,
+          DZ = db.max.z;
+        var s;
+        if (CLOSE) {
+          // прицел: угол экрана (1440, 0) – в точке кадра (fx, fy); в начале на 20% ближе
+          var aim = function (sc) {
+            var wpp = DW / 1440 / sc,
+              dist = (H * wpp) / (2 * Math.tan(THREE.MathUtils.degToRad(17)));
+            var cx = db.max.x - (CLOSE.fx - W / 2) * wpp,
+              cy = db.max.y + (CLOSE.fy - H / 2) * wpp;
+            return { x: cx, y: cy, z: DZ + dist, lx: cx, ly: cy, lz: DZ };
+          };
+          CAM0 = aim(CLOSE.s * 1.2);
+          CAM1 = aim(CLOSE.s);
+          s = CLOSE.s;
+        } else {
+          // широкая: ширина экрана в кадре при самой дальней (родной) камере
+          camera.position.set(CAM1.x, CAM1.y, CAM1.z);
+          camera.lookAt(CAM1.lx, CAM1.ly, CAM1.lz);
+          camera.updateMatrixWorld(true);
+          var a = new THREE.Vector3(db.min.x, db.max.y, DZ).project(camera),
+            b = new THREE.Vector3(db.max.x, db.max.y, DZ).project(camera);
+          s = (((b.x - a.x) / 2) * W) / 1440;
+        }
+        F = Math.ceil(28.5 / s);
+        layoutNote();
+        Promise.all(Object.keys(IC).map(function (key) {
+          return loaded(IC[key]);
+        }).concat([loaded(toastIcon)])).then(function () {
+          bctx.setTransform(2, 0, 0, 2, 0, 0);
+          drawWallpaper(bctx);
+          drawMenuBar(bctx);
+          drawWidgets(bctx);
+          drawFinder(bctx);
+          drawDock(bctx);
+          bctx.setTransform(1, 0, 0, 1, 0, 0);
+          screenReady = true;
+          render();
+        });
+      });
+      render();
+      });
+    </script>
+  </body>
+</html>

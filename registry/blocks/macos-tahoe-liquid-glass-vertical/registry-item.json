@@ -1,0 +1,105 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "macos-tahoe-liquid-glass-vertical",
+  "type": "hyperframes:block",
+  "title": "macOS Tahoe Glass Notification (vertical)",
+  "description": "Vertical macOS Tahoe notification: a close-up of the top right of the MacBook screen, the glass notification slides in with readable text while the camera pulls back; full frame or a top / bottom card. Texts and icon are variables; holds or fades.",
+  "tags": ["3d", "macos", "tahoe", "gltf", "notification", "glass", "macbook", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "macos-tahoe-liquid-glass-vertical.html",
+      "target": "compositions/macos-tahoe-liquid-glass-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/tahoe/macbook.glb",
+      "target": "assets/tahoe/macbook.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/brave.jpg",
+      "target": "assets/tahoe/icons/brave.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/calendar.jpg",
+      "target": "assets/tahoe/icons/calendar.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/dock-finder.png",
+      "target": "assets/tahoe/icons/dock-finder.png",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/dock-mail.jpg",
+      "target": "assets/tahoe/icons/dock-mail.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/dock-music.jpg",
+      "target": "assets/tahoe/icons/dock-music.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/dock-photos.jpg",
+      "target": "assets/tahoe/icons/dock-photos.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/dock-safari.jpg",
+      "target": "assets/tahoe/icons/dock-safari.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/files.jpg",
+      "target": "assets/tahoe/icons/files.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/finder.png",
+      "target": "assets/tahoe/icons/finder.png",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/mail.jpg",
+      "target": "assets/tahoe/icons/mail.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/messages.jpg",
+      "target": "assets/tahoe/icons/messages.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/music.jpg",
+      "target": "assets/tahoe/icons/music.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/photos.jpg",
+      "target": "assets/tahoe/icons/photos.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/safari.jpg",
+      "target": "assets/tahoe/icons/safari.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/slack.jpg",
+      "target": "assets/tahoe/icons/slack.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/tahoe/icons/toast-messages.jpg",
+      "target": "assets/tahoe/icons/toast-messages.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

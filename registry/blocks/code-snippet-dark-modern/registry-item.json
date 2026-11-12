@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "code-snippet-dark-modern",
+  "type": "hyperframes:block",
+  "title": "VS Code Dark Modern",
+  "description": "VS Code workbench in the Dark Modern theme on the brand ground: a Bebas title with a kicker and a note above the window, the file types character by character with Python colours, the terminal rises with the test run and the window tilts. Titles, file name, code, cues and exit are variables; holds or fades.",
+  "tags": ["code", "developer", "showcase", "vscode", "editor", "typing"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "code-snippet-dark-modern.html",
+      "target": "compositions/code-snippet-dark-modern.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

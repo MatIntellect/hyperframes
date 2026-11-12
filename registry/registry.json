@@ -356,6 +356,22 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "code-snippet-dark-2026",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-snippet-dark-2026-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-snippet-dark-modern",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "code-snippet-dark-modern-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "code-typing",
       "type": "hyperframes:block"
     },
@@ -420,6 +436,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "frost-sequence-camera-orbit",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "frost-sequence-camera-orbit-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "gallery-tunnel",
       "type": "hyperframes:block"
     },
@@ -449,6 +473,14 @@
     },
     {
       "name": "gooey-split-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "heygen-avatar-promo-card",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "heygen-avatar-promo-card-landscape",
       "type": "hyperframes:block"
     },
     {
@@ -489,6 +521,14 @@
     },
     {
       "name": "instagram-follow-landscape",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "ios26-liquid-glass",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "ios26-liquid-glass-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -625,6 +665,14 @@
     },
     {
       "name": "macos-notification-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "macos-tahoe-liquid-glass",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "macos-tahoe-liquid-glass-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -852,6 +900,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "ui-3d-reveal",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "ui-3d-reveal-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "us-map",
       "type": "hyperframes:block"
     },
@@ -892,6 +948,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "vfx-iphone-device",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-iphone-device-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "vfx-liquid-background",
       "type": "hyperframes:block"
     },
@@ -929,6 +993,14 @@
     },
     {
       "name": "vfx-text-cursor-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vpn-youtube-spot",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vpn-youtube-spot-vertical",
       "type": "hyperframes:block"
     },
     {

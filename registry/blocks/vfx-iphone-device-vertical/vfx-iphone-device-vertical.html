@@ -1,0 +1,454 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the devices in the 780x1180 field (centre y 770), the scene to the frame edge. top / bottom: the same show on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "phone", "type": "image", "role": "content", "label": "Phone screen", "description": "Screenshot on the iPhone screen, fitted to the screen width; a page taller than the screen scrolls during the show. Default: the MatIntellect mobile page.", "default": "assets/device/phone-page.jpg" },
+    { "id": "laptop", "type": "image", "role": "content", "label": "Laptop screen", "description": "Screenshot on the MacBook screen, fitted to the screen width; a page taller than the screen scrolls. Default: the MatIntellect desktop page.", "default": "assets/device/laptop-page.jpg" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). The show runs 15 s from the mount start: phone close-up, spin to the back, MacBook enters, both on a turntable; then rests. Empty keeps 15.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount; fade fades the block out at cue 1.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        background: transparent;
+        overflow: hidden;
+      }
+      #devv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #devv-frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      
+      #devv-root.devv-card #devv-frame {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #devv-root.devv-card.devv-bottom #devv-frame {
+        top: 600px;
+      }
+      
+      #devv-theater {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .devv-pre {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="devv-root" data-composition-id="vfx-iphone-device-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="devv-frame">
+        <canvas id="devv-theater" width="1080" height="1920"></canvas>
+        <img class="devv-pre" id="devv-phone" data-var-src="phone" src="assets/device/phone-page.jpg" alt="" />
+        <img class="devv-pre" id="devv-laptop" data-var-src="laptop" src="assets/device/laptop-page.jpg" alt="" />
+      </div>
+    </div>
+    <script>
+      (function () {
+      var V =
+        window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+          ? window.__hyperframes.getVariables()
+          : {};
+      function oneOf(v, list, d) {
+        return list.indexOf(v) >= 0 ? v : d;
+      }
+      var $ = function (id) {
+        return document.getElementById("devv-" + id);
+      };
+      var PI = Math.PI;
+      var root = $("root"),
+        frame = $("frame");
+      var css = getComputedStyle(root);
+      var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
+        SURF = css.getPropertyValue("--surface").trim() || "#18181a",
+        ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+
+      // ── раскладка: камера по актам (родные числа – широкая; вертикаль и карточка – свои расстояния, чтобы устройства встали в поле) ──
+      // a1 телефон крупно, a2 спина, a3 обратно, a4 MacBook, a5 оба; phX/lpX – места устройств в a5, cX – куда смотрит камера в a5
+      var W = 1920,
+        H = 1080,
+        LIFT = 0,
+        CAM = { a1: 2.8, a2: 4.8, a3: 3.5, a4: 5, a5: 7.5, phX: -2.0, lpX: 2.2, cX: 0.1 };
+      
+      var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+      W = 1080;
+      H = 1920;
+      LIFT = 0.0605; // середина поля y 770: взгляд ниже на долю высоты видимого
+      CAM = { a1: 8.8, a2: 13.6, a3: 10.5, a4: 17.6, a5: 19.5, phX: -1.0, lpX: 0.9, cX: 0.7 };
+      if (placement !== "full") {
+        root.classList.add("devv-card", "devv-" + placement);
+        W = 780;
+        H = 760;
+        LIFT = 0;
+        CAM = { a1: 6.2, a2: 10.2, a3: 7.9, a4: 7.4, a5: 9.5, phX: -1.0, lpX: 0.9, cX: 0.7 };
+      }
+      
+      var theater = $("theater");
+      theater.width = W;
+      theater.height = H;
+      theater.style.width = W + "px";
+      theater.style.height = H + "px";
+      var cues = String(V.cues || "")
+        .split(",")
+        .map(function (v) {
+          return parseFloat(v);
+        });
+      var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+      // ── Renderer (родной) ──
+      var renderer = new THREE.WebGLRenderer({ canvas: theater, antialias: true, preserveDrawingBuffer: true });
+      renderer.setSize(W, H, false);
+      renderer.setPixelRatio(1);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      var bgCol = new THREE.Color(BG);
+      renderer.setClearColor(bgCol, 1);
+      var scene = new THREE.Scene();
+      scene.background = bgCol;
+      var camera = new THREE.PerspectiveCamera(34, W / H, 0.1, 100);
+
+      var eC = document.createElement("canvas");
+      eC.width = 1024;
+      eC.height = 512;
+      var ec = eC.getContext("2d");
+      var eg = ec.createLinearGradient(0, 0, 1024, 512);
+      eg.addColorStop(0, "#020307");
+      eg.addColorStop(0.15, "#1a1a1e");
+      eg.addColorStop(0.3, "#ffffff");
+      eg.addColorStop(0.45, "#0a0a0e");
+      eg.addColorStop(0.6, "#ffffff");
+      eg.addColorStop(0.75, "#1e1e22");
+      eg.addColorStop(1, "#020307");
+      ec.fillStyle = eg;
+      ec.fillRect(0, 0, 1024, 512);
+      ec.globalCompositeOperation = "screen";
+      for (var ei = 0; ei < 7; ei++) {
+        ec.fillStyle = "rgba(255,255,255," + (ei % 2 === 0 ? 0.15 : 0.08) + ")";
+        ec.fillRect((ei % 3) * 100, 60 + ei * 56, 700, 3 + (ei % 2) * 2);
+      }
+      var eT = new THREE.CanvasTexture(eC);
+      eT.mapping = THREE.EquirectangularReflectionMapping;
+      var pm = new THREE.PMREMGenerator(renderer);
+      scene.environment = pm.fromEquirectangular(eT).texture;
+      eT.dispose();
+      pm.dispose();
+
+      // ── фон: родные два пятна света, цвета темы ──
+      var bgMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(60, 40),
+        new THREE.ShaderMaterial({
+          uniforms: { uBg: { value: new THREE.Color(BG) }, uSurf: { value: new THREE.Color(SURF) }, uAcc: { value: new THREE.Color(ACC) } },
+          vertexShader: "varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+          fragmentShader:
+            "uniform vec3 uBg;uniform vec3 uSurf;uniform vec3 uAcc;varying vec2 v;void main(){vec3 c=uBg;c+=uAcc*0.16*exp(-pow(length(v-vec2(0.4,0.53)),2.0)*40.0);c+=uSurf*0.9*exp(-pow(length(v-vec2(0.6,0.47)),2.0)*40.0);gl_FragColor=vec4(c,1.0);}",
+          depthWrite: false,
+        }),
+      );
+      bgMesh.position.z = -14;
+      scene.add(bgMesh);
+      var floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(80, 80),
+        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.95, roughness: 0.18 }),
+      );
+      // пол – тёмная земля бренда: без притушенного отражения белые полосы окружения красили его светло-серым (в вертикали – пол-кадра)
+      floor.material.envMapIntensity = 0.08;
+      floor.rotation.x = -PI / 2;
+      floor.position.y = -2.5;
+      scene.add(floor);
+      scene.add(new THREE.AmbientLight(0x222226, 0.5));
+      var kL = new THREE.DirectionalLight(0xffffff, 2.2);
+      kL.position.set(-3, 4, 5);
+      scene.add(kL);
+      var rL = new THREE.PointLight(new THREE.Color(ACC), 3, 15);
+      rL.position.set(4, 2, 3);
+      scene.add(rL);
+      var wL = new THREE.PointLight(0xffc8a8, 1.5, 12);
+      wL.position.set(-3, -1, 4);
+      scene.add(wL);
+
+      // ── экраны: картинки полей на холстах, длинная страница прокручивается ──
+      function screen(w, h) {
+        var c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        var t = new THREE.CanvasTexture(c);
+        t.minFilter = THREE.LinearFilter;
+        t.magFilter = THREE.LinearFilter;
+        t.generateMipmaps = false;
+        // картинка в sRGB при выводе sRGB: без пометки тёмные тона поднимаются и экран выходит вымытым
+        t.encoding = THREE.sRGBEncoding;
+        return { c: c, ctx: c.getContext("2d"), tex: t, im: null, last: -1 };
+      }
+      var PH = screen(780, 1688),
+        LP = screen(1440, 900);
+      function paint(sc, sv) {
+        var im = sc.im;
+        if (!im || !im.naturalWidth) return;
+        var w = sc.c.width,
+          h = sc.c.height,
+          ih = (im.naturalHeight * w) / im.naturalWidth;
+        var y = -Math.max(0, ih - h) * sv;
+        if (Math.abs(y - sc.last) < 0.25) return;
+        sc.last = y;
+        sc.ctx.fillStyle = BG;
+        sc.ctx.fillRect(0, 0, w, h);
+        sc.ctx.drawImage(im, 0, y, w, ih);
+        sc.tex.needsUpdate = true;
+      }
+      function loadImg(el, sc) {
+        return new Promise(function (res) {
+          var im = new Image();
+          im.onload = res;
+          im.onerror = function () {
+            console.warn("device: screen image not loaded", im.src);
+            res();
+          };
+          im.src = el.currentSrc || el.src;
+          sc.im = im;
+        });
+      }
+
+      var turntable = new THREE.Group();
+      scene.add(turntable);
+      var phoneGrp = new THREE.Group();
+      turntable.add(phoneGrp);
+      var lapGrp = new THREE.Group();
+      turntable.add(lapGrp);
+
+      // ── стеклянная линза (родная) ──
+      var glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0,
+        roughness: 0.02,
+        transmission: 1,
+        thickness: 1.8,
+        ior: 1.45,
+        attenuationColor: new THREE.Color(0xf2f2f2),
+        attenuationDistance: 10,
+        clearcoat: 1,
+        clearcoatRoughness: 0.03,
+        specularIntensity: 1,
+        envMapIntensity: 2.5,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide,
+      });
+      var glassGeos = [
+        new THREE.SphereGeometry(0.22, 32, 32),
+        new THREE.IcosahedronGeometry(0.22, 1),
+        new THREE.OctahedronGeometry(0.25, 0),
+        new THREE.DodecahedronGeometry(0.22, 0),
+        new THREE.TetrahedronGeometry(0.28, 0),
+        new THREE.TorusGeometry(0.16, 0.07, 16, 32),
+      ];
+      var glassLens = new THREE.Mesh(glassGeos[0], glassMat);
+      glassLens.renderOrder = 10;
+      scene.add(glassLens);
+
+      function planarScreenUv(mesh) {
+        var g = mesh.geometry;
+        g.computeBoundingBox();
+        var bb = g.boundingBox;
+        var pos = g.attributes.position;
+        var w = bb.max.x - bb.min.x || 1;
+        var h = bb.max.y - bb.min.y || 1;
+        var uv = new Float32Array(pos.count * 2);
+        for (var i = 0; i < pos.count; i++) {
+          uv[i * 2] = (pos.getX(i) - bb.min.x) / w;
+          uv[i * 2 + 1] = (pos.getY(i) - bb.min.y) / h;
+        }
+        g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+      }
+      function alignScreenToMinusZ(r, frontName, backName) {
+        var front = r.getObjectByName(frontName);
+        var back = r.getObjectByName(backName);
+        if (!front || !back) return;
+        r.updateWorldMatrix(true, true);
+        var fp = new THREE.Vector3();
+        var bp = new THREE.Vector3();
+        front.getWorldPosition(fp);
+        back.getWorldPosition(bp);
+        if (fp.z > bp.z) r.rotation.y += Math.PI;
+      }
+
+      function cbz(p1x, p1y, p2x, p2y) {
+        var ax = 3 * p1x - 3 * p2x + 1,
+          bx = 3 * p2x - 6 * p1x,
+          cx = 3 * p1x;
+        var ay = 3 * p1y - 3 * p2y + 1,
+          by = 3 * p2y - 6 * p1y,
+          cy = 3 * p1y;
+        return function (t) {
+          var s = t;
+          for (var i = 0; i < 12; i++) {
+            var x = ((ax * s + bx) * s + cx) * s - t;
+            var dx = (3 * ax * s + 2 * bx) * s + cx;
+            if (Math.abs(dx) < 1e-10) break;
+            s -= x / dx;
+          }
+          s = Math.max(0, Math.min(1, s));
+          return ((ay * s + by) * s + cy) * s;
+        };
+      }
+      var enterEase = cbz(0.16, 1.0, 0.3, 1.0);
+      var spinEase = cbz(0.76, 0.0, 0.18, 1.0);
+      var driftEase = cbz(0.45, 0.0, 0.15, 1.0);
+      var snapEase = cbz(0.22, 1.15, 0.36, 1.0);
+      var breatheEase = cbz(0.37, 0.0, 0.63, 1.0);
+
+      var S = {
+        phX: 0, phY: 0.1, phZ: 0.5, phRX: 0, phRY: PI,
+        lpX: 10, lpY: -0.2, lpZ: -0.6, lpRY: 0,
+        cX: 0, cY: 0.15, cZ: CAM.a1, clX: 0, clY: 0.1,
+        drift: 0, turn: 0, scroll: 0,
+      };
+
+      var tl = gsap.timeline({ paused: true });
+      function render() {
+        var d = S.drift;
+        paint(PH, S.scroll);
+        paint(LP, S.scroll);
+        phoneGrp.position.set(S.phX + Math.sin(d * 0.5) * 0.015, S.phY + Math.sin(d * 0.7) * 0.008, S.phZ + Math.cos(d * 0.4) * 0.008);
+        phoneGrp.rotation.set(S.phRX, S.phRY, 0);
+        lapGrp.position.set(S.lpX - Math.sin(d * 0.4) * 0.012, S.lpY + Math.sin(d * 0.6) * 0.006, S.lpZ + Math.cos(d * 0.35) * 0.008);
+        lapGrp.rotation.set(0, S.lpRY, 0);
+        turntable.rotation.y = S.turn;
+        // линза – родные орбиты у экранов, прячется на разворотах
+        var t = tl.time();
+        var geoIdx = Math.floor(d * 0.8) % glassGeos.length;
+        if (glassLens.geometry !== glassGeos[geoIdx]) glassLens.geometry = glassGeos[geoIdx];
+        glassLens.rotation.set(d * 0.7, d * 0.9, d * 0.4);
+        glassLens.visible = t < 3.3 || (t >= 9.5 && t < 12.5) || t >= 13.5;
+        var gx, gy, gz;
+        if (t < 7) {
+          gx = phoneGrp.position.x + Math.sin(d * 1.4) * 0.35;
+          gy = phoneGrp.position.y + Math.cos(d * 1.1) * 0.6;
+          gz = phoneGrp.position.z + 0.15;
+        } else if (t < 11) {
+          gx = lapGrp.position.x + Math.sin(d * 1.2) * 1.2;
+          gy = lapGrp.position.y + 0.3 + Math.cos(d * 0.9) * 0.6;
+          gz = lapGrp.position.z + 0.2;
+        } else {
+          var mx = (phoneGrp.position.x + lapGrp.position.x) * 0.5,
+            my = (phoneGrp.position.y + lapGrp.position.y) * 0.5;
+          gx = mx + Math.sin(d * 1.0) * Math.min(1.5, Math.abs(CAM.lpX - CAM.phX) * 0.36);
+          gy = my + 0.2 + Math.cos(d * 0.8) * 0.5;
+          gz = 0.3;
+        }
+        glassLens.position.set(gx, gy, gz);
+        var lift = LIFT * S.cZ;
+        camera.position.set(S.cX, S.cY - lift, S.cZ);
+        camera.lookAt(S.clX, S.clY - lift, 0);
+        renderer.render(scene, camera);
+      }
+
+      // ── ход разработчиков (15 с) ──
+      tl.to(S, { drift: 15, duration: 15, ease: "none" }, 0);
+      tl.to(S, { phRY: PI + 0.06, phRX: 0.015, duration: 1.5, ease: breatheEase }, 0.3);
+      tl.to(S, { phRY: PI - 0.04, phRX: -0.01, duration: 1.5, ease: breatheEase }, 1.8);
+      tl.to(S, { phRY: PI * 2, duration: 2.2, ease: spinEase }, 3.5);
+      tl.to(S, { cZ: CAM.a2, cY: 0.25, duration: 2, ease: driftEase }, 3.5);
+      tl.to(S, { phRY: PI * 2 + 0.15, phRX: 0.04, cX: 0.15, duration: 1.5, ease: breatheEase }, 5.5);
+      tl.to(S, { phRY: PI * 3, duration: 1.8, ease: snapEase }, 7);
+      tl.to(S, { cZ: CAM.a3, cY: 0.2, duration: 1.5, ease: driftEase }, 7);
+      tl.to(S, { phX: -6, phZ: 0.3, duration: 2, ease: spinEase }, 8);
+      tl.to(S, { lpX: 0, duration: 2, ease: enterEase }, 9);
+      tl.to(S, { cX: 0, clX: 0, cZ: CAM.a4, cY: 0.3, clY: -0.1, duration: 2, ease: driftEase }, 9);
+      tl.to(S, { lpRY: 0.06, duration: 1.5, ease: breatheEase }, 10);
+      tl.to(S, { phX: CAM.phX, duration: 1.5, ease: enterEase }, 11);
+      tl.to(S, { lpX: CAM.lpX, duration: 1.5, ease: breatheEase }, 11);
+      tl.to(S, { cX: CAM.cX, clX: CAM.cX, cZ: CAM.a5, cY: 0.5, clY: -0.1, duration: 1.5, ease: driftEase }, 11);
+      tl.to(S, { phRY: PI * 3, lpRY: 0, duration: 1, ease: breatheEase }, 11);
+      tl.to(S, { turn: PI * 2, duration: 2.5, ease: spinEase }, 12.5);
+      tl.to(S, { scroll: 0.35, duration: 3, ease: breatheEase }, 1.5);
+      tl.to(S, { scroll: 0, duration: 1.5, ease: driftEase }, 7);
+      tl.to(S, { scroll: 0.5, duration: 3, ease: breatheEase }, 9.5);
+      tl.to(S, { scroll: 0.2, duration: 2, ease: driftEase }, 13);
+      if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 0 ? cues[0] : 15);
+      tl.set({}, {}, 30);
+      tl.eventCallback("onUpdate", render);
+      // ход регистрируется сразу под именем блока (у разработчиков – после загрузки моделей и под чужим именем: начало у нас было чёрным)
+      window.__timelines = window.__timelines || {};
+      window.__timelines["vfx-iphone-device-vertical"] = tl;
+
+      var loader = new THREE.GLTFLoader();
+      function load(url) {
+        return new Promise(function (res) {
+          loader.load(url, res, undefined, function (e) {
+            console.warn("device: model not loaded", url, e);
+            res(null);
+          });
+        });
+      }
+      Promise.all([load("assets/device/iphone.glb"), load("assets/device/macbook.glb"), loadImg($("phone"), PH), loadImg($("laptop"), LP)]).then(function (r) {
+        if (r[0]) {
+          var m = r[0].scene;
+          var box = new THREE.Box3().setFromObject(m);
+          m.scale.setScalar(3.2 / box.getSize(new THREE.Vector3()).y);
+          box.setFromObject(m);
+          m.position.sub(box.getCenter(new THREE.Vector3()));
+          m.traverse(function (child) {
+            if (child.isMesh && child.name.indexOf("front-glass") === 0) {
+              planarScreenUv(child);
+              child.material = new THREE.MeshBasicMaterial({ map: PH.tex });
+            }
+          });
+          alignScreenToMinusZ(m, "front-glass", "rear-window");
+          phoneGrp.add(m);
+        }
+        if (r[1]) {
+          var mb = r[1].scene;
+          var bx = new THREE.Box3().setFromObject(mb);
+          var sz = bx.getSize(new THREE.Vector3());
+          mb.scale.setScalar(4.5 / Math.max(sz.x, sz.z));
+          bx.setFromObject(mb);
+          mb.position.sub(bx.getCenter(new THREE.Vector3()));
+          mb.traverse(function (child) {
+            if (child.isMesh && child.name.replace(/\.\d+$/, "") === "display") {
+              planarScreenUv(child);
+              child.material = new THREE.MeshBasicMaterial({ map: LP.tex });
+            }
+          });
+          lapGrp.add(mb);
+        }
+        PH.last = LP.last = -1;
+        render();
+      });
+      render();
+      })();
+    </script>
+  </body>
+</html>

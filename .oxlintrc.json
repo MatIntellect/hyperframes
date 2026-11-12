@@ -13,7 +13,7 @@
     "packages/producer/tests/**/src/vendor/**",
     "docs/public/catalog/",
     "registry/blocks/**/lib/*.iife.js",
-    "registry/blocks/{glass-shard-title,glass-shard-title-vertical,code-slice-hero,cuboid-carousel,cuboid-carousel-vertical,frost-sequence-camera-orbit,orbit-card,orbit-card-vertical}/**/*.{js,mjs}",
+    "registry/blocks/{glass-shard-title,glass-shard-title-vertical,code-slice-hero,cuboid-carousel,cuboid-carousel-vertical,frost-sequence-camera-orbit,frost-sequence-camera-orbit-vertical,orbit-card,orbit-card-vertical}/**/*.{js,mjs}",
     "registry/blocks/frost-sequence-camera-orbit/source/**",
     "registry/examples/path-traced-3d/assets/vendor/*.min.js",
     "chrome/",

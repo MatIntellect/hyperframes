@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "ui-3d-reveal",
+  "type": "hyperframes:block",
+  "title": "3D UI Reveal",
+  "description": "The MatIntellect mark draws itself, then a Figma window with a MatIntellect app on the canvas rises, pushes in and tilts into 3D before flying away; the mark redraws with a tagline and an address pill. Tagline, address, cues and exit are variables; holds or fades.",
+  "tags": ["showcase", "3d", "reveal", "figma", "ui", "logo"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "ui-3d-reveal.html",
+      "target": "compositions/ui-3d-reveal.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

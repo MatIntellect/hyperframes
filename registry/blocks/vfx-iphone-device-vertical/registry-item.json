@@ -1,0 +1,40 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-iphone-device-vertical",
+  "type": "hyperframes:block",
+  "title": "iPhone & MacBook Showcase (vertical)",
+  "description": "Vertical iPhone and MacBook show in the 780x1180 field, or on a top / bottom card: phone close-up, spin, MacBook, both on a turntable. Screens are image variables (long pages scroll); holds or fades.",
+  "tags": ["3d", "device", "iphone", "macbook", "gltf", "showcase", "screenshot", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-iphone-device-vertical.html",
+      "target": "compositions/vfx-iphone-device-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/device/iphone.glb",
+      "target": "assets/device/iphone.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/laptop-page.jpg",
+      "target": "assets/device/laptop-page.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/macbook.glb",
+      "target": "assets/device/macbook.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/phone-page.jpg",
+      "target": "assets/device/phone-page.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

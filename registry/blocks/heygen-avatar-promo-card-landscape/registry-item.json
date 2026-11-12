@@ -1,0 +1,56 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "heygen-avatar-promo-card-landscape",
+  "type": "hyperframes:block",
+  "title": "Avatar Promo Card (landscape)",
+  "description": "MatIntellect promo card, landscape: a Bebas headline over a moving belt of talking-head videos with brand tiles, centred card on the brand dark ground. Words, belt videos, colours and an optional offer (value, promo code – empty by default, tiles stay plain) are variables; holds to the end of the mount; no music.",
+  "tags": ["showcase", "avatar", "promotion", "landscape"],
+  "author": "HeyGen",
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "heygen-avatar-promo-card-landscape.html",
+      "target": "compositions/heygen-avatar-promo-card-landscape.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/av_r1k1.mp4",
+      "target": "assets/av_r1k1.mp4",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/833c8e5e6e9ddd7f.mp4"
+    },
+    {
+      "path": "assets/av_r1k3.mp4",
+      "target": "assets/av_r1k3.mp4",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/1602b62222b3812c.mp4"
+    },
+    {
+      "path": "assets/av_r1k4.mp4",
+      "target": "assets/av_r1k4.mp4",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/3b524891a8beee03.mp4"
+    },
+    {
+      "path": "assets/av_r2k0.mp4",
+      "target": "assets/av_r2k0.mp4",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/70e17234ad8c5b70.mp4"
+    },
+    {
+      "path": "assets/av_r2k2.mp4",
+      "target": "assets/av_r2k2.mp4",
+      "type": "hyperframes:asset",
+      "url": "https://static.heygen.ai/hyperframes-oss/registry-assets/a49b79d1a6e960ed.mp4"
+    },
+    {
+      "path": "assets/img/matintellect-mark.svg",
+      "target": "assets/img/matintellect-mark.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

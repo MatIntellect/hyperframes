@@ -1,0 +1,40 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-iphone-device",
+  "type": "hyperframes:block",
+  "title": "iPhone & MacBook Showcase",
+  "description": "3D iPhone and MacBook product show over a dark brand ground: phone screen close-up, spin to the back, the phone leaves, the MacBook enters, both settle and turn on a turntable, a small glass lens drifts by. The two screens are image variables (a long page scrolls); by default the MatIntellect mobile and desktop pages; holds or fades.",
+  "tags": ["3d", "device", "iphone", "macbook", "gltf", "showcase", "screenshot"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-iphone-device.html",
+      "target": "compositions/vfx-iphone-device.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/device/iphone.glb",
+      "target": "assets/device/iphone.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/laptop-page.jpg",
+      "target": "assets/device/laptop-page.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/macbook.glb",
+      "target": "assets/device/macbook.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/device/phone-page.jpg",
+      "target": "assets/device/phone-page.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

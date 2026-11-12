@@ -1,0 +1,555 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-resolution="portrait"
+  data-composition-variables='[
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the card colour to the frame edge, logo, headline, subhead, moving avatar belt and pills in the 780x1180 field (y 180-1360). top / bottom: a 780x760 card with the headline over the belt at y 180-940 / 600-1360, rest of the frame transparent; subhead and pills are not shown there.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Square brand mark: in the header next to the name and on two belt tiles.", "default": "assets/img/matintellect-mark.svg"},
+    {"id": "brandName", "type": "string", "role": "content", "label": "Brand name", "description": "Name next to the mark in the header (full placement only).", "maxLength": 14, "default": "MatIntellect"},
+    {"id": "video1", "type": "string", "role": "content", "label": "Belt video 1", "description": "Video file (path or URL) on belt tile 1, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r1k1.mp4"},
+    {"id": "video2", "type": "string", "role": "content", "label": "Belt video 2", "description": "Video file (path or URL) on belt tile 2, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r1k3.mp4"},
+    {"id": "video3", "type": "string", "role": "content", "label": "Belt video 3", "description": "Video file (path or URL) on belt tile 3, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r1k4.mp4"},
+    {"id": "video4", "type": "string", "role": "content", "label": "Belt video 4", "description": "Video file (path or URL) on belt tile 4, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r2k0.mp4"},
+    {"id": "video5", "type": "string", "role": "content", "label": "Belt video 5", "description": "Video file (path or URL) on belt tile 5, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r2k2.mp4"},
+    {"id": "titleLine1", "type": "string", "role": "content", "label": "Headline line 1", "description": "First headline line.", "maxLength": 13, "default": "Монтаж рилсов"},
+    {"id": "titleLine2", "type": "string", "role": "content", "label": "Headline line 2", "description": "Second headline line.", "maxLength": 13, "default": "из записи."},
+    {"id": "subhead", "type": "string", "role": "content", "label": "Subhead", "description": "Supporting line under the headline (full placement only).", "maxLength": 36, "default": "Субтитры, графика и звук за минуты."},
+    {"id": "pill1", "type": "string", "role": "content", "label": "Pill 1", "description": "First feature pill (full placement only).", "maxLength": 14, "default": "БЕЗ МОНТАЖЁРА"},
+    {"id": "pill2", "type": "string", "role": "content", "label": "Pill 2", "description": "Second feature pill (full placement only).", "maxLength": 14, "default": "ЗА МИНУТЫ"},
+    {"id": "offerValue", "type": "string", "role": "content", "label": "Offer value", "description": "Large offer value in the light tile. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 6, "default": ""},
+    {"id": "offerSuffix", "type": "string", "role": "content", "label": "Offer suffix", "description": "Large word in the adjacent light tile. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 7, "default": ""},
+    {"id": "codeLabel", "type": "string", "role": "content", "label": "Promo code label", "description": "Small label above the promo code. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 10, "default": ""},
+    {"id": "promoPrefix", "type": "string", "role": "content", "label": "Promo code prefix", "description": "Accent-colored promo-code prefix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 5, "default": ""},
+    {"id": "promoSuffix", "type": "string", "role": "content", "label": "Promo code suffix", "description": "Light promo-code suffix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 3, "default": ""},
+    {"id": "canvasColor", "type": "color", "role": "style", "label": "Canvas color", "description": "Main card background.", "default": "#0c1014"},
+    {"id": "inkColor", "type": "color", "role": "style", "label": "Ink color", "description": "Primary headline, pill, and offer ink.", "default": "#f2f2f2"},
+    {"id": "mutedInkColor", "type": "color", "role": "style", "label": "Muted ink color", "description": "Subhead ink.", "default": "#8a8a90"},
+    {"id": "accentColor", "type": "color", "role": "style", "label": "Accent color", "description": "Brand accent used by tiles and promo-code prefix.", "default": "#ff0000"},
+    {"id": "lightTileColor", "type": "color", "role": "style", "label": "Light tile color", "description": "Light belt-tile surface.", "default": "#18181a"},
+    {"id": "darkTileColor", "type": "color", "role": "style", "label": "Dark tile color", "description": "Dark belt-tile surface.", "default": "#2e2e32"},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the header starts its fade-in (the belt moves for 10 s from the mount start, then holds), 2 the card leaves (only when exit is not none). Empty keeps 0, 9.5.", "default": ""},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
+  ]'
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        overflow: hidden;
+        font-family: "Montserrat", sans-serif;
+      }
+      #heygen-avatar-promo-card {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        --apc-canvas: #0c1014;
+        --apc-ink: #f2f2f2;
+        --apc-muted: #8a8a90;
+        --apc-accent: #ff0000;
+        --apc-light-tile: #18181a;
+        --apc-dark-tile: #2e2e32;
+      }
+      .bgfill {
+        position: absolute;
+        inset: 0;
+        background: var(--apc-canvas);
+      }
+      /* the authored 1080-wide layout, from the logo (y 118) to the pills (y 1682), as one stage */
+      #apc-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1564px;
+        transform-origin: 0 0;
+      }
+      /* the stage is the 780 field: 1080 x 0.7222 = 780 at x 150; the belt is clipped to it */
+      .apc-full #apc-stage {
+        transform: translate(150px, 180px) scale(0.7222);
+        overflow: hidden;
+      }
+      #apc-card {
+        position: absolute;
+        left: 150px;
+        width: 780px;
+        top: 180px;
+        height: 760px;
+        overflow: hidden;
+      }
+      .apc-full #apc-card {
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      .apc-bottom #apc-card {
+        top: 600px;
+      }
+      .apc-top #apc-card,
+      .apc-bottom #apc-card {
+        border-radius: 40px;
+        background: var(--apc-canvas);
+      }
+      .apc-top #apc-stage,
+      .apc-bottom #apc-stage {
+        transform: translate(23px, -128px) scale(0.68);
+      }
+      .apc-top #apc-hdr-logo,
+      .apc-bottom #apc-hdr-logo,
+      .apc-top #apc-hdr-subhead,
+      .apc-bottom #apc-hdr-subhead,
+      .apc-top #apc-hdr-pills,
+      .apc-bottom #apc-hdr-pills {
+        display: none;
+      }
+      .apc-top #apc-hdr-title,
+      .apc-bottom #apc-hdr-title {
+        top: 240px;
+        font-size: 128px;
+        line-height: 128px;
+      }
+
+      .hdr {
+        position: absolute;
+        left: 0;
+        width: 1080px;
+        text-align: center;
+        color: var(--apc-ink);
+      }
+      #apc-hdr-logo {
+        top: 0;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        font-weight: 700;
+        font-size: 40px;
+      }
+      #apc-hdr-logo img {
+        height: 56px;
+      }
+      #apc-hdr-title {
+        top: 87px;
+        font-family: "Bebas Neue", sans-serif;
+        font-weight: 400;
+        font-size: 148px;
+        line-height: 150px;
+        letter-spacing: 0.01em;
+      }
+      #apc-hdr-subhead {
+        top: 406px;
+        font-weight: 500;
+        font-size: 40px;
+        color: var(--apc-muted);
+        letter-spacing: -0.01em;
+      }
+      #apc-hdr-pills {
+        top: 1472px;
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+      }
+      .pill {
+        border: 2px solid var(--apc-ink);
+        border-radius: 999px;
+        padding: 0 42px;
+        height: 92px;
+        line-height: 88px;
+        font-weight: 600;
+        font-size: 40px;
+        letter-spacing: 0.06em;
+        color: var(--apc-ink);
+        white-space: nowrap;
+      }
+
+      #apc-belt-linear {
+        position: absolute;
+        top: 522px;
+        left: 0;
+        width: 2600px;
+        height: 784px;
+      }
+      #apc-belt-entry {
+        position: absolute;
+        inset: 0;
+      }
+      .tile {
+        position: absolute;
+        width: 362px;
+        height: 380px;
+        border-radius: 30px;
+        overflow: hidden;
+        display: block;
+      }
+      .row1 {
+        top: 0;
+      }
+      .row2 {
+        top: 404px;
+      }
+      video.tile {
+        object-fit: cover;
+      }
+      .light {
+        background: var(--apc-light-tile);
+      }
+      .dark {
+        background: var(--apc-dark-tile);
+      }
+      .cyan {
+        background: var(--apc-accent);
+      }
+      .serif-tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Bebas Neue", sans-serif;
+        font-weight: 400;
+        font-size: 165px;
+        color: var(--apc-ink);
+        white-space: nowrap;
+      }
+      .brand-tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .brand-tile img {
+        width: 200px;
+      }
+      .code-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+      }
+      .code-tile .code {
+        font-weight: 600;
+        font-size: 42px;
+        letter-spacing: 0.12em;
+        color: var(--apc-muted);
+      }
+      .code-tile .promo {
+        font-weight: 800;
+        font-size: 92px;
+        letter-spacing: -0.01em;
+      }
+      .code-tile .promo .gen {
+        color: var(--apc-accent);
+      }
+      .code-tile .promo .n25 {
+        color: var(--apc-ink);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="heygen-avatar-promo-card"
+      data-composition-id="heygen-avatar-promo-card"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="30"
+      data-fps="25"
+    >
+      <div class="bgfill" data-layout-allow-occlusion></div>
+      <div id="apc-card">
+        <div id="apc-stage">
+          <!-- belt: geometry + motion law measured from the reference -->
+          <div id="apc-belt-linear">
+            <div id="apc-belt-entry">
+              <!-- row 1 -->
+              <div class="tile row1 cyan brand-tile" style="left: 139.1px">
+                <img src="assets/img/matintellect-mark.svg" alt="" />
+              </div>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k1"
+                src="assets/av_r1k1.mp4" data-var-src="video1"
+                style="left: 523.4px"
+                data-start="0"
+                data-duration="8.60"
+                data-track-index="1"
+                muted
+                playsinline
+              ></video>
+              <div id="apc-offer-value" class="tile row1 light serif-tile" style="left: 907.7px"></div>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3"
+                src="assets/av_r1k3.mp4" data-var-src="video2"
+                style="left: 1292px"
+                data-start="1.44"
+                data-duration="8.56"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3-b"
+                src="assets/av_r1k3.mp4" data-var-src="video2"
+                style="left: 1292px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k3-c"
+                src="assets/av_r1k3.mp4" data-var-src="video2"
+                style="left: 1292px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="2"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4"
+                src="assets/av_r1k4.mp4" data-var-src="video3"
+                style="left: 1676.3px"
+                data-start="5.56"
+                data-duration="4.44"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4-b"
+                src="assets/av_r1k4.mp4" data-var-src="video3"
+                style="left: 1676.3px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k4-c"
+                src="assets/av_r1k4.mp4" data-var-src="video3"
+                style="left: 1676.3px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="3"
+                muted
+                playsinline
+              ></video>
+              <div class="tile row1 cyan" style="left: 2060.6px"></div>
+              <!-- row 2 -->
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k0"
+                src="assets/av_r2k0.mp4" data-var-src="video4"
+                style="left: 139.1px"
+                data-start="0"
+                data-duration="4.48"
+                data-track-index="4"
+                muted
+                playsinline
+              ></video>
+              <div id="apc-offer-suffix" class="tile row2 light serif-tile" style="left: 523.4px"></div>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2"
+                src="assets/av_r2k2.mp4" data-var-src="video5"
+                style="left: 907.7px"
+                data-start="0"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2-b"
+                src="assets/av_r2k2.mp4" data-var-src="video5"
+                style="left: 907.7px"
+                data-start="10"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row2 clip"
+                id="apc-v-r2k2-c"
+                src="assets/av_r2k2.mp4" data-var-src="video5"
+                style="left: 907.7px"
+                data-start="20"
+                data-duration="10"
+                data-track-index="5"
+                muted
+                playsinline
+              ></video>
+              <div class="tile row2 dark code-tile" style="left: 1292px">
+                <div id="apc-code-label" class="code"></div>
+                <div class="promo">
+                  <span id="apc-promo-prefix" class="gen"></span
+                  ><span id="apc-promo-suffix" class="n25"></span>
+                </div>
+              </div>
+              <div class="tile row2 light brand-tile" style="left: 1676.3px">
+                <img src="assets/img/matintellect-mark.svg" alt="" />
+              </div>
+              <div class="tile row2 dark" style="left: 2060.6px"></div>
+            </div>
+          </div>
+
+          <!-- header block -->
+          <div class="hdr" id="apc-hdr-logo"><img src="assets/img/matintellect-mark.svg" alt="" /><span id="apc-brand-name">MatIntellect</span></div>
+          <div class="hdr" id="apc-hdr-title">
+            Монтаж рилсов
+            <div id="apc-title-line-2">из записи.</div>
+          </div>
+          <div class="hdr" id="apc-hdr-subhead">Субтитры, графика и звук за минуты.</div>
+          <div class="hdr" id="apc-hdr-pills">
+            <div id="apc-pill-1" class="pill">БЕЗ МОНТАЖЁРА</div>
+            <div id="apc-pill-2" class="pill">ЗА МИНУТЫ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const variables =
+        window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+          ? window.__hyperframes.getVariables()
+          : {};
+      const root = document.getElementById("heygen-avatar-promo-card");
+      const text = (id, fallback) =>
+        typeof variables[id] === "string" && variables[id].trim() ? variables[id] : fallback;
+      const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
+
+      const placement = oneOf(variables.placement, ["full", "top", "bottom"], "full");
+      root.classList.add("apc-" + placement);
+      if (placement !== "full") root.querySelector(".bgfill").remove();
+
+      root.style.setProperty("--apc-canvas", text("canvasColor", "#0c1014"));
+      root.style.setProperty("--apc-ink", text("inkColor", "#f2f2f2"));
+      root.style.setProperty("--apc-muted", text("mutedInkColor", "#8a8a90"));
+      root.style.setProperty("--apc-accent", text("accentColor", "#ff0000"));
+      root.style.setProperty("--apc-light-tile", text("lightTileColor", "#18181a"));
+      root.style.setProperty("--apc-dark-tile", text("darkTileColor", "#2e2e32"));
+      document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
+        image.src = text("brandLogo", "assets/img/matintellect-mark.svg");
+      });
+      document.getElementById("apc-brand-name").textContent = text("brandName", "MatIntellect");
+      document.getElementById("apc-hdr-title").firstChild.nodeValue = text("titleLine1", "Монтаж рилсов");
+      document.getElementById("apc-title-line-2").textContent = text("titleLine2", "из записи.");
+      document.getElementById("apc-hdr-subhead").textContent = text("subhead", "Субтитры, графика и звук за минуты.");
+      document.getElementById("apc-pill-1").textContent = text("pill1", "БЕЗ МОНТАЖЁРА");
+      document.getElementById("apc-pill-2").textContent = text("pill2", "ЗА МИНУТЫ");
+      document.getElementById("apc-code-label").textContent = text("codeLabel", "");
+      document.getElementById("apc-promo-prefix").textContent = text("promoPrefix", "");
+      document.getElementById("apc-promo-suffix").textContent = text("promoSuffix", "");
+      // the promo code fills the same 362 px tile: like the offer words, the size follows the letter count (about 0.75 em a letter)
+      const promoLength = (text("promoPrefix", "") + text("promoSuffix", "")).length;
+      root.querySelector(".code-tile .promo").style.fontSize =
+        Math.min(92, Math.floor(322 / (Math.max(promoLength, 1) * 0.75))) + "px";
+      // the offer words fill a 362 px tile: the size follows the letter count, never the width at runtime
+      [
+        ["apc-offer-value", "offerValue", "", 165],
+        ["apc-offer-suffix", "offerSuffix", "", 146],
+      ].forEach(([id, key, fallback, max]) => {
+        const el = document.getElementById(id);
+        const value = text(key, fallback);
+        el.textContent = value;
+        el.style.fontSize = Math.min(max, Math.floor(420 / Math.max(value.length, 1))) + "px";
+      });
+
+      const cues = String(variables.cues || "")
+        .split(",")
+        .map((v) => parseFloat(v));
+      const at = (i, d) => (isFinite(cues[i]) ? cues[i] : d);
+      const h = at(0, 0);
+      const exit = oneOf(variables.exit, ["none", "fade"], "none");
+
+      const tl = gsap.timeline({ paused: true });
+
+      // Belt conveyor — measured from reference: 93.601 px/s constant, leftward; holds after 10 s
+      tl.fromTo("#apc-belt-linear", { x: 0 }, { x: -936.01, duration: 10, ease: "none" }, 0);
+      // Belt entry — measured offset table, one keyframe per source frame, linear between
+      const entryX = [
+        0, -11.39, -21.64, -30.9, -39.04, -46.29, -52.55, -57.98, -62.72, -66.71, -69.99, -72.75,
+        -74.86, -76.52, -77.85, -78.8, -79.36, -79.75, -79.87, -79.94, -80.0,
+      ];
+      for (let i = 1; i < entryX.length; i++) {
+        tl.fromTo(
+          "#apc-belt-entry",
+          { x: entryX[i - 1] },
+          { x: entryX[i], duration: 0.04, ease: "none", immediateRender: i === 1 },
+          (i - 1) * 0.04,
+        );
+      }
+
+      // Header waterfall — measured fades, from cue 1
+      tl.fromTo(
+        "#apc-hdr-logo",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
+        h,
+      );
+      tl.fromTo(
+        "#apc-hdr-title",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
+        h + 0.1,
+      );
+      tl.fromTo(
+        "#apc-hdr-subhead",
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.4, ease: "power2.out" },
+        h + 0.5,
+      );
+      if (exit === "fade")
+        tl.to("#apc-card", { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, at(1, 9.5));
+      tl.set({}, {}, 30);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["heygen-avatar-promo-card"] = tl;
+    </script>
+  </body>
+</html>

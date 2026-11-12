@@ -1,0 +1,812 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the phone in the middle of the 780x1180 field (y 180-1360), the scene to the frame edge. top / bottom: a close-up of the top of the phone with the notifications on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "n1app", "type": "string", "role": "content", "label": "Notification 1 app", "description": "Bold app name of the first glass notification, Messages icon.", "maxLength": 12, "default": "Сообщения" },
+    { "id": "n1time", "type": "string", "role": "content", "label": "Notification 1 time", "description": "Time on the right of the first notification.", "maxLength": 6, "default": "сейчас" },
+    { "id": "n1text", "type": "string", "role": "content", "label": "Notification 1 text", "description": "Text of the first notification, up to three lines.", "maxLength": 40, "default": "Аня: ролик огонь, выкладываем?" },
+    { "id": "n2icon", "type": "image", "role": "content", "label": "Notification 2 icon", "description": "Square app icon of the second notification, rounded.", "default": "assets/ios26/matintellect.svg" },
+    { "id": "n2app", "type": "string", "role": "content", "label": "Notification 2 app", "description": "Bold app name of the second notification.", "maxLength": 12, "default": "MatIntellect" },
+    { "id": "n2time", "type": "string", "role": "content", "label": "Notification 2 time", "maxLength": 6, "default": "1 мин" },
+    { "id": "n2text", "type": "string", "role": "content", "label": "Notification 2 text", "description": "Text of the second notification, up to three lines.", "maxLength": 40, "default": "Субтитры и графика готовы" },
+    { "id": "n3app", "type": "string", "role": "content", "label": "Notification 3 app", "description": "Bold app name of the third notification, Gmail icon.", "maxLength": 12, "default": "Gmail" },
+    { "id": "n3time", "type": "string", "role": "content", "label": "Notification 3 time", "maxLength": 6, "default": "2 мин" },
+    { "id": "n3text", "type": "string", "role": "content", "label": "Notification 3 text", "description": "Text of the third notification, up to three lines.", "maxLength": 40, "default": "Клиент принял ролик без правок" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1, 2, 3 the glass notifications drop in one under another; 4 the block fades out (only when exit is fade). The camera drifts back and the phone breathes for 15 s, then rests. Empty keeps 0.85, 1.7, 2.55.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the phone to the end of the mount; fade fades the block out at cue 4.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        background: transparent;
+        overflow: hidden;
+      }
+      #iosv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #iosv-frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      
+      #iosv-root.iosv-card #iosv-frame {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #iosv-root.iosv-card.iosv-bottom #iosv-frame {
+        top: 600px;
+      }
+      
+      #iosv-cap,
+      #iosv-theater {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      #iosv-cap {
+        width: 390px;
+        height: 844px;
+        pointer-events: none;
+      }
+      /* экран телефона – узор: текстура на 3D-модели, читают только уведомления (они рисуются на холсте, шрифт ≥ 28 px на экране) */
+      .iosv-home {
+        position: relative;
+        width: 390px;
+        height: 844px;
+        overflow: hidden;
+        background: #010101;
+        color: #fff;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      .iosv-wall {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 50% 50%, rgba(12, 16, 20, 0.96), transparent 31%),
+          radial-gradient(circle at 50% 54%, rgba(255, 255, 255, 0.06), transparent 8%),
+          linear-gradient(180deg, #020202, #000);
+      }
+      .iosv-wall::before,
+      .iosv-wall::after {
+        content: "";
+        position: absolute;
+        left: 92px;
+        top: 210px;
+        width: 210px;
+        height: 360px;
+        border-radius: 50% 50% 42% 46%;
+        border: 4px solid transparent;
+        background:
+          linear-gradient(#020202, #020202) padding-box,
+          conic-gradient(
+              from 215deg,
+              rgba(255, 255, 255, 0),
+              rgba(242, 242, 242, 0.92),
+              var(--accent, #ff0000),
+              rgba(242, 242, 242, 0.5),
+              var(--accent, #ff0000),
+              rgba(255, 255, 255, 0)
+            )
+            border-box;
+        filter: blur(0.35px);
+        opacity: 0.82;
+        transform: rotate(7deg);
+      }
+      .iosv-wall::after {
+        left: 118px;
+        top: 400px;
+        width: 140px;
+        height: 190px;
+        border-width: 3px;
+        opacity: 0.62;
+        transform: rotate(-27deg);
+      }
+      .iosv-status {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 27px 30px 10px;
+        color: #f6f6f6;
+        font-size: 22px;
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+      }
+      .iosv-sl,
+      .iosv-sr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .iosv-signal {
+        display: flex;
+        align-items: end;
+        gap: 3px;
+        height: 18px;
+      }
+      .iosv-signal span {
+        width: 5px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.92);
+      }
+      .iosv-signal span:nth-child(1) {
+        height: 7px;
+      }
+      .iosv-signal span:nth-child(2) {
+        height: 10px;
+      }
+      .iosv-signal span:nth-child(3) {
+        height: 13px;
+      }
+      .iosv-signal span:nth-child(4) {
+        height: 17px;
+        background: rgba(255, 255, 255, 0.48);
+      }
+      .iosv-battery {
+        position: relative;
+        min-width: 34px;
+        height: 21px;
+        padding: 1px 5px 0;
+        border-radius: 6px;
+        background: #59d768;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 20px;
+      }
+      .iosv-grid {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px 22px;
+        padding: 20px 28px 0;
+      }
+      .iosv-app {
+        text-align: center;
+      }
+      .iosv-icon {
+        display: block;
+        width: 62px;
+        height: 62px;
+        object-fit: cover;
+        border-radius: 18px;
+        box-shadow:
+          0 8px 20px rgba(0, 0, 0, 0.34),
+          inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        filter: grayscale(1) saturate(0.08) contrast(1.2) brightness(0.86);
+      }
+      .iosv-app .iosv-icon {
+        margin: 0 auto 7px;
+      }
+      .iosv-label {
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.1;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        white-space: nowrap;
+      }
+      .iosv-search {
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        bottom: 105px;
+        width: 116px;
+        padding: 9px 0;
+        border-radius: 19px;
+        background: rgba(255, 255, 255, 0.11);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        transform: translateX(-50%);
+      }
+      .iosv-dock {
+        position: absolute;
+        z-index: 2;
+        left: 14px;
+        right: 14px;
+        bottom: 13px;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 16px;
+        border-radius: 37px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+      }
+      .iosv-dock div {
+        position: relative;
+      }
+      .iosv-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        min-width: 24px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: #f7f7f7;
+        color: #303030;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .iosv-pre {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="iosv-root" data-composition-id="ios26-liquid-glass-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="iosv-frame">
+        <canvas id="iosv-cap" layoutsubtree width="390" height="844" data-layout-ignore>
+          <div class="iosv-home" id="iosv-home" data-layout-ignore>
+            <div class="iosv-wall"></div>
+            <div class="iosv-status">
+              <div class="iosv-sl"><span>15:16</span></div>
+              <div class="iosv-sr">
+                <div class="iosv-signal"><span></span><span></span><span></span><span></span></div>
+                <div class="iosv-battery">92</div>
+              </div>
+            </div>
+            <div class="iosv-grid" id="iosv-grid"></div>
+            <div class="iosv-search">Поиск</div>
+            <div class="iosv-dock" id="iosv-dock"></div>
+            <img class="iosv-pre" id="iosv-n1i" src="assets/ios26/icons/notify-messages.jpg" alt="" />
+            <img class="iosv-pre" id="iosv-n2i" data-var-src="n2icon" src="assets/ios26/matintellect.svg" alt="" />
+            <img class="iosv-pre" id="iosv-n3i" src="assets/ios26/icons/gmail.jpg" alt="" />
+          </div>
+        </canvas>
+        <canvas id="iosv-theater" width="1080" height="1920"></canvas>
+      </div>
+    </div>
+    <script>
+      // уведомления рисуются шрифтом бренда на холсте – строим после его загрузки (runtimes.md)
+      Promise.all([document.fonts.load('700 30px "Montserrat"'), document.fonts.load('600 30px "Montserrat"')]).then(function () {
+      var V =
+        window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+          ? window.__hyperframes.getVariables()
+          : {};
+      function txt(v, d) {
+        return typeof v === "string" && v.trim() ? v.trim() : d;
+      }
+      function oneOf(v, list, d) {
+        return list.indexOf(v) >= 0 ? v : d;
+      }
+      var $ = function (id) {
+        return document.getElementById("iosv-" + id);
+      };
+      var PI = Math.PI;
+      var root = $("root"),
+        frame = $("frame");
+      var css = getComputedStyle(root);
+      var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
+        SURF = css.getPropertyValue("--surface").trim() || "#18181a",
+        ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+
+      // раскладка: размер кадра и камера (родная – 16:9; K – во сколько раз дальше камера, OFF – сдвиг взгляда по высоте)
+      var W = 1920,
+        H = 1080,
+        K = 1,
+        OFF = 0;
+      
+      var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+      W = 1080;
+      H = 1920;
+      K = 1.469; // телефон ~1150 px в высоту – в поле 1180
+      OFF = -0.53; // середина телефона на y 770
+      if (placement !== "full") {
+        root.classList.add("iosv-card", "iosv-" + placement);
+        W = 780;
+        H = 760;
+        K = 0.523; // крупно верх телефона с уведомлениями
+        OFF = 0.77;
+      }
+      
+      var theater = $("theater");
+      theater.width = W;
+      theater.height = H;
+      theater.style.width = W + "px";
+      theater.style.height = H + "px";
+
+      // ── экран: родные 24 приложения и док (подписи русской iOS) ──
+      var APPS = [
+        ["weather", "Погода"], ["stocks", "Акции"], ["find-my", "Локатор"], ["home", "Дом"],
+        ["books", "Книги"], ["itunes-store", "iTunes Store"], ["fitness", "Фитнес"], ["watch", "Watch"],
+        ["contacts", "Контакты"], ["files", "Файлы"], ["translate", "Перевод"], ["calendar", "Календарь"],
+        ["photos", "Фото"], ["chatgpt", "ChatGPT"], ["slack", "Slack"], ["instagram", "Instagram"],
+        ["x", "X"], ["proton-mail", "Proton Mail"], ["gmail", "Gmail"], ["revolut", "Revolut"],
+        ["phone", "Телефон"], ["brave", "Brave"], ["whatsapp", "WhatsApp"], ["music", "Музыка"],
+      ];
+      $("grid").innerHTML = APPS.map(function (a) {
+        return '<div class="iosv-app"><img class="iosv-icon" src="assets/ios26/icons/' + a[0] + '.jpg" alt="" /><div class="iosv-label">' + a[1] + "</div></div>";
+      }).join("");
+      $("dock").innerHTML = [["phone", "9+"], ["brave", ""], ["whatsapp", "282"], ["music", ""]]
+        .map(function (d) {
+          return '<div><img class="iosv-icon" src="assets/ios26/icons/' + d[0] + '.jpg" alt="" />' + (d[1] ? '<span class="iosv-badge">' + d[1] + "</span>" : "") + "</div>";
+        })
+        .join("");
+
+      var NOTES = [
+        { icon: $("n1i"), app: txt(V.n1app, "Сообщения"), time: txt(V.n1time, "сейчас"), text: txt(V.n1text, "Аня: ролик огонь, выкладываем?") },
+        { icon: $("n2i"), app: txt(V.n2app, "MatIntellect"), time: txt(V.n2time, "1 мин"), text: txt(V.n2text, "Субтитры и графика готовы") },
+        { icon: $("n3i"), app: txt(V.n3app, "Gmail"), time: txt(V.n3time, "2 мин"), text: txt(V.n3text, "Клиент принял ролик без правок") },
+      ];
+      var cues = String(V.cues || "")
+        .split(",")
+        .map(function (v) {
+          return parseFloat(v);
+        });
+      function cue(i, d) {
+        return isFinite(cues[i]) && cues[i] >= 0 ? cues[i] : d;
+      }
+      var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+      // ── Renderer ──
+      var renderer = new THREE.WebGLRenderer({ canvas: theater, antialias: true, preserveDrawingBuffer: true });
+      renderer.setSize(W, H, false);
+      renderer.setPixelRatio(1);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      var bgCol = new THREE.Color(BG);
+      renderer.setClearColor(bgCol, 1);
+      var scene = new THREE.Scene();
+      scene.background = bgCol;
+      var camera = new THREE.PerspectiveCamera(34, W / H, 0.1, 100);
+
+      // ── Environment Map (родная) ──
+      var eC = document.createElement("canvas");
+      eC.width = 1024;
+      eC.height = 512;
+      var ec = eC.getContext("2d");
+      var eg = ec.createLinearGradient(0, 0, 1024, 512);
+      eg.addColorStop(0, "#020307");
+      eg.addColorStop(0.15, "#1a1a1e");
+      eg.addColorStop(0.3, "#ffffff");
+      eg.addColorStop(0.45, "#0a0a0e");
+      eg.addColorStop(0.6, "#ffffff");
+      eg.addColorStop(0.75, "#1e1e22");
+      eg.addColorStop(1, "#020307");
+      ec.fillStyle = eg;
+      ec.fillRect(0, 0, 1024, 512);
+      ec.globalCompositeOperation = "screen";
+      for (var ei = 0; ei < 7; ei++) {
+        ec.fillStyle = "rgba(255,255,255," + (ei % 2 === 0 ? 0.15 : 0.08) + ")";
+        ec.fillRect((ei % 3) * 100, 60 + ei * 56, 700, 3 + (ei % 2) * 2);
+      }
+      var eT = new THREE.CanvasTexture(eC);
+      eT.mapping = THREE.EquirectangularReflectionMapping;
+      var pm = new THREE.PMREMGenerator(renderer);
+      scene.environment = pm.fromEquirectangular(eT).texture;
+      eT.dispose();
+      pm.dispose();
+
+      // ── фон: родные волны в цветах темы (--bg, --surface, --accent) ──
+      var bgUniforms = {
+        uTime: { value: 0 },
+        uAspect: { value: W / H },
+        uBg: { value: new THREE.Color(BG) },
+        uSurf: { value: new THREE.Color(SURF) },
+        uAcc: { value: new THREE.Color(ACC) },
+      };
+      var bgPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(28, 16),
+        new THREE.ShaderMaterial({
+          uniforms: bgUniforms,
+          vertexShader: "varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+          fragmentShader:
+            "uniform float uTime;uniform float uAspect;uniform vec3 uBg;uniform vec3 uSurf;uniform vec3 uAcc;varying vec2 v;float wave(vec2 p,float s,float t){return sin(p.x*s+p.y*s*.57+uTime*t);}void main(){vec2 p=v*2.0-1.0;p.x*=uAspect;float w=wave(p,3.0,.22)+.55*wave(p.yx+vec2(.7,-.2),5.1,.16)+.32*wave(p+vec2(-.4,.5),8.0,-.12);float a=smoothstep(-.75,1.05,w);vec3 c=mix(uBg,uSurf*1.8,a);c=mix(c,uAcc*.3,smoothstep(.16,1.1,wave(p+vec2(.8,.1),2.4,.1))*.55);float ribbon=smoothstep(.22,.95,sin(p.x*2.2-p.y*3.1+uTime*.18));c+=uAcc*ribbon*.14;float glow=exp(-dot(p+vec2(.62,-.08),p+vec2(.62,-.08))*1.7);c+=uAcc*.18*glow;float vign=smoothstep(1.85,.25,length(p));gl_FragColor=vec4(c*vign,1.0);}",
+          depthTest: false,
+          depthWrite: false,
+        }),
+      );
+      bgPlane.position.z = -7.5;
+      scene.add(bgPlane);
+      var floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(30, 30),
+        new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.86, roughness: 0.22 }),
+      );
+      floor.rotation.x = -PI / 2;
+      floor.position.y = -2.5;
+      scene.add(floor);
+      scene.add(new THREE.AmbientLight(0x222226, 0.5));
+      var kL = new THREE.DirectionalLight(0xffffff, 2.2);
+      kL.position.set(-3, 4, 5);
+      scene.add(kL);
+      var rL = new THREE.PointLight(new THREE.Color(ACC), 3, 15);
+      rL.position.set(4, 2, 3);
+      scene.add(rL);
+      var wL = new THREE.PointLight(0xffc8a8, 1.5, 12);
+      wL.position.set(-3, -1, 4);
+      scene.add(wL);
+
+      // ── экран: снимок HTML один раз (он неподвижен), уведомления – поверх на холсте 2x ──
+      var capCvs = $("cap");
+      var capCtx = capCvs.getContext("2d");
+      var homeEl = $("home");
+      var apiOk = (function () {
+        var tc = document.createElement("canvas");
+        if (!("layoutSubtree" in tc)) return false;
+        tc.setAttribute("layoutsubtree", "");
+        var c = tc.getContext("2d");
+        return c && typeof c.drawElementImage === "function";
+      })();
+      var base = document.createElement("canvas");
+      base.width = 390;
+      base.height = 844;
+      var baseCtx = base.getContext("2d");
+      var scr = document.createElement("canvas");
+      scr.width = 780;
+      scr.height = 1688;
+      var scrCtx = scr.getContext("2d");
+      var phoneTex = new THREE.CanvasTexture(scr);
+      phoneTex.minFilter = THREE.LinearFilter;
+      phoneTex.magFilter = THREE.LinearFilter;
+      phoneTex.generateMipmaps = false;
+      // экран – картинка в sRGB (вывод тоже sRGB): без пометки тёмные тона поднимались, чёрные обои и стекло выходили серыми, белый текст тонул
+      phoneTex.encoding = THREE.sRGBEncoding;
+
+      function pathRoundRect(ctx, x, y, w, h, r) {
+        var rr = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + rr, y);
+        ctx.lineTo(x + w - rr, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+        ctx.lineTo(x + w, y + h - rr);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+        ctx.lineTo(x + rr, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
+        ctx.lineTo(x, y + rr);
+        ctx.quadraticCurveTo(x, y, x + rr, y);
+        ctx.closePath();
+      }
+      function cbz(p1x, p1y, p2x, p2y) {
+        var ax = 3 * p1x - 3 * p2x + 1,
+          bx = 3 * p2x - 6 * p1x,
+          cx = 3 * p1x;
+        var ay = 3 * p1y - 3 * p2y + 1,
+          by = 3 * p2y - 6 * p1y,
+          cy = 3 * p1y;
+        return function (t) {
+          var s = t;
+          for (var i = 0; i < 12; i++) {
+            var x = ((ax * s + bx) * s + cx) * s - t;
+            var dx = (3 * ax * s + 2 * bx) * s + cx;
+            if (Math.abs(dx) < 1e-10) break;
+            s -= x / dx;
+          }
+          s = Math.max(0, Math.min(1, s));
+          return ((ay * s + by) * s + cy) * s;
+        };
+      }
+      var notificationEase = cbz(0.22, 0.0, 0.16, 1.0);
+      var driftEase = cbz(0.45, 0.0, 0.15, 1.0);
+      var breatheEase = cbz(0.37, 0.0, 0.63, 1.0);
+
+      // ── раскладка уведомлений: шрифт F из увеличения экрана (≥ 28 px в кадре), строки по ширине ──
+      var F = 13,
+        X = 13,
+        CW = 364,
+        PAD = 12,
+        IC = 38,
+        GAP = 8,
+        TOP = 96,
+        LAY = [];
+      function fit(ctx, s, w) {
+        if (ctx.measureText(s).width <= w) return s;
+        while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1);
+        return s + "…";
+      }
+      function wrap(ctx, s, w) {
+        var words = s.split(/\s+/),
+          lines = [],
+          cur = "";
+        words.forEach(function (wd) {
+          var t = cur ? cur + " " + wd : wd;
+          if (ctx.measureText(t).width <= w || !cur) cur = t;
+          else {
+            lines.push(cur);
+            cur = wd;
+          }
+        });
+        if (cur) lines.push(cur);
+        return lines.map(function (l) {
+          return fit(ctx, l, w);
+        });
+      }
+      function layoutNotes() {
+        var top = 0,
+          tx = X + PAD + IC + 10,
+          tw = X + CW - 14 - tx;
+        LAY = NOTES.map(function (n) {
+          scrCtx.font = "600 " + F + 'px "Montserrat"';
+          var lines = wrap(scrCtx, n.text, tw);
+          scrCtx.font = "700 " + F + 'px "Montserrat"';
+          var timeW = scrCtx.measureText(n.time).width;
+          var app = fit(scrCtx, n.app, tw - timeW - 12);
+          var h = PAD * 2 + F * 1.2 + 3 + lines.length * F * 1.2;
+          var o = { app: app, time: n.time, lines: lines, icon: n.icon, top: top, h: h, tx: tx };
+          top += h + GAP;
+          return o;
+        });
+      }
+
+      function drawNote(ctx, n, progress) {
+        var p = Math.max(0, Math.min(1, progress));
+        if (p <= 0.001) return;
+        var q = notificationEase(p);
+        var lift = Math.sin(q * PI);
+        var y = TOP + n.top + (1 - q) * -58 + lift * 6;
+        var x = X,
+          w = CW,
+          h = n.h + lift * 2;
+        ctx.save();
+        ctx.globalAlpha = q * 0.98;
+        ctx.shadowColor = "rgba(0,0,0,0.54)";
+        ctx.shadowBlur = 22;
+        ctx.shadowOffsetY = 14;
+        pathRoundRect(ctx, x, y, w, h, 23);
+        ctx.clip();
+        ctx.filter = "blur(12px) saturate(1.2) brightness(0.9)";
+        ctx.drawImage(base, -4, -4, 398, 852);
+        ctx.filter = "none";
+        pathRoundRect(ctx, x, y, w, h, 23);
+        var fill = ctx.createLinearGradient(x, y, x + w, y + h);
+        // тёмное стекло (тёмная тема iOS): белый текст уведомления читается, у разработчиков светлое стекло с белым текстом сливалось
+        fill.addColorStop(0, "rgba(78,78,84,0.66)");
+        fill.addColorStop(0.45, "rgba(44,44,50,0.7)");
+        fill.addColorStop(1, "rgba(24,24,28,0.76)");
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.globalCompositeOperation = "screen";
+        var caustic = ctx.createLinearGradient(x + 40, y, x + w - 20, y + h);
+        caustic.addColorStop(0, "rgba(255,255,255,0.16)");
+        caustic.addColorStop(0.5, "rgba(255,80,80,0.08)");
+        caustic.addColorStop(1, "rgba(255,255,255,0.08)");
+        ctx.fillStyle = caustic;
+        ctx.fillRect(x, y, w, h);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.shadowColor = "transparent";
+        pathRoundRect(ctx, x + 0.5, y + 0.5, w - 1, h - 1, 22.5);
+        ctx.strokeStyle = "rgba(255,255,255,0.72)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + 24, y + 11);
+        ctx.bezierCurveTo(x + 105, y - 2, x + 220, y + 7, x + w - 42, y + 12);
+        ctx.strokeStyle = "rgba(255,255,255,0.38)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        var iy = y + PAD + 2;
+        pathRoundRect(ctx, x + PAD, iy, IC, IC, 11);
+        ctx.fillStyle = "rgba(255,255,255,0.58)";
+        ctx.fill();
+        var im = n.icon && n.icon.iosvim;
+        if (im && im.complete && im.naturalWidth) {
+          ctx.save();
+          pathRoundRect(ctx, x + PAD, iy, IC, IC, 11);
+          ctx.clip();
+          ctx.drawImage(im, x + PAD, iy, IC, IC);
+          ctx.restore();
+        }
+        ctx.fillStyle = "#fff";
+        ctx.shadowColor = "rgba(0,0,0,0.45)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetY = 1;
+        ctx.textBaseline = "top";
+        ctx.font = "700 " + F + 'px "Montserrat"';
+        ctx.fillText(n.app, n.tx, y + PAD);
+        ctx.globalAlpha = q * 0.85;
+        ctx.fillText(n.time, x + w - ctx.measureText(n.time).width - 14, y + PAD);
+        ctx.globalAlpha = q;
+        ctx.font = "600 " + F + 'px "Montserrat"';
+        n.lines.forEach(function (l, i) {
+          ctx.fillText(l, n.tx, y + PAD + F * 1.2 + 3 + i * F * 1.2);
+        });
+        ctx.restore();
+      }
+
+      var paintReady = false;
+      function drawScreen() {
+        if (!paintReady) return;
+        scrCtx.setTransform(2, 0, 0, 2, 0, 0);
+        scrCtx.clearRect(0, 0, 390, 844);
+        scrCtx.drawImage(base, 0, 0, 390, 844);
+        drawNote(scrCtx, LAY[0], S.n1);
+        drawNote(scrCtx, LAY[1], S.n2);
+        drawNote(scrCtx, LAY[2], S.n3);
+        scrCtx.setTransform(1, 0, 0, 1, 0, 0);
+        phoneTex.needsUpdate = true;
+      }
+
+      // ── iPhone (родная модель и выравнивание) ──
+      var phoneGrp = new THREE.Group();
+      scene.add(phoneGrp);
+      var screenMesh = null;
+      function planarScreenUv(mesh) {
+        var g = mesh.geometry;
+        g.computeBoundingBox();
+        var bb = g.boundingBox;
+        var pos = g.attributes.position;
+        var w = bb.max.x - bb.min.x || 1;
+        var h = bb.max.y - bb.min.y || 1;
+        var uv = new Float32Array(pos.count * 2);
+        for (var i = 0; i < pos.count; i++) {
+          uv[i * 2] = (pos.getX(i) - bb.min.x) / w;
+          uv[i * 2 + 1] = (pos.getY(i) - bb.min.y) / h;
+        }
+        g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+      }
+      function alignScreenToMinusZ(rootObj, frontName, backName) {
+        var front = rootObj.getObjectByName(frontName);
+        var back = rootObj.getObjectByName(backName);
+        if (!front || !back) return;
+        rootObj.updateWorldMatrix(true, true);
+        var fp = new THREE.Vector3();
+        var bp = new THREE.Vector3();
+        front.getWorldPosition(fp);
+        back.getWorldPosition(bp);
+        if (fp.z > bp.z) rootObj.rotation.y += Math.PI;
+      }
+
+      // ── состояние и камера по раскладке ──
+      var CZ0 = 0.5 + 5.65 * K,
+        CZ1 = 0.5 + 5.95 * K;
+      var S = { phRX: 0, phRY: PI, cY: 0.18 + OFF, cZ: CZ0, drift: 0, n1: 0, n2: 0, n3: 0 };
+      function render() {
+        var d = S.drift;
+        drawScreen();
+        phoneGrp.position.set(Math.sin(d * 0.5) * 0.015, 0.1 + Math.sin(d * 0.7) * 0.008, 0.5 + Math.cos(d * 0.4) * 0.008);
+        phoneGrp.rotation.set(S.phRX, S.phRY, 0);
+        bgUniforms.uTime.value = d;
+        camera.position.set(0, S.cY, S.cZ);
+        camera.lookAt(0, 0.1 + OFF, 0);
+        renderer.render(scene, camera);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+      tl.to(S, { drift: 15, duration: 15, ease: "none" }, 0);
+      tl.to(S, { cZ: CZ1, duration: 12, ease: driftEase }, 0.5);
+      tl.to(S, { cY: 0.16 + OFF, duration: 12, ease: driftEase }, 0.5);
+      tl.to(S, { phRY: PI + 0.04, phRX: 0.01, duration: 4, ease: breatheEase }, 0.5);
+      tl.to(S, { phRY: PI - 0.03, phRX: -0.008, duration: 4, ease: breatheEase }, 4.5);
+      tl.to(S, { phRY: PI + 0.02, phRX: 0.005, duration: 4, ease: breatheEase }, 8.5);
+      tl.to(S, { n1: 1, duration: 0.72, ease: "none" }, cue(0, 0.85));
+      tl.to(S, { n2: 1, duration: 0.74, ease: "none" }, cue(1, 1.7));
+      tl.to(S, { n3: 1, duration: 0.76, ease: "none" }, cue(2, 2.55));
+      if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, cue(3, 15));
+      tl.set({}, {}, 30);
+      tl.eventCallback("onUpdate", render);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["ios26-liquid-glass-vertical"] = tl;
+
+      function loadImg(el) {
+        return new Promise(function (res) {
+          var im = new Image();
+          im.onload = res;
+          im.onerror = function () {
+            console.warn("ios26: icon not loaded", el.src);
+            res();
+          };
+          im.src = el.currentSrc || el.src;
+          el.iosvim = im;
+        });
+      }
+      function waitImages() {
+        return Promise.all(
+          Array.prototype.map.call(homeEl.querySelectorAll("img"), function (im) {
+            if (im.complete) return Promise.resolve();
+            return new Promise(function (r) {
+              im.onload = r;
+              im.onerror = r;
+            });
+          }),
+        );
+      }
+
+      var loader = new THREE.GLTFLoader();
+      loader.load("assets/ios26/iphone.glb", function (gltf) {
+        var m = gltf.scene;
+        var box = new THREE.Box3().setFromObject(m);
+        var sz = box.getSize(new THREE.Vector3());
+        m.scale.setScalar(3.2 / sz.y);
+        box.setFromObject(m);
+        m.position.sub(box.getCenter(new THREE.Vector3()));
+        m.traverse(function (child) {
+          if (!child.isMesh) return;
+          if (child.name.indexOf("front-glass") === 0) {
+            planarScreenUv(child);
+            child.material = new THREE.MeshBasicMaterial({ map: phoneTex });
+            screenMesh = child;
+          }
+        });
+        alignScreenToMinusZ(m, "front-glass", "rear-window");
+        phoneGrp.add(m);
+        // увеличение экрана в кадре при самой дальней камере → шрифт уведомлений не мельче 28 px
+        var hs = screenMesh ? new THREE.Box3().setFromObject(screenMesh).getSize(new THREE.Vector3()).y : 3.1;
+        var vh = 2 * Math.tan(THREE.MathUtils.degToRad(17)) * (CZ1 - 0.5);
+        var scale = ((hs / vh) * H) / 844;
+        F = Math.ceil(28.5 / scale);
+        IC = Math.max(38, Math.round(F * 1.4));
+        layoutNotes();
+        Promise.all([waitImages(), loadImg($("n1i")), loadImg($("n2i")), loadImg($("n3i"))]).then(function () {
+          // снимок экрана – только когда холст его отрисовал: иначе «No cached paint record»
+          capCvs.onpaint = function () {
+            capCvs.onpaint = null;
+            baseCtx.clearRect(0, 0, 390, 844);
+            if (apiOk) {
+              capCtx.drawElementImage(homeEl, 0, 0, 390, 844);
+              baseCtx.drawImage(capCvs, 0, 0);
+            } else {
+              baseCtx.fillStyle = "#010101";
+              baseCtx.fillRect(0, 0, 390, 844);
+            }
+            paintReady = true;
+            render();
+          };
+          if (apiOk && capCvs.requestPaint) capCvs.requestPaint();
+          else capCvs.onpaint();
+        });
+      });
+      render();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vpn-youtube-spot-vertical",
+  "type": "hyperframes:block",
+  "title": "App Install Spot (vertical)",
+  "description": "Vertical app-store insert: the Bebas headline on top of the 780 field, the phone below scrolls the store, taps the MatIntellect app and installs it to 100 % with sound effects. Headline, app name, search, ready line, cues and exit are variables; holds or fades.",
+  "tags": ["app", "showcase", "youtube", "sfx", "phone", "app-store", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vpn-youtube-spot-vertical.html",
+      "target": "compositions/vpn-youtube-spot-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/vpn-sfx.wav",
+      "target": "assets/vpn-sfx.wav",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "ios26-liquid-glass-vertical",
+  "type": "hyperframes:block",
+  "title": "iOS 26 Glass Notifications (vertical)",
+  "description": "Vertical iOS 26 notifications: the 3D iPhone in the 780x1180 field, or a close-up of the top of the phone on a top / bottom card; three glass notifications drop in with readable text. Texts and the second icon are variables; holds or fades.",
+  "tags": ["html-in-canvas", "3d", "iphone", "ios26", "notifications", "gltf", "glass", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "ios26-liquid-glass-vertical.html",
+      "target": "compositions/ios26-liquid-glass-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/ios26/iphone.glb",
+      "target": "assets/ios26/iphone.glb",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/matintellect.svg",
+      "target": "assets/ios26/matintellect.svg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/books.jpg",
+      "target": "assets/ios26/icons/books.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/brave.jpg",
+      "target": "assets/ios26/icons/brave.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/calendar.jpg",
+      "target": "assets/ios26/icons/calendar.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/chatgpt.jpg",
+      "target": "assets/ios26/icons/chatgpt.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/contacts.jpg",
+      "target": "assets/ios26/icons/contacts.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/files.jpg",
+      "target": "assets/ios26/icons/files.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/find-my.jpg",
+      "target": "assets/ios26/icons/find-my.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/fitness.jpg",
+      "target": "assets/ios26/icons/fitness.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/gmail.jpg",
+      "target": "assets/ios26/icons/gmail.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/home.jpg",
+      "target": "assets/ios26/icons/home.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/instagram.jpg",
+      "target": "assets/ios26/icons/instagram.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/itunes-store.jpg",
+      "target": "assets/ios26/icons/itunes-store.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/music.jpg",
+      "target": "assets/ios26/icons/music.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/notify-messages.jpg",
+      "target": "assets/ios26/icons/notify-messages.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/phone.jpg",
+      "target": "assets/ios26/icons/phone.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/photos.jpg",
+      "target": "assets/ios26/icons/photos.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/proton-mail.jpg",
+      "target": "assets/ios26/icons/proton-mail.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/revolut.jpg",
+      "target": "assets/ios26/icons/revolut.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/slack.jpg",
+      "target": "assets/ios26/icons/slack.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/stocks.jpg",
+      "target": "assets/ios26/icons/stocks.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/translate.jpg",
+      "target": "assets/ios26/icons/translate.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/watch.jpg",
+      "target": "assets/ios26/icons/watch.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/weather.jpg",
+      "target": "assets/ios26/icons/weather.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/whatsapp.jpg",
+      "target": "assets/ios26/icons/whatsapp.jpg",
+      "type": "hyperframes:asset"
+    },
+    {
+      "path": "assets/ios26/icons/x.jpg",
+      "target": "assets/ios26/icons/x.jpg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}
