@@ -1396,6 +1396,10 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "agent-cursor",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "animated-bar-chart",
       "type": "hyperframes:component"
     },
@@ -1488,6 +1492,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "cursor-annotate",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "dart-cursor",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "decline-chart",
       "type": "hyperframes:component"
     },
@@ -1497,6 +1509,10 @@
     },
     {
       "name": "focus-blur-resolve",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "gesture-tap",
       "type": "hyperframes:component"
     },
     {
@@ -1548,6 +1564,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "magnetic-cursor",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "marker-highlight",
       "type": "hyperframes:component"
     },
@@ -1564,11 +1584,19 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "multiplayer-cursors",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "number-pop-in",
       "type": "hyperframes:component"
     },
     {
       "name": "number-wheel",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "oversized-cursor",
       "type": "hyperframes:component"
     },
     {
@@ -1585,6 +1613,10 @@
     },
     {
       "name": "perspective-marquee",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "press-ripple",
       "type": "hyperframes:component"
     },
     {
@@ -1689,6 +1721,10 @@
     },
     {
       "name": "top-down-letters",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "touch-indicator",
       "type": "hyperframes:component"
     },
     {

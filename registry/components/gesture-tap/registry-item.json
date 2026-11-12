@@ -1,0 +1,43 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "gesture-tap",
+  "type": "hyperframes:component",
+  "title": "Gesture Tap",
+  "description": "A contact circle taps a mobile pill button, releases it into a new labeled accent state, and lifts away.",
+  "tags": ["motion-primitive", "gesture", "tap", "interaction", "ui-props"],
+  "jobs": ["demonstrate"],
+  "family": "ui-props",
+  "profile": "interaction",
+  "syncPoints": [
+    {
+      "id": "tap-response",
+      "phase": "in",
+      "offset": 0.72
+    }
+  ],
+  "files": [
+    {
+      "path": "gesture-tap.html",
+      "target": "compositions/components/gesture-tap.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "tap_label",
+      "type": "string",
+      "role": "content",
+      "label": "Tap label",
+      "description": "Button label shown before the tap response.",
+      "default": "Подписаться"
+    },
+    {
+      "id": "response_label",
+      "type": "string",
+      "role": "content",
+      "label": "Response label",
+      "description": "Button label shown when the tap releases.",
+      "default": "Подписан"
+    }
+  ]
+}
