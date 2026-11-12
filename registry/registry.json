@@ -1408,6 +1408,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "ascii-render-pass",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "ascii-trail-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "aurora-drift",
       "type": "hyperframes:component"
     },
@@ -1632,6 +1640,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "grade-split-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "grain-field",
       "type": "hyperframes:component"
     },
@@ -1673,6 +1685,10 @@
     },
     {
       "name": "icon-swap",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "ink-bleed-reveal",
       "type": "hyperframes:component"
     },
     {
@@ -1828,6 +1844,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "particle-image-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "particle-text-dissolve",
       "type": "hyperframes:component"
     },
@@ -1936,6 +1956,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "slit-scan-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "slot-machine-roll",
       "type": "hyperframes:component"
     },
@@ -1993,6 +2017,10 @@
     },
     {
       "name": "stitched-text-draw",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "stop-motion-cadence",
       "type": "hyperframes:component"
     },
     {
