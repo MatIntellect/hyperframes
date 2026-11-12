@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-particle-burst",
+  "type": "hyperframes:component",
+  "title": "Particle Burst",
+  "description": "Reel captions on a black rounded plate: the spoken word lights up from grey to ink; a key word marked with * in front in the words variable (e.g. *монтаж|0.48|0.90) turns red and throws a burst of sparks. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "particles", "burst", "keyword", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-particle-burst.html",
+      "target": "compositions/components/caption-particle-burst.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}
