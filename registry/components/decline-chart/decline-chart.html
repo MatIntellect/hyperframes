@@ -182,11 +182,22 @@
             stroke-width: 4;
           }
 
+          /* the end dot is an HTML circle over the plot: inside the stretched svg (preserveAspectRatio=none) a circle
+             turns into an oval (second head 026: 28x40 on a 780 px field) */
+          .dc-plot {
+            position: relative;
+            min-height: 0;
+          }
           .dc-endpoint {
-            fill: var(--fg, #f2f2f2);
+            position: absolute;
+            left: calc(252 / 260 * 100%);
+            top: calc(222 / 240 * 100%);
+            width: 4cqmin;
+            height: 4cqmin;
+            margin: -2cqmin 0 0 -2cqmin;
+            border-radius: 50%;
+            background: var(--fg, #f2f2f2);
             opacity: 0;
-            transform-box: fill-box;
-            transform-origin: center;
           }
         </style>
 
@@ -204,21 +215,23 @@
               <div class="dc-label"></div>
               <div class="dc-value"></div>
             </div>
-            <svg
-              class="dc-chart"
-              viewBox="0 0 260 240"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <line class="dc-grid" x1="8" y1="55" x2="252" y2="55"></line>
-              <line class="dc-grid" x1="8" y1="120" x2="252" y2="120"></line>
-              <line class="dc-grid" x1="8" y1="185" x2="252" y2="185"></line>
-              <path
-                class="dc-line"
-                d="M 8 24 C 28 28, 44 43, 61 56 S 93 76, 112 92 S 144 111, 163 134 S 193 159, 213 186 S 239 211, 252 222"
-              ></path>
-              <circle class="dc-endpoint" cx="252" cy="222" r="6"></circle>
-            </svg>
+            <div class="dc-plot">
+              <svg
+                class="dc-chart"
+                viewBox="0 0 260 240"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <line class="dc-grid" x1="8" y1="55" x2="252" y2="55"></line>
+                <line class="dc-grid" x1="8" y1="120" x2="252" y2="120"></line>
+                <line class="dc-grid" x1="8" y1="185" x2="252" y2="185"></line>
+                <path
+                  class="dc-line"
+                  d="M 8 24 C 28 28, 44 43, 61 56 S 93 76, 112 92 S 144 111, 163 134 S 193 159, 213 186 S 239 211, 252 222"
+                ></path>
+              </svg>
+              <div class="dc-endpoint"></div>
+            </div>
           </div>
         </div>
 

@@ -2,8 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase in the box (or above it).", "default": "Главное" },
-    { "id": "labelPos", "type": "enum", "role": "layout", "label": "Label", "description": "The phrase inside the box or above it.", "default": "inside", "options": [{ "value": "inside", "label": "Inside" }, { "value": "above", "label": "Above" }] },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase in the box.", "default": "Главное" },
     { "id": "entrance", "type": "enum", "role": "motion", "label": "Entrance", "description": "draw: the box draws on and the phrase fades in; drop: box and phrase drop in and land with a squash.", "default": "draw", "options": [{ "value": "draw", "label": "Draw" }, { "value": "drop", "label": "Drop" }] },
     { "id": "strokeType", "type": "enum", "role": "style", "label": "Stroke", "description": "Texture of the box line: plain, soft, sharp or spray.", "default": "plain", "options": [{ "value": "plain", "label": "Plain" }, { "value": "soft", "label": "Soft" }, { "value": "sharp", "label": "Sharp" }, { "value": "spray", "label": "Spray" }] },
     { "id": "boil", "type": "enum", "role": "motion", "label": "Boil", "description": "Hand-drawn jitter: off, calm or lively.", "default": "calm", "options": [{ "value": "off", "label": "Off" }, { "value": "calm", "label": "Calm" }, { "value": "lively", "label": "Lively" }] }
@@ -170,7 +169,8 @@
           // ── Controls (family base + 3 item-specific; comment grammar is the published-parameter list) ──
           entrance: hwVar("entrance", ["draw", "drop"], "draw"), //   variant: "draw" | "drop" — draw = stroke draw-on + label fade (the shipped entrance); drop = landing squash: box+label drop in, contact squash on the deform wrapper, bouncy spring recovery; travel/duration derived, never exposed
           strokeType: hwVar("strokeType", ["plain", "soft", "sharp", "spray"], "plain"), // variant: "plain" | "soft" | "sharp" | "spray" — authored stroke texture on the box path (constants per type; draw-on composes via the mask clone)
-          labelPos: hwVar("labelPos", ["inside", "above"], "inside"), //  variant: "above" | "inside" — label above the box or vertically centered inside it
+          labelPos: "inside", // locked: the phrase is the box's own label; "above" framed an empty box (second head 026)
+          //  variant: "above" | "inside" — label above the box or vertically centered inside it
           boil: hwVar("boil", ["off", "calm", "lively"], "calm"), //       variant: "off" | "calm" | "lively" — authored amp/rot pairs over the family-locked frameDrop 3; seed locked
 
           // ── Locked (edit the item source to change) ─────────────────────

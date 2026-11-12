@@ -117,6 +117,11 @@
         font-weight: 500;
         font-size: max(28px, min(4.6cqw, 4.6cqh)); /* 28 px floor (vertical.md:18) */
         color: var(--mk-ink-dim);
+        /* stays inside the inner circle: a long label wraps by whole words (second head 026: X3) */
+        max-width: min(36cqw, 36cqh);
+        text-align: center;
+        line-height: 1.1;
+        text-wrap: balance;
       }
     </style>
   </head>

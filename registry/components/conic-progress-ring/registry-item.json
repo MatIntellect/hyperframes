@@ -45,8 +45,8 @@
       "type": "string",
       "role": "content",
       "label": "Center label",
-      "description": "Numeric target shown in the center and counted in sync with the fill.",
-      "default": "100"
+      "description": "Optional. Empty: the center counts to the progress value. Set it only for a suffix or another figure (\"73%\").",
+      "default": ""
     }
   ]
 }

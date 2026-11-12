@@ -3,7 +3,7 @@
   "name": "hw-box-label",
   "type": "hyperframes:component",
   "title": "Hand-Drawn Box Label",
-  "description": "A rounded hand-drawn box that draws on (or drops in with a squash) around one phrase, or under it as a label above, sized to the measured phrase. Ships the hw-boil and hw-box helpers for hosts that frame their own content.",
+  "description": "A rounded hand-drawn box that draws on (or drops in with a squash) around one phrase, sized to the measured phrase. Ships the hw-boil and hw-box helpers for hosts that frame their own content.",
   "tags": ["handwritten", "annotation", "overlay"],
   "files": [
     {

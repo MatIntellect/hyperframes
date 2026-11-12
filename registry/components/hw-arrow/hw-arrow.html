@@ -625,7 +625,8 @@
           if (!b) {
             var p = document.querySelector(target + " path");
             var len = p.getTotalLength();
-            gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+            gsap.set(p, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 }); // kill the round-cap start nub pre-draw
+            tl.set(p, { opacity: 1 }, at);
             tl.to(
               p,
               {

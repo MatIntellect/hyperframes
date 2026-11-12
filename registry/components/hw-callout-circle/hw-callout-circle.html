@@ -547,7 +547,8 @@
             label.style.left = (at === "left" ? ex - 12 : at === "below" ? ex : ex + 12) + "px";
             label.style.transform =
               at === "left" ? "translateX(-100%)" : at === "below" ? "translateX(-50%)" : "";
-            label.style.top = ey - 24 + "px";
+            // below: the note starts under the tip, the connector never enters the letters (second head 026)
+            label.style.top = (at === "below" ? ey + 10 : ey - 24) + "px";
           }
           label.textContent = opts.label || "";
 
@@ -665,7 +666,7 @@
             var fit = window.__hyperframes.fitTextFontSize(text, {
               fontFamily: "Montserrat",
               fontWeight: 700,
-              maxWidth: W * 0.62,
+              maxWidth: W * 0.55,
               baseFontSize: Math.max(28, Math.round(Math.min(W * 0.11, 100))),
               minFontSize: 28,
               step: 1,
@@ -676,9 +677,11 @@
             var k = W / rr.width || 1;
             var tw = tr.width * k;
             var th = tr.height * k;
-            // the ellipse spans 84 % x 72 % of the box (hwCalloutBuild): size the box so it clears the phrase
-            var w = tw / 0.84 + th * 0.6;
-            var h = th / 0.72 + th * 0.8;
+            // the ellipse spans 84 % x 72 % of the box (hwCalloutBuild). It is drawn AROUND the phrase box: an
+            // ellipse through the corners of a w x h box has semi-axes w/2*sqrt2, h/2*sqrt2; +6 % for the 4 % wobble,
+            // + a stroke margin (second head 026: the oval crossed the letters)
+            var w = (((tw / 2) * Math.SQRT2 * 1.06 + th * 0.12) * 2) / 0.84;
+            var h = (((th / 2) * Math.SQRT2 * 1.06 + th * 0.12) * 2) / 0.72;
             var cxp = (tr.left - rr.left) * k + tw / 2;
             var cyp = (tr.top - rr.top) * k + th / 2;
             var c = document.getElementById("hw-co-demo");

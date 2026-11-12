@@ -237,7 +237,8 @@
         window.hwMarkOn = function (tl, target, at, dur) {
           var p = document.querySelector(target + " path");
           var len = p.getTotalLength();
-          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 }); // kill the round-cap start nub pre-draw
+          tl.set(p, { opacity: 1 }, at);
           tl.to(
             p,
             { strokeDashoffset: 0, duration: dur === undefined ? 0.55 : dur, ease: "power2.inOut" },
