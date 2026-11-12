@@ -3,7 +3,7 @@
   "name": "staggered-fade-up",
   "type": "hyperframes:component",
   "title": "Staggered Fade Up",
-  "description": "Words fade in and slide up one after another with configurable delay.",
+  "description": "Words fade in and slide up one after another with configurable delay. Mount it inside a clip with data-composition-id=\"staggered-fade-up\": its own timeline nests there.",
   "tags": ["video-primitive", "motion-primitive", "typography"],
   "files": [
     {

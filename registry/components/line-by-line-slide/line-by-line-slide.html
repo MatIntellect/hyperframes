@@ -132,6 +132,31 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-catalog-line-by-line-slide span', { opacity: 0, '--hf-line-x': '-36px', '--hf-line-y': '18px', '--hf-line-blur': '6px' }, { opacity: 1, '--hf-line-x': '0px', '--hf-line-y': '0px', '--hf-line-blur': '0px', duration: 0.34, stagger: 0.08, ease: 'power3.out' }, startTime);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["line-by-line-slide"]; mount the snippet inside a clip with data-composition-id="line-by-line-slide"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="line-by-line-slide" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-line-by-line-slide span",
+      { opacity: 0, "--hf-line-x": "-36px", "--hf-line-y": "18px", "--hf-line-blur": "6px" },
+      {
+        opacity: 1,
+        "--hf-line-x": "0px",
+        "--hf-line-y": "0px",
+        "--hf-line-blur": "0px",
+        duration: 0.34,
+        stagger: 0.08,
+        ease: "power3.out",
+      },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["line-by-line-slide"] = tl;
+  })();
+</script>

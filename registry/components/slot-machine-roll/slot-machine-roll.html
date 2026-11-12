@@ -162,6 +162,23 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-catalog-slot-machine-roll i', { '--hf-slot-y': '0px' }, { '--hf-slot-y': '-74px', duration: 0.52, stagger: 0.06, ease: 'power3.inOut' }, startTime);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["slot-machine-roll"]; mount the snippet inside a clip with data-composition-id="slot-machine-roll"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="slot-machine-roll" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-slot-machine-roll i",
+      { "--hf-slot-y": "0px" },
+      { "--hf-slot-y": "-74px", duration: 0.52, stagger: 0.06, ease: "power3.inOut" },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["slot-machine-roll"] = tl;
+  })();
+</script>

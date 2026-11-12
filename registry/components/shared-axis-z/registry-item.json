@@ -3,7 +3,7 @@
   "name": "shared-axis-z",
   "type": "hyperframes:component",
   "title": "Shared Axis Z",
-  "description": "Words scale into place one after another along the depth axis, swelling up from small or settling down from large. Entrance only; the clip end takes it off.",
+  "description": "Words scale into place one after another along the depth axis, swelling up from small or settling down from large. Entrance only; the clip end takes it off. Mount it inside a clip with data-composition-id=\"shared-axis-z\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

@@ -33,8 +33,7 @@
   data-composition-variables='[
     {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Headline copy. Every whitespace-separated word becomes one staggered span.", "default": "Монтаж с ИИ за минуту"},
     {"id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Type size of every word in pixels, clamped to 24-160. Line height stays proportional.", "default": 74, "min": 24, "max": 160, "step": 1, "unit": "px"},
-    {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Base word colour: ink for light frames, paper for dark ones.", "default": "paper", "options": [{"value": "ink", "label": "Ink"}, {"value": "paper", "label": "Paper"}]},
-    {"id": "accent", "type": "enum", "role": "style", "label": "Accent", "description": "Colour of the shimmer the second timeline step sweeps across the words.", "default": "blue", "options": [{"value": "blue", "label": "Blue"}, {"value": "green", "label": "Green"}, {"value": "violet", "label": "Violet"}]}
+    {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Base word colour: ink for light frames, paper for dark ones.", "default": "paper", "options": [{"value": "ink", "label": "Ink"}, {"value": "paper", "label": "Paper"}]}
   ]'
 >
   <span>Build</span>
@@ -167,7 +166,28 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-transition-text-stagger span', { opacity: 0, y: 48, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.54, stagger: 0.09, ease: 'power3.out' }, 0.35);
-  tl.to('.hf-transition-text-stagger span', { backgroundPosition: '100% 0%', duration: 0.72, stagger: 0.04, ease: 'power2.inOut' }, 1.05);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["text-stagger"]; mount the snippet inside a clip with data-composition-id="text-stagger"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="text-stagger" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-transition-text-stagger span",
+      { opacity: 0, y: 48, filter: "blur(14px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.54, stagger: 0.09, ease: "power3.out" },
+      0.35,
+    );
+    tl.to(
+      ".hf-transition-text-stagger span",
+      { backgroundPosition: "100% 0%", duration: 0.72, stagger: 0.04, ease: "power2.inOut" },
+      1.05,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["text-stagger"] = tl;
+  })();
+</script>

@@ -32,28 +32,6 @@
       "default": "МОНТАЖ"
     },
     {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Color used by the text, prefix, and optional terminal frame.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
-    },
-    {
       "id": "style",
       "type": "enum",
       "role": "style",

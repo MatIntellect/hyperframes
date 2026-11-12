@@ -3,7 +3,7 @@
   "name": "shared-axis-y",
   "type": "hyperframes:component",
   "title": "Shared Axis Y",
-  "description": "Words rise into place one after another along the vertical axis, for sharp editorial entrances. Entrance only; the clip end takes it off.",
+  "description": "Words rise into place one after another along the vertical axis, for sharp editorial entrances. Entrance only; the clip end takes it off. Mount it inside a clip with data-composition-id=\"shared-axis-y\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

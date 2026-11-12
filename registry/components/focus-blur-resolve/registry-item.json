@@ -3,7 +3,7 @@
   "name": "focus-blur-resolve",
   "type": "hyperframes:component",
   "title": "Focus Blur Resolve",
-  "description": "A premium focus pull: words resolve one after another from heavy blur to crisp text. Entrance only; the clip end takes it off.",
+  "description": "A premium focus pull: words resolve one after another from heavy blur to crisp text. Entrance only; the clip end takes it off. Mount it inside a clip with data-composition-id=\"focus-blur-resolve\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

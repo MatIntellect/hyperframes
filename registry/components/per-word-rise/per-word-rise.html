@@ -35,11 +35,10 @@
   data-composition-id="per-word-rise"
   data-composition-duration="3.5"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Text whose words or characters rise into place.", "default": "Монтаж с ИИ" },
-    { "id": "split", "type": "enum", "role": "content", "label": "Split", "description": "Animate the text as words or individual characters.", "default": "word", "options": [{ "value": "word", "label": "Word" }, { "value": "char", "label": "Character" }] },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds (from mount start) for each unit landing. Empty keeps the authored cascade rhythm.", "default": "" },
-    { "id": "accent", "type": "enum", "role": "style", "label": "Accent", "description": "Contract accent token used for the text color.", "default": "green", "options": [{ "value": "green", "label": "Green" }, { "value": "blue", "label": "Blue" }, { "value": "violet", "label": "Violet" }] },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the line holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Text whose words or characters rise into place.", "default": "Монтаж с ИИ"},
+    {"id": "split", "type": "enum", "role": "content", "label": "Split", "description": "Animate the text as words or individual characters.", "default": "word", "options": [{"value": "word", "label": "Word"}, {"value": "char", "label": "Character"}]},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds (from mount start) for each unit landing. Empty keeps the authored cascade rhythm.", "default": ""},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the line holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
   <head>

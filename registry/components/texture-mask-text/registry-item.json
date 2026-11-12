@@ -3,7 +3,7 @@
   "name": "texture-mask-text",
   "type": "hyperframes:component",
   "title": "Texture Mask Text",
-  "description": "CSS luminance masks that cut holes through letterforms - 66 pre-built texture masks from ambientCG PBR color maps",
+  "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. CSS luminance masks that cut holes through letterforms - 66 pre-built texture masks from ambientCG PBR color maps",
   "tags": ["text", "text-effect", "effect", "texture", "mask"],
   "textureGroups": [
     {

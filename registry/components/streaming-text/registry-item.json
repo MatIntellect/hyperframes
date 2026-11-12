@@ -3,7 +3,7 @@
   "name": "streaming-text",
   "type": "hyperframes:component",
   "title": "Streaming Text",
-  "description": "Words arrive the way an AI answer streams - in uneven bursts on a measured token rhythm, each word landing grey and inking to full colour - rather than the even tick of a typewriter",
+  "description": "Words arrive the way an AI answer streams - in uneven bursts on a measured token rhythm, each word landing grey and inking to full colour - rather than the even tick of a typewriter. Mount it inside a clip with data-composition-id=\"streaming-text\": its own timeline nests there.",
   "tags": ["video-primitive", "text-effect", "ai", "chat"],
   "author": "Miao Yang",
   "variables": [
@@ -13,7 +13,7 @@
       "role": "style",
       "label": "Size",
       "description": "Type size of the streamed words.",
-      "default": 28,
+      "default": 40,
       "min": 28,
       "max": 64,
       "step": 1,

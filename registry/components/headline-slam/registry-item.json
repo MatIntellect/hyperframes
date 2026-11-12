@@ -41,28 +41,6 @@
       "step": 1
     },
     {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Color applied to the selected word.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
-    },
-    {
       "id": "shadow",
       "type": "boolean",
       "role": "style",

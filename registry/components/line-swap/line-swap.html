@@ -41,12 +41,11 @@
   data-composition-id="line-swap"
   data-composition-duration="3.5"
   data-composition-variables='[
-    { "id": "line_a", "type": "string", "role": "content", "label": "Line A", "description": "First line; holds center inside the mask, then exits up on the swap beat.", "default": "Все обещали вам ИИ." },
-    { "id": "line_b", "type": "string", "role": "content", "label": "Line B", "description": "Replacement line; enters bottom-up on the swap beat and holds.", "default": "Почти никто не обещал контроль." },
-    { "id": "swap_at", "type": "number", "role": "timing", "label": "Swap at", "description": "Second (from mount start) of the beat replacement. Clamped so the swap and underline complete before any exit.", "default": 1.5, "min": 0, "step": 0.1, "unit": "s" },
-    { "id": "underline_word", "type": "string", "role": "content", "label": "Underline word", "description": "First case-insensitive substring match in line B gets the accent underline after landing. Empty disables it.", "default": "контроль" },
-    { "id": "accent", "type": "enum", "role": "style", "label": "Accent", "description": "Underline color from the contract token map.", "default": "green", "options": [{ "value": "green", "label": "Green" }, { "value": "blue", "label": "Blue" }, { "value": "violet", "label": "Violet" }] },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the landed line holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
+    {"id": "line_a", "type": "string", "role": "content", "label": "Line A", "description": "First line; holds center inside the mask, then exits up on the swap beat.", "default": "Все обещали вам ИИ."},
+    {"id": "line_b", "type": "string", "role": "content", "label": "Line B", "description": "Replacement line; enters bottom-up on the swap beat and holds.", "default": "Почти никто не обещал контроль."},
+    {"id": "swap_at", "type": "number", "role": "timing", "label": "Swap at", "description": "Second (from mount start) of the beat replacement. Clamped so the swap and underline complete before any exit.", "default": 1.5, "min": 0, "step": 0.1, "unit": "s"},
+    {"id": "underline_word", "type": "string", "role": "content", "label": "Underline word", "description": "First case-insensitive substring match in line B gets the accent underline after landing. Empty disables it.", "default": "контроль"},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the landed line holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
   <head>

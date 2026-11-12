@@ -3,7 +3,7 @@
   "name": "top-down-letters",
   "type": "hyperframes:component",
   "title": "Top-Down Letters",
-  "description": "Letters descend from above in a pronounced staircase with zero blur.",
+  "description": "Letters descend from above in a pronounced staircase with zero blur. Mount it inside a clip with data-composition-id=\"top-down-letters\": its own timeline nests there.",
   "tags": ["video-primitive", "motion-primitive", "typography"],
   "files": [
     {

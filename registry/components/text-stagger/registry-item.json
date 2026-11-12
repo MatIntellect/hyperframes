@@ -3,7 +3,7 @@
   "name": "text-stagger",
   "type": "hyperframes:component",
   "title": "Text Stagger",
-  "description": "A transitions.dev-inspired text stagger primitive with enter, shimmer, and exit-ready words",
+  "description": "A transitions.dev-inspired text stagger primitive with enter, shimmer, and exit-ready words. Mount it inside a clip with data-composition-id=\"text-stagger\": its own timeline nests there.",
   "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "text", "stagger"],
   "files": [
     {
@@ -48,28 +48,6 @@
         {
           "value": "paper",
           "label": "Paper"
-        }
-      ]
-    },
-    {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Colour of the shimmer the second timeline step sweeps across the words.",
-      "default": "blue",
-      "options": [
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
         }
       ]
     }

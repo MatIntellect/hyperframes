@@ -124,6 +124,23 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-catalog-shared-axis-z span', { opacity: 0, '--hf-word-scale': 0.72 }, { opacity: 1, '--hf-word-scale': 1, duration: 0.34, stagger: 0.06, ease: 'back.out(1.8)' }, startTime);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["shared-axis-z"]; mount the snippet inside a clip with data-composition-id="shared-axis-z"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="shared-axis-z" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-shared-axis-z span",
+      { opacity: 0, "--hf-word-scale": 0.72 },
+      { opacity: 1, "--hf-word-scale": 1, duration: 0.34, stagger: 0.06, ease: "back.out(1.8)" },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["shared-axis-z"] = tl;
+  })();
+</script>

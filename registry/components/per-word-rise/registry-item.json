@@ -58,28 +58,6 @@
       "default": ""
     },
     {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Contract accent token used for the text color.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
-    },
-    {
       "id": "exit",
       "type": "enum",
       "role": "timing",

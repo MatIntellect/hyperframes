@@ -3,7 +3,7 @@
   "name": "perspective-marquee",
   "type": "hyperframes:component",
   "title": "Perspective Marquee",
-  "description": "A 3D tilted marquee with depth feel as items roll toward the horizon.",
+  "description": "A 3D tilted marquee with depth feel as items roll toward the horizon. Mount it inside a clip with data-composition-id=\"perspective-marquee\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

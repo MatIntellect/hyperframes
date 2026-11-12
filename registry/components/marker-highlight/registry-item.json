@@ -77,28 +77,6 @@
       "unit": "s"
     },
     {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Marker ink color from the contract token map.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
-    },
-    {
       "id": "exit",
       "type": "enum",
       "role": "timing",

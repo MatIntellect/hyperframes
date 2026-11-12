@@ -225,10 +225,12 @@
               "scale-down": { prop: "scale", v0: 1.7, v1: 1.0, sweep: 1 },
               "scale-up": { prop: "scale", v0: 0.6, v1: 1.0, sweep: 1 },
               "tracking-in": { prop: "tracking", v0: 0.22, v1: -0.052, sweep: 1 },
-              "slide-left": { prop: "x", v0: 0.0885, v1: -0.0885, sweep: -1 },
-              "slide-right": { prop: "x", v0: -0.0885, v1: 0.0885, sweep: 1 },
-              "slide-up": { prop: "y", v0: 0.139, v1: -0.139, sweep: 1 },
-              "slide-down": { prop: "y", v0: -0.139, v1: 0.139, sweep: 1 },
+              // slides rest at 0: the second text lands centred, all of the travel is spent before
+              // and through the cut (natively it rested at -8.85% W / -13.9% H, off centre)
+              "slide-left": { prop: "x", v0: 0.12, v1: 0, sweep: -1 },
+              "slide-right": { prop: "x", v0: -0.12, v1: 0, sweep: 1 },
+              "slide-up": { prop: "y", v0: 0.16, v1: 0, sweep: 1 },
+              "slide-down": { prop: "y", v0: -0.16, v1: 0, sweep: 1 },
             };
             var mode = MODES[vars.mode] ? MODES[vars.mode] : MODES["scale-down"];
             var textA = vars.text_a == null ? "Обычный монтаж" : String(vars.text_a);

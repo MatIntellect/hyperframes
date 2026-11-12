@@ -146,6 +146,31 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-catalog-per-word-crossfade span', { opacity: 0, '--hf-word-y': '22px', '--hf-word-scale': 0.92, '--hf-word-blur': '5px' }, { opacity: 1, '--hf-word-y': '0px', '--hf-word-scale': 1, '--hf-word-blur': '0px', duration: 0.3, stagger: 0.055, ease: 'power3.out' }, startTime);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["per-word-crossfade"]; mount the snippet inside a clip with data-composition-id="per-word-crossfade"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="per-word-crossfade" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-per-word-crossfade span",
+      { opacity: 0, "--hf-word-y": "22px", "--hf-word-scale": 0.92, "--hf-word-blur": "5px" },
+      {
+        opacity: 1,
+        "--hf-word-y": "0px",
+        "--hf-word-scale": 1,
+        "--hf-word-blur": "0px",
+        duration: 0.3,
+        stagger: 0.055,
+        ease: "power3.out",
+      },
+      startTime,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["per-word-crossfade"] = tl;
+  })();
+</script>

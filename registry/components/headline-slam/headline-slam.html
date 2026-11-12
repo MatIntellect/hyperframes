@@ -29,10 +29,9 @@
   data-composition-id="headline-slam"
   data-composition-duration="3.5"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text displayed as the headline.", "default": "Монтаж без людей" },
-    { "id": "accent_word_index", "type": "number", "role": "content", "label": "Accent word index", "description": "Zero-based word index to color. Out of range leaves the headline unaccented.", "default": 1, "step": 1 },
-    { "id": "accent", "type": "enum", "role": "style", "label": "Accent", "description": "Color applied to the selected word.", "default": "green", "options": [{ "value": "green", "label": "Green" }, { "value": "blue", "label": "Blue" }, { "value": "violet", "label": "Violet" }] },
-    { "id": "shadow", "type": "boolean", "role": "style", "label": "Shadow", "description": "Drop shadow cast under the headline. On by default; set false for a flat matte look.", "default": true }
+    {"id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text displayed as the headline.", "default": "Монтаж без людей"},
+    {"id": "accent_word_index", "type": "number", "role": "content", "label": "Accent word index", "description": "Zero-based word index to color. Out of range leaves the headline unaccented.", "default": 1, "step": 1},
+    {"id": "shadow", "type": "boolean", "role": "style", "label": "Shadow", "description": "Drop shadow cast under the headline. On by default; set false for a flat matte look.", "default": true}
   ]'
 >
   <head>

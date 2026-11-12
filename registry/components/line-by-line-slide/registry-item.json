@@ -3,7 +3,7 @@
   "name": "line-by-line-slide",
   "type": "hyperframes:component",
   "title": "Line-by-Line Slide",
-  "description": "Each line enters from the left with a staggered slide and settles in place. Entrance only; the clip end takes it off.",
+  "description": "Each line enters from the left with a staggered slide and settles in place. Entrance only; the clip end takes it off. Mount it inside a clip with data-composition-id=\"line-by-line-slide\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

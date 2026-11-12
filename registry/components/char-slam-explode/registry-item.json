@@ -32,28 +32,6 @@
       "default": "Монтаж"
     },
     {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Headline and glow color.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
-    },
-    {
       "id": "spread",
       "type": "enum",
       "role": "motion",

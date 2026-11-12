@@ -3,7 +3,7 @@
   "name": "rgb-glitch-text",
   "type": "hyperframes:component",
   "title": "RGB Glitch Text",
-  "description": "RGB-offset text copies jitter briefly for a controlled glitch window.",
+  "description": "RGB-offset text copies jitter briefly for a controlled glitch window. Mount it inside a clip with data-composition-id=\"rgb-glitch-text\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

@@ -24,8 +24,8 @@
   Options (all optional):
     at        seconds on the host timeline the wipe enters (default 0)
     in        entry wipe duration, s (0.75)      hold   fully revealed, s (2.0)      out   exit wipe, s (0.55)
-    cycle     Colorama output cycle, [[pos 0..1, [r,g,b]], ...] intensity -> colour (default, brand red: black ->
-              maroon -> red -> scarlet -> red -> pink -> white)
+    cycle     Colorama output cycle, [[pos 0..1, [r,g,b]], ...] intensity -> colour (default: built from --brand: black ->
+              dark brand -> brand -> lifted brand -> brand -> pale brand -> white)
     feather   front softness as a multiple of the text height (2.4)
     tilt      lean of the front in degrees; the bottom of a glyph lags the top (40)
     blur      compound-blur maximum as a multiple of the text height (0.15)
@@ -62,19 +62,7 @@
       in: 0.75,
       hold: 2.0,
       out: 0.55,
-      cycle: [
-        [0.0, [0, 0, 0]],
-        [0.18, [0, 0, 0]],
-        [0.28, [110, 0, 0]],
-        [0.4, [200, 0, 0]],
-        [0.5, [255, 0, 0]],
-        [0.58, [255, 70, 50]],
-        [0.66, [210, 0, 0]],
-        [0.76, [255, 40, 40]],
-        [0.87, [255, 128, 128]],
-        [0.95, [250, 200, 200]],
-        [1.0, [252, 242, 242]],
-      ],
+      cycle: null, // null: built from the element's --brand at attach (brandCycle), so the pass follows the reel palette
       feather: 2.4,
       tilt: 40,
       blur: 0.15,
@@ -100,6 +88,35 @@
         for (var c = 0; c < 3; c++) out[i * 3 + c] = ca[c] + (cb[c] - ca[c]) * u;
       }
       return out;
+    }
+    // the default pass is the brand colour at Colorama's intensity steps: black, shades, the colour itself, then lifts
+    // toward white; one source with the reel palette (--brand), no RGB written into the file
+    function brandCycle(el, ctx) {
+      var raw = getComputedStyle(el).getPropertyValue("--brand").trim() || "#ff0000";
+      ctx.fillStyle = "#ff0000";
+      ctx.fillStyle = raw;
+      var hex = /^#[0-9a-f]{6}$/i.test(ctx.fillStyle) ? ctx.fillStyle : "#ff0000";
+      var rgb = [1, 3, 5].map(function (i) {
+        return parseInt(hex.slice(i, i + 2), 16);
+      });
+      function shade(k) {
+        return rgb.map(function (v) {
+          return k <= 1 ? v * k : v + (255 - v) * (k - 1);
+        });
+      }
+      return [
+        [0.0, shade(0)],
+        [0.18, shade(0)],
+        [0.28, shade(0.43)],
+        [0.4, shade(0.78)],
+        [0.5, shade(1)],
+        [0.58, shade(1.2)],
+        [0.66, shade(0.82)],
+        [0.76, shade(1.16)],
+        [0.87, shade(1.5)],
+        [0.95, shade(1.78)],
+        [1.0, shade(1.95)],
+      ];
     }
     function hash(x, y, f) {
       var h = (x * 374761393 + y * 668265263 + f * 2147483647) | 0;
@@ -197,7 +214,7 @@
       });
       var mapC = mk(FW, FH),
         mapctx = mapC.getContext("2d", { willReadFrequently: true });
-      var LUT = lut(o.cycle);
+      var LUT = lut(o.cycle || brandCycle(el, cctx));
       var dxT = Math.cos(TILT),
         dyT = Math.sin(TILT);
 

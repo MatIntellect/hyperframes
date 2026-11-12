@@ -39,12 +39,11 @@
   data-composition-id="marker-highlight"
   data-composition-duration="3.5"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Full line of display text.", "default": "Монтаж с ИИ дешевле" },
-    { "id": "emphasis_word", "type": "string", "role": "content", "label": "Emphasis word", "description": "First case-insensitive substring match in text receives the marker. Empty or unmatched draws no marker.", "default": "дешевле" },
-    { "id": "style", "type": "enum", "role": "style", "label": "Marker style", "description": "Shape of the hand-drawn marker stroke.", "default": "highlight", "options": [{ "value": "highlight", "label": "Highlight" }, { "value": "circle", "label": "Circle" }, { "value": "underline", "label": "Underline" }, { "value": "scribble", "label": "Scribble" }] },
-    { "id": "draw_at", "type": "number", "role": "timing", "label": "Draw at", "description": "Second (from mount start) the marker starts drawing. Clamped so the stroke completes before any exit.", "default": 0.9, "min": 0, "step": 0.1, "unit": "s" },
-    { "id": "accent", "type": "enum", "role": "style", "label": "Accent", "description": "Marker ink color from the contract token map.", "default": "green", "options": [{ "value": "green", "label": "Green" }, { "value": "blue", "label": "Blue" }, { "value": "violet", "label": "Violet" }] },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Full line of display text.", "default": "Монтаж с ИИ дешевле"},
+    {"id": "emphasis_word", "type": "string", "role": "content", "label": "Emphasis word", "description": "First case-insensitive substring match in text receives the marker. Empty or unmatched draws no marker.", "default": "дешевле"},
+    {"id": "style", "type": "enum", "role": "style", "label": "Marker style", "description": "Shape of the hand-drawn marker stroke.", "default": "highlight", "options": [{"value": "highlight", "label": "Highlight"}, {"value": "circle", "label": "Circle"}, {"value": "underline", "label": "Underline"}, {"value": "scribble", "label": "Scribble"}]},
+    {"id": "draw_at", "type": "number", "role": "timing", "label": "Draw at", "description": "Second (from mount start) the marker starts drawing. Clamped so the stroke completes before any exit.", "default": 0.9, "min": 0, "step": 0.1, "unit": "s"},
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
   <head>

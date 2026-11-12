@@ -146,6 +146,29 @@
 </script>
 
 <!--
-  Timeline integration:
-  tl.fromTo('.hf-catalog-strikethrough-replace i', { '--hf-strike-progress': 0 }, { '--hf-strike-progress': 1, duration: 0.28, ease: 'power2.out' }, startTime); tl.fromTo('.hf-catalog-strikethrough-replace strong', { '--hf-replace-opacity': 0, y: 14 }, { '--hf-replace-opacity': 1, y: 0, duration: 0.3, ease: 'power2.out' }, startTime + 0.24);
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["strikethrough-replace"]; mount the snippet inside a clip with data-composition-id="strikethrough-replace"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="strikethrough-replace" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-strikethrough-replace i",
+      { "--hf-strike-progress": 0 },
+      { "--hf-strike-progress": 1, duration: 0.28, ease: "power2.out" },
+      startTime,
+    );
+    tl.fromTo(
+      ".hf-catalog-strikethrough-replace strong",
+      { "--hf-replace-opacity": 0, y: 14 },
+      { "--hf-replace-opacity": 1, y: 0, duration: 0.3, ease: "power2.out" },
+      startTime + 0.24,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["strikethrough-replace"] = tl;
+  })();
+</script>

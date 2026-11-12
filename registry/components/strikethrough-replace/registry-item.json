@@ -3,7 +3,7 @@
   "name": "strikethrough-replace",
   "type": "hyperframes:component",
   "title": "Strikethrough Replace",
-  "description": "Draw a strike line across old text, then reveal the replacement.",
+  "description": "Draw a strike line across old text, then reveal the replacement. Mount it inside a clip with data-composition-id=\"strikethrough-replace\": its own timeline nests there.",
   "tags": ["motion-primitive", "typography"],
   "files": [
     {

@@ -3,7 +3,7 @@
   "name": "inline-highlight",
   "type": "hyperframes:component",
   "title": "Inline Highlight",
-  "description": "A clean marker-style inline highlight that animates behind text using a CSS scale variable",
+  "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. A clean marker-style inline highlight that animates behind text using a CSS scale variable",
   "tags": ["motion-primitive", "text", "highlight", "caption"],
   "files": [
     {

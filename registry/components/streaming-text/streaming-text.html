@@ -18,7 +18,7 @@
   anything missing or unrecognised, and writes the result as a custom property
   the CSS below consumes.
 
-    - size (28 to 64, default 28, in px): type size; 28 px is the floor of a vertical reel.
+    - size (28 to 64, default 40, in px): type size; the stream is the hero of the frame, 28 px is only the floor.
     - tone (dark-on-light | light-on-dark, default light-on-dark: the reels are dark): the ink
       pair. Fresh-token grey is chosen to sit between the two.
 
@@ -31,7 +31,7 @@
   class="hf-ui-streaming-text"
   aria-label="Streamed answer text"
   data-composition-variables='[
-    { "id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the streamed words.", "default": 28, "min": 28, "max": 64, "step": 1, "unit": "px" },
+    { "id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the streamed words.", "default": 40, "min": 28, "max": 64, "step": 1, "unit": "px" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Ink pair: dark words on a light ground, or light words on a dark ground.", "default": "light-on-dark", "options": [{ "value": "dark-on-light", "label": "Dark on light" }, { "value": "light-on-dark", "label": "Light on dark" }] }
   ]'
 >
@@ -256,7 +256,7 @@
       "light-on-dark": { ink: "#f3f3f3", fresh: "#5f5f5f" },
     };
 
-    var size = clampNumber(vars.size, 28, 64, 28); // 28 px floor (vertical.md:18)
+    var size = clampNumber(vars.size, 28, 64, 40); // hero size; 28 px is the floor (vertical.md:18)
     var tone = tones[pick(tones, vars.tone, "light-on-dark")]; // the reels are dark
 
     var roots = document.querySelectorAll(".hf-ui-streaming-text");
@@ -269,19 +269,32 @@
 </script>
 
 <!--
-  Timeline integration - GAPS is the measured token rhythm (seconds between
-  consecutive words, zeros are words that arrive together). Cycle it for any
-  word count; the ramp inks each word from fresh grey to full colour.
-
-  var GAPS = [
-    0.167, 0.100, 0.000, 0.367, 0.000, 0.167, 0.133, 0.100, 0.100, 0.133,
-    0.167, 0.133, 0.000, 0.233, 0.167, 0.100, 0.000, 0.133, 0.133, 0.100,
-    0.167, 0.133, 0.100, 0.133, 0.167, 0.100, 0.133, 0.100, 0.133,
-  ];
-  var t = startTime;
-  gsap.utils.toArray('.hf-ui-streaming-text .w').forEach(function (w, i) {
-    if (i > 0) t += GAPS[i % GAPS.length];
-    tl.set(w, { opacity: 1 }, t);
-    tl.fromTo(w, { color: 'var(--hf-st-fresh, #5f5f5f)' }, { color: 'var(--hf-st-ink, #f3f3f3)', duration: 0.2667, ease: 'none' }, t);
-  });
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["streaming-text"]; mount the snippet inside a clip with data-composition-id="streaming-text"
+  and the runtime nests it at that clip's start.
 -->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="streaming-text" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    var GAPS = [
+      0.167, 0.1, 0.0, 0.367, 0.0, 0.167, 0.133, 0.1, 0.1, 0.133, 0.167, 0.133, 0.0, 0.233, 0.167,
+      0.1, 0.0, 0.133, 0.133, 0.1, 0.167, 0.133, 0.1, 0.133, 0.167, 0.1, 0.133, 0.1, 0.133,
+    ];
+    var t = startTime;
+    gsap.utils.toArray(".hf-ui-streaming-text .w").forEach(function (w, i) {
+      if (i > 0) t += GAPS[i % GAPS.length];
+      tl.set(w, { opacity: 1 }, t);
+      tl.fromTo(
+        w,
+        { color: "var(--hf-st-fresh, #5f5f5f)" },
+        { color: "var(--hf-st-ink, #f3f3f3)", duration: 0.2667, ease: "none" },
+        t,
+      );
+    });
+    window.__timelines = window.__timelines || {};
+    window.__timelines["streaming-text"] = tl;
+  })();
+</script>

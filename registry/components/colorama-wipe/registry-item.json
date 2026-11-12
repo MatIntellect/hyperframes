@@ -3,7 +3,7 @@
   "name": "colorama-wipe",
   "type": "hyperframes:component",
   "title": "Colorama Wipe",
-  "description": "Headline reveal through a feathered, leaning wipe front that is blurred and colour-mapped in the brand red as it passes, then settles to clean type in the host text colour and wipes off again.",
+  "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. Headline reveal through a feathered, leaning wipe front that is blurred and colour-mapped in the brand red as it passes, then settles to clean type in the host text colour and wipes off again.",
   "tags": ["text", "reveal", "wipe", "colorama", "gradient", "blur", "headline", "saas"],
   "files": [
     {

@@ -31,28 +31,6 @@
       "label": "Final word",
       "description": "Word the ticker locks on and promotes.",
       "default": "проще"
-    },
-    {
-      "id": "accent",
-      "type": "enum",
-      "role": "style",
-      "label": "Accent",
-      "description": "Color used for the lock flash and promoted word.",
-      "default": "green",
-      "options": [
-        {
-          "value": "green",
-          "label": "Green"
-        },
-        {
-          "value": "blue",
-          "label": "Blue"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        }
-      ]
     }
   ]
 }
