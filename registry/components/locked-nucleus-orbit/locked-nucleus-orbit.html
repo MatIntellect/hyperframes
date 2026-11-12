@@ -172,6 +172,9 @@
 
             text-transform: uppercase;
             white-space: normal;
+            /* a word wider than the largest nucleus (30cqmin at the 28 px floor) wraps inside
+               the circle instead of running across the first orbit */
+            overflow-wrap: anywhere;
           }
 
           .lno-arm {
@@ -225,6 +228,9 @@
             line-height: 1.2;
             text-transform: uppercase;
             white-space: normal;
+            /* a word wider than the largest nucleus (30cqmin at the 28 px floor) wraps inside
+               the circle instead of running across the first orbit */
+            overflow-wrap: anywhere;
           }
         </style>
 
