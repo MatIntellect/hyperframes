@@ -202,7 +202,8 @@
             border-radius: var(--radius, 2.8cqmin);
             background: color-mix(in srgb, var(--surface, #18181a) 92%, transparent);
             box-shadow: 0 2.4cqh 6cqh color-mix(in srgb, var(--bg, #0c1014) 56%, transparent);
-            opacity: 0.48;
+            /* dimmed, still readable: text at 0.75 keeps the contrast of large text */
+            opacity: 0.75;
             will-change: opacity;
           }
 
@@ -221,9 +222,9 @@
               var(--surface, #18181a)
             );
             color: var(--tb-accent, var(--brand, #ff0000));
-            font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+            font-family: var(--font-body, "Montserrat", sans-serif);
             font-size: clamp(28px, 3.5cqmin, 28px);
-            font-weight: 760;
+            font-weight: 700;
           }
 
           .tb-copy {
@@ -417,7 +418,7 @@
               var card = node.querySelector(".tb-card");
               var halo = node.querySelector(".tb-halo");
               tl.to(node, { y: 0, duration: NODE_MOVE, ease: "power2.out" }, at);
-              tl.to(card, { opacity: 0.48, duration: NODE_MOVE, ease: "power2.out" }, at);
+              tl.to(card, { opacity: 0.75, duration: NODE_MOVE, ease: "power2.out" }, at);
               tl.to(halo, { opacity: 0, scale: 0.82, duration: NODE_MOVE, ease: "power2.out" }, at);
             }
 
@@ -460,7 +461,9 @@
                 duration: BEAM_EXIT,
                 ease: "power2.in",
               },
-              OUT_START,
+              // the beam runs into the last step and goes out there; held, its tail
+              // hung as a hook over the third card for the whole hold
+              arrivals[2],
             );
             dim(nodes[2], OUT_START);
             tl.to(stage, { opacity: 0, duration: OUT, ease: "power2.in" }, OUT_START);

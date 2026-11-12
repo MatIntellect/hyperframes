@@ -117,7 +117,7 @@
       >
         <svg viewBox="0 0 520 260"><ellipse cx="260" cy="130" rx="244" ry="110"></ellipse></svg>
       </div>
-      <div class="yt-count" id="yt-ptr-count" style="right: 12%; top: 14%">
+      <div class="yt-count" id="yt-ptr-count" style="right: 14%; top: 14%">
         <span class="num">3</span><span>сек</span>
       </div>
       <div
@@ -145,7 +145,9 @@
         window.ytCircleOn = function (tl, target, at, dur) {
           var el = document.querySelector(target + " ellipse");
           var len = el.getTotalLength();
-          gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
+          // The round cap paints a dot even at full dash offset: the ring stays hidden until it starts.
+          gsap.set(el, { strokeDasharray: len, strokeDashoffset: len, opacity: 0 });
+          tl.set(el, { opacity: 1 }, at);
           tl.to(
             el,
             { strokeDashoffset: 0, duration: dur === undefined ? 0.7 : dur, ease: "power2.inOut" },

@@ -145,7 +145,7 @@
           }
 
           .smr-media-middle {
-            stop-color: var(--accent, #ff0000);
+            stop-color: var(--brand, #ff0000);
           }
 
           .smr-media-end {
@@ -156,7 +156,7 @@
             fill: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             font-size: 240px;
-            font-weight: 850;
+            font-weight: 700;
             letter-spacing: 0.02em;
           }
 
@@ -171,7 +171,7 @@
             stroke-width: 2;
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             font-size: 240px;
-            font-weight: 850;
+            font-weight: 700;
             letter-spacing: 0.02em;
           }
         </style>
@@ -226,8 +226,6 @@
                     y="260"
                     text-anchor="middle"
                     dominant-baseline="middle"
-                    textLength="1000"
-                    lengthAdjust="spacingAndGlyphs"
                   >
                     МОНТАЖ
                   </text>
@@ -243,17 +241,15 @@
                 y="260"
                 text-anchor="middle"
                 dominant-baseline="middle"
-                textLength="1000"
-                lengthAdjust="spacingAndGlyphs"
               >
                 МОНТАЖ
               </text>
               <rect
                 class="smr-media"
-                x="0"
-                y="0"
-                width="1200"
-                height="500"
+                x="40"
+                y="40"
+                width="1120"
+                height="420"
                 fill="url(#svg-mask-reveal-media-gradient)"
               />
             </svg>
@@ -299,13 +295,22 @@
 
             maskText.textContent = textValue;
             outlineText.textContent = textValue;
-            // textLength pins the word to 1000 units; a long word at the fixed
-            // 240 size was squeezed far past its natural width. The size
-            // follows the character count (Bebas is about 0.45 em a letter),
-            // so the natural width stays within the pinned 1000.
-            var wordSize = Math.min(240, 1000 / (Math.max(1, Array.from(textValue).length) * 0.45));
-            maskText.style.fontSize = wordSize.toFixed(1) + "px";
-            outlineText.style.fontSize = wordSize.toFixed(1) + "px";
+            // The word keeps its own letter shapes: 240 units tall, smaller only when
+            // its measured width passes 1000 (the source pinned every word to 1000
+            // with textLength, stretching short words). Measured after the fonts
+            // load (runtimes.md:7; the first seek waits for buildReady).
+            function fitWord() {
+              maskText.style.fontSize = "240px";
+              outlineText.style.fontSize = "240px";
+              var natural = outlineText.getComputedTextLength();
+              var size = natural > 1000 ? (240 * 1000) / natural : 240;
+              maskText.style.fontSize = size.toFixed(1) + "px";
+              outlineText.style.fontSize = size.toFixed(1) + "px";
+            }
+            fitWord();
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["svg-mask-reveal"] = document.fonts.ready.then(fitWord);
             svg.setAttribute("aria-label", textValue);
 
             // INVARIANT: the word and sweep masks are independent layers on

@@ -175,9 +175,9 @@
 
           .va-em[data-marker-style="circle"] .va-mark {
             left: -13%;
-            top: -26%;
+            top: -10%;
             width: 126%;
-            height: 152%;
+            height: 120%;
             z-index: 2;
           }
 
@@ -200,6 +200,27 @@
             z-index: 3;
           }
 
+          /* Keyword below the first row: the rig hangs under the keyword, mirrored, so the
+             connector never crosses a row of text (set after fonts load, see placeNote). */
+          .va-anno--below {
+            bottom: auto;
+            top: calc(100% + 1.6cqh);
+          }
+
+          .va-anno--below .va-conn {
+            transform: scaleY(-1);
+          }
+
+          .va-anno--below .va-note {
+            bottom: auto;
+            top: calc(86% + 0.8cqh);
+          }
+
+          /* the ring is taller than the row: rows open up so it stays off its neighbours */
+          .va-text:has(.va-em[data-marker-style="circle"]) {
+            line-height: 1.45;
+          }
+
           .va-conn {
             position: absolute;
             inset: 0;
@@ -210,15 +231,16 @@
 
           .va-note {
             position: absolute;
-            top: -1.2cqh;
-            right: -2cqw;
+            /* the connector ends at (91 %, 14 %) of the rig: the note stands on that end, never on the line */
+            bottom: calc(86% + 0.8cqh);
+            right: 9%;
             max-width: 30cqw;
             font-family: var(--font-body, "Montserrat", sans-serif);
             font-size: max(28px, min(2.4cqw, 4.4cqh));
             font-weight: 500;
             letter-spacing: 0.01em;
             line-height: 1.25;
-            text-align: left;
+            text-align: right;
             width: 26cqw;
             /* the note sits inside the nowrap keyword; it wraps on its own */
             white-space: normal;
@@ -390,6 +412,18 @@
               textEl.textContent = text;
             }
             textEl.setAttribute("aria-label", text);
+
+            // Which row the keyword lands on is known only after the fonts load
+            // (runtimes.md:7; the first seek waits for buildReady, path-tracing.md:27).
+            function placeNote() {
+              if (!anno) return;
+              var firstRow = emEl.offsetTop - textEl.offsetTop < emEl.offsetHeight / 2;
+              anno.classList.toggle("va-anno--below", !firstRow);
+            }
+            placeNote();
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["vox-annotate"] = document.fonts.ready.then(placeNote);
 
             // Deterministic character-count fit; the line may wrap, the
             // keyword never wraps internally.

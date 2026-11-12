@@ -1912,10 +1912,6 @@
       "type": "hyperframes:component"
     },
     {
-      "name": "svg-line-draw-loader",
-      "type": "hyperframes:component"
-    },
-    {
       "name": "svg-mask-reveal",
       "type": "hyperframes:component"
     },
