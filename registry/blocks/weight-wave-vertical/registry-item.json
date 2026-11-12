@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "weight-wave-vertical",
+  "type": "hyperframes:block",
+  "title": "Weight Wave (vertical)",
+  "description": "Vertical weight wave: a crest of thickness runs through a Montserrat headline of up to three lines on the 780 field, letters swelling from light to black on the wght axis. Placement full, top or bottom card; weights, crest, speed, direction are variables; fades in and out on cues.",
+  "tags": ["typography", "kinetic-type", "title", "variable-font", "text", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "weight-wave-vertical.html",
+      "target": "compositions/weight-wave-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

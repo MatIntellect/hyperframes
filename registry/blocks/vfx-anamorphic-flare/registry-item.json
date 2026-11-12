@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-anamorphic-flare",
+  "type": "hyperframes:block",
+  "title": "Anamorphic Streak Flare",
+  "description": "Anamorphic light background: points of light in the brand red and white drift slowly, each throwing a long horizontal lens streak over the theme ground, brightest mid-way. Point colours, their share, streak tint, ground, intensity, threshold, streak length, bloom, drift and point count are variables; drifts or fades.",
+  "tags": ["background", "light", "flare", "streak", "ambient"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-anamorphic-flare.html",
+      "target": "compositions/vfx-anamorphic-flare.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

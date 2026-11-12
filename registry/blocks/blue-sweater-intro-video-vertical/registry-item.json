@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "blue-sweater-intro-video-vertical",
+  "type": "hyperframes:block",
+  "title": "Brand Intro to Follow Card (vertical)",
+  "description": "Vertical brand intro to follow card: word burst into the wordmark, a Claude window types and sends the request, an X profile card is followed - centred on the 780 field or on a top / bottom card. Texts and avatar are variables; holds or fades.",
+  "tags": ["showcase", "ai", "creator", "brand", "intro", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "blue-sweater-intro-video-vertical.html",
+      "target": "compositions/blue-sweater-intro-video-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

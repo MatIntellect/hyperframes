@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-magnetic",
+  "type": "hyperframes:block",
+  "title": "Magnetic Cursor Page",
+  "description": "A brand page - Bebas headline with a red second line, text and three numbered cards - warped by a WebGL shader toward a red cursor dot that draws a figure-eight across it, with a push-away pulse and RGB split at the pull point. Headline, text and card titles and texts are variables; holds or fades.",
+  "tags": ["html-in-canvas", "webgl", "cursor", "shader", "distortion", "page"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-magnetic.html",
+      "target": "compositions/vfx-magnetic.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

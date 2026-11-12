@@ -1,0 +1,567 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: both pages to the frame edge, their content on the 780x1180 field. top / bottom: the pages on a card 780x760 at y 180-940 / 600-1360 (stats page without the cards), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "label", "type": "string", "role": "content", "label": "Stats label", "description": "Small caps label above the big number of the stats page.", "maxLength": 24, "default": "Просмотры за месяц" },
+    { "id": "number", "type": "string", "role": "content", "label": "Big number", "description": "The big number, Bebas Neue, one line.", "maxLength": 11, "default": "2 847 391" },
+    { "id": "change", "type": "string", "role": "content", "label": "Change badge", "description": "Red badge next to the number.", "maxLength": 8, "default": "+12,4%" },
+    { "id": "stat1", "type": "string", "role": "content", "label": "Card 1 label", "description": "Label of the first stats card (wide and full vertical only).", "maxLength": 14, "default": "Ролики" },
+    { "id": "value1", "type": "string", "role": "content", "label": "Card 1 value", "description": "Value of the first stats card, Bebas Neue.", "maxLength": 8, "default": "148" },
+    { "id": "stat2", "type": "string", "role": "content", "label": "Card 2 label", "description": "Label of the second stats card.", "maxLength": 14, "default": "Подписчики" },
+    { "id": "value2", "type": "string", "role": "content", "label": "Card 2 value", "description": "Value of the second stats card, Bebas Neue.", "maxLength": 8, "default": "+3 210" },
+    { "id": "stat3", "type": "string", "role": "content", "label": "Card 3 label", "description": "Label of the third stats card.", "maxLength": 14, "default": "Досмотры" },
+    { "id": "value3", "type": "string", "role": "content", "label": "Card 3 value", "description": "Value of the third stats card, Bebas Neue.", "maxLength": 8, "default": "71%" },
+    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round avatar of the post the stats page melts into.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "name", "type": "string", "role": "content", "label": "Author name", "description": "Post author name.", "portrays": ["subject_name"], "maxLength": 18, "default": "MatIntellect" },
+    { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Grey handle next to the name.", "maxLength": 18, "default": "@MatIntellect" },
+    { "id": "post", "type": "string", "role": "content", "label": "Post text", "description": "Post text, Montserrat, up to four lines (three on a top / bottom card).", "maxLength": 110, "default": "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%" },
+    { "id": "stats", "type": "string", "role": "content", "label": "Post numbers", "description": "Grey line of numbers under the post.", "maxLength": 34, "default": "1,2 тыс. репостов · 8,4 тыс. лайков" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the surface starts to flow (stats page melts into the post 5-7 s later, waves settle by 12 s), 2 the block fades out (only when exit is fade). Empty keeps 0 and 12.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the still post to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        background: transparent;
+        overflow: hidden;
+      }
+      #lqbv-root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #lqbv-frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #000000;
+      }
+      
+      #lqbv-root.lqbv-card #lqbv-frame {
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        border: 2px solid var(--border, #2e2e32);
+      }
+      #lqbv-root.lqbv-card.lqbv-bottom #lqbv-frame {
+        top: 600px;
+      }
+      
+      #lqbv-canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #lqbv-avatar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="lqbv-root" data-composition-id="vfx-liquid-background-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="lqbv-frame">
+        <canvas id="lqbv-canvas" aria-hidden="true"></canvas>
+        <img id="lqbv-avatar" data-var-src="avatar" src="assets/img/matintellect-avatar.svg" alt="" />
+      </div>
+    </div>
+    <script>
+      // обе страницы рисуются сами на холстах; аватар – картинка из поля, ждём её вместе со шрифтами
+      var lqbvav = document.getElementById("lqbv-avatar");
+      Promise.all([
+        document.fonts.load('700 120px "Bebas Neue"'),
+        document.fonts.load('400 32px "Montserrat"'),
+        document.fonts.load('600 32px "Montserrat"'),
+        document.fonts.load('700 32px "Montserrat"'),
+        // знак – отдельной картинкой по адресу поля: элемент img только носит адрес (data-var-src), рисует холст
+        new Promise(function (res) {
+          var im = new Image();
+          im.onload = function () {
+            lqbvav.lqbvim = im;
+            res();
+          };
+          im.onerror = function () {
+            console.warn("avatar not loaded: " + im.src);
+            res();
+          };
+          im.src = lqbvav.currentSrc || lqbvav.src;
+        }),
+      ]).then(function () {
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function txt(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var $ = function (id) {
+          return document.getElementById("lqbv-" + id);
+        };
+        var root = $("root"),
+          frame = $("frame"),
+          canvas = $("canvas"),
+          av = $("avatar");
+        var css = getComputedStyle(root);
+        function tok(n, d) {
+          var v = css.getPropertyValue(n).trim();
+          return v || d;
+        }
+        var C = { bg: tok("--bg", "#0c1014"), surface: tok("--surface", "#18181a"), border: tok("--border", "#2e2e32"), fg: tok("--fg", "#f2f2f2"), muted: tok("--muted", "#8a8a90"), accent: tok("--accent", "#ff0000") };
+        function rgba(c, a) {
+          var i = document.createElement("i");
+          i.style.color = c;
+          frame.appendChild(i);
+          var m = (getComputedStyle(i).color.match(/[\d.]+/g) || [255, 0, 0]).slice(0, 3);
+          i.remove();
+          return "rgba(" + m.join(",") + "," + a + ")";
+        }
+
+        // поле содержимого (в пикселях кадра) и размеры шрифтов на каждую раскладку
+        var W = 1920,
+          H = 1080,
+          L = { x: 200, y: 130, w: 1520, h: 820, num: 190, lab: 32, badge: 34, cards: 3, cardRow: true, statLab: 30, statVal: 84, name: 40, handle: 32, post: 48, postLines: 4, small: 30 };
+        
+        var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
+        W = 1080;
+        H = 1920;
+        L = { x: 150, y: 180, w: 780, h: 1180, num: 160, lab: 32, badge: 32, cards: 3, cardRow: false, statLab: 30, statVal: 72, name: 38, handle: 30, post: 44, postLines: 4, small: 30 };
+        if (placement !== "full") {
+          root.classList.add("lqbv-card", "lqbv-" + placement);
+          W = 780;
+          H = 760;
+          L = { x: 70, y: 70, w: 640, h: 620, num: 130, lab: 30, badge: 30, cards: 0, cardRow: false, statLab: 28, statVal: 60, name: 34, handle: 28, post: 36, postLines: 3, small: 28 };
+        }
+        
+        canvas.width = W;
+        canvas.height = H;
+        canvas.style.width = W + "px";
+        canvas.style.height = H + "px";
+
+        // плоскость у разработчиков на 16% больше кадра (края не видны при наклоне): текстура рисуется с этим запасом,
+        // а содержимое – в пикселях кадра, со сдвигом на запас, чтобы край его не резал
+        var K = 1.164,
+          TW = Math.round(W * K),
+          TH = Math.round(H * K),
+          OX = (TW - W) / 2,
+          OY = (TH - H) / 2;
+        function sheet() {
+          var p = document.createElement("canvas");
+          p.width = TW;
+          p.height = TH;
+          var g = p.getContext("2d");
+          g.fillStyle = C.bg;
+          g.fillRect(0, 0, TW, TH);
+          g.translate(OX, OY);
+          return g;
+        }
+        function rr(g, x, y, w, h, r) {
+          g.beginPath();
+          g.moveTo(x + r, y);
+          g.arcTo(x + w, y, x + w, y + h, r);
+          g.arcTo(x + w, y + h, x, y + h, r);
+          g.arcTo(x, y + h, x, y, r);
+          g.arcTo(x, y, x + w, y, r);
+          g.closePath();
+        }
+        function wrap(g, text, font, maxW) {
+          g.font = font;
+          var lines = [],
+            cur = "";
+          text.split(/\s+/).forEach(function (w) {
+            var t = cur ? cur + " " + w : w;
+            if (cur && g.measureText(t).width > maxW) {
+              lines.push(cur);
+              cur = w;
+            } else cur = t;
+          });
+          if (cur) lines.push(cur);
+          return lines;
+        }
+
+        // страница А – статистика: подпись, крупное число со значком, график, карточки
+        var gA = sheet();
+        (function (g) {
+          var y = L.y,
+            x = L.x;
+          g.font = '600 ' + L.lab + 'px "Montserrat"';
+          g.fillStyle = C.muted;
+          g.fillText(txt(V.label, "Просмотры за месяц").toUpperCase(), x, y + L.lab);
+          y += L.lab * 1.6;
+          g.font = '700 ' + L.num + 'px "Bebas Neue"';
+          g.fillStyle = C.fg;
+          var num = txt(V.number, "2 847 391");
+          g.fillText(num, x, y + L.num * 0.86);
+          var nw = g.measureText(num).width;
+          var bt = txt(V.change, "+12,4%");
+          g.font = '600 ' + L.badge + 'px "Montserrat"';
+          var bw = g.measureText(bt).width + L.badge * 1.2,
+            bh = L.badge * 1.8;
+          // значок – справа от числа, а если не влезает в ширину поля – под ним
+          var bx = x + nw + 28,
+            by = y + L.num * 0.86 - bh;
+          if (bx + bw > x + L.w) {
+            bx = x;
+            by = y + L.num * 0.95 + 12;
+            y += bh + 12;
+          }
+          rr(g, bx, by, bw, bh, bh / 2);
+          g.fillStyle = C.accent;
+          g.fill();
+          g.fillStyle = C.fg;
+          g.fillText(bt, bx + L.badge * 0.6, by + bh / 2 + L.badge * 0.36);
+          y += L.num * 0.95 + 36;
+          // карточки снизу поля; график – между числом и карточками
+          var cardsH = 0,
+            ch = L.statLab * 1.4 + L.statVal * 0.95 + 56,
+            GAP = 24;
+          if (L.cards) cardsH = L.cardRow ? ch : 3 * ch + 2 * GAP;
+          var chartTop = y,
+            chartBot = L.y + L.h - cardsH - (L.cards ? 40 : 0);
+          var pts = [
+            [0, 0.72],
+            [0.12, 0.66],
+            [0.25, 0.5],
+            [0.36, 0.56],
+            [0.5, 0.36],
+            [0.62, 0.42],
+            [0.75, 0.22],
+            [0.88, 0.28],
+            [1, 0.06],
+          ].map(function (p) {
+            return [x + p[0] * L.w, chartTop + p[1] * (chartBot - chartTop)];
+          });
+          function path() {
+            g.beginPath();
+            g.moveTo(pts[0][0], pts[0][1]);
+            for (var i = 1; i < pts.length; i++) {
+              var a = pts[i - 1],
+                b = pts[i],
+                mx = (a[0] + b[0]) / 2;
+              g.bezierCurveTo(mx, a[1], mx, b[1], b[0], b[1]);
+            }
+          }
+          path();
+          g.lineTo(x + L.w, chartBot);
+          g.lineTo(x, chartBot);
+          g.closePath();
+          var cg = g.createLinearGradient(0, chartTop, 0, chartBot);
+          cg.addColorStop(0, rgba(C.accent, 0.35));
+          cg.addColorStop(1, rgba(C.accent, 0));
+          g.fillStyle = cg;
+          g.fill();
+          path();
+          g.strokeStyle = C.accent;
+          g.lineWidth = 5;
+          g.stroke();
+          if (!L.cards) return;
+          var cy = L.y + L.h - cardsH,
+            cw = L.cardRow ? (L.w - 2 * GAP) / 3 : L.w;
+          [
+            [txt(V.stat1, "Ролики"), txt(V.value1, "148")],
+            [txt(V.stat2, "Подписчики"), txt(V.value2, "+3 210")],
+            [txt(V.stat3, "Досмотры"), txt(V.value3, "71%")],
+          ].forEach(function (c, i) {
+            var cx = L.cardRow ? x + i * (cw + GAP) : x,
+              yy = L.cardRow ? cy : cy + i * (ch + GAP);
+            rr(g, cx, yy, cw, ch, 20);
+            g.fillStyle = C.surface;
+            g.fill();
+            g.lineWidth = 2;
+            g.strokeStyle = C.border;
+            g.stroke();
+            g.font = '400 ' + L.statLab + 'px "Montserrat"';
+            g.fillStyle = C.muted;
+            g.fillText(c[0], cx + 28, yy + 28 + L.statLab);
+            g.font = '700 ' + L.statVal + 'px "Bebas Neue"';
+            g.fillStyle = C.fg;
+            g.fillText(c[1], cx + 28, yy + 28 + L.statLab * 1.4 + L.statVal * 0.85);
+          });
+        })(gA);
+
+        // страница Б – пост: знак, имя, ник, текст, строка цифр; по середине поля
+        var gB = sheet();
+        (function (g) {
+          var AV = Math.round(L.name * 2.4),
+            x = L.x;
+          var NAME = '700 ' + L.name + 'px "Montserrat"',
+            HAND = '400 ' + L.handle + 'px "Montserrat"',
+            POST = '400 ' + L.post + 'px "Montserrat"',
+            SM = '400 ' + L.small + 'px "Montserrat"';
+          var pl = wrap(g, txt(V.post, "Месяц без монтажёра: 148 роликов из записей, субтитры и графика собраны сами. Досматривают 71%"), POST, L.w).slice(0, L.postLines);
+          var PLH = L.post * 1.4;
+          var total = AV + 40 + pl.length * PLH + 30 + L.small * 1.3;
+          var y = L.y + (L.h - total) / 2;
+          g.save();
+          g.beginPath();
+          g.arc(x + AV / 2, y + AV / 2, AV / 2, 0, Math.PI * 2);
+          g.closePath();
+          g.fillStyle = C.surface;
+          g.fill();
+          g.clip();
+          if (av.lqbvim) g.drawImage(av.lqbvim, x, y, AV, AV);
+          g.restore();
+          var tx = x + AV + 28;
+          g.font = NAME;
+          g.fillStyle = C.fg;
+          g.fillText(txt(V.name, "MatIntellect"), tx, y + AV / 2 - 6);
+          g.font = HAND;
+          g.fillStyle = C.muted;
+          g.fillText(txt(V.handle, "@MatIntellect"), tx, y + AV / 2 + L.handle + 4);
+          y += AV + 40;
+          g.font = POST;
+          g.fillStyle = C.fg;
+          pl.forEach(function (l) {
+            g.fillText(l, x, y + L.post * 1.05);
+            y += PLH;
+          });
+          y += 30;
+          g.font = SM;
+          g.fillStyle = C.muted;
+          g.fillText(txt(V.stats, "1,2 тыс. репостов · 8,4 тыс. лайков"), x, y + L.small);
+        })(gB);
+
+        // жидкая плоскость разработчиков: сетка 100x60, волны по z, наклон камеры, перетекание А → Б (WebGL1, без three.js)
+        var gl = canvas.getContext("webgl", { alpha: false, preserveDrawingBuffer: true, antialias: true });
+        var S = { wave: 0, ripple: 0, mix: 0, rx: 0, ry: 0, t: 0 };
+        var render = function () {};
+        if (gl) {
+          var VS = [
+            "attribute vec2 a_pos;",
+            "attribute vec2 a_uv;",
+            "uniform mat4 uMVP;",
+            "uniform float uTime;",
+            "uniform float uWave;",
+            "uniform float uRipple;",
+            "varying vec2 vUv;",
+            "varying float vDisp;",
+            "void main(){",
+            "  vUv=a_uv;",
+            "  vec3 pos=vec3(a_pos,0.0);",
+            "  float w1=sin(pos.x*3.0+uTime*1.2)*0.04*uWave;",
+            "  float w2=sin((pos.x+pos.y)*5.0+uTime*1.8)*0.025*uWave;",
+            "  float w3=sin(pos.x*12.0-uTime*3.0)*sin(pos.y*10.0+uTime*2.5)*0.015*uRipple;",
+            "  float d=w1+w2+w3;",
+            "  pos.z+=d;",
+            "  vDisp=d;",
+            "  gl_Position=uMVP*vec4(pos,1.0);",
+            "}",
+          ].join("\n");
+          var FS = [
+            "precision highp float;",
+            "uniform sampler2D uA;",
+            "uniform sampler2D uB;",
+            "uniform float uTime;",
+            "uniform float uMix;",
+            "uniform float uWave;",
+            "uniform float uRipple;",
+            "varying vec2 vUv;",
+            "varying float vDisp;",
+            "void main(){",
+            "  vec2 d=vUv;",
+            "  d.x+=sin(vUv.y*10.0+uTime*1.8)*0.008*uWave;",
+            "  d.y+=sin(vUv.x*8.0+uTime*1.2)*0.006*uWave;",
+            "  d.x+=sin(vUv.x*20.0-uTime*3.0)*0.003*uRipple;",
+            "  d.y+=cos(vUv.y*18.0+uTime*2.5)*0.003*uRipple;",
+            "  vec4 c=mix(texture2D(uA,d),texture2D(uB,d),uMix);",
+            // блик от волны – нейтральный (у разработчиков с фиолетовым оттенком их темы)
+            "  c.rgb+=vec3(0.15)*vDisp*3.0;",
+            "  c.rgb*=1.0-0.3*length((vUv-0.5)*1.4);",
+            "  gl_FragColor=vec4(c.rgb,1.0);",
+            "}",
+          ].join("\n");
+          var sh = function (type, src) {
+            var s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+            return s;
+          };
+          var prog = gl.createProgram();
+          gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+          gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+          gl.linkProgram(prog);
+          // камера разработчиков: угол 45°, расстояние 2.8; плоскость = видимая область x 1.164
+          var FOV = (45 * Math.PI) / 180,
+            DIST = 2.8,
+            FH = 2 * Math.tan(FOV / 2) * DIST,
+            FW = FH * (W / H),
+            PW = FW * K,
+            PH = FH * K;
+          var NX = 100,
+            NY = 60,
+            v = [],
+            idx = [];
+          for (var j = 0; j <= NY; j++)
+            for (var i = 0; i <= NX; i++) v.push((i / NX - 0.5) * PW, (0.5 - j / NY) * PH, i / NX, j / NY);
+          for (var j2 = 0; j2 < NY; j2++)
+            for (var i2 = 0; i2 < NX; i2++) {
+              var a = j2 * (NX + 1) + i2,
+                b = a + 1,
+                c = a + NX + 1,
+                d = c + 1;
+              idx.push(a, c, b, b, c, d);
+            }
+          var vb = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(v), gl.STATIC_DRAW);
+          var ib = gl.createBuffer();
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
+          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(idx), gl.STATIC_DRAW);
+          var tex = function (src) {
+            var t = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, t);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            return t;
+          };
+          var tA = tex(gA.canvas),
+            tB = tex(gB.canvas);
+          var U = {};
+          ["uMVP", "uTime", "uWave", "uRipple", "uA", "uB", "uMix"].forEach(function (n) {
+            U[n] = gl.getUniformLocation(prog, n);
+          });
+          var aPos = gl.getAttribLocation(prog, "a_pos"),
+            aUv = gl.getAttribLocation(prog, "a_uv");
+          // матрицы по столбцам (как ждёт WebGL)
+          function mul(a, b) {
+            var o = new Array(16);
+            for (var r = 0; r < 4; r++)
+              for (var k = 0; k < 4; k++) {
+                var s = 0;
+                for (var m = 0; m < 4; m++) s += a[m * 4 + r] * b[k * 4 + m];
+                o[k * 4 + r] = s;
+              }
+            return o;
+          }
+          var f = 1 / Math.tan(FOV / 2),
+            n = 0.1,
+            fa = 100;
+          var P = [f / (W / H), 0, 0, 0, 0, f, 0, 0, 0, 0, (fa + n) / (n - fa), -1, 0, 0, (2 * fa * n) / (n - fa), 0];
+          function rotX(t) {
+            var c = Math.cos(t),
+              s = Math.sin(t);
+            return [1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1];
+          }
+          function rotY(t) {
+            var c = Math.cos(t),
+              s = Math.sin(t);
+            return [c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1];
+          }
+          var T = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -DIST, 1];
+          gl.enable(gl.DEPTH_TEST);
+          render = function () {
+            // вид камеры = обратный её повороту (x, затем y) после отъезда на DIST
+            var view = mul(mul(rotY(-S.ry), rotX(-S.rx)), T);
+            gl.viewport(0, 0, W, H);
+            gl.clearColor(0, 0, 0, 1);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.useProgram(prog);
+            gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+            gl.enableVertexAttribArray(aPos);
+            gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 16, 0);
+            gl.enableVertexAttribArray(aUv);
+            gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
+            gl.uniformMatrix4fv(U.uMVP, false, new Float32Array(mul(P, view)));
+            gl.uniform1f(U.uTime, S.t);
+            gl.uniform1f(U.uWave, S.wave);
+            gl.uniform1f(U.uRipple, S.ripple);
+            gl.uniform1f(U.uMix, S.mix);
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, tA);
+            gl.uniform1i(U.uA, 0);
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, tB);
+            gl.uniform1i(U.uB, 1);
+            gl.drawElements(gl.TRIANGLES, idx.length, gl.UNSIGNED_SHORT, 0);
+          };
+        }
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (x) {
+            return parseFloat(x);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        // ход разработчиков, 12 с
+        var s = gsap.timeline();
+        s.to(S, { t: 12, duration: 12, ease: "none" }, 0);
+        s.to(S, { wave: 1, duration: 2, ease: "power2.out" }, 0);
+        s.to(S, { ripple: 0.6, duration: 2.5, ease: "power2.out" }, 0.5);
+        s.to(S, { rx: 0.06, ry: -0.04, duration: 2.5, ease: "power1.inOut" }, 2);
+        s.to(S, { wave: 2.5, duration: 1, ease: "power2.in" }, 4.5);
+        s.to(S, { ripple: 2, duration: 1, ease: "power2.in" }, 4.5);
+        s.to(S, { mix: 1, duration: 2, ease: "power2.inOut" }, 5);
+        s.to(S, { wave: 1, duration: 2, ease: "power2.out" }, 6.5);
+        s.to(S, { ripple: 0.5, duration: 2, ease: "power2.out" }, 6.5);
+        s.to(S, { rx: -0.03, ry: 0.03, duration: 2.5, ease: "power1.inOut" }, 6.5);
+        // у разработчиков 2 с – наезжали на затухание с 10.5 с; кончаются ровно к нему
+        s.to(S, { wave: 0.7, duration: 1.5, ease: "sine.inOut" }, 9);
+        s.to(S, { ripple: 0.3, duration: 1.5, ease: "sine.inOut" }, 9);
+        s.to(S, { wave: 0, duration: 1.5, ease: "power2.inOut" }, 10.5);
+        s.to(S, { ripple: 0, duration: 1.5, ease: "power2.inOut" }, 10.5);
+        s.to(S, { rx: 0, ry: 0, duration: 1.5, ease: "power2.inOut" }, 10.5);
+
+        var tl = gsap.timeline({ paused: true, onUpdate: render });
+        tl.add(s, c0);
+        if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 12);
+        tl.set({}, {}, 30);
+        render();
+        window.__timelines = window.__timelines || {};
+        window.__timelines["vfx-liquid-background-vertical"] = tl;
+      });
+    </script>
+  </body>
+</html>

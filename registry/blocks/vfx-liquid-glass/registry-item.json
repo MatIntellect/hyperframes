@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-liquid-glass",
+  "type": "hyperframes:block",
+  "title": "Liquid Glass Wall",
+  "description": "A wall of 3D glass shards (Voronoi fracture, physical glass with refraction, bloom and grain) floats in front of a brand page - red caps badge, Bebas headline with a red second line, text and three numbers - and parts around a wandering point to reveal it, for 20 s. Badge, headline, text, numbers and labels are variables; the glass keeps its own colours; holds or fades.",
+  "tags": ["html-in-canvas", "webgl", "glass", "3d", "title", "stats"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-liquid-glass.html",
+      "target": "compositions/vfx-liquid-glass.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

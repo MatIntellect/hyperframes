@@ -52,6 +52,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "blue-sweater-intro-video",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "blue-sweater-intro-video-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "camcorder-hud",
       "type": "hyperframes:block"
     },
@@ -876,11 +884,67 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "vfx-anamorphic-flare",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-anamorphic-flare-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-liquid-background",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-liquid-background-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-liquid-glass",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-liquid-glass-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-magnetic",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-magnetic-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-portal",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-portal-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-text-cursor",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "vfx-text-cursor-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "week-in-merges",
       "type": "hyperframes:block"
     },
     {
       "name": "week-in-merges-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "weight-wave",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "weight-wave-vertical",
       "type": "hyperframes:block"
     },
     {

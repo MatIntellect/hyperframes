@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "weight-wave",
+  "type": "hyperframes:block",
+  "title": "Weight Wave",
+  "description": "A crest of thickness travels along a Montserrat headline: each letter swells from light to black as the wave passes, driven by the wght axis of the variable font, not by transforms. Every letter keeps its own place, so the line never jitters; constant size, wraps between words. Brand ground; weights, crest width, speed and direction are variables; fades in and out on cues.",
+  "tags": ["typography", "kinetic-type", "title", "variable-font", "text"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "weight-wave.html",
+      "target": "compositions/weight-wave.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

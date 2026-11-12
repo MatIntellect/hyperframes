@@ -1,0 +1,778 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "intro", "type": "string", "role": "content", "label": "Intro word", "description": "One word in Bebas Neue that bursts apart at 1.4 s.", "maxLength": 14, "default": "Представляем" },
+    { "id": "brand", "type": "string", "role": "content", "label": "Wordmark", "description": "The name the burst assembles into, Bebas Neue, one line.", "portrays": ["subject_name"], "maxLength": 14, "default": "MatIntellect" },
+    { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "The request typed into the Claude window, Montserrat 32 px (wide – up to four lines, vertical – up to five).", "maxLength": 130, "default": "Посоветуй, кто смонтирует мне рилсы из записи с ИИ: быстро, по делу и без монтажёра." },
+    { "id": "model", "type": "string", "role": "content", "label": "Model", "description": "Model name in the Claude window.", "maxLength": 10, "default": "Opus 5.5" },
+    { "id": "thinking", "type": "string", "role": "content", "label": "Thinking label", "description": "Shown after the prompt is sent.", "maxLength": 16, "default": "Думаю…" },
+    { "id": "result", "type": "string", "role": "content", "label": "Result line", "description": "The answer line with the X button that opens the profile, one line.", "maxLength": 28, "default": "Открыть профиль в X" },
+    { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round avatar on the profile card.", "portrays": ["subject_image"], "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Profile name, one line.", "portrays": ["subject_name"], "maxLength": 18, "default": "MatIntellect" },
+    { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Grey handle under the name.", "maxLength": 18, "default": "@MatIntellect" },
+    { "id": "bio", "type": "string", "role": "content", "label": "Bio", "description": "Profile text, up to two lines.", "maxLength": 76, "default": "Монтаж рилсов с ИИ: из записи – готовый ролик за минуты" },
+    { "id": "follow", "type": "string", "role": "content", "label": "Follow label", "description": "Button label before the click.", "maxLength": 9, "default": "Читать" },
+    { "id": "following", "type": "string", "role": "content", "label": "Following label", "description": "Button label after the click, with a tick.", "maxLength": 8, "default": "Читаю" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sequence starts (it runs 11 s: intro, burst, wordmark at 2.4 s, Claude window at 3 s, prompt sent at 7.9 s, profile card at 9.9 s, follow clicked at 10.9 s), 2 the block fades out (only when exit is fade). Empty keeps 0 and 13.", "default": "" },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the followed profile card to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        background: transparent;
+        overflow: hidden;
+      }
+      #bsw-root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: "Montserrat", sans-serif;
+        /* окно Claude и карточка профиля – интерфейсы, цвета родные (решение Mat 12.11 09:20) */
+        --bsw-ink: #11110f;
+        --bsw-muted: #807d76;
+        --bsw-line: #dcd8cf;
+        --bsw-panel: #fbfaf6;
+        --bsw-claude: #c85f45;
+      }
+      /* заливка и вся сцена – в рамке: весь кадр, в вертикали top/bottom – карточка */
+      #bsw-frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: var(--bg, #0c1014);
+      }
+      
+      .bsw-scene {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+      /* точка отсчёта – середина сцены (родная 960, 540) */
+      .bsw-c {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      #bsw-warm {
+        position: absolute;
+        left: -360px;
+        top: -77px;
+        width: 720px;
+        height: 154px;
+        background: var(--accent, #ff0000);
+        border-radius: 6px;
+        clip-path: polygon(2% 4%, 98% 0, 100% 88%, 96% 98%, 4% 94%, 0 12%);
+      }
+      .bsw-title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translate(-50%, -50%);
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 150px;
+        line-height: 1;
+        color: var(--fg, #f2f2f2);
+        white-space: nowrap;
+      }
+      .bsw-piece {
+        position: absolute;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--fg, #f2f2f2);
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .bsw-rem {
+        font-size: 150px;
+      }
+      .bsw-frag {
+        font-size: 160px;
+      }
+      #bsw-mark {
+        font-size: 160px;
+        opacity: 0;
+      }
+      /* всплеск сжат в вертикали вокруг середины, текст – нет */
+      #bsw-fx {
+        transform-origin: 0 0;
+      }
+      .bsw-block {
+        position: absolute;
+        background: var(--accent, #ff0000);
+        border-radius: 9px;
+        opacity: 0;
+        clip-path: polygon(2% 8%, 14% 4%, 42% 5%, 63% 2%, 92% 5%, 99% 12%, 97% 88%, 86% 96%, 55% 94%, 28% 98%, 5% 92%, 0 18%);
+      }
+      #bsw-sel {
+        position: absolute;
+        left: -580px;
+        top: -288px;
+        width: 550px;
+        height: 176px;
+        border: 1px solid color-mix(in srgb, var(--accent, #ff0000) 34%, transparent);
+        background: color-mix(in srgb, var(--accent, #ff0000) 16%, transparent);
+        opacity: 0;
+        transform-origin: 0 0;
+      }
+      .bsw-star {
+        position: absolute;
+        color: var(--bsw-claude);
+      }
+      .bsw-star svg,
+      #bsw-cursor svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      #bsw-bstar {
+        left: -75px;
+        top: -85px;
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+      }
+      /* окно Claude */
+      #bsw-stack {
+        position: absolute;
+        transform-origin: 50% 50%;
+      }
+      
+      #bsw-stack {
+        left: -650px;
+        top: -166px;
+        width: 1300px;
+        height: 332px;
+      }
+      
+      
+      #bsw-pstar {
+        left: 88px;
+        top: -102px;
+        width: 42px;
+        height: 42px;
+      }
+      .bsw-panel {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background: var(--bsw-panel);
+        border: 1px solid var(--bsw-line);
+        border-radius: 42px;
+        box-shadow: 0 18px 50px rgb(0 0 0 / 30%);
+        opacity: 0;
+        color: var(--bsw-ink);
+      }
+      #bsw-pe {
+        top: -54px;
+        height: 306px;
+        opacity: 1;
+      }
+      #bsw-pf {
+        top: 0;
+        height: 100%;
+      }
+      #bsw-pt {
+        top: 7px;
+        height: 304px;
+      }
+      .bsw-placeholder {
+        position: absolute;
+        left: 54px;
+        top: 48px;
+        color: var(--bsw-muted);
+        font-size: 34px;
+        line-height: 1.15;
+      }
+      #bsw-prompt {
+        position: absolute;
+        left: 54px;
+        right: 56px;
+        top: 42px;
+        bottom: 110px;
+        font-size: 32px;
+        line-height: 1.16;
+      }
+      .bsw-plus {
+        position: absolute;
+        left: 52px;
+        bottom: 44px;
+        width: 42px;
+        height: 42px;
+      }
+      .bsw-plus::before,
+      .bsw-plus::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 34px;
+        height: 2px;
+        background: var(--bsw-ink);
+        transform: translate(-50%, -50%);
+      }
+      .bsw-plus::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+      .bsw-model {
+        position: absolute;
+        right: 126px;
+        bottom: 48px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 30px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      #bsw-pe .bsw-model {
+        right: 78px;
+      }
+      .bsw-model .bsw-muted {
+        color: var(--bsw-muted);
+      }
+      .bsw-chevron {
+        width: 14px;
+        height: 14px;
+        border-right: 2px solid var(--bsw-muted);
+        border-bottom: 2px solid var(--bsw-muted);
+        transform: rotate(45deg) translateY(-5px);
+      }
+      .bsw-send {
+        position: absolute;
+        right: 42px;
+        bottom: 38px;
+        display: grid;
+        place-items: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 17px;
+        background: var(--bsw-claude);
+        transform-origin: 50% 50%;
+      }
+      .bsw-send svg {
+        width: 30px;
+        height: 30px;
+      }
+      #bsw-sendf {
+        opacity: 0;
+      }
+      .bsw-thinking,
+      .bsw-result {
+        position: absolute;
+        left: 54px;
+        top: 46px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 30px;
+        line-height: 1;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .bsw-thinking .bsw-star {
+        position: relative;
+        width: 26px;
+        height: 26px;
+      }
+      .bsw-xbtn {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 15px;
+        background: var(--bsw-ink);
+        color: var(--bsw-panel);
+        font-size: 29px;
+        font-weight: 700;
+      }
+      /* карточка профиля */
+      #bsw-card {
+        position: absolute;
+        border: 1px solid var(--bsw-line);
+        border-radius: 36px;
+        background: var(--bsw-panel);
+        box-shadow: 0 28px 70px rgb(0 0 0 / 34%);
+        opacity: 0;
+        overflow: hidden;
+        transform-origin: 50% 50%;
+        color: var(--bsw-ink);
+      }
+      
+      #bsw-card {
+        left: -400px;
+        top: -362px;
+        width: 800px;
+        height: 450px;
+      }
+      
+      
+      #bsw-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 150px;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--accent, #ff0000) 14%, transparent), rgb(17 17 15 / 6%));
+      }
+      .bsw-cx {
+        position: absolute;
+        right: 28px;
+        top: 24px;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--bsw-ink);
+        color: var(--bsw-panel);
+        font-size: 28px;
+        font-weight: 700;
+      }
+      #bsw-avatar {
+        position: absolute;
+        left: 52px;
+        top: 94px;
+        width: 118px;
+        height: 118px;
+        border: 5px solid var(--bsw-panel);
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--bsw-panel);
+      }
+      #bsw-name {
+        position: absolute;
+        left: 52px;
+        top: 236px;
+        font-size: 44px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      #bsw-handle {
+        position: absolute;
+        left: 52px;
+        top: 292px;
+        color: var(--bsw-muted);
+        font-size: 28px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      #bsw-bio {
+        position: absolute;
+        left: 52px;
+        right: 52px;
+        top: 340px;
+        font-size: 28px;
+        line-height: 1.2;
+      }
+      /* как в профиле X: кнопка на уровне аватарки под шапкой, строка имени свободна во всю ширину */
+      #bsw-fbtn {
+        position: absolute;
+        right: 46px;
+        top: 162px;
+        width: 190px;
+        height: 60px;
+        border-radius: 18px;
+        background: var(--bsw-ink);
+        color: var(--bsw-panel);
+        font-size: 28px;
+        font-weight: 600;
+        overflow: hidden;
+        transform-origin: 50% 50%;
+      }
+      .bsw-flabel {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+      #bsw-fl2 {
+        opacity: 0;
+      }
+      .bsw-check {
+        width: 22px;
+        height: 22px;
+      }
+      #bsw-cursor {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 98px;
+        height: 120px;
+        opacity: 0;
+        z-index: 20;
+        transform-origin: 13px 6px;
+        filter: drop-shadow(0 10px 22px rgb(0 0 0 / 35%));
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bsw-root" data-composition-id="blue-sweater-intro-video" data-width="1920" data-height="1080" data-start="0" data-duration="30">
+      <div id="bsw-frame">
+        <div id="bsw-warmup" class="bsw-scene"><div class="bsw-c"><div id="bsw-warm"></div></div></div>
+        <div id="bsw-introsc" class="bsw-scene">
+          <div class="bsw-c"><div id="bsw-intro" class="bsw-title"></div></div>
+        </div>
+        <div id="bsw-burst" class="bsw-scene">
+          <div class="bsw-c">
+            <div id="bsw-fx">
+              <div id="bsw-sel"></div>
+              <div class="bsw-block" style="left: -225px; top: -122px; width: 162px; height: 90px"></div>
+              <div class="bsw-block" style="left: -40px; top: -126px; width: 172px; height: 92px"></div>
+              <div class="bsw-block" style="left: 340px; top: -120px; width: 96px; height: 92px"></div>
+              <div class="bsw-block" style="left: -170px; top: 108px; width: 172px; height: 94px"></div>
+              <div class="bsw-block" style="left: 82px; top: 102px; width: 90px; height: 96px"></div>
+              <div id="bsw-bstar" class="bsw-star">
+                <svg viewBox="-50 -50 100 100"><g stroke="currentColor" stroke-width="8" stroke-linecap="round"><line x1="0" y1="-38" x2="0" y2="38" /><line x1="-38" y1="0" x2="38" y2="0" /><line x1="-27" y1="-27" x2="27" y2="27" /><line x1="-27" y1="27" x2="27" y2="-27" /><line x1="-14" y1="-35" x2="14" y2="35" /><line x1="-35" y1="-14" x2="35" y2="14" /></g></svg>
+              </div>
+            </div>
+            <div id="bsw-rems"></div>
+          </div>
+        </div>
+        <div id="bsw-brandsc" class="bsw-scene">
+          <div class="bsw-c"><div id="bsw-frags"></div><div id="bsw-mark" class="bsw-piece"></div></div>
+        </div>
+        <div id="bsw-ui" class="bsw-scene">
+          <div class="bsw-c">
+            <div id="bsw-stack">
+              <div id="bsw-pstar" class="bsw-star">
+                <svg viewBox="-50 -50 100 100"><g stroke="currentColor" stroke-width="8" stroke-linecap="round"><line x1="0" y1="-38" x2="0" y2="38" /><line x1="-38" y1="0" x2="38" y2="0" /><line x1="-27" y1="-27" x2="27" y2="27" /><line x1="-27" y1="27" x2="27" y2="-27" /><line x1="-14" y1="-35" x2="14" y2="35" /><line x1="-35" y1="-14" x2="35" y2="14" /></g></svg>
+              </div>
+              <div id="bsw-pe" class="bsw-panel">
+                <div class="bsw-placeholder">Чем могу помочь сегодня?</div>
+                <div class="bsw-plus"></div>
+                <div class="bsw-model"><span><span class="bsw-mname"></span> <span class="bsw-muted">Extended</span></span><span class="bsw-chevron"></span></div>
+              </div>
+              <div id="bsw-pf" class="bsw-panel">
+                <div id="bsw-prompt"></div>
+                <div class="bsw-plus"></div>
+                <div class="bsw-model"><span><span class="bsw-mname"></span> <span class="bsw-muted">Extended</span></span><span class="bsw-chevron"></span></div>
+                <div id="bsw-sendf" class="bsw-send"><svg viewBox="0 0 32 32" fill="none"><path d="M16 25V8M16 8L9 15M16 8L23 15" stroke="#FBFAF6" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+              </div>
+              <div id="bsw-pt" class="bsw-panel">
+                <div class="bsw-thinking">
+                  <span class="bsw-star"><svg viewBox="-50 -50 100 100"><g stroke="currentColor" stroke-width="8" stroke-linecap="round"><line x1="0" y1="-38" x2="0" y2="38" /><line x1="-38" y1="0" x2="38" y2="0" /><line x1="-27" y1="-27" x2="27" y2="27" /><line x1="-27" y1="27" x2="27" y2="-27" /><line x1="-14" y1="-35" x2="14" y2="35" /><line x1="-35" y1="-14" x2="35" y2="14" /></g></svg></span>
+                  <span id="bsw-think"></span>
+                </div>
+                <div class="bsw-result"><span id="bsw-xbtn" class="bsw-xbtn">X</span><span id="bsw-res"></span></div>
+                <div class="bsw-plus"></div>
+                <div class="bsw-model"><span><span class="bsw-mname"></span> <span class="bsw-muted">Extended</span></span><span class="bsw-chevron"></span></div>
+                <div class="bsw-send"><svg viewBox="0 0 32 32" fill="none"><path d="M16 25V8M16 8L9 15M16 8L23 15" stroke="#FBFAF6" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+              </div>
+            </div>
+            <div id="bsw-card">
+              <div class="bsw-cx">X</div>
+              <img id="bsw-avatar" data-var-src="avatar" src="assets/img/matintellect-avatar.svg" alt="" />
+              <div id="bsw-name"></div>
+              <div id="bsw-handle"></div>
+              <div id="bsw-fbtn">
+                <span id="bsw-fl1" class="bsw-flabel"></span>
+                <span id="bsw-fl2" class="bsw-flabel"><span id="bsw-fl2t"></span><svg class="bsw-check" viewBox="0 0 24 24" fill="none" stroke="#FBFAF6" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              </div>
+              <div id="bsw-bio"></div>
+            </div>
+          </div>
+        </div>
+        <div id="bsw-cursor"><svg viewBox="0 0 98 120" fill="none"><path d="M13 6L86 80L51 85L35 114L13 6Z" style="fill: var(--accent, #ff0000); stroke: var(--fg, #f2f2f2)" stroke-width="7" stroke-linejoin="round" /></svg></div>
+      </div>
+    </div>
+    <script>
+      // куски слова и знака меряются шрифтом Bebas – строим после его загрузки (runtimes.md)
+      Promise.all([document.fonts.load('700 150px "Bebas Neue"'), document.fonts.load('400 32px "Montserrat"')]).then(function () {
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function txt(v, d) {
+          return typeof v === "string" && v.trim() ? v.trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        var $ = function (id) {
+          return document.getElementById("bsw-" + id);
+        };
+        var root = $("root"),
+          frame = $("frame");
+
+        // середина сцены и сжатие всплеска: широкая – родные 960, 540; вертикаль – середина поля или карточки
+        var CX = 960,
+          CY = 540,
+          K = 1;
+        
+        Array.prototype.forEach.call(document.querySelectorAll(".bsw-c"), function (c) {
+          c.style.left = CX + "px";
+          c.style.top = CY + "px";
+        });
+        gsap.set($("fx"), { scale: K });
+        // точка родной сцены (x, y) → кадр рамки: от середины, со сжатием всплеска
+        function P(x, y) {
+          return { x: CX + (x - 960) * K, y: CY + (y - 540) * K };
+        }
+
+        var INTRO = txt(V.intro, "Представляем"),
+          BRAND = txt(V.brand, "MatIntellect");
+        $("intro").textContent = INTRO;
+        $("prompt").textContent = txt(V.prompt, "Посоветуй, кто смонтирует мне рилсы из записи с ИИ: быстро, по делу и без монтажёра.");
+        Array.prototype.forEach.call(document.querySelectorAll(".bsw-mname"), function (e) {
+          e.textContent = txt(V.model, "Opus 5.5");
+        });
+        $("think").textContent = txt(V.thinking, "Думаю…");
+        $("res").textContent = txt(V.result, "Открыть профиль в X");
+        $("name").textContent = txt(V.name, "MatIntellect");
+        $("handle").textContent = txt(V.handle, "@MatIntellect");
+        $("bio").textContent = txt(V.bio, "Монтаж рилсов с ИИ: из записи – готовый ролик за минуты");
+        $("fl1").textContent = txt(V.follow, "Читать");
+        $("fl2t").textContent = txt(V.following, "Читаю");
+
+        // печать запроса – буква за буквой (родной ход)
+        var promptEl = $("prompt"),
+          ptext = promptEl.textContent;
+        promptEl.textContent = "";
+        var pchars = Array.prototype.map.call(ptext, function (ch) {
+          var s = document.createElement("span");
+          s.textContent = ch;
+          s.style.opacity = 0;
+          promptEl.appendChild(s);
+          return s;
+        });
+
+        // обломки слова: у разработчиков «Intro», «ducin», «g», «tro» – доли слова, смещения – доли его ширины
+        var n = INTRO.length,
+          cut = function (a, b) {
+            return INTRO.slice(Math.round(n * a), Math.max(Math.round(n * a) + 1, Math.round(n * b)));
+          };
+        var introW = $("intro").offsetWidth,
+          kw = introW / 560;
+        var rems = [
+          [cut(0, 0.45), -220, -44],
+          [cut(0.45, 0.9), -42, -42],
+          [cut(0.9, 1), 155, -48],
+          [cut(0.18, 0.45), -82, -4],
+        ].map(function (r) {
+          var e = document.createElement("span");
+          e.className = "bsw-piece bsw-rem";
+          e.textContent = r[0];
+          $("rems").appendChild(e);
+          e.style.left = r[1] * kw - e.offsetWidth / 2 + "px";
+          e.style.top = r[2] - e.offsetHeight / 2 + "px";
+          return e;
+        });
+
+        // знак: целиком по середине; куски – те же буквы на своих местах в знаке (замер), прилетают родными путями
+        var mark = $("mark");
+        mark.textContent = BRAND;
+        var mw = mark.offsetWidth,
+          mh = mark.offsetHeight;
+        mark.style.left = -mw / 2 + "px";
+        mark.style.top = -mh / 2 - 6 + "px";
+        var probe = document.createElement("span");
+        probe.className = "bsw-piece bsw-frag";
+        $("frags").appendChild(probe);
+        var m = BRAND.length,
+          bounds = [0, 0.25, 0.4, 0.5, 0.75, 1].map(function (f, i) {
+            return i === 0 ? 0 : i === 5 ? m : Math.min(m - 1, Math.max(1, Math.round(m * f)));
+          });
+        var frags = [];
+        for (var i = 0; i < 5; i++) {
+          if (bounds[i + 1] <= bounds[i]) continue;
+          probe.textContent = BRAND.slice(0, bounds[i]);
+          var x0 = bounds[i] ? probe.offsetWidth : 0;
+          var e = document.createElement("span");
+          e.className = "bsw-piece bsw-frag";
+          e.textContent = BRAND.slice(bounds[i], bounds[i + 1]);
+          e.style.left = -mw / 2 + x0 + "px";
+          e.style.top = -mh / 2 - 6 + "px";
+          $("frags").appendChild(e);
+          frags.push(e);
+        }
+        probe.remove();
+
+        var cues = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+        var exit = oneOf(V.exit, ["none", "fade"], "none");
+
+        // ход разработчиков, 11 с; вся цепочка – вложенная шкала, ставится на первый момент
+        var s = gsap.timeline({ defaults: { ease: "power3.out" } });
+        var cur = $("cursor");
+        function to(x, y, rot, t, d, ease) {
+          var p = P(x, y);
+          s.to(cur, { x: p.x, y: p.y, rotation: rot, duration: d, ease: ease || "power2.inOut", overwrite: "auto" }, t);
+        }
+        var p0 = P(690, 846);
+        s.set(cur, { x: p0.x, y: p0.y, rotation: -8, scale: 0.72, opacity: 0 }, 0);
+        s.to($("warmup"), { opacity: 1, duration: 0.01 }, 0);
+        s.fromTo($("warm"), { x: -820 * K, scaleX: 0.42, opacity: 0, filter: "blur(14px)" }, { x: -25 * K, scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, 0.02);
+        s.to($("warm"), { x: 620 * K, opacity: 0, filter: "blur(18px)", duration: 0.24, ease: "power2.in" }, 0.25);
+        s.to($("warmup"), { opacity: 0, duration: 0.08 }, 0.4);
+        s.to($("introsc"), { opacity: 1, duration: 0.1 }, 0.44);
+        s.fromTo($("intro"), { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.46, ease: "expo.out" }, 0.48);
+        s.to(cur, { opacity: 1, duration: 0.12 }, 0.44);
+        to(942, 604, -3, 0.44, 0.36);
+        to(982, 642, -6, 1.28, 0.24);
+        s.to($("intro"), { opacity: 0.26, filter: "blur(4px)", duration: 0.03, ease: "power2.in" }, 1.43);
+        s.to($("burst"), { opacity: 1, duration: 0.02 }, 1.4);
+        s.fromTo(rems, { opacity: 0, x: 0, y: 0, filter: "blur(2px)" }, { opacity: 0.32, x: function (k) { return [-22, 8, 32, -10][k]; }, y: function (k) { return [-10, 5, -18, 28][k]; }, filter: "blur(7px)", duration: 0.055, stagger: 0.004, ease: "power2.out" }, 1.435);
+        s.to($("intro"), { opacity: 0, y: -8, filter: "blur(10px)", duration: 0.08, ease: "power2.in" }, 1.47);
+        s.to(rems, { opacity: 0, filter: "blur(11px)", duration: 0.07, ease: "power2.in" }, 1.49);
+        s.to($("introsc"), { opacity: 0, duration: 0.06 }, 1.56);
+        s.fromTo($("bstar"), { opacity: 0, scale: 0.08, rotation: -20 }, { opacity: 1, scale: 0.16, rotation: -6, duration: 0.08, ease: "power2.out" }, 1.43);
+        s.to($("bstar"), { scale: 1, rotation: 0, duration: 0.42, ease: "expo.out", overwrite: "auto" }, 1.55);
+        var PATHS = [
+          { source: [-1, 28], scatter: [-160, -96], drift: [-151, -126], select: [-82, -86], squeeze: [19, -68], release: [19, -68], fade: 2.17 },
+          { source: [-11, 5], scatter: [165, -123], drift: [153, -126], select: [61, -118], squeeze: [-81, -65], release: [-81, -65], fade: 2.17 },
+          { source: [-3, -8], scatter: [169, -28], drift: [174, -24], select: [127, 9], squeeze: [37, 70], release: [-78, 96], fade: 2.33 },
+          { source: [-9, 2], scatter: [-153, 80], drift: [-157, 76], select: [-133, 39], squeeze: [-90, -40], release: [-90, -40], fade: 2.17 },
+          { source: [-7, -13], scatter: [-10, 129], drift: [-17, 128], select: [-38, 83], squeeze: [-67, -18], release: [-92, -87], fade: 2.33 },
+        ];
+        Array.prototype.forEach.call(document.querySelectorAll(".bsw-block"), function (b, k) {
+          var p = PATHS[k],
+            r = k % 2 ? 1 : -1;
+          s.set(b, { x: p.source[0], y: p.source[1], scale: 0.78, rotation: 3 * r, filter: "blur(8px)" }, 1.45);
+          s.to(b, { opacity: 1, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.055 }, 1.455);
+          s.to(b, { x: p.scatter[0], y: p.scatter[1], rotation: 2 * r, duration: 0.2, ease: "sine.out" }, 1.5);
+          s.to(b, { x: p.drift[0], y: p.drift[1], rotation: r, duration: 0.2, ease: "sine.inOut" }, 1.7);
+          s.to(b, { x: p.select[0], y: p.select[1], rotation: 0, duration: 0.2, ease: "sine.inOut" }, 1.9);
+          s.to(b, { x: p.squeeze[0], y: p.squeeze[1], scale: 1, filter: "blur(0.6px)", duration: 0.07, ease: "sine.inOut" }, 2.1);
+          s.to(b, { x: p.release[0], y: p.release[1], scale: 0.84, filter: "blur(1.5px)", duration: 0.05, ease: "sine.inOut" }, 2.17);
+          s.to(b, { opacity: 0, scale: 0.38, filter: "blur(7px)", duration: 0.05, ease: "power2.in" }, p.fade);
+        });
+        to(1540, 112, -9, 1.56, 0.26);
+        to(380, 252, -7, 1.82, 0.16);
+        s.fromTo($("sel"), { opacity: 0, scaleX: 0.06, scaleY: 0.1, x: 0, y: 0, filter: "blur(3px)" }, { opacity: 1, scaleX: 1, scaleY: 1, x: 42, y: 52, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 1.96);
+        to(930, 478, -4, 1.96, 0.14);
+        to(1168, 560, -4, 2.12, 0.14);
+        s.to($("sel"), { x: 220, y: 158, scaleX: 640 / 550, scaleY: 190 / 176, duration: 0.2, ease: "power2.inOut" }, 2.16);
+        s.to($("bstar"), { x: 118, y: -62, scale: 0.16, opacity: 0.45, duration: 0.18, ease: "power2.inOut", overwrite: "auto" }, 2.12);
+        s.to($("brandsc"), { opacity: 1, duration: 0.04 }, 2.08);
+        var FM = [
+          { from: [112, -118, 4], carry: [88, -96], settle: [20, -24], vis: 1 },
+          { from: [-12, 78, 5], carry: [-22, 56], settle: [-8, 18], vis: 1 },
+          { from: [38, 70, 7], carry: [18, 48], settle: [6, 14], vis: 0.82 },
+          { from: [-82, -108, 4], carry: [-54, -78], settle: [-18, -18], vis: 1 },
+          { from: [62, 22, 5], carry: [38, 12], settle: [12, 4], vis: 1 },
+        ];
+        frags.forEach(function (f, k) {
+          var q = FM[k];
+          s.fromTo(f, { opacity: 0, x: q.from[0], y: q.from[1], scale: 0.99, filter: "blur(" + q.from[2] + "px)" }, { opacity: q.vis, x: q.carry[0], y: q.carry[1], scale: 1, filter: "blur(1.2px)", duration: 0.16, ease: "sine.out", overwrite: "auto" }, 2.12 + k * 0.004);
+          s.to(f, { x: q.settle[0], y: q.settle[1], filter: "blur(0.35px)", duration: 0.28, overwrite: "auto" }, 2.28 + k * 0.003);
+          s.to(f, { opacity: 0, x: q.settle[0] + [8, -6, 2, -8, 6][k], y: q.settle[1] + [-6, 7, 4, -5, 3][k], filter: "blur(4px)", duration: 0.14, ease: "power2.out", overwrite: "auto" }, 2.31 + k * 0.002);
+        });
+        s.fromTo(mark, { opacity: 0, x: -12, y: 8, scale: 0.995, filter: "blur(5px)" }, { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.24, ease: "power4.out", overwrite: "auto" }, 2.38);
+        s.to($("bstar"), { opacity: 0, duration: 0.12, ease: "power2.in" }, 2.32);
+        s.to($("sel"), { opacity: 0, filter: "blur(5px)", duration: 0.16, ease: "power2.in" }, 2.33);
+        to(1256, 587, -3, 2.34, 0.3);
+        s.to($("burst"), { opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power2.in" }, 2.58);
+        s.to(cur, { opacity: 0, duration: 0.13, ease: "power2.in" }, 2.86);
+        s.to($("brandsc"), { opacity: 0, y: 26, filter: "blur(9px)", duration: 0.22, ease: "power2.in" }, 2.9);
+
+        // окно Claude: курсор целится в настоящие кнопки (замер в покое), а не в зашитые точки
+        s.to($("ui"), { opacity: 1, duration: 0.08 }, 3.02);
+        var fr = frame.getBoundingClientRect();
+        function at(el, dx, dy) {
+          var r = el.getBoundingClientRect();
+          return { x: r.left - fr.left + r.width * dx, y: r.top - fr.top + r.height * dy };
+        }
+        var sendP = at($("sendf"), 0.45, 0.55),
+          xP = at($("xbtn"), 0.45, 0.55),
+          fbP = at($("fbtn"), 0.5, 0.55);
+        s.fromTo($("stack"), { opacity: 0, scale: 0.88, y: 92, filter: "blur(14px)" }, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.66, ease: "expo.out" }, 3.05);
+        s.fromTo($("pstar"), { opacity: 0, scale: 0.5, rotation: -16 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.38 }, 3.18);
+        s.fromTo("#bsw-pe .bsw-placeholder", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.34 }, 3.3);
+        s.fromTo("#bsw-pe .bsw-plus, #bsw-pe .bsw-model", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.06 }, 3.42);
+        s.to($("pe"), { opacity: 0, duration: 0.18, ease: "power2.inOut" }, 4.12);
+        s.to($("pf"), { opacity: 1, duration: 0.18, ease: "power2.inOut" }, 4.12);
+        var Z = 1.32,
+          ZX = 300,
+          ZY = -100;
+        
+        s.to($("stack"), { scale: Z, x: ZX, y: ZY, duration: 0.26, ease: "power2.inOut" }, 4.14);
+        s.to($("stack"), { scale: 1, x: 0, y: 0, duration: 0.74, ease: "power2.inOut" }, 4.92);
+        s.to(pchars, { opacity: 1, duration: 0.01, stagger: { amount: 2.85 }, ease: "none" }, 4.18);
+        s.to($("sendf"), { opacity: 1, scale: 1, duration: 0.24 }, 7.32);
+        s.fromTo(cur, { x: sendP.x - 180, y: sendP.y + 280, rotation: -6, scale: 1, opacity: 0 }, { x: sendP.x, y: sendP.y + 280, rotation: -5, scale: 1, opacity: 1, duration: 0.48, ease: "power2.inOut" }, 6.92);
+        s.to(cur, { x: sendP.x, y: sendP.y, rotation: -5, duration: 0.5, ease: "power2.inOut" }, 7.44);
+        s.to($("sendf"), { scale: 0.86, duration: 0.08, ease: "power2.in" }, 7.9);
+        s.to($("sendf"), { scale: 1, duration: 0.14, ease: "back.out(1.7)" }, 7.98);
+        s.to(cur, { x: sendP.x + 22, duration: 0.28, ease: "power2.out" }, 7.94);
+        s.to($("pf"), { opacity: 0, duration: 0.16, ease: "power2.inOut" }, 8.15);
+        s.to($("pt"), { opacity: 1, duration: 0.18, ease: "power2.inOut" }, 8.15);
+        s.to("#bsw-pt .bsw-thinking", { opacity: 1, duration: 0.3 }, 8.25);
+        s.to("#bsw-pt .bsw-thinking", { opacity: 0, duration: 0.18, ease: "power2.inOut" }, 8.64);
+        s.fromTo("#bsw-pt .bsw-result", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.28 }, 8.82);
+        s.to(cur, { x: xP.x, y: xP.y, rotation: -6, duration: 0.58, ease: "power2.inOut", overwrite: "auto" }, 8.74);
+        s.to($("xbtn"), { keyframes: [{ scale: 0.88, duration: 0.08, ease: "power2.in" }, { scale: 1, duration: 0.14, ease: "back.out(1.7)" }] }, 9.34);
+        s.to("#bsw-pt .bsw-result", { opacity: 0, y: -8, duration: 0.18, ease: "power2.inOut" }, 9.5);
+        s.to($("stack"), { opacity: 0, scale: 0.93, y: 26, filter: "blur(12px)", duration: 0.4, ease: "power3.inOut" }, 9.5);
+        s.fromTo($("card"), { opacity: 0, y: 34, scale: 0.88, filter: "blur(12px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 9.86);
+        s.to(cur, { x: fbP.x + 160, y: fbP.y - 200, rotation: -5, duration: 0.42, ease: "power2.inOut", overwrite: "auto" }, 9.96);
+        s.to(cur, { x: fbP.x, y: fbP.y, rotation: -5, duration: 0.36, ease: "power2.inOut", overwrite: "auto" }, 10.5);
+        s.to($("fbtn"), { scale: 0.9, duration: 0.08, ease: "power2.in" }, 10.88);
+        s.to($("fbtn"), { scale: 1, backgroundColor: "#2f2f2f", duration: 0.28, ease: "elastic.out(1, 0.45)" }, 10.96);
+        s.to($("fl1"), { opacity: 0, duration: 0.08, ease: "none" }, 10.96);
+        s.to($("fl2"), { opacity: 1, duration: 0.08, ease: "none" }, 10.99);
+        s.to(cur, { x: fbP.x + 44, y: fbP.y + 26, rotation: -5, duration: 0.16, ease: "power2.out", overwrite: "auto" }, 11);
+
+        var tl = gsap.timeline({ paused: true });
+        tl.add(s, c0);
+        if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 + 11.2 ? cues[1] : c0 + 13);
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["blue-sweater-intro-video"] = tl;
+      });
+    </script>
+  </body>
+</html>

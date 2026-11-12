@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-portal-vertical",
+  "type": "hyperframes:block",
+  "title": "Portal Page Reveal (vertical)",
+  "description": "Vertical portal reveal: the light page tears open in a red and white ring onto the brand page, text centred on the 780 field or on a top / bottom card. Texts of both pages are variables; holds or fades.",
+  "tags": ["html-in-canvas", "webgl", "transition", "portal", "reveal", "before-after", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-portal-vertical.html",
+      "target": "compositions/vfx-portal-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

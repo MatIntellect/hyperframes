@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "blue-sweater-intro-video",
+  "type": "hyperframes:block",
+  "title": "Brand Intro to Follow Card",
+  "description": "Brand intro that ends on a follow: a word bursts into red blocks that assemble the wordmark, a Claude window types a request and sends it, the answer opens an X profile card and the cursor clicks follow. Word, wordmark, prompt, avatar, name, handle, bio and button labels are variables; the Claude window keeps its native colours; holds or fades.",
+  "tags": ["showcase", "ai", "creator", "brand", "intro"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "blue-sweater-intro-video.html",
+      "target": "compositions/blue-sweater-intro-video.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

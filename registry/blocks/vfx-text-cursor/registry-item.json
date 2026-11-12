@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-text-cursor",
+  "type": "hyperframes:block",
+  "title": "Text Cursor Light Reveal",
+  "description": "Wordmark reveal on a black stage: the wordmark rises, a light cursor sweeps across it casting rays in the brand colours (WebGL), then a glass card zooms in, a red word types in and slides into its line, and a final card slides across. Wordmark, words and the two ray colours are variables; holds or fades.",
+  "tags": ["html-in-canvas", "text", "shader", "cursor", "light", "title"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-text-cursor.html",
+      "target": "compositions/vfx-text-cursor.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

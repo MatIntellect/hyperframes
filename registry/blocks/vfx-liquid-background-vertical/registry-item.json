@@ -1,0 +1,25 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-liquid-background-vertical",
+  "type": "hyperframes:block",
+  "title": "Liquid Stats to Post (vertical)",
+  "description": "Vertical liquid stats to post: the stats page (number, badge, chart, stacked cards) on a wavy surface melts into a social post, content on the 780 field, or a compact version without the cards on a top / bottom card. Texts and avatar are variables; holds or fades.",
+  "tags": ["webgl", "liquid", "transition", "stats", "social", "post", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-liquid-background-vertical.html",
+      "target": "compositions/vfx-liquid-background-vertical.html",
+      "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/img/matintellect-avatar.svg",
+      "target": "assets/img/matintellect-avatar.svg",
+      "type": "hyperframes:asset"
+    }
+  ]
+}

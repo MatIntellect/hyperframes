@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-magnetic-vertical",
+  "type": "hyperframes:block",
+  "title": "Magnetic Cursor Page (vertical)",
+  "description": "Vertical magnetic cursor page: Bebas headline, text and three stacked cards on the 780 field warped toward a moving red dot, or a compact version with card titles only on a top / bottom card. Texts are variables; holds or fades.",
+  "tags": ["html-in-canvas", "webgl", "cursor", "shader", "distortion", "page", "vertical"],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-magnetic-vertical.html",
+      "target": "compositions/vfx-magnetic-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

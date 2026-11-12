@@ -1,0 +1,20 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "vfx-portal",
+  "type": "hyperframes:block",
+  "title": "Portal Page Reveal",
+  "description": "Before / after reveal: a light page with a label, Bebas headline, text and button tears open from the centre in a ragged red and white energy ring with sparks and RGB split, and the brand page behind it fills the frame. Labels, headlines, texts and button labels of both pages are variables; holds or fades.",
+  "tags": ["html-in-canvas", "webgl", "transition", "portal", "reveal", "before-after"],
+  "dimensions": {
+    "width": 1920,
+    "height": 1080
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "vfx-portal.html",
+      "target": "compositions/vfx-portal.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}
