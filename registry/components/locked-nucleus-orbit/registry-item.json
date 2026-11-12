@@ -34,6 +34,14 @@
       "min": 3,
       "max": 6,
       "step": 1
+    },
+    {
+      "id": "words",
+      "type": "string",
+      "role": "content",
+      "label": "Satellite words",
+      "description": "Comma-separated satellite words, one per chip; a missing entry keeps the default word.",
+      "default": "звук,свет,кадры,монтаж,цвет,титры"
     }
   ]
 }

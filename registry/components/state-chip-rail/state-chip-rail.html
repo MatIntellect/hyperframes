@@ -138,6 +138,10 @@
               flex-direction: column;
               align-items: stretch;
             }
+            .scr-badges {
+              align-self: flex-start;
+              padding-left: 1.6em;
+            }
           }
 
           .scr-chip,
@@ -173,7 +177,7 @@
           .scr-chip[data-state="pending"] {
             border-color: color-mix(in srgb, var(--border, #2e2e32) 80%, transparent);
             background: transparent;
-            color: color-mix(in srgb, var(--muted, #8a8a90) 78%, transparent);
+            color: var(--muted, #8a8a90);
           }
 
           .scr-chip[data-state="active"] {
@@ -205,7 +209,14 @@
             padding: 0.5em 0.9em;
             border-color: color-mix(in srgb, var(--border, #2e2e32) 70%, transparent);
             color: color-mix(in srgb, var(--muted, #8a8a90) 88%, transparent);
-            font-size: 0.82em;
+            font-size: max(28px, 0.82em);
+          }
+
+          .scr-badges {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5em;
           }
         </style>
 
@@ -295,10 +306,15 @@
             });
             chips.forEach(function (chip, index) {
               rail.appendChild(chip);
-              if (index === badgeState) {
+              if (index === badgeState && badgeElements.length > 0) {
+                // One group beside its state: in the standing column, separate
+                // stretched rows read as extra states (second head, 038).
+                var badgeGroup = document.createElement("div");
+                badgeGroup.className = "scr-badges";
                 badgeElements.forEach(function (badge) {
-                  rail.appendChild(badge);
+                  badgeGroup.appendChild(badge);
                 });
+                rail.appendChild(badgeGroup);
               }
             });
             rail.setAttribute("aria-label", states.join(", "));
@@ -320,7 +336,7 @@
               fontCqw = Math.min(6, 88 / (longest * 0.8 + 3.1));
               // and the column must fit the height: a chip is 2.24em tall plus a
               // 0.8em gap, so a row takes about 3.05em (ten rows ran into the captions)
-              var rows = count + badges.length;
+              var rows = count + Math.ceil(badges.length / 2);
               var byHeight = ((0.9 * root.clientHeight) / (rows * 3.05) / root.clientWidth) * 100;
               fontCqw = Math.min(fontCqw, byHeight);
             }

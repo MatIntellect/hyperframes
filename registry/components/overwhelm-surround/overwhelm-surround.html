@@ -176,7 +176,7 @@
           }
 
           .os-chip[data-kind="alert"] {
-            border-color: color-mix(in srgb, var(--brand, #ff0000) 62%, var(--border, #2e2e32));
+            border-color: var(--brand, #ff0000);
           }
 
           .os-chip[data-kind="alert"]::before {
@@ -209,8 +209,7 @@
             padding: 0 3cqw;
             display: grid;
             place-items: center;
-            border: 0.2cqw solid
-              color-mix(in srgb, var(--accent, #ff0000) 78%, var(--border, #2e2e32));
+            border: 0.2cqw solid var(--brand, #ff0000);
             border-radius: clamp(2.2cqw, 3.4cqw, 4.5cqw);
             background: var(--surface, #18181a);
             color: var(--fg, #f2f2f2);

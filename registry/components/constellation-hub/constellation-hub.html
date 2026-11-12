@@ -441,11 +441,7 @@
               { opacity: 0.88, scale: 1, duration: SETTLE, ease: "power2.out" },
               SETTLE_START,
             );
-            tl.to(
-              connectors,
-              { opacity: 0.62, duration: SETTLE, ease: "power2.out" },
-              SETTLE_START,
-            );
+            tl.to(connectors, { opacity: 1, duration: SETTLE, ease: "power2.out" }, SETTLE_START);
 
             var driftHalf = Math.max(0, HOLD - STILLNESS) / 2;
             if (driftHalf > 0) {
