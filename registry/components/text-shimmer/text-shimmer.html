@@ -145,6 +145,14 @@
           <span class="ts-headline"></span>
         </div>
 
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("text-shimmer-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
         <script>
           (function () {

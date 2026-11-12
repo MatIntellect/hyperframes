@@ -103,6 +103,14 @@
       ></div>
     </div>
     <script>
+      /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+      (function () {
+        var c = document.getElementById("mk-emph-drv");
+        var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+        if (h) c.dataset.duration = h.dataset.duration;
+      })();
+    </script>
+    <script>
       (function () {
         window.__timelines = window.__timelines || {};
 

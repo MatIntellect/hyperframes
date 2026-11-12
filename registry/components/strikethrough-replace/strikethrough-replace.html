@@ -88,7 +88,10 @@
   .hf-catalog-strikethrough-replace i {
     position: absolute;
     left: 0;
-    width: 48%;
+    /* the first word's grid cell is the containing block: the line spans exactly the struck word, any pair of words */
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
     height: var(--hf-strike-thickness, 6px);
     border-radius: 999px;
     background: var(--hf-strike-color, var(--brand, #ff0000));
