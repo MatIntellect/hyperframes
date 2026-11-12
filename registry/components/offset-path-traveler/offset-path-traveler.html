@@ -134,14 +134,13 @@
             display: inline-flex;
             align-items: center;
             gap: var(--space-1, 1.4cqmin);
-            max-width: 34cqw;
+            max-width: 60cqw;
             min-height: 8cqh;
             padding: var(--space-1, 1.6cqh) var(--space-2, 2.6cqw);
-            overflow: hidden;
-            border: 0.18cqmin solid
-              color-mix(in srgb, var(--opt-accent) 68%, var(--border, #2e2e32));
+            border: 0.18cqmin solid var(--opt-accent);
             border-radius: var(--radius, 999px);
-            background: color-mix(in srgb, var(--surface, #18181a) 88%, var(--opt-accent));
+            /* clean plate: surface mixed with red gave a maroon the palette does not have */
+            background: var(--surface, #18181a);
             box-shadow:
               0 2.2cqh 5cqh color-mix(in srgb, var(--bg, #0c1014) 48%, transparent),
               0 0 3.5cqh color-mix(in srgb, var(--opt-accent) 24%, transparent);
@@ -149,9 +148,10 @@
             font-family: var(--font-body, "Montserrat", sans-serif);
             font-size: clamp(28px, 3.5cqmin, 30px);
             font-weight: 700;
-            line-height: 1;
+            line-height: 1.15;
             letter-spacing: -0.01em;
-            white-space: nowrap;
+            /* a long label wraps inside the chip (nowrap + overflow cut it silently) */
+            white-space: normal;
           }
 
           .opt-dot {

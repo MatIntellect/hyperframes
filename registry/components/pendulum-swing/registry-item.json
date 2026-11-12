@@ -88,16 +88,12 @@
       "type": "enum",
       "role": "style",
       "label": "Tone",
-      "description": "Sign colour from the palette: ink the card colour, paper the light text colour, accent the brand red.",
+      "description": "Sign colour from the palette: ink the card colour, accent the brand red.",
       "default": "ink",
       "options": [
         {
           "value": "ink",
           "label": "Ink"
-        },
-        {
-          "value": "paper",
-          "label": "Paper"
         },
         {
           "value": "accent",

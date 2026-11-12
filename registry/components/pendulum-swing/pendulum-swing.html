@@ -21,9 +21,9 @@
       from. right lifts the first swing clockwise, left mirrors it.
     - text (string, default «Мы открыты»): words on the sign; a long line
       wraps inside 640px.
-    - tone (ink | paper | accent, default ink): sign colour, all from the
-      palette: ink is the card colour with light text, paper the light text
-      colour with dark text, accent the brand red with light text.
+    - tone (ink | accent, default ink): sign colour from the palette: ink is
+      the card colour with light text, accent the brand red with light text
+      (the source's light paper sign is gone: the palette has no light plate).
 
   On every default the result is identical to the original: a near-black sign
   hanging from its top centre, entering from the right through a 34deg swing.
@@ -43,7 +43,7 @@
     { "id": "pivot", "type": "enum", "role": "layout", "label": "Pivot", "description": "Where the content hangs from. The swing rotates about this point, so the top edge stays pinned.", "default": "top-center", "options": [{ "value": "top-center", "label": "Top center" }, { "value": "top-left", "label": "Top left" }, { "value": "top-right", "label": "Top right" }] },
     { "id": "amplitude", "type": "enum", "role": "motion", "label": "Amplitude", "description": "How far the first swing reaches before it settles. Every later swing scales with it, so the pendulum still comes to rest upright.", "default": "standard", "options": [{ "value": "gentle", "label": "Gentle" }, { "value": "standard", "label": "Standard" }, { "value": "wide", "label": "Wide" }] },
     { "id": "direction", "type": "enum", "role": "motion", "label": "Direction", "description": "Which side the pendulum swings in from: right lifts the first swing clockwise, left mirrors it.", "default": "right", "options": [{ "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }] },
-    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Sign colour from the palette: ink the card colour, paper the light text colour, accent the brand red.", "default": "ink", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] }
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Sign colour from the palette: ink the card colour, accent the brand red.", "default": "ink", "options": [{ "value": "ink", "label": "Ink" }, { "value": "accent", "label": "Accent" }] }
   ]'
 >
   <span class="hf-catalog-pendulum-swing__body">Мы открыты</span>
@@ -136,7 +136,6 @@
     // Each tone is a fill/text pair so the sign keeps AA contrast on any frame.
     var tones = {
       ink: { bg: "var(--surface, #18181a)", fg: "var(--fg, #f2f2f2)" },
-      paper: { bg: "var(--fg, #f2f2f2)", fg: "var(--bg, #0c1014)" },
       accent: { bg: "var(--brand, #ff0000)", fg: "var(--fg, #f2f2f2)" },
     };
 
