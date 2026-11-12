@@ -1,0 +1,223 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "value", "type": "number", "role": "content", "label": "Value", "description": "Arc fill and counted number, 0 to 100 percent.", "default": 76, "min": 0, "max": 100, "step": 1, "unit": "%" },
+    { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Small label under the number.", "default": "Загрузка" }
+  ]'
+>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      /* the unit fills the host box; the gauge sizes from it */
+      #mk-arc-root {
+        position: absolute;
+        inset: 0;
+        container-type: size;
+      }
+      /* ---- mk-usage-arc ----------------------------------------------------
+         Hairline circular gauge: draw-on arc + centered value + tiny label.
+         The promo's "Usage" arc. Recolor via --mk-arc-color. */
+      .mk-arc {
+        --mk-font: "Montserrat", sans-serif; /* figures and labels are Montserrat (Mat 11.11) */
+        --mk-ink: var(--fg, #f2f2f2);
+        --mk-ink-dim: var(--muted, #8a8a90);
+        --mk-accent: var(--brand, #ff0000);
+        --mk-arc-color: var(--mk-accent);
+        --mk-hairline: 3px;
+
+        position: absolute;
+        /* sized by the host box (was a fixed 220 px demo in a 1920x1080 scene) */
+        left: 50%;
+        top: 50%;
+        width: min(60cqw, 60cqh);
+        height: min(60cqw, 60cqh);
+        margin: calc(min(60cqw, 60cqh) / -2) 0 0 calc(min(60cqw, 60cqh) / -2);
+        pointer-events: none;
+      }
+      .mk-arc svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .mk-arc-track {
+        fill: none;
+        stroke: color-mix(in srgb, var(--fg, #f2f2f2) 14%, transparent);
+        stroke-width: var(--mk-hairline);
+      }
+      .mk-arc-fill {
+        fill: none;
+        stroke: var(--mk-arc-color);
+        stroke-width: var(--mk-hairline);
+        stroke-linecap: round;
+      }
+      .mk-arc-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.2cqmin;
+        font-family: var(--mk-font);
+      }
+      .mk-arc-num {
+        font-weight: 600;
+        font-size: min(13cqw, 13cqh);
+        letter-spacing: -0.02em;
+        color: var(--mk-ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .mk-arc-label {
+        font-weight: 500;
+        font-size: max(28px, min(4.6cqw, 4.6cqh)); /* 28 px floor (vertical.md:18) */
+        color: var(--mk-ink-dim);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Self-preview wrapper. WIRING: copy the .mk-arc CSS, the markup below,
+         and the helpers into your host. r=92 with 220px box; the helper reads
+         the circle's radius, so resizing the box + r just works. -->
+    <div id="mk-arc-root" data-composition-id="mk-usage-arc" data-start="0" data-duration="4">
+      <div class="mk-arc" id="mk-arc-demo">
+        <svg viewBox="0 0 220 220">
+          <circle class="mk-arc-track" cx="110" cy="110" r="92"></circle>
+          <circle
+            class="mk-arc-fill"
+            cx="110"
+            cy="110"
+            r="92"
+            transform="rotate(-90 110 110)"
+          ></circle>
+        </svg>
+        <div class="mk-arc-center">
+          <span class="mk-arc-num">0%</span>
+          <span class="mk-arc-label">Загрузка</span>
+        </div>
+      </div>
+      <div
+        id="mk-arc-drv"
+        class="clip"
+        data-start="0"
+        data-duration="4"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+      (function () {
+        var c = document.getElementById("mk-arc-drv");
+        var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+        if (h) c.dataset.duration = h.dataset.duration;
+      })();
+    </script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // ---- copy these helpers into the host script, then:
+        //   mkArcIn(tl, "#mk-my-arc", 1.0, 0.76);  // draw to 76%, count the numeral
+        //   mkArcOut(tl, "#mk-my-arc", 8.5);
+        window.mkArcIn = function (tl, target, at, value) {
+          var el = document.querySelector(target);
+          var fill = el.querySelector(".mk-arc-fill");
+          var num = el.querySelector(".mk-arc-num");
+          var C = 2 * Math.PI * parseFloat(fill.getAttribute("r"));
+          gsap.set(el, { opacity: 0, y: 16 });
+          gsap.set(fill, { strokeDasharray: C, strokeDashoffset: C });
+          tl.to(el, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, at);
+          tl.to(
+            fill,
+            { strokeDashoffset: C * (1 - value), duration: 1.1, ease: "power2.inOut" },
+            at + 0.15,
+          );
+          var st = { v: 0 };
+          tl.to(
+            st,
+            {
+              v: value,
+              duration: 1.1,
+              ease: "power2.inOut",
+              onUpdate: function () {
+                num.textContent = Math.round(st.v * 100) + "%";
+              },
+            },
+            at + 0.15,
+          );
+        };
+        window.mkArcOut = function (tl, target, at) {
+          tl.to(target, { opacity: 0, y: -12, duration: 0.35, ease: "power2.in" }, at);
+        };
+
+        // ---- the unit: one gauge filling the host box ----
+        var root = document.getElementById("mk-arc-root");
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        var v = Number(vars.value);
+        var value = isFinite(v) ? Math.min(100, Math.max(0, v)) / 100 : 0.76;
+        if (typeof vars.label === "string") {
+          document.querySelector("#mk-arc-demo .mk-arc-label").textContent = vars.label;
+        }
+        // length from the host clip: the runtime strips data-duration from a mounted root (flattenedRoot.ts:8-19)
+        var D = parseFloat(
+          ((root.parentElement && root.parentElement.closest("[data-duration]")) || root).dataset
+            .duration || "4",
+        );
+        var tl = gsap.timeline({ paused: true });
+        window.mkArcIn(tl, "#mk-arc-demo", 0.4, value);
+        window.mkArcOut(tl, "#mk-arc-demo", Math.max(1.9, D - 0.6));
+        tl.set({}, {}, D);
+        window.__timelines["mk-usage-arc"] = tl;
+      })();
+    </script>
+  </body>
+</html>

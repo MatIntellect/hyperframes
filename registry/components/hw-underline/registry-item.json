@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "hw-underline",
+  "type": "hyperframes:component",
+  "title": "Squiggle Marks",
+  "description": "A hand-drawn mark that draws on and boils under, through or beside one phrase: squiggle underline, double strike or bracket, sized to the measured phrase. Ships the hw-boil and hw-mark helpers for hosts that annotate their own text.",
+  "tags": ["handwritten", "annotation", "text-treatment"],
+  "files": [
+    {
+      "path": "hw-underline.html",
+      "target": "compositions/components/hw-underline.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

@@ -1396,6 +1396,14 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "animated-bar-chart",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "blur-in",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "bottom-up-letters",
       "type": "hyperframes:component"
     },
@@ -1456,11 +1464,23 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "chart-story",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "colorama-wipe",
       "type": "hyperframes:component"
     },
     {
+      "name": "conic-progress-ring",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "count-up",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "decline-chart",
       "type": "hyperframes:component"
     },
     {
@@ -1477,6 +1497,22 @@
     },
     {
       "name": "hook-plate",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "hw-arrow",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "hw-box-label",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "hw-callout-circle",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "hw-underline",
       "type": "hyperframes:component"
     },
     {
@@ -1505,6 +1541,10 @@
     },
     {
       "name": "mk-emphasis-type",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "mk-usage-arc",
       "type": "hyperframes:component"
     },
     {

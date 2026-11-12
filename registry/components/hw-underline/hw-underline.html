@@ -1,0 +1,320 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase the mark annotates.", "default": "Монтаж с ИИ" },
+    { "id": "mark", "type": "enum", "role": "style", "label": "Mark", "description": "underline: a squiggle under the phrase; strike: a double pass through it; bracket: a bracket at its left.", "default": "underline", "options": [{ "value": "underline", "label": "Underline" }, { "value": "strike", "label": "Strike" }, { "value": "bracket", "label": "Bracket" }] }
+  ]'
+>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      /* ---- hw-underline ------------------------------------------------
+         Squiggle underline / strikethrough / bracket marks that draw on.
+         Size the wrapper over the text they annotate. Requires the hw-boil
+         helpers in the host. */
+      .hw-mark {
+        position: absolute;
+        pointer-events: none;
+      }
+      .hw-mark svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .hw-mark path {
+        fill: none;
+        stroke: var(--hw-mark-color, var(--hw-accent-warm, var(--brand, #ff0000)));
+        stroke-width: var(--hw-mark-w, 7);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      /* the unit: one phrase centred in the host box, one mark sized to it */
+      #hw-un-root {
+        position: absolute;
+        inset: 0;
+        container-type: size;
+      }
+      #hw-un-scene {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-family: var(--hw-font-print, "Montserrat", sans-serif);
+        font-weight: 700;
+        color: var(--fg, #f2f2f2);
+      }
+      #hw-un-text {
+        white-space: nowrap;
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Self-preview. WIRING: copy the .hw-mark CSS + markup pattern, the
+         hwMarkPath / hwMarkOn / hwMarkOff helpers, AND the hw-boil helpers.
+         Then:
+
+           document.querySelector("#hw-my-mark path")
+             .setAttribute("d", hwMarkPath(420, 34, "underline", 4));
+           hwMarkOn(tl, "#hw-my-mark", 2.0);
+           hwBoil(tl, "#hw-my-mark", { frameDrop: 3, seed: 4 });
+    -->
+    <div id="hw-un-root" data-composition-id="hw-underline" data-start="0" data-duration="4">
+      <div id="hw-un-scene"><div id="hw-un-text"></div></div>
+      <div class="hw-mark" id="hw-un-m1">
+        <svg><path></path></svg>
+      </div>
+      <div
+        id="hw-un-drv"
+        class="clip"
+        data-start="0"
+        data-duration="4"
+        data-track-index="0"
+        style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none"
+      ></div>
+    </div>
+    <script>
+      /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+      (function () {
+        var c = document.getElementById("hw-un-drv");
+        var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+        if (h) c.dataset.duration = h.dataset.duration;
+      })();
+    </script>
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        /* ---- hw-boil helpers (shared family runtime — copy once per host) ---- */
+        window.hwOnUpdate = function (tl, fn) {
+          if (!tl.__hwRenders) {
+            tl.__hwRenders = [];
+            tl.eventCallback("onUpdate", function () {
+              for (var i = 0; i < tl.__hwRenders.length; i++) tl.__hwRenders[i]();
+            });
+          }
+          tl.__hwRenders.push(fn);
+          fn();
+        };
+        window.hwHash = function (n, seed) {
+          var x = Math.sin(n * 127.1 + (seed || 1) * 311.7) * 43758.5453;
+          return (x - Math.floor(x)) * 2 - 1;
+        };
+        window.hwBoil = function (tl, target, opts) {
+          opts = opts || {};
+          var amp = opts.amp !== undefined ? opts.amp : 1.6;
+          var rot = opts.rot !== undefined ? opts.rot : 0.5;
+          var fps = opts.fps || 30;
+          var drop = opts.frameDrop || 3;
+          var seed = opts.seed || 1;
+          var els = gsap.utils.toArray(target);
+          window.hwOnUpdate(tl, function () {
+            var step = Math.floor((tl.time() * fps) / drop);
+            for (var i = 0; i < els.length; i++) {
+              gsap.set(els[i], {
+                x: window.hwHash(step * 3 + i * 97, seed) * amp,
+                y: window.hwHash(step * 3 + 1 + i * 97, seed) * amp,
+                rotation: (opts.baseRot || 0) + window.hwHash(step * 3 + 2 + i * 97, seed) * rot,
+              });
+            }
+          });
+        };
+
+        // ---- hw-mark helpers (copy these too) ----
+        // style: "underline" (squiggle) | "strike" (double pass) | "bracket"
+        window.hwMarkPath = function (w, h, style, seed) {
+          seed = seed || 1;
+          function wob(n, range) {
+            return window.hwHash(n, seed) * (range === undefined ? 5 : range);
+          }
+          var mid = h / 2;
+          if (style === "bracket") {
+            return (
+              "M " +
+              (w * 0.9 + wob(1, 3)) +
+              " " +
+              (2 + wob(2, 3)) +
+              " Q " +
+              wob(3, 4) +
+              " " +
+              (2 + wob(4)) +
+              " " +
+              (4 + wob(5, 3)) +
+              " " +
+              (h * 0.5 + wob(6)) +
+              " Q " +
+              wob(7, 4) +
+              " " +
+              (h - 2 + wob(8)) +
+              " " +
+              (w * 0.9 + wob(9, 3)) +
+              " " +
+              (h - 2 + wob(10, 3))
+            );
+          }
+          if (style === "strike") {
+            return (
+              "M " +
+              (2 + wob(1, 3)) +
+              " " +
+              (mid + wob(2)) +
+              " L " +
+              (w - 4 + wob(3, 3)) +
+              " " +
+              (mid - 3 + wob(4)) +
+              " M " +
+              (w - 10 + wob(5, 4)) +
+              " " +
+              (mid + 7 + wob(6)) +
+              " L " +
+              (8 + wob(7, 4)) +
+              " " +
+              (mid + 3 + wob(8))
+            );
+          }
+          /* underline squiggle */
+          var segs = Math.max(5, Math.round(w / 95));
+          var d = "M 2 " + (mid + wob(0, 4));
+          for (var i = 1; i <= segs; i++) {
+            var x = (w / segs) * i;
+            d +=
+              " Q " +
+              (x - w / segs / 2 + wob(i * 4 + 1, 9)) +
+              " " +
+              (mid + (i % 2 ? -1 : 1) * (9 + wob(i * 4 + 2, 4))) +
+              " " +
+              x.toFixed(1) +
+              " " +
+              (mid + wob(i * 4 + 3, 4));
+          }
+          return d;
+        };
+        window.hwMarkOn = function (tl, target, at, dur) {
+          var p = document.querySelector(target + " path");
+          var len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          tl.to(
+            p,
+            { strokeDashoffset: 0, duration: dur === undefined ? 0.55 : dur, ease: "power2.inOut" },
+            at,
+          );
+        };
+        window.hwMarkOff = function (tl, target, at) {
+          tl.to(target, { opacity: 0, duration: 0.3, ease: "power2.in" }, at);
+        };
+
+        // ---- the unit: one phrase, one mark sized to it ----
+        var root = document.getElementById("hw-un-root");
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        var text =
+          typeof vars.text === "string" && vars.text.trim() !== ""
+            ? vars.text.trim()
+            : "Монтаж с ИИ";
+        var mark = { underline: 1, strike: 1, bracket: 1 }[vars.mark] ? vars.mark : "underline";
+        var textEl = document.getElementById("hw-un-text");
+        textEl.textContent = text;
+        // length from the host clip: the runtime strips data-duration from a mounted root (flattenedRoot.ts:8-19)
+        var D = parseFloat(
+          ((root.parentElement && root.parentElement.closest("[data-duration]")) || root).dataset
+            .duration || "4",
+        );
+        // fonts first (format.md:151): the mark is sized from the measured phrase
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["hw-underline"] = document.fonts
+          .load('700 100px "Montserrat"', text)
+          .then(function () {
+            var W = root.clientWidth;
+            var fit = window.__hyperframes.fitTextFontSize(text, {
+              fontFamily: "Montserrat",
+              fontWeight: 700,
+              maxWidth: W * 0.8,
+              baseFontSize: Math.max(28, Math.round(Math.min(W * 0.13, 120))),
+              minFontSize: 28,
+              step: 1,
+            });
+            textEl.style.fontSize = fit.fontSize + "px";
+            var rr = root.getBoundingClientRect();
+            var tr = textEl.getBoundingClientRect();
+            var k = W / rr.width || 1;
+            var tx = (tr.left - rr.left) * k;
+            var ty = (tr.top - rr.top) * k;
+            var tw = tr.width * k;
+            var th = tr.height * k;
+            var box =
+              mark === "bracket"
+                ? { x: tx - th * 0.55, y: ty - th * 0.15, w: th * 0.4, h: th * 1.3 }
+                : mark === "strike"
+                  ? { x: tx - th * 0.1, y: ty + th * 0.3, w: tw + th * 0.2, h: th * 0.4 }
+                  : { x: tx - th * 0.1, y: ty + th * 1.0, w: tw + th * 0.2, h: th * 0.4 };
+            var m = document.getElementById("hw-un-m1");
+            m.style.left = box.x + "px";
+            m.style.top = box.y + "px";
+            m.style.width = box.w + "px";
+            m.style.height = box.h + "px";
+            m.style.setProperty("--hw-mark-w", String(Math.max(4, Math.round(th * 0.08))));
+            m.querySelector("svg").setAttribute("viewBox", "0 0 " + box.w + " " + box.h);
+            m.querySelector("path").setAttribute("d", window.hwMarkPath(box.w, box.h, mark, 4));
+            var tl = gsap.timeline({ paused: true });
+            window.hwMarkOn(tl, "#hw-un-m1", 0.4);
+            window.hwBoil(tl, [".hw-mark"], { amp: 1.5, rot: 0.4, frameDrop: 3, seed: 5 });
+            tl.to(
+              [".hw-mark"],
+              { opacity: 0, duration: 0.3, ease: "power2.in" },
+              Math.max(1.2, D - 0.5),
+            );
+            tl.set({}, {}, D);
+            window.__timelines["hw-underline"] = tl;
+          });
+      })();
+    </script>
+  </body>
+</html>
