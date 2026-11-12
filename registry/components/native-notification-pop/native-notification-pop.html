@@ -243,13 +243,13 @@
           }
 
           .nnp-anchor[data-os="ios"] .nnp-banner {
-            width: 58cqw;
+            width: 92cqw; /* a vertical field: the system banner spans the phone */
             border-radius: 3.6cqmin;
             padding: 2.6cqmin 3cqmin;
           }
 
           .nnp-anchor[data-os="macos"] .nnp-banner {
-            width: 38cqw;
+            width: 80cqw;
             border-radius: 2.2cqmin;
             padding: 2.2cqmin 2.6cqmin;
           }
@@ -322,13 +322,8 @@
           <div class="nnp-slot" data-slot="scene">
             <!-- SLOT "scene": replace the children of this element with your
                  own full-bleed content (img, video, or HTML). -->
-            <div class="nnp-default" aria-hidden="true">
-              <div class="nnp-card">
-                <div class="nnp-card-bar"></div>
-                <div class="nnp-card-line"></div>
-                <div class="nnp-card-line"></div>
-              </div>
-            </div>
+            <!-- empty by default: the reel itself shows through under the banner blur;
+                 a host that edits the file may put its own scene here -->
           </div>
 
           <div class="nnp-anchor" data-os="ios">

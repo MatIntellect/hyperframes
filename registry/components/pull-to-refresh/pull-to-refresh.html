@@ -528,6 +528,7 @@
             // IN and OUT scale together only when the composition duration is short.
             var IN_BASE = 1.8;
             var OUT_BASE = 0.65;
+            var READ_BASE = 1.4; // the "updated" line holds long enough to read (catalog.mdx:193); taken from the loading hold
             var CONTACT_BASE = 0.12;
             var DRAG_BASE = 0.7;
             var ARM_AT_BASE = 0.61;
@@ -538,16 +539,17 @@
                 .dataset.duration,
             );
             var duration = Number.isFinite(durationValue) && durationValue > 0 ? durationValue : 4;
-            var totalBase = IN_BASE + OUT_BASE;
+            var totalBase = IN_BASE + OUT_BASE + READ_BASE;
             var scale = duration < totalBase ? duration / totalBase : 1;
             var IN = IN_BASE * scale;
             var OUT = OUT_BASE * scale;
+            var READ = READ_BASE * scale;
             var CONTACT = CONTACT_BASE * scale;
             var DRAG = DRAG_BASE * scale;
             var ARM_AT = ARM_AT_BASE * scale;
             var IMPACT_AT = IMPACT_AT_BASE * scale;
             var HANDOFF = HANDOFF_BASE * scale;
-            var HOLD = Math.max(0, duration - IN - OUT);
+            var HOLD = Math.max(0, duration - IN - OUT - READ);
             var OUT_START = IN + HOLD;
             var ACTIVE_DURATION = Math.max(0.001, OUT_START - IMPACT_AT);
 

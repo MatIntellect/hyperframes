@@ -13,9 +13,9 @@
       "role": "style",
       "label": "Size",
       "description": "Bubble width in pixels; dots and tail scale with it.",
-      "default": 124,
-      "min": 80,
-      "max": 220,
+      "default": 176,
+      "min": 120,
+      "max": 280,
       "step": 2,
       "unit": "px"
     },

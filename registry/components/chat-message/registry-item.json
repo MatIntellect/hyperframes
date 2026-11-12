@@ -42,7 +42,7 @@
       "type": "string",
       "role": "content",
       "label": "Text",
-      "description": "Bubble text, or the emoji row for the Emoji type.",
+      "description": "Bubble text, or the emoji row for the Emoji type. Up to 140 characters; longer is refused.",
       "default": "смотри 👀"
     },
     {
@@ -50,7 +50,7 @@
       "type": "string",
       "role": "content",
       "label": "Card title",
-      "description": "Link-card title (Link card type only).",
+      "description": "Link-card title (Link card type only). Up to 80 characters.",
       "default": "MatIntellect – монтаж роликов с ИИ"
     },
     {
@@ -58,7 +58,7 @@
       "type": "string",
       "role": "content",
       "label": "Card domain",
-      "description": "Link-card domain line (Link card type only).",
+      "description": "Link-card domain line (Link card type only). Up to 40 characters.",
       "default": "matintellect.com"
     },
     {

@@ -12,7 +12,7 @@
       "type": "string",
       "role": "content",
       "label": "Title",
-      "description": "Bold note title. A | breaks the line.",
+      "description": "Bold note title. A | breaks the line. Up to 60 characters.",
       "default": "Что никто не сказал|про видео"
     },
     {
@@ -20,7 +20,7 @@
       "type": "string",
       "role": "content",
       "label": "Lines",
-      "description": "Pipe-separated body lines, typed one after another.",
+      "description": "Pipe-separated body lines, typed one after another. Up to 6 lines and 240 characters.",
       "default": "ролики выходили слабыми|программы стоили дорого|и переделкам не было конца"
     },
     {

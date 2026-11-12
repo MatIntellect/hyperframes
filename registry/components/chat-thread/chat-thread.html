@@ -23,7 +23,7 @@
   lang="en"
   data-composition-id="chat-thread"
   data-composition-duration="12"
-  data-composition-variables='[{"id": "contact", "type": "string", "role": "content", "label": "Contact", "description": "Name in the thread header; the avatar shows its first letter.", "default": "Аня"}, {"id": "unread", "type": "number", "role": "content", "label": "Unread badge", "description": "Count in the back-button badge. 0 hides it.", "default": 12, "min": 0, "max": 99, "step": 1}, {"id": "messages", "type": "string", "role": "content", "label": "Messages", "description": "Pipe-separated thread. Each entry picks its type by prefix: recv: or sent: for a text bubble, emoji: for a large emoji row, img for a media placeholder, card:Title~domain for a link card. Example: recv:hey|sent:look 👀|card:HyperFrames~hyperframes.heygen.com|emoji:🤯🤯🤯", "default": "recv:чем делал ролик к запуску??|sent:смотри 👀|card:MatIntellect – монтаж роликов с ИИ~matintellect.com|recv:ОГО, ЗА ОДИН ВЕЧЕР|emoji:🤯🤯🤯|sent:в 4K. без монтажёра"}, {"id": "beat", "type": "number", "role": "timing", "label": "Beat", "description": "Seconds between message arrivals.", "default": 1.7, "min": 0.8, "max": 3, "step": 0.1}, {"id": "dots", "type": "enum", "role": "timing", "label": "Typing dots", "description": "Show the three-dot indicator before received messages.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]}, {"id": "receipt", "type": "enum", "role": "content", "label": "Delivered receipt", "description": "Show Delivered under the last sent bubble, as iMessage does.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]}]'
+  data-composition-variables='[{"id": "contact", "type": "string", "role": "content", "label": "Contact", "description": "Name in the thread header; the avatar shows its first letter. Up to 16 characters.", "default": "Аня"}, {"id": "unread", "type": "number", "role": "content", "label": "Unread badge", "description": "Count in the back-button badge. 0 hides it.", "default": 12, "min": 0, "max": 99, "step": 1}, {"id": "messages", "type": "string", "role": "content", "label": "Messages", "description": "Pipe-separated thread. Each entry picks its type by prefix: recv: or sent: for a text bubble, emoji: for a large emoji row, img for a media placeholder, card:Title~domain for a link card. Up to 12 entries and 800 characters. Example: recv:hey|sent:look 👀|card:HyperFrames~hyperframes.heygen.com|emoji:🤯🤯🤯", "default": "recv:чем делал ролик к запуску??|sent:смотри 👀|card:MatIntellect – монтаж роликов с ИИ~matintellect.com|recv:ОГО, ЗА ОДИН ВЕЧЕР|emoji:🤯🤯🤯|sent:в 4K. без монтажёра"}, {"id": "beat", "type": "number", "role": "timing", "label": "Beat", "description": "Seconds between message arrivals.", "default": 1.7, "min": 0.8, "max": 3, "step": 0.1}, {"id": "dots", "type": "enum", "role": "timing", "label": "Typing dots", "description": "Show the three-dot indicator before received messages.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]}, {"id": "receipt", "type": "enum", "role": "content", "label": "Delivered receipt", "description": "Show Delivered under the last sent bubble, as iMessage does.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]}]'
 >
   <head>
     <meta charset="UTF-8" />
@@ -77,13 +77,7 @@
             container-type: size;
             isolation: isolate;
             background: #000;
-            font-family: var(
-              --font-body,
-              -apple-system,
-              BlinkMacSystemFont,
-              "Segoe UI",
-              sans-serif
-            );
+            font-family: var(--font-body, "Montserrat", sans-serif);
             pointer-events: none;
           }
           /* status bar */
@@ -267,7 +261,11 @@
             aspect-ratio: 4 / 3;
             border-radius: 4cqmin;
             position: relative;
-            background: linear-gradient(165deg, #0f3a2c 0%, #0a9c6b 78%, #3ce6ac 100%);
+            background: color-mix(
+              in srgb,
+              var(--fg, #f2f2f2) 10%,
+              var(--surface, #18181a)
+            ); /* monochrome media placeholder (placeholder-material.md:78) */
           }
           .cht-play {
             position: absolute;
@@ -301,7 +299,11 @@
             width: 100%;
             aspect-ratio: 1.02;
             position: relative;
-            background: linear-gradient(165deg, #0f3a2c 0%, #0a9c6b 78%, #3ce6ac 100%);
+            background: color-mix(
+              in srgb,
+              var(--fg, #f2f2f2) 10%,
+              var(--surface, #18181a)
+            ); /* monochrome media placeholder (placeholder-material.md:78) */
           }
           .cht-cardmeta {
             background: #28282c;
@@ -480,7 +482,11 @@
               if (typeof v !== "string") return fb;
               var t = v.trim();
               if (!t) return fb;
-              return t.length > mx ? t.slice(0, mx) : t;
+              if (t.length > mx)
+                throw new Error(
+                  "text over " + mx + " characters (the field limit): " + t.slice(0, 24) + "…",
+                ); // refuse, never cut silently
+              return t;
             }
             function clampNumber(v, min, max, fb) {
               var n = typeof v === "number" ? v : parseFloat(v);
@@ -512,8 +518,9 @@
               .map(function (t) {
                 return t.trim();
               })
-              .filter(Boolean)
-              .slice(0, 12);
+              .filter(Boolean);
+            if (entries.length > 12)
+              throw new Error("more than 12 messages: the thread holds 12, split it"); // refuse, never drop silently
             if (entries.length === 0) entries = ["recv:hey"];
 
             var view = document.getElementById("cht-view");
