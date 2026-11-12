@@ -1,0 +1,75 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "hyperframes:component",
+  "title": "Separator",
+  "description": "A structural rule (2, 4 or 8px) spanning its host box, horizontal or vertical, with a seek-safe progress reveal in muted grey or brand red. Mount it inside a clip with data-composition-id=\"separator\": its own timeline nests there.",
+  "tags": ["video-primitive", "separator", "layout"],
+  "files": [
+    {
+      "path": "separator.html",
+      "target": "compositions/components/separator.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "orientation",
+      "type": "enum",
+      "role": "layout",
+      "label": "Orientation",
+      "description": "Which way the rule runs, and so which way the reveal travels.",
+      "default": "horizontal",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ]
+    },
+    {
+      "id": "thickness",
+      "type": "enum",
+      "role": "style",
+      "label": "Thickness",
+      "description": "Size of the rule across its short edge, from a 2px hairline to an 8px bar.",
+      "default": "hairline",
+      "options": [
+        {
+          "value": "hairline",
+          "label": "Hairline"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "id": "tone",
+      "type": "enum",
+      "role": "style",
+      "label": "Tone",
+      "description": "Colour of the revealed fill: neutral grey, or the reel brand red.",
+      "default": "neutral",
+      "options": [
+        {
+          "value": "neutral",
+          "label": "Neutral"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        }
+      ]
+    }
+  ]
+}

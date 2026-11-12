@@ -1544,6 +1544,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "constellation-hub",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "count-up",
       "type": "hyperframes:component"
     },
@@ -1680,6 +1684,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "locked-nucleus-orbit",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "logo-brand-close",
       "type": "hyperframes:component"
     },
@@ -1784,6 +1792,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "overwhelm-surround",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "page-slide",
       "type": "hyperframes:component"
     },
@@ -1832,6 +1844,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "radial-surround",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "rgb-glitch-text",
       "type": "hyperframes:component"
     },
@@ -1845,6 +1861,18 @@
     },
     {
       "name": "screen-flow-carousel",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "scroll-feed",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "segmentation-flood",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "separator",
       "type": "hyperframes:component"
     },
     {
@@ -1888,6 +1916,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "soft-blob-touch",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "soft-blur-in",
       "type": "hyperframes:component"
     },
@@ -1921,6 +1953,10 @@
     },
     {
       "name": "star-rating-fill",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "state-chip-rail",
       "type": "hyperframes:component"
     },
     {
@@ -1961,6 +1997,10 @@
     },
     {
       "name": "tabs-slide-indicator",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "telemetry-hud",
       "type": "hyperframes:component"
     },
     {
