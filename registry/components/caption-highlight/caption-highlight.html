@@ -1,0 +1,281 @@
+<!doctype html>
+<!--
+  caption-highlight: captions of a vertical reel on a black rounded plate – a red bar sweeps in behind each word as it is spoken.
+
+  Words come from outside in one variable, so the file is never edited: "word|start|end;..."
+  with seconds from mount start (the transcript's words in order; empty shows nothing).
+  Groups of up to 3 words (high energy, captions.md "Groups"), broken at a sentence mark, a
+  pause of 150 ms, or where the next word would not fit the line; one group on screen at a
+  time, hard-killed after it ends. Every group is one upper-case Bebas Neue line at one size,
+  78 px (captions.md base), within the readable width (72.2% of the box: 780 px of 1080),
+  centred in the caption band (y 71.9%-80.2%: 1380-1540 px); words go to the next group
+  instead of shrinking the type (spec.md:48), only a single word wider than the line steps
+  down. The letters sit dead centre in the plate with equal padding on all four sides
+  (text-box trim to cap height and baseline, one padding value). Colours read the palette
+  variables of the reel (--fg, --muted, --accent, --plate) with the brand as fallback.
+
+  Mount contract: the runtime clones only this template. #root fills the host box (mount it
+  over the whole 1080 x 1920 frame for the length of the speech), has no data-width or
+  data-height, and registers one paused timeline under the caption-highlight key. Fonts come from the
+  project's assets/fonts.
+-->
+<html
+  lang="ru"
+  data-composition-id="caption-highlight"
+  data-composition-duration="600"
+  data-composition-variables='[
+    { "id": "words", "type": "string", "role": "content", "label": "Words", "description": "Every caption word with its timing, in order: word|start|end separated by ; (seconds from mount start, e.g. Такой|0.20|0.48;монтаж|0.48|0.90). Build it from transcript.json words.", "maxLength": 40000, "default": "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10" }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Highlight</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="caption-highlight" data-duration="600" data-fps="30">
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          #root {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            container-type: size;
+            pointer-events: none;
+          }
+          .hl-clip {
+            position: absolute;
+            inset: 0;
+          }
+          .hl-group {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 71.875cqh;
+            height: 8.3333cqh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+          }
+          .hl-plate {
+            background: var(--plate, #000);
+            border-radius: 2.5926cqw;
+            color: var(--fg, #f2f2f2);
+            font-family: "Bebas Neue", sans-serif;
+            font-weight: 700;
+            font-size: 78px;
+            line-height: 1.08;
+            text-transform: uppercase;
+            text-align: center;
+            white-space: nowrap;
+            text-box: trim-both cap alphabetic;
+            padding: 0.3em;
+          }
+          .hl-word {
+            display: inline-block;
+          }
+          .hl-word {
+            position: relative;
+            text-box: trim-both cap alphabetic;
+          }
+          .hl-bg {
+            position: absolute;
+            inset: -0.12em -0.1em;
+            background: var(--accent, #ff0000);
+            border-radius: 0.1em;
+            transform: scaleX(0);
+            transform-origin: 0% 50%;
+          }
+          .hl-t {
+            position: relative;
+          }
+        </style>
+
+        <div
+          id="caption-highlight-clip"
+          class="hl-clip clip"
+          data-start="0"
+          data-duration="600"
+          data-track-index="0"
+        ></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          window.hlStyle = {
+            // a red bar sweeps in behind the word being spoken and leaves when it ends
+            wordInner: function (s, text) {
+              var bg = document.createElement("span");
+              bg.className = "hl-bg";
+              var t = document.createElement("span");
+              t.className = "hl-t";
+              t.textContent = text;
+              s.appendChild(bg);
+              s.appendChild(t);
+            },
+            word: function (tl, o) {
+              var bg = o.el.firstChild;
+              tl.set(bg, { scaleX: 0 }, o.open);
+              tl.to(bg, { scaleX: 1, duration: 0.15, ease: "power2.out" }, o.at);
+              tl.to(
+                bg,
+                { scaleX: 0, duration: 0.1, ease: "power2.in" },
+                Math.min(o.w.end, o.close - 0.1),
+              );
+            },
+          };
+          (function () {
+            // Shared caption engine of the MatIntellect base (one source in the workshop: zagotovki/kapsh/_dvizhok.js).
+            // Words come from outside in one variable "word|start|end;...". Groups of up to 3 words, broken at a
+            // sentence mark, a pause of 150 ms, or where the next word would not fit the line at 78 px; one group on
+            // screen at a time, hard-killed after it ends (captions.md "Groups"). Every group is one upper-case
+            // line at 78 px on a black plate within 780 of 1080; a group goes off no later than the next one comes on; only a single word wider than the line steps
+            // down ("cut words, never shrink type", spec.md:48). Built after the font loads; render waits on buildReady.
+            var root = document.getElementById("root");
+            var stage = document.getElementById("caption-highlight-clip");
+            var STYLE = window.hlStyle;
+            var DEFAULT =
+              "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10";
+            var MAX_WORDS = STYLE.maxWords || 3;
+            var SIZE = 78;
+            var PAUSE = 0.15;
+            var HOLD = 0.3;
+            var LEAD = 0.05;
+            var V =
+              window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+                ? window.__hyperframes.getVariables()
+                : {};
+            var src = typeof V.words === "string" ? V.words : DEFAULT;
+            var css = getComputedStyle(root);
+            var C = {
+              fg: css.getPropertyValue("--fg").trim() || "#f2f2f2",
+              muted: css.getPropertyValue("--muted").trim() || "#8a8a90",
+              accent: css.getPropertyValue("--accent").trim() || "#ff0000",
+            };
+
+            var words = src
+              .split(";")
+              .map(function (s) {
+                var p = s.split("|");
+                return {
+                  text: (p[0] || "").trim(),
+                  start: parseFloat(p[1]),
+                  end: parseFloat(p[2]),
+                };
+              })
+              .filter(function (w) {
+                return w.text && isFinite(w.start) && isFinite(w.end);
+              });
+
+            var tl = gsap.timeline({ paused: true });
+            tl.set({}, {}, 600);
+            window.__timelines = window.__timelines || {};
+            window.__timelines["caption-highlight"] = tl;
+
+            function fits(text, fs) {
+              return window.__hyperframes.fitTextFontSize(text.toUpperCase(), {
+                fontFamily: "Bebas Neue",
+                fontWeight: 700,
+                maxWidth: root.clientWidth * 0.72222 - 0.6 * fs - (STYLE.extraWidth || 0) * fs,
+                baseFontSize: fs,
+                minFontSize: fs,
+              }).fits;
+            }
+            function join(g) {
+              return g
+                .map(function (w) {
+                  return w.text;
+                })
+                .join(" ");
+            }
+
+            function build() {
+              var groups = [];
+              var cur = [];
+              words.forEach(function (w, i) {
+                if (cur.length && !fits(join(cur.concat(w)), SIZE)) {
+                  groups.push(cur);
+                  cur = [];
+                }
+                cur.push(w);
+                var next = words[i + 1];
+                if (
+                  !next ||
+                  cur.length >= MAX_WORDS ||
+                  /[.,:;!?…]$/.test(w.text) ||
+                  next.start - w.end >= PAUSE
+                ) {
+                  groups.push(cur);
+                  cur = [];
+                }
+              });
+              groups.forEach(function (g, gi) {
+                var el = document.createElement("div");
+                el.className = "hl-group";
+                var plate = document.createElement("div");
+                plate.className = "hl-plate";
+                g.forEach(function (w, wi) {
+                  if (wi) plate.appendChild(document.createTextNode(" "));
+                  var s = document.createElement("span");
+                  s.className = "hl-word";
+                  if (STYLE.wordInner) STYLE.wordInner(s, w.text);
+                  else s.textContent = w.text;
+                  plate.appendChild(s);
+                  w.el = s;
+                });
+                var fs = SIZE;
+                while (fs > 42 && !fits(join(g), fs)) fs -= 2;
+                plate.style.fontSize = fs + "px";
+                el.appendChild(plate);
+                stage.appendChild(el);
+
+                var open = Math.max(0, g[0].start - LEAD);
+                var nextOpen = groups[gi + 1]
+                  ? Math.max(0, groups[gi + 1][0].start - LEAD)
+                  : Infinity;
+                var close = Math.min(nextOpen, g[g.length - 1].end + HOLD);
+                tl.set(el, { opacity: 1, visibility: "visible" }, open);
+                if (STYLE.group)
+                  STYLE.group(tl, {
+                    el: el,
+                    plate: plate,
+                    words: g,
+                    open: open,
+                    close: close,
+                    index: gi,
+                    C: C,
+                  });
+                g.forEach(function (w, wi) {
+                  STYLE.word(tl, {
+                    el: w.el,
+                    w: w,
+                    first: wi === 0,
+                    open: open,
+                    at: Math.max(open, w.start - LEAD),
+                    close: close,
+                    index: wi,
+                    C: C,
+                  });
+                });
+                tl.set(el, { opacity: 0, visibility: "hidden" }, close);
+              });
+            }
+            window.__hf = window.__hf || {};
+            window.__hf.buildReady = window.__hf.buildReady || {};
+            window.__hf.buildReady["caption-highlight"] = Promise.all(
+              ['700 100px "Bebas Neue"'].concat(STYLE.fonts || []).map(function (f) {
+                return document.fonts.load(f, join(words) || "А");
+              }),
+            ).then(build);
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

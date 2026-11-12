@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-emoji-pop",
+  "type": "hyperframes:component",
+  "title": "Emoji Pop",
+  "description": "Reel captions on a black rounded plate: each line enters with a horizontal squeeze and settle; an emoji passed in the words like any word (e.g. 🔥|1.2|1.4) pops in on its own beat. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "emoji", "squeeze", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-emoji-pop.html",
+      "target": "compositions/components/caption-emoji-pop.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

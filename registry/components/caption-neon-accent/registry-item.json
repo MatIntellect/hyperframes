@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-neon-accent",
+  "type": "hyperframes:component",
+  "title": "Neon Accent",
+  "description": "Reel captions on a black rounded plate: each line pops in with an overshoot and drifts in a slow wiggle, every word glowing softly in the red accent. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "neon", "wiggle", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-neon-accent.html",
+      "target": "compositions/components/caption-neon-accent.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

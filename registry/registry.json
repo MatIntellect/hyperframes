@@ -1396,7 +1396,47 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "caption-clip-wipe",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-emoji-pop",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-glitch-rgb",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-gradient-fill",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-highlight",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-kinetic-slam",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-matrix-decode",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-neon-accent",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-neon-glow",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "caption-pill-karaoke",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "caption-weight-shift",
       "type": "hyperframes:component"
     },
     {

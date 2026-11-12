@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-kinetic-slam",
+  "type": "hyperframes:component",
+  "title": "Kinetic Slam",
+  "description": "Reel captions on a black rounded plate, one upper-case word at a time, each slammed in from an alternating side (left, right, top, bottom) and settling hard. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "kinetic", "slam", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-kinetic-slam.html",
+      "target": "compositions/components/caption-kinetic-slam.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-glitch-rgb",
+  "type": "hyperframes:component",
+  "title": "Glitch RGB",
+  "description": "Reel captions on a black rounded plate: each word lands with a red chromatic split and a short jitter that snaps back into one clean letterform. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "glitch", "rgb", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-glitch-rgb.html",
+      "target": "compositions/components/caption-glitch-rgb.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

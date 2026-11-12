@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-weight-shift",
+  "type": "hyperframes:component",
+  "title": "Weight Shift",
+  "description": "Reel captions on a black rounded plate: a line eases in, its words resting in the light cut of Bebas Neue in muted ink, and the word being spoken shifts to the bold cut in full ink. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "weight", "typography", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-weight-shift.html",
+      "target": "compositions/components/caption-weight-shift.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

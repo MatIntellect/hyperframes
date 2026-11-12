@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-clip-wipe",
+  "type": "hyperframes:component",
+  "title": "Clip Wipe",
+  "description": "Reel captions on a black rounded plate: each word is wiped on from left to right as it is spoken, lands in the red accent and settles to ink. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "wipe", "reveal", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-clip-wipe.html",
+      "target": "compositions/components/caption-clip-wipe.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

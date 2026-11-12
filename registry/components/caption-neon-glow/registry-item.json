@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-neon-glow",
+  "type": "hyperframes:component",
+  "title": "Neon Glow",
+  "description": "Reel captions on a black rounded plate: the line flickers on, and the word being spoken lights from muted to full ink with a red neon glow. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "neon", "glow", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-neon-glow.html",
+      "target": "compositions/components/caption-neon-glow.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

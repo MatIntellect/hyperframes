@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-matrix-decode",
+  "type": "hyperframes:component",
+  "title": "Matrix Decode",
+  "description": "Reel captions on a black rounded plate: each word flickers through two rows of scrambled red letters and resolves into the real word as it is spoken. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "decode", "scramble", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-matrix-decode.html",
+      "target": "compositions/components/caption-matrix-decode.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-highlight",
+  "type": "hyperframes:component",
+  "title": "Highlight",
+  "description": "Reel captions on a black rounded plate: groups of up to three words in one upper-case line at one size, a red accent bar sweeping in behind each word as it is spoken. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "highlight", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-highlight.html",
+      "target": "compositions/components/caption-highlight.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

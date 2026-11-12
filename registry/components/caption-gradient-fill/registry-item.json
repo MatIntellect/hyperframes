@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "caption-gradient-fill",
+  "type": "hyperframes:component",
+  "title": "Gradient Fill",
+  "description": "Reel captions on a black rounded plate: the plate pops in with a short back-out, and the word being spoken fills with the red accent from left to right, then returns to ink. All words and timings come in one variable; mount over the whole frame for the speech.",
+  "tags": ["captions", "caption-style", "gradient", "fill", "bounce", "plate", "vertical"],
+  "files": [
+    {
+      "path": "caption-gradient-fill.html",
+      "target": "compositions/components/caption-gradient-fill.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}
