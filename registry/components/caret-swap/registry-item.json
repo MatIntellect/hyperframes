@@ -83,27 +83,27 @@
     },
     {
       "id": "color",
-      "type": "color",
+      "type": "string",
       "role": "style",
       "label": "Text color",
-      "description": "Color of both phrases.",
-      "default": "#f2f2f2"
+      "description": "Color of both phrases. Any CSS colour; by default the theme token --fg.",
+      "default": "var(--fg, #f2f2f2)"
     },
     {
       "id": "caret_color",
-      "type": "color",
+      "type": "string",
       "role": "style",
       "label": "Caret top",
-      "description": "Top color of the caret gradient.",
-      "default": "#ff0000"
+      "description": "Top color of the caret gradient. Any CSS colour; by default the theme token --accent.",
+      "default": "var(--accent, #ff0000)"
     },
     {
       "id": "caret_color_end",
-      "type": "color",
+      "type": "string",
       "role": "style",
       "label": "Caret bottom",
-      "description": "Bottom color of the caret gradient.",
-      "default": "#ff0000"
+      "description": "Bottom color of the caret gradient. Any CSS colour; by default the theme token --accent.",
+      "default": "var(--accent, #ff0000)"
     }
   ]
 }

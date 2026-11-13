@@ -9,8 +9,8 @@
     { "id": "line2", "type": "string", "role": "content", "label": "Second line", "description": "Second line of the first card.", "maxLength": 12, "default": "без людей" },
     { "id": "after1", "type": "string", "role": "content", "label": "Final line 1", "description": "The card that slides in after, line 1.", "maxLength": 16, "default": "Уже работает" },
     { "id": "after2", "type": "string", "role": "content", "label": "Final line 2", "description": "The card that slides in after, line 2.", "maxLength": 16, "default": "в MatIntellect" },
-    { "id": "warm", "type": "color", "role": "style", "label": "Light colour", "description": "Main colour of the light rays.", "default": "#ff0000" },
-    { "id": "cool", "type": "color", "role": "style", "label": "Second colour", "description": "Second colour of the rays and the wordmark.", "default": "#f2f2f2" },
+    { "id": "warm", "type": "string", "role": "style", "label": "Light colour", "description": "Main colour of the light rays. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)" },
+    { "id": "cool", "type": "string", "role": "style", "label": "Second colour", "description": "Second colour of the rays and the wordmark. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sequence starts (wordmark rises 0-1 s, light sweeps 0.7-3 s, glass card at 3.1 s, final card at about 4.7 s), 2 the block fades out (only when exit is fade). Empty keeps 0 and 7.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the final card to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -71,7 +71,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--bg, #0c1014);
       }
       
       #vtcv-root.vtcv-card #vtcv-frame {
@@ -241,8 +241,12 @@
           i.remove();
           return m.length === 3 ? m : rgb(d, d);
         }
-        var WARM = rgb(V.warm, "#ff0000"),
-          COOL = rgb(V.cool, "#f2f2f2");
+        var WARM = rgb(V.warm, "var(--accent, #ff0000)"),
+          COOL = rgb(V.cool, "var(--fg, #f2f2f2)");
+        // the theme ground, for the shader: light is added onto it, not onto black
+        var GROUND = rgb("var(--bg, #0c1014)", "#0c1014").map(function (v) {
+          return v / 255;
+        });
         root.style.setProperty("--vtcv-warm", "rgb(" + WARM.join(",") + ")");
         root.style.setProperty("--vtcv-cool", "rgb(" + COOL.join(",") + ")");
 
@@ -334,8 +338,8 @@
             "  float logoDust=smoothstep(0.02,0.38,acc)+smoothstep(0.03,0.22,mask);",
             "  c.rgb+=grain*0.07*(0.42+logoDust)*effectMix;",
             "  c.rgb+=spectrum(grain+cursorX)*abs(grain)*0.045*smoothstep(0.02,0.5,acc)*effectMix;",
-            // light is added onto the brand ground #0c1014, not onto black
-            "  c.rgb+=vec3(0.047,0.063,0.078);",
+            // light is added onto the theme ground, not onto black
+            "  c.rgb+=vec3(" + GROUND.map(function (v) { return v.toFixed(4); }).join(",") + ");",
             "  c.a=1.0;gl_FragColor=c;",
             "}",
           ].join("\n");
@@ -373,7 +377,7 @@
           var posLoc = gl.getAttribLocation(program, "position");
           render = function () {
             gl.viewport(0, 0, W, H);
-            gl.clearColor(0.047, 0.063, 0.078, 1); // brand ground #0c1014
+            gl.clearColor(GROUND[0], GROUND[1], GROUND[2], 1); // the theme ground
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.useProgram(program);
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

@@ -142,9 +142,9 @@
     opacity: var(--hf-rgb-opacity, 0);
     background: linear-gradient(
       90deg,
-      rgba(242, 242, 242, 0.16),
+      color-mix(in srgb, var(--fg, #f2f2f2) 16%, transparent),
       transparent,
-      rgba(242, 242, 242, 0.16)
+      color-mix(in srgb, var(--fg, #f2f2f2) 16%, transparent)
     );
     transform: translateX(var(--hf-rgb-x, 0px));
   }

@@ -449,7 +449,8 @@
                 var frame = Math.floor(t * fps);
                 if (Math.floor(frame / 2) % 2 === 1) {
                   ctx.globalAlpha = 0.05;
-                  ctx.fillStyle = "#f2f2f2"; // palette text light, not pure white
+                  ctx.fillStyle =
+                    getComputedStyle(root).getPropertyValue("--fg").trim() || "#f2f2f2"; // theme text light, not pure white
                   ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
               }

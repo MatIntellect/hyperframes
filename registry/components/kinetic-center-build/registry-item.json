@@ -61,11 +61,11 @@
     },
     {
       "id": "color",
-      "type": "color",
+      "type": "string",
       "role": "style",
       "label": "Color",
-      "description": "Text color for the full phrase.",
-      "default": "#f2f2f2"
+      "description": "Text color for the full phrase. Any CSS colour; by default the theme token --fg.",
+      "default": "var(--fg, #f2f2f2)"
     },
     {
       "id": "font_weight",

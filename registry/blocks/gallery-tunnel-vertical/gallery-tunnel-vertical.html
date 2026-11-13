@@ -6,7 +6,7 @@
     { "id": "images", "type": "string", "role": "content", "label": "Image slots", "description": "Comma-separated paths, tiled into the panels (e.g. assets/shot-1.png,assets/shot-2.png). Empty keeps colour slabs only.", "default": "" },
     { "id": "imageMix", "type": "number", "role": "content", "label": "Image share of filled slots", "description": "0 = all colour, 1 = all images.", "default": 0.5, "min": 0, "max": 1, "step": 0.05 },
     { "id": "speed", "type": "number", "role": "motion", "label": "Flight speed", "default": 3, "min": 0, "max": 8, "step": 0.1, "unit": "segments/s" },
-    { "id": "palette", "type": "string", "role": "style", "label": "Slab palette", "description": "Comma-separated hex colours.", "default": "#ff0000,#2e2e32,#8a8a90,#18181a,#f2f2f2" },
+    { "id": "palette", "type": "string", "role": "style", "label": "Slab palette", "description": "Comma-separated colours. By default the theme tokens --accent, --border, --muted, --surface, --fg (the browser resolves them before the list is read).", "default": "var(--accent, #ff0000),var(--border, #2e2e32),var(--muted, #8a8a90),var(--surface, #18181a),var(--fg, #f2f2f2)" },
     { "id": "grid", "type": "number", "role": "style", "label": "Grid density", "description": "Slots per wall face per axis (2 = 4 per face, 16 per segment).", "default": 2, "min": 1, "max": 4, "step": 1 },
     { "id": "fill", "type": "number", "role": "style", "label": "Slot fill rate", "default": 0.5, "min": 0, "max": 1, "step": 0.05 },
     { "id": "fog", "type": "number", "role": "style", "label": "Fog distance", "description": "Depth at which the corridor reaches pure backdrop.", "default": 14.25, "min": 3, "max": 14.5, "step": 0.25, "unit": "segments" },
