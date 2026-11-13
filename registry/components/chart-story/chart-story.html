@@ -45,7 +45,7 @@
     {"id": "data", "type": "string", "role": "content", "label": "Data", "description": "Comma-separated numbers; the chart lands exactly on these values.", "default": "12, 28, 45, 64"},
     {"id": "labels", "type": "string", "role": "content", "label": "Labels", "description": "Comma-separated labels, one per datum.", "default": "Янв, Фев, Мар, Апр"},
     {"id": "emphasize", "type": "number", "role": "content", "label": "Emphasize", "description": "Index of the datum that takes the accent and the value callout. Clamped to the data range.", "default": 3, "step": 1},
-    {"id": "unit", "type": "string", "role": "content", "label": "Unit", "description": "Suffix appended to every displayed value.", "default": "%"},
+    {"id": "unit", "type": "string", "role": "content", "label": "Unit", "description": "Suffix appended to every displayed value.", "default": "%", "maxLength": 4},
     {"id": "exit", "type": "enum", "role": "style", "label": "Exit", "description": "Optional departure. Proof stats end on the still hold, so the default is none.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
@@ -654,29 +654,55 @@
               });
 
               // Legend row beneath, reading order left to right.
-              // Each item is as wide as its text (the callout chip's char-count estimate), so the
-              // larger labels never run into the next swatch.
+              // Each item is as wide as its text: 0.66 em a character, an upper bound for Montserrat, so a
+              // label never runs into the next swatch. A row that would leave the 1000-unit viewBox wraps
+              // onto the next line and the viewBox grows by that row (the stage is width-bound, so the
+              // type keeps its size; spec.md:48 "never shrink type").
+              var charW = 26 * TEXT_K * 0.66;
               var itemWidths = values.map(function (value, index) {
                 var entryText = (labels[index] ? labels[index] + " " : "") + displays[index];
-                return 40 + Array.from(entryText).length * 26 + 36;
+                return 40 + Array.from(entryText).length * charW + 36;
               });
-              var legendWidth =
-                itemWidths.reduce(function (a, b) {
-                  return a + b;
-                }, 0) - 36;
-              var startX = 500 - legendWidth / 2;
+              var ROW_H = 60;
+              var rows = [[]];
+              var rowW = [0];
+              itemWidths.forEach(function (w, index) {
+                var r = rows.length - 1;
+                if (rows[r].length && rowW[r] + w - 36 > 968) {
+                  rows.push([]);
+                  rowW.push(0);
+                  r += 1;
+                }
+                rows[r].push(index);
+                rowW[r] += w;
+              });
+              svg.setAttribute("viewBox", "0 0 1000 " + (560 + (rows.length - 1) * ROW_H));
+              var itemX = [];
+              var itemDy = [];
+              rows.forEach(function (row, r) {
+                var rowX = 500 - (rowW[r] - 36) / 2;
+                row.forEach(function (index) {
+                  itemX[index] = rowX;
+                  itemDy[index] = r * ROW_H;
+                  rowX += itemWidths[index];
+                });
+              });
               values.forEach(function (value, index) {
-                var x = startX;
-                for (var k = 0; k < index; k += 1) x += itemWidths[k];
+                var x = itemX[index];
+
                 var group = make("g", {});
-                var swatch = make("rect", { x: x, y: 506, width: 20, height: 20, rx: 5 }, group);
+                var swatch = make(
+                  "rect",
+                  { x: x, y: 506 + itemDy[index], width: 20, height: 20, rx: 5 },
+                  group,
+                );
                 swatch.style.fill =
                   index === emphasize
                     ? accentColor
                     : "color-mix(in srgb, var(--fg, #f2f2f2) " +
                       ladder[index % ladder.length] +
                       "%, var(--surface, #18181a))";
-                var entry = text(x + 40, 525, 26, mutedColor, "start", group);
+                var entry = text(x + 40, 525 + itemDy[index], 26, mutedColor, "start", group);
                 entry.textContent = labels[index] ? labels[index] + " " : "";
                 var valueSpan = document.createElementNS(NS, "tspan");
                 valueSpan.style.fill = inkColor;

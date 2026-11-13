@@ -90,7 +90,8 @@
       "role": "content",
       "label": "Unit",
       "description": "Suffix appended to every displayed value.",
-      "default": "%"
+      "default": "%",
+      "maxLength": 4
     },
     {
       "id": "exit",

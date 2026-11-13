@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Result",
       "description": "Characters the reels land on, one reel column per character. Whitespace is stripped and every reel starts on a zero.",
-      "default": "A7K"
+      "default": "A7K",
+      "maxLength": 6
     },
     {
       "id": "direction",

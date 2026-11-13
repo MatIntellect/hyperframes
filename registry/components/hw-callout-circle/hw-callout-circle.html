@@ -2,8 +2,8 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное" },
-    { "id": "label", "type": "string", "role": "content", "label": "Note", "description": "The hand-written note on the connector. Empty hides it.", "default": "смотри сюда!" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное", "maxLength": 28 },
+    { "id": "label", "type": "string", "role": "content", "label": "Note", "description": "The hand-written note on the connector. Empty hides it.", "default": "смотри сюда!", "maxLength": 16 },
     { "id": "labelAt", "type": "enum", "role": "layout", "label": "Note side", "description": "Where the connector and the note go: left, right or below.", "default": "below", "options": [{ "value": "below", "label": "Below" }, { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] },
     { "id": "scribble", "type": "boolean", "role": "style", "label": "Scribble", "description": "Hatch fill inside the circle. Off by default: on a phrase it covers the letters.", "default": false },
     { "id": "strokeType", "type": "enum", "role": "style", "label": "Stroke", "description": "Texture of the circle and connector: plain, soft, sharp or spray.", "default": "plain", "options": [{ "value": "plain", "label": "Plain" }, { "value": "soft", "label": "Soft" }, { "value": "sharp", "label": "Sharp" }, { "value": "spray", "label": "Spray" }] },
@@ -702,6 +702,29 @@
               strokeType: CONFIG.strokeType,
               boil: CONFIG.boil,
             });
+            // The side note stays inside the box (a vertical field is 780 wide): the whole group - phrase,
+            // circle, connector, note - slides away from the note as far as the circle allows; a note still
+            // wider than the room left wraps by words. Type keeps its size (spec.md:48 "never shrink type").
+            if (CONFIG.labelAt !== "below" && CONFIG.connector !== false && CONFIG.label) {
+              var lab = c.querySelector(".hw-co-label");
+              var right = CONFIG.labelAt === "right";
+              var left0 = cxp - w / 2;
+              var lw = lab.offsetWidth;
+              var noteL = (parseFloat(lab.style.left) || 0) - (right ? 0 : lw);
+              var gL = Math.min(left0, left0 + noteL);
+              var gR = Math.max(left0 + w, left0 + noteL + lw);
+              var dx = right
+                ? -Math.max(0, Math.min(gR - W, gL))
+                : Math.max(0, Math.min(-gL, W - gR));
+              textEl.style.position = "relative";
+              textEl.style.left = dx + "px";
+              c.style.left = left0 + dx + "px";
+              var over = right ? left0 + dx + noteL + lw - W : -(left0 + dx + noteL);
+              if (over > 0) {
+                lab.style.whiteSpace = "normal";
+                lab.style.width = lw - over + "px";
+              }
+            }
             var tl = gsap.timeline({ paused: true });
             window.hwCalloutOn(tl, "#hw-co-demo", 0.4);
             window.hwCalloutOff(tl, "#hw-co-demo", Math.max(1.8, D - 0.7));
