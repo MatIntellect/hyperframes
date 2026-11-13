@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Title",
       "description": "The header line that sits above the folded body.",
-      "default": "Параметры движения"
+      "default": "Параметры движения",
+      "maxLength": 28
     },
     {
       "id": "width",

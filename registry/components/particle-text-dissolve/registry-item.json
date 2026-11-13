@@ -36,7 +36,8 @@
       "role": "content",
       "label": "Text",
       "description": "The line that assembles from (or dissolves into) the particle cloud.",
-      "default": "Монтаж с ИИ"
+      "default": "Монтаж с ИИ",
+      "maxLength": 28
     },
     {
       "id": "direction",

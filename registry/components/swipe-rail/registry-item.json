@@ -33,7 +33,8 @@
       "role": "content",
       "label": "Card label prefix",
       "description": "Text placed before each card number.",
-      "default": "Шаг"
+      "default": "Шаг",
+      "maxLength": 16
     }
   ]
 }

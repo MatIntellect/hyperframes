@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Action line",
       "description": "Two to four word action that closes the film.",
-      "default": "Сделайте первый шаг"
+      "default": "Сделайте первый шаг",
+      "maxLength": 48
     },
     {
       "id": "button_label",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Button label",
       "description": "Text displayed inside the single CTA capsule.",
-      "default": "Записаться"
+      "default": "Записаться",
+      "maxLength": 16
     },
     {
       "id": "exit",

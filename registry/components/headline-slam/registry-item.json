@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Text displayed as the headline.",
-      "default": "Монтаж без людей"
+      "default": "Монтаж без людей",
+      "maxLength": 28
     },
     {
       "id": "accent_word_index",

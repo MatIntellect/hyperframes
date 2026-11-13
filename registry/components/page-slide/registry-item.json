@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Outgoing label",
       "description": "Label printed on the page that slides out.",
-      "default": "Главная"
+      "default": "Главная",
+      "maxLength": 16
     },
     {
       "id": "label_b",
@@ -27,7 +28,8 @@
       "role": "content",
       "label": "Incoming label",
       "description": "Label printed on the page that slides in.",
-      "default": "Аналитика"
+      "default": "Аналитика",
+      "maxLength": 16
     },
     {
       "id": "corner",

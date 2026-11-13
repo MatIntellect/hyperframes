@@ -60,7 +60,8 @@
       "type": "string",
       "role": "content",
       "label": "Click label",
-      "default": "Создать"
+      "default": "Создать",
+      "maxLength": 16
     },
     {
       "id": "exit",

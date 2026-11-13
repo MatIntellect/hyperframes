@@ -22,7 +22,8 @@
       "role": "content",
       "label": "App title",
       "description": "Title displayed in the app header.",
-      "default": "Статистика"
+      "default": "Статистика",
+      "maxLength": 28
     }
   ]
 }

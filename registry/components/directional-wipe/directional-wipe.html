@@ -29,8 +29,8 @@
 <div
   class="hf-catalog-directional-wipe"
   data-composition-variables='[
-    { "id": "from-label", "type": "string", "role": "content", "label": "Outgoing label", "description": "Caption on the outgoing panel, the one on screen when the wipe starts.", "default": "Было" },
-    { "id": "to-label", "type": "string", "role": "content", "label": "Incoming label", "description": "Caption on the incoming panel, the one the wipe brings in.", "default": "Стало" },
+    { "id": "from-label", "type": "string", "role": "content", "label": "Outgoing label", "description": "Caption on the outgoing panel, the one on screen when the wipe starts.", "default": "Было", "maxLength": 16 },
+    { "id": "to-label", "type": "string", "role": "content", "label": "Incoming label", "description": "Caption on the incoming panel, the one the wipe brings in.", "default": "Стало", "maxLength": 16 },
     { "id": "corner", "type": "enum", "role": "style", "label": "Corner", "description": "Corner radius of the transition card.", "default": "rounded", "options": [{ "value": "square", "label": "Square" }, { "value": "rounded", "label": "Rounded" }, { "value": "soft", "label": "Soft" }] }
   ]'
 >

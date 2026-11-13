@@ -29,8 +29,8 @@
   data-composition-id="cta-close"
   data-composition-duration="3.5"
   data-composition-variables='[
-    {"id": "action_line", "type": "string", "role": "content", "label": "Action line", "description": "Two to four word action that closes the film.", "default": "Сделайте первый шаг"},
-    {"id": "button_label", "type": "string", "role": "content", "label": "Button label", "description": "Text displayed inside the single CTA capsule.", "default": "Записаться"},
+    {"id": "action_line", "type": "string", "role": "content", "label": "Action line", "description": "Two to four word action that closes the film.", "default": "Сделайте первый шаг", "maxLength": 48},
+    {"id": "button_label", "type": "string", "role": "content", "label": "Button label", "description": "Text displayed inside the single CTA capsule.", "default": "Записаться", "maxLength": 16},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts (this primitive closes films).", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >

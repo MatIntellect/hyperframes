@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Accent text",
       "description": "Word or short label emphasized by the beat hit.",
-      "default": "БАХ"
+      "default": "БАХ",
+      "maxLength": 12
     },
     {
       "id": "intensity",

@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "Words on the hanging sign. A long line wraps inside 640px.",
-      "default": "Мы открыты"
+      "default": "Мы открыты",
+      "maxLength": 28
     },
     {
       "id": "pivot",

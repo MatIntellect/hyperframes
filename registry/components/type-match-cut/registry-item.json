@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Text split around the incoming panel.",
-      "default": "Встречайте новый монтаж"
+      "default": "Встречайте новый монтаж",
+      "maxLength": 28
     }
   ]
 }

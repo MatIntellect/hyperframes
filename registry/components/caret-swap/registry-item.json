@@ -33,7 +33,8 @@
       "role": "content",
       "label": "From text",
       "description": "The phrase covered by the expanding caret.",
-      "default": "Снять ролик?"
+      "default": "Снять ролик?",
+      "maxLength": 28
     },
     {
       "id": "to_text",
@@ -41,7 +42,8 @@
       "role": "content",
       "label": "To text",
       "description": "The replacement phrase, typed one character at a time.",
-      "default": "Вот где все сдаются"
+      "default": "Вот где все сдаются",
+      "maxLength": 28
     },
     {
       "id": "font_size",

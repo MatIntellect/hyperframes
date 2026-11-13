@@ -33,7 +33,8 @@
       "role": "content",
       "label": "Text",
       "description": "Short phrase that builds one word at a time.",
-      "default": "Монтаж с ИИ за минуту."
+      "default": "Монтаж с ИИ за минуту.",
+      "maxLength": 28
     },
     {
       "id": "font_size",

@@ -48,11 +48,11 @@
   data-composition-id="testimonial-proof-card"
   data-composition-duration="4.5"
   data-composition-variables='[
-    {"id": "quote", "type": "string", "role": "content", "label": "Quote", "description": "The testimonial line. Wraps inside the card; each rendered line reveals through its own mask.", "default": "Мы выпустили ролик к запуску за один вечер"},
-    {"id": "name", "type": "string", "role": "content", "label": "Name", "description": "Attribution name in mono. Also seeds the avatar initials.", "default": "Ольга Петрова"},
-    {"id": "role", "type": "string", "role": "content", "label": "Role", "description": "Attribution role in muted mono. Empty hides the line.", "default": "владелица пекарни"},
-    {"id": "company", "type": "string", "role": "content", "label": "Company", "description": "Company mark as wide-tracked mono text at the byline end. Empty hides it.", "default": "ЗЕРНО"},
-    {"id": "emphasis", "type": "string", "role": "content", "label": "Emphasis", "description": "First case-insensitive substring match in quote, expanded to whole words, gets the accent underline. Empty disables the draw.", "default": "за один вечер"},
+    {"id": "quote", "type": "string", "role": "content", "label": "Quote", "description": "The testimonial line. Wraps inside the card; each rendered line reveals through its own mask.", "default": "Мы выпустили ролик к запуску за один вечер", "maxLength": 120},
+    {"id": "name", "type": "string", "role": "content", "label": "Name", "description": "Attribution name in mono. Also seeds the avatar initials.", "default": "Ольга Петрова", "maxLength": 16},
+    {"id": "role", "type": "string", "role": "content", "label": "Role", "description": "Attribution role in muted mono. Empty hides the line.", "default": "владелица пекарни", "maxLength": 28},
+    {"id": "company", "type": "string", "role": "content", "label": "Company", "description": "Company mark as wide-tracked mono text at the byline end. Empty hides it.", "default": "ЗЕРНО", "maxLength": 16},
+    {"id": "emphasis", "type": "string", "role": "content", "label": "Emphasis", "description": "First case-insensitive substring match in quote, expanded to whole words, gets the accent underline. Empty disables the draw.", "default": "за один вечер", "maxLength": 16},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the card holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >

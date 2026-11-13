@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Quote",
       "description": "The testimonial line. Wraps inside the card; each rendered line reveals through its own mask.",
-      "default": "Мы выпустили ролик к запуску за один вечер"
+      "default": "Мы выпустили ролик к запуску за один вечер",
+      "maxLength": 120
     },
     {
       "id": "name",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Name",
       "description": "Attribution name in mono. Also seeds the avatar initials.",
-      "default": "Ольга Петрова"
+      "default": "Ольга Петрова",
+      "maxLength": 16
     },
     {
       "id": "role",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Role",
       "description": "Attribution role in muted mono. Empty hides the line.",
-      "default": "владелица пекарни"
+      "default": "владелица пекарни",
+      "maxLength": 28
     },
     {
       "id": "company",
@@ -53,7 +56,8 @@
       "role": "content",
       "label": "Company",
       "description": "Company mark as wide-tracked mono text at the byline end. Empty hides it.",
-      "default": "ЗЕРНО"
+      "default": "ЗЕРНО",
+      "maxLength": 16
     },
     {
       "id": "emphasis",
@@ -61,7 +65,8 @@
       "role": "content",
       "label": "Emphasis",
       "description": "First case-insensitive substring match in quote, expanded to whole words, gets the accent underline. Empty disables the draw.",
-      "default": "за один вечер"
+      "default": "за один вечер",
+      "maxLength": 16
     },
     {
       "id": "exit",

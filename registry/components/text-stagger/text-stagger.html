@@ -31,7 +31,7 @@
 <div
   class="hf-transition-text-stagger"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Headline copy. Every whitespace-separated word becomes one staggered span.", "default": "Монтаж с ИИ за минуту"},
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Headline copy. Every whitespace-separated word becomes one staggered span.", "default": "Монтаж с ИИ за минуту", "maxLength": 28},
     {"id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Type size of every word in pixels, clamped to 24-160. Line height stays proportional.", "default": 74, "min": 24, "max": 160, "step": 1, "unit": "px"},
     {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Base word colour: ink for light frames, paper for dark ones.", "default": "paper", "options": [{"value": "ink", "label": "Ink"}, {"value": "paper", "label": "Paper"}]}
   ]'

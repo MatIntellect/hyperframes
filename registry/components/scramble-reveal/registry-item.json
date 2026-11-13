@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "Target string that resolves from deterministic wrong glyphs.",
-      "default": "МОНТАЖ"
+      "default": "МОНТАЖ",
+      "maxLength": 12
     },
     {
       "id": "style",

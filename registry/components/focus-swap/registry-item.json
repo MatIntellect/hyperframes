@@ -70,7 +70,8 @@
       "role": "content",
       "label": "Card A status",
       "description": "Short status word above the title of card A.",
-      "default": "План"
+      "default": "План",
+      "maxLength": 16
     },
     {
       "id": "title_a",
@@ -78,7 +79,8 @@
       "role": "content",
       "label": "Card A title",
       "description": "Title of card A.",
-      "default": "Придумать идею"
+      "default": "Придумать идею",
+      "maxLength": 28
     },
     {
       "id": "detail_a",
@@ -86,7 +88,8 @@
       "role": "content",
       "label": "Card A detail",
       "description": "One line under the title of card A; wraps by words.",
-      "default": "Собрать задачу и договориться с командой"
+      "default": "Собрать задачу и договориться с командой",
+      "maxLength": 48
     },
     {
       "id": "status_b",
@@ -94,7 +97,8 @@
       "role": "content",
       "label": "Card B status",
       "description": "Short status word above the title of card B.",
-      "default": "Запуск"
+      "default": "Запуск",
+      "maxLength": 16
     },
     {
       "id": "title_b",
@@ -102,7 +106,8 @@
       "role": "content",
       "label": "Card B title",
       "description": "Title of card B.",
-      "default": "Выпустить ролик"
+      "default": "Выпустить ролик",
+      "maxLength": 28
     },
     {
       "id": "detail_b",
@@ -110,7 +115,8 @@
       "role": "content",
       "label": "Card B detail",
       "description": "One line under the title of card B; wraps by words.",
-      "default": "От согласованного монтажа к публикации"
+      "default": "От согласованного монтажа к публикации",
+      "maxLength": 48
     }
   ]
 }

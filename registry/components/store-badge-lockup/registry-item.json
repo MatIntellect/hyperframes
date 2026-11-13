@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Short action line shown above the store badges.",
-      "default": "Скачай приложение"
+      "default": "Скачай приложение",
+      "maxLength": 28
     },
     {
       "id": "showApple",

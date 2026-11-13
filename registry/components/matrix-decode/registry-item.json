@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Target text",
       "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.",
-      "default": "МОНТАЖ"
+      "default": "МОНТАЖ",
+      "maxLength": 32
     },
     {
       "id": "size",

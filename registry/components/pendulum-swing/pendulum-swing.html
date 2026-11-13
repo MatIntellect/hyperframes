@@ -39,7 +39,7 @@
 <div
   class="hf-catalog-pendulum-swing"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Words on the hanging sign. A long line wraps inside 640px.", "default": "Мы открыты" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Words on the hanging sign. A long line wraps inside 640px.", "default": "Мы открыты", "maxLength": 28 },
     { "id": "pivot", "type": "enum", "role": "layout", "label": "Pivot", "description": "Where the content hangs from. The swing rotates about this point, so the top edge stays pinned.", "default": "top-center", "options": [{ "value": "top-center", "label": "Top center" }, { "value": "top-left", "label": "Top left" }, { "value": "top-right", "label": "Top right" }] },
     { "id": "amplitude", "type": "enum", "role": "motion", "label": "Amplitude", "description": "How far the first swing reaches before it settles. Every later swing scales with it, so the pendulum still comes to rest upright.", "default": "standard", "options": [{ "value": "gentle", "label": "Gentle" }, { "value": "standard", "label": "Standard" }, { "value": "wide", "label": "Wide" }] },
     { "id": "direction", "type": "enum", "role": "motion", "label": "Direction", "description": "Which side the pendulum swings in from: right lifts the first swing clockwise, left mirrors it.", "default": "right", "options": [{ "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }] },

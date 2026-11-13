@@ -29,7 +29,8 @@
       "role": "style",
       "label": "Prompt glyph",
       "description": "Leading glyph before the command and the trailing prompt. Empty string hides it.",
-      "default": "$"
+      "default": "$",
+      "maxLength": 2
     },
     {
       "id": "cadence",

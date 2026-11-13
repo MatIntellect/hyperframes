@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Wordmark",
       "description": "Display wordmark that settles dead-center.",
-      "default": "MATINTELLECT"
+      "default": "MATINTELLECT",
+      "maxLength": 12
     },
     {
       "id": "label",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Label",
       "description": "Mono caption under the rule. Empty hides it.",
-      "default": "МОНТАЖ С ИИ. РОЛИК ЗА МИНУТУ."
+      "default": "МОНТАЖ С ИИ. РОЛИК ЗА МИНУТУ.",
+      "maxLength": 48
     },
     {
       "id": "kicker",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Kicker",
       "description": "Small label above the wordmark. Empty hides it.",
-      "default": "ПРЕДСТАВЛЯЕМ"
+      "default": "ПРЕДСТАВЛЯЕМ",
+      "maxLength": 16
     },
     {
       "id": "rule",

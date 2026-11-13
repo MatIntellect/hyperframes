@@ -13,7 +13,8 @@
       "role": "content",
       "label": "Contact",
       "description": "Name in the thread header; the avatar shows its first letter. Up to 16 characters.",
-      "default": "Аня"
+      "default": "Аня",
+      "maxLength": 16
     },
     {
       "id": "unread",

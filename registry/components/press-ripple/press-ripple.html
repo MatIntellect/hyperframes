@@ -41,8 +41,8 @@
   data-composition-id="press-ripple"
   data-composition-duration="2.4"
   data-composition-variables='[
-    {"id": "label", "type": "string", "role": "content", "label": "Label", "description": "Text inside the default pill target.", "default": "Начать"},
-    {"id": "done_label", "type": "string", "role": "content", "label": "Done label", "description": "Text beside the check once the default pill is pressed.", "default": "Сохранено"},
+    {"id": "label", "type": "string", "role": "content", "label": "Label", "description": "Text inside the default pill target.", "default": "Начать", "maxLength": 16},
+    {"id": "done_label", "type": "string", "role": "content", "label": "Done label", "description": "Text beside the check once the default pill is pressed.", "default": "Сохранено", "maxLength": 16},
     {"id": "target_x", "type": "number", "role": "layout", "label": "Target X", "description": "Zone center, percent of host width.", "default": 50, "min": 8, "max": 92, "step": 1, "unit": "%"},
     {"id": "target_y", "type": "number", "role": "layout", "label": "Target Y", "description": "Zone center, percent of host height.", "default": 50, "min": 8, "max": 92, "step": 1, "unit": "%"},
     {"id": "press_at", "type": "number", "role": "timing", "label": "Press at", "description": "Seconds from mount start when the press begins.", "default": 0.9, "min": 0.9, "max": 10, "step": 0.1, "unit": "s"},

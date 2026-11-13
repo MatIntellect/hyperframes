@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "Full line of display text.",
-      "default": "Монтаж с ИИ дешевле"
+      "default": "Монтаж с ИИ дешевле",
+      "maxLength": 48
     },
     {
       "id": "emphasis_word",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Emphasis word",
       "description": "First case-insensitive substring match in text receives the marker. Empty or unmatched draws no marker.",
-      "default": "дешевле"
+      "default": "дешевле",
+      "maxLength": 16
     },
     {
       "id": "style",

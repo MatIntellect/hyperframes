@@ -56,7 +56,8 @@
       "role": "content",
       "label": "Heading",
       "description": "Line above the wall.",
-      "default": "Нам доверяют"
+      "default": "Нам доверяют",
+      "maxLength": 28
     },
     {
       "id": "marks",

@@ -39,7 +39,8 @@
       "role": "content",
       "label": "Before label",
       "description": "Chip shown on the base before panel. Blank hides the chip.",
-      "default": "До"
+      "default": "До",
+      "maxLength": 16
     },
     {
       "id": "label_b",
@@ -47,7 +48,8 @@
       "role": "content",
       "label": "After label",
       "description": "Chip shown on the revealed after panel. Blank hides the chip.",
-      "default": "После"
+      "default": "После",
+      "maxLength": 16
     },
     {
       "id": "rest_split",

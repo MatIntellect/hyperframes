@@ -47,7 +47,8 @@
       "role": "content",
       "label": "Outgoing kicker",
       "description": "Empty hides the line.",
-      "default": "СЕЙЧАС"
+      "default": "СЕЙЧАС",
+      "maxLength": 16
     },
     {
       "id": "out_title",
@@ -55,7 +56,8 @@
       "role": "content",
       "label": "Outgoing title",
       "description": "Empty hides the line.",
-      "default": "Держим натяжение"
+      "default": "Держим натяжение",
+      "maxLength": 28
     },
     {
       "id": "out_subtitle",
@@ -63,7 +65,8 @@
       "role": "content",
       "label": "Outgoing subtitle",
       "description": "Empty hides the line.",
-      "default": "С каждым рывком сопротивление сильнее"
+      "default": "С каждым рывком сопротивление сильнее",
+      "maxLength": 48
     },
     {
       "id": "in_kicker",
@@ -71,7 +74,8 @@
       "role": "content",
       "label": "Incoming kicker",
       "description": "Empty hides the line.",
-      "default": "ДАЛЬШЕ"
+      "default": "ДАЛЬШЕ",
+      "maxLength": 16
     },
     {
       "id": "in_title",
@@ -79,7 +83,8 @@
       "role": "content",
       "label": "Incoming title",
       "description": "Empty hides the line.",
-      "default": "Отпустили"
+      "default": "Отпустили",
+      "maxLength": 28
     },
     {
       "id": "in_subtitle",
@@ -87,7 +92,8 @@
       "role": "content",
       "label": "Incoming subtitle",
       "description": "Empty hides the line.",
-      "default": "Новая сцена встаёт за рывком"
+      "default": "Новая сцена встаёт за рывком",
+      "maxLength": 48
     }
   ]
 }

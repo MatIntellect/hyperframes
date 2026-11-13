@@ -31,12 +31,12 @@
   data-composition-duration="2.5"
   data-composition-variables='[
     {"id": "direction", "type": "enum", "role": "content", "label": "Direction", "description": "Edge the outgoing panel releases through.", "default": "up", "options": [{"value": "up", "label": "Up"}, {"value": "left", "label": "Left"}]},
-    {"id": "out_kicker", "type": "string", "role": "content", "label": "Outgoing kicker", "description": "Empty hides the line.", "default": "СЕЙЧАС"},
-    {"id": "out_title", "type": "string", "role": "content", "label": "Outgoing title", "description": "Empty hides the line.", "default": "Держим натяжение"},
-    {"id": "out_subtitle", "type": "string", "role": "content", "label": "Outgoing subtitle", "description": "Empty hides the line.", "default": "С каждым рывком сопротивление сильнее"},
-    {"id": "in_kicker", "type": "string", "role": "content", "label": "Incoming kicker", "description": "Empty hides the line.", "default": "ДАЛЬШЕ"},
-    {"id": "in_title", "type": "string", "role": "content", "label": "Incoming title", "description": "Empty hides the line.", "default": "Отпустили"},
-    {"id": "in_subtitle", "type": "string", "role": "content", "label": "Incoming subtitle", "description": "Empty hides the line.", "default": "Новая сцена встаёт за рывком"}
+    {"id": "out_kicker", "type": "string", "role": "content", "label": "Outgoing kicker", "description": "Empty hides the line.", "default": "СЕЙЧАС", "maxLength": 16},
+    {"id": "out_title", "type": "string", "role": "content", "label": "Outgoing title", "description": "Empty hides the line.", "default": "Держим натяжение", "maxLength": 28},
+    {"id": "out_subtitle", "type": "string", "role": "content", "label": "Outgoing subtitle", "description": "Empty hides the line.", "default": "С каждым рывком сопротивление сильнее", "maxLength": 48},
+    {"id": "in_kicker", "type": "string", "role": "content", "label": "Incoming kicker", "description": "Empty hides the line.", "default": "ДАЛЬШЕ", "maxLength": 16},
+    {"id": "in_title", "type": "string", "role": "content", "label": "Incoming title", "description": "Empty hides the line.", "default": "Отпустили", "maxLength": 28},
+    {"id": "in_subtitle", "type": "string", "role": "content", "label": "Incoming subtitle", "description": "Empty hides the line.", "default": "Новая сцена встаёт за рывком", "maxLength": 48}
   ]'
 >
   <head>

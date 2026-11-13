@@ -34,7 +34,8 @@
       "role": "content",
       "label": "Center label",
       "description": "Label on the default center token card.",
-      "default": "Ваша команда"
+      "default": "Ваша команда",
+      "maxLength": 16
     },
     {
       "id": "chips",

@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "Word that cascades in. Every character becomes one letter span, in source order.",
-      "default": "МОНТАЖ"
+      "default": "МОНТАЖ",
+      "maxLength": 12
     },
     {
       "id": "distance",

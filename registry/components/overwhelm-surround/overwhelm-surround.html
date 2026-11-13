@@ -53,7 +53,7 @@
   lang="en"
   data-composition-variables='[
     { "id": "count", "type": "number", "role": "content", "label": "Chip count", "description": "Number of tasks and notifications crowding the center.", "default": 16, "min": 8, "max": 24, "step": 1 },
-    { "id": "centerLabel", "type": "string", "role": "content", "label": "Center label", "description": "Text inside the calm central subject. Blank hides the text.", "default": "Вы" },
+    { "id": "centerLabel", "type": "string", "role": "content", "label": "Center label", "description": "Text inside the calm central subject. Blank hides the text.", "default": "Вы", "maxLength": 10 },
     { "id": "intensity", "type": "number", "role": "layout", "label": "Intensity", "description": "How tightly and quickly the chips crowd the center.", "default": 1, "min": 0.5, "max": 2, "step": 0.1 }
   ]'
 >

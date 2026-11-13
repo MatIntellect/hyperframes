@@ -34,7 +34,8 @@
       "role": "content",
       "label": "Quote",
       "description": "Customer testimonial copy revealed at reading pace.",
-      "default": "Ролики теперь выходят каждый день, а я только снимаю."
+      "default": "Ролики теперь выходят каждый день, а я только снимаю.",
+      "maxLength": 120
     },
     {
       "id": "author",
@@ -42,7 +43,8 @@
       "role": "content",
       "label": "Author",
       "description": "Name attributed to the testimonial.",
-      "default": "Анна Смирнова"
+      "default": "Анна Смирнова",
+      "maxLength": 16
     },
     {
       "id": "handle",
@@ -50,7 +52,8 @@
       "role": "content",
       "label": "Handle",
       "description": "Role or social handle shown beneath the author name.",
-      "default": "@anna.bakery"
+      "default": "@anna.bakery",
+      "maxLength": 16
     },
     {
       "id": "rating",

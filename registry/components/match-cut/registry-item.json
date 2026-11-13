@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Scene A label",
       "description": "Text inside the outgoing button.",
-      "default": "Старт"
+      "default": "Старт",
+      "maxLength": 16
     },
     {
       "id": "label_b",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Scene B label",
       "description": "Result text revealed after the cut.",
-      "default": "Готово"
+      "default": "Готово",
+      "maxLength": 16
     },
     {
       "id": "kicker",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Kicker",
       "description": "Small line above the result label; empty hides it.",
-      "default": "Совпало"
+      "default": "Совпало",
+      "maxLength": 16
     }
   ]
 }

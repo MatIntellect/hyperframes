@@ -23,7 +23,7 @@
   data-composition-id="agent-cursor"
   data-composition-duration="4.8"
   data-composition-variables='[
-    { "id": "agent_name", "type": "string", "role": "content", "label": "Agent name", "default": "Агент" },
+    { "id": "agent_name", "type": "string", "role": "content", "label": "Agent name", "default": "Агент", "maxLength": 16 },
     { "id": "steps", "type": "string", "role": "content", "label": "Status steps", "description": "Comma-separated: a reading line, one line per target, then a done line.", "default": "Читаю страницу,Открываю настройки,Включаю копии,Готово" },
     { "id": "targets", "type": "string", "role": "layout", "label": "Click targets", "description": "Semicolon-separated x,y points in percent of the frame.", "default": "25,47;76,30" }
   ]'

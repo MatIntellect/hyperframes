@@ -30,7 +30,8 @@
       "role": "content",
       "label": "Final word",
       "description": "Word the ticker locks on and promotes.",
-      "default": "проще"
+      "default": "проще",
+      "maxLength": 12
     }
   ]
 }

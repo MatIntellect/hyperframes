@@ -25,7 +25,7 @@
   class="hf-catalog-matrix-decode"
   data-final="МОНТАЖ"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Target text", "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.", "default": "МОНТАЖ"},
+    {"id": "text", "type": "string", "role": "content", "label": "Target text", "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.", "default": "МОНТАЖ", "maxLength": 32},
     {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. A row wider than its space shrinks to fit, never under 28 px, then wraps.", "default": 64, "min": 28, "max": 160, "step": 4, "unit": "px"}
   ]'
 >

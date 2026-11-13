@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Nucleus label",
       "description": "Text displayed inside the fixed center nucleus.",
-      "default": "Идея"
+      "default": "Идея",
+      "maxLength": 16
     },
     {
       "id": "satellites",

@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Label",
       "description": "Text displayed on the card.",
-      "default": "Готово"
+      "default": "Готово",
+      "maxLength": 28
     },
     {
       "id": "sweep_angle",

@@ -42,7 +42,8 @@
       "role": "content",
       "label": "Text",
       "description": "The phrase the arrow points at.",
-      "default": "Вот здесь"
+      "default": "Вот здесь",
+      "maxLength": 28
     },
     {
       "id": "arrowStyle",

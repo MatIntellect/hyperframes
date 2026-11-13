@@ -38,7 +38,8 @@
       "type": "string",
       "role": "content",
       "label": "Agent name",
-      "default": "Агент"
+      "default": "Агент",
+      "maxLength": 16
     },
     {
       "id": "steps",

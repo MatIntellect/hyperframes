@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Name",
       "description": "Primary line revealed once the skeleton fades out.",
-      "default": "Анна Смирнова"
+      "default": "Анна Смирнова",
+      "maxLength": 16
     },
     {
       "id": "detail",
@@ -27,7 +28,8 @@
       "role": "content",
       "label": "Detail",
       "description": "Secondary line under the name, such as an email or a role.",
-      "default": "anna@studio.ru"
+      "default": "anna@studio.ru",
+      "maxLength": 28
     }
   ]
 }

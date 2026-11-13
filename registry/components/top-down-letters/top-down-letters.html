@@ -30,7 +30,7 @@
 <div
   class="hf-catalog-top-down-letters"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Word that cascades in. Every character becomes one letter span, in source order.", "default": "МОНТАЖ" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Word that cascades in. Every character becomes one letter span, in source order.", "default": "МОНТАЖ", "maxLength": 12 },
     { "id": "distance", "type": "enum", "role": "motion", "label": "Distance", "description": "Multiplies the drop the timeline drives, so the letters cover a shorter or longer run in the same time.", "default": "standard", "options": [{ "value": "close", "label": "Close" }, { "value": "standard", "label": "Standard" }, { "value": "far", "label": "Far" }] },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Letter colour: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] }
   ]'
@@ -81,7 +81,7 @@
     display: inline-flex;
     gap: 1px;
     font-size: 74px;
-    line-height: 0.9;
+    line-height: 1.25; /* the row clips: room for descenders and Ё/Й (a Montserrat glyph spans ~1.22 em) */
     overflow: hidden;
   }
   .hf-catalog-top-down-letters span {

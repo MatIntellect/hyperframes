@@ -37,7 +37,8 @@
       "role": "content",
       "label": "Traveler label",
       "description": "Text displayed inside the default traveler chip.",
-      "default": "Ролик в пути"
+      "default": "Ролик в пути",
+      "maxLength": 16
     }
   ]
 }

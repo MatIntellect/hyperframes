@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "Line that types itself out character by character.",
-      "default": "hyperframes add typewriter"
+      "default": "hyperframes add typewriter",
+      "maxLength": 28
     },
     {
       "id": "tone",

@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Hub label",
       "description": "Text displayed inside the fixed central hub.",
-      "default": "Ролик"
+      "default": "Ролик",
+      "maxLength": 16
     },
     {
       "id": "nodes",

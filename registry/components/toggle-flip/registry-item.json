@@ -40,7 +40,8 @@
       "role": "content",
       "label": "Caption",
       "description": "Optional caption under the toggle. Blank hides the line.",
-      "default": "Автосохранение"
+      "default": "Автосохранение",
+      "maxLength": 16
     },
     {
       "id": "size",

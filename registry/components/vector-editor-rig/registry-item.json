@@ -53,7 +53,8 @@
       "role": "content",
       "label": "Path label",
       "description": "Name shown for the active vector path.",
-      "default": "Логотип"
+      "default": "Логотип",
+      "maxLength": 16
     }
   ]
 }

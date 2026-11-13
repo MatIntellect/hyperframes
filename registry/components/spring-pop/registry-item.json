@@ -51,7 +51,8 @@
       "role": "content",
       "label": "Label",
       "description": "Text displayed inside the badge.",
-      "default": "Новое"
+      "default": "Новое",
+      "maxLength": 16
     }
   ]
 }

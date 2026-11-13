@@ -49,7 +49,7 @@
   data-composition-id="radial-surround"
   data-composition-duration="5"
   data-composition-variables='[
-    {"id": "center_label", "type": "string", "role": "content", "label": "Center label", "description": "Label on the default center token card.", "default": "Ваша команда"},
+    {"id": "center_label", "type": "string", "role": "content", "label": "Center label", "description": "Label on the default center token card.", "default": "Ваша команда", "maxLength": 16},
     {"id": "chips", "type": "string", "role": "content", "label": "Chips", "description": "Comma-separated chip labels that surround the center (up to 12).", "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы"},
     {"id": "close_in", "type": "boolean", "role": "timing", "label": "Close in", "description": "Converge the ring inward with a subtle edge dim after assembly. The center never moves.", "default": true},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated per-chip entrance times in seconds. Blank entries use the default cascade.", "default": ""},

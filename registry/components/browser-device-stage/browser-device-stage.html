@@ -59,7 +59,7 @@
   data-composition-duration="5"
   data-composition-variables='[
     {"id": "chrome", "type": "enum", "role": "content", "label": "Chrome", "description": "Device frame drawn around the screen slot.", "default": "browser", "options": [{"value": "browser", "label": "Browser"}, {"value": "window", "label": "Window"}, {"value": "phone", "label": "Phone"}]},
-    {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "Address pill text (browser) or title bar text (window).", "default": "app.example.com"},
+    {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "Address pill text (browser) or title bar text (window).", "default": "app.example.com", "maxLength": 28},
     {"id": "swap_at", "type": "number", "role": "content", "label": "Swap at", "description": "Seconds from mount start to swap to the second screen. 0 disables the swap.", "default": 0, "min": 0, "max": 30, "step": 0.1, "unit": "s"},
     {"id": "exit", "type": "enum", "role": "style", "label": "Exit", "description": "Optional departure. None holds the final frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

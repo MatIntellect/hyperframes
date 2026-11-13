@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Metric label",
       "description": "Label shown above the declining value.",
-      "default": "Удержание"
+      "default": "Удержание",
+      "maxLength": 16
     },
     {
       "id": "start_value",

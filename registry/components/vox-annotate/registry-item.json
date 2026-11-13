@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "Full line of display text.",
-      "default": "Продавайте историю, а не функции"
+      "default": "Продавайте историю, а не функции",
+      "maxLength": 48
     },
     {
       "id": "keyword",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Keyword",
       "description": "First case-insensitive substring match in text receives the marker and annotation. Empty or unmatched draws nothing.",
-      "default": "историю"
+      "default": "историю",
+      "maxLength": 16
     },
     {
       "id": "note",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Note",
       "description": "Callout label at the end of the connector. Empty draws the marker only.",
-      "default": "главное в кадре"
+      "default": "главное в кадре",
+      "maxLength": 16
     },
     {
       "id": "style",

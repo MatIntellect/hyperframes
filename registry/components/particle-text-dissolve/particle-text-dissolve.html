@@ -58,7 +58,7 @@
   data-composition-id="particle-text-dissolve"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "The line that assembles from (or dissolves into) the particle cloud.", "default": "Монтаж с ИИ"},
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "The line that assembles from (or dissolves into) the particle cloud.", "default": "Монтаж с ИИ", "maxLength": 28},
     {"id": "direction", "type": "enum", "role": "timing", "label": "Direction", "description": "in assembles the text from the cloud and holds it crisp; out erases the text into the cloud and holds empty.", "default": "in", "options": [{"value": "in", "label": "Assemble in"}, {"value": "out", "label": "Dissolve out"}]},
     {"id": "density", "type": "enum", "role": "style", "label": "Density", "description": "Particle count cap for the field.", "default": "med", "options": [{"value": "low", "label": "Low"}, {"value": "med", "label": "Medium"}, {"value": "high", "label": "High"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the end state holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}

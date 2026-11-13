@@ -47,7 +47,7 @@
   data-composition-id="variable-font-flex"
   data-composition-duration="3.5"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The word whose weight flexes.", "default": "Сила" },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The word whose weight flexes.", "default": "Сила", "maxLength": 12 },
     { "id": "stagger", "type": "number", "role": "timing", "label": "Stagger", "description": "Seconds between per-character flex starts, clamped 0 to 0.25.", "default": 0.06, "min": 0, "max": 0.25, "step": 0.01, "unit": "s" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the carved word holds until the frame cuts.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Up" }] }
   ]'

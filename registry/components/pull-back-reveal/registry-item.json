@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Detail text",
       "description": "Stat shown in the detail chip at the center of the reveal.",
-      "default": "+312%"
+      "default": "+312%",
+      "maxLength": 6
     },
     {
       "id": "headline",
@@ -30,7 +31,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Headline revealed around the focused detail.",
-      "default": "Рост складывается"
+      "default": "Рост складывается",
+      "maxLength": 28
     },
     {
       "id": "detail_label",
@@ -38,7 +40,8 @@
       "role": "content",
       "label": "Detail label",
       "description": "Small caps label at the top of the detail card.",
-      "default": "Рост за месяц"
+      "default": "Рост за месяц",
+      "maxLength": 16
     },
     {
       "id": "detail_context",
@@ -46,7 +49,8 @@
       "role": "content",
       "label": "Detail context",
       "description": "Line at the bottom of the detail card; wraps by words.",
-      "default": "Во всех проектах"
+      "default": "Во всех проектах",
+      "maxLength": 48
     },
     {
       "id": "support_a_label",
@@ -54,7 +58,8 @@
       "role": "content",
       "label": "Card A label",
       "description": "Label of the first supporting card.",
-      "default": "Досмотры"
+      "default": "Досмотры",
+      "maxLength": 16
     },
     {
       "id": "support_a_value",
@@ -62,7 +67,8 @@
       "role": "content",
       "label": "Card A value",
       "description": "Value of the first supporting card.",
-      "default": "94%"
+      "default": "94%",
+      "maxLength": 6
     },
     {
       "id": "support_b_label",
@@ -70,7 +76,8 @@
       "role": "content",
       "label": "Card B label",
       "description": "Label of the second supporting card.",
-      "default": "Ролики"
+      "default": "Ролики",
+      "maxLength": 16
     },
     {
       "id": "support_b_value",
@@ -78,7 +85,8 @@
       "role": "content",
       "label": "Card B value",
       "description": "Value of the second supporting card.",
-      "default": "48"
+      "default": "48",
+      "maxLength": 6
     }
   ]
 }

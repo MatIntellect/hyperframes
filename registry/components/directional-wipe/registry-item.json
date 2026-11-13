@@ -12,7 +12,8 @@
       "role": "content",
       "label": "Outgoing label",
       "description": "Caption on the outgoing panel, the one on screen when the wipe starts.",
-      "default": "Было"
+      "default": "Было",
+      "maxLength": 16
     },
     {
       "id": "to-label",
@@ -20,7 +21,8 @@
       "role": "content",
       "label": "Incoming label",
       "description": "Caption on the incoming panel, the one the wipe brings in.",
-      "default": "Стало"
+      "default": "Стало",
+      "maxLength": 16
     },
     {
       "id": "corner",

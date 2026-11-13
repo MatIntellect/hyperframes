@@ -13,7 +13,8 @@
       "role": "content",
       "label": "Title",
       "description": "Bold note title. A | breaks the line. Up to 60 characters.",
-      "default": "Что никто не сказал|про видео"
+      "default": "Что никто не сказал|про видео",
+      "maxLength": 60
     },
     {
       "id": "lines",

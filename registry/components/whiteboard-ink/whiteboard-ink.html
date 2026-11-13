@@ -44,7 +44,7 @@
   data-composition-duration="5"
   data-composition-variables='[
     {"id": "sketch", "type": "enum", "role": "content", "label": "Sketch", "description": "Authored preset sketch to draw. Ignored when the strokes slot holds custom paths.", "default": "bulb", "options": [{"value": "bulb", "label": "Bulb"}, {"value": "flow", "label": "Flow"}, {"value": "rocket", "label": "Rocket"}]},
-    {"id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Short line shown after the sketch completes.", "default": "Нарисуйте идею"},
+    {"id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Short line shown after the sketch completes.", "default": "Нарисуйте идею", "maxLength": 48},
     {"id": "pen", "type": "enum", "role": "style", "label": "Pen", "description": "Show or hide the pen nib actor.", "default": "show", "options": [{"value": "show", "label": "Show"}, {"value": "hide", "label": "Hide"}]},
     {"id": "exit", "type": "enum", "role": "style", "label": "Exit", "description": "How the completed lockup leaves. none holds the final frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

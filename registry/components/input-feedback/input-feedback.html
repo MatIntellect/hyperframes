@@ -27,8 +27,8 @@
   data-state="valid"
   data-composition-variables='[
     { "id": "status", "type": "enum", "role": "style", "label": "Status", "description": "Whether the field reads as accepted or rejected, colouring the border, chip and hint.", "default": "valid", "options": [{ "value": "valid", "label": "Valid" }, { "value": "error", "label": "Error" }] },
-    { "id": "value", "type": "string", "role": "content", "label": "Value", "description": "Text held by the field.", "default": "anna@studio.ru" },
-    { "id": "hint", "type": "string", "role": "content", "label": "Hint", "description": "Helper line under the field.", "default": "Всё верно" }
+    { "id": "value", "type": "string", "role": "content", "label": "Value", "description": "Text held by the field.", "default": "anna@studio.ru", "maxLength": 28 },
+    { "id": "hint", "type": "string", "role": "content", "label": "Hint", "description": "Helper line under the field.", "default": "Всё верно", "maxLength": 28 }
   ]'
 >
   <label>Почта</label>
