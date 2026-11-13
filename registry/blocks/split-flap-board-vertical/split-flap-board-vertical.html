@@ -190,10 +190,15 @@
           root.classList.add("sfbv-card", "sfbv-" + placement);
           root.querySelector(".sfbv-ground").remove();
         }
+        /* room for the board: the field (780x1180), or inside the card (at most 780x760) less its padding and border */
+        var cs = getComputedStyle(root.querySelector("#sfbv-field")),
+          edge = function (a, b) {
+            return parseFloat(cs["padding" + a]) + parseFloat(cs["padding" + b]) + parseFloat(cs["border" + a + "Width"]) + parseFloat(cs["border" + b + "Width"]);
+          };
         var COLS = 8,
           ROWS = 4,
-          WIDTH = placement === "full" ? 780 : 696,
-          HMAX = placement === "full" ? 1180 : 680,
+          WIDTH = placement === "full" ? 780 : 780 - edge("Left", "Right"),
+          HMAX = placement === "full" ? 1180 : 760 - edge("Top", "Bottom"),
           CMAX = 120;
         
 

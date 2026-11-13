@@ -322,10 +322,19 @@
       var PI = Math.PI;
       var root = $("root"),
         frame = $("frame");
-      var css = getComputedStyle(root);
-      var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
-        SURF = css.getPropertyValue("--surface").trim() || "#18181a",
-        ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+      // palette colours resolved by a probe and taken whole as rgb() (halftone-dissolve.html:258-262):
+      // THREE.Color reads rgb(), not every CSS colour form a palette may use
+      function colour(c) {
+        var p = document.createElement("i");
+        p.style.color = c;
+        root.appendChild(p);
+        var v = getComputedStyle(p).color;
+        p.remove();
+        return v;
+      }
+      var BG = colour("var(--bg, #0c1014)"),
+        SURF = colour("var(--surface, #18181a)"),
+        ACC = colour("var(--accent, #ff0000)");
       // the pink caustic is a shade of the brand red: the developers' color-mix (camera-scan-gate.html:125-127), resolved
       // by a probe and taken whole (halftone-dissolve.html:258-262); a canvas gradient does not read var()
       var CAUSTIC = (function () {

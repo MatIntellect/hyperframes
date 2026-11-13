@@ -123,7 +123,7 @@
         }
 
         // theme colours, resolved by a probe (the developers' way, halftone-dissolve.html:258-262): the faint words
-        // are --muted, they light up to --fg the developers' way (interpolate faint -> full, one hue); an accent word
+        // are --muted, they light up to --fg the developers' way (color-mix faint -> full, one hue); an accent word
         // turns --accent in one step, with no grey-to-red blend in between
         function tok(c) {
           var p = document.createElement("i");
@@ -151,7 +151,10 @@
                 ? function (f) {
                     return f < 0.5 ? FAINT : RED;
                   }
-                : gsap.utils.interpolate(FAINT, FULL),
+                : function (f) {
+                    // the browser mixes in srgb whatever form the palette is written in (camera-scan-gate.html:125-127)
+                    return tok("color-mix(in srgb, " + FULL + " " + Math.round(f * 1000) / 10 + "%, " + FAINT + ")");
+                  },
           });
         });
 

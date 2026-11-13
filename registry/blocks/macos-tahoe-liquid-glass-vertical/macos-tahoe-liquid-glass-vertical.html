@@ -138,11 +138,14 @@
         frame = $("frame");
       // theme colours for the canvas, resolved by a probe and taken whole (the developers' way, halftone-dissolve.html:258-262);
       // a colour with its own alpha is the developers' color-mix with transparent (camera-scan-gate.html:125-127)
-      var probe = document.createElement("i");
-      root.appendChild(probe);
+      // a probe per call, removed after the read (halftone-dissolve.html: probe.remove())
       function colour(c) {
+        var probe = document.createElement("i");
+        root.appendChild(probe);
         probe.style.color = c;
-        return getComputedStyle(probe).color;
+        var v = getComputedStyle(probe).color;
+        probe.remove();
+        return v;
       }
       function tint(c, a) {
         return colour("color-mix(in srgb, " + c + " " + a * 100 + "%, transparent)");
