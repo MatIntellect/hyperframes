@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object about 760 px across, centred on the field (y 770). top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
-    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
+    {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
@@ -38,7 +38,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--shholographicv-ground, var(--bg, #0c1014));
       }
       #shholographicv-stage canvas {
         position: absolute;
@@ -54,7 +54,7 @@
         width: 780px;
         height: 760px;
         border-radius: 32px;
-        border: 2px solid #2e2e32;
+        border: 2px solid var(--border, #2e2e32);
       }
       #shholographicv-stage.shholographicv-bottom {
         top: 600px;
@@ -95,9 +95,18 @@
           window.__hyperframes && window.__hyperframes.getVariables
             ? window.__hyperframes.getVariables()
             : {};
+        var root = document.getElementById("shholographicv-root");
+        var stage = document.getElementById("shholographicv-stage");
+        var cv = stage.querySelector("canvas");
+        // A colour variable is any CSS colour, by default a theme token ("var(--accent, #ff0000)"). The shader needs
+        // the resolved colour: a probe inside the root takes the value and the browser resolves it against the reel's
+        // palette – the developers' own way (registry/components/halftone-dissolve/halftone-dissolve.html:258-262).
+        var probe = document.createElement("span");
+        root.appendChild(probe);
         function colour(id, fallback) {
           var v = vars[id];
-          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+          probe.style.color = typeof v === "string" && v.trim() ? v.trim() : fallback;
+          return getComputedStyle(probe).color || fallback;
         }
         var props = Object.assign({}, FIXED);
         Object.keys(COLORS).forEach(function (id) {
@@ -108,11 +117,9 @@
             return { color: colour("stop" + (i + 1), s.color), position: s.position };
           });
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
-
-        var root = document.getElementById("shholographicv-root");
-        var stage = document.getElementById("shholographicv-stage");
-        var cv = stage.querySelector("canvas");
-        stage.style.background = colour("bg", "#0c1014");
+        probe.remove();
+        // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
+        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shholographicv-ground", vars.ground.trim());
         var W = 1080,
           H = 1920;
         

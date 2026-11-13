@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
+    {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "mode", "type": "enum", "role": "style", "label": "Mode", "description": "Rainbow uses the full iridescent spectrum; Custom cycles through your three chosen colors", "default": "rainbow", "options": [{"value": "rainbow", "label": "Rainbow"}, {"value": "custom", "label": "Custom"}]},
     {"id": "colorA", "type": "color", "role": "style", "label": "Color 1", "description": "First color in the rim cycle (mode custom)", "default": "#2b6fff"},
     {"id": "colorB", "type": "color", "role": "style", "label": "Color 2", "description": "Second color in the rim cycle (mode custom)", "default": "#ffffff"},
@@ -41,7 +41,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--shthinfilm-ground, var(--bg, #0c1014));
       }
       #shthinfilm-stage canvas {
         position: absolute;
@@ -86,9 +86,18 @@
           window.__hyperframes && window.__hyperframes.getVariables
             ? window.__hyperframes.getVariables()
             : {};
+        var root = document.getElementById("shthinfilm-root");
+        var stage = document.getElementById("shthinfilm-stage");
+        var cv = stage.querySelector("canvas");
+        // A colour variable is any CSS colour, by default a theme token ("var(--accent, #ff0000)"). The shader needs
+        // the resolved colour: a probe inside the root takes the value and the browser resolves it against the reel's
+        // palette – the developers' own way (registry/components/halftone-dissolve/halftone-dissolve.html:258-262).
+        var probe = document.createElement("span");
+        root.appendChild(probe);
         function colour(id, fallback) {
           var v = vars[id];
-          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+          probe.style.color = typeof v === "string" && v.trim() ? v.trim() : fallback;
+          return getComputedStyle(probe).color || fallback;
         }
         var props = Object.assign({}, FIXED);
         Object.keys(COLORS).forEach(function (id) {
@@ -99,11 +108,9 @@
             return { color: colour("stop" + (i + 1), s.color), position: s.position };
           });
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
-
-        var root = document.getElementById("shthinfilm-root");
-        var stage = document.getElementById("shthinfilm-stage");
-        var cv = stage.querySelector("canvas");
-        stage.style.background = colour("bg", "#0c1014");
+        probe.remove();
+        // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
+        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shthinfilm-ground", vars.ground.trim());
         var W = 1920,
           H = 1080;
         

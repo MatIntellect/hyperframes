@@ -2,8 +2,8 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
-    {"id": "rayColor", "type": "color", "role": "style", "label": "Ray Color", "description": "Color of the light rays", "default": "#ff0000"},
+    {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
+    {"id": "rayColor", "type": "string", "role": "style", "label": "Ray Color", "description": "Color of the light rays. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
     {"id": "backgroundColor", "type": "color", "role": "style", "label": "Background Color", "description": "Background color", "default": "transparent"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
@@ -39,7 +39,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--shgodrays-ground, var(--bg, #0c1014));
       }
       #shgodrays-stage canvas {
         position: absolute;
@@ -74,7 +74,7 @@
         var COMP_ID = "godrays";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"rayColor": "#ff0000", "backgroundColor": "transparent"};
+        var COLORS = {"rayColor": "var(--accent, #ff0000)", "backgroundColor": "transparent"};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = null;
@@ -84,9 +84,18 @@
           window.__hyperframes && window.__hyperframes.getVariables
             ? window.__hyperframes.getVariables()
             : {};
+        var root = document.getElementById("shgodrays-root");
+        var stage = document.getElementById("shgodrays-stage");
+        var cv = stage.querySelector("canvas");
+        // A colour variable is any CSS colour, by default a theme token ("var(--accent, #ff0000)"). The shader needs
+        // the resolved colour: a probe inside the root takes the value and the browser resolves it against the reel's
+        // palette – the developers' own way (registry/components/halftone-dissolve/halftone-dissolve.html:258-262).
+        var probe = document.createElement("span");
+        root.appendChild(probe);
         function colour(id, fallback) {
           var v = vars[id];
-          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+          probe.style.color = typeof v === "string" && v.trim() ? v.trim() : fallback;
+          return getComputedStyle(probe).color || fallback;
         }
         var props = Object.assign({}, FIXED);
         Object.keys(COLORS).forEach(function (id) {
@@ -97,11 +106,9 @@
             return { color: colour("stop" + (i + 1), s.color), position: s.position };
           });
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
-
-        var root = document.getElementById("shgodrays-root");
-        var stage = document.getElementById("shgodrays-stage");
-        var cv = stage.querySelector("canvas");
-        stage.style.background = colour("bg", "#0c1014");
+        probe.remove();
+        // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
+        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shgodrays-ground", vars.ground.trim());
         var W = 1920,
           H = 1080;
         

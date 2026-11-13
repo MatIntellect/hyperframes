@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "bg", "type": "color", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent.", "default": "#0c1014"},
+    {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "coreColor", "type": "color", "role": "style", "label": "Core Color", "description": "The hot color the densest gas cores glow with — the embedded newborn stars", "default": "#ffd9b0"},
     {"id": "gasColor", "type": "color", "role": "style", "label": "Gas Color", "description": "The main emission color of the gas body — H-alpha rose by default", "default": "#ff5e7a"},
     {"id": "veilColor", "type": "color", "role": "style", "label": "Veil Color", "description": "The color of the thin outer veils and the deep-space background behind the gas", "default": "#3a5bdb"},
@@ -40,7 +40,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--shnebula-ground, var(--bg, #0c1014));
       }
       #shnebula-stage canvas {
         position: absolute;
@@ -85,9 +85,18 @@
           window.__hyperframes && window.__hyperframes.getVariables
             ? window.__hyperframes.getVariables()
             : {};
+        var root = document.getElementById("shnebula-root");
+        var stage = document.getElementById("shnebula-stage");
+        var cv = stage.querySelector("canvas");
+        // A colour variable is any CSS colour, by default a theme token ("var(--accent, #ff0000)"). The shader needs
+        // the resolved colour: a probe inside the root takes the value and the browser resolves it against the reel's
+        // palette – the developers' own way (registry/components/halftone-dissolve/halftone-dissolve.html:258-262).
+        var probe = document.createElement("span");
+        root.appendChild(probe);
         function colour(id, fallback) {
           var v = vars[id];
-          return typeof v === "string" && v.trim() ? v.trim() : fallback;
+          probe.style.color = typeof v === "string" && v.trim() ? v.trim() : fallback;
+          return getComputedStyle(probe).color || fallback;
         }
         var props = Object.assign({}, FIXED);
         Object.keys(COLORS).forEach(function (id) {
@@ -98,11 +107,9 @@
             return { color: colour("stop" + (i + 1), s.color), position: s.position };
           });
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
-
-        var root = document.getElementById("shnebula-root");
-        var stage = document.getElementById("shnebula-stage");
-        var cv = stage.querySelector("canvas");
-        stage.style.background = colour("bg", "#0c1014");
+        probe.remove();
+        // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
+        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shnebula-ground", vars.ground.trim());
         var W = 1920,
           H = 1080;
         
