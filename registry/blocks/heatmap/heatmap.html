@@ -5,9 +5,9 @@
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "stop1", "type": "string", "role": "style", "label": "Gradient 1", "description": "Gradient stop at 0%. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "stop2", "type": "string", "role": "style", "label": "Gradient 2", "description": "Gradient stop at 20%. Any CSS colour; by default the theme token --border.", "default": "var(--border, #2e2e32)"},
-    {"id": "stop3", "type": "color", "role": "style", "label": "Gradient 3", "description": "Gradient stop at 45%.", "default": "#7a0000"},
+    {"id": "stop3", "type": "string", "role": "style", "label": "Gradient 3", "description": "Gradient stop at 45%. Any CSS colour; by default a shade of the theme token --accent.", "default": "color-mix(in srgb, var(--accent, #ff0000) 48%, #000)"},
     {"id": "stop4", "type": "string", "role": "style", "label": "Gradient 4", "description": "Gradient stop at 70%. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
-    {"id": "stop5", "type": "color", "role": "style", "label": "Gradient 5", "description": "Gradient stop at 90%.", "default": "#ff8a80"},
+    {"id": "stop5", "type": "string", "role": "style", "label": "Gradient 5", "description": "Gradient stop at 90%. Any CSS colour; by default a shade of the theme token --accent.", "default": "color-mix(in srgb, var(--accent, #ff0000) 50%, #fff)"},
     {"id": "stop6", "type": "string", "role": "style", "label": "Gradient 6", "description": "Gradient stop at 100%. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
@@ -80,7 +80,7 @@
         // colour variables: id -> default (the same default as in the variables list above)
         var COLORS = {};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
-        var STOPS = [{"color": "var(--bg, #0c1014)", "position": 0}, {"color": "var(--border, #2e2e32)", "position": 0.2}, {"color": "#7a0000", "position": 0.45}, {"color": "var(--accent, #ff0000)", "position": 0.7}, {"color": "#ff8a80", "position": 0.9}, {"color": "var(--fg, #f2f2f2)", "position": 1}];
+        var STOPS = [{"color": "var(--bg, #0c1014)", "position": 0}, {"color": "var(--border, #2e2e32)", "position": 0.2}, {"color": "color-mix(in srgb, var(--accent, #ff0000) 48%, #000)", "position": 0.45}, {"color": "var(--accent, #ff0000)", "position": 0.7}, {"color": "color-mix(in srgb, var(--accent, #ff0000) 50%, #fff)", "position": 0.9}, {"color": "var(--fg, #f2f2f2)", "position": 1}];
         var MODE = null;
         // settings the brand fixes that are not variables (colour blending)
         var FIXED = {};

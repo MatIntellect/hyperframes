@@ -5,7 +5,7 @@
     {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "colorA", "type": "string", "role": "style", "label": "Lead Color", "description": "Color at the leading edge of each line. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
-    {"id": "colorB", "type": "color", "role": "style", "label": "Trail Color", "description": "Color at the trailing edge (transparent by default)", "default": "#ff000000"},
+    {"id": "colorB", "type": "string", "role": "style", "label": "Trail Color", "description": "Color at the trailing edge (transparent by default). Any CSS colour; by default a shade of the theme token --accent.", "default": "rgb(from var(--accent, #ff0000) r g b / 0)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
@@ -87,7 +87,7 @@
         var COMP_ID = "falling-lines-vertical";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"colorA": "var(--accent, #ff0000)", "colorB": "#ff000000"};
+        var COLORS = {"colorA": "var(--accent, #ff0000)", "colorB": "rgb(from var(--accent, #ff0000) r g b / 0)"};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = null;
