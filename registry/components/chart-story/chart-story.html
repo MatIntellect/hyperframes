@@ -559,6 +559,12 @@
                 if (index !== emphasize) {
                   var valueLabel = text(point.x, point.y - 20, 25, inkColor);
                   valueLabel.textContent = displays[index];
+                  // a halo of the ground under the figure: the line passing behind it stays out of the letters
+                  // (paint-order stroke fill, the developers' beat-freeze-cut.html:362)
+                  valueLabel.style.stroke = "var(--bg, #0c1014)";
+                  valueLabel.style.strokeWidth = "10px";
+                  valueLabel.style.strokeLinejoin = "round";
+                  valueLabel.style.paintOrder = "stroke fill";
                   fadeIn(valueLabel, at + 0.2, true);
                 }
               });
