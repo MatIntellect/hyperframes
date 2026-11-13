@@ -8,8 +8,8 @@
     { "id": "rate", "type": "number", "role": "motion", "label": "Rotation rate", "description": "Core turn over the native 10 s shot; the rim stands still, so the arms wind. The shot is laid over cue 1 .. cue 2, or to the mount end.", "default": 0.25, "min": 0, "max": 1.5, "step": 0.05, "unit": "rad/s" },
     { "id": "glow", "type": "number", "role": "style", "label": "Core brightness", "default": 1.9, "min": 0.2, "max": 4, "step": 0.1 },
     { "id": "size", "type": "number", "role": "style", "label": "Star size", "default": 10, "min": 2, "max": 40, "step": 1, "unit": "px" },
-    { "id": "core", "type": "color", "role": "style", "label": "Core colour", "default": "#f2f2f2" },
-    { "id": "rim", "type": "color", "role": "style", "label": "Rim colour", "default": "#ff0000" },
+    { "id": "core", "type": "string", "role": "style", "label": "Core colour", "description": "Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)" },
+    { "id": "rim", "type": "string", "role": "style", "label": "Rim colour", "description": "Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the galaxy fades in over 0.6 s and starts winding (0 = already shining on the first frame), 2 the winding ends, and the galaxy fades out from 0.5 s before it when exit is fade. Without cue 2 the winding spans to the mount end. Empty keeps 0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the galaxy turning to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -144,8 +144,17 @@
         var RATE = clampNum(vars.rate, 0, 1.5, 0.25);
         var GLOW = clampNum(vars.glow, 0.2, 4, 1.9);
         var SIZE = clampNum(vars.size, 2, 40, 10);
-        var CORE_COLOR = typeof vars.core === "string" ? vars.core : "#f2f2f2";
-        var RIM_COLOR = typeof vars.rim === "string" ? vars.rim : "#ff0000";
+        // any CSS colour, by default a theme token: a probe resolves it against the reel's palette
+        // (the developers' way, halftone-dissolve.html:258-262); THREE.Color takes the rgb() it gives
+        var probe = document.createElement("span");
+        root.appendChild(probe);
+        function colour(v, d) {
+          probe.style.color = typeof v === "string" && v.trim() ? v.trim() : d;
+          return getComputedStyle(probe).color;
+        }
+        var CORE_COLOR = colour(vars.core, "var(--fg, #f2f2f2)");
+        var RIM_COLOR = colour(vars.rim, "var(--accent, #ff0000)");
+        probe.remove();
 
         // layout: canvas size and offset; fit scales the native 1920x1080 view
         // (disc about 1610 px wide) so the whole spiral stays in the frame

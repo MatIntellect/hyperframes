@@ -15,8 +15,8 @@
     { "id": "message", "type": "string", "role": "content", "label": "Second card message", "description": "Up to three lines, typing dots after it.", "maxLength": 70, "default": "Аня: а можно живее, но без перебора?" },
     { "id": "reply", "type": "string", "role": "content", "label": "First action", "maxLength": 12, "default": "Ответить" },
     { "id": "read", "type": "string", "role": "content", "label": "Second action", "maxLength": 12, "default": "Прочитано" },
-    { "id": "warm", "type": "color", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass.", "default": "#ff0000" },
-    { "id": "cool", "type": "color", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow.", "default": "#8a8a90" },
+    { "id": "warm", "type": "string", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)" },
+    { "id": "cool", "type": "string", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow. Any CSS colour; by default the theme token --muted.", "default": "var(--muted, #8a8a90)" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first card slides in, 2 the second card slides in and the progress bar starts, 3 the work is done (status, text and dot change, bar full), 4 the exit (only when exit is not none). Empty keeps 0.2, 0.8, 4.25, 6.75.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the cards and the glow to the end of the mount. out: the cards slide back out at cue 4, then the glow fades. fade: everything fades at cue 4.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Slide out" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -385,8 +385,8 @@
           uTime: { value: 0 },
           uAr: { value: SW / SH },
           uBg: { value: rgb(cs.getPropertyValue("--bg").trim(), "#0c1014") },
-          uWarm: { value: rgb(str(V.warm, "#ff0000"), "#ff0000") },
-          uCool: { value: rgb(str(V.cool, "#8a8a90"), "#8a8a90") },
+          uWarm: { value: rgb(str(V.warm, "var(--accent, #ff0000)"), "var(--accent, #ff0000)") },
+          uCool: { value: rgb(str(V.cool, "var(--muted, #8a8a90)"), "var(--muted, #8a8a90)") },
         };
 
         var renderer = new THREE.WebGLRenderer({ canvas: three, antialias: false, preserveDrawingBuffer: true });

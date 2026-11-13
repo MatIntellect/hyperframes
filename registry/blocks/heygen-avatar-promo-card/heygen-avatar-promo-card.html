@@ -21,12 +21,12 @@
     {"id": "codeLabel", "type": "string", "role": "content", "label": "Promo code label", "description": "Small label above the promo code. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 10, "default": ""},
     {"id": "promoPrefix", "type": "string", "role": "content", "label": "Promo code prefix", "description": "Accent-colored promo-code prefix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 5, "default": ""},
     {"id": "promoSuffix", "type": "string", "role": "content", "label": "Promo code suffix", "description": "Light promo-code suffix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 3, "default": ""},
-    {"id": "canvasColor", "type": "color", "role": "style", "label": "Canvas color", "description": "Main card background.", "default": "#0c1014"},
-    {"id": "inkColor", "type": "color", "role": "style", "label": "Ink color", "description": "Primary headline, pill, and offer ink.", "default": "#f2f2f2"},
-    {"id": "mutedInkColor", "type": "color", "role": "style", "label": "Muted ink color", "description": "Subhead ink.", "default": "#8a8a90"},
-    {"id": "accentColor", "type": "color", "role": "style", "label": "Accent color", "description": "Brand accent used by tiles and promo-code prefix.", "default": "#ff0000"},
-    {"id": "lightTileColor", "type": "color", "role": "style", "label": "Light tile color", "description": "Light belt-tile surface.", "default": "#18181a"},
-    {"id": "darkTileColor", "type": "color", "role": "style", "label": "Dark tile color", "description": "Dark belt-tile surface.", "default": "#2e2e32"},
+    {"id": "canvasColor", "type": "string", "role": "style", "label": "Canvas color", "description": "Main card background. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
+    {"id": "inkColor", "type": "string", "role": "style", "label": "Ink color", "description": "Primary headline, pill, and offer ink. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
+    {"id": "mutedInkColor", "type": "string", "role": "style", "label": "Muted ink color", "description": "Subhead ink. Any CSS colour; by default the theme token --muted.", "default": "var(--muted, #8a8a90)"},
+    {"id": "accentColor", "type": "string", "role": "style", "label": "Accent color", "description": "Brand accent used by tiles and promo-code prefix. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
+    {"id": "lightTileColor", "type": "string", "role": "style", "label": "Light tile color", "description": "Light belt-tile surface. Any CSS colour; by default the theme token --surface.", "default": "var(--surface, #18181a)"},
+    {"id": "darkTileColor", "type": "string", "role": "style", "label": "Dark tile color", "description": "Dark belt-tile surface. Any CSS colour; by default the theme token --border.", "default": "var(--border, #2e2e32)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the header starts its fade-in (the belt moves for 10 s from the mount start, then holds), 2 the card leaves (only when exit is not none). Empty keeps 0, 9.5.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
@@ -467,12 +467,12 @@
       root.classList.add("apc-" + placement);
       if (placement !== "full") root.querySelector(".bgfill").remove();
 
-      root.style.setProperty("--apc-canvas", text("canvasColor", "#0c1014"));
-      root.style.setProperty("--apc-ink", text("inkColor", "#f2f2f2"));
-      root.style.setProperty("--apc-muted", text("mutedInkColor", "#8a8a90"));
-      root.style.setProperty("--apc-accent", text("accentColor", "#ff0000"));
-      root.style.setProperty("--apc-light-tile", text("lightTileColor", "#18181a"));
-      root.style.setProperty("--apc-dark-tile", text("darkTileColor", "#2e2e32"));
+      root.style.setProperty("--apc-canvas", text("canvasColor", "var(--bg, #0c1014)"));
+      root.style.setProperty("--apc-ink", text("inkColor", "var(--fg, #f2f2f2)"));
+      root.style.setProperty("--apc-muted", text("mutedInkColor", "var(--muted, #8a8a90)"));
+      root.style.setProperty("--apc-accent", text("accentColor", "var(--accent, #ff0000)"));
+      root.style.setProperty("--apc-light-tile", text("lightTileColor", "var(--surface, #18181a)"));
+      root.style.setProperty("--apc-dark-tile", text("darkTileColor", "var(--border, #2e2e32)"));
       document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
         image.src = text("brandLogo", "assets/img/matintellect-mark.svg");
       });

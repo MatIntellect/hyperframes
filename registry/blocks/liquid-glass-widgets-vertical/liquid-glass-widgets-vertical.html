@@ -23,8 +23,8 @@
     { "id": "chip1", "type": "string", "role": "content", "label": "Chip 1", "description": "Full screen only.", "maxLength": 12, "default": "Субтитры" },
     { "id": "chip2", "type": "string", "role": "content", "label": "Chip 2", "description": "Full screen only.", "maxLength": 12, "default": "Графика" },
     { "id": "chip3", "type": "string", "role": "content", "label": "Chip 3", "description": "Full screen only.", "maxLength": 12, "default": "Звук" },
-    { "id": "warm", "type": "color", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass.", "default": "#ff0000" },
-    { "id": "cool", "type": "color", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow.", "default": "#8a8a90" },
+    { "id": "warm", "type": "string", "role": "style", "label": "Glow colour 1", "description": "Main ridges of the moving glow behind the glass. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)" },
+    { "id": "cool", "type": "string", "role": "style", "label": "Glow colour 2", "description": "Second ridges of the glow. Any CSS colour; by default the theme token --muted.", "default": "var(--muted, #8a8a90)" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the cards rise in turn (stats, showcase, chips over 1 s), 2 the numbers count up and the bars fill, 3 the work is done (status changes, bar full, cards nod), 4 the exit (only when exit is not none). Empty keeps 0.1, 0.9, 5.2, 6.75.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the cards and the glow to the end of the mount. out: the cards drop out at cue 4, then the glow fades. fade: everything fades at cue 4.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "out", "label": "Drop out" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -463,8 +463,8 @@
           uTime: { value: 0 },
           uAr: { value: SW / SH },
           uBg: { value: rgb(cs.getPropertyValue("--bg").trim(), "#0c1014") },
-          uWarm: { value: rgb(str(V.warm, "#ff0000"), "#ff0000") },
-          uCool: { value: rgb(str(V.cool, "#8a8a90"), "#8a8a90") },
+          uWarm: { value: rgb(str(V.warm, "var(--accent, #ff0000)"), "var(--accent, #ff0000)") },
+          uCool: { value: rgb(str(V.cool, "var(--muted, #8a8a90)"), "var(--muted, #8a8a90)") },
         };
         var renderer = new THREE.WebGLRenderer({ canvas: three, antialias: false, preserveDrawingBuffer: true });
         renderer.setSize(SW, SH, false);

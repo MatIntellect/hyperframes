@@ -17,7 +17,7 @@
     { "id": "flipBounce", "type": "number", "role": "style", "label": "Elastic flip bounce", "default": 0.15, "min": 0, "max": 0.8, "step": 0.05 },
     { "id": "cellSize", "type": "number", "role": "style", "label": "Square cell size", "description": "Tile size at the wide 300 px type; smaller type scales the tiles with it.", "default": 112, "min": 24, "max": 120, "step": 4, "unit": "px" },
     { "id": "formationScale", "type": "number", "role": "style", "label": "Local formation scale", "default": 1, "min": 0.94, "max": 1, "step": 0.001 },
-    { "id": "behindColor", "type": "color", "role": "style", "label": "Behind-tile background", "description": "Seen in the gaps while tiles lift. Brand surface by default.", "default": "#18181a" },
+    { "id": "behindColor", "type": "string", "role": "style", "label": "Behind-tile background", "description": "Seen in the gaps while tiles lift. Any CSS colour; by default the theme token --surface.", "default": "var(--surface, #18181a)" },
     { "id": "shadowStrength", "type": "number", "role": "style", "label": "Cast shadow strength", "default": 0.19, "min": 0, "max": 0.65, "step": 0.01 },
     { "id": "shadowSoftness", "type": "number", "role": "style", "label": "Cast shadow softness", "default": 4, "min": 0.5, "max": 4, "step": 0.1, "unit": "px" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the cursor sweep starts (the rear headline is whole about sweep duration + flip later), 2 the surface fades out (only when exit is fade; empty – 2 s after the last tile settles). Empty keeps 1.35.", "default": "" },
@@ -214,20 +214,18 @@
         const fieldReach = cursorRadius * Math.sqrt(-Math.log(0.06) / cursorFalloff);
         const noiseStrength = number("noiseStrength", 0, 2),
           flipBounce = number("flipBounce", 0, 0.8);
-        // Match the workbench color control: both #RGB and #RRGGBB are valid.
-        const rawBehindColor = String(values.behindColor ?? "")
-          .trim()
-          .toLowerCase();
-        const behindColor = /^#[0-9a-f]{3}$/.test(rawBehindColor)
-          ? "#" +
-            rawBehindColor
-              .slice(1)
-              .split("")
-              .map((c) => c + c)
-              .join("")
-          : /^#[0-9a-f]{6}$/.test(rawBehindColor)
-            ? rawBehindColor
-            : "#18181a";
+        // Any CSS colour, by default the theme token: a probe resolves it against the reel's palette (the developers'
+        // way, halftone-dissolve.html:258-262); the surface shader takes #rrggbb, so the resolved rgb() is written so.
+        const probe = document.createElement("span");
+        document.getElementById("cshv-stage").appendChild(probe);
+        probe.style.color = String(values.behindColor ?? "").trim() || "var(--surface, #18181a)";
+        const behindColor =
+          "#" +
+          (getComputedStyle(probe).color.match(/[\d.]+/g) || [24, 24, 26])
+            .slice(0, 3)
+            .map((v) => Math.round(+v).toString(16).padStart(2, "0"))
+            .join("");
+        probe.remove();
         const shadowStrength = number("shadowStrength", 0, 0.65),
           shadowSoftness = number("shadowSoftness", 0.5, 4);
         const stage = document.getElementById("cshv-stage");

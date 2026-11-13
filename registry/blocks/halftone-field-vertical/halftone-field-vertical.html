@@ -30,7 +30,7 @@
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #0c1014;
+        background: var(--bg, #0c1014);
       }
       
       #hlfv-backdrop.hlfv-card {
@@ -39,7 +39,7 @@
         width: 780px;
         height: 760px;
         border-radius: 32px;
-        border: 2px solid #2e2e32;
+        border: 2px solid var(--border, #2e2e32);
       }
       #hlfv-backdrop.hlfv-bottom {
         top: 600px;
@@ -70,11 +70,11 @@
         {"id":"cellSize","type":"number","label":"Cell size","default":54,"min":1,"max":100,"step":1},
         {"id":"gamma","type":"number","label":"Gamma (midtone crush)","default":12,"min":1,"max":20,"step":0.1},
         {"id":"paletteBias","type":"number","label":"Palette bias","default":2,"min":0,"max":20,"step":0.5},
-        {"id":"palette1","type":"color","label":"Palette stop 1 (lows)","default":"#2e2e32"},
-        {"id":"palette2","type":"color","label":"Palette stop 2","default":"#ff0000"},
-        {"id":"palette3","type":"color","label":"Palette stop 3","default":"#f2f2f2"},
-        {"id":"palette4","type":"color","label":"Palette stop 4 (crests)","default":"#0c1014"},
-        {"id":"background","type":"color","label":"Background","default":"#0c1014"},
+        {"id":"palette1","type":"string","role":"style","label":"Palette stop 1 (lows)","description":"Any CSS colour; by default the theme token --border.","default":"var(--border, #2e2e32)"},
+        {"id":"palette2","type":"string","role":"style","label":"Palette stop 2","description":"Any CSS colour; by default the theme token --accent.","default":"var(--accent, #ff0000)"},
+        {"id":"palette3","type":"string","role":"style","label":"Palette stop 3","description":"Any CSS colour; by default the theme token --fg.","default":"var(--fg, #f2f2f2)"},
+        {"id":"palette4","type":"string","role":"style","label":"Palette stop 4 (crests)","description":"Any CSS colour; by default the theme token --bg.","default":"var(--bg, #0c1014)"},
+        {"id":"background","type":"string","role":"style","label":"Background","description":"Any CSS colour; by default the theme token --bg.","default":"var(--bg, #0c1014)"},
         {"id":"quantize","type":"boolean","label":"Quantise to 30fps (stepped)","default":false},
         {"id":"cues","type":"string","role":"timing","label":"Cues","description":"Comma-separated seconds from mount start: 1 the field fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.","default":""},
         {"id":"exit","type":"enum","role":"timing","label":"Exit","description":"none keeps the field flowing to the end of the mount.","default":"none","options":[{"value":"none","label":"Hold"},{"value":"fade","label":"Fade"}]}
@@ -119,18 +119,17 @@
           var v = raw(id);
           return v === true || /^(true|1|on|yes)$/i.test(String(v));
         }
-        // #RGB / #RRGGBB -> [r, g, b] in 0..1. Anything else falls back.
+        // Any CSS colour (by default a theme token) -> [r, g, b] in 0..1: a probe inside the root resolves it against
+        // the reel's palette, the developers' way (halftone-dissolve.html:258-262).
+        var probe = document.createElement("span");
+        document.getElementById("hlfv-root").appendChild(probe);
         function rgb(id, fallback) {
-          var s = String(raw(id) || "").trim();
-          var m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(s);
-          if (!m) s = fallback;
-          else s = "#" + m[1];
-          var hex = s.slice(1);
-          if (hex.length === 3) {
-            hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-          }
-          var n = parseInt(hex, 16);
-          return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+          probe.style.color = fallback;
+          probe.style.color = String(raw(id) || "").trim() || fallback;
+          var c = (getComputedStyle(probe).color.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3);
+          return c.map(function (v) {
+            return +v / 255;
+          });
         }
         // The reference exposes 1-10 / 1-100 / 1-20 dials and maps them onto
         // the ranges the shader actually wants.
@@ -144,12 +143,13 @@
         var GAMMA = mapLinear(num("gamma", 12), 1, 20, 0.5, 8);
         var BIAS = num("paletteBias", 2) * 0.05;
         var PAL = [
-          rgb("palette1", "#2e2e32"),
-          rgb("palette2", "#ff0000"),
-          rgb("palette3", "#f2f2f2"),
-          rgb("palette4", "#0c1014"),
+          rgb("palette1", "var(--border, #2e2e32)"),
+          rgb("palette2", "var(--accent, #ff0000)"),
+          rgb("palette3", "var(--fg, #f2f2f2)"),
+          rgb("palette4", "var(--bg, #0c1014)"),
         ];
-        var BG = rgb("background", "#0c1014");
+        var BG = rgb("background", "var(--bg, #0c1014)");
+        probe.remove();
         
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement !== "full") {
