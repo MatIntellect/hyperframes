@@ -1,0 +1,15 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "parallax-unzoom",
+  "type": "hyperframes:component",
+  "title": "Parallax Unzoom",
+  "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. Reveal transition — focus card scales down from full frame as siblings parallax in to form a grid (reverse of parallax-zoom)",
+  "tags": ["transition", "reveal", "unzoom", "parallax", "grid", "hero"],
+  "files": [
+    {
+      "path": "parallax-unzoom.html",
+      "target": "compositions/components/parallax-unzoom.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

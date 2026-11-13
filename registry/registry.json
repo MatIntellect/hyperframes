@@ -1852,6 +1852,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "ordered-dither-pass",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "outline-draw",
       "type": "hyperframes:component"
     },
@@ -1873,6 +1877,22 @@
     },
     {
       "name": "panel-reveal",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "paper-collage-reveal",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "parallax-device-dive",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "parallax-unzoom",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "parallax-zoom",
       "type": "hyperframes:component"
     },
     {
@@ -1925,6 +1945,10 @@
     },
     {
       "name": "rgb-glitch-text",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "rubber-band-bumper",
       "type": "hyperframes:component"
     },
     {
@@ -2148,6 +2172,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "torn-paper-rip",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "touch-indicator",
       "type": "hyperframes:component"
     },
@@ -2161,6 +2189,10 @@
     },
     {
       "name": "trust-strip",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "type-match-cut",
       "type": "hyperframes:component"
     },
     {
@@ -2204,6 +2236,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "whip-pan-cut",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "whiteboard-ink",
       "type": "hyperframes:component"
     },
@@ -2229,6 +2265,10 @@
     },
     {
       "name": "yt-screen-warp",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "zoom-through-transition",
       "type": "hyperframes:component"
     }
   ]

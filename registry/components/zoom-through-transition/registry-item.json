@@ -1,0 +1,55 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "zoom-through-transition",
+  "type": "hyperframes:component",
+  "title": "Zoom Through Transition",
+  "description": "A transition that zooms through a focal card into the next scene.",
+  "tags": ["transition-primitive"],
+  "variables": [
+    {
+      "id": "from-label",
+      "type": "string",
+      "role": "content",
+      "label": "Outgoing label",
+      "description": "Caption on the outgoing scene, the one on screen when the transition starts.",
+      "default": "Было"
+    },
+    {
+      "id": "to-label",
+      "type": "string",
+      "role": "content",
+      "label": "Incoming label",
+      "description": "Caption on the incoming scene, the one the timeline wipes into frame.",
+      "default": "Стало"
+    },
+    {
+      "id": "depth",
+      "type": "enum",
+      "role": "motion",
+      "label": "Depth",
+      "description": "Multiplies how far both scenes travel and how hard the outgoing one blurs, so the push covers a shorter or longer run in the same time.",
+      "default": "standard",
+      "options": [
+        {
+          "value": "close",
+          "label": "Close"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "far",
+          "label": "Far"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "zoom-through-transition.html",
+      "target": "compositions/components/zoom-through-transition.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

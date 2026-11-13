@@ -1,0 +1,466 @@
+<!doctype html>
+<!--
+  type-match-cut: HyperFrames video primitive
+
+  A headline splits into upper and lower word groups. An incoming editor
+  panel appears in the negative space between them, holds there as a visible
+  geometric match, then grows to fill the frame while the words arc through
+  the top and bottom edges.
+
+  Variables:
+    text: headline copy; each half is sized from its letter count (Bebas,
+      0.55em a letter) with the 28px floor and wraps rather than being cut
+    the incoming scene rides the reel palette, accent the brand red (--brand)
+
+  Envelope, fixed IN and OUT with elastic HOLD:
+    IN_BASE  = 1.05s, words separate and expose the matched panel slot
+    HOLD     = max(0, D - IN - OUT), the slot breathes almost imperceptibly
+    OUT_BASE = 1.15s, the panel takes the frame while both word groups exit
+    If D is shorter than IN_BASE + OUT_BASE, IN and OUT compress together.
+    The timeline is never time-scaled.
+
+  Mount contract: the runtime clones only this template. #root fills the host
+  box, establishes the container query basis, and has no data-width or
+  data-height. One paused timeline registers under the literal type-match-cut
+  key.
+-->
+<html
+  lang="en"
+  data-composition-id="type-match-cut"
+  data-composition-duration="4"
+  data-composition-variables='[
+    {"id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text split around the incoming panel.", "default": "Встречайте новый монтаж"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Match Cut</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="type-match-cut" data-duration="4" data-fps="30">
+        <style>
+          @font-face {
+            font-family: "Bebas Neue";
+            src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+            font-weight: 700;
+            font-display: block;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+              U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+          }
+          @font-face {
+            font-family: "Montserrat";
+            src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+            font-weight: 100 900;
+            font-display: block;
+            unicode-range:
+              U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+              U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+              U+2113, U+2C60-2C7F, U+A720-A7FF;
+          }
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+
+          #root {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            container-type: size;
+            isolation: isolate;
+            background: var(--bg, #0c1014);
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-display, "Bebas Neue", sans-serif);
+            pointer-events: none;
+          }
+
+          .tmc-clip,
+          .tmc-panel,
+          .tmc-copy {
+            position: absolute;
+            inset: 0;
+            width: 100cqw;
+            height: 100cqh;
+          }
+
+          .tmc-clip {
+            overflow: hidden;
+          }
+
+          .tmc-panel {
+            z-index: 1;
+            overflow: hidden;
+            background: var(--surface, #18181a);
+            box-shadow: 0 4cqh 12cqh color-mix(in srgb, #000 45%, transparent);
+            transform-origin: 50% 50%;
+            will-change: transform, border-radius;
+          }
+
+          .tmc-editor {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 22cqw 1fr;
+            grid-template-rows: 11cqh 1fr;
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          .tmc-toolbar {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 1.1cqw;
+            padding: 0 4cqw;
+            border-bottom: 0.16cqmin solid var(--border, #2e2e32);
+            background: var(--surface, #18181a);
+          }
+
+          .tmc-mark {
+            width: 2.4cqmin;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: var(--tmc-accent, var(--brand, #ff0000));
+          }
+
+          .tmc-title {
+            font-size: max(28px, 2.4cqmin);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+          }
+
+          .tmc-status {
+            margin-left: auto;
+            padding: 1.1cqh 1.4cqw;
+            border-radius: 999px;
+            background: var(--tmc-accent, var(--brand, #ff0000));
+            color: var(--fg, #f2f2f2);
+            font-size: max(28px, 1.7cqmin);
+            font-weight: 800;
+          }
+
+          .tmc-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2.4cqh;
+            padding: 5cqh 3cqw;
+            border-right: 0.16cqmin solid var(--border, #2e2e32);
+            background: var(--surface, #18181a);
+          }
+
+          .tmc-nav {
+            height: 1.5cqh;
+            border-radius: 999px;
+            background: var(--border, #2e2e32);
+          }
+
+          .tmc-nav:first-child {
+            width: 76%;
+            background: var(--tmc-accent, var(--brand, #ff0000));
+          }
+
+          .tmc-nav:nth-child(2) {
+            width: 58%;
+          }
+
+          .tmc-nav:nth-child(3) {
+            width: 82%;
+          }
+
+          .tmc-canvas {
+            display: grid;
+            place-items: center;
+            padding: 7cqh 8cqw;
+            background: var(--bg, #0c1014);
+          }
+
+          .tmc-preview {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            border: 0.18cqmin solid var(--border, #2e2e32);
+            border-radius: 3cqmin;
+            background: var(--surface, #18181a);
+            box-shadow: 0 3cqh 8cqh rgba(0, 0, 0, 0.35);
+          }
+
+          .tmc-play {
+            width: 12cqmin;
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--tmc-accent, var(--brand, #ff0000));
+            color: var(--fg, #f2f2f2);
+            font-family: var(--font-body, "Montserrat", sans-serif);
+            font-size: max(28px, 4.2cqmin);
+            font-weight: 900;
+          }
+
+          .tmc-copy {
+            z-index: 2;
+            overflow: hidden;
+            text-shadow: 0 1.4cqh 4.8cqh rgba(0, 0, 0, 0.72);
+          }
+
+          .tmc-half {
+            position: absolute;
+            top: calc(50% - 0.44em);
+            display: block;
+            width: 40cqw;
+            color: var(--fg, #f2f2f2);
+            font-size: max(28px, min(10.5cqw, calc(40cqw / var(--tmc-chars, 4))));
+            font-weight: 700;
+            line-height: 0.88;
+            letter-spacing: 0;
+            will-change: transform;
+          }
+
+          .tmc-top {
+            right: 52cqw;
+            text-align: right;
+          }
+
+          .tmc-bottom {
+            left: 52cqw;
+            text-align: left;
+          }
+
+          /* A tall box (reel field) stacks the halves as two lines across 90% of the width:
+             side by side each half had 40% of a narrow box and the headline fell to the floor. */
+          @container (aspect-ratio < 1) {
+            .tmc-half {
+              width: 90cqw;
+              text-align: center;
+              font-size: max(28px, min(16cqw, calc(90cqw / var(--tmc-chars, 4))));
+            }
+            .tmc-top {
+              top: calc(50% - 0.94em);
+              right: 5cqw;
+            }
+            .tmc-bottom {
+              top: calc(50% + 0.06em);
+              left: 5cqw;
+            }
+          }
+        </style>
+
+        <div
+          id="type-match-cut-clip"
+          class="tmc-clip clip"
+          data-start="0"
+          data-duration="4"
+          data-track-index="0"
+        >
+          <section class="tmc-panel" aria-label="Incoming editor scene">
+            <div class="tmc-editor">
+              <div class="tmc-toolbar">
+                <span class="tmc-mark" aria-hidden="true"></span>
+                <span class="tmc-title">Монтаж</span>
+                <span class="tmc-status">Готово</span>
+              </div>
+              <div class="tmc-sidebar" aria-hidden="true">
+                <span class="tmc-nav"></span>
+                <span class="tmc-nav"></span>
+                <span class="tmc-nav"></span>
+              </div>
+              <div class="tmc-canvas">
+                <div class="tmc-preview">
+                  <span class="tmc-play" aria-hidden="true">▶</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="tmc-copy" role="heading" aria-level="1">
+            <span class="tmc-half tmc-top" aria-hidden="true"></span>
+            <span class="tmc-half tmc-bottom" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <script>
+          /* hostSlot: the whole-scene clip follows the host slot (komp-sobrat.py klip_hozyaina; caret-swap:219) */
+          (function () {
+            var c = document.getElementById("type-match-cut-clip");
+            var h = c && c.parentElement && c.parentElement.closest("[data-duration]");
+            if (h) c.dataset.duration = h.dataset.duration;
+          })();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.getElementById("root");
+            var panel = root.querySelector(".tmc-panel");
+            var copy = root.querySelector(".tmc-copy");
+            var topWords = root.querySelector(".tmc-top");
+            var bottomWords = root.querySelector(".tmc-bottom");
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+
+            var text = vars.text == null ? "Встречайте новый монтаж" : String(vars.text);
+            // One palette: the incoming scene accent rides the reel brand red.
+            var accentName = "brand";
+            var accents = { brand: "var(--brand, #ff0000)" };
+            var words = text.trim() === "" ? [""] : text.trim().split(/\s+/);
+            var splitAt = Math.ceil(words.length / 2);
+            var topText = words.slice(0, splitAt).join(" ");
+            var bottomText = words.slice(splitAt).join(" ");
+
+            root.style.setProperty("--tmc-accent", accents[accentName]);
+            copy.setAttribute("aria-label", text);
+            topWords.textContent = topText;
+            bottomWords.textContent = bottomText;
+
+            // Deterministic fit from character count. Layout measurement is
+            // zero while the mounted template is being constructed, so each
+            // half is sized against its authored 40cqw box instead. The halves
+            // are Bebas, a condensed face: 0.55em a letter covers its widest
+            // capitals. CSS floors the size at 28px; past that the half wraps.
+            var longestHalf = Math.max(1, topText.length, bottomText.length);
+            // CSS divides the half's box width by this letter count (wide box 40cqw, tall 90cqw).
+            root.style.setProperty("--tmc-chars", (longestHalf * 0.55).toFixed(2));
+
+            var IN_BASE = 1.05;
+            var OUT_BASE = 1.15;
+            var SPLIT_AT_BASE = 0.14;
+            var SPLIT_DURATION_BASE = 0.58;
+            var PANEL_AT_BASE = 0.58;
+            var PANEL_DURATION_BASE = 0.47;
+            var duration = Math.max(
+              0.001,
+              parseFloat(
+                ((root.parentElement && root.parentElement.closest("[data-duration]")) || root)
+                  .dataset.duration || "4",
+              ),
+            );
+            var fixedTotal = IN_BASE + OUT_BASE;
+            var phaseScale = duration < fixedTotal ? duration / fixedTotal : 1;
+            var IN = IN_BASE * phaseScale;
+            var OUT = OUT_BASE * phaseScale;
+            var SPLIT_AT = SPLIT_AT_BASE * phaseScale;
+            var SPLIT_DURATION = SPLIT_DURATION_BASE * phaseScale;
+            var PANEL_AT = PANEL_AT_BASE * phaseScale;
+            var PANEL_DURATION = PANEL_DURATION_BASE * phaseScale;
+            var HOLD = Math.max(0, duration - IN - OUT);
+            var HOLD_START = IN;
+            var OUT_START = IN + HOLD;
+            var ARC_FIRST = OUT * 0.42;
+            var ARC_SECOND = OUT - ARC_FIRST;
+
+            var tl = gsap.timeline({ paused: true });
+
+            tl.set(panel, { scaleX: 0.02, scaleY: 0.02, borderRadius: "12cqmin" }, 0);
+            tl.set(topWords, { x: 0, y: 0 }, 0);
+            tl.set(bottomWords, { x: 0, y: 0 }, 0);
+
+            tl.to(
+              topWords,
+              { y: "-20cqh", duration: SPLIT_DURATION, ease: "power3.out" },
+              SPLIT_AT,
+            );
+            tl.to(
+              bottomWords,
+              { y: "20cqh", duration: SPLIT_DURATION, ease: "power3.out" },
+              SPLIT_AT,
+            );
+            tl.to(
+              panel,
+              {
+                scaleX: 0.46,
+                scaleY: 0.14,
+                borderRadius: "6cqmin",
+                duration: PANEL_DURATION,
+                ease: "power3.out",
+              },
+              PANEL_AT,
+            );
+
+            if (HOLD > 0) {
+              tl.to(
+                panel,
+                {
+                  scaleX: 0.47,
+                  scaleY: 0.145,
+                  duration: HOLD / 2,
+                  ease: "sine.inOut",
+                  yoyo: true,
+                  repeat: 1,
+                },
+                HOLD_START,
+              );
+            }
+
+            tl.to(
+              panel,
+              {
+                scaleX: 1,
+                scaleY: 1,
+                borderRadius: 0,
+                duration: OUT,
+                ease: "power4.out",
+              },
+              OUT_START,
+            );
+
+            // Two authored segments create an arc instead of a straight exit.
+            tl.to(
+              topWords,
+              { x: "3cqw", y: "-42cqh", duration: ARC_FIRST, ease: "power2.in" },
+              OUT_START,
+            );
+            tl.to(
+              topWords,
+              {
+                x: "-5cqw",
+                y: "-125cqh",
+                duration: ARC_SECOND,
+                ease: "power2.in",
+              },
+              OUT_START + ARC_FIRST,
+            );
+            tl.to(
+              bottomWords,
+              { x: "-3cqw", y: "42cqh", duration: ARC_FIRST, ease: "power2.in" },
+              OUT_START,
+            );
+            tl.to(
+              bottomWords,
+              {
+                x: "5cqw",
+                y: "125cqh",
+                duration: ARC_SECOND,
+                ease: "power2.in",
+              },
+              OUT_START + ARC_FIRST,
+            );
+
+            tl.seek(0);
+            window.__timelines = window.__timelines || {};
+            window.__timelines["type-match-cut"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>
