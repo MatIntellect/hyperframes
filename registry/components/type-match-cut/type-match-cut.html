@@ -10,7 +10,9 @@
   Variables:
     text: headline copy; each half is sized from its letter count (Bebas,
       0.55em a letter) with the 28px floor and wraps rather than being cut
-    the incoming scene rides the reel palette, accent the brand red (--brand)
+    the incoming scene rides the reel palette, accent the brand red (--brand);
+      its editor stays hidden while the panel is a squeezed slot and fades in
+      as the panel lands at full size (its labels sit at the 28px floor)
 
   Envelope, fixed IN and OUT with elastic HOLD:
     IN_BASE  = 1.05s, words separate and expose the matched panel slot
@@ -310,6 +312,7 @@
 
             var root = document.getElementById("root");
             var panel = root.querySelector(".tmc-panel");
+            var editor = root.querySelector(".tmc-editor");
             var copy = root.querySelector(".tmc-copy");
             var topWords = root.querySelector(".tmc-top");
             var bottomWords = root.querySelector(".tmc-bottom");
@@ -371,6 +374,9 @@
             var tl = gsap.timeline({ paused: true });
 
             tl.set(panel, { scaleX: 0.02, scaleY: 0.02, borderRadius: "12cqmin" }, 0);
+            // While the panel is a squeezed slot its editor stays hidden: the labels
+            // are set at the 28px floor, so they read only once the panel lands.
+            tl.set(editor, { opacity: 0 }, 0);
             tl.set(topWords, { x: 0, y: 0 }, 0);
             tl.set(bottomWords, { x: 0, y: 0 }, 0);
 
@@ -421,6 +427,12 @@
                 ease: "power4.out",
               },
               OUT_START,
+            );
+
+            tl.to(
+              editor,
+              { opacity: 1, duration: OUT * 0.25, ease: "power1.out" },
+              OUT_START + OUT * 0.75,
             );
 
             // Two authored segments create an arc instead of a straight exit.

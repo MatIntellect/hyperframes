@@ -9,6 +9,8 @@
 
   Variables:
     direction: up or left exit direction
+    out_kicker, out_title, out_subtitle / in_kicker, in_title, in_subtitle:
+      the words of the outgoing and incoming panels; empty hides the line
     the tension bands ride the reel brand red (--brand), pure
 
   Envelope, fixed IN and OUT with elastic HOLD:
@@ -28,7 +30,13 @@
   data-composition-id="rubber-band-bumper"
   data-composition-duration="2.5"
   data-composition-variables='[
-    {"id": "direction", "type": "enum", "role": "content", "label": "Direction", "description": "Edge the outgoing panel releases through.", "default": "up", "options": [{"value": "up", "label": "Up"}, {"value": "left", "label": "Left"}]}
+    {"id": "direction", "type": "enum", "role": "content", "label": "Direction", "description": "Edge the outgoing panel releases through.", "default": "up", "options": [{"value": "up", "label": "Up"}, {"value": "left", "label": "Left"}]},
+    {"id": "out_kicker", "type": "string", "role": "content", "label": "Outgoing kicker", "description": "Empty hides the line.", "default": "СЕЙЧАС"},
+    {"id": "out_title", "type": "string", "role": "content", "label": "Outgoing title", "description": "Empty hides the line.", "default": "Держим натяжение"},
+    {"id": "out_subtitle", "type": "string", "role": "content", "label": "Outgoing subtitle", "description": "Empty hides the line.", "default": "С каждым рывком сопротивление сильнее"},
+    {"id": "in_kicker", "type": "string", "role": "content", "label": "Incoming kicker", "description": "Empty hides the line.", "default": "ДАЛЬШЕ"},
+    {"id": "in_title", "type": "string", "role": "content", "label": "Incoming title", "description": "Empty hides the line.", "default": "Отпустили"},
+    {"id": "in_subtitle", "type": "string", "role": "content", "label": "Incoming subtitle", "description": "Empty hides the line.", "default": "Новая сцена встаёт за рывком"}
   ]'
 >
   <head>
@@ -245,6 +253,19 @@
                 : {};
 
             var direction = vars.direction === "left" ? "left" : "up";
+            // Words come from fields; an empty field hides its line.
+            [
+              ["out", outgoing],
+              ["in", incoming],
+            ].forEach(function (panel) {
+              ["kicker", "title", "subtitle"].forEach(function (part) {
+                var value = vars[panel[0] + "_" + part];
+                if (value == null) return;
+                var line = panel[1].querySelector(".rbb-" + part);
+                line.textContent = String(value);
+                if (!line.textContent) line.style.display = "none";
+              });
+            });
             // One palette: the accent rides the reel brand red.
             var accentColors = { brand: "var(--brand, #ff0000)" };
             var accent = "brand";

@@ -1600,6 +1600,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "directional-wipe",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "drift-hold",
       "type": "hyperframes:component"
     },
@@ -2265,10 +2269,6 @@
     },
     {
       "name": "yt-screen-warp",
-      "type": "hyperframes:component"
-    },
-    {
-      "name": "zoom-through-transition",
       "type": "hyperframes:component"
     }
   ]

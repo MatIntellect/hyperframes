@@ -294,9 +294,16 @@
           }
 
           .pdd-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            /* Side by side only when both cards fit the screen (about 430px in any box,
+               the phone is sized by height); otherwise each takes its own full row. */
+            display: flex;
+            flex-wrap: wrap;
             gap: 1.15cqh;
+          }
+
+          .pdd-stats > .pdd-stat {
+            flex: 1 1 0;
+            min-width: max-content;
           }
 
           .pdd-stat {
@@ -456,7 +463,14 @@
             var boxH = root.clientHeight || 1080;
             var phoneW = phone.offsetWidth || 1;
             var phoneH = phone.offsetHeight || 1;
-            var DIVE_SCALE = Math.max(1, boxW / phoneW);
+            // Bottom of the stats row inside the phone, at its deepest parallax pose
+            // (2.4cqh down, scale 1.12 about its centre): the dive stops before the
+            // box edge would cut it, so no line of the app is clipped silently.
+            var statsBottom = stats.offsetHeight * 1.06 + boxH * 0.024;
+            for (var el = stats; el && el !== phone; el = el.offsetParent)
+              statsBottom += el.offsetTop;
+            if (el !== phone) statsBottom = phoneH;
+            var DIVE_SCALE = Math.max(1, Math.min(boxW / phoneW, (boxH * 0.97) / statsBottom));
             var DIVE_Y = Math.max(0, (phoneH * DIVE_SCALE - boxH) / 2);
             tl.to(
               phone,
@@ -476,7 +490,7 @@
             );
             tl.to(
               stats,
-              { y: "2.4cqh", scale: 1.16, duration: DIVE, ease: "power4.in" },
+              { y: "2.4cqh", scale: 1.12, duration: DIVE, ease: "power4.in" },
               OUT_START,
             );
             tl.to(

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "directional-wipe",
+  "type": "hyperframes:component",
+  "title": "Directional Wipe",
+  "description": "A directional scene push that slides one panel over another. Mount it inside a clip with data-composition-id=\"directional-wipe\": its own timeline nests there.",
+  "tags": ["transition-primitive"],
+  "variables": [
+    {
+      "id": "from-label",
+      "type": "string",
+      "role": "content",
+      "label": "Outgoing label",
+      "description": "Caption on the outgoing panel, the one on screen when the wipe starts.",
+      "default": "Было"
+    },
+    {
+      "id": "to-label",
+      "type": "string",
+      "role": "content",
+      "label": "Incoming label",
+      "description": "Caption on the incoming panel, the one the wipe brings in.",
+      "default": "Стало"
+    },
+    {
+      "id": "corner",
+      "type": "enum",
+      "role": "style",
+      "label": "Corner",
+      "description": "Corner radius of the transition card.",
+      "default": "rounded",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "soft",
+          "label": "Soft"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "directional-wipe.html",
+      "target": "compositions/components/directional-wipe.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

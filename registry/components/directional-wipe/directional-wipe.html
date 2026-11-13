@@ -1,0 +1,240 @@
+<!--
+  Directional Wipe - catalog component for HyperFrames.
+
+  Paste the markup and CSS into a composition. Drive the timeline integration
+  from a paused GSAP timeline so renders remain deterministic.
+
+  Variables. The script below reads each one, falls back to the declared
+  default on anything missing or unrecognised, and writes the result as a
+  custom property the CSS consumes. The timeline recipe at the bottom is
+  untouched by them.
+
+    - from-label (string, default "Было"): caption on the outgoing panel.
+    - to-label (string, default "Стало"): caption on the incoming panel,
+      clipped out until the wipe brings it in. Both captions are big phrases
+      (--font-display, Bebas Neue); they wrap, never cut.
+    The outgoing drift starts from fromTo (runtimes.md:8): a to() on the never
+    declared --hf-from-* read 0 and grew the outgoing panel from a dot.
+    The ring that marks the incoming panel rides the reel brand red (--brand);
+    both panels are monochrome placeholder material. The incoming panel is
+    opaque (it was translucent, so the outgoing caption showed through it to
+    the end); the strobe is a neutral flicker (a red/cyan wash over the grey
+    plates read pink and teal).
+    - corner (square | rounded | soft, default rounded): corner radius of the
+      card. square is 0, rounded the original 30px, soft 56px.
+
+  On every default the motion is unchanged.
+-->
+
+<div
+  class="hf-catalog-directional-wipe"
+  data-composition-variables='[
+    { "id": "from-label", "type": "string", "role": "content", "label": "Outgoing label", "description": "Caption on the outgoing panel, the one on screen when the wipe starts.", "default": "Было" },
+    { "id": "to-label", "type": "string", "role": "content", "label": "Incoming label", "description": "Caption on the incoming panel, the one the wipe brings in.", "default": "Стало" },
+    { "id": "corner", "type": "enum", "role": "style", "label": "Corner", "description": "Corner radius of the transition card.", "default": "rounded", "options": [{ "value": "square", "label": "Square" }, { "value": "rounded", "label": "Rounded" }, { "value": "soft", "label": "Soft" }] }
+  ]'
+>
+  <div class="scene from" data-layout-allow-overlap>Было</div>
+  <div class="scene to" data-layout-allow-occlusion>Стало</div>
+  <div class="fx"></div>
+  <div class="rgb"></div>
+</div>
+
+<style>
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: block;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "Montserrat";
+    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: block;
+    unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
+      U+A720-A7FF;
+  }
+  .hf-catalog-directional-wipe {
+    --hf-accent: var(--brand, #ff0000);
+    --hf-l1: rgba(255, 255, 255, 0.72);
+    --hf-l3: rgba(255, 255, 255, 0.18);
+    --hf-l4: rgba(255, 255, 255, 0.08);
+    --hf-hair: rgba(255, 255, 255, 0.14);
+    --hf-ink: var(--fg, #f2f2f2);
+    --hf-muted: var(--muted, #8a8a90);
+    --hf-surface: var(--surface, #18181a);
+    color: var(--hf-ink);
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+  .hf-catalog-directional-wipe {
+    position: relative;
+    width: 760px;
+    height: 428px;
+    overflow: hidden;
+    border-radius: var(--hf-corner, 30px);
+    background: var(--bg, #0c1014);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+  }
+  .hf-catalog-directional-wipe .scene {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0 40px;
+    font-family: var(--font-display, "Bebas Neue", sans-serif);
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-align: center;
+    overflow-wrap: anywhere;
+    color: var(--hf-ink);
+  }
+  .hf-catalog-directional-wipe .from {
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px),
+      var(--hf-l4);
+    transform: translate(var(--hf-from-x, 0px), var(--hf-from-y, 0px))
+      scale(var(--hf-from-scale, 1));
+    filter: blur(var(--hf-from-blur, 0px));
+  }
+  .hf-catalog-directional-wipe .to {
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
+      var(--border, #2e2e32);
+    box-shadow: inset 0 0 0 2px var(--hf-accent);
+    transform: translate(var(--hf-to-x, 0px), var(--hf-to-y, 0px)) scale(var(--hf-to-scale, 1));
+    clip-path: inset(
+      var(--hf-clip-top, 0%) var(--hf-clip-right, 100%) var(--hf-clip-bottom, 0%)
+        var(--hf-clip-left, 0%)
+    );
+  }
+  .hf-catalog-directional-wipe .fx {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+    mix-blend-mode: screen;
+    transform: translateX(var(--hf-fx-x, -110%));
+  }
+  .hf-catalog-directional-wipe .rgb {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--hf-rgb-opacity, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(242, 242, 242, 0.16),
+      transparent,
+      rgba(242, 242, 242, 0.16)
+    );
+    transform: translateX(var(--hf-rgb-x, 0px));
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var vars =
+      window.__hyperframes && window.__hyperframes.getVariables
+        ? window.__hyperframes.getVariables()
+        : {};
+
+    // Unrecognised overrides fall back to their declared defaults.
+    // One palette: the ring rides the reel brand red (CSS --hf-accent).
+    var corners = { square: "0px", rounded: "30px", soft: "56px" };
+
+    function pick(table, value, fallback) {
+      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    }
+
+    var fromLabel = vars["from-label"] == null ? "Было" : String(vars["from-label"]);
+    var toLabel = vars["to-label"] == null ? "Стало" : String(vars["to-label"]);
+    var corner = corners[pick(corners, vars.corner, "rounded")];
+
+    var roots = document.querySelectorAll(".hf-catalog-directional-wipe");
+    for (var i = 0; i < roots.length; i += 1) {
+      roots[i].style.setProperty("--hf-corner", corner);
+      roots[i].querySelector(".from").textContent = fromLabel;
+      roots[i].querySelector(".to").textContent = toLabel;
+    }
+  })();
+</script>
+
+<!--
+  Timeline integration: built in, see the script below. It registers its own paused timeline as
+  window.__timelines["directional-wipe"]; mount the snippet inside a clip with data-composition-id="directional-wipe"
+  and the runtime nests it at that clip's start.
+-->
+
+<script>
+  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="directional-wipe" */
+  (function () {
+    var startTime = 0;
+    var tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      ".hf-catalog-directional-wipe .to",
+      { "--hf-clip-right": "100%", "--hf-to-x": "60px", "--hf-to-scale": 1.04 },
+      {
+        "--hf-clip-right": "0%",
+        "--hf-to-x": "0px",
+        "--hf-to-scale": 1,
+        duration: 0.9,
+        ease: "power3.inOut",
+      },
+      startTime,
+    );
+    tl.fromTo(
+      ".hf-catalog-directional-wipe .from",
+      { "--hf-from-x": "0px", "--hf-from-scale": 1, "--hf-from-blur": "0px" },
+      {
+        "--hf-from-x": "-70px",
+        "--hf-from-scale": 0.96,
+        "--hf-from-blur": "5px",
+        duration: 0.9,
+        ease: "power3.inOut",
+      },
+      startTime,
+    );
+    tl.fromTo(
+      ".hf-catalog-directional-wipe .fx",
+      { "--hf-fx-x": "-110%" },
+      { "--hf-fx-x": "110%", duration: 0.58, ease: "power2.inOut" },
+      startTime + 0.18,
+    );
+    tl.fromTo(
+      ".hf-catalog-directional-wipe .rgb",
+      { "--hf-rgb-opacity": 0, "--hf-rgb-x": "-16px" },
+      {
+        "--hf-rgb-opacity": 1,
+        "--hf-rgb-x": "16px",
+        repeat: 3,
+        yoyo: true,
+        duration: 0.07,
+        ease: "steps(1)",
+      },
+      startTime + 0.32,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["directional-wipe"] = tl;
+  })();
+</script>
