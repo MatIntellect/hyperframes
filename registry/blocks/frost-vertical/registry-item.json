@@ -3,7 +3,7 @@
   "name": "frost-vertical",
   "type": "hyperframes:block",
   "title": "Frost (vertical)",
-  "description": "Vertical: a frozen blue orb with frost creeping in from its edge, on the dark ground, the object centred on the field. A WebGPU shader from the Shaders library (shaders.com, MIT); keeps its own material colour; every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "description": "Vertical: a frozen blue ice orb lit from inside, its rim a soft frosted glow, the object centred on the field. A WebGPU shader from the Shaders library (shaders.com, MIT); keeps its own material colour; every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
   "tags": ["webgpu", "webgpu-shader", "orb", "ice", "frost", "material", "loopable", "vertical"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

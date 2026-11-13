@@ -134,6 +134,12 @@ export function createOrbitScene(V, P) {
     g.fillStyle = P.fg;
     g.font = "700 132px " + P.display;
     g.fillText(title.toUpperCase(), 0, 170, 1440);
+    // on a 780x760 card the whole orbit fits only at a scale where the paragraph would read under 28 px:
+    // the card keeps the title and drops the paragraph (spec.md:48 «cut words, never shrink type»)
+    if (P.card) {
+      copyTexture.needsUpdate = true;
+      return;
+    }
     g.fillStyle = P.muted;
     g.font = "400 88px " + P.body;
     const words = description.split(/\s+/);

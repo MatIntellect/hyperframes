@@ -3,7 +3,7 @@
   "name": "frost",
   "type": "hyperframes:block",
   "title": "Frost",
-  "description": "A frozen blue orb with frost creeping in from its edge, on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; keeps its own material colour; every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "A frozen blue ice orb lit from inside, its rim a soft frosted glow. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; keeps its own material colour; every colour is a variable. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "orb", "ice", "frost", "material", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

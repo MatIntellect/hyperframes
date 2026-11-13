@@ -81,7 +81,9 @@
           cool: ["#f2f8ff", "#a9d6ff"],
           white: [fg, fg],
         };
-        var COUNT = Math.round((V.density === "dense" ? 420 : 180) * (W * H) / (1920 * 1080));
+        // the count follows the frame, not the box: a 780x760 card is the frame of its own shot, and the area share
+        // (51 stars of 1-3 px) read as an empty card (5а, 058)
+        var COUNT = Math.round((V.density === "dense" ? 420 : 180) * (1920 * 1080) / (1920 * 1080));
         var palette = TONES[oneOf(V.tone, ["warm", "cool", "white"], "white")];
         var cycleSeconds = V.speed === "fast" ? 0.9 : 1.6;
         // детерминированный разброс без случайных чисел (как у разработчиков)

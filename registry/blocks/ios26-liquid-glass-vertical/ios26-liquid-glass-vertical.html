@@ -88,6 +88,12 @@
       #iosv-root.iosv-card.iosv-bottom #iosv-frame {
         top: 600px;
       }
+      /* the close-up of the phone ends in a soft edge: the camera drifts, so whichever row of the home screen the card's
+         lower edge crosses fades out instead of being cut through (5а, 058) */
+      #iosv-root.iosv-card #iosv-theater {
+        -webkit-mask-image: linear-gradient(to top, transparent 0, #000 96px);
+        mask-image: linear-gradient(to top, transparent 0, #000 96px);
+      }
       
       #iosv-cap,
       #iosv-theater {
@@ -375,7 +381,7 @@
         W = 780;
         H = 760;
         K = 0.523; // крупно верх телефона с уведомлениями
-        OFF = 0.86; // ряд подписей под значками целиком над нижним краем карточки (0,09 ≈ 30 px при камере ~3,5)
+        OFF = 0.77;
       }
       
       var theater = $("theater");

@@ -200,7 +200,8 @@
         tower(-9.5 * FS, 3.5 * FS, 9.6 * FS, -4.0 * FS, 6, 14, FAR_Z * 1.03, 0.34);
         tower(2.0 * FS, 4.5 * FS, 6.4 * FS, -4.0 * FS, 8, 12, FAR_Z * 0.98, 0.3);
         tower(12.5 * FS, 3.0 * FS, 11.0 * FS, -4.0 * FS, 5, 15, FAR_Z * 1.08, 0.36);
-        // the neon tube: lights closer than their diameter (11 / 79 = 0.14 < 0.2), so in focus it reads as one tube, not dots
+        // the neon sign: lights closer than their diameter (11 / 79 = 0.14 < 0.2) – in focus a chain of touching beads that
+        // reads as a line, not a dotted trail (the developers' 40 left gaps wider than a light)
         for (var s = 0; s < 80; s++) {
           var sx = (-5.5 + (11 * s) / 79) * FS;
           var mixc = s / 79;

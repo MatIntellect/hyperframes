@@ -221,6 +221,12 @@
         overflow: hidden;
         z-index: 10;
       }
+      /* the card has no header over the thread: its top is the scroll edge, softened as iOS 26 does, so a row scrolling
+         up fades within the thread's own top padding (20) instead of being cut through its letters */
+      .cge-half .scrollport {
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 20px);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 20px);
+      }
       .thread {
         position: relative;
         padding: var(--cge-pad-top, 74px) 16px 190px;
