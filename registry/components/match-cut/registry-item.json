@@ -38,6 +38,14 @@
       "label": "Scene B label",
       "description": "Result text revealed after the cut.",
       "default": "Готово"
+    },
+    {
+      "id": "kicker",
+      "type": "string",
+      "role": "content",
+      "label": "Kicker",
+      "description": "Small line above the result label; empty hides it.",
+      "default": "Совпало"
     }
   ]
 }

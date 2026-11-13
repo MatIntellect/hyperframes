@@ -10,7 +10,8 @@
   Customize:
   - COLS / ROWS: grid density (default 16×9, turned to 9×16 in a box taller
     than wide so the cells stay square), edit in the script below
-  - --grid-color: cell fill color (default the reel ground --bg)
+  - --grid-color: cell fill color (default the reel brand red --brand: opaque
+    cells that read on the reel ground --bg)
   - Stagger "from": "center" for radial, "edges" for inward, "random" for scatter
 -->
 
@@ -31,7 +32,7 @@
 
 <style>
   #grid-pixelate-overlay {
-    --grid-color: var(--bg, #0c1014);
+    --grid-color: var(--brand, #ff0000);
   }
 
   #grid-pixelate-overlay .grid-cell {

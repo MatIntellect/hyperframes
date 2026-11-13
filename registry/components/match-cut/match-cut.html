@@ -9,10 +9,12 @@
 
   Variables:
     The matched circles ride the reel brand red (--brand); text on them is --fg.
-    - label_a (string, default "Старт"): scene A button label, one short
-      word: it rides the circle from scale 0.54, so it is set at 52px to read
-      at the 28px floor. Wraps at spaces, never cut.
+    - label_a (string, default "Старт"): scene A button label. It rides the
+      circle from scale 0.54, so it is set at 52px to read at the 28px floor;
+      the circle grows to hold its longest word. Wraps at spaces, never cut.
     - label_b (string, default "Готово"): scene B result label. Wraps.
+    - kicker (string, default "Совпало"): small line above the result label;
+      empty hides it.
 
   Envelope (fixed IN/OUT, elastic HOLD only, never timeScale):
     IN_BASE  = 2.35s  scene A enters and accelerates into the hard cut, then
@@ -37,7 +39,8 @@
   data-composition-duration="4"
   data-composition-variables='[
     {"id": "label_a", "type": "string", "role": "content", "label": "Scene A label", "description": "Text inside the outgoing button.", "default": "Старт"},
-    {"id": "label_b", "type": "string", "role": "content", "label": "Scene B label", "description": "Result text revealed after the cut.", "default": "Готово"}
+    {"id": "label_b", "type": "string", "role": "content", "label": "Scene B label", "description": "Result text revealed after the cut.", "default": "Готово"},
+    {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the result label; empty hides it.", "default": "Совпало"}
   ]'
 >
   <head>
@@ -128,7 +131,12 @@
           .mc-circle {
             display: grid;
             place-items: center;
-            width: 32cqmin;
+            /* label_a size, shared by the label and the circle around it. */
+            --mc-label: max(52px, 6.6cqmin);
+            /* The circle grows with the longest word of label_a (--mc-chars, set by
+               the script) so the word fits at the 52px floor size: Montserrat 780
+               Cyrillic runs up to 0.75 em a letter, inside 80% of the circle. */
+            width: max(32cqmin, min(86cqw, calc(var(--mc-chars, 5) * var(--mc-label) * 0.94)));
             aspect-ratio: 1;
             border-radius: 50%;
             background: var(--mc-accent, var(--brand, #ff0000));
@@ -142,11 +150,12 @@
             max-width: 86%;
             color: var(--fg, #f2f2f2);
             /* The circle enters at scale 0.54: 52px stays at the 28px floor on screen. */
-            font-size: max(52px, 6.6cqmin);
+            font-size: var(--mc-label);
             font-weight: 780;
             letter-spacing: -0.01em;
             line-height: 1.05;
             text-align: center;
+            overflow-wrap: anywhere;
           }
 
           .mc-circle-b {
@@ -260,6 +269,22 @@
             root.style.setProperty("--mc-accent", accents[accentName]);
             labelA.textContent = labelAText;
             labelB.textContent = labelBText;
+            // The circle is sized from the longest word of label_a (CSS --mc-chars).
+            root.style.setProperty(
+              "--mc-chars",
+              String(
+                Math.max.apply(
+                  null,
+                  labelAText.split(/\s+/).map(function (w) {
+                    return w.length;
+                  }),
+                ),
+              ),
+            );
+            var kicker = root.querySelector(".mc-kicker");
+            var kickerText = vars.kicker == null ? "Совпало" : String(vars.kicker);
+            kicker.textContent = kickerText;
+            if (!kickerText) kicker.style.display = "none";
 
             var IN_BASE = 2.35;
             var OUT_BASE = 0.5;
