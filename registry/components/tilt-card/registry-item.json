@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Eyebrow",
       "description": "Small uppercase kicker above the headline.",
-      "default": "Движение"
+      "default": "Движение",
+      "maxLength": 16
     },
     {
       "id": "headline",
@@ -27,7 +28,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Large card headline.",
-      "default": "Графика для роликов"
+      "default": "Графика для роликов",
+      "maxLength": 28
     },
     {
       "id": "glow",

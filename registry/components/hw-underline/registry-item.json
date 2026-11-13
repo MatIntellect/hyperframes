@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "The phrase the mark annotates.",
-      "default": "Монтаж с ИИ"
+      "default": "Монтаж с ИИ",
+      "maxLength": 28
     },
     {
       "id": "mark",

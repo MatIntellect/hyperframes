@@ -33,7 +33,8 @@
       "role": "content",
       "label": "Captions",
       "description": "Comma-separated caption per screen. Blank entries use the authored defaults.",
-      "default": ""
+      "default": "",
+      "maxLength": 80
     },
     {
       "id": "cues",

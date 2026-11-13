@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Primary title displayed in the card.",
-      "default": "Меньше, но лучше"
+      "default": "Меньше, но лучше",
+      "maxLength": 28
     },
     {
       "id": "kicker",
@@ -30,7 +31,8 @@
       "role": "content",
       "label": "Kicker",
       "description": "Small uppercase label displayed above the headline.",
-      "default": "ПРИНЦИП МОНТАЖА"
+      "default": "ПРИНЦИП МОНТАЖА",
+      "maxLength": 16
     }
   ]
 }

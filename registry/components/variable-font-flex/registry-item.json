@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "The word whose weight flexes.",
-      "default": "Сила"
+      "default": "Сила",
+      "maxLength": 12
     },
     {
       "id": "stagger",

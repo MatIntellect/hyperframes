@@ -38,9 +38,9 @@
   data-composition-id="match-cut"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "label_a", "type": "string", "role": "content", "label": "Scene A label", "description": "Text inside the outgoing button.", "default": "Старт"},
-    {"id": "label_b", "type": "string", "role": "content", "label": "Scene B label", "description": "Result text revealed after the cut.", "default": "Готово"},
-    {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the result label; empty hides it.", "default": "Совпало"}
+    {"id": "label_a", "type": "string", "role": "content", "label": "Scene A label", "description": "Text inside the outgoing button.", "default": "Старт", "maxLength": 16},
+    {"id": "label_b", "type": "string", "role": "content", "label": "Scene B label", "description": "Result text revealed after the cut.", "default": "Готово", "maxLength": 16},
+    {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the result label; empty hides it.", "default": "Совпало", "maxLength": 16}
   ]'
 >
   <head>

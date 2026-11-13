@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Title",
       "description": "The notification title line.",
-      "default": "Ролик готов"
+      "default": "Ролик готов",
+      "maxLength": 28
     },
     {
       "id": "body",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Body",
       "description": "The body line; a long one wraps by words.",
-      "default": "zapusk.mp4 можно смотреть"
+      "default": "zapusk.mp4 можно смотреть",
+      "maxLength": 48
     },
     {
       "id": "app_label",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "App label",
       "description": "Small-caps app name row beside the app dot.",
-      "default": "MatIntellect"
+      "default": "MatIntellect",
+      "maxLength": 16
     },
     {
       "id": "os",

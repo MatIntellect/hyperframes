@@ -34,7 +34,8 @@
       "role": "content",
       "label": "Target label",
       "description": "Confirmation label revealed at recognition lock. Blank hides the line.",
-      "default": "Проверено"
+      "default": "Проверено",
+      "maxLength": 16
     },
     {
       "id": "sweepSpeed",

@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Text split into glyphs for the scatter and slam.",
-      "default": "Монтаж"
+      "default": "Монтаж",
+      "maxLength": 12
     },
     {
       "id": "spread",

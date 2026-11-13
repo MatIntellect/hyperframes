@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Nucleus label",
       "description": "Text displayed inside the fixed center nucleus.",
-      "default": "Идея"
+      "default": "Идея",
+      "maxLength": 16
     },
     {
       "id": "satellites",
@@ -41,7 +42,8 @@
       "role": "content",
       "label": "Satellite words",
       "description": "Comma-separated satellite words, one per chip; a missing entry keeps the default word.",
-      "default": "звук,свет,кадры,монтаж,цвет,титры"
+      "default": "звук,свет,кадры,монтаж,цвет,титры",
+      "maxLength": 80
     }
   ]
 }

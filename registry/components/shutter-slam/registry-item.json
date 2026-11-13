@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Word",
       "description": "The word driven through the six beats.",
-      "default": "Движение"
+      "default": "Движение",
+      "maxLength": 12
     },
     {
       "id": "blur",

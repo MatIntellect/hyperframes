@@ -63,7 +63,7 @@
   data-composition-id="stitched-text-draw"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Uppercased А-Я, Ё, A-Z, 0-9, space and . , ! ? : - –. Words wrap into lines; the thread never thins under 4 px.", "default": "СТЕЖОК"},
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Uppercased А-Я, Ё, A-Z, 0-9, space and . , ! ? : - –. Words wrap into lines; the thread never thins under 4 px.", "default": "СТЕЖОК", "maxLength": 12},
     {"id": "stitch", "type": "enum", "role": "style", "label": "Stitch", "description": "Dash/gap scale, thread width, and jitter amplitude.", "default": "fine", "options": [{"value": "fine", "label": "Fine"}, {"value": "coarse", "label": "Coarse"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the stitched word holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

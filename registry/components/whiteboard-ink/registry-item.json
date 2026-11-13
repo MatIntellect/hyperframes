@@ -51,7 +51,8 @@
       "role": "content",
       "label": "Caption",
       "description": "Short line shown after the sketch completes.",
-      "default": "Нарисуйте идею"
+      "default": "Нарисуйте идею",
+      "maxLength": 48
     },
     {
       "id": "pen",

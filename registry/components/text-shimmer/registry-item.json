@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Text receiving the single shimmer pass.",
-      "default": "Легко"
+      "default": "Легко",
+      "maxLength": 12
     },
     {
       "id": "sweep_at",

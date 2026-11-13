@@ -19,7 +19,8 @@
       "role": "content",
       "label": "From text",
       "description": "The outgoing label, on screen before the swap.",
-      "default": "Монтирую"
+      "default": "Монтирую",
+      "maxLength": 12
     },
     {
       "id": "to-text",
@@ -27,7 +28,8 @@
       "role": "content",
       "label": "To text",
       "description": "The incoming label, on screen after the swap. It rests hidden until the timeline reveals it.",
-      "default": "Готово"
+      "default": "Готово",
+      "maxLength": 12
     },
     {
       "id": "distance",

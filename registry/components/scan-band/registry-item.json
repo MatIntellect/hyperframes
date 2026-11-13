@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Wordmark",
       "description": "Text displayed by the scan effect.",
-      "default": "MATINTELLECT"
+      "default": "MATINTELLECT",
+      "maxLength": 12
     },
     {
       "id": "band_angle",

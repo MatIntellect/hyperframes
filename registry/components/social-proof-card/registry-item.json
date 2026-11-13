@@ -13,7 +13,8 @@
       "role": "content",
       "label": "Wordmark",
       "description": "Wordmark at the top of the card.",
-      "default": "MATINTELLECT"
+      "default": "MATINTELLECT",
+      "maxLength": 12
     },
     {
       "id": "proof",
@@ -21,7 +22,8 @@
       "role": "content",
       "label": "Proof line",
       "description": "Social-proof line under the stars.",
-      "default": "12 000+ авторов"
+      "default": "12 000+ авторов",
+      "maxLength": 28
     },
     {
       "id": "cta",
@@ -29,7 +31,8 @@
       "role": "content",
       "label": "CTA",
       "description": "Label on the closing capsule.",
-      "default": "Попробовать бесплатно"
+      "default": "Попробовать бесплатно",
+      "maxLength": 28
     },
     {
       "id": "f1",
@@ -37,7 +40,8 @@
       "role": "content",
       "label": "Feature 1",
       "description": "First feature, | breaks the line.",
-      "default": "Снимаешь|на телефон"
+      "default": "Снимаешь|на телефон",
+      "maxLength": 28
     },
     {
       "id": "f2",
@@ -45,7 +49,8 @@
       "role": "content",
       "label": "Feature 2",
       "description": "Second feature, | breaks the line.",
-      "default": "ИИ|монтирует"
+      "default": "ИИ|монтирует",
+      "maxLength": 28
     },
     {
       "id": "f3",
@@ -53,7 +58,8 @@
       "role": "content",
       "label": "Feature 3",
       "description": "Third feature, | breaks the line.",
-      "default": "Выкладываешь|везде"
+      "default": "Выкладываешь|везде",
+      "maxLength": 28
     }
   ],
   "files": [

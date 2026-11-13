@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "Uppercased А-Я, Ё, A-Z, 0-9, space and . , ! ? : - –. Words wrap into lines; the thread never thins under 4 px.",
-      "default": "СТЕЖОК"
+      "default": "СТЕЖОК",
+      "maxLength": 12
     },
     {
       "id": "stitch",

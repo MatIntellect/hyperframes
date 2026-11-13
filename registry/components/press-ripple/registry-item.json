@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Label",
       "description": "Text inside the default pill target.",
-      "default": "Начать"
+      "default": "Начать",
+      "maxLength": 16
     },
     {
       "id": "done_label",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Done label",
       "description": "Text beside the check once the default pill is pressed.",
-      "default": "Сохранено"
+      "default": "Сохранено",
+      "maxLength": 16
     },
     {
       "id": "target_x",

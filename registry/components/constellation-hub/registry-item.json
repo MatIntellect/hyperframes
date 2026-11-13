@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Hub label",
       "description": "Text displayed inside the fixed central hub.",
-      "default": "Ролик"
+      "default": "Ролик",
+      "maxLength": 16
     },
     {
       "id": "nodes",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Feature nodes",
       "description": "Comma-separated feature labels introduced in narration order.",
-      "default": "Сценарий,Съёмка,Монтаж,Публикация"
+      "default": "Сценарий,Съёмка,Монтаж,Публикация",
+      "maxLength": 80
     },
     {
       "id": "cues",

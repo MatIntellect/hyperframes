@@ -34,7 +34,7 @@
   data-composition-id="scramble-reveal"
   data-composition-duration="3"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Target string that resolves from deterministic wrong glyphs.", "default": "МОНТАЖ"},
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Target string that resolves from deterministic wrong glyphs.", "default": "МОНТАЖ", "maxLength": 12},
     {"id": "style", "type": "enum", "role": "style", "label": "Style", "description": "Terminal frame or clean text-only presentation.", "default": "terminal", "options": [{"value": "terminal", "label": "Terminal"}, {"value": "clean", "label": "Clean"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the locked string holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Value",
       "description": "The number itself. Every character becomes its own span, so the stagger still lands character by character.",
-      "default": "5,7"
+      "default": "5,7",
+      "maxLength": 12
     },
     {
       "id": "unit",
@@ -27,7 +28,8 @@
       "role": "content",
       "label": "Unit",
       "description": "Small suffix printed after the number. Pass an empty string to drop it.",
-      "default": "млн"
+      "default": "млн",
+      "maxLength": 8
     },
     {
       "id": "lift",

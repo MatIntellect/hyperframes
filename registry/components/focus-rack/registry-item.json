@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Card A label",
       "description": "Label on the card that begins in focus.",
-      "default": "Черновик"
+      "default": "Черновик",
+      "maxLength": 16
     },
     {
       "id": "label_b",
@@ -30,7 +31,8 @@
       "role": "content",
       "label": "Card B label",
       "description": "Label on the card that receives focus.",
-      "default": "Опубликовано"
+      "default": "Опубликовано",
+      "maxLength": 16
     }
   ]
 }

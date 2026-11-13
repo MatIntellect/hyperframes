@@ -58,7 +58,8 @@
       "role": "content",
       "label": "Proof label",
       "description": "Community proof copy shown in the center hub.",
-      "default": "50 000+ авторов"
+      "default": "50 000+ авторов",
+      "maxLength": 16
     }
   ]
 }

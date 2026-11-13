@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Prefix",
       "description": "Fixed sentence text before the rolling word slot.",
-      "default": "Монтаж"
+      "default": "Монтаж",
+      "maxLength": 28
     },
     {
       "id": "options",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Options",
       "description": "Comma-separated words shown in the rolling slot.",
-      "default": "быстрее,дешевле,проще"
+      "default": "быстрее,дешевле,проще",
+      "maxLength": 80
     },
     {
       "id": "suffix",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Suffix",
       "description": "Fixed sentence text after the rolling word slot.",
-      "default": ""
+      "default": "",
+      "maxLength": 28
     },
     {
       "id": "cues",

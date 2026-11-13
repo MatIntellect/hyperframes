@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Options",
       "description": "Comma-separated words shown by the ticker.",
-      "default": "быстрее,дешевле,проще,везде"
+      "default": "быстрее,дешевле,проще,везде",
+      "maxLength": 80
     },
     {
       "id": "final_word",
@@ -30,7 +31,8 @@
       "role": "content",
       "label": "Final word",
       "description": "Word the ticker locks on and promotes.",
-      "default": "проще"
+      "default": "проще",
+      "maxLength": 12
     }
   ]
 }

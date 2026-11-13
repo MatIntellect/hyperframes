@@ -46,10 +46,10 @@
   data-composition-id="state-chip-rail"
   data-composition-duration="5"
   data-composition-variables='[
-    {"id": "states", "type": "string", "role": "content", "label": "States", "description": "Comma-separated chip labels in machine order (2 to 8 states).", "default": "В очереди,Читает,Пишет,Готово"},
-    {"id": "times", "type": "string", "role": "timing", "label": "Times", "description": "Comma-separated activation times in seconds, one per advance (state 1 onward). Blank entries use the default even rhythm.", "default": ""},
+    {"id": "states", "type": "string", "role": "content", "label": "States", "description": "Comma-separated chip labels in machine order (2 to 8 states).", "default": "В очереди,Читает,Пишет,Готово", "maxLength": 80},
+    {"id": "times", "type": "string", "role": "timing", "label": "Times", "description": "Comma-separated activation times in seconds, one per advance (state 1 onward). Blank entries use the default even rhythm.", "default": "", "maxLength": 120},
     {"id": "badge_state", "type": "number", "role": "content", "label": "Badge state", "description": "Index of the state the badges pop beside.", "default": 1, "min": 0, "max": 7, "step": 1},
-    {"id": "badges", "type": "string", "role": "content", "label": "Badges", "description": "Comma-separated badge labels shown beside the badge state. Empty disables.", "default": ""},
+    {"id": "badges", "type": "string", "role": "content", "label": "Badges", "description": "Comma-separated badge labels shown beside the badge state. Empty disables.", "default": "", "maxLength": 80},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the rail leaves the frame. Default none: the hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >

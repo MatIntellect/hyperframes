@@ -37,7 +37,8 @@
       "role": "content",
       "label": "Value",
       "description": "Text held by the field.",
-      "default": "anna@studio.ru"
+      "default": "anna@studio.ru",
+      "maxLength": 28
     },
     {
       "id": "hint",
@@ -45,7 +46,8 @@
       "role": "content",
       "label": "Hint",
       "description": "Helper line under the field.",
-      "default": "Всё верно"
+      "default": "Всё верно",
+      "maxLength": 28
     }
   ]
 }

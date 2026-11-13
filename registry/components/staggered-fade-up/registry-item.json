@@ -89,7 +89,8 @@
       "role": "content",
       "label": "Words",
       "description": "The words themselves, split on spaces, one span and one stagger step each.",
-      "default": "Монтаж с ИИ"
+      "default": "Монтаж с ИИ",
+      "maxLength": 48
     }
   ]
 }

@@ -29,7 +29,8 @@
       "role": "content",
       "label": "States",
       "description": "Comma-separated chip labels in machine order (2 to 8 states).",
-      "default": "В очереди,Читает,Пишет,Готово"
+      "default": "В очереди,Читает,Пишет,Готово",
+      "maxLength": 80
     },
     {
       "id": "times",
@@ -37,7 +38,8 @@
       "role": "timing",
       "label": "Times",
       "description": "Comma-separated activation times in seconds, one per advance (state 1 onward). Blank entries use the default even rhythm.",
-      "default": ""
+      "default": "",
+      "maxLength": 120
     },
     {
       "id": "badge_state",
@@ -56,7 +58,8 @@
       "role": "content",
       "label": "Badges",
       "description": "Comma-separated badge labels shown beside the badge state. Empty disables.",
-      "default": ""
+      "default": "",
+      "maxLength": 80
     },
     {
       "id": "exit",

@@ -31,7 +31,8 @@
       "role": "content",
       "label": "Label",
       "description": "Small label under the number.",
-      "default": "Загрузка"
+      "default": "Загрузка",
+      "maxLength": 16
     }
   ]
 }

@@ -42,15 +42,15 @@
 <html
   lang="en"
   data-composition-variables='[
-    { "id": "focus", "type": "enum", "role": "motion", "label": "Final focus", "description": "Card that ends sharp, full-size, and fully opaque.", "default": "b", "options": [{ "value": "a", "label": "Card A" }, { "value": "b", "label": "Card B" }] },
-    { "id": "blurPx", "type": "number", "role": "style", "label": "Unfocused blur", "description": "Blur applied to the card outside the viewer focus.", "default": 6, "min": 0, "max": 20, "step": 1, "unit": "px" },
-    { "id": "dim", "type": "number", "role": "style", "label": "Unfocused opacity", "description": "Opacity of the card outside the viewer focus.", "default": 0.5, "min": 0, "max": 1, "step": 0.05 },
-    { "id": "status_a", "type": "string", "role": "content", "label": "Card A status", "description": "Short status word above the title of card A.", "default": "План" },
-    { "id": "title_a", "type": "string", "role": "content", "label": "Card A title", "description": "Title of card A.", "default": "Придумать идею" },
-    { "id": "detail_a", "type": "string", "role": "content", "label": "Card A detail", "description": "One line under the title of card A; wraps by words.", "default": "Собрать задачу и договориться с командой" },
-    { "id": "status_b", "type": "string", "role": "content", "label": "Card B status", "description": "Short status word above the title of card B.", "default": "Запуск" },
-    { "id": "title_b", "type": "string", "role": "content", "label": "Card B title", "description": "Title of card B.", "default": "Выпустить ролик" },
-    { "id": "detail_b", "type": "string", "role": "content", "label": "Card B detail", "description": "One line under the title of card B; wraps by words.", "default": "От согласованного монтажа к публикации" }
+    {"id": "focus", "type": "enum", "role": "motion", "label": "Final focus", "description": "Card that ends sharp, full-size, and fully opaque.", "default": "b", "options": [{"value": "a", "label": "Card A"}, {"value": "b", "label": "Card B"}]},
+    {"id": "blurPx", "type": "number", "role": "style", "label": "Unfocused blur", "description": "Blur applied to the card outside the viewer focus.", "default": 6, "min": 0, "max": 20, "step": 1, "unit": "px"},
+    {"id": "dim", "type": "number", "role": "style", "label": "Unfocused opacity", "description": "Opacity of the card outside the viewer focus.", "default": 0.5, "min": 0, "max": 1, "step": 0.05},
+    {"id": "status_a", "type": "string", "role": "content", "label": "Card A status", "description": "Short status word above the title of card A.", "default": "План", "maxLength": 16},
+    {"id": "title_a", "type": "string", "role": "content", "label": "Card A title", "description": "Title of card A.", "default": "Придумать идею", "maxLength": 28},
+    {"id": "detail_a", "type": "string", "role": "content", "label": "Card A detail", "description": "One line under the title of card A; wraps by words.", "default": "Собрать задачу и договориться с командой", "maxLength": 48},
+    {"id": "status_b", "type": "string", "role": "content", "label": "Card B status", "description": "Short status word above the title of card B.", "default": "Запуск", "maxLength": 16},
+    {"id": "title_b", "type": "string", "role": "content", "label": "Card B title", "description": "Title of card B.", "default": "Выпустить ролик", "maxLength": 28},
+    {"id": "detail_b", "type": "string", "role": "content", "label": "Card B detail", "description": "One line under the title of card B; wraps by words.", "default": "От согласованного монтажа к публикации", "maxLength": 48}
   ]'
 >
   <head>

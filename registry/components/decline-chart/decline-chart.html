@@ -22,9 +22,9 @@
   data-composition-id="decline-chart"
   data-composition-duration="4"
   data-composition-variables='[
-    { "id": "label", "type": "string", "role": "content", "label": "Metric label", "description": "Label shown above the declining value.", "default": "Удержание" },
-    { "id": "start_value", "type": "number", "role": "content", "label": "Start value", "description": "Metric value at the start of the decline.", "default": 82, "min": 0, "max": 100, "step": 1 },
-    { "id": "end_value", "type": "number", "role": "content", "label": "End value", "description": "Metric value at the bottom of the decline.", "default": 34, "min": 0, "max": 100, "step": 1 }
+    {"id": "label", "type": "string", "role": "content", "label": "Metric label", "description": "Label shown above the declining value.", "default": "Удержание", "maxLength": 16},
+    {"id": "start_value", "type": "number", "role": "content", "label": "Start value", "description": "Metric value at the start of the decline.", "default": 82, "min": 0, "max": 100, "step": 1},
+    {"id": "end_value", "type": "number", "role": "content", "label": "End value", "description": "Metric value at the bottom of the decline.", "default": 34, "min": 0, "max": 100, "step": 1}
   ]'
 >
   <head>

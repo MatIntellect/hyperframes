@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Titles",
       "description": "Comma-separated card titles (1 to 5 cards).",
-      "default": "Ролик в очереди,Проверки пройдены,Ролик опубликован"
+      "default": "Ролик в очереди,Проверки пройдены,Ролик опубликован",
+      "maxLength": 120
     },
     {
       "id": "bodies",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Bodies",
       "description": "Comma-separated body lines matched to titles by index. Blank entries hide that body line.",
-      "default": "Монтаж начат,Все 12 проверок зелёные,Выложен в Instagram и YouTube"
+      "default": "Монтаж начат,Все 12 проверок зелёные,Выложен в Instagram и YouTube",
+      "maxLength": 120
     },
     {
       "id": "expand",

@@ -38,8 +38,8 @@
   data-composition-id="constellation-hub"
   data-composition-duration="4.5"
   data-composition-variables='[
-    {"id": "hub_label", "type": "string", "role": "content", "label": "Hub label", "description": "Text displayed inside the fixed central hub.", "default": "Ролик"},
-    {"id": "nodes", "type": "string", "role": "content", "label": "Feature nodes", "description": "Comma-separated feature labels introduced in narration order.", "default": "Сценарий,Съёмка,Монтаж,Публикация"},
+    {"id": "hub_label", "type": "string", "role": "content", "label": "Hub label", "description": "Text displayed inside the fixed central hub.", "default": "Ролик", "maxLength": 16},
+    {"id": "nodes", "type": "string", "role": "content", "label": "Feature nodes", "description": "Comma-separated feature labels introduced in narration order.", "default": "Сценарий,Съёмка,Монтаж,Публикация", "maxLength": 80},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds (from mount start) for each node reveal. Empty keeps the authored even spread.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

@@ -35,11 +35,11 @@
   data-composition-id="kinetic-center-build"
   data-composition-duration="2"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Short phrase that builds one word at a time.", "default": "Монтаж с ИИ за минуту." },
-    { "id": "font_size", "type": "number", "role": "style", "label": "Font size", "description": "Maximum text size in pixels. Longer phrases shrink to stay inside the frame.", "default": 72, "min": 36, "max": 160, "step": 2, "unit": "px" },
-    { "id": "entry_offset", "type": "number", "role": "motion", "label": "Entry offset", "description": "Horizontal distance each new word travels before it lands.", "default": 88, "min": 20, "max": 160, "step": 4, "unit": "px" },
-    { "id": "color", "type": "string", "role": "style", "label": "Color", "description": "Text color for the full phrase. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)" },
-    { "id": "font_weight", "type": "enum", "role": "style", "label": "Font weight", "description": "Weight used by every word in the phrase.", "default": "600", "options": [{ "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }, { "value": "800", "label": "Extra bold" }] }
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "Short phrase that builds one word at a time.", "default": "Монтаж с ИИ за минуту.", "maxLength": 28},
+    {"id": "font_size", "type": "number", "role": "style", "label": "Font size", "description": "Maximum text size in pixels. Longer phrases shrink to stay inside the frame.", "default": 72, "min": 36, "max": 160, "step": 2, "unit": "px"},
+    {"id": "entry_offset", "type": "number", "role": "motion", "label": "Entry offset", "description": "Horizontal distance each new word travels before it lands.", "default": 88, "min": 20, "max": 160, "step": 4, "unit": "px"},
+    {"id": "color", "type": "string", "role": "style", "label": "Color", "description": "Text color for the full phrase. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
+    {"id": "font_weight", "type": "enum", "role": "style", "label": "Font weight", "description": "Weight used by every word in the phrase.", "default": "600", "options": [{"value": "500", "label": "Medium"}, {"value": "600", "label": "Semibold"}, {"value": "700", "label": "Bold"}, {"value": "800", "label": "Extra bold"}]}
   ]'
 >
   <head>

@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "The line to animate. It is split on whitespace and every word gets its own span, so the stagger picks up the new words.",
-      "default": "Снял раз выложил везде"
+      "default": "Снял раз выложил везде",
+      "maxLength": 48
     },
     {
       "id": "drift",

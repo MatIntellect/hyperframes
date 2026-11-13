@@ -65,7 +65,8 @@
       "role": "content",
       "label": "Data",
       "description": "Comma-separated numbers; the chart lands exactly on these values.",
-      "default": "12, 28, 45, 64"
+      "default": "12, 28, 45, 64",
+      "maxLength": 120
     },
     {
       "id": "labels",
@@ -73,7 +74,8 @@
       "role": "content",
       "label": "Labels",
       "description": "Comma-separated labels, one per datum.",
-      "default": "Янв, Фев, Мар, Апр"
+      "default": "Янв, Фев, Мар, Апр",
+      "maxLength": 80
     },
     {
       "id": "emphasize",
@@ -90,7 +92,8 @@
       "role": "content",
       "label": "Unit",
       "description": "Suffix appended to every displayed value.",
-      "default": "%"
+      "default": "%",
+      "maxLength": 8
     },
     {
       "id": "exit",

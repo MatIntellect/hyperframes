@@ -40,9 +40,9 @@
   data-composition-id="kinetic-type-swap"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Fixed sentence text before the rolling word slot.", "default": "Монтаж"},
-    {"id": "options", "type": "string", "role": "content", "label": "Options", "description": "Comma-separated words shown in the rolling slot.", "default": "быстрее,дешевле,проще"},
-    {"id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "Fixed sentence text after the rolling word slot.", "default": ""},
+    {"id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Fixed sentence text before the rolling word slot.", "default": "Монтаж", "maxLength": 28},
+    {"id": "options", "type": "string", "role": "content", "label": "Options", "description": "Comma-separated words shown in the rolling slot.", "default": "быстрее,дешевле,проще", "maxLength": 80},
+    {"id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "Fixed sentence text after the rolling word slot.", "default": "", "maxLength": 28},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds (from mount start) for each word swap. Empty keeps the authored even spread.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the sentence holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

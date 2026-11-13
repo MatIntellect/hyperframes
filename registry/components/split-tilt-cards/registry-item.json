@@ -34,7 +34,8 @@
       "role": "content",
       "label": "Left label",
       "description": "Mono header on the left card. Blank hides it.",
-      "default": "До"
+      "default": "До",
+      "maxLength": 16
     },
     {
       "id": "label_b",
@@ -42,7 +43,8 @@
       "role": "content",
       "label": "Right label",
       "description": "Mono header on the right card. Blank hides it.",
-      "default": "После"
+      "default": "После",
+      "maxLength": 16
     },
     {
       "id": "badge_a",
@@ -50,7 +52,8 @@
       "role": "content",
       "label": "Left badge",
       "description": "Pill badge that spring-pops at the left card inner edge. Blank disables it.",
-      "default": "v1"
+      "default": "v1",
+      "maxLength": 16
     },
     {
       "id": "badge_b",
@@ -58,7 +61,8 @@
       "role": "content",
       "label": "Right badge",
       "description": "Pill badge that spring-pops at the right card inner edge. Blank disables it.",
-      "default": "v2"
+      "default": "v2",
+      "maxLength": 16
     },
     {
       "id": "exit",

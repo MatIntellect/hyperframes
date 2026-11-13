@@ -42,7 +42,8 @@
       "role": "content",
       "label": "Text",
       "description": "The phrase that gets circled.",
-      "default": "Главное"
+      "default": "Главное",
+      "maxLength": 28
     },
     {
       "id": "label",
@@ -50,7 +51,8 @@
       "role": "content",
       "label": "Note",
       "description": "The hand-written note on the connector. Empty hides it.",
-      "default": "смотри сюда!"
+      "default": "смотри сюда!",
+      "maxLength": 28
     },
     {
       "id": "labelAt",

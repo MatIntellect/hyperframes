@@ -40,7 +40,8 @@
       "role": "content",
       "label": "Card label prefix",
       "description": "Text placed before each shot number.",
-      "default": "Кадр"
+      "default": "Кадр",
+      "maxLength": 16
     }
   ]
 }

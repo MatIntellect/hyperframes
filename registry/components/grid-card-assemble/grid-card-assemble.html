@@ -60,7 +60,7 @@
   data-composition-id="grid-card-assemble"
   data-composition-duration="4.5"
   data-composition-variables='[
-    {"id": "items", "type": "string", "role": "content", "label": "Items", "description": "Comma-separated cards (3 to 12). \"Label: body\" adds a one-line muted body under the label.", "default": "Съёмка,Монтаж,Рендер,Публикация"},
+    {"id": "items", "type": "string", "role": "content", "label": "Items", "description": "Comma-separated cards (3 to 12). \"Label: body\" adds a one-line muted body under the label.", "default": "Съёмка,Монтаж,Рендер,Публикация", "maxLength": 80},
     {"id": "layout", "type": "enum", "role": "layout", "label": "Layout", "description": "Grid wraps by columns; list stacks vertically.", "default": "grid", "options": [{"value": "grid", "label": "Grid"}, {"value": "list", "label": "List"}]},
     {"id": "columns", "type": "number", "role": "layout", "label": "Columns", "description": "Grid column count (grid layout only). 0 picks automatically: one row up to 3 items, then ceil(sqrt(N)).", "default": 0, "min": 0, "max": 4, "step": 1},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated per-item entrance times in seconds. Blank entries use the default cascade.", "default": ""},

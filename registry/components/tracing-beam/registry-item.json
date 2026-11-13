@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Labels",
       "description": "Three comma-separated labels shown in path order.",
-      "default": "Сценарий,Съёмка,Монтаж"
+      "default": "Сценарий,Съёмка,Монтаж",
+      "maxLength": 80
     }
   ]
 }

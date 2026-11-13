@@ -19,7 +19,8 @@
       "role": "content",
       "label": "Text",
       "description": "Headline copy. Every whitespace-separated word becomes one staggered span.",
-      "default": "Монтаж с ИИ за минуту"
+      "default": "Монтаж с ИИ за минуту",
+      "maxLength": 28
     },
     {
       "id": "size",

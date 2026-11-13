@@ -33,7 +33,8 @@
       "role": "content",
       "label": "Labels",
       "description": "Comma-separated cursor names, in order.",
-      "default": "Аня,Олег,Вика,Миша"
+      "default": "Аня,Олег,Вика,Миша",
+      "maxLength": 80
     }
   ]
 }

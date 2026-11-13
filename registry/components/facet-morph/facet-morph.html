@@ -58,7 +58,7 @@
   data-composition-id="facet-morph"
   data-composition-duration="5"
   data-composition-variables='[
-    {"id": "forms", "type": "string", "role": "content", "label": "Forms", "description": "Comma-separated silhouette sequence from blob, mark, badge.", "default": "blob,mark,badge"},
+    {"id": "forms", "type": "string", "role": "content", "label": "Forms", "description": "Comma-separated silhouette sequence from blob, mark, badge.", "default": "blob,mark,badge", "maxLength": 120},
     {"id": "hold_last", "type": "boolean", "role": "timing", "label": "Hold last", "description": "True settles dead still on the final silhouette; false keeps the mass slowly breathing through the hold.", "default": true},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the settled mass.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

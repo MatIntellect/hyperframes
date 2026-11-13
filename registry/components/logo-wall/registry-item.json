@@ -56,7 +56,8 @@
       "role": "content",
       "label": "Heading",
       "description": "Line above the wall.",
-      "default": "Нам доверяют"
+      "default": "Нам доверяют",
+      "maxLength": 28
     },
     {
       "id": "marks",
@@ -64,7 +65,8 @@
       "role": "content",
       "label": "Marks",
       "description": "Comma-separated client names, one per cell, in reading order. Empty keeps the neutral lettermarks; the wall shrinks to the names given.",
-      "default": ""
+      "default": "",
+      "maxLength": 80
     }
   ]
 }

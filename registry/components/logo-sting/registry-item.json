@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Wordmark",
       "description": "Brand name displayed in the final lockup.",
-      "default": "MATINTELLECT"
+      "default": "MATINTELLECT",
+      "maxLength": 12
     }
   ]
 }

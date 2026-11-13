@@ -35,9 +35,9 @@
   data-composition-id="logo-brand-close"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Brand name whose letters cascade into the centered lockup.", "default": "MATINTELLECT"},
-    {"id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Optional tagline that settles beneath the wordmark. Empty hides it.", "default": "Ролики, которые смотрят до конца"},
-    {"id": "url", "type": "string", "role": "content", "label": "URL", "description": "Optional URL line beneath the tagline. Empty hides it.", "default": "matintellect.com"},
+    {"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Brand name whose letters cascade into the centered lockup.", "default": "MATINTELLECT", "maxLength": 12},
+    {"id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Optional tagline that settles beneath the wordmark. Empty hides it.", "default": "Ролики, которые смотрят до конца", "maxLength": 48},
+    {"id": "url", "type": "string", "role": "content", "label": "URL", "description": "Optional URL line beneath the tagline. Empty hides it.", "default": "matintellect.com", "maxLength": 40},
     {"id": "exit", "type": "enum", "role": "style", "label": "Exit", "description": "Optional departure. Films end on the still hold, so the default is none.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >

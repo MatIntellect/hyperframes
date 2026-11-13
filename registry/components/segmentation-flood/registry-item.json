@@ -37,7 +37,8 @@
       "role": "content",
       "label": "Regions",
       "description": "Comma-separated region labels; 2 to 4 are used, one translucent mask + bracket + mono chip each.",
-      "default": "Человек, Сигнал, Фон"
+      "default": "Человек, Сигнал, Фон",
+      "maxLength": 80
     },
     {
       "id": "flood_at",

@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Text",
       "description": "Word or short headline to emphasize.",
-      "default": "УДАР"
+      "default": "УДАР",
+      "maxLength": 12
     },
     {
       "id": "fromValue",

@@ -27,10 +27,10 @@
 <div
   class="hf-catalog-per-word-crossfade"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The line to animate. It is split on whitespace and every word gets its own span, so the stagger picks up the new words.", "default": "Снял раз выложил везде" },
-    { "id": "drift", "type": "enum", "role": "motion", "label": "Drift", "description": "Scales the vertical offset, so the words cover a shorter or longer run in the same time.", "default": "standard", "options": [{ "value": "close", "label": "Close" }, { "value": "standard", "label": "Standard" }, { "value": "far", "label": "Far" }] },
-    { "id": "blur", "type": "enum", "role": "style", "label": "Blur", "description": "Scales the blur radius the timeline drives, from a light haze to a full smear.", "default": "standard", "options": [{ "value": "soft", "label": "Soft" }, { "value": "standard", "label": "Standard" }, { "value": "heavy", "label": "Heavy" }] },
-    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Word colour: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] }
+    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "The line to animate. It is split on whitespace and every word gets its own span, so the stagger picks up the new words.", "default": "Снял раз выложил везде", "maxLength": 48},
+    {"id": "drift", "type": "enum", "role": "motion", "label": "Drift", "description": "Scales the vertical offset, so the words cover a shorter or longer run in the same time.", "default": "standard", "options": [{"value": "close", "label": "Close"}, {"value": "standard", "label": "Standard"}, {"value": "far", "label": "Far"}]},
+    {"id": "blur", "type": "enum", "role": "style", "label": "Blur", "description": "Scales the blur radius the timeline drives, from a light haze to a full smear.", "default": "standard", "options": [{"value": "soft", "label": "Soft"}, {"value": "standard", "label": "Standard"}, {"value": "heavy", "label": "Heavy"}]},
+    {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Word colour: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{"value": "ink", "label": "Ink"}, {"value": "paper", "label": "Paper"}, {"value": "accent", "label": "Accent"}]}
   ]'
 >
   <span>Снял</span><span>раз</span><span>выложил</span><span>везде</span>

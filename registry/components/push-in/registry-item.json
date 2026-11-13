@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Headline",
       "description": "Text centered in the camera frame.",
-      "default": "Главное"
+      "default": "Главное",
+      "maxLength": 28
     },
     {
       "id": "intensity",

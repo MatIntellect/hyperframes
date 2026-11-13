@@ -57,7 +57,7 @@
   data-composition-duration="5"
   data-composition-variables='[
     {"id": "screens", "type": "number", "role": "content", "label": "Screens", "description": "How many screens ride the rail.", "default": 3, "min": 2, "max": 5, "step": 1},
-    {"id": "captions", "type": "string", "role": "content", "label": "Captions", "description": "Comma-separated caption per screen. Blank entries use the authored defaults.", "default": ""},
+    {"id": "captions", "type": "string", "role": "content", "label": "Captions", "description": "Comma-separated caption per screen. Blank entries use the authored defaults.", "default": "", "maxLength": 80},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated advance times in seconds from mount start. Blank entries use the authored even rhythm.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the final screen holds until the cut.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

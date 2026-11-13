@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Outgoing text",
       "description": "The line on screen before the cut.",
-      "default": "Обычный монтаж"
+      "default": "Обычный монтаж",
+      "maxLength": 28
     },
     {
       "id": "text_b",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Incoming text",
       "description": "The line that continues the move after the cut.",
-      "default": "Монтаж с ИИ"
+      "default": "Монтаж с ИИ",
+      "maxLength": 28
     },
     {
       "id": "mode",

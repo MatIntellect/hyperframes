@@ -44,7 +44,8 @@
       "role": "content",
       "label": "Card text",
       "description": "Word displayed on the exiting card.",
-      "default": "Потом"
+      "default": "Потом",
+      "maxLength": 12
     }
   ]
 }

@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Wordmark",
       "description": "Brand name whose letters cascade into the centered lockup.",
-      "default": "MATINTELLECT"
+      "default": "MATINTELLECT",
+      "maxLength": 12
     },
     {
       "id": "tagline",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Tagline",
       "description": "Optional tagline that settles beneath the wordmark. Empty hides it.",
-      "default": "Ролики, которые смотрят до конца"
+      "default": "Ролики, которые смотрят до конца",
+      "maxLength": 48
     },
     {
       "id": "url",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "URL",
       "description": "Optional URL line beneath the tagline. Empty hides it.",
-      "default": "matintellect.com"
+      "default": "matintellect.com",
+      "maxLength": 40
     },
     {
       "id": "exit",

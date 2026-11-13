@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Tap label",
       "description": "Button label shown before the tap response.",
-      "default": "Подписаться"
+      "default": "Подписаться",
+      "maxLength": 16
     },
     {
       "id": "response_label",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Response label",
       "description": "Button label shown when the tap releases.",
-      "default": "Подписан"
+      "default": "Подписан",
+      "maxLength": 16
     }
   ]
 }

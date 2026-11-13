@@ -47,7 +47,8 @@
       "role": "content",
       "label": "Prefix",
       "description": "Optional text shown before the value.",
-      "default": ""
+      "default": "",
+      "maxLength": 8
     },
     {
       "id": "suffix",
@@ -55,7 +56,8 @@
       "role": "content",
       "label": "Suffix",
       "description": "Optional text shown after the value.",
-      "default": "%"
+      "default": "%",
+      "maxLength": 8
     },
     {
       "id": "glow",

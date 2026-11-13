@@ -46,7 +46,8 @@
       "role": "content",
       "label": "Center label",
       "description": "Optional. Empty: the center counts to the progress value. Set it only for a suffix or another figure (\"73%\").",
-      "default": ""
+      "default": "",
+      "maxLength": 16
     }
   ]
 }

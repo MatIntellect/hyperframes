@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Action line",
       "description": "Primary action statement shown above the CTA.",
-      "default": "Начните сегодня"
+      "default": "Начните сегодня",
+      "maxLength": 48
     },
     {
       "id": "button_label",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Button label",
       "description": "Text displayed inside the CTA capsule.",
-      "default": "Оставить заявку"
+      "default": "Оставить заявку",
+      "maxLength": 16
     },
     {
       "id": "microcopy",
@@ -45,7 +47,8 @@
       "role": "content",
       "label": "Microcopy",
       "description": "Supporting detail shown below the CTA capsule.",
-      "default": "Ответим в течение дня"
+      "default": "Ответим в течение дня",
+      "maxLength": 48
     }
   ]
 }

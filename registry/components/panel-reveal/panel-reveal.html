@@ -24,9 +24,9 @@
 <section
   class="hf-transition-panel-reveal"
   data-composition-variables='[
-    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "The header line that sits above the folded body.", "default": "Параметры движения" },
-    { "id": "width", "type": "enum", "role": "layout", "label": "Width", "description": "How wide the panel sits, 520, 640 or 720 px.", "default": "standard", "options": [{ "value": "narrow", "label": "Narrow" }, { "value": "standard", "label": "Standard" }, { "value": "wide", "label": "Wide" }] },
-    { "id": "reveal", "type": "enum", "role": "motion", "label": "Reveal", "description": "Whether the body fades in with the height. fade is the shipped motion, solid opens the height only.", "default": "fade", "options": [{ "value": "fade", "label": "Fade" }, { "value": "solid", "label": "Solid" }] }
+    {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "The header line that sits above the folded body.", "default": "Параметры движения", "maxLength": 28},
+    {"id": "width", "type": "enum", "role": "layout", "label": "Width", "description": "How wide the panel sits, 520, 640 or 720 px.", "default": "standard", "options": [{"value": "narrow", "label": "Narrow"}, {"value": "standard", "label": "Standard"}, {"value": "wide", "label": "Wide"}]},
+    {"id": "reveal", "type": "enum", "role": "motion", "label": "Reveal", "description": "Whether the body fades in with the height. fade is the shipped motion, solid opens the height only.", "default": "fade", "options": [{"value": "fade", "label": "Fade"}, {"value": "solid", "label": "Solid"}]}
   ]'
 >
   <header>Параметры движения</header>

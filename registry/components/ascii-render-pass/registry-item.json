@@ -29,7 +29,8 @@
       "role": "style",
       "label": "Charset",
       "description": "Density ramp, dark to light. A leading space keeps dark cells empty.",
-      "default": " .:-=+*#%@"
+      "default": " .:-=+*#%@",
+      "maxLength": 120
     },
     {
       "id": "grid",

@@ -47,11 +47,11 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "rows", "type": "number", "role": "layout", "label": "Rows", "description": "Number of logo rows in the wall.", "default": 4, "min": 2, "max": 4, "step": 1 },
-    { "id": "cols", "type": "number", "role": "layout", "label": "Columns", "description": "Number of logo columns in the wall.", "default": 3, "min": 3, "max": 6, "step": 1 },
-    { "id": "stagger", "type": "number", "role": "motion", "label": "Stagger", "description": "Delay between consecutive logo cell entrances.", "default": 45, "min": 20, "max": 75, "step": 1, "unit": "ms" },
-    { "id": "heading", "type": "string", "role": "content", "label": "Heading", "description": "Line above the wall.", "default": "Нам доверяют" },
-    { "id": "marks", "type": "string", "role": "content", "label": "Marks", "description": "Comma-separated client names, one per cell, in reading order. Empty keeps the neutral lettermarks; the wall shrinks to the names given.", "default": "" }
+    {"id": "rows", "type": "number", "role": "layout", "label": "Rows", "description": "Number of logo rows in the wall.", "default": 4, "min": 2, "max": 4, "step": 1},
+    {"id": "cols", "type": "number", "role": "layout", "label": "Columns", "description": "Number of logo columns in the wall.", "default": 3, "min": 3, "max": 6, "step": 1},
+    {"id": "stagger", "type": "number", "role": "motion", "label": "Stagger", "description": "Delay between consecutive logo cell entrances.", "default": 45, "min": 20, "max": 75, "step": 1, "unit": "ms"},
+    {"id": "heading", "type": "string", "role": "content", "label": "Heading", "description": "Line above the wall.", "default": "Нам доверяют", "maxLength": 28},
+    {"id": "marks", "type": "string", "role": "content", "label": "Marks", "description": "Comma-separated client names, one per cell, in reading order. Empty keeps the neutral lettermarks; the wall shrinks to the names given.", "default": "", "maxLength": 80}
   ]'
 >
   <head>

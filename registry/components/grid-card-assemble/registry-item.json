@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Items",
       "description": "Comma-separated cards (3 to 12). \"Label: body\" adds a one-line muted body under the label.",
-      "default": "Съёмка,Монтаж,Рендер,Публикация"
+      "default": "Съёмка,Монтаж,Рендер,Публикация",
+      "maxLength": 80
     },
     {
       "id": "layout",

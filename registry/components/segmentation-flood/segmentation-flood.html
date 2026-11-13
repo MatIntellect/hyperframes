@@ -59,7 +59,7 @@
   data-composition-id="segmentation-flood"
   data-composition-duration="4.5"
   data-composition-variables='[
-    {"id": "regions", "type": "string", "role": "content", "label": "Regions", "description": "Comma-separated region labels; 2 to 4 are used, one translucent mask + bracket + mono chip each.", "default": "Человек, Сигнал, Фон"},
+    {"id": "regions", "type": "string", "role": "content", "label": "Regions", "description": "Comma-separated region labels; 2 to 4 are used, one translucent mask + bracket + mono chip each.", "default": "Человек, Сигнал, Фон", "maxLength": 80},
     {"id": "flood_at", "type": "number", "role": "timing", "label": "Flood at", "description": "Seconds from mount start when the segmentation pass begins. Clamped so the pass and any exit stay inside the clip.", "default": 0.8},
     {"id": "flicker", "type": "enum", "role": "style", "label": "Flicker", "description": "Deterministic 2-frame HUD luminance toggle riding the flood pass.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the labeled read holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}

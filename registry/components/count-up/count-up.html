@@ -38,8 +38,8 @@
   data-composition-variables='[
     {"id": "start", "type": "number", "role": "content", "label": "Start value", "description": "First value shown by the count.", "default": 0, "step": 1},
     {"id": "end", "type": "number", "role": "content", "label": "End value", "description": "Final value where the count lands.", "default": 100, "step": 1},
-    {"id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Optional text shown before the value.", "default": ""},
-    {"id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "Optional text shown after the value.", "default": "%"},
+    {"id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Optional text shown before the value.", "default": "", "maxLength": 8},
+    {"id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "Optional text shown after the value.", "default": "%", "maxLength": 8},
     {"id": "glow", "type": "boolean", "role": "style", "label": "Glow", "description": "Optional soft accent glow under the count. Off by default.", "default": false},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the landed value holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'

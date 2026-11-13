@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Line A",
       "description": "First line; holds center inside the mask, then exits up on the swap beat.",
-      "default": "Все обещали вам ИИ."
+      "default": "Все обещали вам ИИ.",
+      "maxLength": 48
     },
     {
       "id": "line_b",
@@ -37,7 +38,8 @@
       "role": "content",
       "label": "Line B",
       "description": "Replacement line; enters bottom-up on the swap beat and holds.",
-      "default": "Почти никто не обещал контроль."
+      "default": "Почти никто не обещал контроль.",
+      "maxLength": 48
     },
     {
       "id": "swap_at",
@@ -56,7 +58,8 @@
       "role": "content",
       "label": "Underline word",
       "description": "First case-insensitive substring match in line B gets the accent underline after landing. Empty disables it.",
-      "default": "контроль"
+      "default": "контроль",
+      "maxLength": 16
     },
     {
       "id": "exit",

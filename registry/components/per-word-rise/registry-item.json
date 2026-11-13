@@ -29,7 +29,8 @@
       "role": "content",
       "label": "Text",
       "description": "Text whose words or characters rise into place.",
-      "default": "Монтаж с ИИ"
+      "default": "Монтаж с ИИ",
+      "maxLength": 28
     },
     {
       "id": "split",

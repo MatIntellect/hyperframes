@@ -49,8 +49,8 @@
   data-composition-id="radial-surround"
   data-composition-duration="5"
   data-composition-variables='[
-    {"id": "center_label", "type": "string", "role": "content", "label": "Center label", "description": "Label on the default center token card.", "default": "Ваша команда"},
-    {"id": "chips", "type": "string", "role": "content", "label": "Chips", "description": "Comma-separated chip labels that surround the center (up to 12).", "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы"},
+    {"id": "center_label", "type": "string", "role": "content", "label": "Center label", "description": "Label on the default center token card.", "default": "Ваша команда", "maxLength": 16},
+    {"id": "chips", "type": "string", "role": "content", "label": "Chips", "description": "Comma-separated chip labels that surround the center (up to 12).", "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы", "maxLength": 120},
     {"id": "close_in", "type": "boolean", "role": "timing", "label": "Close in", "description": "Converge the ring inward with a subtle edge dim after assembly. The center never moves.", "default": true},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated per-chip entrance times in seconds. Blank entries use the default cascade.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the surrounded stage leaves the frame. Default none: the crowded hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}

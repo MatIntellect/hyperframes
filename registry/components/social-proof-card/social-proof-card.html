@@ -16,7 +16,14 @@
   lang="ru"
   data-composition-id="social-proof-card"
   data-composition-duration="4"
-  data-composition-variables='[{"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Wordmark at the top of the card.", "default": "MATINTELLECT"}, {"id": "proof", "type": "string", "role": "content", "label": "Proof line", "description": "Social-proof line under the stars.", "default": "12 000+ авторов"}, {"id": "cta", "type": "string", "role": "content", "label": "CTA", "description": "Label on the closing capsule.", "default": "Попробовать бесплатно"}, {"id": "f1", "type": "string", "role": "content", "label": "Feature 1", "description": "First feature, | breaks the line.", "default": "Снимаешь|на телефон"}, {"id": "f2", "type": "string", "role": "content", "label": "Feature 2", "description": "Second feature, | breaks the line.", "default": "ИИ|монтирует"}, {"id": "f3", "type": "string", "role": "content", "label": "Feature 3", "description": "Third feature, | breaks the line.", "default": "Выкладываешь|везде"}]'
+  data-composition-variables='[
+    {"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Wordmark at the top of the card.", "default": "MATINTELLECT", "maxLength": 12},
+    {"id": "proof", "type": "string", "role": "content", "label": "Proof line", "description": "Social-proof line under the stars.", "default": "12 000+ авторов", "maxLength": 28},
+    {"id": "cta", "type": "string", "role": "content", "label": "CTA", "description": "Label on the closing capsule.", "default": "Попробовать бесплатно", "maxLength": 28},
+    {"id": "f1", "type": "string", "role": "content", "label": "Feature 1", "description": "First feature, | breaks the line.", "default": "Снимаешь|на телефон", "maxLength": 28},
+    {"id": "f2", "type": "string", "role": "content", "label": "Feature 2", "description": "Second feature, | breaks the line.", "default": "ИИ|монтирует", "maxLength": 28},
+    {"id": "f3", "type": "string", "role": "content", "label": "Feature 3", "description": "Third feature, | breaks the line.", "default": "Выкладываешь|везде", "maxLength": 28}
+  ]'
 >
   <head>
     <meta charset="UTF-8" />

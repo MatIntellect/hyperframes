@@ -67,9 +67,9 @@
 <html
   lang="en"
   data-composition-variables='[
-    { "id": "direction", "type": "enum", "role": "content", "label": "Flip direction", "description": "Target end state the flip lands on.", "default": "on", "options": [{ "value": "on", "label": "Off → On" }, { "value": "off", "label": "On → Off" }] },
-    { "id": "label", "type": "string", "role": "content", "label": "Caption", "description": "Optional caption under the toggle. Blank hides the line.", "default": "Автосохранение" },
-    { "id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Toggle width as a percent of the host box width.", "default": 40, "min": 20, "max": 70, "step": 1, "unit": "%" }
+    {"id": "direction", "type": "enum", "role": "content", "label": "Flip direction", "description": "Target end state the flip lands on.", "default": "on", "options": [{"value": "on", "label": "Off → On"}, {"value": "off", "label": "On → Off"}]},
+    {"id": "label", "type": "string", "role": "content", "label": "Caption", "description": "Optional caption under the toggle. Blank hides the line.", "default": "Автосохранение", "maxLength": 16},
+    {"id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Toggle width as a percent of the host box width.", "default": 40, "min": 20, "max": 70, "step": 1, "unit": "%"}
   ]'
 >
   <head>

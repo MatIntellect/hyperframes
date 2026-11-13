@@ -22,7 +22,8 @@
       "role": "content",
       "label": "Text",
       "description": "Text displayed in the default centered card.",
-      "default": "Всегда в кадре"
+      "default": "Всегда в кадре",
+      "maxLength": 28
     },
     {
       "id": "intensity",
