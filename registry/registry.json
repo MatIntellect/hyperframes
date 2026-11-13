@@ -1580,6 +1580,14 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "curtain-reveal",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "cut-the-curve",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "dart-cursor",
       "type": "hyperframes:component"
     },
@@ -1613,6 +1621,10 @@
     },
     {
       "name": "facet-morph",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "fade-through",
       "type": "hyperframes:component"
     },
     {
@@ -1653,6 +1665,14 @@
     },
     {
       "name": "grid-card-assemble",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "grid-pixelate-wipe",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "halftone-dissolve",
       "type": "hyperframes:component"
     },
     {
@@ -1700,6 +1720,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "iris-reveal",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "kinetic-center-build",
       "type": "hyperframes:component"
     },
@@ -1744,6 +1768,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "match-cut",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "matrix-decode",
       "type": "hyperframes:component"
     },
@@ -1769,6 +1797,10 @@
     },
     {
       "name": "modal-morph",
+      "type": "hyperframes:component"
+    },
+    {
+      "name": "morph-swap",
       "type": "hyperframes:component"
     },
     {

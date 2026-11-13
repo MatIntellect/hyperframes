@@ -1,0 +1,43 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "match-cut",
+  "type": "hyperframes:component",
+  "title": "Match Cut",
+  "description": "A circle accelerates into a hard single-frame scene swap, matches the incoming circle exactly, and continues into a smaller resting pose.",
+  "tags": ["motion-primitive", "transition", "match-cut", "hard-cut", "continuity"],
+  "jobs": ["connect"],
+  "family": "transitions",
+  "profile": "transition",
+  "syncPoints": [
+    {
+      "id": "hard-cut",
+      "phase": "in",
+      "offset": 1.4
+    }
+  ],
+  "files": [
+    {
+      "path": "match-cut.html",
+      "target": "compositions/components/match-cut.html",
+      "type": "hyperframes:snippet"
+    }
+  ],
+  "variables": [
+    {
+      "id": "label_a",
+      "type": "string",
+      "role": "content",
+      "label": "Scene A label",
+      "description": "Text inside the outgoing button.",
+      "default": "Старт"
+    },
+    {
+      "id": "label_b",
+      "type": "string",
+      "role": "content",
+      "label": "Scene B label",
+      "description": "Result text revealed after the cut.",
+      "default": "Готово"
+    }
+  ]
+}
