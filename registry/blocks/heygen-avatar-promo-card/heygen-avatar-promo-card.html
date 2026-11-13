@@ -76,12 +76,12 @@
         width: 1080px;
         height: 1920px;
         overflow: hidden;
-        --apc-canvas: #0c1014;
-        --apc-ink: #f2f2f2;
-        --apc-muted: #8a8a90;
-        --apc-accent: #ff0000;
-        --apc-light-tile: #18181a;
-        --apc-dark-tile: #2e2e32;
+        --apc-canvas: var(--bg, #0c1014);
+        --apc-ink: var(--fg, #f2f2f2);
+        --apc-muted: var(--muted, #8a8a90);
+        --apc-accent: var(--accent, #ff0000);
+        --apc-light-tile: var(--surface, #18181a);
+        --apc-dark-tile: var(--border, #2e2e32);
       }
       .bgfill {
         position: absolute;
