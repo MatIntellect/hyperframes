@@ -114,6 +114,21 @@
       var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
         SURF = css.getPropertyValue("--surface").trim() || "#18181a",
         ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+      // the canvas glows take the theme colours with their own alpha: a probe gives the r,g,b once
+      // (the developers' way, halftone-dissolve.html:258-262)
+      function rgbOf(c) {
+        var p = document.createElement("i");
+        p.style.color = c;
+        root.appendChild(p);
+        var m = (getComputedStyle(p).color.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).join(",");
+        p.remove();
+        return m;
+      }
+      var ACC_RGB = rgbOf(ACC),
+        SURF_RGB = rgbOf(SURF);
+      function rgba(c, a) {
+        return "rgba(" + c + "," + a + ")";
+      }
 
       // раскладка: широкая – родная камера (отъезд от всего ноутбука); вертикаль – крупно правый верхний угол экрана
       var W = 1920,
@@ -205,6 +220,7 @@
         // envMapIntensity 0.08: the white bands of the environment map painted the metal floor light grey
         new THREE.MeshStandardMaterial({ color: bgCol, metalness: 0.9, roughness: 0.2, envMapIntensity: 0.08 }),
       );
+      
       floor.rotation.x = -PI / 2;
       floor.position.y = -2.5;
       scene.add(floor);
@@ -302,8 +318,8 @@
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, 1440, 900);
         var r1 = ctx.createRadialGradient(330, 760, 0, 330, 760, 760);
-        r1.addColorStop(0, "rgba(255,0,0,0.42)");
-        r1.addColorStop(1, "rgba(255,0,0,0)");
+        r1.addColorStop(0, rgba(ACC_RGB, 0.42));
+        r1.addColorStop(1, rgba(ACC_RGB, 0));
         ctx.fillStyle = r1;
         ctx.fillRect(0, 0, 1440, 900);
         var r2 = ctx.createRadialGradient(1180, 180, 0, 1180, 180, 620);
@@ -317,7 +333,7 @@
           ctx.beginPath();
           ctx.moveTo(-120, 560 + i * 70);
           ctx.bezierCurveTo(380, 400 + i * 60, 920, 780 + i * 40, 1560, 470 + i * 60);
-          ctx.strokeStyle = i % 2 ? "rgba(242,242,242," + (0.1 - i * 0.015) + ")" : "rgba(255,40,40," + (0.3 - i * 0.05) + ")";
+          ctx.strokeStyle = i % 2 ? "rgba(242,242,242," + (0.1 - i * 0.015) + ")" : rgba(ACC_RGB, 0.3 - i * 0.05);
           ctx.lineWidth = 70 - i * 12;
           ctx.stroke();
         }
@@ -371,8 +387,8 @@
         }
         glass(ctx, 138, 48, 112, 112, 18);
         var wg = ctx.createLinearGradient(138, 48, 250, 160);
-        wg.addColorStop(0, "rgba(255,0,0,0.42)");
-        wg.addColorStop(1, "rgba(24,24,26,0.2)");
+        wg.addColorStop(0, rgba(ACC_RGB, 0.42));
+        wg.addColorStop(1, rgba(SURF_RGB, 0.2));
         rr(ctx, 138, 48, 112, 112, 18);
         ctx.fillStyle = wg;
         ctx.fill();
@@ -428,7 +444,7 @@
           var sy = y + 70 + i * 34;
           if (i === 0) {
             rr(ctx, x + 16, sy - 17, 136, 26, 8);
-            ctx.fillStyle = "rgba(255,0,0,0.22)";
+            ctx.fillStyle = rgba(ACC_RGB, 0.22);
             ctx.fill();
           }
           roundImg(ctx, IC[s[1]], x + 28, sy - 14, 18, 18, 5);
