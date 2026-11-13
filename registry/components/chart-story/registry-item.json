@@ -65,8 +65,7 @@
       "role": "content",
       "label": "Data",
       "description": "Comma-separated numbers; the chart lands exactly on these values.",
-      "default": "12, 28, 45, 64",
-      "maxLength": 120
+      "default": "12, 28, 45, 64"
     },
     {
       "id": "labels",

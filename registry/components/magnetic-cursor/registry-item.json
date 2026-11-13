@@ -46,8 +46,7 @@
       "role": "content",
       "label": "Buttons visited",
       "description": "Comma-separated indexes 0-5: bold, italic, underline, link, list, image.",
-      "default": "0,3",
-      "maxLength": 120
+      "default": "0,3"
     },
     {
       "id": "press",

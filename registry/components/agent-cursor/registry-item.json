@@ -56,8 +56,7 @@
       "role": "layout",
       "label": "Click targets",
       "description": "Semicolon-separated x,y points in percent of the frame.",
-      "default": "25,47;76,30",
-      "maxLength": 120
+      "default": "25,47;76,30"
     }
   ]
 }

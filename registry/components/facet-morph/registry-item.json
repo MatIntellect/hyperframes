@@ -29,8 +29,7 @@
       "role": "content",
       "label": "Forms",
       "description": "Comma-separated silhouette sequence from blob, mark, badge.",
-      "default": "blob,mark,badge",
-      "maxLength": 120
+      "default": "blob,mark,badge"
     },
     {
       "id": "hold_last",
