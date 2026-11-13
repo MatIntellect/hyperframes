@@ -162,8 +162,8 @@
       #yccv-root.yccv-bottom #yccv-col {
         bottom: 560px;
       }
-      /* the comments fill the 780 field (montazher.md:22 "large, all the free space"): one or two comments set large,
-         three set medium so the longest words still end inside the 760 card */
+      /* the comments fill the 780 field (montazher.md:22 "large, all the free space"): large; medium (-fit) when the
+         large column would leave the field */
       #yccv-col {
         gap: 40px;
       }
@@ -192,29 +192,29 @@
         width: 40px;
         height: 40px;
       }
-      #yccv-root.yccv-n3 #yccv-col {
+      #yccv-root.yccv-fit #yccv-col {
         gap: 20px;
       }
-      #yccv-root.yccv-n3 .yccv-card {
+      #yccv-root.yccv-fit .yccv-card {
         gap: 24px;
       }
-      #yccv-root.yccv-n3 .yccv-av {
+      #yccv-root.yccv-fit .yccv-av {
         width: 88px;
         height: 88px;
         font-size: 40px;
       }
-      #yccv-root.yccv-n3 .yccv-user,
-      #yccv-root.yccv-n3 .yccv-time {
+      #yccv-root.yccv-fit .yccv-user,
+      #yccv-root.yccv-fit .yccv-time {
         font-size: 34px;
       }
-      #yccv-root.yccv-n3 .yccv-text {
+      #yccv-root.yccv-fit .yccv-text {
         font-size: 42px;
       }
-      #yccv-root.yccv-n3 .yccv-row {
+      #yccv-root.yccv-fit .yccv-row {
         margin-top: 10px;
         font-size: 30px;
       }
-      #yccv-root.yccv-n3 .yccv-row svg {
+      #yccv-root.yccv-fit .yccv-row svg {
         width: 32px;
         height: 32px;
       }
@@ -240,7 +240,19 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
         
-        root.classList.add("yccv-" + oneOf(V.placement, ["top", "center", "bottom"], "center"));
+        var placement = oneOf(V.placement, ["top", "center", "bottom"], "center");
+        root.classList.add("yccv-" + placement);
+        /* the comments set large; when the column is taller than its field (760 on top / bottom, 1180 centred) they set
+           medium. Measured once the face has loaded; render waits on buildReady (path-tracing.md:18) */
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["yt-comment-card-vertical-fit"] = Promise.all([
+          document.fonts.load('400 54px "Montserrat"'),
+          document.fonts.load('500 40px "Montserrat"'),
+        ]).then(function () {
+          var col = document.getElementById("yccv-col");
+          if (col.offsetHeight > (placement === "center" ? 1180 : 760)) root.classList.add("yccv-fit");
+        });
         
 
         var DEF = [
@@ -254,9 +266,6 @@
           var c = { user: get("user" + k, d[0]), time: get("time" + k, d[1]), text: get("text" + k, d[2]), likes: get("likes" + k, d[3]), avatar: get("avatar" + k, "") };
           if (c.user && c.text) comments.push(c);
         }
-        
-        if (comments.length === 3) root.classList.add("yccv-n3");
-        
         var reply = get("replyLabel", "") || "Ответить";
         var THUMB = '<svg viewBox="0 0 24 24"><path d="M7 11v9M7 11l3.2-6.4a2 2 0 0 1 3.6 1.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6a2 2 0 0 1-2 1.6H7M7 11H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/></svg>';
         /* YouTube's default avatars: a coloured circle with the first letter */

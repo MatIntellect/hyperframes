@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line wide, up to two lines vertical. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line; the vertical sets it smaller to keep a long headline on one line. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
     { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 32.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first row land, 2 the last row lands (rows between are spread evenly), 3 the list fades out (only when exit is fade). Empty keeps 0.3 and 0.25 s per row.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the list to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -159,7 +159,6 @@
         var titleEl = document.getElementById("msl-title");
         titleEl.textContent = title;
         if (!title) titleEl.style.display = "none";
-        
         var rows = String(typeof V.rows === "string" && V.rows.trim() ? V.rows : DEF)
           .split(";")
           .map(function (r) {

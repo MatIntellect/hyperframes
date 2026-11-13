@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1180 field (y 180-1360), up to 6 rows. top / bottom: the list on a brand card 780x760 at y 180-940 / 600-1360, up to 4 rows, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line wide, up to two lines vertical. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line; the vertical sets it smaller to keep a long headline on one line. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
     { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 32.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first row land, 2 the last row lands (rows between are spread evenly), 3 the list fades out (only when exit is fade). Empty keeps 0.3 and 0.25 s per row.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the list to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -192,33 +192,33 @@
           root.querySelector(".mslv-ground").remove();
           MAXROWS = 4;
         }
+        /* the headline stays on one line in the 780 column: the largest size up to the set one that fits, measured once
+           the display face has loaded (fitTextFontSize – runtimes.md:14, contributing.md:66), never under 28px
+           (vertical.md:18); render waits on buildReady (path-tracing.md:18) */
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["mk-specs-list-vertical-title"] = document.fonts
+          .load('700 100px "Bebas Neue"', String(V.title || "Что внутри"))
+          .then(function () {
+            var el = document.getElementById("mslv-title");
+            if (!el.textContent || !(window.__hyperframes && window.__hyperframes.fitTextFontSize)) return;
+            var cs = getComputedStyle(el);
+            var fit = window.__hyperframes.fitTextFontSize(el.textContent.toUpperCase(), {
+              fontFamily: cs.fontFamily,
+              fontWeight: 700,
+              maxWidth: el.clientWidth,
+              baseFontSize: parseFloat(cs.fontSize),
+              minFontSize: 28,
+              step: 1,
+            });
+            el.style.fontSize = fit.fontSize + "px";
+          });
         
         var DEF = "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз";
         var title = typeof V.title === "string" ? V.title : "Что внутри";
         var titleEl = document.getElementById("mslv-title");
         titleEl.textContent = title;
         if (!title) titleEl.style.display = "none";
-        
-        // the headline stays on one line in the 780 column: the largest size up to the set one that fits, measured once the
-        // display face has loaded (fitTextFontSize – runtimes.md:14, contributing.md:66), never under 28px (vertical.md:18);
-        // render waits on buildReady (path-tracing.md:18)
-        if (title && window.__hyperframes && window.__hyperframes.fitTextFontSize) {
-          var tcs = getComputedStyle(titleEl);
-          window.__hf = window.__hf || {};
-          window.__hf.buildReady = window.__hf.buildReady || {};
-          window.__hf.buildReady["mk-specs-list-vertical-title"] = document.fonts.load("700 100px " + tcs.fontFamily, title).then(function () {
-            var fit = window.__hyperframes.fitTextFontSize(title.toUpperCase(), {
-              fontFamily: tcs.fontFamily,
-              fontWeight: 700,
-              maxWidth: titleEl.clientWidth,
-              baseFontSize: parseFloat(tcs.fontSize),
-              minFontSize: 28,
-              step: 1,
-            });
-            titleEl.style.fontSize = fit.fontSize + "px";
-          });
-        }
-        
         var rows = String(typeof V.rows === "string" && V.rows.trim() ? V.rows : DEF)
           .split(";")
           .map(function (r) {

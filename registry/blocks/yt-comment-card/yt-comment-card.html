@@ -4,17 +4,17 @@
   data-composition-variables='[
     { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
     { "id": "time1", "type": "string", "role": "content", "label": "Comment 1 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "2 дня назад" },
-    { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "Как ты это смонтировал так быстро?" },
+    { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Как ты это смонтировал так быстро?" },
     { "id": "likes1", "type": "string", "role": "content", "label": "Comment 1 likes", "description": "Like count.", "maxLength": 8, "default": "47" },
     { "id": "avatar1", "type": "image", "role": "content", "label": "Comment 1 avatar", "description": "Round picture; empty draws a coloured circle with the first letter of the handle.", "default": "" },
     { "id": "user2", "type": "string", "role": "content", "label": "Comment 2 user", "description": "Handle of the second commenter. Empty hides the comment.", "maxLength": 20, "default": "@framerate" },
     { "id": "time2", "type": "string", "role": "content", "label": "Comment 2 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "1 день назад" },
-    { "id": "text2", "type": "string", "role": "content", "label": "Comment 2 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "Графика как у больших каналов, жду разбор" },
+    { "id": "text2", "type": "string", "role": "content", "label": "Comment 2 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Графика как у больших каналов, жду разбор" },
     { "id": "likes2", "type": "string", "role": "content", "label": "Comment 2 likes", "description": "Like count.", "maxLength": 8, "default": "12" },
     { "id": "avatar2", "type": "image", "role": "content", "label": "Comment 2 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
     { "id": "user3", "type": "string", "role": "content", "label": "Comment 3 user", "description": "Handle of the third commenter. Empty hides the comment.", "maxLength": 20, "default": "" },
     { "id": "time3", "type": "string", "role": "content", "label": "Comment 3 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "" },
-    { "id": "text3", "type": "string", "role": "content", "label": "Comment 3 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "" },
+    { "id": "text3", "type": "string", "role": "content", "label": "Comment 3 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "" },
     { "id": "likes3", "type": "string", "role": "content", "label": "Comment 3 likes", "description": "Like count.", "maxLength": 8, "default": "" },
     { "id": "avatar3", "type": "image", "role": "content", "label": "Comment 3 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
     { "id": "replyLabel", "type": "string", "role": "content", "label": "Reply label", "description": "Word after the like count.", "maxLength": 12, "default": "Ответить" },
@@ -212,7 +212,6 @@
           var c = { user: get("user" + k, d[0]), time: get("time" + k, d[1]), text: get("text" + k, d[2]), likes: get("likes" + k, d[3]), avatar: get("avatar" + k, "") };
           if (c.user && c.text) comments.push(c);
         }
-        
         var reply = get("replyLabel", "") || "Ответить";
         var THUMB = '<svg viewBox="0 0 24 24"><path d="M7 11v9M7 11l3.2-6.4a2 2 0 0 1 3.6 1.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6a2 2 0 0 1-2 1.6H7M7 11H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/></svg>';
         /* YouTube's default avatars: a coloured circle with the first letter */
