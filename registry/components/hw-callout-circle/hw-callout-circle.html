@@ -663,11 +663,28 @@
           .load('700 100px "Montserrat"', text + " " + CONFIG.label)
           .then(function () {
             var W = root.clientWidth;
+            // A side note needs the room beside the circle for its longest word (the note wraps by words,
+            // its type keeps its size): label left = 0.92 w + 82 of the circle box (hwCalloutBuild), and
+            // w = 1.785 tw + 0.286 th, so the phrase gets what is left, th taken at its largest (100 px).
+            var phraseMax = W * 0.55;
+            if (CONFIG.labelAt !== "below" && CONFIG.connector !== false && CONFIG.label) {
+              var box = document.getElementById("hw-co-demo");
+              var probe = document.createElement("span");
+              probe.className = "hw-co-label";
+              probe.style.visibility = "hidden";
+              box.appendChild(probe);
+              var noteW = 0;
+              CONFIG.label.split(/\s+/).forEach(function (word) {
+                probe.textContent = word;
+                noteW = Math.max(noteW, probe.offsetWidth);
+              });
+              box.removeChild(probe);
+              phraseMax = Math.min(phraseMax, ((W - 82 - noteW) / 0.92 - 0.286 * 100) / 1.785);
+            }
             var fit = window.__hyperframes.fitTextFontSize(text, {
               fontFamily: "Montserrat",
               fontWeight: 700,
-              // a side note needs the room beside the circle: the phrase takes 35 % of the width, not 55 %
-              maxWidth: W * (CONFIG.labelAt === "below" ? 0.55 : 0.35),
+              maxWidth: phraseMax,
               baseFontSize: Math.max(28, Math.round(Math.min(W * 0.11, 100))),
               minFontSize: 28,
               step: 1,
