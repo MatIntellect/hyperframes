@@ -122,7 +122,20 @@
           return w.toLowerCase().replace(/[^0-9a-zа-яё-]/gi, "");
         }
 
-        var FAINT = "rgb(138, 138, 144)";
+        // theme colours, resolved by a probe (the developers' way, halftone-dissolve.html:258-262): the faint words
+        // are --muted, they light up to --fg the developers' way (interpolate faint -> full, one hue); an accent word
+        // turns --accent in one step, with no grey-to-red blend in between
+        function tok(c) {
+          var p = document.createElement("i");
+          p.style.color = c;
+          box.appendChild(p);
+          var v = getComputedStyle(p).color;
+          p.remove();
+          return v;
+        }
+        var FAINT = tok("var(--muted, #8a8a90)"),
+          FULL = tok("var(--fg, #f2f2f2)"),
+          RED = tok("var(--accent, #ff0000)");
         var words = [];
         text.split(/\s+/).forEach(function (w, i) {
           if (i > 0) box.appendChild(document.createTextNode(" "));
@@ -131,7 +144,15 @@
           span.textContent = w;
           span.style.color = FAINT;
           box.appendChild(span);
-          words.push({ el: span, mix: gsap.utils.interpolate(FAINT, red.indexOf(bare(w)) >= 0 ? "rgb(255, 0, 0)" : "rgb(242, 242, 242)") });
+          words.push({
+            el: span,
+            mix:
+              red.indexOf(bare(w)) >= 0
+                ? function (f) {
+                    return f < 0.5 ? FAINT : RED;
+                  }
+                : gsap.utils.interpolate(FAINT, FULL),
+          });
         });
 
         var st = { _p: 0 };
