@@ -48,7 +48,7 @@
       "label": "Note",
       "description": "Callout label at the end of the connector. Empty draws the marker only.",
       "default": "главное в кадре",
-      "maxLength": 28
+      "maxLength": 16
     },
     {
       "id": "style",

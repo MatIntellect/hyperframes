@@ -52,7 +52,7 @@
       "label": "Note",
       "description": "The hand-written note on the connector. Empty hides it.",
       "default": "смотри сюда!",
-      "maxLength": 28
+      "maxLength": 16
     },
     {
       "id": "labelAt",

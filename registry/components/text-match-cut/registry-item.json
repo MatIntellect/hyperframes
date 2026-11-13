@@ -30,7 +30,7 @@
       "label": "Outgoing text",
       "description": "The line on screen before the cut.",
       "default": "Обычный монтаж",
-      "maxLength": 28
+      "maxLength": 24
     },
     {
       "id": "text_b",
@@ -39,7 +39,7 @@
       "label": "Incoming text",
       "description": "The line that continues the move after the cut.",
       "default": "Монтаж с ИИ",
-      "maxLength": 28
+      "maxLength": 24
     },
     {
       "id": "mode",

@@ -32,7 +32,7 @@
       "label": "CTA",
       "description": "Label on the closing capsule.",
       "default": "Попробовать бесплатно",
-      "maxLength": 28
+      "maxLength": 16
     },
     {
       "id": "f1",

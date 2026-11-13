@@ -52,7 +52,7 @@
       "label": "Label",
       "description": "Text displayed inside the badge.",
       "default": "Новое",
-      "maxLength": 28
+      "maxLength": 16
     }
   ]
 }

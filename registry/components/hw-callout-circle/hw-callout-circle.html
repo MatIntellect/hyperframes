@@ -2,12 +2,12 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное", "maxLength": 28},
-    {"id": "label", "type": "string", "role": "content", "label": "Note", "description": "The hand-written note on the connector. Empty hides it.", "default": "смотри сюда!", "maxLength": 28},
-    {"id": "labelAt", "type": "enum", "role": "layout", "label": "Note side", "description": "Where the connector and the note go: left, right or below.", "default": "below", "options": [{"value": "below", "label": "Below"}, {"value": "left", "label": "Left"}, {"value": "right", "label": "Right"}]},
-    {"id": "scribble", "type": "boolean", "role": "style", "label": "Scribble", "description": "Hatch fill inside the circle. Off by default: on a phrase it covers the letters.", "default": false},
-    {"id": "strokeType", "type": "enum", "role": "style", "label": "Stroke", "description": "Texture of the circle and connector: plain, soft, sharp or spray.", "default": "plain", "options": [{"value": "plain", "label": "Plain"}, {"value": "soft", "label": "Soft"}, {"value": "sharp", "label": "Sharp"}, {"value": "spray", "label": "Spray"}]},
-    {"id": "boil", "type": "enum", "role": "motion", "label": "Boil", "description": "Hand-drawn jitter: off, calm or lively.", "default": "calm", "options": [{"value": "off", "label": "Off"}, {"value": "calm", "label": "Calm"}, {"value": "lively", "label": "Lively"}]}
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное", "maxLength": 28 },
+    { "id": "label", "type": "string", "role": "content", "label": "Note", "description": "The hand-written note on the connector. Empty hides it.", "default": "смотри сюда!", "maxLength": 16 },
+    { "id": "labelAt", "type": "enum", "role": "layout", "label": "Note side", "description": "Where the connector and the note go: left, right or below.", "default": "below", "options": [{ "value": "below", "label": "Below" }, { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] },
+    { "id": "scribble", "type": "boolean", "role": "style", "label": "Scribble", "description": "Hatch fill inside the circle. Off by default: on a phrase it covers the letters.", "default": false },
+    { "id": "strokeType", "type": "enum", "role": "style", "label": "Stroke", "description": "Texture of the circle and connector: plain, soft, sharp or spray.", "default": "plain", "options": [{ "value": "plain", "label": "Plain" }, { "value": "soft", "label": "Soft" }, { "value": "sharp", "label": "Sharp" }, { "value": "spray", "label": "Spray" }] },
+    { "id": "boil", "type": "enum", "role": "motion", "label": "Boil", "description": "Hand-drawn jitter: off, calm or lively.", "default": "calm", "options": [{ "value": "off", "label": "Off" }, { "value": "calm", "label": "Calm" }, { "value": "lively", "label": "Lively" }] }
   ]'
 >
   <head>

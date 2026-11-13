@@ -84,7 +84,7 @@
       "label": "Correction",
       "description": "Mistyped word typed in place of the final word, then backspaced and corrected. Empty disables.",
       "default": "",
-      "maxLength": 28
+      "maxLength": 12
     },
     {
       "id": "cues",

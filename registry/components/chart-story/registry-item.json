@@ -91,7 +91,7 @@
       "label": "Unit",
       "description": "Suffix appended to every displayed value.",
       "default": "%",
-      "maxLength": 8
+      "maxLength": 4
     },
     {
       "id": "exit",

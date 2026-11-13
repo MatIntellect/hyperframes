@@ -20,7 +20,7 @@
       "label": "Value",
       "description": "The number itself. Every character becomes its own span, so the stagger still lands character by character.",
       "default": "5,7",
-      "maxLength": 12
+      "maxLength": 6
     },
     {
       "id": "unit",

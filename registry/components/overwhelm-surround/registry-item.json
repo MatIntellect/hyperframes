@@ -34,7 +34,7 @@
       "label": "Center label",
       "description": "Text inside the calm central subject. Blank hides the text.",
       "default": "Вы",
-      "maxLength": 16
+      "maxLength": 10
     },
     {
       "id": "intensity",

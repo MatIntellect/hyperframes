@@ -42,13 +42,13 @@
   data-composition-id="caret-swap"
   data-composition-duration="3.3333333333333335"
   data-composition-variables='[
-    {"id": "from_text", "type": "string", "role": "content", "label": "From text", "description": "The phrase covered by the expanding caret.", "default": "Снять ролик?", "maxLength": 28},
-    {"id": "to_text", "type": "string", "role": "content", "label": "To text", "description": "The replacement phrase, typed one character at a time.", "default": "Вот где все сдаются", "maxLength": 28},
-    {"id": "font_size", "type": "number", "role": "style", "label": "Font size", "description": "Maximum size in pixels. Both phrases shrink together to fit the host.", "default": 72, "min": 36, "max": 160, "step": 2, "unit": "px"},
-    {"id": "font_weight", "type": "enum", "role": "style", "label": "Font weight", "description": "Weight used by both phrases. Every option is included in the bundled Geist font.", "default": "400", "options": [{"value": "400", "label": "Regular"}, {"value": "500", "label": "Medium"}, {"value": "600", "label": "Semibold"}, {"value": "700", "label": "Bold"}]},
-    {"id": "color", "type": "string", "role": "style", "label": "Text color", "description": "Color of both phrases. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
-    {"id": "caret_color", "type": "string", "role": "style", "label": "Caret top", "description": "Top color of the caret gradient. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
-    {"id": "caret_color_end", "type": "string", "role": "style", "label": "Caret bottom", "description": "Bottom color of the caret gradient. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"}
+    {"id":"from_text","type":"string","role":"content","label":"From text","description":"The phrase covered by the expanding caret.","default":"Снять ролик?", "maxLength": 28},
+    {"id":"to_text","type":"string","role":"content","label":"To text","description":"The replacement phrase, typed one character at a time.","default":"Вот где все сдаются", "maxLength": 28},
+    {"id":"font_size","type":"number","role":"style","label":"Font size","description":"Maximum size in pixels. Both phrases shrink together to fit the host.","default":72,"min":36,"max":160,"step":2,"unit":"px"},
+    {"id":"font_weight","type":"enum","role":"style","label":"Font weight","description":"Weight used by both phrases. Every option is included in the bundled Geist font.","default":"400","options":[{"value":"400","label":"Regular"},{"value":"500","label":"Medium"},{"value":"600","label":"Semibold"},{"value":"700","label":"Bold"}]},
+    {"id":"color","type":"string","role":"style","label":"Text color","description":"Color of both phrases. Any CSS colour; by default the theme token --fg.","default":"var(--fg, #f2f2f2)"},
+    {"id":"caret_color","type":"string","role":"style","label":"Caret top","description":"Top color of the caret gradient. Any CSS colour; by default the theme token --accent.","default":"var(--accent, #ff0000)"},
+    {"id":"caret_color_end","type":"string","role":"style","label":"Caret bottom","description":"Bottom color of the caret gradient. Any CSS colour; by default the theme token --accent.","default":"var(--accent, #ff0000)"}
   ]'
 >
   <head>

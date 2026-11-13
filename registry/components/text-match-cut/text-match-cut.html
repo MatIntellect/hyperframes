@@ -48,11 +48,13 @@
   data-composition-id="text-match-cut"
   data-composition-duration="3"
   data-composition-variables='[
-    {"id": "text_a", "type": "string", "role": "content", "label": "Outgoing text", "description": "The line on screen before the cut.", "default": "Обычный монтаж", "maxLength": 28},
-    {"id": "text_b", "type": "string", "role": "content", "label": "Incoming text", "description": "The line that continues the move after the cut.", "default": "Монтаж с ИИ", "maxLength": 28},
-    {"id": "mode", "type": "enum", "role": "style", "label": "Move", "description": "Which property carries the cut. Both texts ride the same curve.", "default": "scale-down", "options": [{"value": "scale-down", "label": "Scale down (tutorial)"}, {"value": "scale-up", "label": "Scale up"}, {"value": "tracking-in", "label": "Tracking in"}, {"value": "slide-left", "label": "Slide left"}, {"value": "slide-right", "label": "Slide right"}, {"value": "slide-up", "label": "Slide up"}, {"value": "slide-down", "label": "Slide down"}]},
-    {"id": "sweep", "type": "enum", "role": "style", "label": "Gradient sweep", "description": "Brand-red bar sweeping through the glyphs around the cut.", "default": "on", "options": [{"value": "on", "label": "On"}, {"value": "off", "label": "Off"}]},
-    {"id": "background", "type": "enum", "role": "style", "label": "Background", "description": "A dark brand-red glow from below, or transparent so the host shows through.", "default": "transparent", "options": [{"value": "glow", "label": "Glow"}, {"value": "transparent", "label": "Transparent"}]}
+    { "id": "text_a", "type": "string", "role": "content", "label": "Outgoing text", "description": "The line on screen before the cut.", "default": "Обычный монтаж", "maxLength": 24 },
+    { "id": "text_b", "type": "string", "role": "content", "label": "Incoming text", "description": "The line that continues the move after the cut.", "default": "Монтаж с ИИ", "maxLength": 24 },
+    { "id": "mode", "type": "enum", "role": "style", "label": "Move", "description": "Which property carries the cut. Both texts ride the same curve.", "default": "scale-down", "options": [
+      { "value": "scale-down", "label": "Scale down (tutorial)" }, { "value": "scale-up", "label": "Scale up" }, { "value": "tracking-in", "label": "Tracking in" },
+      { "value": "slide-left", "label": "Slide left" }, { "value": "slide-right", "label": "Slide right" }, { "value": "slide-up", "label": "Slide up" }, { "value": "slide-down", "label": "Slide down" } ] },
+    { "id": "sweep", "type": "enum", "role": "style", "label": "Gradient sweep", "description": "Brand-red bar sweeping through the glyphs around the cut.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] },
+    { "id": "background", "type": "enum", "role": "style", "label": "Background", "description": "A dark brand-red glow from below, or transparent so the host shows through.", "default": "transparent", "options": [{ "value": "glow", "label": "Glow" }, { "value": "transparent", "label": "Transparent" }] }
   ]'
 >
   <head>
@@ -296,7 +298,10 @@
                 var fit = window.__hyperframes.fitTextFontSize(longest, {
                   fontFamily: "Montserrat",
                   fontWeight: 450,
-                  maxWidth: root.clientWidth * 0.92,
+                  // fit the widest moment: scale modes enter at up to 1.7x
+                  maxWidth:
+                    (root.clientWidth * 0.92) /
+                    (mode.prop === "scale" ? Math.max(mode.v0, mode.v1) : 1),
                   baseFontSize: Math.max(
                     28,
                     Math.round(Math.min(root.clientWidth, root.clientHeight) * 0.082),
