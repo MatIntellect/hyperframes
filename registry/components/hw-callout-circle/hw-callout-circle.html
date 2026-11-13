@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное", "maxLength": 28 },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "The phrase that gets circled.", "default": "Главное", "maxLength": 12 },
     { "id": "label", "type": "string", "role": "content", "label": "Note", "description": "The hand-written note on the connector. Empty hides it.", "default": "смотри сюда!", "maxLength": 16 },
     { "id": "labelAt", "type": "enum", "role": "layout", "label": "Note side", "description": "Where the connector and the note go: left, right or below.", "default": "below", "options": [{ "value": "below", "label": "Below" }, { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] },
     { "id": "scribble", "type": "boolean", "role": "style", "label": "Scribble", "description": "Hatch fill inside the circle. Off by default: on a phrase it covers the letters.", "default": false },
@@ -666,7 +666,8 @@
             var fit = window.__hyperframes.fitTextFontSize(text, {
               fontFamily: "Montserrat",
               fontWeight: 700,
-              maxWidth: W * 0.55,
+              // a side note needs the room beside the circle: the phrase takes 35 % of the width, not 55 %
+              maxWidth: W * (CONFIG.labelAt === "below" ? 0.55 : 0.35),
               baseFontSize: Math.max(28, Math.round(Math.min(W * 0.11, 100))),
               minFontSize: 28,
               step: 1,

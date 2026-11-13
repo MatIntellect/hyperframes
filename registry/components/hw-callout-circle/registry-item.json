@@ -43,7 +43,7 @@
       "label": "Text",
       "description": "The phrase that gets circled.",
       "default": "Главное",
-      "maxLength": 28
+      "maxLength": 12
     },
     {
       "id": "label",
