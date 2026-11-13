@@ -40,7 +40,7 @@
       "type": "number",
       "role": "motion",
       "label": "Split point",
-      "description": "How far across the plate the edge stops to hold the comparison, before it commits and takes the rest.",
+      "description": "How far across the plate the edge stops to hold the comparison, before it commits and takes the rest. With labels on it is held where both captions fit their halves.",
       "default": 62,
       "min": 25,
       "max": 85,

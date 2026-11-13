@@ -51,8 +51,8 @@
   data-composition-duration="4"
   data-composition-variables='[
     {"id": "axis", "type": "enum", "role": "style", "label": "Axis", "description": "rows smears arrival across horizontal slices; cols across vertical slices.", "default": "rows", "options": [{"value": "rows", "label": "Rows"}, {"value": "cols", "label": "Columns"}]},
-    {"id": "spread", "type": "number", "role": "timing", "label": "Spread", "description": "Maximum sampling offset in seconds across the frame; larger smears further through time.", "default": 0.45},
-    {"id": "resolve_at", "type": "number", "role": "timing", "label": "Resolve at", "description": "Seconds from mount start when the offsets start collapsing to zero. Clamped so the collapse and any exit stay inside the clip.", "default": 2.2},
+    {"id": "spread", "type": "number", "role": "timing", "label": "Spread", "description": "Maximum sampling offset in seconds across the frame; larger smears further through time.", "default": 0.45, "min": 0.1, "max": 1.2, "step": 0.05, "unit": "s"},
+    {"id": "resolve_at", "type": "number", "role": "timing", "label": "Resolve at", "description": "Seconds from mount start when the offsets start collapsing to zero. Clamped so the collapse and any exit stay inside the clip (2.85 s at the 4 s default length).", "default": 2.2, "min": 0.4, "max": 2.85, "step": 0.05, "unit": "s"},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the resolved mark holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >

@@ -34,7 +34,8 @@
     - look (warm-cinematic | cool-teal | bleach-bypass, default warm-cinematic): the grade the
       upper copy carries, and the label printed over it. All three are real grading blocks
       handed to the shader, not CSS filters.
-    - split (25 to 85, default 62, percent of the plate width): where the edge stops to hold
+    - split (25 to 85, default 62, percent of the plate width): where the edge stops to hold (with labels on,
+      held where both captions fit their halves)
       the comparison before it commits and takes the rest.
     - edge (hairline | bold | hidden, default hairline): the divider line riding the wipe.
       hidden removes it, so the grade arrives with no visible seam.
@@ -49,7 +50,7 @@
   lang="en"
   data-composition-variables='[
     { "id": "look", "type": "enum", "role": "style", "label": "Look", "description": "Grade carried by the upper copy, and the label printed over it. All three are real grading blocks handed to the shader, not CSS filters.", "default": "warm-cinematic", "options": [{ "value": "warm-cinematic", "label": "Warm Cinematic" }, { "value": "cool-teal", "label": "Cool Teal" }, { "value": "bleach-bypass", "label": "Bleach Bypass" }] },
-    { "id": "split", "type": "number", "role": "motion", "label": "Split point", "description": "How far across the plate the edge stops to hold the comparison, before it commits and takes the rest.", "default": 62, "min": 25, "max": 85, "step": 1, "unit": "%" },
+    { "id": "split", "type": "number", "role": "motion", "label": "Split point", "description": "How far across the plate the edge stops to hold the comparison, before it commits and takes the rest. With labels on it is held where both captions fit their halves.", "default": 62, "min": 25, "max": 85, "step": 1, "unit": "%" },
     { "id": "edge", "type": "enum", "role": "style", "label": "Edge", "description": "The divider line riding the wipe. Hidden drops it entirely so the grade arrives with no seam.", "default": "hairline", "options": [{ "value": "hairline", "label": "Hairline" }, { "value": "bold", "label": "Bold" }, { "value": "hidden", "label": "Hidden" }] },
     { "id": "labels", "type": "enum", "role": "style", "label": "Labels", "description": "Show or hide the two captions naming each half of the plate.", "default": "on", "options": [{ "value": "on", "label": "Show" }, { "value": "off", "label": "Hide" }] }
   ]'
@@ -422,6 +423,17 @@
             tagBefore.style.textAlign = "right";
 
             tagAfter.textContent = LOOK.label;
+            /* With captions on, the hold point keeps both inside their halves: at 25 or 85 the
+               edge cut a caption in two (second head, 040). Deterministic width from the glyph
+               count (uppercase Montserrat 700 with 0.06em tracking stays under 0.8em a glyph). */
+            if (LABELS_ON) {
+              var capW = function (el) {
+                return Array.from(el.textContent).length * TAG * 0.8;
+              };
+              var splitLo = ((PAD * 2 + capW(tagAfter)) / PW) * 100;
+              var splitHi = 100 - ((PAD * 2 + capW(tagBefore)) / PW) * 100;
+              if (splitLo <= splitHi) SPLIT = Math.min(splitHi, Math.max(splitLo, SPLIT));
+            }
             edge.style.width = EDGE_WIDTHS[EDGE];
             /* The edge also casts a shadow, so zero width alone would leave a smudge. */
             if (EDGE === "hidden") edge.style.display = "none";

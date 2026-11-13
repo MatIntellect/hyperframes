@@ -284,7 +284,7 @@
               else target.rect(x, y, tile, tile);
               target.fill();
               target.fillStyle = resolveColor("var(--fg, #f2f2f2)", "#f2f2f2");
-              target.font = "600 " + Math.round(m * 0.3) + "px " + monoFamily;
+              target.font = "600 " + Math.round(m * 0.7) + "px " + monoFamily;
               target.textAlign = "center";
               target.textBaseline = "middle";
               target.fillText("М", w / 2, h / 2 + m * 0.012);
@@ -461,7 +461,9 @@
                   var x1 = Math.min(rw, Math.round((cx + 1) * cell * rasterScale));
                   var y1 = Math.min(rh, Math.round((cy + 1) * cell * rasterScale));
                   var luma = cellLuma(x0, Math.min(y0, rh), x1, Math.min(y1, rh));
-                  var idx = Math.round(luma * (GN - 1));
+                  // Threshold, not rounding: the brand background (luma ~0.06) rounded up to the
+                  // second glyph and carpeted the frame in dots (second head, 040).
+                  var idx = Math.min(GN - 1, Math.floor(luma * GN));
                   if (idx <= 0 && glyphs[0] === " ") continue;
                   var alpha = (0.3 + 0.7 * luma) * fade;
                   if (shimmerAmp > 0) {
