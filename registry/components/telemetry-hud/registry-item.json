@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Telemetry HUD",
   "description": "Quiet debug-HUD readouts frame a slotted subject: corner brackets draw on, label:value lines tick their values on cues, one readout emphasized in accent. The subject never moves; the HUD breathes zero.",
-  "tags": ["motion-primitive", "product-demo", "hud", "telemetry", "deterministic"],
+  "tags": ["motion-primitive", "product-demo", "hud", "telemetry", "deterministic", "vertical"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "holdable",

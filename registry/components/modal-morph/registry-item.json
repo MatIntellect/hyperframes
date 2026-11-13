@@ -11,7 +11,8 @@
     "shared-element",
     "modal",
     "deterministic",
-    "experiment"
+    "experiment",
+    "vertical"
   ],
   "jobs": ["demonstrate"],
   "family": "structure",

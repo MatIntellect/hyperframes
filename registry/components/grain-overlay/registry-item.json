@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Grain Overlay",
   "description": "Animated film grain texture overlay using CSS keyframes — adds warmth and analog character to any composition",
-  "tags": ["texture", "grain", "overlay", "film"],
+  "tags": ["texture", "grain", "overlay", "film", "vertical"],
   "files": [
     {
       "path": "grain-overlay.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Type Match Cut",
   "description": "A headline splits vertically around an incoming panel, which grows from the negative space and takes the frame as the words exit through opposite edges.",
-  "tags": ["motion-primitive", "transition", "typography", "match-cut", "continuity"],
+  "tags": ["motion-primitive", "transition", "typography", "match-cut", "continuity", "vertical"],
   "jobs": ["bridge"],
   "family": "transitions",
   "profile": "match-cut",

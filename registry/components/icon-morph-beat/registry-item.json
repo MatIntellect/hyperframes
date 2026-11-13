@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Icon Morph Beat",
   "description": "Icon morph beat for vertical reels: one icon on a brand card holds its before state, morphs into its after state (mic, play or lock to check or unlock) while turning brand red, then marks completion with a small pulse and halo. The icon pair is a field. Brand palette, sized for the 780 px graphics field.",
-  "tags": ["motion-primitive", "product-demo", "icon", "morph", "state-change", "completion"],
+  "tags": [
+    "motion-primitive",
+    "product-demo",
+    "icon",
+    "morph",
+    "state-change",
+    "completion",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "state-change",

@@ -10,7 +10,8 @@
     "particles",
     "canvas",
     "deterministic",
-    "experiment"
+    "experiment",
+    "vertical"
   ],
   "jobs": ["emphasize"],
   "family": "text-effects",

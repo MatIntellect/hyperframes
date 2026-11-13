@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Hairline Arc Gauge",
   "description": "Hairline circular gauge filling the host box: the arc draws on to a value while the centred number counts up, a small label under it.",
-  "tags": ["data-viz", "gauge", "minimal"],
+  "tags": ["data-viz", "gauge", "minimal", "vertical"],
   "files": [
     {
       "path": "mk-usage-arc.html",

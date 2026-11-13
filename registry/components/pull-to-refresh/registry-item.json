@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Pull to Refresh",
   "description": "A mobile list pulls through nonlinear rubber-band resistance, arms at a threshold, commits to a bounded loading indicator, then snaps exactly back to rest.",
-  "tags": ["pointer", "pointers", "mobile", "gesture", "interaction", "refresh", "demonstrate"],
+  "tags": [
+    "pointer",
+    "pointers",
+    "mobile",
+    "gesture",
+    "interaction",
+    "refresh",
+    "demonstrate",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "pointers",
   "profile": "interaction",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "CTA Lockup",
   "description": "A canonical closing lockup that reveals an action line, pops in an accent CTA capsule, settles supporting microcopy, and holds with confidence.",
-  "tags": ["motion-primitive", "ui-props", "cta", "end-card", "lockup", "ask"],
+  "tags": ["motion-primitive", "ui-props", "cta", "end-card", "lockup", "ask", "vertical"],
   "jobs": ["ask"],
   "family": "ui-props",
   "profile": "holdable",

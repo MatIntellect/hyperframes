@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Caret Swap",
   "description": "A gradient caret expands over one phrase, collapses to the left, then types its replacement with a blinking caret.",
-  "tags": ["motion-primitive", "text-effects", "typography", "swap", "typewriter", "remocn-port"],
+  "tags": [
+    "motion-primitive",
+    "text-effects",
+    "typography",
+    "swap",
+    "typewriter",
+    "remocn-port",
+    "vertical"
+  ],
   "jobs": ["emphasize"],
   "family": "text-effects",
   "profile": "caret-swap",

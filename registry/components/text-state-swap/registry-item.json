@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Text State Swap",
   "description": "A text state swap primitive with outgoing blur and incoming lift. Mount it inside a clip with data-composition-id=\"text-state-swap\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "text", "swap"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "text",
+    "swap",
+    "vertical"
+  ],
   "files": [
     {
       "path": "text-state-swap.html",

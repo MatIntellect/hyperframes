@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Panel Reveal",
   "description": "Panel reveal for vertical reels: a titled card opens its body by height while the lines fade in. Title, width and reveal style are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"panel-reveal\": its own timeline nests there.",
-  "tags": ["transition-primitive", "transitions-dev-port", "panel", "reveal"],
+  "tags": ["transition-primitive", "transitions-dev-port", "panel", "reveal", "vertical"],
   "files": [
     {
       "path": "panel-reveal.html",

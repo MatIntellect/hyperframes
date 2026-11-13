@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Hand-Drawn Arrow",
   "description": "A hand-drawn arrow that draws on and boils, rising from below-left to one phrase: straight, gentle or swoop bend, plain, soft, sharp or spray line. Ships the hw-boil and hw-arrow helpers for hosts that point at their own content.",
-  "tags": ["handwritten", "annotation", "arrow", "overlay"],
+  "tags": ["handwritten", "annotation", "arrow", "overlay", "vertical"],
   "files": [
     {
       "path": "hw-arrow.html",

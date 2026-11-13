@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Avatar Cloud",
   "description": "Lettermark avatars populate a loose elliptical cloud while fine SVG links draw between the community and its central proof label.",
-  "tags": ["effects", "avatars", "community", "network", "social-proof", "prove"],
+  "tags": ["effects", "avatars", "community", "network", "social-proof", "prove", "vertical"],
   "jobs": ["prove"],
   "family": "effects",
   "profile": "holdable",

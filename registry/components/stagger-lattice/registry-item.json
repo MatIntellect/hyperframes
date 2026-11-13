@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Stagger Lattice",
   "description": "Stagger lattice for vertical reels: a five-row grid of light tiles rises in a wave across a dark brand panel. Brand palette, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"stagger-lattice\": its own timeline nests there.",
-  "tags": ["advanced-motion", "anime-inspired", "hyperframes-native"],
+  "tags": ["advanced-motion", "anime-inspired", "hyperframes-native", "vertical"],
   "files": [
     {
       "path": "stagger-lattice.html",

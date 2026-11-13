@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Screen Flow Carousel",
   "description": "Screen flow carousel for vertical reels: two to five app-screen skeletons slide through a centred stage one by one, the active screen ringed in brand red with a Montserrat caption under it. Screens count, captions and cues are fields; captions wrap instead of being cut. Brand palette, sized for the 780 px graphics field.",
-  "tags": ["product-demo", "feature-tour", "carousel", "rail", "slot", "screens"],
+  "tags": ["product-demo", "feature-tour", "carousel", "rail", "slot", "screens", "vertical"],
   "jobs": ["feature-tour"],
   "family": "product-demo",
   "profile": "carousel",

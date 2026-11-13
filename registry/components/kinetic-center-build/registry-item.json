@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Kinetic Center Build",
   "description": "Words enter from the right and push the growing phrase left until the final line locks centered.",
-  "tags": ["motion-primitive", "text-effects", "kinetic-type", "reveal", "remocn-port"],
+  "tags": ["motion-primitive", "text-effects", "kinetic-type", "reveal", "remocn-port", "vertical"],
   "jobs": ["reveal"],
   "family": "text-effects",
   "profile": "build",

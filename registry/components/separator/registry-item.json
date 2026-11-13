@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Separator",
   "description": "A structural rule (2, 4 or 8px) spanning its host box, horizontal or vertical, with a seek-safe progress reveal in muted grey or brand red. Mount it inside a clip with data-composition-id=\"separator\": its own timeline nests there.",
-  "tags": ["video-primitive", "separator", "layout"],
+  "tags": ["video-primitive", "separator", "layout", "vertical"],
   "files": [
     {
       "path": "separator.html",

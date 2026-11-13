@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Wordmark Tiles",
   "description": "A wordmark resolves from deterministic color noise into correctly cropped glyph tiles through a spatially modulated GSAP wave.",
-  "tags": ["typography", "wordmark", "tiles", "raster", "reveal"],
+  "tags": ["typography", "wordmark", "tiles", "raster", "reveal", "vertical"],
   "jobs": ["reveal"],
   "family": "typography",
   "profile": "holdable",

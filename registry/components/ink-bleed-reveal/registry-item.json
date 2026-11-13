@@ -11,7 +11,8 @@
     "gooey",
     "svg-filter",
     "deterministic",
-    "experiment"
+    "experiment",
+    "vertical"
   ],
   "jobs": ["reveal"],
   "family": "texture",

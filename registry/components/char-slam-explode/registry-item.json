@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Char Slam Explode",
   "description": "Headline glyphs hold in a deterministic scatter, then reassemble with an overshooting slam and a three-frame landing shake.",
-  "tags": ["motion-primitive", "typography", "text-treatment", "scatter", "slam", "impact"],
+  "tags": [
+    "motion-primitive",
+    "typography",
+    "text-treatment",
+    "scatter",
+    "slam",
+    "impact",
+    "vertical"
+  ],
   "jobs": ["emphasize"],
   "family": "typography",
   "profile": "impact",

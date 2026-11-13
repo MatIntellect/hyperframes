@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "SVG Mask Reveal",
   "description": "A soft token-colored sweep reveals media only through an editable SVG wordmark mask.",
-  "tags": ["effect", "svg", "mask", "wordmark", "reveal", "exhibit"],
+  "tags": ["effect", "svg", "mask", "wordmark", "reveal", "exhibit", "vertical"],
   "jobs": ["exhibit"],
   "family": "effects",
   "profile": "burst",

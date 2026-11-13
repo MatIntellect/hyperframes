@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Morph Text",
   "description": "Gooey text morph — cycles through an editable word list using SVG threshold + GSAP-driven blur for a fluid, satisfying transition effect",
-  "tags": ["text", "text-effect", "typography", "morph", "gooey", "kinetic", "animation"],
+  "tags": [
+    "text",
+    "text-effect",
+    "typography",
+    "morph",
+    "gooey",
+    "kinetic",
+    "animation",
+    "vertical"
+  ],
   "files": [
     {
       "path": "morph-text.html",

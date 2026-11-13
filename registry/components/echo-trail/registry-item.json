@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Echo Trail",
   "description": "A moving element renders with N ghosted copies of itself at t minus i times delta, opacity stepped down per ghost; one traversal, echoes collapsing into the settled element at rest.",
-  "tags": ["motion-primitive", "demonstrate", "trail", "onion-skin", "ghosts", "deterministic"],
+  "tags": [
+    "motion-primitive",
+    "demonstrate",
+    "trail",
+    "onion-skin",
+    "ghosts",
+    "deterministic",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "demonstrate",
   "profile": "onion-skin",

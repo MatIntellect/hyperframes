@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Grade Split Reveal",
   "description": "The same picture twice, one flat and one finished, with a hard edge sweeping between them. It stops in the middle long enough to compare, then commits and the graded look takes the frame. Both looks are real HyperFrames color grading run through the WebGL shader, so the preview and the render match.",
-  "tags": ["color-grading", "media", "compare", "reveal", "motion-primitive", "grade"],
+  "tags": ["color-grading", "media", "compare", "reveal", "motion-primitive", "grade", "vertical"],
   "files": [
     {
       "path": "grade-split-reveal.html",

@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Ticker Takeover",
   "description": "A mono ticker rolls through options, locks on a final word with an accent flash, and promotes it into a full-frame headline.",
-  "tags": ["motion-primitive", "typography", "ticker", "slot-machine", "headline", "reveal"],
+  "tags": [
+    "motion-primitive",
+    "typography",
+    "ticker",
+    "slot-machine",
+    "headline",
+    "reveal",
+    "vertical"
+  ],
   "jobs": ["reveal"],
   "family": "typography",
   "profile": "kinetic",

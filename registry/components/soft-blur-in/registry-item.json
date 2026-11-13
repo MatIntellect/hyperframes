@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Soft Blur In",
   "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. A soft opacity, blur, and lift reveal for headlines, captions, and product UI callouts",
-  "tags": ["motion-primitive", "text", "reveal", "blur"],
+  "tags": ["motion-primitive", "text", "reveal", "blur", "vertical"],
   "files": [
     {
       "path": "soft-blur-in.html",

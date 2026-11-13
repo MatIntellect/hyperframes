@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Device Frame Stage",
   "description": "A phone or tablet mockup staged as a physical scene prop with a screen slot for arbitrary reconstructed UI, rising onto the stage, settling, and holding an idle float",
-  "tags": ["prop", "device", "mobile", "tablet", "ui-props", "holdable"],
+  "tags": ["prop", "device", "mobile", "tablet", "ui-props", "holdable", "vertical"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "holdable",

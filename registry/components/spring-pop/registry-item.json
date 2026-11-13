@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Spring Pop",
   "description": "Spring pop for vertical reels: one brand-card badge with a red dot and a short Montserrat label arrives from scale 0.9 with a restrained back.out overshoot and settles at full size. Label, overshoot and starting scale are fields. Sized for the 780 px graphics field.",
-  "tags": ["motion-primitive", "effects", "spring", "overshoot", "pop", "reveal"],
+  "tags": ["motion-primitive", "effects", "spring", "overshoot", "pop", "reveal", "vertical"],
   "jobs": ["reveal"],
   "family": "effects",
   "profile": "burst",

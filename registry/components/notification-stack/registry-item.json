@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Notification Stack",
   "description": "1 to 5 token notification cards slide-settle into a vertical stack on cues, newest on top; one card grows slightly and brightens as the focus while the rest dim by position.",
-  "tags": ["motion-primitive", "product-demo", "notification", "stack", "stagger"],
+  "tags": ["motion-primitive", "product-demo", "notification", "stack", "stagger", "vertical"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "stack",

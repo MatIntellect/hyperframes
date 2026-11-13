@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Sticky Mock Swap",
   "description": "A pinned product mock cross-fades through accent-tinted feature states while matching captions rise, hold, and exit beside it.",
-  "tags": ["motion-primitive", "product-demo", "sticky", "mock", "crossfade", "feature-tour"],
+  "tags": [
+    "motion-primitive",
+    "product-demo",
+    "sticky",
+    "mock",
+    "crossfade",
+    "feature-tour",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "sticky-swap",

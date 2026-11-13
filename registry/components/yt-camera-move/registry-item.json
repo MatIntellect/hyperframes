@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Camera Punch-In",
   "description": "Dynamic zoom, slide, and 3D tilt-pan helpers for any wrapper (video, include, card) with cubic-easing defaults and an edge-defocus pulse overlay",
-  "tags": ["camera", "zoom", "effect", "creator"],
+  "tags": ["camera", "zoom", "effect", "creator", "vertical"],
   "files": [
     {
       "path": "yt-camera-move.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Multi Device Splay",
   "description": "Multi-device splay: a monitor, a tablet and a phone fan out around one product, each showing a dark brand skeleton of the same app suited to its form factor, with one brand-red accent. In a portrait field (vertical reel) the fan restacks: monitor on top, tablet and phone side by side below; in a landscape field the three fan out in a row.",
-  "tags": ["motion-primitive", "device", "phone", "tablet", "desktop", "splay"],
+  "tags": ["motion-primitive", "device", "phone", "tablet", "desktop", "splay", "vertical"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "holdable",

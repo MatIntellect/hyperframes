@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Push In",
   "description": "A centered headline gains focus through one slow, continuous camera push and a gentle fade out.",
-  "tags": ["motion-primitive", "camera", "push-in", "focus", "emphasize", "holdable"],
+  "tags": ["motion-primitive", "camera", "push-in", "focus", "emphasize", "holdable", "vertical"],
   "jobs": ["emphasize"],
   "family": "camera",
   "profile": "holdable",

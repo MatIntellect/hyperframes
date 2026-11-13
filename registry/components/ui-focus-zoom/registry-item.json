@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "UI Focus Zoom",
   "description": "A full app surface establishes with one settle, then the camera zooms and pans to an anchored region on its cue and holds the zoomed state, with an optional soft focus halo at the anchor. The surface is a slot with a token-styled skeleton default.",
-  "tags": ["camera", "product-demo", "zoom", "focus", "pan", "slot", "servo"],
+  "tags": ["camera", "product-demo", "zoom", "focus", "pan", "slot", "servo", "vertical"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "camera",

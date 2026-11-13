@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Velocity Throw Snap",
   "description": "A five-shot rail whips past on a fast decaying curve, then overshoots and snaps the selected hero shot exactly to center.",
-  "tags": ["motion-primitive", "feature-tour", "rail", "velocity", "throw", "snap", "physics"],
+  "tags": [
+    "motion-primitive",
+    "feature-tour",
+    "rail",
+    "velocity",
+    "throw",
+    "snap",
+    "physics",
+    "vertical"
+  ],
   "jobs": ["exhibit"],
   "family": "feature-tour",
   "profile": "kinetic",

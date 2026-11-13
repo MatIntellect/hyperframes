@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Curtain Reveal",
   "description": "Two pleated stage curtains gather outward from center, the way real velvet bunches at the tieback, revealing the stage underneath. A static pelmet frames the top; a soft spotlight can bloom in as they part.",
-  "tags": ["curtain", "stage reveal", "transition", "motion-primitive"],
+  "tags": ["curtain", "stage reveal", "transition", "motion-primitive", "vertical"],
   "files": [
     {
       "path": "curtain-reveal.html",

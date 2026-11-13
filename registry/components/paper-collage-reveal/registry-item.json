@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Paper Collage Reveal",
   "description": "A scrapbook patchwork of torn paper scraps, each with its own texture and tilt, flutters away in a staggered scatter to reveal the content underneath.",
-  "tags": ["collage", "scrapbook", "torn paper", "reveal", "transition", "motion-primitive"],
+  "tags": [
+    "collage",
+    "scrapbook",
+    "torn paper",
+    "reveal",
+    "transition",
+    "motion-primitive",
+    "vertical"
+  ],
   "files": [
     {
       "path": "paper-collage-reveal.html",

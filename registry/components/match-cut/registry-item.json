@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Match Cut",
   "description": "A circle accelerates into a hard single-frame scene swap, matches the incoming circle exactly, and continues into a smaller resting pose.",
-  "tags": ["motion-primitive", "transition", "match-cut", "hard-cut", "continuity"],
+  "tags": ["motion-primitive", "transition", "match-cut", "hard-cut", "continuity", "vertical"],
   "jobs": ["connect"],
   "family": "transitions",
   "profile": "transition",

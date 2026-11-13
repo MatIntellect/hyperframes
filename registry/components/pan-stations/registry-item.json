@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Pan Stations",
   "description": "A lateral camera move across a continuous row of labeled feature stations, with a steady dwell at each stop before the next pan.",
-  "tags": ["camera", "pan", "stations", "features", "exhibit", "agitate", "cross-shelved"],
+  "tags": [
+    "camera",
+    "pan",
+    "stations",
+    "features",
+    "exhibit",
+    "agitate",
+    "cross-shelved",
+    "vertical"
+  ],
   "jobs": ["exhibit", "agitate"],
   "family": "camera",
   "profile": "holdable",

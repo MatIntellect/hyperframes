@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Titlecard Calm",
   "description": "A restrained title card where a mono kicker and generous grotesque headline fade upward, drift almost imperceptibly, and exit cleanly.",
-  "tags": ["motion-primitive", "typography", "title-card", "calm", "orient"],
+  "tags": ["motion-primitive", "typography", "title-card", "calm", "orient", "vertical"],
   "jobs": ["orient"],
   "family": "typography",
   "profile": "calm",

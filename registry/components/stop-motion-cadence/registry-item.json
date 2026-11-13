@@ -11,7 +11,8 @@
     "stepped",
     "boil",
     "deterministic",
-    "experiment"
+    "experiment",
+    "vertical"
   ],
   "jobs": ["demonstrate"],
   "family": "demonstrate",

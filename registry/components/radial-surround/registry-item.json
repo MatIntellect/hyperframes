@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Radial Surround",
   "description": "Labeled hairline chips assemble around a centered subject on an elliptical ring, then optionally converge inward with a subtle edge dim. The center never moves: surrounded, not zoomed.",
-  "tags": ["motion-primitive", "problem-setup", "radial", "ring", "surround", "converge"],
+  "tags": [
+    "motion-primitive",
+    "problem-setup",
+    "radial",
+    "ring",
+    "surround",
+    "converge",
+    "vertical"
+  ],
   "jobs": ["agitate"],
   "family": "layout",
   "profile": "surround",

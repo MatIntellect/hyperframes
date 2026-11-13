@@ -13,7 +13,8 @@
     "holdable",
     "before-after",
     "wipe",
-    "slots"
+    "slots",
+    "vertical"
   ],
   "jobs": ["compare"],
   "family": "ui-props",

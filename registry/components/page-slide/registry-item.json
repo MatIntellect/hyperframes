@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Page Slide",
   "description": "Page slide for vertical reels: a brand-red page slides in over the brand-card page, which steps back. Labels and corner are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"page-slide\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "page", "slide"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "page",
+    "slide",
+    "vertical"
+  ],
   "files": [
     {
       "path": "page-slide.html",

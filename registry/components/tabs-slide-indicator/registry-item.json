@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Tabs Slide Indicator",
   "description": "Segmented tabs for vertical reels: a brand-red pill slides one tab to the right and the active label lights up as it passes. Tab width, shape and labels are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"tabs-slide-indicator\": its own timeline nests there.",
-  "tags": ["transition-primitive", "transitions-dev-port", "tabs", "indicator"],
+  "tags": ["transition-primitive", "transitions-dev-port", "tabs", "indicator", "vertical"],
   "files": [
     {
       "path": "tabs-slide-indicator.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Beat Pulse Background",
   "description": "An accent-derived backdrop pulses its glow intensity and saturation on a deterministic, supplied beat grid.",
-  "tags": ["motion-primitive", "background", "beat", "pulse", "rhythmic", "reactive"],
+  "tags": ["motion-primitive", "background", "beat", "pulse", "rhythmic", "reactive", "vertical"],
   "jobs": ["emphasize"],
   "family": "backgrounds",
   "profile": "rhythmic",

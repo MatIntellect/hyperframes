@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Stitched Text Draw",
   "description": "Text drawn as thread stitches: a single-stroke display alphabet draws via attribute-driven dashoffset with stitch-tuned dash patterns, seeded angle jitter, needle-hole dots, a leading needle, and a thread-tail overshoot per letter.",
-  "tags": ["motion-primitive", "experiment", "type", "craft", "stitch", "deterministic"],
+  "tags": [
+    "motion-primitive",
+    "experiment",
+    "type",
+    "craft",
+    "stitch",
+    "deterministic",
+    "vertical"
+  ],
   "jobs": ["reveal"],
   "family": "text-effects",
   "profile": "thread-stitch",

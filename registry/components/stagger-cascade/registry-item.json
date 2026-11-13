@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Stagger Cascade",
   "description": "A responsive grid of tile cards that fades and travels into place with an evenly spaced per-item GSAP stagger. The ordered cascade is the only visual mechanic.",
-  "tags": ["effects", "grid", "stagger", "entrance", "exhibit"],
+  "tags": ["effects", "grid", "stagger", "entrance", "exhibit", "vertical"],
   "jobs": ["exhibit"],
   "family": "effects",
   "profile": "burst",

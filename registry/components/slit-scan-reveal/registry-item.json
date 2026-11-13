@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Slit Scan Reveal",
   "description": "The frame's rows sample an authored subject at offset times: a canvas painter draws row slices of one pure position function evaluated at t minus offset(row), smearing arrival through time until the offsets collapse to zero and the mark holds coherent.",
-  "tags": ["motion-primitive", "time", "slit-scan", "canvas", "deterministic", "experiment"],
+  "tags": [
+    "motion-primitive",
+    "time",
+    "slit-scan",
+    "canvas",
+    "deterministic",
+    "experiment",
+    "vertical"
+  ],
   "jobs": ["reveal"],
   "family": "time",
   "profile": "time-smear",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "On-Screen Display Effect",
   "description": "Makes footage read as a physical display: a slight 3D tilt, pixel grid, scanlines, vignette and sheen fade in over a screen inset in the host box. The host's footage comes in through a template with data-slot=\"yt-screen-warp-screen\"; helpers ytScreenOn/ytScreenOff wire the same look onto any media wrapper.",
-  "tags": ["effect", "overlay", "texture"],
+  "tags": ["effect", "overlay", "texture", "vertical"],
   "files": [
     {
       "path": "yt-screen-warp.html",

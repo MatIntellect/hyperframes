@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Trust Strip",
   "description": "A monochrome trust row of wide-tracked mono wordmarks that fade in with an opacity-only left-to-right stagger, then hold dead still.",
-  "tags": ["motion-primitive", "proof", "trust", "logo-strip", "wordmarks"],
+  "tags": ["motion-primitive", "proof", "trust", "logo-strip", "wordmarks", "vertical"],
   "jobs": ["prove"],
   "family": "proof-and-stats",
   "profile": "quiet-proof",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Annotate Cursor",
   "description": "A marker pen glides onto the frame and hand-draws a loose loop, an underline, or an arrow around a region, the ink laid exactly under its nib, then lifts and leaves.",
-  "tags": ["cursor", "motion-primitive", "pen", "annotation", "draw-on", "highlight"],
+  "tags": ["cursor", "motion-primitive", "pen", "annotation", "draw-on", "highlight", "vertical"],
   "files": [
     {
       "path": "cursor-annotate.html",

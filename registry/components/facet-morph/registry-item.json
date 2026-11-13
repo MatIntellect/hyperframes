@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Facet Morph",
   "description": "A faceted low-poly mass of 36 triangles continuously reshapes between three authored silhouettes (blob, mark, badge) with per-facet flat shading that recomputes as the vertices move. Light reads from the upper left; lit facets lift toward a pale accent-tinted tone while turned-away facets fall toward near-black. One calm continuous morph, then a settled hold.",
-  "tags": ["motion-primitive", "intro", "morph", "low-poly", "svg", "deterministic"],
+  "tags": ["motion-primitive", "intro", "morph", "low-poly", "svg", "deterministic", "vertical"],
   "jobs": ["reveal"],
   "family": "intros-reveals",
   "profile": "holdable",

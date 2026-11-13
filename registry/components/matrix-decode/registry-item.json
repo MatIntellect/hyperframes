@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Matrix Decode",
   "description": "A deterministic matrix-style decode: one monospace cell per character staggers in and resolves the target word. Monospace on purpose: a decode is a code look, and code stays monospace (brand: Bebas Neue and Montserrat for words, monospace for code). Mount it inside a clip with data-composition-id=\"matrix-decode\": its own timeline nests there.",
-  "tags": ["motion-primitive", "typography"],
+  "tags": ["motion-primitive", "typography", "vertical"],
   "files": [
     {
       "path": "matrix-decode.html",

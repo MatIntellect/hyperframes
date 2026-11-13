@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Scribble Callout Circle",
   "description": "A hand-drawn circle that draws around one phrase, with an optional scribble fill, a connector and a hand-written note below or beside it, sized to the measured phrase. Ships the hw-boil and hw-callout helpers for hosts that circle their own content.",
-  "tags": ["handwritten", "annotation", "callout", "overlay"],
+  "tags": ["handwritten", "annotation", "callout", "overlay", "vertical"],
   "files": [
     {
       "path": "hw-callout-circle.html",

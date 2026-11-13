@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Magnetic Cursor",
   "description": "A soft dot pointer glides across an editor toolbar, is pulled into each button and morphs into its rounded hover plate while the icon leans toward it, presses one, and leaves as a dot.",
-  "tags": ["cursor", "motion-primitive", "pointer", "hover", "morph", "toolbar"],
+  "tags": ["cursor", "motion-primitive", "pointer", "hover", "morph", "toolbar", "vertical"],
   "files": [
     {
       "path": "magnetic-cursor.html",

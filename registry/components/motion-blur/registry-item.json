@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Motion Blur",
   "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. After Effects-style motion blur — integrates each element over a shutter window (shutter angle, phase, samples per frame) by sampling the GSAP timeline at sub-frame times and averaging equal-weight additive copies of the element along its real trajectory, so translation, scale, rotation, 3D rotation and skew all drive the smear",
-  "tags": ["effect", "motion-blur", "shutter", "after-effects", "velocity", "animation"],
+  "tags": [
+    "effect",
+    "motion-blur",
+    "shutter",
+    "after-effects",
+    "velocity",
+    "animation",
+    "vertical"
+  ],
   "files": [
     {
       "path": "motion-blur.html",

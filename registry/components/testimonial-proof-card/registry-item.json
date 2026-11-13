@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Testimonial Proof Card",
   "description": "A quote card whose testimonial reveals per-line through a soft mask, with an avatar disc (initials default, image slot), mono name and role, an optional company text mark, and one emphasis substring underlined in accent ink after the quote lands.",
-  "tags": ["motion-primitive", "proof", "testimonial", "quote", "social-proof", "deterministic"],
+  "tags": [
+    "motion-primitive",
+    "proof",
+    "testimonial",
+    "quote",
+    "social-proof",
+    "deterministic",
+    "vertical"
+  ],
   "jobs": ["prove"],
   "family": "proof-stats",
   "profile": "testimonial",

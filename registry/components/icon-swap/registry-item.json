@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Icon Swap",
   "description": "Icon swap for vertical reels: a plus blurs, shrinks and turns away as the done mark blurs in, like a toolbar action changing state. Tone, size, shape and blur are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"icon-swap\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "icon", "swap"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "icon",
+    "swap",
+    "vertical"
+  ],
   "files": [
     {
       "path": "icon-swap.html",

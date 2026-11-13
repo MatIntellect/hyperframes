@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Multiplayer Cursors",
   "description": "Labeled collaborator cursors with token-derived colors and soft glows drift from spread positions into a shared center zone, proving live multiplayer presence.",
-  "tags": ["cursor", "pointer", "multiplayer", "collaboration", "presence", "loop", "prove"],
+  "tags": [
+    "cursor",
+    "pointer",
+    "multiplayer",
+    "collaboration",
+    "presence",
+    "loop",
+    "prove",
+    "vertical"
+  ],
   "jobs": ["prove"],
   "family": "pointers",
   "profile": "loop",

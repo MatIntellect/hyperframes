@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Background Emphasis Type",
   "description": "Oversized low-contrast background word drifting slowly behind the subject — typography as texture",
-  "tags": ["typography", "text-treatment", "minimal"],
+  "tags": ["typography", "text-treatment", "minimal", "vertical"],
   "files": [
     {
       "path": "mk-emphasis-type.html",

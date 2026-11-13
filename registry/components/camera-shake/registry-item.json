@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Camera Shake",
   "description": "Procedural handheld, telephoto and rig camera shake for any wrapper: nine measured profiles with per-lens projection, closed-form and seek-safe",
-  "tags": ["camera", "shake", "handheld", "effect", "cinematic"],
+  "tags": ["camera", "shake", "handheld", "effect", "cinematic", "vertical"],
   "variables": [
     {
       "id": "shakeProfile",

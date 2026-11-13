@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Line Swap",
   "description": "A masked full-line beat replacement: line A holds center then exits up through an overflow-hidden mask as line B enters bottom-up on the same beat, with an optional accent underline drawing beneath one word of line B.",
-  "tags": ["motion-primitive", "text-effects", "swap", "beat", "deterministic"],
+  "tags": ["motion-primitive", "text-effects", "swap", "beat", "deterministic", "vertical"],
   "jobs": ["emphasize"],
   "family": "text-effects",
   "profile": "beat-swap",

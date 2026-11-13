@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "SVG Stroke Trace",
   "description": "An authored SVG path draws from its measured length, holds with subtle drift, and optionally fills when the path is closed.",
-  "tags": ["motion-primitive", "intro", "reveal", "svg", "stroke", "line-draw"],
+  "tags": ["motion-primitive", "intro", "reveal", "svg", "stroke", "line-draw", "vertical"],
   "jobs": ["reveal"],
   "family": "intros-and-reveals",
   "profile": "trace",

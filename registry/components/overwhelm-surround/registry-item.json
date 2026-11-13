@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Overwhelm Surround",
   "description": "Tasks, tabs, pings, and notification bubbles accelerate inward around a calm central subject, turning overload into visible spatial pressure.",
-  "tags": ["effects", "agitate", "overwhelm", "pressure", "notifications"],
+  "tags": ["effects", "agitate", "overwhelm", "pressure", "notifications", "vertical"],
   "jobs": ["agitate"],
   "family": "effects",
   "profile": "holdable",

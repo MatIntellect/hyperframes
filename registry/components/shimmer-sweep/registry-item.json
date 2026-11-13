@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Shimmer Sweep",
   "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. Animated pass of the brand colour across light text: a soft band sweeps the letters left to right and leaves the dark ground untouched.",
-  "tags": ["text", "shimmer", "highlight", "effect"],
+  "tags": ["text", "shimmer", "highlight", "effect", "vertical"],
   "files": [
     {
       "path": "shimmer-sweep.html",

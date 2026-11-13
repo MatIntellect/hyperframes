@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Typed Prompt",
   "description": "A prompt line to an AI types itself in chunked human cadence behind a deterministic blinking caret, with optional backspace-and-retype correction of the final word; a long prompt wraps, the type never drops below 28 px.",
-  "tags": ["motion-primitive", "product-demo", "typing", "prompt", "deterministic"],
+  "tags": ["motion-primitive", "product-demo", "typing", "prompt", "deterministic", "vertical"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "typing",

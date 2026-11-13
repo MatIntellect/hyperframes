@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Terminal Simulator",
   "description": "Editor and terminal mock for vertical reels: a dark brand window with a file list, code lines that draw in one by one and a render command that rises in the terminal pane. Brand palette, monospace 28 px for code, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"terminal-simulator\": its own timeline nests there.",
-  "tags": ["code-animation"],
+  "tags": ["code-animation", "vertical"],
   "files": [
     {
       "path": "terminal-simulator.html",

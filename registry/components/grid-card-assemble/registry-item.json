@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Grid Card Assemble",
   "description": "Grid card assemble for vertical reels: three to twelve dark brand cards with thin brand-red line icons cascade into a grid or a list and hold still. Items (\"Label: body\"), layout, columns, cues and exit are fields; in a portrait field the grid is one or two columns and labels wrap at 28 px. Montserrat, sized for the 780 px graphics field.",
-  "tags": ["motion-primitive", "layout", "grid", "list", "stagger", "assemble", "feature-tour"],
+  "tags": [
+    "motion-primitive",
+    "layout",
+    "grid",
+    "list",
+    "stagger",
+    "assemble",
+    "feature-tour",
+    "vertical"
+  ],
   "jobs": ["reveal", "tour"],
   "family": "layout",
   "profile": "assemble",

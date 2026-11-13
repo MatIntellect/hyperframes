@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Variable Axis Type",
   "description": "A locked one-line headline whose weight axis morphs into a decisive emphasis beat. Montserrat on purpose: the brand display face Bebas Neue has no axes, Montserrat has weight.",
-  "tags": ["typography", "variable-font", "kinetic-type", "axis", "emphasize"],
+  "tags": ["typography", "variable-font", "kinetic-type", "axis", "emphasize", "vertical"],
   "jobs": ["emphasize"],
   "family": "typography",
   "profile": "burst",

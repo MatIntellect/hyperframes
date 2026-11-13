@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Skeleton Reveal",
   "description": "Skeleton reveal for vertical reels: a shimmering placeholder card cross-fades into a name and a detail line. Name and detail are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"skeleton-reveal\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "skeleton", "reveal"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "skeleton",
+    "reveal",
+    "vertical"
+  ],
   "files": [
     {
       "path": "skeleton-reveal.html",

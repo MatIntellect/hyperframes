@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Constellation Hub",
   "description": "Feature nodes brighten in narration order as real-length SVG connectors draw outward from a fixed central hub, then settle into one lockup.",
-  "tags": ["motion-primitive", "feature-tour", "hub", "nodes", "connector", "reveal"],
+  "tags": ["motion-primitive", "feature-tour", "hub", "nodes", "connector", "reveal", "vertical"],
   "jobs": ["exhibit"],
   "family": "feature-tour",
   "profile": "network",

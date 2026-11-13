@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Kinetic Type Swap",
   "description": "A held sentence keeps its fixed text in place while one widest-word masked slot rolls through alternatives and settles on the final option.",
-  "tags": ["motion-primitive", "text-effects", "kinetic-type", "word-swap", "reveal"],
+  "tags": ["motion-primitive", "text-effects", "kinetic-type", "word-swap", "reveal", "vertical"],
   "jobs": ["reveal"],
   "family": "text-effects",
   "profile": "swap",

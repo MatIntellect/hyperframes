@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Notification Pileup",
   "description": "Mobile notification cards arrive faster and faster, each new alert pushing the existing stack downward into a dense, anxious tower.",
-  "tags": ["notification", "mobile", "ui-props", "overload", "pileup", "loop", "agitate"],
+  "tags": [
+    "notification",
+    "mobile",
+    "ui-props",
+    "overload",
+    "pileup",
+    "loop",
+    "agitate",
+    "vertical"
+  ],
   "jobs": ["agitate"],
   "family": "ui-props",
   "profile": "loop",

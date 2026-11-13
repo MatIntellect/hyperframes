@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Menu Morph",
   "description": "Menu button morph for vertical reels: a brand-red round button pops, its bars cross into a close mark and action pills fan out beneath. Actions and button size are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"menu-morph\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "menu", "morph"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "menu",
+    "morph",
+    "vertical"
+  ],
   "files": [
     {
       "path": "menu-morph.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Pendulum Swing",
   "description": "Content hangs from a fixed pivot and swings into rest with gravity-damped oscillation, like a hanging sign settling on its hook. Mount it inside a clip with data-composition-id=\"pendulum-swing\": its own timeline nests there.",
-  "tags": ["motion-primitive", "physics", "swing", "settle", "reveal"],
+  "tags": ["motion-primitive", "physics", "swing", "settle", "reveal", "vertical"],
   "files": [
     {
       "path": "pendulum-swing.html",

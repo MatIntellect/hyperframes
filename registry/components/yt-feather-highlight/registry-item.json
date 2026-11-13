@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Feathered Spotlight",
   "description": "Spotlights part of the host's frame: a dim layer in the reel's ground colour with a feathered elliptical hole fades in, glides to the next target and releases. Helpers ytHighlightIn/To/Out wire it onto any frame.",
-  "tags": ["highlight", "spotlight", "effect", "overlay"],
+  "tags": ["highlight", "spotlight", "effect", "overlay", "vertical"],
   "files": [
     {
       "path": "yt-feather-highlight.html",

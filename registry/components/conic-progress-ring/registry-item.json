@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Conic Progress Ring",
   "description": "A token-driven conic progress ring whose angular fill and center count settle together from one registered percentage.",
-  "tags": ["data", "progress", "ring", "conic-gradient", "prove", "demonstrate"],
+  "tags": ["data", "progress", "ring", "conic-gradient", "prove", "demonstrate", "vertical"],
   "jobs": ["prove", "demonstrate"],
   "family": "data",
   "profile": "holdable",

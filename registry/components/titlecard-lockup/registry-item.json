@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Titlecard Lockup",
   "description": "The calm breather titlecard: an optional mono kicker fades up, the wordmark settles dead-center with one restrained move, a hairline rule draws left to right, a mono label fades beneath, and the lockup holds truly still.",
-  "tags": ["motion-primitive", "typography", "title-card", "lockup", "breather", "orient"],
+  "tags": [
+    "motion-primitive",
+    "typography",
+    "title-card",
+    "lockup",
+    "breather",
+    "orient",
+    "vertical"
+  ],
   "jobs": ["orient"],
   "family": "typography",
   "profile": "calm",

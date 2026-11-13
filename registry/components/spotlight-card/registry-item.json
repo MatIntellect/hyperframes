@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Spotlight Card",
   "description": "Spotlight card for vertical reels: a soft light spot drifts across a dark brand card while a blurred light mesh breathes behind it. Brand palette, Montserrat 28-44 px, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"spotlight-card\": its own timeline nests there.",
-  "tags": ["effect"],
+  "tags": ["effect", "vertical"],
   "files": [
     {
       "path": "spotlight-card.html",

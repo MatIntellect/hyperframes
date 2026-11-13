@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Native Notification Pop",
   "description": "One system-faithful notification banner (iOS or macOS) drops in over any scene on an accurate interruptible spring: fast arrival, soft overshoot, settled mass, backdrop blur, app dot, title, one body line. Holds; tucks away only via exit.",
-  "tags": ["motion-primitive", "product-demo", "overlay", "notification", "spring"],
+  "tags": ["motion-primitive", "product-demo", "overlay", "notification", "spring", "vertical"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "holdable",

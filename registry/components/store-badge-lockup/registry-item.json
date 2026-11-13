@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Store Badge Lockup",
   "description": "Settles a short headline above equal-size App Store and Google Play badges as a token-driven mobile end-card call to action.",
-  "tags": ["prop", "ui-props", "mobile", "store-badges", "cta", "ask"],
+  "tags": ["prop", "ui-props", "mobile", "store-badges", "cta", "ask", "vertical"],
   "jobs": ["ask"],
   "family": "ui-props",
   "profile": "holdable",

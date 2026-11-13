@@ -11,7 +11,8 @@
     "hud",
     "canvas",
     "deterministic",
-    "experiment"
+    "experiment",
+    "vertical"
   ],
   "jobs": ["demonstrate"],
   "family": "product-demo",

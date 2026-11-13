@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Cut the Curve",
   "description": "A velocity-matched directional hard cut: the outgoing subject accelerates with power4.in, swaps at peak velocity, and the incoming subject continues in the same direction with power4.out.",
-  "tags": ["transition", "directional-cut", "velocity-match", "whip", "bridge", "demonstrate"],
+  "tags": [
+    "transition",
+    "directional-cut",
+    "velocity-match",
+    "whip",
+    "bridge",
+    "demonstrate",
+    "vertical"
+  ],
   "jobs": ["bridge", "demonstrate"],
   "family": "transitions",
   "profile": "transition",

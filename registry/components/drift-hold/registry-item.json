@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Drift Hold",
   "description": "A centered content card stays subtly alive through loop-exact rotation, scale breathing, and a slow light sweep.",
-  "tags": ["motion-primitive", "camera", "ambient", "drift", "hold", "loopable"],
+  "tags": ["motion-primitive", "camera", "ambient", "drift", "hold", "loopable", "vertical"],
   "jobs": ["orient"],
   "family": "camera",
   "profile": "ambient",

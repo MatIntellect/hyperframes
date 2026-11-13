@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Particle Image Reveal",
   "description": "A seeded deterministic particle field converges and settles while a slotted image reveals beneath it, the trail thinning until the image holds clean.",
-  "tags": ["motion-primitive", "intros-reveals", "particles", "reveal", "canvas", "deterministic"],
+  "tags": [
+    "motion-primitive",
+    "intros-reveals",
+    "particles",
+    "reveal",
+    "canvas",
+    "deterministic",
+    "vertical"
+  ],
   "jobs": ["reveal"],
   "family": "intros-reveals",
   "profile": "materialize",

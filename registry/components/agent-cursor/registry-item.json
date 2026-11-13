@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Agent Cursor",
   "description": "An AI agent operating a UI: a cursor with an accent name label that types out each step, clicks each target with a small ring, and ends on a check.",
-  "tags": ["cursor", "motion-primitive", "agent", "ai", "status", "click"],
+  "tags": ["cursor", "motion-primitive", "agent", "ai", "status", "click", "vertical"],
   "files": [
     {
       "path": "agent-cursor.html",

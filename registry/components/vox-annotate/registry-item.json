@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Vox Annotate",
   "description": "The Vox-style annotate gesture: a keyword in a held sentence gets a hand-drawn marker while a thin connector draws up to a mono callout label, all as one choreographed beat on the cue.",
-  "tags": ["motion-primitive", "typography", "annotation", "marker", "deterministic"],
+  "tags": ["motion-primitive", "typography", "annotation", "marker", "deterministic", "vertical"],
   "jobs": ["emphasize"],
   "family": "text-effects",
   "profile": "emphasis",

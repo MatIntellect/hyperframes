@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Headline Slam",
   "description": "A heavyweight headline scales down into frame, lands with a deterministic three-frame shake, holds with subtle drift, and whips upward on exit.",
-  "tags": ["motion-primitive", "typography", "headline", "slam", "impact", "exit"],
+  "tags": ["motion-primitive", "typography", "headline", "slam", "impact", "exit", "vertical"],
   "jobs": ["emphasize"],
   "family": "typography",
   "profile": "impact",

@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "State Chip Rail",
   "description": "A rail of status chips (a column in a standing box) advances a seek-safe data-state snap machine on a cue schedule: active chip ink on surface, done chips dim, pending chips hollow, optional badges pop beside one state.",
-  "tags": ["motion-primitive", "product-demo", "state-machine", "status", "chips", "rail"],
+  "tags": [
+    "motion-primitive",
+    "product-demo",
+    "state-machine",
+    "status",
+    "chips",
+    "rail",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "state-machine",

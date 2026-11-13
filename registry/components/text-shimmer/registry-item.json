@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Text Shimmer",
   "description": "A static headline receives one clean specular gradient sweep through its glyphs, then returns to its ordinary text color.",
-  "tags": ["motion-primitive", "text-effects", "shimmer", "specular", "emphasis"],
+  "tags": ["motion-primitive", "text-effects", "shimmer", "specular", "emphasis", "vertical"],
   "jobs": ["emphasize"],
   "family": "text-effects",
   "profile": "drift",

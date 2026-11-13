@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Per-Word Crossfade",
   "description": "Words gently fade into place with a short vertical drift for calm keynote rhythm. Mount it inside a clip with data-composition-id=\"per-word-crossfade\": its own timeline nests there.",
-  "tags": ["motion-primitive", "typography"],
+  "tags": ["motion-primitive", "typography", "vertical"],
   "files": [
     {
       "path": "per-word-crossfade.html",

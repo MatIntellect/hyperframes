@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Torn Paper Rip",
   "description": "A fibrous paper tear runs across the frame: the torn sheet shows its white paper core along the edge and lifts away on a soft shadow, leaving the next scene standing.",
-  "tags": ["torn paper", "paper rip", "paper tear", "transition", "texture", "motion-primitive"],
+  "tags": [
+    "torn paper",
+    "paper rip",
+    "paper tear",
+    "transition",
+    "texture",
+    "motion-primitive",
+    "vertical"
+  ],
   "files": [
     {
       "path": "torn-paper-rip.html",

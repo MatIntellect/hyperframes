@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Offset Path Traveler",
   "description": "A slotted traveler follows an authored path with tangent rotation, curved entry, and curved exit.",
-  "tags": ["motion-primitive", "product-demo", "path", "traveler", "auto-rotate"],
+  "tags": ["motion-primitive", "product-demo", "path", "traveler", "auto-rotate", "vertical"],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "path-travel",

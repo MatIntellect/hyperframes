@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Logo Brand Close",
   "description": "A display-scale wordmark cascades letter by letter into a centered lockup, the accent brand period lands last, an optional tagline and wide-tracked mono URL settle beneath, and the finished identity holds dead still to the end of the film.",
-  "tags": ["motion-primitive", "typography", "brand", "logo", "end-card", "close"],
+  "tags": ["motion-primitive", "typography", "brand", "logo", "end-card", "close", "vertical"],
   "jobs": ["celebrate"],
   "family": "typography",
   "profile": "holdable",

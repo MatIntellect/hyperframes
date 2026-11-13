@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Focus Swap",
   "description": "Moves attention between two cards (side by side in a landscape field, stacked in a portrait field) as one recedes with scale, blur and dimming while the other advances to full focus. Card words (status, title, detail) are fields.",
-  "tags": ["effect", "ui-props", "focus", "blur", "attention", "demonstrate"],
+  "tags": ["effect", "ui-props", "focus", "blur", "attention", "demonstrate", "vertical"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "holdable",

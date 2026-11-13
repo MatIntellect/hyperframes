@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Parallax Device Dive",
   "description": "A canonical phone rises into view before the camera pushes through its screen and layered app UI expands to fill the frame.",
-  "tags": ["motion-primitive", "camera", "device", "phone", "parallax", "transition"],
+  "tags": ["motion-primitive", "camera", "device", "phone", "parallax", "transition", "vertical"],
   "jobs": ["transition"],
   "family": "camera",
   "profile": "dive",

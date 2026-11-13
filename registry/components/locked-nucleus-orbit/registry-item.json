@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Locked Nucleus Orbit",
   "description": "A fixed center nucleus anchors deterministic satellite orbits that settle into a composed lockup.",
-  "tags": ["motion-primitive", "intro", "reveal", "orbit", "lockup", "deterministic"],
+  "tags": ["motion-primitive", "intro", "reveal", "orbit", "lockup", "deterministic", "vertical"],
   "jobs": ["reveal"],
   "family": "effects",
   "profile": "orbit",

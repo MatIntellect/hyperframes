@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Gesture Tap",
   "description": "A contact circle taps a mobile pill button, releases it into a new labeled accent state, and lifts away.",
-  "tags": ["motion-primitive", "gesture", "tap", "interaction", "ui-props"],
+  "tags": ["motion-primitive", "gesture", "tap", "interaction", "ui-props", "vertical"],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "interaction",

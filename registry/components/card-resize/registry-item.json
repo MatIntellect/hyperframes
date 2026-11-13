@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Card Resize",
   "description": "Card resize for vertical reels: a compact status card grows into a detailed one and its hint fades in. Thumbnail treatment and elevation are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"card-resize\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "card", "layout"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "card",
+    "layout",
+    "vertical"
+  ],
   "files": [
     {
       "path": "card-resize.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Decline Chart",
   "description": "A metric line draws downward as its value counts down and the ambient background darkens in lockstep.",
-  "tags": ["motion-primitive", "data", "chart", "decline", "metric", "problem"],
+  "tags": ["motion-primitive", "data", "chart", "decline", "metric", "problem", "vertical"],
   "jobs": ["agitate"],
   "family": "data",
   "profile": "holdable",

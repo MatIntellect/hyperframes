@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Scroll Feed",
   "description": "A loop-friendly column of varied skeleton post cards scrolls upward with subtle motion trails and an agitated pace.",
-  "tags": ["motion-primitive", "effects", "scroll", "feed", "loop", "agitation"],
+  "tags": ["motion-primitive", "effects", "scroll", "feed", "loop", "agitation", "vertical"],
   "jobs": ["demonstrate"],
   "family": "effects",
   "profile": "continuous",

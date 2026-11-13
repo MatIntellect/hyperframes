@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Tracing Beam",
   "description": "A glowing dash follows one SVG path through three UI elements, lifting and brightening each element in sequence.",
-  "tags": ["motion-primitive", "product-demo", "attention", "beam", "path", "spotlight"],
+  "tags": [
+    "motion-primitive",
+    "product-demo",
+    "attention",
+    "beam",
+    "path",
+    "spotlight",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "product-demo",
   "profile": "attention",

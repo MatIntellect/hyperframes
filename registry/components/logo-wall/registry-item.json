@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Logo Wall",
   "description": "A trusted-by wall of placeholder lettermark logos that fades and scales into place with a deterministic per-cell stagger.",
-  "tags": ["data", "logos", "social-proof", "stagger", "prove"],
+  "tags": ["data", "logos", "social-proof", "stagger", "prove", "vertical"],
   "jobs": ["prove"],
   "family": "data",
   "profile": "holdable",

@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Count Up",
   "description": "A token-native stat counter that eases between values, counting up or down, and lands with a restrained scale pulse.",
-  "tags": ["motion-primitive", "proof", "stats", "counter", "number", "countdown", "deterministic"],
+  "tags": [
+    "motion-primitive",
+    "proof",
+    "stats",
+    "counter",
+    "number",
+    "countdown",
+    "deterministic",
+    "vertical"
+  ],
   "jobs": ["prove"],
   "family": "proof-stats",
   "profile": "count",

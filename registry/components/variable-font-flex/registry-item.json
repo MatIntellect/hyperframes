@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Variable Font Flex",
   "description": "A word lands while its weight flexes from hairline to black with a per-character stagger; font-size eases inversely so the letterforms gain mass while the box holds. Brand Montserrat (local variable font, Cyrillic), word in --fg.",
-  "tags": ["motion-primitive", "experiment", "type", "variable-font", "deterministic"],
+  "tags": ["motion-primitive", "experiment", "type", "variable-font", "deterministic", "vertical"],
   "jobs": ["emphasize"],
   "family": "text-effects",
   "profile": "axis-flex",

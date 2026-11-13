@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Arc Motion Path",
   "description": "Two brand chips travel curved dashed arcs, one over and one under a central brand card, and land apart on the right with level labels (GSAP MotionPathPlugin, loaded with the unit). Mount it inside a clip with data-composition-id=\"arc-motion-path\": its own timeline nests there.",
-  "tags": ["video-primitive", "motionpath", "gsap-plugin", "hyperframes-native"],
+  "tags": ["video-primitive", "motionpath", "gsap-plugin", "hyperframes-native", "vertical"],
   "files": [
     {
       "path": "arc-motion-path.html",

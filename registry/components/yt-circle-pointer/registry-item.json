@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Pointer Circle + Countdown",
   "description": "Annotation tools over the host's frame: a hand-drawn ring draws on around a target, and a brand-red countdown chip ticks down with a pulse each second. Helpers ytCircleOn/Off, ytCountIn, ytCountdown wire them onto any frame.",
-  "tags": ["annotation", "countdown", "overlay"],
+  "tags": ["annotation", "countdown", "overlay", "vertical"],
   "files": [
     {
       "path": "yt-circle-pointer.html",

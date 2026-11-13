@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Marker Highlight",
   "description": "Display text settles in, then one hand-drawn marker stroke (highlight, circle, underline, or scribble) draws over the emphasized word on cue.",
-  "tags": ["motion-primitive", "typography", "emphasis", "marker", "deterministic"],
+  "tags": ["motion-primitive", "typography", "emphasis", "marker", "deterministic", "vertical"],
   "jobs": ["emphasize"],
   "family": "typography",
   "profile": "emphasis",

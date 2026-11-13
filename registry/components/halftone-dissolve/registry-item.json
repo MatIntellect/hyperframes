@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Halftone Dissolve",
   "description": "Scene A dissolves into scene B through a growing halftone dot field: accent ink dots pop onto a fixed grid smallest-first, each opens into a window onto B, until the windows merge and B fully replaces A.",
-  "tags": ["motion-primitive", "transition", "texture", "halftone", "dissolve"],
+  "tags": ["motion-primitive", "transition", "texture", "halftone", "dissolve", "vertical"],
   "jobs": ["bridge"],
   "family": "transitions",
   "profile": "texture",

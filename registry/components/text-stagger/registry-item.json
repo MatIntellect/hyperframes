@@ -4,7 +4,14 @@
   "type": "hyperframes:component",
   "title": "Text Stagger",
   "description": "A transitions.dev-inspired text stagger primitive with enter, shimmer, and exit-ready words. Mount it inside a clip with data-composition-id=\"text-stagger\": its own timeline nests there.",
-  "tags": ["video-primitive", "transition-primitive", "transitions-dev-port", "text", "stagger"],
+  "tags": [
+    "video-primitive",
+    "transition-primitive",
+    "transitions-dev-port",
+    "text",
+    "stagger",
+    "vertical"
+  ],
   "files": [
     {
       "path": "text-stagger.html",

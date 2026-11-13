@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Pull Back Reveal",
   "description": "A tight stat detail holds, then one decelerating camera pull-back reveals the headline and supporting cards that recontextualize it.",
-  "tags": ["motion-primitive", "camera", "pull-back", "reveal", "recontextualize"],
+  "tags": ["motion-primitive", "camera", "pull-back", "reveal", "recontextualize", "vertical"],
   "jobs": ["reveal"],
   "family": "camera",
   "profile": "reveal",

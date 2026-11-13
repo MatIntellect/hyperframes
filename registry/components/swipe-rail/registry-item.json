@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Swipe Rail",
   "description": "A contact circle leads a horizontal card rail through a fast drag, momentum carry, and settled snap to the next card.",
-  "tags": ["motion-primitive", "interaction", "gesture", "swipe", "cards", "rail"],
+  "tags": ["motion-primitive", "interaction", "gesture", "swipe", "cards", "rail", "vertical"],
   "jobs": ["demonstrate"],
   "family": "interaction",
   "profile": "gesture",

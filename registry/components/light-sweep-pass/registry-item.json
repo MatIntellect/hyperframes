@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Light Sweep Pass",
   "description": "A traveling key light re-shades a slotted scene: a soft diagonal gradient band crosses the frame once while every per-element highlight and shadow shifts in lockstep (all driven by one --light-x property), then the light settles into a resting key. Quiet, expensive-feeling; the scene itself never moves. Callers fill the named scene slot; a token hero-and-cards default renders when it is left empty.",
-  "tags": ["motion-primitive", "overlay", "light", "sweep", "slots", "deterministic"],
+  "tags": ["motion-primitive", "overlay", "light", "sweep", "slots", "deterministic", "vertical"],
   "jobs": ["texture"],
   "family": "overlays",
   "profile": "holdable",

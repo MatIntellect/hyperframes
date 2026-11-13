@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Typing Indicator",
   "description": "The three-dot chat bubble that says someone is writing: it pops in at the thread's edge exactly as messaging apps do, holds while the reply is coming, and vanishes when the message lands. Mount it inside a clip with data-composition-id=\"typing-indicator\": its own timeline nests there.",
-  "tags": ["video-primitive", "chat", "mock-ui", "overlay"],
+  "tags": ["video-primitive", "chat", "mock-ui", "overlay", "vertical"],
   "author": "Miao Yang",
   "variables": [
     {

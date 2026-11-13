@@ -13,7 +13,8 @@
     "line",
     "donut",
     "progress",
-    "deterministic"
+    "deterministic",
+    "vertical"
   ],
   "jobs": ["prove"],
   "family": "proof-stats",

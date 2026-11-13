@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Ordered Dither Pass",
   "description": "Bayer-matrix ordered dithering quantizes a slotted scene (rasterized once at mount): the image emerges from pure 2-tone noise to clean, or dissolves the reverse. Stateless per frame, never error diffusion.",
-  "tags": ["motion-primitive", "experiment", "texture", "dither", "transition", "quantize"],
+  "tags": [
+    "motion-primitive",
+    "experiment",
+    "texture",
+    "dither",
+    "transition",
+    "quantize",
+    "vertical"
+  ],
   "jobs": ["reveal", "bridge"],
   "family": "effects",
   "profile": "texture",

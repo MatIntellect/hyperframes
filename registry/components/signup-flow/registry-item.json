@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Signup Flow",
   "description": "Sign-up card for vertical reels: heading, a social button, a divider, two fields and a brand-red primary button, entering line by line. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"signup-flow\": its own timeline nests there.",
-  "tags": ["ui-flow", "signup", "form"],
+  "tags": ["ui-flow", "signup", "form", "vertical"],
   "files": [
     {
       "path": "signup-flow.html",

@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Aurora Drift",
   "description": "Three soft accent-derived aurora fields drift in an exact ambient loop over a deep base and faint vignette.",
-  "tags": ["motion-primitive", "background", "aurora", "gradient", "ambient", "loopable"],
+  "tags": [
+    "motion-primitive",
+    "background",
+    "aurora",
+    "gradient",
+    "ambient",
+    "loopable",
+    "vertical"
+  ],
   "jobs": ["orient"],
   "family": "backgrounds",
   "profile": "ambient",

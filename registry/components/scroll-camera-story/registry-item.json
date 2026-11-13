@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Scroll Camera Story",
   "description": "A compressed forced-scroll cinematic pass: a tall scene of slotted sections travels past the camera top to bottom, depth layers parallax at different rates, each section rises as the camera reaches it, and the pass decelerates into a held final section.",
-  "tags": ["camera", "scroll", "parallax", "story", "sections", "slot", "servo"],
+  "tags": ["camera", "scroll", "parallax", "story", "sections", "slot", "servo", "vertical"],
   "jobs": ["demonstrate"],
   "family": "camera",
   "profile": "camera",

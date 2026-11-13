@@ -4,7 +4,15 @@
   "type": "hyperframes:component",
   "title": "Toggle Flip",
   "description": "An oversized UI toggle switch that flips with real physicality: thumb overshoot, track color crossfade, and a soft press-compress before release. The reference prop of the ui-props family.",
-  "tags": ["prop", "ui-props", "toggle", "interaction", "reference-prop", "demonstrate"],
+  "tags": [
+    "prop",
+    "ui-props",
+    "toggle",
+    "interaction",
+    "reference-prop",
+    "demonstrate",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "interaction",

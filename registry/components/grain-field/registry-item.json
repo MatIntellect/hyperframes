@@ -4,7 +4,16 @@
   "type": "hyperframes:component",
   "title": "Grain Field",
   "description": "Quiet background texture: a fixed neutral dot field drifts slowly over the reel's dark ground with a soft brand-red wash; copy over it stays readable.",
-  "tags": ["motion-primitive", "background", "grain", "dots", "texture", "ambient", "loopable"],
+  "tags": [
+    "motion-primitive",
+    "background",
+    "grain",
+    "dots",
+    "texture",
+    "ambient",
+    "loopable",
+    "vertical"
+  ],
   "jobs": ["orient"],
   "family": "backgrounds",
   "profile": "ambient",

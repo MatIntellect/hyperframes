@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Testimonial Card",
   "description": "Reveals a customer quote at reading pace, then settles its avatar, author name, and handle beneath as a clean proof beat.",
-  "tags": ["prop", "ui-props", "testimonial", "social-proof", "quote", "prove"],
+  "tags": ["prop", "ui-props", "testimonial", "social-proof", "quote", "prove", "vertical"],
   "jobs": ["prove"],
   "family": "ui-props",
   "profile": "holdable",

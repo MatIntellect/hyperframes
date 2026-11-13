@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Beat Timeline",
   "description": "A paused master-timeline orchestration spine that pins titled beat rows to evenly spaced named labels. Each row enters on its label, holds with the sequence, then exits with the group.",
-  "tags": ["orchestration", "transitions", "sequencing", "bridge", "timeline"],
+  "tags": ["orchestration", "transitions", "sequencing", "bridge", "timeline", "vertical"],
   "jobs": ["bridge"],
   "family": "transitions",
   "profile": "holdable",

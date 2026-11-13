@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Beat Accent",
   "description": "A single music-hit sting: impact flash, micro scale-pulse on the subject, immediate decay.",
-  "tags": ["motion-primitive", "effects", "burst", "sting", "emphasize", "impact"],
+  "tags": ["motion-primitive", "effects", "burst", "sting", "emphasize", "impact", "vertical"],
   "jobs": ["emphasize"],
   "family": "effects",
   "profile": "burst",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Star Rating Fill",
   "description": "A token-driven star row whose colored layer sweeps to a rating, preserves the fractional final star, and can count the value in sync.",
-  "tags": ["data", "rating", "stars", "fractional", "fill", "prove"],
+  "tags": ["data", "rating", "stars", "fractional", "fill", "prove", "vertical"],
   "jobs": ["prove"],
   "family": "data",
   "profile": "holdable",

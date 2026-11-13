@@ -4,7 +4,17 @@
   "type": "hyperframes:component",
   "title": "Camera Scan Gate",
   "description": "Camera scan gate for vertical reels: a viewfinder sweeps once, its four corner brackets tighten onto the target, then a pulse, check flash and a Montserrat confirmation chip lock it in. Scan line, brackets and glow ride the reel's brand red; the label and sweep speed are fields. Sized for the 780 px graphics field.",
-  "tags": ["prop", "ui-props", "camera", "qr", "scan", "recognition", "interaction", "demonstrate"],
+  "tags": [
+    "prop",
+    "ui-props",
+    "camera",
+    "qr",
+    "scan",
+    "recognition",
+    "interaction",
+    "demonstrate",
+    "vertical"
+  ],
   "jobs": ["demonstrate"],
   "family": "ui-props",
   "profile": "interaction",

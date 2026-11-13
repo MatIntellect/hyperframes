@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Confetti",
   "description": "Celebration burst overlay: 22 palette pieces (brand red, light, grey) burst up from the centre, fall under gravity and fade, with no background. Mount it inside a clip with data-composition-id=\"confetti\": its own timeline nests there.",
-  "tags": ["effect"],
+  "tags": ["effect", "vertical"],
   "files": [
     {
       "path": "confetti.html",

@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "ASCII Render Pass",
   "description": "A slotted scene renders as live ASCII: a canvas samples the source's luminance grid (rasterized once at mount) and draws glyphs from a density ramp charset; resolution steps coarse to fine as the piece resolves, then holds legible-fine.",
-  "tags": ["motion-primitive", "experiment", "texture", "ascii", "quantize"],
+  "tags": ["motion-primitive", "experiment", "texture", "ascii", "quantize", "vertical"],
   "jobs": ["reveal"],
   "family": "effects",
   "profile": "texture",

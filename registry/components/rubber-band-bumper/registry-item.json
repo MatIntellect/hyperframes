@@ -4,7 +4,7 @@
   "type": "hyperframes:component",
   "title": "Rubber Band Bumper",
   "description": "An outgoing panel pulls against increasing resistance, holds at tension, then snaps past an edge with overshoot as the incoming panel settles behind it.",
-  "tags": ["motion-primitive", "transition", "rubber-band", "resistance", "overshoot"],
+  "tags": ["motion-primitive", "transition", "rubber-band", "resistance", "overshoot", "vertical"],
   "jobs": ["bridge"],
   "family": "transitions",
   "profile": "elastic",
