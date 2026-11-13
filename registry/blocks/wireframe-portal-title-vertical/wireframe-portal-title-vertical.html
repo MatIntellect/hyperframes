@@ -14,7 +14,7 @@
     {"id": "accent", "type": "string", "label": "Accent", "default": "", "role": "style", "description": "Hex colour of the floating triangles; empty takes the theme accent."},
     {"id": "burstChaos", "type": "number", "label": "Burst chaos (0-2)", "default": 1, "min": 0, "max": 2, "step": 0.01, "role": "style"},
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card copy rises and the portal opens 0.45 s later, 2 the exit starts (default 6 s after cue 1). Empty keeps 0.", "default": "" },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fly pushes the camera through the letters and lifts the frame to the light ground (native); fade dissolves the block; none holds the phrase to the end of the mount.", "default": "fly", "options": [{ "value": "fade", "label": "Fade" }, { "value": "fly", "label": "Push through" }, { "value": "none", "label": "Hold" }] }
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fly pushes the camera through the letters, lifts the frame to the light ground (native) and the light clears 0.4 s later, a flash into the next shot; fade dissolves the block; none holds the phrase to the end of the mount.", "default": "fly", "options": [{ "value": "fade", "label": "Fade" }, { "value": "fly", "label": "Push through" }, { "value": "none", "label": "Hold" }] }
   ]'
 >
   <head>
@@ -371,10 +371,12 @@
         tl.to(S, { push: 1, duration: 1.6, ease: "power2.in" }, C0 + E);
         tl.to(S, { exitFx: 1, duration: 1.6, ease: "power2.in" }, C0 + E + 0.4);
         tl.to("#wpt-white", { opacity: 1, duration: 0.95, ease: "sine.inOut" }, C0 + E + 0.9);
+        // in a reel the light plate is a flash into the next shot, not a hold: it clears once it has landed
+        tl.to("#wptv-root", { opacity: 0, duration: 0.4, ease: "power2.out" }, C0 + E + 2.0);
       } else if (EXIT === "fade") {
         tl.to("#wptv-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, C0 + E);
       }
-      // The light plate is intentionally empty and fully opaque for the last hold.
+      // The light plate lands fully opaque, then clears (fly) – the reel's next shot comes up under it.
       tl.addLabel("light-card", C0 + 0.8);
       tl.addLabel("portal-alignment", C0 + 1.47);
       tl.addLabel(

@@ -2242,7 +2242,7 @@
           var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
           if (placement !== "full") document.querySelector(S).classList.add("card", placement);
           // vertical: the 1100 px program window fits the 780 field and sits on its centre y 770
-          gsap.set(scene, { y: -190, scale: 0.6 });
+          gsap.set(scene, { y: -190, scale: 780 / 1100 });
           
           var cardGlow = document.querySelector(S + " .card-glow");
 

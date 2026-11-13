@@ -13,7 +13,7 @@
     { "id": "lab2", "type": "string", "role": "content", "label": "Number 2 label", "description": "Caps label under the second number.", "maxLength": 12, "default": "Роликов" },
     { "id": "val3", "type": "string", "role": "content", "label": "Number 3", "description": "Third number, Montserrat.", "maxLength": 6, "default": "71%" },
     { "id": "lab3", "type": "string", "role": "content", "label": "Number 3 label", "description": "Caps label under the third number.", "maxLength": 12, "default": "Досмотров" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). The glass drifts and parts around a wandering point for 20 s from the mount start; from 18.2 s it opens over the page and by 19.6 s rests with the page in a clear window. Empty keeps 20.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the glass opens over the page (it drifts and parts around a wandering point until then, opens over 1.4 s and rests with the page in a clear window; the developers' native is 18.2), 2 the block fades out (only when exit is fade; at least 1.4 s after cue 1, else at the mount end). Empty keeps 3.5.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the opened glass (the page in a clear window) to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -839,16 +839,23 @@
       var exit = oneOf(V.exit, ["none", "fade"], "none");
       var tl = gsap.timeline({ paused: true });
       tl.to({ _: 0 }, { _: 1, duration: DURATION, ease: "none" }, 0);
+      // R – the glass opens over the page (cue 1; the developers' 18.2). The wander keeps its native pace and
+      // runs only the legs that start before R, so the opening is never overridden by a later leg
+      var R = isFinite(cues[0]) && cues[0] > 0.6 ? Math.min(cues[0], 18.2) : 3.5;
       tl.set(ptr, { x: 0.16, y: 0.04 }, 0);
-      tl.to(ptr, { x: 0.45, y: -0.15, duration: 3.5, ease: "sine.inOut" }, 0.5);
-      tl.to(ptr, { x: -0.35, y: 0.25, duration: 3.5, ease: "sine.inOut" }, 4);
-      tl.to(ptr, { x: 0.15, y: -0.35, duration: 3, ease: "sine.inOut" }, 7.5);
-      tl.to(ptr, { x: -0.45, y: 0.05, duration: 3, ease: "sine.inOut" }, 10.5);
-      tl.to(ptr, { x: 0.3, y: 0.2, duration: 3, ease: "sine.inOut" }, 13.5);
-      tl.to(ptr, { x: -0.1, y: -0.1, duration: 1.7, ease: "sine.inOut" }, 16.5);
-      tl.to(ptr, { x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, 18.2);
-      tl.to(rest, { k: 1, duration: 1.4, ease: "power2.inOut" }, 18.2);
-      if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 0 ? cues[0] : DURATION);
+      [
+        [0.45, -0.15, 3.5, 0.5],
+        [-0.35, 0.25, 3.5, 4],
+        [0.15, -0.35, 3, 7.5],
+        [-0.45, 0.05, 3, 10.5],
+        [0.3, 0.2, 3, 13.5],
+        [-0.1, -0.1, 1.7, 16.5],
+      ].forEach(function (w) {
+        if (w[3] < R) tl.to(ptr, { x: w[0], y: w[1], duration: Math.min(w[2], R - w[3]), ease: "sine.inOut" }, w[3]);
+      });
+      tl.to(ptr, { x: 0, y: 0, duration: 1.4, ease: "power2.inOut" }, R);
+      tl.to(rest, { k: 1, duration: 1.4, ease: "power2.inOut" }, R);
+      if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > R + 1.4 ? cues[1] : DURATION);
       tl.set({}, {}, 30);
       tl.eventCallback("onUpdate", function () {
         renderScene(tl.time());

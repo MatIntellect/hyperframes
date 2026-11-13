@@ -175,6 +175,9 @@
         width: 800px;
         height: var(--mtr-chat-h, 950px);
         overflow: hidden;
+        /* the scroll edge, as iOS 26 softens it: a bubble scrolling off the top fades, never cut through its letters */
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 44px);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 44px);
       }
       .item {
         position: absolute;

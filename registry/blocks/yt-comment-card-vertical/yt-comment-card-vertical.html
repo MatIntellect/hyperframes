@@ -247,9 +247,9 @@
         window.__hf = window.__hf || {};
         window.__hf.buildReady = window.__hf.buildReady || {};
         window.__hf.buildReady["yt-comment-card-vertical-fit"] = Promise.all([
-          // with a Cyrillic sample, so the Cyrillic face is the one waited for (FontFaceSet.load text argument)
-          document.fonts.load('400 54px "Montserrat"', "Жж"),
-          document.fonts.load('500 40px "Montserrat"', "Жж"),
+          // a Cyrillic, Latin and digit sample: every face the card sets (names, handle, likes) is waited for (FontFaceSet.load text argument)
+          document.fonts.load('400 54px "Montserrat"', "Жж Aa 0"),
+          document.fonts.load('500 40px "Montserrat"', "Жж Aa 0"),
         ]).then(function () {
           var col = document.getElementById("yccv-col");
           if (col.offsetHeight > (placement === "center" ? 1180 : 760)) root.classList.add("yccv-fit");

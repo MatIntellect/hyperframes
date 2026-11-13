@@ -291,8 +291,6 @@
         var cursor = document.getElementById("fch-cursor");
         var badge = document.getElementById("fch-badge");
         var L0 = LV[0];
-        var W = 1920,
-          H = 1080;
         var tx = L0.x + L0.w * 0.72,
           ty = L0.y + L0.h * 0.58;
         var lowest = LV.reduce(function (m, b) {
@@ -300,7 +298,9 @@
         }, 0);
         var rx = L0.x + L0.w * 0.3,
           ry = lowest + 24;
-        gsap.set(cursor, { x: W + 40, y: H + 40 });
+        // the cursor appears at its own board's lower-right corner (the frame in full, the card on a top / bottom card)
+        // and shows as it moves: from the frame corner it would cross the speaker's circle beside the card
+        gsap.set(cursor, { x: board.offsetLeft + board.offsetWidth - 30, y: board.offsetTop + board.offsetHeight - 30, autoAlpha: 0 });
         gsap.set(badge, { left: L0.x - 24, top: L0.y - 30 });
 
         var cues = String(V.cues || "")
@@ -325,6 +325,7 @@
           tl.to(el, { scale: 1, duration: 0.4, ease: "back.out(1.7)" }, cL + i * 0.15);
         });
         tl.to(cursor, { x: tx, y: ty, duration: 1, ease: "power1.inOut" }, cC);
+        tl.to(cursor, { autoAlpha: 1, duration: 0.2, ease: "power1.out" }, cC);
         var t = cC + 1;
         tl.to(cursor, { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1 }, t);
         tl.set(selbox, { opacity: 1 }, t);

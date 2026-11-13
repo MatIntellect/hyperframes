@@ -271,8 +271,10 @@
         function px(i) {
           return pad + (n > 1 ? (i / (n - 1)) * (CW - 2 * pad) : (CW - 2 * pad) / 2);
         }
+        /* a value can ride under its dot (FS + 22): the plot keeps that room over the axis, as it keeps FS + 30 under the top */
+        var room = FS + 30;
         function py(v) {
-          return base - (v / max) * (base - top - (series.length > 1 ? FS + 30 : 0));
+          return base - room - (v / max) * (base - top - room - (series.length > 1 ? FS + 30 : 0));
         }
 
         var grid = [];

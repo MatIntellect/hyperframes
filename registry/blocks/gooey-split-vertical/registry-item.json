@@ -3,7 +3,7 @@
   "name": "gooey-split-vertical",
   "type": "hyperframes:block",
   "title": "Gooey Split (vertical)",
-  "description": "Vertical gooey split: a dot splits into three with a gooey neck, swirls into a mark under shutter motion blur and merges back, centred in the field. Placement full, top or bottom card; cues shift the move; holds or fades.",
+  "description": "Vertical gooey split: a dot splits into three with a gooey neck, swirls into a mark under shutter motion blur and merges back, centred in the field. Placement full, top or bottom card; cues shift the move; fades out after the merge, or holds.",
   "tags": ["effect", "gooey", "metaball", "motion-blur", "morph", "logo", "icon", "vertical"],
   "dimensions": {
     "width": 1080,

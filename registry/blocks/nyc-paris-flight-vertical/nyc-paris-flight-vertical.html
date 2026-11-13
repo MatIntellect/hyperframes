@@ -537,9 +537,20 @@
         
         // вертикаль: в узком поле три надписи не делят одну строку – каждая своей строкой под маршрутом
         // (подпись вылета, ниже подпись прилёта под кругом, ниже плашка); высоты – по настоящим размерам
-        var pinH = $("from").offsetHeight / 2;
-        var row2 = Math.max(A[1] - pinH + 34 + $("from-label").offsetHeight + 12, B[1] + 100 * DOODLE);
-        $("to-label").style.top = Math.round(row2 - (B[1] - pinH)) + "px";
+        // the arrival label sits under its own circle, centred on the city (inside the field); it drops below the
+        // departure label only when the two share columns
+        var pinH = $("from").offsetHeight / 2,
+          pinW = $("to").offsetWidth / 2;
+        var toL = $("to-label"),
+          frL = $("from-label");
+        var tw = toL.offsetWidth;
+        var tx = Math.max(FX[0], Math.min(FX[1] - tw, B[0] - tw / 2));
+        toL.style.right = "auto";
+        toL.style.left = Math.round(tx - (B[0] - pinW) - $("to").clientLeft) + "px";
+        var fx = A[0] - pinW + $("from").clientLeft + frL.offsetLeft;
+        var shared = tx < fx + frL.offsetWidth + 12 && fx < tx + tw + 12;
+        var row2 = Math.max(B[1] + 100 * DOODLE, shared ? A[1] - pinH + 34 + frL.offsetHeight + 12 : 0);
+        toL.style.top = Math.round(row2 - (B[1] - pinH)) + "px";
         badge.style.top = Math.round(row2 + $("to-label").offsetHeight + 12) + "px";
         
 

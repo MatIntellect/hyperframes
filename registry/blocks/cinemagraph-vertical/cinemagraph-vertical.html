@@ -320,9 +320,10 @@
         var card = placement !== "full";
         if (card) clip.classList.add("cmgv-card");
         if (placement === "bottom") clip.classList.add("cmgv-bottom");
-        var S = card ? 0.7 : 1920 / 1080,
+        // карточка: чашка с паром (~550 по высоте у разработчиков, середина ~571) крупно в 760 – масштаб 1,2, середина на 380
+        var S = card ? 1.2 : 1920 / 1080,
           AX = card ? 388 : 540,
-          AY = card ? 378 : 770;
+          AY = card ? 360 : 770;
         scene.style.transform = "translate(" + (AX - 960 * S) + "px," + (AY - 537 * S) + "px) scale(" + S + ")";
         
         // своё видео: петля под стоп-кадром, в стоп-кадре – мягкое овальное окно; без видео – родная сцена с паром

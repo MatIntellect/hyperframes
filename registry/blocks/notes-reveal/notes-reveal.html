@@ -157,6 +157,10 @@
         width: 1080px;
         height: 593px;
         overflow: hidden;
+        /* the scroll edge under the toolbar, as iOS 26 softens it: a line scrolling up fades, never cut through its letters
+           (the title rests 52 px down, clear of the 44 px edge) */
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 44px);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 44px);
       }
       #note-body {
         position: absolute;

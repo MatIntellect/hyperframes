@@ -271,7 +271,7 @@
         color: var(--ink);
       }
       .c1 {
-        width: 110px;
+        width: 124px;
       }
       .c2 {
         width: 114px;
@@ -279,7 +279,7 @@
         overflow-wrap: anywhere;
       }
       .c3 {
-        width: 146px;
+        width: 132px;
       }
       .th {
         font-size: 14.5px;
@@ -302,6 +302,11 @@
       }
       .emo {
         font-size: 14px;
+      }
+      /* the use case wraps inside its column: a long word breaks instead of running into the tool column */
+      .use .w {
+        min-width: 0;
+        overflow-wrap: anywhere;
       }
       /* ---------------------------------------------------------- scroll chrome */
       .scrollbar {

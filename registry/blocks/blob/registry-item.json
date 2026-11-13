@@ -3,7 +3,7 @@
   "name": "blob",
   "type": "hyperframes:block",
   "title": "Blob",
-  "description": "A soft red blob with a white highlight slowly changes shape on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
+  "description": "A soft red and grey blob with a white highlight slowly changes shape on the dark ground. A WebGPU shader from the Shaders library (shaders.com, MIT) on the brand ground; brand colours by default (dark ground, red and grey); every colour is a variable. Fades in and out on cues, holds 30 s.",
   "tags": ["webgpu", "webgpu-shader", "background", "abstract", "organic", "gradient", "loopable"],
   "license": "Apache-2.0 AND MIT",
   "dimensions": {

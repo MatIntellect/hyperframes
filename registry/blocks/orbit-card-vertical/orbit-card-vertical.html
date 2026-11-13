@@ -116,7 +116,8 @@
         stage.classList.add("orcv-card", "orcv-" + placement);
         width = 780;
         height = 760;
-        vScale = 760 / 1080;
+        // the card shows the wide frame's height (vScale 1): the orbit's near pass fits it as it fits 1080
+        vScale = 1;
       }
       
       // цвета и шрифты темы: в three.js и на холст – готовыми значениями

@@ -200,16 +200,17 @@
         tower(-9.5 * FS, 3.5 * FS, 9.6 * FS, -4.0 * FS, 6, 14, FAR_Z * 1.03, 0.34);
         tower(2.0 * FS, 4.5 * FS, 6.4 * FS, -4.0 * FS, 8, 12, FAR_Z * 0.98, 0.3);
         tower(12.5 * FS, 3.0 * FS, 11.0 * FS, -4.0 * FS, 5, 15, FAR_Z * 1.08, 0.36);
-        for (var s = 0; s < 40; s++) {
-          var sx = (-5.5 + (11 * s) / 39) * FS;
-          var mixc = s / 39;
+        // the neon tube: lights closer than their diameter (11 / 79 = 0.14 < 0.2), so in focus it reads as one tube, not dots
+        for (var s = 0; s < 80; s++) {
+          var sx = (-5.5 + (11 * s) / 79) * FS;
+          var mixc = s / 79;
           var sc = [
             SIGN_A[0] + (SIGN_B[0] - SIGN_A[0]) * mixc,
             SIGN_A[1] + (SIGN_B[1] - SIGN_A[1]) * mixc,
             SIGN_A[2] + (SIGN_B[2] - SIGN_A[2]) * mixc,
           ];
-          light(sx, -5.0 * FS, FAR_Z * 0.99, 0.1 * FS, 7, sc);
-          light(sx, -5.55 * FS, FAR_Z * 0.99, 0.1 * FS, 7, sc);
+          light(sx, -5.0 * FS, FAR_Z * 0.99, 0.1 * FS, 3.5, sc);
+          light(sx, -5.55 * FS, FAR_Z * 0.99, 0.1 * FS, 3.5, sc);
         }
 
         var Z_LO = Math.min(NEAR_Z, FAR_Z) * 1.9;

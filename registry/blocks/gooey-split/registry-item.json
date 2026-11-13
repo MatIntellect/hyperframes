@@ -3,7 +3,7 @@
   "name": "gooey-split",
   "type": "hyperframes:block",
   "title": "Gooey Split",
-  "description": "A dot splits into a three-dot menu with a gooey neck, spins into a swirl mark under directional shutter motion blur, breaks back into three dots and merges into one. Brand ink on the brand ground; cues shift the whole move; holds or fades.",
+  "description": "A dot splits into a three-dot menu with a gooey neck, spins into a swirl mark under directional shutter motion blur, breaks back into three dots and merges into one. Brand ink on the brand ground; cues shift the whole move; fades out after the merge, or holds.",
   "tags": ["effect", "gooey", "metaball", "motion-blur", "morph", "logo", "icon"],
   "dimensions": {
     "width": 1920,

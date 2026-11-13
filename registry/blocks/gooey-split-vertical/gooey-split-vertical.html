@@ -4,7 +4,7 @@
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the mark centred in the 780x1180 field (y 770). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the move starts (the native 4.7 s: split into three dots, swirl mark, back to three dots, merge into one), 2 the block fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the single dot to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fade (default) fades the block out 2 s after the merge, so a lone dot never holds the frame; none holds the single dot to the end of the mount.", "default": "fade", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
   <head>
@@ -785,7 +785,7 @@
           });
         // метка 1 сдвигает весь родной ход
         var C0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
-        var exit = ["none", "fade"].indexOf(String(V.exit)) >= 0 ? String(V.exit) : "none";
+        var exit = ["none", "fade"].indexOf(String(V.exit)) >= 0 ? String(V.exit) : "fade";
         // чернила – цвет --fg: им же красится порог фильтра «липкости»
         var CS = getComputedStyle(root);
         var ink = (CS.getPropertyValue("--fg").trim() || "#f2f2f2").replace("#", "");

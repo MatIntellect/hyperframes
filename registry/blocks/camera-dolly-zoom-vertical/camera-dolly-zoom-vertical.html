@@ -201,8 +201,9 @@
           W = 780;
           H = 760;
           k = 0.75;
-          subTop = 70;
           OY = 380;
+          // the figure centred on the vanishing point, as in full (460 + 310 = 770): half its height 310 * k above OY
+          subTop = OY - 310 * k;
         }
         
         var label = typeof V.label === "string" ? V.label.trim() : "Эффект Хичкока";

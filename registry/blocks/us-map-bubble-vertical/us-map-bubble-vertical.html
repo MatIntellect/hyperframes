@@ -5,7 +5,7 @@
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and source in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "20 крупнейших городов США" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Размер круга – население города" },
-    { "id": "cities", "type": "string", "role": "content", "label": "Cities", "description": "Cities separated by ;, each as Name: latitude, longitude, value (decimal point in the coordinates). Up to 25 cities; circle area follows the value, the five largest get a label (three on the vertical card), arcs run from the largest to the next four.", "maxLength": 1000, "default": "Нью-Йорк: 40.71, -74.01, 8300000; Лос-Анджелес: 34.05, -118.24, 3900000; Чикаго: 41.88, -87.63, 2700000; Хьюстон: 29.76, -95.37, 2300000; Финикс: 33.45, -112.07, 1600000; Филадельфия: 39.95, -75.17, 1600000; Сан-Антонио: 29.42, -98.49, 1400000; Сан-Диего: 32.72, -117.16, 1400000; Даллас: 32.78, -96.8, 1300000; Джэксонвилл: 30.33, -81.66, 950000; Остин: 30.27, -97.74, 960000; Сан-Хосе: 37.34, -121.89, 1000000; Форт-Уэрт: 32.76, -97.33, 930000; Колумбус: 39.96, -83, 910000; Шарлотт: 35.23, -80.84, 870000; Индианаполис: 39.77, -86.16, 880000; Сан-Франциско: 37.77, -122.42, 870000; Сиэтл: 47.61, -122.33, 740000; Денвер: 39.74, -104.99, 710000; Нашвилл: 36.16, -86.78, 690000" },
+    { "id": "cities", "type": "string", "role": "content", "label": "Cities", "description": "Cities separated by ;, each as Name: latitude, longitude, value (decimal point in the coordinates). Up to 25 cities; circle area follows the value, the five largest (three on the vertical card) get a label where it fits clear of the other circles and labels, arcs run from the largest to the next four.", "maxLength": 1000, "default": "Нью-Йорк: 40.71, -74.01, 8300000; Лос-Анджелес: 34.05, -118.24, 3900000; Чикаго: 41.88, -87.63, 2700000; Хьюстон: 29.76, -95.37, 2300000; Финикс: 33.45, -112.07, 1600000; Филадельфия: 39.95, -75.17, 1600000; Сан-Антонио: 29.42, -98.49, 1400000; Сан-Диего: 32.72, -117.16, 1400000; Даллас: 32.78, -96.8, 1300000; Джэксонвилл: 30.33, -81.66, 950000; Остин: 30.27, -97.74, 960000; Сан-Хосе: 37.34, -121.89, 1000000; Форт-Уэрт: 32.76, -97.33, 930000; Колумбус: 39.96, -83, 910000; Шарлотт: 35.23, -80.84, 870000; Индианаполис: 39.77, -86.16, 880000; Сан-Франциско: 37.77, -122.42, 870000; Сиэтл: 47.61, -122.33, 740000; Денвер: 39.74, -104.99, 710000; Нашвилл: 36.16, -86.78, 690000" },
     { "id": "unit", "type": "string", "role": "content", "label": "Value unit", "description": "Word after the value in the labels (values print as 8,3 млн or 950 тыс.). Empty prints the number alone.", "maxLength": 10, "default": "" },
     { "id": "source", "type": "string", "role": "content", "label": "Source", "description": "Source line. Empty hides it.", "maxLength": 50, "default": "Источник: Бюро переписи США, 2024" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline lands, 2 the states fade up and the circles pop in from the largest (about 2.5 s), 3 the labels fade in and the arcs draw from the largest city, then it pulses, 4 the map fades out (only when exit is fade; empty – after the first pulse of the largest city, cue 3 + 4.3). Empty keeps 0, 1, 4.", "default": "" },
@@ -334,7 +334,8 @@
           var inX = function (x) {
             return Math.max(w / 2, Math.min(MAPW - w / 2, x));
           };
-          var pick = spots[0];
+          // no free spot – no label: the circle's size still carries the value (a label over a neighbour reads as neither)
+          var pick = null;
           for (var i = 0; i < spots.length; i++) {
             var b = { x: inX(spots[i][0]) - w / 2, y: spots[i][1] - h / 2, w: w, h: h };
             if (!hits(b)) {
@@ -342,13 +343,17 @@
               break;
             }
           }
+          if (!pick) {
+            g.remove();
+            return null;
+          }
           var lx = inX(pick[0]);
           boxes.push({ x: lx - w / 2, y: pick[1] - h / 2, w: w, h: h });
           t.attr("x", lx).attr("y", pick[1]);
           var ty = pick[1] < c.y - c.r ? pick[1] + h / 2 : pick[1] > c.y + c.r ? pick[1] - h / 2 : c.y;
           tick.attr("x1", c.x).attr("y1", c.y).attr("x2", Math.abs(pick[1] - c.y) < 1 ? (pick[0] < c.x ? lx + w / 2 : lx - w / 2) : c.x).attr("y2", ty);
           return g.node();
-        });
+        }).filter(Boolean);
 
         var cues = String(V.cues || "")
           .split(",")

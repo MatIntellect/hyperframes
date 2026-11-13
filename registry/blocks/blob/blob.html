@@ -4,7 +4,7 @@
   data-composition-variables='[
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "colorA", "type": "string", "role": "style", "label": "Color A", "description": "Primary color of the blob. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
-    {"id": "colorB", "type": "string", "role": "style", "label": "Color B", "description": "Secondary color of the blob. Any CSS colour; by default the theme token --surface.", "default": "var(--surface, #18181a)"},
+    {"id": "colorB", "type": "string", "role": "style", "label": "Color B", "description": "Secondary color of the blob. Any CSS colour; by default the theme token --muted.", "default": "var(--muted, #8a8a90)"},
     {"id": "highlightColor", "type": "string", "role": "style", "label": "Highlight Color", "description": "Color of the specular highlight. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the shader running to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
@@ -75,7 +75,7 @@
         var COMP_ID = "blob";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"colorA": "var(--accent, #ff0000)", "colorB": "var(--surface, #18181a)", "highlightColor": "var(--fg, #f2f2f2)"};
+        var COLORS = {"colorA": "var(--accent, #ff0000)", "colorB": "var(--muted, #8a8a90)", "highlightColor": "var(--fg, #f2f2f2)"};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = null;
