@@ -189,9 +189,9 @@
           return isFinite(n) ? n : fallback;
         }
 
-        /* the light is the theme accent (brand red); the hot core needs a #rrggbb value */
-        var accent = getComputedStyle(root).getPropertyValue("--accent").trim();
-        if (!/^#[0-9a-fA-F]{6}$/.test(accent)) accent = "#ff0000";
+        /* the light is the theme accent (brand red), the developers' way (camera-scan-gate.html:94-128): the token with the
+           literal as fallback, set as style (an SVG stroke attribute does not read var()) */
+        var accent = "var(--accent, #ff0000)";
         var mode = V.movement === "glide" ? "glide" : "step";
         var speed = Math.max(0.05, num(V.speed, 1.6)); // corners per second
         var radius = Math.min(Math.min(W, H) / 2, Math.max(0, num(V.cornerRadius, 26)));
@@ -200,18 +200,8 @@
         var glow = Math.max(0, num(V.glow, 1));
 
         // Hot core: the accent lifted most of the way to white, the way a real
-        // filament reads brighter than its halo.
-        function towardWhite(hex, amount) {
-          var v = parseInt(hex.slice(1), 16);
-          var out = "#";
-          for (var s = 16; s >= 0; s -= 8) {
-            var c = (v >> s) & 255;
-            var m = Math.round(c + (255 - c) * amount);
-            out += (m < 16 ? "0" : "") + m.toString(16);
-          }
-          return out;
-        }
-        var hot = towardWhite(accent, 0.78);
+        // filament reads brighter than its halo (the developers' color-mix, camera-scan-gate.html:125-127)
+        var hot = "color-mix(in srgb, " + accent + " 22%, #fff)";
 
         // ---- geometry -------------------------------------------------------
         // Rounded rect, clockwise, starting where the top edge leaves the
@@ -235,7 +225,7 @@
         var railEl = document.getElementById("lnbv-rail");
         fillEl.setAttribute("d", d);
         railEl.setAttribute("d", d);
-        railEl.setAttribute("stroke", accent);
+        railEl.style.stroke = accent;
         railEl.setAttribute("stroke-width", String(thickness));
         railEl.setAttribute("stroke-opacity", "0.14");
 
@@ -360,7 +350,7 @@
           LAYERS.forEach(function (layer) {
             var u = document.createElementNS(SVG_NS, "use");
             u.setAttribute("href", "#lnbv-seg-" + tag + "-" + (layer.core ? "core" : "glow"));
-            u.setAttribute("stroke", layer.stroke);
+            u.style.stroke = layer.stroke;
             u.setAttribute(
               "stroke-width",
               String(Math.max(0.5, thickness + 2 * layer.spread * MAX_REACH * glow)),
