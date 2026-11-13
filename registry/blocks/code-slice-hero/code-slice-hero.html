@@ -467,10 +467,9 @@
 
         // The cursor is imaginary and belongs exclusively to the timeline.
         function seek(event) {
-          if (!timeline || typeof event.detail?.time !== "number") return;
-          const time = clamp(event.detail.time, 0, DURATION);
-          timeline.totalTime(time, true);
-          renderAt(time);
+          // the runtime has already put this timeline at the block's own time; event.detail.time is the reel's
+          if (!timeline) return;
+          renderAt(clamp(timeline.time(), 0, DURATION));
         }
         window.addEventListener("hf-seek", seek);
         document.fonts.load(`700 100px "${FONT}"`, headline + reverseHeadline).then(build);

@@ -1349,8 +1349,8 @@
       }
 
       function onSeek(event) {
+        // the runtime has already put this timeline at the block's own time; event.detail.time is the reel's
         const timeline = window.__timelines["canopy-part-title-vertical"];
-        timeline.totalTime(Math.max(0, Number(event.detail?.time) || 0), true);
         renderAt(window.cptvClock(timeline.time()));
       }
       window.addEventListener("hf-seek", onSeek);
@@ -1386,7 +1386,7 @@
       for (const { group } of leaves) group.visible = true;
       renderer.compile(scene, camera);
       renderAt(0);
-      renderAt(window.__hfThreeTime ?? (tl ? tl.time() : 0));
+      renderAt(tl.time());
       /* Draw across the timeline and flush the GPU before ready, so shader links
          and texture uploads land in the readiness gate, not the first visible frames. */
       async function warmGpu() {

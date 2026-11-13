@@ -852,9 +852,8 @@
       tl.eventCallback("onUpdate", () => renderAt(sceneTime(clock.t)));
       if (EXIT === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, C1);
 
-      window.addEventListener("hf-seek", function (event) {
-        const d = event && event.detail;
-        if (d && typeof d.time === "number") tl.totalTime(Math.min(d.time, tl.totalDuration()), true);
+      // the runtime has already put tl at the block's own time; event.detail.time is the reel's
+      window.addEventListener("hf-seek", function () {
         const fn = tl.eventCallback("onUpdate");
         if (fn) fn();
       });

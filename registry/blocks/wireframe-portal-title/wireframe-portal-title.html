@@ -358,10 +358,8 @@
       });
       /* Studio's player seeks with GSAP events suppressed and dispatches an
          hf-seek CustomEvent instead — re-sync and repaint so the stage follows. */
-      window.addEventListener("hf-seek", function (event) {
-        var d = event && event.detail;
-        if (d && typeof d.time === "number")
-          tl.totalTime(Math.min(d.time, tl.totalDuration()), true);
+      /* the runtime has already put tl at the block's own time; event.detail.time is the reel's */
+      window.addEventListener("hf-seek", function () {
         var fn = tl.eventCallback("onUpdate");
         if (fn) fn();
       });

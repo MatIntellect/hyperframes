@@ -3275,10 +3275,9 @@
 
         function seek(event) {
           const d = event && event.detail;
-          if (!d || typeof d.time !== "number") return;
-          const time = clamp(d.time, 0, DURATION);
-          activeTimeline().totalTime(time, true);
-          renderAt(time);
+          if (!d) return;
+          // the runtime has already put the timeline at the block's own time; d.time is the reel's
+          renderAt(clamp(activeTimeline().time(), 0, DURATION));
           // async renderer: hold the capture until the GPU queue has drained (and until the scene has loaded)
           if (typeof d.waitUntil === "function") d.waitUntil(frost.waitForGpu());
         }

@@ -138,12 +138,8 @@
         onUpdate: () => renderAt(state.time),
       });
       if (V.exit === "fade") timeline.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, Number.isFinite(cues[1]) && cues[1] > start ? Math.min(cues[1], start + 6.85) : start + 6.85);
-      window.addEventListener("hf-seek", (event) => {
-        if (typeof event.detail?.time === "number") {
-          timeline.totalTime(Math.max(0, Math.min(30, event.detail.time)), true);
-          renderAt(event.detail.time);
-        }
-      });
+      // the runtime has already put the timeline at the block's own time; event.detail.time is the reel's
+      window.addEventListener("hf-seek", () => renderAt(Math.min(30, timeline.time())));
       window.__timelines = window.__timelines || {};
       window.__timelines["orbit-card"] = timeline;
     </script>
