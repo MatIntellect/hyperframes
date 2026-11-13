@@ -5,17 +5,17 @@
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 180. center: centred on y 770. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
     { "id": "time1", "type": "string", "role": "content", "label": "Comment 1 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "2 дня назад" },
-    { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Как ты это смонтировал так быстро?" },
+    { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "Как ты это смонтировал так быстро?" },
     { "id": "likes1", "type": "string", "role": "content", "label": "Comment 1 likes", "description": "Like count.", "maxLength": 8, "default": "47" },
     { "id": "avatar1", "type": "image", "role": "content", "label": "Comment 1 avatar", "description": "Round picture; empty draws a coloured circle with the first letter of the handle.", "default": "" },
     { "id": "user2", "type": "string", "role": "content", "label": "Comment 2 user", "description": "Handle of the second commenter. Empty hides the comment.", "maxLength": 20, "default": "@framerate" },
     { "id": "time2", "type": "string", "role": "content", "label": "Comment 2 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "1 день назад" },
-    { "id": "text2", "type": "string", "role": "content", "label": "Comment 2 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "Графика как у больших каналов, жду разбор" },
+    { "id": "text2", "type": "string", "role": "content", "label": "Comment 2 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "Графика как у больших каналов, жду разбор" },
     { "id": "likes2", "type": "string", "role": "content", "label": "Comment 2 likes", "description": "Like count.", "maxLength": 8, "default": "12" },
     { "id": "avatar2", "type": "image", "role": "content", "label": "Comment 2 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
     { "id": "user3", "type": "string", "role": "content", "label": "Comment 3 user", "description": "Handle of the third commenter. Empty hides the comment.", "maxLength": 20, "default": "" },
     { "id": "time3", "type": "string", "role": "content", "label": "Comment 3 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "" },
-    { "id": "text3", "type": "string", "role": "content", "label": "Comment 3 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 80, "default": "" },
+    { "id": "text3", "type": "string", "role": "content", "label": "Comment 3 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "" },
     { "id": "likes3", "type": "string", "role": "content", "label": "Comment 3 likes", "description": "Like count.", "maxLength": 8, "default": "" },
     { "id": "avatar3", "type": "image", "role": "content", "label": "Comment 3 avatar", "description": "Round picture; empty draws a coloured circle with a letter.", "default": "" },
     { "id": "replyLabel", "type": "string", "role": "content", "label": "Reply label", "description": "Word after the like count.", "maxLength": 12, "default": "Ответить" },
@@ -151,7 +151,6 @@
       #yccv-col {
         left: 150px;
         width: 780px;
-        gap: 20px;
       }
       #yccv-root.yccv-top #yccv-col {
         top: 180px;
@@ -163,30 +162,61 @@
       #yccv-root.yccv-bottom #yccv-col {
         bottom: 560px;
       }
+      /* the comments fill the 780 field (montazher.md:22 "large, all the free space"): one or two comments set large,
+         three set medium so the longest words still end inside the 760 card */
+      #yccv-col {
+        gap: 40px;
+      }
       .yccv-card {
-        gap: 20px;
+        gap: 28px;
       }
       .yccv-av {
-        width: 72px;
-        height: 72px;
-        font-size: 32px;
+        width: 112px;
+        height: 112px;
+        font-size: 50px;
       }
       .yccv-user,
       .yccv-time {
-        font-size: 30px;
+        font-size: 40px;
       }
       .yccv-text {
         margin-top: 6px;
-        font-size: 38px;
-        line-height: 1.25;
+        font-size: 54px;
+        line-height: 1.2;
       }
       .yccv-row {
         margin-top: 12px;
-        font-size: 28px;
+        font-size: 36px;
       }
       .yccv-row svg {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
+      }
+      #yccv-root.yccv-n3 #yccv-col {
+        gap: 20px;
+      }
+      #yccv-root.yccv-n3 .yccv-card {
+        gap: 24px;
+      }
+      #yccv-root.yccv-n3 .yccv-av {
+        width: 88px;
+        height: 88px;
+        font-size: 40px;
+      }
+      #yccv-root.yccv-n3 .yccv-user,
+      #yccv-root.yccv-n3 .yccv-time {
+        font-size: 34px;
+      }
+      #yccv-root.yccv-n3 .yccv-text {
+        font-size: 42px;
+      }
+      #yccv-root.yccv-n3 .yccv-row {
+        margin-top: 10px;
+        font-size: 30px;
+      }
+      #yccv-root.yccv-n3 .yccv-row svg {
+        width: 32px;
+        height: 32px;
       }
       
     </style>
@@ -224,6 +254,9 @@
           var c = { user: get("user" + k, d[0]), time: get("time" + k, d[1]), text: get("text" + k, d[2]), likes: get("likes" + k, d[3]), avatar: get("avatar" + k, "") };
           if (c.user && c.text) comments.push(c);
         }
+        
+        if (comments.length === 3) root.classList.add("yccv-n3");
+        
         var reply = get("replyLabel", "") || "Ответить";
         var THUMB = '<svg viewBox="0 0 24 24"><path d="M7 11v9M7 11l3.2-6.4a2 2 0 0 1 3.6 1.2V9h4.6a2 2 0 0 1 2 2.4l-1.2 6a2 2 0 0 1-2 1.6H7M7 11H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/></svg>';
         /* YouTube's default avatars: a coloured circle with the first letter */

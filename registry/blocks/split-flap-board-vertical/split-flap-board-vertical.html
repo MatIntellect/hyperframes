@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the board centred in the 780x1180 field (y 180-1360), up to 4 rows of 8 cells. top / bottom: the board on a brand card 780x760 at y 180-940 / 600-1360, up to 3 rows of 8 cells, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the board centred in the 780x1180 field (y 180-1360), up to 4 rows of 8 cells. top / bottom: the board on a brand card that wraps it (at most 780x760) at the top of y 180-940 / the bottom of y 600-1360, up to 4 rows of 8 cells, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "boardText", "type": "string", "role": "content", "label": "Board text", "description": "Text the board flips to, upper case, Bebas Neue. Words wrap into rows (wide: 2 rows of 14 cells; vertical: rows of 8 cells, more and narrower cells when the words need them). Russian and Latin letters, digits and . , ! ? - : are on the drum; other characters stay blank.", "maxLength": 28, "default": "МОНТАЖ ГОТОВ" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the board starts flipping, 2 the last cell lands (the flap speed is set so every cell walks its drum by then), 3 the board fades out (only when exit is fade). Empty keeps 0.2 and 2.6.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed board to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -144,8 +144,11 @@
         top: 180px;
         height: 1180px;
       }
+      /* the card wraps the board (no empty card around a short word, montazher.md:22): at most 780x760, at the top / bottom
+         edge of its zone */
       #sfbv-root.sfbv-card #sfbv-field {
-        height: 760px;
+        height: auto;
+        padding: 40px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
@@ -154,7 +157,8 @@
         background: var(--bg, #0c1014);
       }
       #sfbv-root.sfbv-bottom #sfbv-field {
-        top: 600px;
+        top: auto;
+        bottom: 560px;
       }
       
     </style>
@@ -187,8 +191,9 @@
           root.querySelector(".sfbv-ground").remove();
         }
         var COLS = 8,
-          ROWS = placement === "full" ? 4 : 3,
+          ROWS = 4,
           WIDTH = placement === "full" ? 780 : 700,
+          HMAX = placement === "full" ? 1180 : 680,
           CMAX = 120;
         
 
@@ -223,7 +228,8 @@
         );
 
         var GAP = 10;
-        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols));
+        /* the largest cell that keeps the board inside its field, across and down (a cell is 1.45 times as tall as wide) */
+        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols), Math.floor((HMAX - (lines.length - 1) * GAP * 1.6) / lines.length / 1.45));
         var chh = Math.round(cw * 1.45);
         var board = document.getElementById("sfbv-board");
         board.style.gap = GAP * 1.6 + "px";

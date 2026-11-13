@@ -167,6 +167,7 @@
         var COLS = 14,
           ROWS = 2,
           WIDTH = 1640,
+          HMAX = Infinity,
           CMAX = 120;
         
         
@@ -202,7 +203,8 @@
         );
 
         var GAP = 10;
-        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols));
+        /* the largest cell that keeps the board inside its field, across and down (a cell is 1.45 times as tall as wide) */
+        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols), Math.floor((HMAX - (lines.length - 1) * GAP * 1.6) / lines.length / 1.45));
         var chh = Math.round(cw * 1.45);
         var board = document.getElementById("sfb-board");
         board.style.gap = GAP * 1.6 + "px";
