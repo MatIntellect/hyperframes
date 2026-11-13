@@ -192,7 +192,8 @@
             var stitch = vars.stitch === "coarse" ? "coarse" : "fine";
             var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
 
-            // One palette: the thread rides the reel's brand red.
+            // One palette: the stitched word is --fg; the loose thread and the
+            // needle ring ride the reel's brand red (no translucent red mixes).
             root.style.setProperty("--std-accent", "var(--brand, #ff0000)");
             stage.setAttribute("aria-label", text);
 
@@ -952,7 +953,9 @@
                 var path = el("path");
                 path.setAttribute("d", d);
                 path.setAttribute("fill", "none");
-                path.setAttribute("stroke", "var(--std-accent)");
+                // Finished stitches are the word itself: text colour. Red stays on
+                // the work in progress, the loose thread and the needle ring.
+                path.setAttribute("stroke", "var(--fg, #f2f2f2)");
                 path.setAttribute("stroke-width", String(reg.width));
                 path.setAttribute("stroke-linecap", "round");
                 svg.appendChild(path);
@@ -1022,7 +1025,7 @@
             var needle = el("circle");
             needle.setAttribute("r", (reg.width * 1.15).toFixed(2));
             needle.setAttribute("fill", "var(--fg, #f2f2f2)");
-            needle.setAttribute("stroke", "color-mix(in srgb, var(--std-accent) 60%, transparent)");
+            needle.setAttribute("stroke", "var(--std-accent)");
             needle.setAttribute("stroke-width", (reg.width * 0.45).toFixed(2));
             needle.setAttribute("opacity", "0");
             svg.appendChild(needle);

@@ -12,12 +12,11 @@
 
     - text (text, default МОНТАЖ): the word the scramble resolves into.
       One scrambling cell per character, up to 32. Also written to data-final,
-      which the decode reads. Cells and glow ride the reel's brand red.
+      which the decode reads. Scrambling cells ride the reel's brand red; a cell turns
+      light (--fg) as it locks, so the finished word reads in the text colour.
     - size (28 to 160 px, default 64): type size of the cells. Cell width and
       gap are fractions of it, so the row scales as a whole; a row wider than
       its space shrinks to fit (never under 28 px), then wraps.
-    - glow (none | standard | strong, default standard): halo strength behind
-      the cells, from no shadow at all to a heavy bloom.
 
   Monospace on purpose: a decode is a code look.
 -->
@@ -27,8 +26,7 @@
   data-final="МОНТАЖ"
   data-composition-variables='[
     {"id": "text", "type": "string", "role": "content", "label": "Target text", "description": "Word the scramble resolves into. One scrambling cell per character, up to 32.", "default": "МОНТАЖ"},
-    {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. A row wider than its space shrinks to fit, never under 28 px, then wraps.", "default": 64, "min": 28, "max": 160, "step": 4, "unit": "px"},
-    {"id": "glow", "type": "enum", "role": "style", "label": "Glow", "description": "Strength of the halo behind the cells, from none to a heavy bloom.", "default": "standard", "options": [{"value": "none", "label": "None"}, {"value": "standard", "label": "Standard"}, {"value": "strong", "label": "Strong"}]}
+    {"id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the cells in pixels. A row wider than its space shrinks to fit, never under 28 px, then wraps.", "default": 64, "min": 28, "max": 160, "step": 4, "unit": "px"}
   ]'
 >
   <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span
@@ -81,13 +79,14 @@
       monospace;
     font-size: var(--hf-matrix-size, 64px);
     color: var(--hf-matrix-color, var(--brand, #ff0000));
-    text-shadow: 0 0 var(--hf-matrix-glow-radius, 18px)
-      rgba(var(--hf-matrix-glow-rgb, 255, 0, 0), var(--hf-matrix-glow-alpha, 0.28));
   }
   .hf-catalog-matrix-decode span {
     display: inline-block;
     min-width: 0.64em;
     opacity: var(--hf-matrix-opacity, 1);
+  }
+  .hf-catalog-matrix-decode span.is-locked {
+    color: var(--fg, #f2f2f2);
   }
 </style>
 
@@ -101,16 +100,6 @@
         : {};
 
     // Anything missing or invalid returns to its declared default.
-    var glows = {
-      none: { radius: "0px", alpha: "0" },
-      standard: { radius: "18px", alpha: "0.28" },
-      strong: { radius: "34px", alpha: "0.55" },
-    };
-
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
-    }
-
     var text = typeof vars.text === "string" ? vars.text.trim().slice(0, 32) : "";
     if (!text) {
       text = "МОНТАЖ";
@@ -120,17 +109,14 @@
       typeof vars.size === "number" || typeof vars.size === "string" ? Number(vars.size) : NaN;
     size = isFinite(size) && size > 0 ? Math.min(160, Math.max(28, size)) : 64;
 
-    // One palette: the cells and their glow ride the reel's brand red.
-    var accent = { color: "var(--brand, #ff0000)", rgb: "255, 0, 0" };
-    var glow = glows[pick(glows, vars.glow, "standard")];
+    // One palette: scrambling cells ride the reel's brand red, locked cells --fg
+    // (a red glow on the dark ground read as a translucent maroon wash, so none).
+    var accent = { color: "var(--brand, #ff0000)" };
 
     var roots = document.querySelectorAll(".hf-catalog-matrix-decode");
     for (var i = 0; i < roots.length; i += 1) {
       roots[i].style.setProperty("--hf-matrix-size", size + "px");
       roots[i].style.setProperty("--hf-matrix-color", accent.color);
-      roots[i].style.setProperty("--hf-matrix-glow-rgb", accent.rgb);
-      roots[i].style.setProperty("--hf-matrix-glow-radius", glow.radius);
-      roots[i].style.setProperty("--hf-matrix-glow-alpha", glow.alpha);
       roots[i].setAttribute("data-final", text);
       while (roots[i].firstChild) {
         roots[i].removeChild(roots[i].firstChild);
@@ -192,10 +178,12 @@
         if (letter === " " || letter === "") continue;
         if (decode.p >= (c + 1) / (decodeCells.length + 1)) {
           decodeCells[c].textContent = letter;
+          decodeCells[c].classList.add("is-locked");
           continue;
         }
         var h = Math.imul(c + 1, 2654435761) ^ Math.imul(tick + 7, 40503);
         h = (h ^ (h >>> 15)) >>> 0;
+        decodeCells[c].classList.remove("is-locked");
         decodeCells[c].textContent = GLYPHS.charAt(h % GLYPHS.length);
       }
     }
