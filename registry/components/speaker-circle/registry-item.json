@@ -1,0 +1,23 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "speaker-circle",
+  "type": "hyperframes:component",
+  "title": "Speaker Circle",
+  "description": "Attachment snippet, no markup of its own: apply it to the host's element and drive it from the host timeline with the recipe in the file. The speaker's recording in a round window with no outline over a vertical reel: opens large (1.95x) in the centre of the frame, then moves between the places you give it (time, centre, size 1x–1.95x) or leaves the frame for full-screen graphics and comes back. The window grows, the face is never zoomed.",
+  "tags": [
+    "circle",
+    "speaker",
+    "talking-head",
+    "picture-in-picture",
+    "recording",
+    "overlay",
+    "vertical"
+  ],
+  "files": [
+    {
+      "path": "speaker-circle.html",
+      "target": "compositions/components/speaker-circle.html",
+      "type": "hyperframes:snippet"
+    }
+  ]
+}

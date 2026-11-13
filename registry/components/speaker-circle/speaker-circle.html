@@ -1,0 +1,107 @@
+<!--
+  Speaker Circle – the speaker's recording in a round window over a vertical reel (1080x1920).
+  No outline. It opens large (1.95x, Ø780) in the centre of the frame (x 540, y 960) at 0 s, then
+  moves between the places you give it, 1x (Ø400) to 1.95x (Ø780), or leaves the frame (size 0)
+  for full-screen graphics. The picture is never stretched or zoomed: the window grows, not the face.
+
+  Usage:
+  1. Paste the style block and the script block below into the reel.
+  2. Wrap the recording (its own timed clip, as always) in an untimed div with class="speaker-circle":
+       <div id="krug" class="speaker-circle">
+         <video id="a-roll" class="clip" src="assets/footage/rec.mp4" playsinline data-has-audio="true"
+                data-start="0" data-duration="<recording length>" data-track-index="0"></video>
+       </div>
+  3. In the reel's paused timeline, one line:
+       speakerCircle(tl, "#krug", "2.0|540|1150|1; 9.4|540|390|1; 14.7|0; 21.95|540|940|1.6");
+     Each place is time|x|y|size[|move seconds]: seconds on the reel's timeline, the circle's centre
+     in frame pixels, size 1–1.95 (0 = leaves the frame), the move length (default 0.6 s).
+     At rest the whole circle stays inside x 60–930, y 180–1360 (the reel's safe zone for graphics
+     and the circle); a place outside it, or a size outside 1–1.95, throws an error naming the place.
+  The circle moves with transforms on the wrapper (overlays.md: "move it with transforms on a
+  wrapper"). A render can lose a video inside a moved wrapper even when check passes: look at
+  frames of the rendered mp4.
+-->
+
+<style>
+  .speaker-circle {
+    position: absolute;
+    left: 340px;
+    top: 760px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    overflow: hidden;
+    transform-origin: 50% 50%;
+    z-index: 1;
+  }
+  .speaker-circle > video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  window.speakerCircle = function (tl, sel, places) {
+    var ZONE = { x0: 60, x1: 930, y0: 180, y1: 1360 };
+    var list = String(places || "")
+      .split(";")
+      .map(function (p) {
+        return p.trim();
+      })
+      .filter(Boolean)
+      .map(function (p) {
+        var f = p.split("|").map(Number);
+        var pl = {
+          at: f[0],
+          x: f[1],
+          y: f[2],
+          size: f.length === 2 ? f[1] : f[3],
+          dur: f[4] || 0.6,
+          text: p,
+        };
+        if (!(pl.at >= 0)) throw new Error("speakerCircle: bad time in '" + p + "'");
+        if (pl.size !== 0) {
+          var r = 200 * pl.size;
+          if (!(pl.size >= 1 && pl.size <= 1.95))
+            throw new Error("speakerCircle: size must be 1–1.95 or 0 in '" + p + "'");
+          if (
+            !(
+              pl.x - r >= ZONE.x0 &&
+              pl.x + r <= ZONE.x1 &&
+              pl.y - r >= ZONE.y0 &&
+              pl.y + r <= ZONE.y1
+            )
+          )
+            throw new Error(
+              "speakerCircle: circle leaves the safe zone x 60–930, y 180–1360 in '" + p + "'",
+            );
+        }
+        return pl;
+      })
+      .sort(function (a, b) {
+        return a.at - b.at;
+      });
+    // opens large in the centre of the frame (Mat's rule for every reel)
+    tl.set(sel, { x: 0, y: 0, scale: 1.95, opacity: 1 }, 0);
+    var shown = true;
+    list.forEach(function (pl) {
+      if (pl.size === 0) {
+        if (shown)
+          tl.to(sel, { scale: "*=0.8", opacity: 0, duration: 0.3, ease: "power2.in" }, pl.at);
+        shown = false;
+        return;
+      }
+      var to = { x: pl.x - 540, y: pl.y - 960, scale: pl.size };
+      if (shown) {
+        tl.to(sel, Object.assign({ duration: pl.dur, ease: "power3.inOut" }, to), pl.at);
+      } else {
+        tl.set(sel, { x: to.x, y: to.y, scale: pl.size * 0.8 }, pl.at);
+        tl.to(sel, { scale: pl.size, opacity: 1, duration: 0.45, ease: "back.out(1.4)" }, pl.at);
+        shown = true;
+      }
+    });
+  };
+</script>

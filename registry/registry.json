@@ -2036,6 +2036,10 @@
       "type": "hyperframes:component"
     },
     {
+      "name": "speaker-circle",
+      "type": "hyperframes:component"
+    },
+    {
       "name": "split-tilt-cards",
       "type": "hyperframes:component"
     },
@@ -2273,6 +2277,6 @@
     }
   ],
   "catalogArtifact": {
-    "revision": "79fbd3071c79b09d2b85b720b21d3888cf34d416d3b9b0d91e80e7289cdd5c87"
+    "revision": "9d6f7c2e606b72d934ab23eddbe78f346c88054a701ef95a77d714ef199c9731"
   }
 }
