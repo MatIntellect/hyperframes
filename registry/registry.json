@@ -2271,5 +2271,8 @@
       "name": "yt-screen-warp",
       "type": "hyperframes:component"
     }
-  ]
+  ],
+  "catalogArtifact": {
+    "revision": "8a81eb055bb8a2adcdadc00a56fa84a0bf232cc7306fd9ea24afb5e61700f788"
+  }
 }
