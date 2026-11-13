@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object about 460 px across, centred on the field (y 770). top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object up to about 700 px across as it swells, centred on the field (y 770). top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "colorA", "type": "string", "role": "style", "label": "Color A", "description": "Primary color of the blob. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
     {"id": "colorB", "type": "string", "role": "style", "label": "Color B", "description": "Secondary color of the blob. Any CSS colour; by default a shade of the theme token --accent.", "default": "color-mix(in srgb, var(--accent, #ff0000) 48%, #000)"},
@@ -134,8 +134,8 @@
           props.size = 0.3; // native 0.5 x 0.6: the swell stays in the card
         } else {
           // the object's size follows the canvas height: 1920 would make it wider than the frame.
-          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 770).
-          props.size = 0.16875; // size: native 0.5 at 1080/1920, x 0.6 so its swell stays in the field
+          // centred on the field (y 770), sized below so it stays inside x 150-930.
+          props.size = 0.1125; // size: native 0.5 at 1080/1920, x 0.4 so its swell and glow stay in the field
           props.center = { x: 0.5, y: 770 / 1920 };
         }
         

@@ -222,10 +222,10 @@
         z-index: 10;
       }
       /* the card has no header over the thread: its top is the scroll edge, softened as iOS 26 does, so a row scrolling
-         up fades within the thread's own top padding (20) instead of being cut through its letters */
+         up fades within the thread's own top padding (28, about a line) instead of being cut through its letters */
       .cge-half .scrollport {
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 20px);
-        mask-image: linear-gradient(to bottom, transparent 0, #000 20px);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 28px);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 28px);
       }
       .thread {
         position: relative;
@@ -591,7 +591,7 @@
         if (!full) root.classList.add("cge-half");
         const H = full ? 608 : 391;
         root.style.setProperty("--cge-h", H + "px");
-        root.style.setProperty("--cge-pad-top", (full ? 74 : 20) + "px");
+        root.style.setProperty("--cge-pad-top", (full ? 74 : 28) + "px");
         root.style.setProperty("--cge-bar-top", (full ? 91 : 30) + "px");
         root.style.setProperty("--cge-chev-top", H - 135.3 + "px");
 

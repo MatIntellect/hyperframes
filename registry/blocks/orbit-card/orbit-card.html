@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "feature1Title", "type": "string", "role": "content", "label": "Card title", "description": "Bebas Neue, one line.", "default": "Всегда синхронно", "maxLength": 24 },
-    { "id": "feature1Desc", "type": "string", "role": "content", "label": "Card description", "description": "Montserrat, up to two lines. The vertical top / bottom card shows the title only.", "default": "Изменения сразу на каждом экране", "maxLength": 44 },
+    { "id": "feature1Desc", "type": "string", "role": "content", "label": "Card description", "description": "Montserrat, up to two lines.", "default": "Изменения сразу на каждом экране", "maxLength": 44 },
     { "id": "cardOrbitDegrees", "type": "number", "role": "style", "label": "Card orbit degrees", "description": "Total card-only vertical orbit during Blender frames 150–180 (5–6 s after the start). Enter 180, 360, 720, or any angle. The sphere keeps its independent spin. The final angle holds after frame 180.", "default": 360, "min": -36000, "max": 36000, "step": 1 },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the Blender move starts (the card enters, orbits at 5–6 s and flies out left at 7.35–8.55 s after it), 2 the block fades out (only when exit is fade, before the fly-out). Empty keeps 0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fly: the native Blender exit, the card leaves the frame to the left. fade: the block fades out at cue 2 instead.", "default": "fly", "options": [{ "value": "fade", "label": "Fade" }, { "value": "fly", "label": "Fly out" }] }

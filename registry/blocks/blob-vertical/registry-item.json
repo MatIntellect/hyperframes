@@ -3,7 +3,7 @@
   "name": "blob-vertical",
   "type": "hyperframes:block",
   "title": "Blob (vertical)",
-  "description": "Vertical: a soft red blob, deep red in its folds, with a white highlight slowly changes shape on the dark ground, the object centred on the field. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and grey); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
+  "description": "Vertical: a soft red blob, deep red in its folds, with a white highlight slowly changes shape on the dark ground, the object centred on the field. A WebGPU shader from the Shaders library (shaders.com, MIT); brand colours by default (dark ground, red and its dark shade); every colour is a variable. Placement full, top or bottom card; fades in and out on cues.",
   "tags": [
     "webgpu",
     "webgpu-shader",
