@@ -339,6 +339,16 @@
       var BG = css.getPropertyValue("--bg").trim() || "#0c1014",
         SURF = css.getPropertyValue("--surface").trim() || "#18181a",
         ACC = css.getPropertyValue("--accent").trim() || "#ff0000";
+      // the pink caustic is a shade of the brand red: the developers' color-mix (camera-scan-gate.html:125-127), resolved
+      // by a probe and taken whole (halftone-dissolve.html:258-262); a canvas gradient does not read var()
+      var CAUSTIC = (function () {
+        var p = document.createElement("i");
+        p.style.color = "color-mix(in srgb, color-mix(in srgb, var(--accent, #ff0000) 69%, #fff) 8%, transparent)";
+        root.appendChild(p);
+        var c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      })();
 
       // раскладка: размер кадра и камера (родная – 16:9; K – во сколько раз дальше камера, OFF – сдвиг взгляда по высоте)
       var W = 1920,
@@ -623,7 +633,7 @@
         ctx.globalCompositeOperation = "screen";
         var caustic = ctx.createLinearGradient(x + 40, y, x + w - 20, y + h);
         caustic.addColorStop(0, "rgba(255,255,255,0.16)");
-        caustic.addColorStop(0.5, "rgba(255,80,80,0.08)");
+        caustic.addColorStop(0.5, CAUSTIC);
         caustic.addColorStop(1, "rgba(255,255,255,0.08)");
         ctx.fillStyle = caustic;
         ctx.fillRect(x, y, w, h);
