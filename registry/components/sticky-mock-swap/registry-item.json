@@ -22,8 +22,7 @@
       "role": "content",
       "label": "Captions",
       "description": "Comma-separated feature captions shown beside the pinned mock.",
-      "default": "Черновик за минуту,Без настроек,Выпуск в пятницу",
-      "maxLength": 80
+      "default": "Черновик за минуту,Без настроек,Выпуск в пятницу"
     }
   ]
 }

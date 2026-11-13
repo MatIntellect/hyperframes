@@ -85,8 +85,7 @@
       "role": "content",
       "label": "Words",
       "description": "Comma separated pill labels. The list is laid down twice so the strip still reads as a continuous loop.",
-      "default": "МОНТАЖ, СУБТИТРЫ, ПЕРЕХОДЫ, ИИ",
-      "maxLength": 80
+      "default": "МОНТАЖ, СУБТИТРЫ, ПЕРЕХОДЫ, ИИ"
     }
   ]
 }

@@ -42,8 +42,7 @@
       "role": "content",
       "label": "Satellite words",
       "description": "Comma-separated satellite words, one per chip; a missing entry keeps the default word.",
-      "default": "звук,свет,кадры,монтаж,цвет,титры",
-      "maxLength": 80
+      "default": "звук,свет,кадры,монтаж,цвет,титры"
     }
   ]
 }

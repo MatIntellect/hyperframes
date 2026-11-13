@@ -38,8 +38,7 @@
       "role": "content",
       "label": "Feature nodes",
       "description": "Comma-separated feature labels introduced in narration order.",
-      "default": "Сценарий,Съёмка,Монтаж,Публикация",
-      "maxLength": 80
+      "default": "Сценарий,Съёмка,Монтаж,Публикация"
     },
     {
       "id": "cues",

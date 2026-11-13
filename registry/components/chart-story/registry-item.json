@@ -73,8 +73,7 @@
       "role": "content",
       "label": "Labels",
       "description": "Comma-separated labels, one per datum.",
-      "default": "Янв, Фев, Мар, Апр",
-      "maxLength": 80
+      "default": "Янв, Фев, Мар, Апр"
     },
     {
       "id": "emphasize",

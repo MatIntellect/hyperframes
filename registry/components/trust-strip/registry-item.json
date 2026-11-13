@@ -29,8 +29,7 @@
       "role": "content",
       "label": "Marks",
       "description": "Comma-separated wordmark texts (3 to 7 recommended).",
-      "default": "Кофейня Зерно, Студия Свет, Клиника Плюс, Школа ИИ, Фабрика роликов",
-      "maxLength": 120
+      "default": "Кофейня Зерно, Студия Свет, Клиника Плюс, Школа ИИ, Фабрика роликов"
     },
     {
       "id": "tone",

@@ -86,16 +86,16 @@
   .hf-catalog-slot-machine-roll {
     display: inline-flex;
     gap: 6px;
-    height: var(--hf-slot-row, 74px);
+    height: var(--hf-slot-row, 93px);
     overflow: hidden;
     font:
-      900 var(--hf-slot-row, 74px)/1 "Montserrat",
+      900 var(--hf-slot-font, 74px)/var(--hf-slot-row, 93px) "Montserrat",
       sans-serif;
     font-variant-numeric: tabular-nums; /* brand: digits in Montserrat, columns kept even */
   }
   .hf-catalog-slot-machine-roll span {
     display: block;
-    height: var(--hf-slot-row, 74px);
+    height: var(--hf-slot-row, 93px);
     overflow: hidden;
   }
   .hf-catalog-slot-machine-roll i {
@@ -133,7 +133,9 @@
     };
 
     var dir = directions[pick(directions, vars.direction, "up")];
-    var row = sizes[pick(sizes, vars.size, "standard")];
+    var font = sizes[pick(sizes, vars.size, "standard")];
+    // The window is one row tall and clips; a Montserrat glyph with its descender spans ~1.22 em.
+    var row = Math.round(font * 1.25);
     var tone = tones[pick(tones, vars.tone, "paper")];
     var result = (typeof vars.result === "string" ? vars.result : "").replace(/\s+/g, "");
     if (result.length === 0) result = "A7K";
@@ -142,6 +144,7 @@
     for (var i = 0; i < roots.length; i += 1) {
       var root = roots[i];
       root.style.setProperty("--hf-slot-row", row + "px");
+      root.style.setProperty("--hf-slot-font", font + "px");
       root.style.setProperty("--hf-slot-gain", String(row / 74));
       root.style.setProperty("--hf-slot-dir", String(dir));
       // Rolling down starts one row up, so the zero still sits in frame at rest.

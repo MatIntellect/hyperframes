@@ -63,8 +63,7 @@
       "role": "content",
       "label": "Labels",
       "description": "The tab names, separated by commas. Two or more names rebuild the row.",
-      "default": "План,Отладка,Вопрос",
-      "maxLength": 80
+      "default": "План,Отладка,Вопрос"
     }
   ]
 }

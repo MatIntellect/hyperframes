@@ -43,8 +43,7 @@
       "role": "content",
       "label": "Chips",
       "description": "Comma-separated chip labels that surround the center (up to 12).",
-      "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы",
-      "maxLength": 120
+      "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы"
     },
     {
       "id": "close_in",

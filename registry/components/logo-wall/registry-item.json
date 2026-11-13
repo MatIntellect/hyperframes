@@ -65,8 +65,7 @@
       "role": "content",
       "label": "Marks",
       "description": "Comma-separated client names, one per cell, in reading order. Empty keeps the neutral lettermarks; the wall shrinks to the names given.",
-      "default": "",
-      "maxLength": 80
+      "default": ""
     }
   ]
 }

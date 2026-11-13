@@ -45,8 +45,7 @@
       "role": "content",
       "label": "Labels",
       "description": "Comma-separated beat titles, one per beat. Extra entries are ignored and missing entries fall back to Шаг N.",
-      "default": "Идея,Съёмка,Монтаж,Публикация",
-      "maxLength": 80
+      "default": "Идея,Съёмка,Монтаж,Публикация"
     }
   ]
 }

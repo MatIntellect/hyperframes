@@ -38,8 +38,7 @@
       "role": "content",
       "label": "Options",
       "description": "Comma-separated words shown in the rolling slot.",
-      "default": "быстрее,дешевле,проще",
-      "maxLength": 80
+      "default": "быстрее,дешевле,проще"
     },
     {
       "id": "suffix",

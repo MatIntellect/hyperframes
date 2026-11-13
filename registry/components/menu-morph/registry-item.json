@@ -19,8 +19,7 @@
       "role": "content",
       "label": "Actions",
       "description": "Comma separated labels for the pills that fan out under the button. Up to six.",
-      "default": "Текст, Картинка, Звук",
-      "maxLength": 80
+      "default": "Текст, Картинка, Звук"
     },
     {
       "id": "size",

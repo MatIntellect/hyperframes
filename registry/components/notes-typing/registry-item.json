@@ -22,8 +22,7 @@
       "role": "content",
       "label": "Lines",
       "description": "Pipe-separated body lines, typed one after another. Up to 6 lines and 240 characters.",
-      "default": "ролики выходили слабыми|программы стоили дорого|и переделкам не было конца",
-      "maxLength": 240
+      "default": "ролики выходили слабыми|программы стоили дорого|и переделкам не было конца"
     },
     {
       "id": "speed",

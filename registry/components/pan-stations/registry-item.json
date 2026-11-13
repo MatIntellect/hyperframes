@@ -33,8 +33,7 @@
       "role": "content",
       "label": "Station labels",
       "description": "Comma-separated labels shown on the station cards.",
-      "default": "Сценарий,Монтаж,Субтитры,Публикация",
-      "maxLength": 80
+      "default": "Сценарий,Монтаж,Субтитры,Публикация"
     },
     {
       "id": "dwell",

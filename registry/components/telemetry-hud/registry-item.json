@@ -29,8 +29,7 @@
       "role": "content",
       "label": "Readouts",
       "description": "Comma-separated label:value pairs, up to 8. The first colon splits label from value.",
-      "default": "кадры/с:60,задержка:12 мс,видеокарта:38%,память:2 ГБ",
-      "maxLength": 120
+      "default": "кадры/с:60,задержка:12 мс,видеокарта:38%,память:2 ГБ"
     },
     {
       "id": "emphasize",

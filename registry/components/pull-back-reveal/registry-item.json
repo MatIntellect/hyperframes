@@ -23,7 +23,7 @@
       "label": "Detail text",
       "description": "Stat shown in the detail chip at the center of the reveal.",
       "default": "+312%",
-      "maxLength": 16
+      "maxLength": 6
     },
     {
       "id": "headline",
@@ -68,7 +68,7 @@
       "label": "Card A value",
       "description": "Value of the first supporting card.",
       "default": "94%",
-      "maxLength": 16
+      "maxLength": 6
     },
     {
       "id": "support_b_label",
@@ -86,7 +86,7 @@
       "label": "Card B value",
       "description": "Value of the second supporting card.",
       "default": "48",
-      "maxLength": 16
+      "maxLength": 6
     }
   ]
 }
