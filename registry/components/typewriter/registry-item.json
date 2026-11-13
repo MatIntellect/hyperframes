@@ -19,7 +19,7 @@
       "role": "content",
       "label": "Text",
       "description": "Line that types itself out character by character.",
-      "default": "Печатаю строку по буквам",
+      "default": "смонтируй ролик из записи",
       "maxLength": 28
     },
     {

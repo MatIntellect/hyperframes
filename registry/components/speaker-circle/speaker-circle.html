@@ -15,6 +15,8 @@
        speakerCircle(tl, "#krug", "2.0|540|1150|1; 9.4|540|390|1; 14.7|0; 21.95|540|940|1.6");
      Each place is time|x|y|size[|move seconds]: seconds on the reel's timeline, the circle's centre
      in frame pixels, size 1–1.95 (0 = leaves the frame), the move length (default 0.6 s).
+     Moves never overlap: each place starts after the previous move has finished (a leave
+     takes 0.3 s, a come-back 0.45 s); a leave while the circle is already gone is an error.
      At rest the whole circle stays inside x 60–930, y 180–1360 (the reel's safe zone for graphics
      and the circle); a place outside it, or a size outside 1–1.95, throws an error naming the place.
   The circle moves with transforms on the wrapper (overlays.md: "move it with transforms on a
@@ -54,15 +56,11 @@
       .filter(Boolean)
       .map(function (p) {
         var f = p.split("|").map(Number);
-        var pl = {
-          at: f[0],
-          x: f[1],
-          y: f[2],
-          size: f.length === 2 ? f[1] : f[3],
-          dur: f[4] || 0.6,
-          text: p,
-        };
+        var pl = { at: f[0], x: f[1], y: f[2], size: f.length === 2 ? f[1] : f[3], text: p };
         if (!(pl.at >= 0)) throw new Error("speakerCircle: bad time in '" + p + "'");
+        if (f.length === 5 && !(f[4] > 0))
+          throw new Error("speakerCircle: move seconds must be above 0 in '" + p + "'");
+        pl.dur = f.length === 5 ? f[4] : 0.6;
         if (pl.size !== 0) {
           var r = 200 * pl.size;
           if (!(pl.size >= 1 && pl.size <= 1.95))
@@ -84,6 +82,19 @@
       .sort(function (a, b) {
         return a.at - b.at;
       });
+    // one move at a time: a place starts after the previous move ends (leave 0.3 s, come back 0.45 s)
+    var shownAt = true;
+    list.forEach(function (pl, k) {
+      if (pl.size === 0 && !shownAt)
+        throw new Error("speakerCircle: the circle is already gone at '" + pl.text + "'");
+      pl.len = pl.size === 0 ? 0.3 : shownAt ? pl.dur : 0.45;
+      var prev = list[k - 1];
+      if (prev && pl.at < prev.at + prev.len)
+        throw new Error(
+          "speakerCircle: '" + pl.text + "' starts before '" + prev.text + "' has finished",
+        );
+      shownAt = pl.size !== 0;
+    });
     // opens large in the centre of the frame (Mat's rule for every reel)
     tl.set(sel, { x: 0, y: 0, scale: 1.95, opacity: 1 }, 0);
     var shown = true;

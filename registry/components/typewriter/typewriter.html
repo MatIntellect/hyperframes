@@ -14,7 +14,7 @@
   command is code, and code stays monospace (brand: Bebas Neue and Montserrat
   for words, monospace for code).
 
-    - text (string, default Печатаю строку по буквам): the line that types
+    - text (string, default смонтируй ролик из записи): the line that types
       itself out. It is written into the existing span, so the reveal keeps
       running character by character over whatever is set. Anything that is
       not a non-empty string keeps the shipped line.
@@ -33,12 +33,12 @@
 <div
   class="hf-catalog-typewriter"
   data-composition-variables='[
-    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Line that types itself out character by character.", "default": "Печатаю строку по буквам", "maxLength": 28 },
+    { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "Line that types itself out character by character.", "default": "смонтируй ролик из записи", "maxLength": 28 },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Colour of the text and the caret: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{ "value": "ink", "label": "Ink" }, { "value": "paper", "label": "Paper" }, { "value": "accent", "label": "Accent" }] },
     { "id": "caret", "type": "enum", "role": "style", "label": "Caret", "description": "Caret shape: a thin rule, a terminal-style block, or no caret at all.", "default": "line", "options": [{ "value": "line", "label": "Line" }, { "value": "block", "label": "Block" }, { "value": "none", "label": "None" }] }
   ]'
 >
-  <span>Печатаю строку по буквам</span><i></i>
+  <span>смонтируй ролик из записи</span><i></i>
 </div>
 
 <style>
