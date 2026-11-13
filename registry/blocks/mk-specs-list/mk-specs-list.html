@@ -159,6 +159,7 @@
         var titleEl = document.getElementById("msl-title");
         titleEl.textContent = title;
         if (!title) titleEl.style.display = "none";
+        
         var rows = String(typeof V.rows === "string" && V.rows.trim() ? V.rows : DEF)
           .split(";")
           .map(function (r) {
