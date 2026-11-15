@@ -4,6 +4,9 @@
 
   Words come from outside in one variable, so the file is never edited: "word|start|end;..."
   with seconds from mount start (the transcript's words in order; empty shows nothing).
+  Pass the words with the transcript's punctuation: the mark that ends a word breaks the group
+  there, and a period, a comma or an ellipsis is never shown (the brand's captions carry none;
+  ! and ? stay, and so does a dot inside a word such as matintellect.com).
   Groups of up to 3 words (high energy, captions.md "Groups"), broken at a sentence mark, a
   pause of 150 ms, or where the next word would not fit the line; one group on screen at a
   time, hard-killed after it ends. Every group is one upper-case Bebas Neue line at one size,
@@ -13,6 +16,15 @@
   down. The letters sit dead centre in the plate with equal padding on all four sides
   (text-box trim to cap height and baseline, one padding value). Colours read the palette
   variables of the reel (--fg, --muted, --accent, --plate) with the brand as fallback.
+
+  Usage: one host for the whole speech, on the captions track. In a reel with a hook the words
+  start with the first word after the hook: the hook and the captions share the band and are
+  never on screen together.
+    <div id="captions" class="clip" data-track-kind="captions"
+      data-composition-id="caption-emoji-pop"
+      data-composition-src="compositions/components/caption-emoji-pop.html"
+      data-variable-values='{"words":"<word|start|end;...>"}'
+      data-start="0" data-duration="<length of the speech>" data-track-index="<a free track>"></div>
 
   Mount contract: the runtime clones only this template. #root fills the host box (mount it
   over the whole 1080 x 1920 frame for the length of the speech), has no data-width or
@@ -24,7 +36,7 @@
   data-composition-id="caption-emoji-pop"
   data-composition-duration="600"
   data-composition-variables='[
-    { "id": "words", "type": "string", "role": "content", "label": "Words", "description": "Every caption word with its timing, in order: word|start|end separated by ; (seconds from mount start, e.g. Такой|0.20|0.48;монтаж|0.48|0.90). Build it from transcript.json words.", "maxLength": 40000, "default": "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10" }
+    { "id": "words", "type": "string", "role": "content", "label": "Words", "description": "Every caption word with its timing, in order: word|start|end separated by ; (seconds from mount start, e.g. Такой|0.20|0.48;монтаж|0.48|0.90). Build it from transcript.json words and keep their punctuation: it breaks the groups, and periods, commas and ellipses are not shown.", "maxLength": 40000, "default": "Такой|0.20|0.48;монтаж|0.48|0.90;ещё|0.90|1.20;никто|1.35|1.70;не|1.70|1.82;делал.|1.82|2.30;Смотри,|2.55|2.95;как|3.05|3.25;это|3.25|3.50;работает.|3.50|4.10" }
   ]'
 >
   <head>
@@ -114,7 +126,9 @@
           };
           (function () {
             // Shared caption engine of the MatIntellect base (one source in the workshop: zagotovki/kapsh/_dvizhok.js).
-            // Words come from outside in one variable "word|start|end;...". Groups of up to 3 words, broken at a
+            // Words come from outside in one variable "word|start|end;..." with the transcript's punctuation: the
+            // mark that ends a word breaks the group there, and a period, a comma or an ellipsis is never shown
+            // (! and ? stay). Groups of up to 3 words, broken at a
             // sentence mark, a pause of 150 ms, or where the next word would not fit the line at 78 px; one group on
             // screen at a time, hard-killed after it ends (captions.md "Groups"). Every group is one upper-case
             // line at 78 px on a black plate within 780 of 1080 (entrances grow it no further: room); a group goes off no later than the next one comes on; only a single word wider than the line steps
@@ -145,8 +159,12 @@
               .split(";")
               .map(function (s) {
                 var p = s.split("|");
+                var raw = (p[0] || "").trim();
+                // the one door for a word's mark: stop says a group breaks after this word, text is what is
+                // shown – without the periods, commas and ellipses that end it
                 return {
-                  text: (p[0] || "").trim(),
+                  text: raw.replace(/[.,…]+$/, ""),
+                  stop: /[.,:;!?…]$/.test(raw),
                   start: parseFloat(p[1]),
                   end: parseFloat(p[2]),
                 };
@@ -187,12 +205,7 @@
                 }
                 cur.push(w);
                 var next = words[i + 1];
-                if (
-                  !next ||
-                  cur.length >= MAX_WORDS ||
-                  /[.,:;!?…]$/.test(w.text) ||
-                  next.start - w.end >= PAUSE
-                ) {
+                if (!next || cur.length >= MAX_WORDS || w.stop || next.start - w.end >= PAUSE) {
                   groups.push(cur);
                   cur = [];
                 }
