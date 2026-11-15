@@ -5,7 +5,9 @@
   for full-screen graphics. The picture is never stretched or zoomed: the window grows, not the face.
 
   Usage:
-  1. Paste the style block and the script block below into the reel.
+  1. Paste the style block and the script block below into the reel's <head>, before the reel's
+     own script: that script calls speakerCircle, and pasted after it check fails with
+     "speakerCircle is not defined".
   2. Wrap the recording (its own timed clip, as always) in an untimed div with class="speaker-circle":
        <div id="krug" class="speaker-circle">
          <video id="a-roll" class="clip" src="assets/footage/rec.mp4" playsinline data-has-audio="true"
