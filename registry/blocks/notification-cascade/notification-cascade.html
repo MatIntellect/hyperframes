@@ -2,16 +2,27 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the backdrop photo to the frame edge, the stack in the 780x1180 field (y 180-1360). top / bottom: the stack alone in the 780x760 field at y 180-940 / 600-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "notifTitle", "type": "string", "role": "content", "label": "Notification title", "description": "Bold first line on every banner, one line clear of the time label.", "maxLength": 18, "default": "Новый ролик" },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the ground (brand lock screen or photo, see ground) to the frame edge, the stack in the 780x1180 field (y 180-1360). top / bottom: the stack alone in the 780x760 field at y 180-940 / 600-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "notifTitle", "type": "string", "role": "content", "label": "Notification title", "description": "Bold first line on every banner that has no title of its own, one line clear of the time label.", "maxLength": 18, "default": "Новый ролик" },
+    { "id": "title1", "type": "string", "role": "content", "label": "Title 1", "description": "Bold first line of the first banner, e.g. the app it comes from. Empty takes the notification title.", "maxLength": 18, "default": "" },
+    { "id": "title2", "type": "string", "role": "content", "label": "Title 2", "description": "Bold first line of the second banner. Empty takes the notification title.", "maxLength": 18, "default": "" },
+    { "id": "title3", "type": "string", "role": "content", "label": "Title 3", "description": "Bold first line of the third banner. Empty takes the notification title.", "maxLength": 18, "default": "" },
+    { "id": "title4", "type": "string", "role": "content", "label": "Title 4", "description": "Bold first line of the fourth banner. Empty takes the notification title.", "maxLength": 18, "default": "" },
+    { "id": "icon1", "type": "image", "role": "content", "label": "Icon 1", "description": "App mark of the first banner on a white tile, e.g. an official logo from media-use resolve --type logo. Empty keeps the green message icon.", "default": "" },
+    { "id": "icon2", "type": "image", "role": "content", "label": "Icon 2", "description": "App mark of the second banner. Empty keeps the green message icon.", "default": "" },
+    { "id": "icon3", "type": "image", "role": "content", "label": "Icon 3", "description": "App mark of the third banner. Empty keeps the green message icon.", "default": "" },
+    { "id": "icon4", "type": "image", "role": "content", "label": "Icon 4", "description": "App mark of the fourth banner. Empty keeps the green message icon.", "default": "" },
     { "id": "message1", "type": "string", "role": "content", "label": "Message 1", "description": "Subtitle of the first banner to land.", "maxLength": 30, "default": "Ролик готов к публикации." },
     { "id": "message2", "type": "string", "role": "content", "label": "Message 2", "description": "Subtitle of the second banner.", "maxLength": 30, "default": "Все проверки пройдены." },
     { "id": "message3", "type": "string", "role": "content", "label": "Message 3", "description": "Subtitle of the third banner.", "maxLength": 30, "default": "Рендер 4K за 92 секунды." },
     { "id": "message4", "type": "string", "role": "content", "label": "Message 4", "description": "Subtitle of the fourth banner.", "maxLength": 30, "default": "Опубликовано в канале." },
-    { "id": "appName", "type": "string", "role": "content", "label": "App name", "description": "Credited in the corner of every banner.", "maxLength": 16, "default": "MatIntellect" },
+    { "id": "appName", "type": "string", "role": "content", "label": "App name", "description": "Credited in the corner of every banner. Empty removes the credit.", "maxLength": 16, "default": "MatIntellect" },
     { "id": "nowLabel", "type": "string", "role": "content", "label": "Time label", "description": "Small time label in the banner corner.", "maxLength": 8, "default": "сейчас" },
     { "id": "pillLabel", "type": "string", "role": "content", "label": "Pill label", "description": "Label of the collapse pill above the stack.", "maxLength": 10, "default": "Свернуть" },
-    { "id": "backdrop", "type": "image", "role": "content", "label": "Backdrop", "description": "Photo behind the stack in full placement, slowly pushed in.", "default": "assets/desk-backdrop.jpg" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "What is behind the stack in full placement. lock: the brand ground with a soft accent glow and a lock-screen date and clock above the stack. photo: the backdrop photo, slowly pushed in.", "default": "lock", "options": [{ "value": "lock", "label": "Brand lock screen" }, { "value": "photo", "label": "Photo" }] },
+    { "id": "lockDate", "type": "string", "role": "content", "label": "Lock-screen date", "description": "Date line over the clock (ground lock). Empty removes it.", "maxLength": 28, "default": "Понедельник, 16 ноября" },
+    { "id": "lockTime", "type": "string", "role": "content", "label": "Lock-screen clock", "description": "Clock under the date (ground lock). Empty removes it.", "maxLength": 5, "default": "9:41" },
+    { "id": "backdrop", "type": "image", "role": "content", "label": "Backdrop", "description": "Photo behind the stack when ground is photo, slowly pushed in.", "default": "assets/desk-backdrop.jpg" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1-4 each banner lands (the earlier ones slide up to make room), 5 the stack lifts away (only when exit is lift). Empty keeps 1.6, 3.6, 5.6, 7.6, 9.2.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the stack to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "lift", "label": "Lift away" }] }
   ]'
@@ -102,6 +113,39 @@
         height: 1920px;
         object-fit: cover;
       }
+      /* ground lock: the brand ground, an accent glow at 18 % (look.md: 15–25 % for atmosphere) */
+      #nc-ground {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 70% 42% at 50% 58%,
+            color-mix(in srgb, var(--accent, #ff0000) 18%, transparent) 0%,
+            transparent 70%
+          ),
+          var(--bg, #0c1014);
+      }
+      #nc-lock {
+        position: absolute;
+        left: 0;
+        top: 196px;
+        width: 1080px;
+        text-align: center;
+        color: var(--fg, #f2f2f2);
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+      }
+      #nc-date {
+        font-size: 38px;
+        font-weight: 600;
+        line-height: 46px;
+      }
+      #nc-time {
+        font-size: 176px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -4px;
+        font-variant-numeric: tabular-nums;
+      }
       #nc-vignette {
         position: absolute;
         inset: 0;
@@ -136,6 +180,17 @@
         height: 100px;
         border-radius: 24px;
         background: linear-gradient(180deg, #5ae458 0%, #1fc83f 100%);
+      }
+      .nc-banner .nc-icon.nc-mark {
+        background: #ffffff;
+      }
+      .nc-banner .nc-icon img {
+        position: absolute;
+        left: 13%;
+        top: 13%;
+        width: 74%;
+        height: 74%;
+        object-fit: contain;
       }
       .nc-banner .nc-icon svg {
         position: absolute;
@@ -224,8 +279,13 @@
       data-height="1920"
       data-duration="30"
     >
-      <!-- backdrop plate: slow push-in added in the timeline -->
+      <!-- ground: the brand lock screen, or the photo with a slow push-in added in the timeline -->
       <section id="nc-base" class="clip" data-start="0" data-duration="30" data-track-index="1">
+        <div id="nc-ground"></div>
+        <div id="nc-lock">
+          <div id="nc-date">Понедельник, 16 ноября</div>
+          <div id="nc-time">9:41</div>
+        </div>
         <img id="nc-backdrop" data-var-src="backdrop" src="assets/desk-backdrop.jpg" alt="" />
         <div id="nc-vignette"></div>
       </section>
@@ -345,6 +405,28 @@
         root.style.setProperty("--nc-base-top", baseTop + "px");
         root.style.setProperty("--nc-pill-top", baseTop - 96 + "px");
         if (!full) document.getElementById("nc-base").remove();
+        var ground = oneOf(vars.ground, ["lock", "photo"], "lock");
+        function drop(id) {
+          var el = document.getElementById(id);
+          if (el) el.remove();
+        }
+        if (ground === "lock") {
+          drop("nc-backdrop");
+          drop("nc-vignette");
+        } else {
+          drop("nc-ground");
+          drop("nc-lock");
+        }
+        /* an explicitly empty field removes its line; absent keeps the default */
+        function shown(id, value, fallback) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          var v = typeof value === "string" ? value.trim() : fallback;
+          if (v) el.textContent = v;
+          else el.remove();
+        }
+        shown("nc-date", vars.lockDate, "Понедельник, 16 ноября");
+        shown("nc-time", vars.lockTime, "9:41");
 
         function setAll(selector, value) {
           document.querySelectorAll(selector).forEach(function (el) {
@@ -352,8 +434,24 @@
           });
         }
 
-        setAll(".nc-title", text(vars.notifTitle, "Новый ролик"));
-        setAll(".nc-credit", text(vars.appName, "MatIntellect"));
+        var notifTitle = text(vars.notifTitle, "Новый ролик");
+        document.querySelectorAll(".nc-banner").forEach(function (banner, i) {
+          banner.querySelector(".nc-title").textContent = text(vars["title" + (i + 1)], notifTitle);
+          var icon = vars["icon" + (i + 1)];
+          if (typeof icon === "string" && icon.trim()) {
+            var tile = banner.querySelector(".nc-icon");
+            var img = document.createElement("img");
+            img.src = icon.trim();
+            img.alt = "";
+            tile.innerHTML = "";
+            tile.classList.add("nc-mark");
+            tile.appendChild(img);
+          }
+          var credit = banner.querySelector(".nc-credit");
+          var by = typeof vars.appName === "string" ? vars.appName.trim() : "MatIntellect";
+          if (by) credit.textContent = by;
+          else credit.remove();
+        });
         setAll(".nc-now", text(vars.nowLabel, "сейчас"));
         document.getElementById("nc-pill-label").textContent = text(vars.pillLabel, "Свернуть");
         var messages = [
@@ -400,7 +498,7 @@
         );
 
         /* backdrop push-in: linear, scale 1 -> 1.105 across the whole mount */
-        if (full)
+        if (full && ground === "photo")
           tl.fromTo(
             "#nc-backdrop",
             { scale: 1.0, transformOrigin: "525px 950px" },

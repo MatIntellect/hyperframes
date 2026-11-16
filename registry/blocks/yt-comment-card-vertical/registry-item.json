@@ -3,7 +3,7 @@
   "name": "yt-comment-card-vertical",
   "type": "hyperframes:block",
   "title": "YouTube Comment Card (vertical)",
-  "description": "Vertical YouTube comments over footage in the 780 column: avatar pops, the text types letter by letter, the like row follows; up to three comments. Words, likes and avatars are variables; placement top, centre or bottom; cues set each start.",
+  "description": "Vertical YouTube comments in the 780 column, over footage or on YouTube's own dark comments sheet: avatar pops, the text types letter by letter, the like row follows; up to three comments. Words, likes and avatars are variables; placement top, centre or bottom; cues set each start.",
   "tags": ["social", "comments", "creator", "overlay", "vertical"],
   "dimensions": {
     "width": 1080,

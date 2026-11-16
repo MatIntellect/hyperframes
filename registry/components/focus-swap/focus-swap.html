@@ -50,7 +50,9 @@
     { "id": "detail_a", "type": "string", "role": "content", "label": "Card A detail", "description": "One line under the title of card A; wraps by words.", "default": "Собрать задачу и договориться с командой", "maxLength": 48 },
     { "id": "status_b", "type": "string", "role": "content", "label": "Card B status", "description": "Short status word above the title of card B.", "default": "Запуск", "maxLength": 16 },
     { "id": "title_b", "type": "string", "role": "content", "label": "Card B title", "description": "Title of card B.", "default": "Выпустить ролик", "maxLength": 28 },
-    { "id": "detail_b", "type": "string", "role": "content", "label": "Card B detail", "description": "One line under the title of card B; wraps by words.", "default": "От согласованного монтажа к публикации", "maxLength": 48 }
+    { "id": "detail_b", "type": "string", "role": "content", "label": "Card B detail", "description": "One line under the title of card B; wraps by words.", "default": "От согласованного монтажа к публикации", "maxLength": 48 },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Seconds from mount start when the focus starts to move to the final card. Empty keeps 0.2.", "default": "" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the pair on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -108,6 +110,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.fs-no-ground {
+            background: transparent;
           }
 
           .fs-clip {
@@ -335,7 +341,12 @@
                   .dataset.duration || "1.5",
               ),
             );
-            var SWAP_START = Math.min(0.2, duration * 0.2);
+            if (vars.ground === "none") root.classList.add("fs-no-ground");
+            var swapCue = parseFloat(String(vars.cues || "").split(",")[0]);
+            var SWAP_START =
+              isFinite(swapCue) && swapCue >= 0
+                ? Math.min(swapCue, duration - 0.001)
+                : Math.min(0.2, duration * 0.2);
             var SWAP_DURATION = Math.min(0.7, Math.max(0.001, duration - SWAP_START));
 
             gsap.set(initialFocused, { opacity: 1, scale: 1, filter: sharp });

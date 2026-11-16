@@ -3,6 +3,9 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 180. center: centred on y 770. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card over the whole field (y 180-940 top, 180-1360 centre, 600-1360 bottom) with its header, sliding up as in the app.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
+    { "id": "sheetTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Header of the YouTube sheet.", "maxLength": 16, "default": "Комментарии" },
+    { "id": "sheetCount", "type": "string", "role": "content", "label": "Sheet count", "description": "Grey comment count after the header. Empty removes it.", "maxLength": 8, "default": "214" },
     { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
     { "id": "time1", "type": "string", "role": "content", "label": "Comment 1 time", "description": "Grey age after the handle.", "maxLength": 14, "default": "2 дня назад" },
     { "id": "text1", "type": "string", "role": "content", "label": "Comment 1 text", "description": "Typed on letter by letter, up to three lines.", "maxLength": 48, "default": "Как ты это смонтировал так быстро?" },
@@ -162,6 +165,59 @@
       #yccv-root.yccv-bottom #yccv-col {
         bottom: 560px;
       }
+      /* sheet youtube: YouTube's dark comments sheet over the field, the column inside it under the header */
+      #yccv-sheet {
+        display: none;
+        position: absolute;
+        left: 150px;
+        top: 180px;
+        width: 780px;
+        height: 760px;
+        border-radius: 32px;
+        background: #0f0f0f;
+        border: 2px solid #272727;
+      }
+      #yccv-root.yccv-sheet #yccv-sheet {
+        display: block;
+      }
+      #yccv-root.yccv-sheet.yccv-center #yccv-sheet {
+        height: 1180px;
+      }
+      #yccv-root.yccv-sheet.yccv-bottom #yccv-sheet {
+        top: 600px;
+      }
+      #yccv-head {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 776px;
+        height: 112px;
+        padding: 0 36px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        border-bottom: 2px solid #272727;
+      }
+      #yccv-head-t {
+        font-size: 40px;
+        font-weight: 700;
+        color: #f1f1f1;
+      }
+      #yccv-head-n {
+        font-size: 36px;
+        font-weight: 500;
+        color: #aaaaaa;
+      }
+      #yccv-root.yccv-sheet #yccv-col {
+        left: 186px;
+        width: 708px;
+        top: 324px;
+        bottom: auto;
+        transform: none;
+      }
+      #yccv-root.yccv-sheet.yccv-bottom #yccv-col {
+        top: 744px;
+      }
       /* the comments fill the 780 field (montazher.md:22 "large, all the free space"): large; medium (-fit) when the
          large column would leave the field */
       #yccv-col {
@@ -223,6 +279,12 @@
   </head>
   <body>
     <div id="yccv-root" data-composition-id="yt-comment-card-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+      <div id="yccv-sheet">
+        <div id="yccv-head">
+          <span id="yccv-head-t">Комментарии</span>
+          <span id="yccv-head-n">214</span>
+        </div>
+      </div>
       <div id="yccv-col"></div>
     </div>
     <script>
@@ -242,8 +304,17 @@
         
         var placement = oneOf(V.placement, ["top", "center", "bottom"], "center");
         root.classList.add("yccv-" + placement);
+        var onSheet = oneOf(V.sheet, ["none", "youtube"], "none") === "youtube";
+        var sheet = document.getElementById("yccv-sheet");
+        if (onSheet) {
+          root.classList.add("yccv-sheet");
+          document.getElementById("yccv-head-t").textContent = get("sheetTitle", "") || "Комментарии";
+          var count = get("sheetCount", "214");
+          if (count) document.getElementById("yccv-head-n").textContent = count;
+          else document.getElementById("yccv-head-n").remove();
+        } else sheet.remove();
         /* the comments set large; when the column is taller than its field (760 on top / bottom, 1180 centred) they set
-           medium. Measured once the face has loaded; render waits on buildReady (path-tracing.md:18) */
+           medium; on the sheet the field is less its header and margins (160). Measured once the face has loaded; render waits on buildReady (path-tracing.md:18) */
         window.__hf = window.__hf || {};
         window.__hf.buildReady = window.__hf.buildReady || {};
         window.__hf.buildReady["yt-comment-card-vertical-fit"] = Promise.all([
@@ -252,7 +323,7 @@
           document.fonts.load('500 40px "Montserrat"', "Жж Aa 0"),
         ]).then(function () {
           var col = document.getElementById("yccv-col");
-          if (col.offsetHeight > (placement === "center" ? 1180 : 760)) root.classList.add("yccv-fit");
+          if (col.offsetHeight > (placement === "center" ? 1180 : 760) - (onSheet ? 160 : 0)) root.classList.add("yccv-fit");
         });
         
 
@@ -335,8 +406,11 @@
         var tl = gsap.timeline({ paused: true });
         /* each comment: avatar pops, handle fades, text types at most 2.2 s, like row fades; the next starts at its cue or right after */
         var t = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
+        /* the sheet comes up from the field's foot as YouTube's comments do, by the time the first comment starts */
+        if (onSheet)
+          tl.fromTo(sheet, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, Math.max(0, t - 0.3));
         parts.forEach(function (p, i) {
-          if (i > 0 && isFinite(cues[i]) && cues[i] >= t) t = cues[i];
+          if (i > 0 && isFinite(cues[i])) t = cues[i]; /* a cue wins: each comment starts on its own word, even while the one above is still finishing */
           var next = isFinite(cues[i + 1]) ? cues[i + 1] : Infinity;
           var room = Math.max(0.4, Math.min(2.2, next - t - 1));
           var step = Math.min(0.024, room / Math.max(1, p.chars.length));
@@ -348,7 +422,7 @@
           tl.to(p.row, { opacity: 1, duration: 0.35, ease: "power2.out" }, t);
           t += 0.5;
         });
-        if (exit === "fade") tl.to(col, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, isFinite(cues[parts.length]) ? cues[parts.length] : t + 3);
+        if (exit === "fade") tl.to(onSheet ? [col, sheet] : col, { opacity: 0, y: -18, duration: 0.4, ease: "power2.in" }, isFinite(cues[parts.length]) ? cues[parts.length] : t + 3);
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["yt-comment-card-vertical"] = tl;

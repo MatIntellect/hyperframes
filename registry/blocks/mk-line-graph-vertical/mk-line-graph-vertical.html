@@ -299,6 +299,10 @@
             "stroke-width": 6,
             "stroke-linejoin": "round",
             "stroke-linecap": "round",
+            /* film.md: hide a round-capped line with a gap longer than the path, else its cap shows as a dot */
+            pathLength: 100,
+            "stroke-dasharray": "100 120",
+            "stroke-dashoffset": 110,
           });
           s.dots = [];
           s.vals = [];
@@ -352,8 +356,7 @@
         });
         series.forEach(function (s, si) {
           var t0 = si ? c2 : c1;
-          var len = s.path.getTotalLength();
-          tl.fromTo(s.path, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: DRAW, ease: "power2.inOut" }, t0);
+          tl.fromTo(s.path, { strokeDashoffset: 110 }, { strokeDashoffset: 0, duration: DRAW, ease: "power2.inOut" }, t0);
           s.v.forEach(function (v, i) {
             var td = t0 + (n > 1 ? (i / (n - 1)) * DRAW * 0.92 : 0);
             tl.fromTo(s.dots[i], { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(1.2)" }, td);

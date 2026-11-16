@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the backdrop fills the frame. top / bottom: the backdrop is a rounded card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the backdrop fades in, 2 it shrinks into the card (wide, shape card), 3 it fades out (only when exit is fade). Empty keeps 0 and 1.6.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the backdrop fades in (0: it is already there on the first frame), 2 it shrinks into the card (wide, shape card), 3 it fades out (only when exit is fade). Empty keeps 0 and 1.6. The block lives 180 s, so one mount covers a whole reel.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the backdrop to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -47,15 +47,15 @@
         border-radius: 50%;
       }
       #mbgv-blob1 {
-        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--accent, #ff0000) 45%, transparent) 0%, transparent 72%);
+        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--accent, #ff0000) 24%, transparent) 0%, transparent 72%);
       }
       #mbgv-blob2 {
-        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--muted, #8a8a90) 30%, transparent) 0%, transparent 72%);
+        background: radial-gradient(circle closest-side, color-mix(in srgb, var(--muted, #8a8a90) 20%, transparent) 0%, transparent 72%);
       }
     </style>
   </head>
   <body>
-    <div id="mbgv-root" data-composition-id="mk-background-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="mbgv-root" data-composition-id="mk-background-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="mbgv-card" data-layout-allow-occlusion>
         <div id="mbgv-blob1" class="mbgv-blob" data-layout-allow-overflow data-layout-ignore></div>
         <div id="mbgv-blob2" class="mbgv-blob" data-layout-allow-overflow data-layout-ignore></div>
@@ -92,11 +92,14 @@
         var cB = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 1.6;
         var exit = oneOf(V.exit, ["none", "fade"], "none");
 
+        var LIFE = 180;
+        var drift = Math.ceil((LIFE - c0 - 0.3) / 2.35);
         var tl = gsap.timeline({ paused: true });
-        tl.from(card, { opacity: 0, duration: 0.7, ease: "power2.out" }, c0);
+        /* a backdrop that starts at 0 is there on the first frame: the first frame is the reel's thumbnail */
+        if (c0 > 0) tl.from(card, { opacity: 0, duration: 0.7, ease: "power2.out" }, c0);
         tl.from([b1, b2], { scale: 1.14, duration: 1.2, ease: "power3.out" }, c0);
-        tl.to(b1, { x: 70 * k, y: 42 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: 11 }, c0 + 0.3);
-        tl.to(b2, { x: -84 * k, y: -36 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: 11 }, c0 + 0.3);
+        tl.to(b1, { x: 70 * k, y: 42 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: drift }, c0 + 0.3);
+        tl.to(b2, { x: -84 * k, y: -36 * k, duration: 2.35, ease: "sine.inOut", yoyo: true, repeat: drift }, c0 + 0.3);
         
         
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
@@ -109,7 +112,7 @@
         if (placement !== "full") gsap.set(card, { x: 150, y: placement === "top" ? 180 : 600, width: 780, height: 760, borderRadius: 32 });
         
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cB + 4);
-        tl.set({}, {}, 30);
+        tl.set({}, {}, LIFE);
         window.__timelines = window.__timelines || {};
         window.__timelines["mk-background-vertical"] = tl;
       })();

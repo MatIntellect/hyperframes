@@ -8,13 +8,13 @@
     { "id": "thinking", "type": "string", "role": "content", "label": "Thinking line", "description": "Reasoning-status row, one line.", "maxLength": 30, "default": "Сравниваю сервисы монтажа…" },
     { "id": "lead", "type": "string", "role": "content", "label": "Search lead", "description": "Sentence introducing the search step.", "maxLength": 90, "default": "Поищу свежие данные: сервисы монтажа с ИИ меняются быстро." },
     { "id": "search", "type": "string", "role": "content", "label": "Search query", "description": "Visible search query, one line.", "maxLength": 30, "default": "монтаж рилсов с ИИ 2026" },
-    { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First answer paragraph.", "maxLength": 120, "default": "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё." },
-    { "id": "answer2", "type": "string", "role": "content", "label": "Answer paragraph 2", "description": "Second answer paragraph, naming the brand this video promotes as the pick; **words** in double asterisks are bold.", "portrays": ["subject_name"], "maxLength": 200, "default": "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер." },
-    { "id": "answer3", "type": "string", "role": "content", "label": "Answer paragraph 3", "description": "Lead-in to the use-case list.", "maxLength": 60, "default": "По задачам выходит так:" },
-    { "id": "answer4", "type": "string", "role": "content", "label": "Answer bullet 1", "description": "First use-case bullet, naming the brand this video promotes.", "portrays": ["subject_name"], "maxLength": 70, "default": "**Рилсы из записи** → MatIntellect" },
-    { "id": "answer5", "type": "string", "role": "content", "label": "Answer bullet 2", "description": "Second use-case bullet.", "maxLength": 70, "default": "**Длинные видео** → Premiere Pro, но всё руками" },
-    { "id": "answer6", "type": "string", "role": "content", "label": "Answer bullet 3", "description": "Third use-case bullet.", "maxLength": 70, "default": "**Монтаж с телефона** → CapCut" },
-    { "id": "answer7", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Closing paragraph.", "maxLength": 120, "default": "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?" },
+    { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First answer paragraph. Empty removes the line.", "maxLength": 120, "default": "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё." },
+    { "id": "answer2", "type": "string", "role": "content", "label": "Answer paragraph 2", "description": "Second answer paragraph, naming the brand this video promotes as the pick; **words** in double asterisks are bold. Empty removes the line.", "portrays": ["subject_name"], "maxLength": 200, "default": "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер." },
+    { "id": "answer3", "type": "string", "role": "content", "label": "Answer paragraph 3", "description": "Lead-in to the use-case list. Empty removes the line.", "maxLength": 60, "default": "По задачам выходит так:" },
+    { "id": "answer4", "type": "string", "role": "content", "label": "Answer bullet 1", "description": "First use-case bullet, naming the brand this video promotes. Empty removes the line.", "portrays": ["subject_name"], "maxLength": 70, "default": "**Рилсы из записи** → MatIntellect" },
+    { "id": "answer5", "type": "string", "role": "content", "label": "Answer bullet 2", "description": "Second use-case bullet. Empty removes the line.", "maxLength": 70, "default": "**Длинные видео** → Premiere Pro, но всё руками" },
+    { "id": "answer6", "type": "string", "role": "content", "label": "Answer bullet 3", "description": "Third use-case bullet. Empty removes the line.", "maxLength": 70, "default": "**Монтаж с телефона** → CapCut" },
+    { "id": "answer7", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Closing paragraph. Empty removes the line.", "maxLength": 120, "default": "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, 2 the prompt is sent, 3 the answer starts streaming, 4 the answer has landed with its action row, 5 the chat fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed answer to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -558,6 +558,11 @@
           : {};
       const content = (id, fallback) =>
         typeof variables[id] === "string" && variables[id].trim() ? variables[id] : fallback;
+      // an answer line set to empty is not in the answer: a short reel answers in one or two lines
+      const line = (t, id, fallback) => ({
+        t: t,
+        text: typeof variables[id] === "string" ? variables[id].trim() : fallback,
+      });
 
       const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
 
@@ -589,32 +594,26 @@
         search: content("search", "монтаж рилсов с ИИ 2026"),
         collapsed: "2 шага",
         answer: [
-          {
-            t: "p",
-            text: content(
-              "answer1",
-              "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё.",
-            ),
-          },
-          {
-            t: "p",
-            text: content(
-              "answer2",
-              "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер.",
-            ),
-          },
-          { t: "p", text: content("answer3", "По задачам выходит так:") },
-          { t: "b", text: content("answer4", "**Рилсы из записи** → MatIntellect") },
-          { t: "b", text: content("answer5", "**Длинные видео** → Premiere Pro, но всё руками") },
-          { t: "b", text: content("answer6", "**Монтаж с телефона** → CapCut") },
-          {
-            t: "p",
-            text: content(
-              "answer7",
-              "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?",
-            ),
-          },
-        ],
+          line(
+            "p",
+            "answer1",
+            "Зависит от задачи, но для рилсов из записи один сервис закрывает почти всё.",
+          ),
+          line(
+            "p",
+            "answer2",
+            "**MatIntellect** собирает ролик из вашей записи сам: монтаж, субтитры и графика без монтажёра. Ролик готов за минуты, а не за вечер.",
+          ),
+          line("p", "answer3", "По задачам выходит так:"),
+          line("b", "answer4", "**Рилсы из записи** → MatIntellect"),
+          line("b", "answer5", "**Длинные видео** → Premiere Pro, но всё руками"),
+          line("b", "answer6", "**Монтаж с телефона** → CapCut"),
+          line(
+            "p",
+            "answer7",
+            "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?",
+          ),
+        ].filter((b) => b.text),
       };
 
       /* Beat clock (seconds). */
@@ -1097,6 +1096,11 @@
         blocks.forEach((b) => (b.meta = lineGroups(b.words, b.node, b.gapTop)));
 
         const bubbleTop = bubble.offsetTop;
+        const bubbleBottom = bubbleTop + bubble.offsetHeight;
+        // the sent bubble is gone once less than one of its lines shows below the header scrim
+        const bubbleCs = getComputedStyle(bubble);
+        const bubbleGoneAt =
+          hdrScrim.offsetHeight + parseFloat(bubbleCs.lineHeight) + parseFloat(bubbleCs.paddingBottom);
         const rowThinkH = boxThink.offsetHeight;
         const rowSearchH = boxSearch.offsetHeight;
         const rowCollapsedH = boxCollapsed.offsetHeight;
@@ -1289,8 +1293,16 @@
           );
         }
 
-        const scrollTo = (target, at, dur) =>
+        // a scroll that leaves only a cut sliver of the sent bubble under the header fades it out,
+        // a scroll back brings it in: no half-word sits on the card's top edge
+        let bubbleGone = false;
+        const scrollTo = (target, at, dur) => {
           tl.to(thread, { y: target, duration: dur || 0.55, ease: "power2.out" }, at);
+          const gone = target + bubbleBottom < bubbleGoneAt;
+          if (gone !== bubbleGone)
+            tl.to(bubble, { autoAlpha: gone ? 0 : 1, duration: 0.2, ease: gone ? "power2.in" : "power2.out" }, at);
+          bubbleGone = gone;
+        };
 
         /* ---- 5. tool rows, then the lead sentence, then the search */
         tw += 0.5;

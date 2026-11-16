@@ -9,6 +9,7 @@
     { "id": "followLabel", "type": "string", "role": "content", "label": "Follow button", "description": "Button text before the press.", "maxLength": 12, "default": "Подписаться" },
     { "id": "followingLabel", "type": "string", "role": "content", "label": "Following button", "description": "Button text after the press.", "maxLength": 12, "default": "Вы подписаны" },
     { "id": "avatar", "type": "image", "role": "content", "label": "Avatar", "description": "Round profile picture.", "default": "assets/img/matintellect-avatar.svg" },
+    { "id": "countFrom", "type": "number", "role": "content", "label": "Count from", "description": "The follower number rolls up from this value to the number at the start of followers, from the landing to the press. 0 keeps it still.", "default": 0 },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 card lands, 2 button pressed, 3 card leaves (only when exit is not none). Empty keeps 0.1, 1.0, 3.8.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "down", "label": "Slide down" }] }
   ]'
@@ -273,6 +274,21 @@
         tl.to(btn, { backgroundColor: "#2f2f2f", duration: 0.12, ease: "none" }, at(1) + 0.15);
         tl.to(tFollow, { opacity: 0, duration: 0.08, ease: "none" }, at(1) + 0.15);
         tl.to(tFollowing, { opacity: 1, duration: 0.08, ease: "none" }, at(1) + 0.18);
+        // the follower count rolls up from countFrom to its number until the press
+        var fEl = root.querySelector(".ttf-followers");
+        var fm = /^(\d[\d\u00a0 ]*?(?:,\d+)?)(\s.*)$/.exec(fEl.textContent);
+        var from = parseFloat(vars.countFrom);
+        if (fm && isFinite(from) && from > 0) {
+          var to = parseFloat(fm[1].replace(/[\s\u00a0]/g, "").replace(",", "."));
+          var tail = fm[2];
+          var dec = /,/.test(fm[1]) ? 1 : 0;
+          var cnt = { v: from };
+          function show() {
+            fEl.textContent = cnt.v.toFixed(dec).replace(".", ",") + tail;
+          }
+          show();
+          tl.to(cnt, { v: to, duration: Math.max(0.3, at(1) + 0.15 - (at(0) + 0.3)), ease: "power2.in", onUpdate: show }, at(0) + 0.3);
+        }
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.3, ease: "power2.in" }, at(2));
         if (exit === "down")
           tl.to(card, { y: 300, opacity: 0, duration: 0.25, ease: "power3.in" }, at(2));

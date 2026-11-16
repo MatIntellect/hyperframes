@@ -34,6 +34,12 @@
       --accent, violet to --accent-2.
     - exit (none | fade | up, default none): outgoing transition. none holds
       the final frame (frame roots own transitions; holds end films).
+    - cues (string, default ""): seconds from mount start for the left card,
+      the right card, the left badge and the right badge, comma-separated.
+      Empty keeps the envelope below.
+    - ground (own | none, default own): own paints the dark ground and clips
+      to the box; none leaves the box clear, so the reel shows through and the
+      cards fly in across its edge.
 
   Envelope (fixed IN/OUT, elastic HOLD only, never gsap.timeScale()):
     IN       = 2.15s: left card lands 0 to 1.1s, right card 0.2 to 1.3s,
@@ -67,6 +73,8 @@
     {"id": "label_b", "type": "string", "role": "content", "label": "Right label", "description": "Mono header on the right card. Blank hides it.", "default": "После", "maxLength": 16},
     {"id": "badge_a", "type": "string", "role": "content", "label": "Left badge", "description": "Pill badge that spring-pops at the left card inner edge. Blank disables it.", "default": "v1", "maxLength": 16},
     {"id": "badge_b", "type": "string", "role": "content", "label": "Right badge", "description": "Pill badge that spring-pops at the right card inner edge. Blank disables it.", "default": "v2", "maxLength": 16},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the left card starts in, 2 the right card starts in, 3 the left badge pops, 4 the right badge pops. Empty keeps 0, 0.2, 1.45, 1.75.", "default": ""},
+    {"id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the pair on its own dark ground, clipped to its box. none: no ground, the reel shows through and the cards fly in across the box edge.", "default": "own", "options": [{"value": "own", "label": "Own ground"}, {"value": "none", "label": "No ground"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the final spread.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
@@ -136,6 +144,12 @@
             overflow: hidden;
           }
 
+          #root.stc-no-ground,
+          #root.stc-no-ground .stc-clip {
+            overflow: visible;
+            background: transparent;
+          }
+
           /* Two faint ambient side glows: each wing owns a color identity
              across the 50% symmetry axis. Static by design. */
           .stc-clip::before,
@@ -176,10 +190,11 @@
             inset: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-3, 5cqw);
+            gap: var(--space-3, 4cqw);
             align-items: center;
             justify-items: center;
-            padding: 0 8cqw;
+            /* the pair takes the whole box: graphics large, on all the free space */
+            padding: 0 3cqw;
             perspective: 120cqw;
           }
 
@@ -189,8 +204,8 @@
           .stc-wing {
             position: relative;
             width: 100%;
-            max-width: 38cqw;
-            height: 58cqh;
+            max-width: 45cqw;
+            height: 76cqh;
             transform-style: preserve-3d;
             will-change: transform;
           }
@@ -500,6 +515,15 @@
               : "green";
             // INVARIANT: only none | fade | up reaches the timeline.
             var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
+            if (vars.ground === "none") root.classList.add("stc-no-ground");
+            var cues = String(vars.cues || "")
+              .split(",")
+              .map(function (v) {
+                return parseFloat(v);
+              });
+            function cue(i, d) {
+              return isFinite(cues[i]) && cues[i] >= 0 ? cues[i] : d;
+            }
 
             labelA.textContent = labelAText;
             labelB.textContent = labelBText;
@@ -531,7 +555,14 @@
             );
             var totalBase = IN_BASE + OUT_BASE;
             var scale = duration < totalBase ? duration / totalBase : 1;
-            var IN = IN_BASE * scale;
+            var A_AT = cue(0, 0);
+            var B_AT = cue(1, CARD_B_DELAY_BASE * scale);
+            var BADGE_A_AT = cue(2, BADGE_A_AT_BASE * scale);
+            var BADGE_B_AT = cue(3, BADGE_B_AT_BASE * scale);
+            var IN = Math.max(
+              B_AT + CARD_DUR_BASE * scale,
+              (badgeBText === "" ? 0 : BADGE_B_AT) + BADGE_DUR_BASE * scale,
+            );
             var OUT = OUT_BASE * scale;
             var HOLD = Math.max(0, duration - (IN + OUT));
             var OUT_START = IN + HOLD;
@@ -557,8 +588,8 @@
             // IN: mirrored opposite-wing entries, right ~0.2s behind, each
             // carrying its static book-open tilt; only x/scale/opacity move.
             [
-              { wing: wingA, card: cardA, at: 0 },
-              { wing: wingB, card: cardB, at: CARD_B_DELAY_BASE * scale },
+              { wing: wingA, card: cardA, at: A_AT },
+              { wing: wingB, card: cardB, at: B_AT },
             ].forEach(function (entry) {
               tl.to(
                 entry.card,
@@ -580,8 +611,8 @@
             // Badges: the one sanctioned overshoot, kept small. Left lands
             // first, right ~0.3s behind, both inside fixed IN.
             [
-              { badge: badgeA, text: badgeAText, at: BADGE_A_AT_BASE * scale },
-              { badge: badgeB, text: badgeBText, at: BADGE_B_AT_BASE * scale },
+              { badge: badgeA, text: badgeAText, at: BADGE_A_AT },
+              { badge: badgeB, text: badgeBText, at: BADGE_B_AT },
             ].forEach(function (pop) {
               if (pop.text === "") return;
               tl.to(

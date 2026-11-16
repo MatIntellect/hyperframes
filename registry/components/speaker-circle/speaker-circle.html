@@ -15,8 +15,11 @@
        </div>
   3. In the reel's paused timeline, one line:
        speakerCircle(tl, "#krug", "2.0|540|1150|1; 9.4|540|390|1; 14.7|0; 21.95|540|940|1.6");
-     Each place is time|x|y|size[|move seconds]: seconds on the reel's timeline, the circle's centre
-     in frame pixels, size 1–1.95 (0 = leaves the frame), the move length (default 0.6 s).
+     Each place is time|x|y|size[|move seconds[|how]]: seconds on the reel's timeline, the circle's
+     centre in frame pixels, size 1–1.95 (0 = leaves the frame), the move length (default 0.6 s), and
+     how it gets there: a GSAP ease name for the move (default power3.inOut), or cut – the circle is
+     at its place on that frame, no move (the second half of a match cut; move seconds are ignored,
+     so leave them empty: "23.3|540|700|1.4||cut").
      Moves never overlap: each place starts after the previous move has finished (a leave
      takes 0.3 s, a come-back 0.45 s); a leave while the circle is already gone is an error.
      At rest the whole circle stays inside x 60–930, y 180–1360 (the reel's safe zone for graphics
@@ -58,11 +61,14 @@
       .filter(Boolean)
       .map(function (p) {
         var f = p.split("|").map(Number);
+        var how = (p.split("|")[5] || "").trim();
         var pl = { at: f[0], x: f[1], y: f[2], size: f.length === 2 ? f[1] : f[3], text: p };
+        pl.cut = how === "cut";
+        pl.ease = how && !pl.cut ? how : "power3.inOut";
         if (!(pl.at >= 0)) throw new Error("speakerCircle: bad time in '" + p + "'");
-        if (f.length === 5 && !(f[4] > 0))
+        if (f.length >= 5 && !pl.cut && !(f[4] > 0))
           throw new Error("speakerCircle: move seconds must be above 0 in '" + p + "'");
-        pl.dur = f.length === 5 ? f[4] : 0.6;
+        pl.dur = f.length >= 5 && !pl.cut ? f[4] : 0.6;
         if (pl.size !== 0) {
           var r = 200 * pl.size;
           if (!(pl.size >= 1 && pl.size <= 1.95))
@@ -89,7 +95,7 @@
     list.forEach(function (pl, k) {
       if (pl.size === 0 && !shownAt)
         throw new Error("speakerCircle: the circle is already gone at '" + pl.text + "'");
-      pl.len = pl.size === 0 ? 0.3 : shownAt ? pl.dur : 0.45;
+      pl.len = pl.size === 0 ? 0.3 : pl.cut ? 0 : shownAt ? pl.dur : 0.45;
       var prev = list[k - 1];
       if (prev && pl.at < prev.at + prev.len)
         throw new Error(
@@ -108,8 +114,11 @@
         return;
       }
       var to = { x: pl.x - 540, y: pl.y - 960, scale: pl.size };
-      if (shown) {
-        tl.to(sel, Object.assign({ duration: pl.dur, ease: "power3.inOut" }, to), pl.at);
+      if (pl.cut) {
+        tl.set(sel, Object.assign({ opacity: 1 }, to), pl.at);
+        shown = true;
+      } else if (shown) {
+        tl.to(sel, Object.assign({ duration: pl.dur, ease: pl.ease }, to), pl.at);
       } else {
         tl.set(sel, { x: to.x, y: to.y, scale: pl.size * 0.8 }, pl.at);
         tl.to(sel, { scale: pl.size, opacity: 1, duration: 0.45, ease: "back.out(1.4)" }, pl.at);

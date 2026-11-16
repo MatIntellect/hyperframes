@@ -39,6 +39,8 @@
       L1 redirect. Empty keeps the authored default rhythm.
     - exit (none | fade | up, default none): frame roots own transitions;
       holds end films.
+    - ground (own | none, default own): own paints the dark ground and clips
+      to the box; none leaves the box clear, so the reel shows through.
 
   Envelope, fixed IN and OUT with elastic HOLD only (never time-scaled):
     IN    = staggered card entrances, back to front, done by ~0.8s
@@ -61,6 +63,7 @@
   data-composition-variables='[
     {"id": "cards", "type": "number", "role": "content", "label": "Cards", "description": "Number of cards in the stack, 3 to 5.", "default": 4, "min": 3, "max": 5, "step": 1},
     {"id": "cues", "type": "string", "role": "timing", "label": "Shuffle cues", "description": "Comma-separated seconds from mount start; each cue throws the back card to the front. Cues inside a running throw redirect it mid-flight, velocity preserved. Empty keeps the default rhythm.", "default": "0.9, 1.7, 1.95"},
+    {"id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the stack on its own dark ground, clipped to its box. none: no ground, the reel shows through and nothing is clipped.", "default": "own", "options": [{"value": "own", "label": "Own ground"}, {"value": "none", "label": "No ground"}]},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the settled stack holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
   ]'
 >
@@ -128,6 +131,12 @@
             overflow: hidden;
           }
 
+          #root.sss-no-ground,
+          #root.sss-no-ground .sss-clip {
+            overflow: visible;
+            background: transparent;
+          }
+
           .sss-stage {
             position: absolute;
             inset: 0;
@@ -137,11 +146,12 @@
           .sss-card {
             position: absolute;
             left: 50%;
-            top: 58%;
-            width: 46cqw;
-            height: 42cqh;
-            margin-left: -23cqw;
-            margin-top: -21cqh;
+            /* the stack takes the box: graphics large, on all the free space */
+            top: 60%;
+            width: 72cqw;
+            height: 50cqh;
+            margin-left: -36cqw;
+            margin-top: -25cqh;
             border: 0.16cqmin solid var(--border, #2e2e32);
             border-radius: var(--radius, 2.2cqmin);
             background: var(--surface, #18181a);
@@ -336,6 +346,7 @@
             // One palette: the active-card ring rides the reel's brand red.
             root.style.setProperty("--sss-accent", "var(--brand, #ff0000)");
             var exit = vars.exit === "fade" || vars.exit === "up" ? vars.exit : "none";
+            if (vars.ground === "none") root.classList.add("sss-no-ground");
 
             var cardCountRaw = Number(vars.cards);
             var cardCount = Number.isFinite(cardCountRaw)

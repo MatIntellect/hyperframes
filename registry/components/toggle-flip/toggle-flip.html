@@ -27,12 +27,13 @@
     - size (number, percent of container width, default 40): toggle width
       as a percentage of the host box's own width (cqw-driven, so it stays
       proportional no matter what box a host composition gives it).
+    - ground ("own" | "none", default "own"): own paints the dark ground;
+      none leaves the box clear, so the reel shows through.
 
   Envelope (fixed IN/OUT, elastic HOLD only -- never gsap.timeScale()):
     IN_BASE  = 0.90s  stage settles in, anticipation press, then the flip
-    HOLD     = elastic = max(0, D - (IN_BASE + OUT_BASE)); ambient glow
-               breathes gently to prove the frame is alive, or sits calm at
-               HOLD = 0 for short durations
+    HOLD     = elastic = max(0, D - (IN_BASE + OUT_BASE)); the toggle holds
+               still (motion.md: breathing loops on UI read as generated)
     OUT_BASE = 0.50s  release fade
     If D < IN_BASE + OUT_BASE, IN and OUT scale down together (never
     time-scaled) so IN + OUT == D and HOLD == 0.
@@ -69,7 +70,8 @@
   data-composition-variables='[
     { "id": "direction", "type": "enum", "role": "content", "label": "Flip direction", "description": "Target end state the flip lands on.", "default": "on", "options": [{ "value": "on", "label": "Off → On" }, { "value": "off", "label": "On → Off" }] },
     { "id": "label", "type": "string", "role": "content", "label": "Caption", "description": "Optional caption under the toggle. Blank hides the line.", "default": "Автосохранение", "maxLength": 16 },
-    { "id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Toggle width as a percent of the host box width.", "default": 40, "min": 20, "max": 70, "step": 1, "unit": "%" }
+    { "id": "size", "type": "number", "role": "layout", "label": "Size", "description": "Toggle width as a percent of the host box width.", "default": 40, "min": 20, "max": 70, "step": 1, "unit": "%" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the toggle on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -139,6 +141,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.tf-no-ground {
+            background: transparent;
           }
 
           .tf-clip {
@@ -312,15 +318,11 @@
             // INVARIANT: size always clamps into the declared 20-70% range so an
             // out-of-range override can't blow the toggle past its container.
             var sizePct = Math.max(20, Math.min(70, Number(vars.size) || 40));
+            if (vars.ground === "none") root.classList.add("tf-no-ground");
 
             labelEl.textContent = labelText;
             toggleEl.style.setProperty("--tf-size", String(sizePct));
             labelEl.style.setProperty("--tf-size", String(sizePct));
-
-            // A project's own --dur-beat sets this primitive's ambient pace, so
-            // the HOLD breathing feels native to whatever theme is compiled in.
-            var beat = parseFloat(getComputedStyle(root).getPropertyValue("--dur-beat")) || 0.5;
-            var SHEEN_HALF = beat * 1.5;
 
             // RETIME RANGE: these are the only numbers to touch for a global
             // pacing retune. Do not reach for gsap.timeScale() -- HOLD below is
@@ -441,24 +443,7 @@
               FLIP_AT + FLIP_DURATION,
             );
 
-            // HOLD: gentle ambient breathing so an elastic frame still reads
-            // alive; naturally absent when HOLD == 0. Finite repeat count per
-            // the determinism rule -- floor, never ceil, so it can't overshoot D.
-            if (HOLD > SHEEN_HALF) {
-              var breathRepeat = Math.max(0, Math.floor(HOLD / SHEEN_HALF) - 1);
-              tl.fromTo(
-                glowEl,
-                { opacity: 0 },
-                {
-                  opacity: 0.32,
-                  duration: SHEEN_HALF,
-                  ease: "sine.inOut",
-                  yoyo: true,
-                  repeat: breathRepeat,
-                },
-                HOLD_START + GLOW_DURATION,
-              );
-            }
+            // HOLD: the toggle holds still (motion.md: breathing loops on UI read as generated).
 
             // OUT: release fade
             tl.to(stage, { opacity: 0, duration: OUT, ease: "power2.out" }, OUT_START);
