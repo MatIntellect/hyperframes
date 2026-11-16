@@ -996,6 +996,10 @@
       "type": "hyperframes:block"
     },
     {
+      "name": "poll-vote-vertical",
+      "type": "hyperframes:block"
+    },
+    {
       "name": "prism",
       "type": "hyperframes:block"
     },
@@ -1265,6 +1269,10 @@
     },
     {
       "name": "vfx-text-cursor-vertical",
+      "type": "hyperframes:block"
+    },
+    {
+      "name": "video-editor-timeline-vertical",
       "type": "hyperframes:block"
     },
     {
@@ -2277,6 +2285,6 @@
     }
   ],
   "catalogArtifact": {
-    "revision": "1ea79e1c2a1ceb698deeda6fcd6140c47bcb8104371060ee6db895c1a160f5ac"
+    "revision": "e12b3230126a8229b72d9b4aa90399bfd80861cfa211d2335bd752d0271264e5"
   }
 }

@@ -1,0 +1,406 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Small grey line over the question, after a red dot. Empty hides the line.", "maxLength": 28, "default": "Опрос в комментариях" },
+    { "id": "question", "type": "string", "role": "content", "label": "Question", "description": "Bebas Neue, up to two lines; long text steps down in size, never below 72 px.", "maxLength": 40, "default": "ИИ-монтаж – это" },
+    { "id": "opt1", "type": "string", "role": "content", "label": "Option 1", "description": "First answer, one or two words.", "maxLength": 12, "default": "Норм" },
+    { "id": "opt2", "type": "string", "role": "content", "label": "Option 2", "description": "Second answer.", "maxLength": 12, "default": "Стрём" },
+    { "id": "opt3", "type": "string", "role": "content", "label": "Option 3", "description": "Third answer. Empty leaves a two-answer poll.", "maxLength": 12, "default": "" },
+    { "id": "pct1", "type": "number", "role": "content", "label": "Option 1 %", "description": "Share of option 1. With two answers option 2 gets the rest.", "default": 64, "min": 0, "max": 100, "step": 1 },
+    { "id": "pct2", "type": "number", "role": "content", "label": "Option 2 %", "description": "Share of option 2 when there are three answers; option 3 gets the rest.", "default": 26, "min": 0, "max": 100, "step": 1 },
+    { "id": "pick", "type": "number", "role": "content", "label": "Picked", "description": "The answer voted for: its bar fills in the accent and a check pops on it. 0 leaves every bar grey.", "default": 1, "min": 0, "max": 3, "step": 1 },
+    { "id": "votes", "type": "number", "role": "content", "label": "Votes", "description": "Vote count rolling up under the answers. 0 hides the line.", "default": 2418, "min": 0, "step": 1 },
+    { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "Word after the count.", "maxLength": 14, "default": "голосов" },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 200, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1540, the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands, 2 answer 1 lands and fills, 3 answer 2, 4 answer 3 (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the card. none: no ground, the reel shows through around the card.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount; fade drops it away 0.3 s.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      /* A two- or three-answer poll card in the brand, 780 px wide inside the reel safe zone (x 150-930).
+         Each answer lands on the second the speaker says it; its bar fills to its share while the
+         percent counts up; the picked answer fills in the accent and gets a check. */
+      #pv-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #pv-ground {
+        position: absolute;
+        inset: 0;
+        background: var(--bg, #0c1014);
+      }
+      #pv-glow {
+        position: absolute;
+        left: 90px;
+        width: 900px;
+        height: 1000px;
+        border-radius: 50%;
+        background: radial-gradient(
+          closest-side,
+          color-mix(in srgb, var(--accent, #ff0000) 20%, transparent),
+          transparent 100%
+        );
+      }
+      #pv-card {
+        position: absolute;
+        left: 150px;
+        width: 780px;
+        padding: 52px 48px 56px;
+        border-radius: 36px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
+      }
+      #pv-head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 40px;
+        color: var(--muted, #8a8a90);
+      }
+      #pv-head i {
+        display: block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent, #ff0000);
+      }
+      #pv-q {
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 120px;
+        line-height: 0.95;
+        text-transform: uppercase;
+        padding-top: 0.08em;
+      }
+      .pv-opt {
+        position: relative;
+        height: 168px;
+        margin-top: 34px;
+        border-radius: 26px;
+        background: color-mix(in srgb, var(--fg, #f2f2f2) 6%, var(--surface, #18181a));
+        border: 2px solid var(--border, #2e2e32);
+        overflow: hidden;
+      }
+      .pv-opt:first-of-type {
+        margin-top: 48px;
+      }
+      .pv-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        transform-origin: 0 50%;
+        background: color-mix(in srgb, var(--fg, #f2f2f2) 24%, var(--surface, #18181a));
+      }
+      .pv-opt.pv-picked .pv-fill {
+        background: var(--accent, #ff0000);
+      }
+      .pv-row {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 0 40px;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 104px;
+        line-height: 1;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      .pv-row .pv-t {
+        flex: 1 1 auto;
+        white-space: nowrap;
+        padding-top: 0.08em;
+      }
+      .pv-row .pv-p {
+        flex: 0 0 auto;
+        font-variant-numeric: tabular-nums;
+        padding-top: 0.08em;
+      }
+      .pv-check {
+        flex: 0 0 auto;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .pv-picked .pv-check {
+        display: flex;
+      }
+      #pv-foot {
+        margin-top: 34px;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 40px;
+        color: var(--muted, #8a8a90);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="pv-root"
+      data-composition-id="poll-vote-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="10"
+    >
+      <div id="pv-ground"></div>
+      <div id="pv-glow"></div>
+      <div id="pv-card">
+        <div id="pv-head"><i></i><span id="pv-head-text">Опрос в комментариях</span></div>
+        <div id="pv-q">ИИ-монтаж – это</div>
+        <div id="pv-opts"></div>
+        <div id="pv-foot"><span id="pv-votes">0</span> <span id="pv-votes-word">голосов</span></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("pv-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(s) {
+          return root.querySelector(s);
+        }
+        function text(id, d) {
+          return typeof V[id] === "string" ? V[id].trim() : d;
+        }
+        function num(id, d) {
+          var n = Number(V[id]);
+          return V[id] !== "" && V[id] != null && isFinite(n) ? n : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function clamp(v) {
+          return Math.max(0, Math.min(100, Math.round(v)));
+        }
+
+        if (oneOf(V.ground, ["own", "none"], "own") === "none") {
+          $("#pv-ground").remove();
+          $("#pv-glow").remove();
+        }
+        var head = text("header", "Опрос в комментариях");
+        if (head) $("#pv-head-text").textContent = head;
+        else $("#pv-head").remove();
+        $("#pv-q").textContent = text("question", "") || "ИИ-монтаж – это";
+
+        // answers and shares: two answers split 100 between them, a third takes the rest
+        var labels = [text("opt1", "") || "Норм", text("opt2", "") || "Стрём"];
+        var third = text("opt3", "");
+        if (third) labels.push(third);
+        var p1 = clamp(num("pct1", 64));
+        var pcts =
+          labels.length === 2 ? [p1, 100 - p1] : [p1, Math.min(clamp(num("pct2", 26)), 100 - p1)];
+        if (labels.length === 3) pcts.push(100 - pcts[0] - pcts[1]);
+        var pick = Math.round(num("pick", 1));
+
+        var CHECK =
+          '<svg width="36" height="36" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="var(--accent, #ff0000)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var opts = labels.map(function (label, i) {
+          var o = document.createElement("div");
+          o.className = "pv-opt" + (pick === i + 1 ? " pv-picked" : "");
+          o.id = "pv-opt" + (i + 1);
+          o.innerHTML =
+            '<div class="pv-fill"></div><div class="pv-row"><span class="pv-t"></span><span class="pv-check">' +
+            CHECK +
+            '</span><span class="pv-p">0%</span></div>';
+          o.querySelector(".pv-t").textContent = label;
+          $("#pv-opts").appendChild(o);
+          return o;
+        });
+
+        var votes = Math.max(0, Math.round(num("votes", 2418)));
+        if (votes) $("#pv-votes-word").textContent = text("votesLabel", "") || "голосов";
+        else $("#pv-foot").remove();
+
+        // the question steps down until it fits two lines; an answer steps down until it fits its row
+        var q = $("#pv-q");
+        for (var fs = 120; fs > 72 && q.scrollHeight > fs * 0.95 * 2 + fs * 0.08 + 2; fs -= 4)
+          q.style.fontSize = fs - 4 + "px";
+        opts.forEach(function (o) {
+          var row = o.querySelector(".pv-row"),
+            t = o.querySelector(".pv-t");
+          for (var s = 104; s > 64 && t.scrollWidth > t.clientWidth; s -= 4)
+            row.style.fontSize = s - 4 + "px";
+        });
+
+        // placement inside the reel safe zone (y 180-1540)
+        var card = $("#pv-card"),
+          H = card.offsetHeight;
+        var place = oneOf(V.placement, ["top", "center", "bottom"], "center");
+        var top = place === "top" ? 200 : place === "bottom" ? 1540 - H : Math.round(860 - H / 2);
+        top = Math.max(180, top);
+        card.style.top = top + "px";
+        var glow = $("#pv-glow");
+        if (glow) glow.style.top = Math.round(top + H / 2 - 500) + "px";
+
+        // cues: each event on its own second; a missing or out-of-order list keeps the authored rhythm
+        var AUTHORED = [0.05, 0.89, 2.05, 3.2];
+        var n = labels.length;
+        var given = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = AUTHORED.slice(0, n + 1).map(function (t, i) {
+          return isFinite(given[i]) && given[i] >= 0 ? given[i] : t;
+        });
+        if (
+          !at.every(function (t, i) {
+            return i === 0 || t > at[i - 1];
+          })
+        )
+          at = AUTHORED.slice(0, n + 1);
+        var IN = at[0],
+          last = at[n];
+
+        var tl = gsap.timeline({ paused: true });
+        if (glow)
+          tl.fromTo(
+            glow,
+            { opacity: 0, scale: 0.8 },
+            { opacity: 1, scale: 1, duration: 0.7, ease: "power2.out" },
+            IN,
+          );
+        tl.fromTo(
+          card,
+          { opacity: 0, y: 140, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "expo.out" },
+          IN,
+        );
+        tl.fromTo(
+          q,
+          { color: "#8a8a90" },
+          { color: "#f2f2f2", duration: 0.3, ease: "none" },
+          IN + 0.35,
+        );
+
+        opts.forEach(function (o, i) {
+          var t = at[i + 1],
+            pct = pcts[i];
+          tl.fromTo(
+            o,
+            { opacity: 0, x: i % 2 ? 90 : -90, scale: 0.9 },
+            { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.6)" },
+            t - 0.08,
+          );
+          tl.fromTo(
+            o.querySelector(".pv-fill"),
+            { scaleX: 0 },
+            { scaleX: pct / 100, duration: 0.6, ease: "power3.out" },
+            t + 0.12,
+          );
+          var c = { v: 0 },
+            p = o.querySelector(".pv-p");
+          tl.fromTo(
+            c,
+            { v: 0 },
+            {
+              v: pct,
+              duration: 0.6,
+              ease: "power3.out",
+              onUpdate: function () {
+                p.textContent = Math.round(c.v) + "%";
+              },
+            },
+            t + 0.12,
+          );
+          if (pick === i + 1)
+            tl.fromTo(
+              o.querySelector(".pv-check"),
+              { scale: 0 },
+              { scale: 1, duration: 0.35, ease: "back.out(2.2)" },
+              t + 0.5,
+            );
+        });
+
+        if (votes) {
+          var vv = { v: 0 },
+            vEl = $("#pv-votes");
+          tl.fromTo(
+            vv,
+            { v: 0 },
+            {
+              v: votes,
+              duration: last + 0.7 - (IN + 0.3),
+              ease: "power1.out",
+              onUpdate: function () {
+                vEl.textContent = Math.round(vv.v).toLocaleString("ru-RU");
+              },
+            },
+            IN + 0.3,
+          );
+        }
+
+        if (oneOf(V.exit, ["none", "fade"], "none") === "fade") {
+          var OUT = isFinite(given[n + 1]) && given[n + 1] > last ? given[n + 1] : last + 1.5;
+          tl.to(card, { opacity: 0, y: 60, scale: 0.97, duration: 0.3, ease: "power3.in" }, OUT);
+          if (glow) tl.to(glow, { opacity: 0, duration: 0.3, ease: "power2.in" }, OUT);
+          if ($("#pv-ground"))
+            tl.to("#pv-ground", { opacity: 0, duration: 0.3, ease: "power2.in" }, OUT);
+        }
+        tl.set({}, {}, 10);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["poll-vote-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>

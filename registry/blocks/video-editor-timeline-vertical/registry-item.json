@@ -1,0 +1,29 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/registry-item.json",
+  "name": "video-editor-timeline-vertical",
+  "type": "hyperframes:block",
+  "title": "Video Editor Timeline (vertical)",
+  "description": "Vertical video editor at work: a panel with video, hook, sound and titles lanes, a red playhead crossing them with a running timecode, the razor cutting the clip, a transition mark, the hook clip slamming in, the waveform growing, title clips piling in, then a render button pressed and the tracks dimming for a progress ring or match cut. Lane names, file, button and every beat are variables; own brand ground or none; holds.",
+  "tags": [
+    "editor",
+    "timeline",
+    "video-editing",
+    "montage",
+    "tracks",
+    "playhead",
+    "mock-ui",
+    "vertical"
+  ],
+  "dimensions": {
+    "width": 1080,
+    "height": 1920
+  },
+  "duration": 30,
+  "files": [
+    {
+      "path": "video-editor-timeline-vertical.html",
+      "target": "compositions/video-editor-timeline-vertical.html",
+      "type": "hyperframes:composition"
+    }
+  ]
+}

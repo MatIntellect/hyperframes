@@ -1,0 +1,603 @@
+<!doctype html>
+<html
+  lang="ru"
+  data-composition-variables='[
+    { "id": "fileName", "type": "string", "role": "content", "label": "File name", "description": "File name in the editor header, after a red dot. Empty hides the dot and the name.", "maxLength": 22, "default": "рилс.mp4" },
+    { "id": "reelLength", "type": "number", "role": "content", "label": "Reel length", "description": "Seconds the ruler spans and the timecode counts to while the playhead crosses the tracks.", "default": 30, "min": 5, "max": 180, "step": 1 },
+    { "id": "lane1", "type": "string", "role": "content", "label": "Lane 1", "description": "Label of the video lane: the clip the razor cuts and the transition mark lands in.", "maxLength": 7, "default": "Видео" },
+    { "id": "lane2", "type": "string", "role": "content", "label": "Lane 2", "description": "Label of the hook lane: the red hook clip and grey clips after it.", "maxLength": 7, "default": "Хук" },
+    { "id": "lane3", "type": "string", "role": "content", "label": "Lane 3", "description": "Label of the sound lane: a waveform.", "maxLength": 7, "default": "Звук" },
+    { "id": "lane4", "type": "string", "role": "content", "label": "Lane 4", "description": "Label of the titles lane: seven title clips.", "maxLength": 7, "default": "Титры" },
+    { "id": "hookLabel", "type": "string", "role": "content", "label": "Hook clip", "description": "Word on the red hook clip, Bebas Neue.", "maxLength": 5, "default": "ХУК" },
+    { "id": "buttonLabel", "type": "string", "role": "content", "label": "Button", "description": "Red button under the tracks, pressed at the last cue. Empty removes the button.", "maxLength": 10, "default": "Рендер" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the playhead starts, 2 the razor cuts the video clip, 3 the transition mark lands in the cut, 4 the hook clip slams in, 5 the waveform grows, 6 the title clips pile in, 7 the button is pressed and the tracks dim (the playhead stops 0.1 s before), 8 the editor fades out (only when exit is fade). Empty keeps 0.3, 2.4, 3.4, 4.5, 5.1, 6.2, 7.5.", "default": "" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the panel. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the dimmed editor to the end of the mount, so a ring or a match cut can sit over it.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Bebas Neue";
+        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: block;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+      /* A video editor in the brand: a 780x1040 panel in the field (y 250-1290), four lanes, a playhead
+         crossing them at constant speed, and the edit happening on cue (razor, transition, hook, sound,
+         titles, the button). */
+      #vet-root {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        font-family: var(--font-body, "Montserrat"), sans-serif;
+        color: var(--fg, #f2f2f2);
+      }
+      #vet-ground {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 62% 40% at 50% 40%,
+            color-mix(in srgb, var(--accent, #ff0000) 16%, transparent) 0%,
+            transparent 70%
+          ),
+          var(--bg, #0c1014);
+      }
+      #vet-panel {
+        position: absolute;
+        left: 150px;
+        top: 250px;
+        width: 780px;
+        height: 1040px;
+        border-radius: 32px;
+        background: var(--surface, #18181a);
+        border: 2px solid var(--border, #2e2e32);
+        overflow: hidden;
+      }
+      #vet-head {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 780px;
+        height: 96px;
+        border-bottom: 2px solid var(--border, #2e2e32);
+      }
+      #vet-file {
+        position: absolute;
+        left: 32px;
+        top: 30px;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 36px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      #vet-file i {
+        display: block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--accent, #ff0000);
+      }
+      #vet-tc {
+        position: absolute;
+        right: 32px;
+        top: 30px;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 36px;
+        color: var(--muted, #8a8a90);
+        font-variant-numeric: tabular-nums;
+      }
+      .vet-tick {
+        position: absolute;
+        top: 104px;
+        width: 2px;
+        height: 14px;
+        background: var(--border, #2e2e32);
+      }
+      .vet-sec {
+        position: absolute;
+        top: 112px;
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 32px;
+        color: var(--muted, #8a8a90);
+        transform: translateX(8px);
+      }
+      #vet-lanes {
+        position: absolute;
+        inset: 0;
+      }
+      .vet-lane-label {
+        position: absolute;
+        left: 32px;
+        width: 130px;
+        height: 136px;
+        display: flex;
+        align-items: center;
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--muted, #8a8a90);
+      }
+      .vet-lane {
+        position: absolute;
+        left: 170px;
+        width: 580px;
+        height: 136px;
+        border-radius: 14px;
+        background: #1f1f22;
+      }
+      /* the recording on the video lane: a grey clip with sprockets and round thumbnails */
+      .vet-film {
+        position: absolute;
+        top: 170px;
+        height: 136px;
+        border-radius: 14px;
+        background: #242427;
+        border: 2px solid #3a3a3f;
+        overflow: hidden;
+      }
+      .vet-film .vet-sp {
+        position: absolute;
+        width: 10px;
+        height: 8px;
+        border-radius: 2px;
+        background: var(--bg, #0c1014);
+      }
+      .vet-film .vet-th {
+        position: absolute;
+        top: 26px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 50% 36%,
+          #8a8a90 0 17%,
+          #5c5c62 18% 46%,
+          #3a3a3f 47% 100%
+        );
+      }
+      #vet-razor {
+        position: absolute;
+        top: 156px;
+        width: 6px;
+        height: 164px;
+        border-radius: 3px;
+        background: var(--accent, #ff0000);
+        transform-origin: 50% 0%;
+      }
+      #vet-bowtie {
+        position: absolute;
+        top: 210px;
+        width: 64px;
+        height: 56px;
+      }
+      #vet-hook {
+        position: absolute;
+        left: 170px;
+        top: 330px;
+        width: 150px;
+        height: 136px;
+        border-radius: 14px;
+        background: var(--accent, #ff0000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 1;
+        color: #ffffff;
+      }
+      .vet-stk {
+        position: absolute;
+        top: 352px;
+        height: 92px;
+        border-radius: 12px;
+        background: #3a3a3f;
+      }
+      .vet-bar {
+        position: absolute;
+        width: 6px;
+        border-radius: 3px;
+        background: var(--muted, #8a8a90);
+        transform-origin: 50% 50%;
+      }
+      .vet-ttl {
+        position: absolute;
+        top: 670px;
+        width: 66px;
+        height: 96px;
+        border-radius: 12px;
+        background: var(--fg, #f2f2f2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 48px;
+        line-height: 1;
+        color: var(--surface, #18181a);
+      }
+      #vet-play {
+        position: absolute;
+        left: 0;
+        top: 100px;
+        width: 0;
+        height: 700px;
+      }
+      #vet-play-line {
+        position: absolute;
+        left: -2px;
+        top: 18px;
+        width: 4px;
+        height: 682px;
+        background: var(--accent, #ff0000);
+      }
+      #vet-play-head {
+        position: absolute;
+        left: -15px;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        background: var(--accent, #ff0000);
+        clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%);
+      }
+      #vet-button {
+        position: absolute;
+        left: 210px;
+        top: 860px;
+        width: 360px;
+        height: 112px;
+        border-radius: 24px;
+        background: var(--accent, #ff0000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display, "Bebas Neue"), sans-serif;
+        font-weight: 700;
+        font-size: 64px;
+        line-height: 1;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="vet-root"
+      data-composition-id="video-editor-timeline-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
+      <div id="vet-ground"></div>
+      <div id="vet-panel">
+        <div id="vet-head">
+          <div id="vet-file"><i></i><span id="vet-file-name">рилс.mp4</span></div>
+          <div id="vet-tc">00:00</div>
+        </div>
+        <div id="vet-ruler"></div>
+        <div id="vet-lanes">
+          <div class="vet-lane-label" id="vet-l1" style="top: 170px">Видео</div>
+          <div class="vet-lane-label" id="vet-l2" style="top: 330px">Хук</div>
+          <div class="vet-lane-label" id="vet-l3" style="top: 490px">Звук</div>
+          <div class="vet-lane-label" id="vet-l4" style="top: 650px">Титры</div>
+          <div class="vet-lane" style="top: 170px"></div>
+          <div class="vet-lane" style="top: 330px"></div>
+          <div class="vet-lane" style="top: 490px"></div>
+          <div class="vet-lane" style="top: 650px"></div>
+          <div id="vet-film" class="vet-film"></div>
+          <div id="vet-film-a" class="vet-film"></div>
+          <div id="vet-film-b" class="vet-film"></div>
+          <div id="vet-razor"></div>
+          <svg id="vet-bowtie" viewBox="0 0 64 56">
+            <path
+              d="M4 4 L32 28 L4 52 Z M60 4 L32 28 L60 52 Z"
+              fill="var(--accent, #ff0000)"
+              stroke="var(--accent, #ff0000)"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <div id="vet-hook">ХУК</div>
+          <div id="vet-stickers"></div>
+          <div id="vet-wave"></div>
+          <div id="vet-titles"></div>
+          <div id="vet-play">
+            <div id="vet-play-line"></div>
+            <div id="vet-play-head"></div>
+          </div>
+        </div>
+        <div id="vet-button">Рендер</div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var root = document.getElementById("vet-root");
+        var V =
+          window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
+            ? window.__hyperframes.getVariables()
+            : {};
+        function $(s) {
+          return root.querySelector(s);
+        }
+        function text(id, d) {
+          return typeof V[id] === "string" ? V[id].trim() : d;
+        }
+        function oneOf(v, list, d) {
+          return list.indexOf(v) >= 0 ? v : d;
+        }
+        function make(cls, parent, css) {
+          var e = document.createElement("div");
+          if (cls) e.className = cls;
+          if (css) e.style.cssText = css;
+          parent.appendChild(e);
+          return e;
+        }
+
+        if (oneOf(V.ground, ["own", "none"], "own") === "none") $("#vet-ground").remove();
+        var file = text("fileName", "рилс.mp4");
+        if (file) $("#vet-file-name").textContent = file;
+        else $("#vet-file").remove();
+        $("#vet-l1").textContent = text("lane1", "Видео");
+        $("#vet-l2").textContent = text("lane2", "Хук");
+        $("#vet-l3").textContent = text("lane3", "Звук");
+        $("#vet-l4").textContent = text("lane4", "Титры");
+        $("#vet-hook").textContent = text("hookLabel", "") || "ХУК";
+        var button = text("buttonLabel", "Рендер");
+        if (button) $("#vet-button").textContent = button;
+        else {
+          $("#vet-button").remove();
+          $("#vet-panel").style.height = "830px"; // no empty band where the button stood
+        }
+        var reel = Math.max(5, Math.min(180, Number(V.reelLength) || 30));
+
+        /* cues: each event at its own second; an empty or out-of-order list keeps the authored rhythm */
+        var AUTHORED = [0.3, 2.4, 3.4, 4.5, 5.1, 6.2, 7.5];
+        var given = String(V.cues || "")
+          .split(",")
+          .map(function (v) {
+            return parseFloat(v);
+          });
+        var at = AUTHORED.map(function (t, i) {
+          return isFinite(given[i]) && given[i] >= 0 ? given[i] : t;
+        });
+        var ordered = at.every(function (t, i) {
+          return i === 0 || t > at[i - 1];
+        });
+        if (!ordered) at = AUTHORED.slice();
+        var PLAY0 = at[0],
+          CUT_T = at[1],
+          BOW_T = at[2],
+          HOOK_T = at[3],
+          SOUND_T = at[4],
+          TITLES_T = at[5],
+          PRESS_T = at[6],
+          PLAY1 = PRESS_T - 0.1;
+
+        // geometry, panel coordinates: the tracks run x 170-750
+        var X0 = 170,
+          X1 = 750,
+          GAP = 16;
+        var CUT_X = X0 + ((X1 - X0) * (CUT_T - PLAY0)) / (PLAY1 - PLAY0);
+
+        // ruler: round steps whatever the reel length (5 s ticks, numbers every 10 s for a 30 s reel),
+        // no number closer than 60 px to the end of the track
+        var ruler = $("#vet-ruler");
+        var STEPS = [1, 2, 5, 10, 15, 30, 60];
+        var step =
+          STEPS.filter(function (s) {
+            return reel / s <= 8;
+          })[0] || 60;
+        for (var s = 0; s <= reel + 1e-6; s += step) {
+          var x = X0 + ((X1 - X0) * s) / reel;
+          make("vet-tick", ruler, "left:" + (x - 1) + "px");
+          if ((s / step) % 2 === 0 && x < X1 - 60)
+            make("vet-sec", ruler, "left:" + x + "px").textContent = s + "с";
+        }
+
+        // the video clip: one strip until the razor; on the razor frame it becomes two pieces
+        // (sprockets and thumbnails on one grid, so the razor slices through a thumbnail)
+        function film(el, from, to) {
+          el.style.left = from + "px";
+          el.style.width = to - from + "px";
+          for (var s = X0 + 8; s < X1 - 10; s += 22) {
+            if (s + 10 <= from || s >= to) continue;
+            make("vet-sp", el, "left:" + (s - from) + "px;top:8px");
+            make("vet-sp", el, "left:" + (s - from) + "px;bottom:8px");
+          }
+          for (var j = X0 + 12; j + 80 <= X1 - 4; j += 96) {
+            if (j + 80 <= from || j >= to) continue;
+            make("vet-th", el, "left:" + (j - from) + "px");
+          }
+        }
+        var filmA = $("#vet-film-a"),
+          filmB = $("#vet-film-b");
+        film($("#vet-film"), X0, X1);
+        film(filmA, X0, CUT_X);
+        film(filmB, CUT_X, X1);
+        filmA.style.borderRightWidth = "0px";
+        filmA.style.borderTopRightRadius = filmA.style.borderBottomRightRadius = "0px";
+        filmB.style.borderLeftWidth = "0px";
+        filmB.style.borderTopLeftRadius = filmB.style.borderBottomLeftRadius = "0px";
+        $("#vet-razor").style.left = CUT_X - 3 + "px";
+        $("#vet-bowtie").style.left = CUT_X + GAP / 2 - 32 + "px";
+
+        // after the hook: grey clips (the "and so on")
+        var stk = [
+          [338, 120],
+          [476, 96],
+          [590, 140],
+        ].map(function (p) {
+          return make("vet-stk", $("#vet-stickers"), "left:" + p[0] + "px;width:" + p[1] + "px");
+        });
+
+        // the sound lane: a waveform of fixed heights (a table, no Math.random)
+        var HTS = [
+          30, 52, 74, 46, 88, 104, 62, 40, 96, 118, 84, 58, 36, 70, 92, 112, 80, 54, 42, 66, 98,
+          120, 90, 60, 44, 72, 100, 86, 50, 34, 64, 94, 116, 82, 56, 40, 68, 90, 108, 76, 48, 36,
+          60, 84, 70, 46, 32, 52,
+        ];
+        var bars = HTS.map(function (h, i) {
+          var b = make(
+            "vet-bar",
+            $("#vet-wave"),
+            "left:" + (X0 + 8 + i * 12) + "px;top:" + (558 - h / 2) + "px;height:" + h + "px",
+          );
+          if (i % 12 === 5) b.style.background = "var(--fg, #f2f2f2)";
+          return b;
+        });
+
+        // titles lane: seven clips
+        var ttl = [0, 1, 2, 3, 4, 5, 6].map(function (i) {
+          var t = make("vet-ttl", $("#vet-titles"), "left:" + (X0 + 10 + i * 82) + "px");
+          t.textContent = "Т";
+          return t;
+        });
+
+        var play = $("#vet-play"),
+          tc = $("#vet-tc");
+        var pp = { x: X0 };
+        function writePlay() {
+          play.style.transform = "translateX(" + pp.x + "px)";
+          var secs = Math.round(((pp.x - X0) / (X1 - X0)) * reel);
+          tc.textContent =
+            String(Math.floor(secs / 60)).padStart(2, "0") +
+            ":" +
+            String(secs % 60).padStart(2, "0");
+        }
+        writePlay();
+
+        var tl = gsap.timeline({ paused: true });
+
+        // the panel arrives slightly large and settles
+        tl.fromTo(
+          "#vet-panel",
+          { scale: 1.04, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.6, ease: "expo.out" },
+          0,
+        );
+
+        // the playhead runs at constant speed (linear is the point), the timecode follows it
+        tl.fromTo(
+          pp,
+          { x: X0 },
+          { x: X1, duration: PLAY1 - PLAY0, ease: "none", onUpdate: writePlay },
+          PLAY0,
+        );
+
+        // razor: the red blade drops, the clip opens at the cut
+        tl.fromTo(
+          "#vet-razor",
+          { scaleY: 0, opacity: 1 },
+          { scaleY: 1, duration: 0.14, ease: "power3.out" },
+          CUT_T,
+        );
+        tl.to("#vet-razor", { opacity: 0, duration: 0.25, ease: "power2.in" }, CUT_T + 0.5);
+        tl.set("#vet-film", { opacity: 1 }, 0);
+        tl.set([filmA, filmB], { opacity: 0 }, 0);
+        tl.set("#vet-film", { opacity: 0 }, CUT_T + 0.08);
+        tl.set([filmA, filmB], { opacity: 1 }, CUT_T + 0.08);
+        tl.fromTo(filmB, { x: 0 }, { x: GAP, duration: 0.35, ease: "expo.out" }, CUT_T + 0.08);
+
+        // the transition mark lands in the gap
+        tl.fromTo(
+          "#vet-bowtie",
+          { scale: 0, opacity: 0, transformOrigin: "50% 50%" },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" },
+          BOW_T,
+        );
+
+        // the red hook clip slams in at the start of the reel
+        tl.fromTo(
+          "#vet-hook",
+          { x: -90, scale: 1.18, opacity: 0, filter: "blur(8px)" },
+          { x: 0, scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power4.out" },
+          HOOK_T,
+        );
+
+        // the waveform grows bar by bar
+        tl.fromTo(
+          bars,
+          { scaleY: 0 },
+          { scaleY: 1, duration: 0.3, ease: "power3.out", stagger: 0.012 },
+          SOUND_T,
+        );
+
+        // titles and grey clips pile in
+        tl.fromTo(
+          ttl,
+          { scale: 0.5, opacity: 0, transformOrigin: "50% 100%" },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.6)", stagger: 0.07 },
+          TITLES_T,
+        );
+        tl.fromTo(
+          stk,
+          { scaleX: 0, opacity: 0, transformOrigin: "0% 50%" },
+          { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out", stagger: 0.09 },
+          TITLES_T + 0.17,
+        );
+
+        // the button is pressed and the timeline steps back
+        if (button) {
+          tl.to("#vet-button", { scale: 0.93, duration: 0.08, ease: "power2.out" }, PRESS_T);
+          tl.to("#vet-button", { scale: 1, duration: 0.2, ease: "power2.out" }, PRESS_T + 0.08);
+        }
+        tl.to(
+          ["#vet-lanes", "#vet-head", "#vet-ruler", "#vet-button"].filter(function (s) {
+            return $(s);
+          }),
+          { opacity: 0.22, duration: 0.3, ease: "power2.inOut" },
+          PRESS_T + 0.12,
+        );
+
+        if (oneOf(V.exit, ["none", "fade"], "none") === "fade")
+          tl.to(
+            "#vet-root",
+            { opacity: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(given[7]) && given[7] > PRESS_T ? given[7] : PRESS_T + 1.5,
+          );
+        tl.set({}, {}, 30);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["video-editor-timeline-vertical"] = tl;
+      })();
+    </script>
+  </body>
+</html>
