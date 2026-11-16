@@ -56,7 +56,8 @@
   lang="en"
   data-composition-variables='[
     { "id": "tool", "type": "enum", "role": "content", "label": "Active tool", "description": "Tool highlighted in the editor toolbar.", "default": "pen", "options": [{ "value": "pen", "label": "Pen" }, { "value": "shape", "label": "Shape" }, { "value": "type", "label": "Type" }] },
-    { "id": "pathLabel", "type": "string", "role": "content", "label": "Path label", "description": "Name shown for the active vector path.", "default": "Логотип", "maxLength": 16 }
+    { "id": "pathLabel", "type": "string", "role": "content", "label": "Path label", "description": "Name shown for the active vector path.", "default": "Логотип", "maxLength": 16 },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -117,6 +118,13 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ve-clip,
@@ -712,6 +720,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // INVARIANT: exactly one known tool owns the active toolbar state.
             var allowedTools = ["pen", "shape", "type"];

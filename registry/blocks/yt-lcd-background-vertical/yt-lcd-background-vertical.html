@@ -157,7 +157,7 @@
     </style>
   </head>
   <body>
-    <div id="ylbv-root" data-composition-id="yt-lcd-background-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="ylbv-root" data-composition-id="yt-lcd-background-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="ylbv-board">
         <div id="ylbv-scan" data-layout-allow-overflow data-layout-ignore></div>
         <div id="ylbv-grid" data-layout-ignore></div>
@@ -227,11 +227,12 @@
         tl.fromTo(bow, { opacity: 0, filter: "blur(16px)" }, { opacity: 1, filter: "blur(2.2px)", duration: 1.7, ease: "power2.out" }, c0);
         tl.fromTo(r, { x: -O * 4, opacity: 0.5 }, { x: -O, opacity: 0.85, duration: 1.7, ease: "power2.out" }, c0);
         tl.fromTo(b, { x: O * 4, opacity: 0.5 }, { x: O, opacity: 0.85, duration: 1.7, ease: "power2.out" }, c0);
-        tl.to(r, { x: -O - 1.2, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: 9 }, c0 + 1.7);
-        tl.to(b, { x: O + 1.2, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: 9 }, c0 + 1.7);
-        tl.to("#ylbv-scan", { y: 14, duration: 3.1, ease: "sine.inOut", yoyo: true, repeat: 8 }, 0.5);
+        var LIFE = 180; /* lives 180 s: one mount covers a whole reel */
+        tl.to(r, { x: -O - 1.2, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: Math.ceil((LIFE - c0 - 1.7) / 2.4) }, c0 + 1.7);
+        tl.to(b, { x: O + 1.2, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: Math.ceil((LIFE - c0 - 1.7) / 2.4) }, c0 + 1.7);
+        tl.to("#ylbv-scan", { y: 14, duration: 3.1, ease: "sine.inOut", yoyo: true, repeat: Math.ceil((LIFE - 0.5) / 3.1) }, 0.5);
         if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
-        tl.set({}, {}, 30);
+        tl.set({}, {}, LIFE);
         window.__timelines = window.__timelines || {};
         window.__timelines["yt-lcd-background-vertical"] = tl;
       })();

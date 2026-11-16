@@ -53,7 +53,8 @@
     {"id": "role", "type": "string", "role": "content", "label": "Role", "description": "Attribution role in muted mono. Empty hides the line.", "default": "владелица пекарни", "maxLength": 28},
     {"id": "company", "type": "string", "role": "content", "label": "Company", "description": "Company mark as wide-tracked mono text at the byline end. Empty hides it.", "default": "ЗЕРНО", "maxLength": 16},
     {"id": "emphasis", "type": "string", "role": "content", "label": "Emphasis", "description": "First case-insensitive substring match in quote, expanded to whole words, gets the accent underline. Empty disables the draw.", "default": "за один вечер", "maxLength": 16},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the card holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the card holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -118,6 +119,13 @@
               sans-serif
             ); /* the quote is reading text: Montserrat (Mat 11.11) */
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .tq-clip {
@@ -318,6 +326,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             function str(value, fallback) {
               return (value == null ? fallback : String(value)).trim().replace(/\s+/g, " ");

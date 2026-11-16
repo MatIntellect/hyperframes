@@ -30,7 +30,8 @@
   data-composition-variables='[
     {"id": "label", "type": "string", "role": "content", "label": "Nucleus label", "description": "Text displayed inside the fixed center nucleus.", "default": "Идея", "maxLength": 16},
     {"id": "satellites", "type": "number", "role": "layout", "label": "Satellites", "description": "Number of orbiting copy chips.", "default": 4, "min": 3, "max": 6, "step": 1},
-    {"id": "words", "type": "string", "role": "content", "label": "Satellite words", "description": "Comma-separated satellite words, one per chip; a missing entry keeps the default word.", "default": "звук,свет,кадры,монтаж,цвет,титры"}
+    {"id": "words", "type": "string", "role": "content", "label": "Satellite words", "description": "Comma-separated satellite words, one per chip; a missing entry keeps the default word.", "default": "звук,свет,кадры,монтаж,цвет,титры"},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -89,6 +90,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .lno-clip {
@@ -274,6 +282,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // One palette: the accent rides the reel brand red.
             var accentColors = { brand: "var(--brand, #ff0000)" };

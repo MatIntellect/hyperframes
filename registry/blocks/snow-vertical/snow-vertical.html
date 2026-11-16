@@ -73,7 +73,7 @@
     </style>
   </head>
   <body>
-    <div id="snwv-root" data-composition-id="snow-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="snwv-root" data-composition-id="snow-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="snwv-box">
         <div id="snwv-snow" data-layout-allow-overflow></div>
       </div>
@@ -101,7 +101,7 @@
           k = 760 / 1080;
         }
         
-        var duration = 30;
+        var duration = 180; /* lives 180 s: one mount covers a whole reel */
         var COUNT = Math.round((V.density === "dense" ? 280 : 120) * (W * H) / (1920 * 1080));
         var fallSeconds = V.speed === "gust" ? 2.2 : 4.5;
         var swaySeconds = V.speed === "gust" ? 2.2 : 4;

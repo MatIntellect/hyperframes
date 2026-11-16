@@ -49,7 +49,8 @@
   data-composition-duration="2.4"
   data-composition-variables='[
     { "id": "pelmet", "type": "enum", "role": "style", "label": "Pelmet", "description": "Static valance framing the top of the stage.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] },
-    { "id": "spotlight", "type": "enum", "role": "style", "label": "Spotlight", "description": "Soft glow blooming over the stage as the curtains part.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] }
+    { "id": "spotlight", "type": "enum", "role": "style", "label": "Spotlight", "description": "Soft glow blooming over the stage as the curtains part.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -107,6 +108,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             background: var(--bg, #0c1014);
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .cvr-clip {
@@ -274,6 +282,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // fold: [dark, mid, light, sheen] – one graphite velvet in the reel palette.
             var palette = {

@@ -24,7 +24,8 @@
   data-composition-id="logo-sting"
   data-composition-duration="2.2"
   data-composition-variables='[
-    {"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Brand name displayed in the final lockup.", "default": "MATINTELLECT", "maxLength": 12}
+    {"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Brand name displayed in the final lockup.", "default": "MATINTELLECT", "maxLength": 12},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -82,6 +83,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ls-clip {
@@ -160,6 +168,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var wordmarkText = vars.wordmark == null ? "MATINTELLECT" : String(vars.wordmark);
 

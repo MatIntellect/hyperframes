@@ -54,7 +54,8 @@
   data-composition-variables='[
     { "id": "count", "type": "number", "role": "content", "label": "Chip count", "description": "Number of tasks and notifications crowding the center.", "default": 16, "min": 8, "max": 24, "step": 1 },
     { "id": "centerLabel", "type": "string", "role": "content", "label": "Center label", "description": "Text inside the calm central subject. Blank hides the text.", "default": "Вы", "maxLength": 10 },
-    { "id": "intensity", "type": "number", "role": "layout", "label": "Intensity", "description": "How tightly and quickly the chips crowd the center.", "default": 1, "min": 0.5, "max": 2, "step": 0.1 }
+    { "id": "intensity", "type": "number", "role": "layout", "label": "Intensity", "description": "How tightly and quickly the chips crowd the center.", "default": 1, "min": 0.5, "max": 2, "step": 0.1 },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -122,6 +123,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.hf-no-ground {
+            background: transparent;
           }
 
           .os-clip {
@@ -276,6 +281,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // INVARIANT: one clamped value owns each visual decision. Empty
             // centerLabel remains distinct from a missing value.

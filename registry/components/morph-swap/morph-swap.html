@@ -55,7 +55,8 @@
   data-composition-variables='[
     {"id": "swap_at", "type": "number", "role": "timing", "label": "Swap start", "description": "Seconds after mount start when the morph begins.", "default": 1.4, "min": 0.1, "max": 8, "step": 0.05, "unit": "s"},
     {"id": "register", "type": "enum", "role": "style", "label": "Register", "description": "Morph mechanic: condense shrink-fades A into B at center; reshape morphs the silhouette on scaleX/scaleY.", "default": "condense", "options": [{"value": "condense", "label": "Condense"}, {"value": "reshape", "label": "Reshape"}]},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the final frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the final frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -115,6 +116,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.hf-no-ground {
+            background: transparent;
           }
 
           .msw-clip,
@@ -286,6 +291,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var rawSwapAt = vars.swap_at == null ? 1.4 : Number(vars.swap_at);
             // INVARIANT: swap_at always clamps into the declared 0.1-8 range.

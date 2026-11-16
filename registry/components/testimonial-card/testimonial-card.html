@@ -44,7 +44,8 @@
     { "id": "quote", "type": "string", "role": "content", "label": "Quote", "description": "Customer testimonial copy revealed at reading pace.", "default": "Ролики теперь выходят каждый день, а я только снимаю.", "maxLength": 120 },
     { "id": "author", "type": "string", "role": "content", "label": "Author", "description": "Name attributed to the testimonial.", "default": "Анна Смирнова", "maxLength": 16 },
     { "id": "handle", "type": "string", "role": "content", "label": "Handle", "description": "Role or social handle shown beneath the author name.", "default": "@anna.bakery", "maxLength": 16 },
-    { "id": "rating", "type": "number", "role": "content", "label": "Rating", "description": "Visible customer rating from zero to five stars.", "default": 5, "min": 0, "max": 5, "step": 0.1 }
+    { "id": "rating", "type": "number", "role": "content", "label": "Rating", "description": "Visible customer rating from zero to five stars.", "default": 5, "min": 0, "max": 5, "step": 0.1 },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -102,6 +103,13 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .tc-clip {
@@ -299,6 +307,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             /* INVARIANT: getVariables() is the sole owner of content. Missing
                values use the declared defaults, while intentional empty

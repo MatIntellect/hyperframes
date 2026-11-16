@@ -31,7 +31,8 @@
   data-composition-id="type-match-cut"
   data-composition-duration="4"
   data-composition-variables='[
-    {"id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text split around the incoming panel.", "default": "Встречайте новый монтаж", "maxLength": 28}
+    {"id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Text split around the incoming panel.", "default": "Встречайте новый монтаж", "maxLength": 28},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -90,6 +91,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .tmc-clip,
@@ -320,6 +328,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var text = vars.text == null ? "Встречайте новый монтаж" : String(vars.text);
             // One palette: the incoming scene accent rides the reel brand red.

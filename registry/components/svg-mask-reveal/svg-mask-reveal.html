@@ -43,7 +43,8 @@
   data-composition-variables='[
     { "id": "text", "type": "string", "role": "content", "label": "Wordmark", "description": "Text used as the SVG mask window.", "default": "МОНТАЖ", "maxLength": 16 },
     { "id": "revealProgress", "type": "number", "role": "content", "label": "Reveal progress", "description": "Final revealed width of the wordmark.", "default": 100, "min": 0, "max": 100, "step": 1, "unit": "%" },
-    { "id": "featherPx", "type": "number", "role": "style", "label": "Edge feather", "description": "Softness of the traveling reveal edge.", "default": 24, "min": 0, "max": 120, "step": 1, "unit": "px" }
+    { "id": "featherPx", "type": "number", "role": "style", "label": "Edge feather", "description": "Softness of the traveling reveal edge.", "default": 24, "min": 0, "max": 120, "step": 1, "unit": "px" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -115,6 +116,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.hf-no-ground {
+            background: transparent;
           }
 
           .smr-clip,
@@ -284,6 +289,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
             var textValue = vars.text == null ? "МОНТАЖ" : String(vars.text);
             var progressValue = vars.revealProgress == null ? NaN : Number(vars.revealProgress);
             var revealProgress = Number.isFinite(progressValue)

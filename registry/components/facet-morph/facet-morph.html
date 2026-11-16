@@ -60,7 +60,8 @@
   data-composition-variables='[
     {"id": "forms", "type": "string", "role": "content", "label": "Forms", "description": "Comma-separated silhouette sequence from blob, mark, badge.", "default": "blob,mark,badge"},
     {"id": "hold_last", "type": "boolean", "role": "timing", "label": "Hold last", "description": "True settles dead still on the final silhouette; false keeps the mass slowly breathing through the hold.", "default": true},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the settled mass.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Outgoing transition. None holds the settled mass.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -118,6 +119,13 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .fm-clip {
@@ -206,6 +214,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             /* ---------------- variables ---------------- */
 

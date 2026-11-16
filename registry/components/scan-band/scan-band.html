@@ -27,7 +27,8 @@
   data-composition-duration="3.5"
   data-composition-variables='[
     { "id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Text displayed by the scan effect.", "default": "MATINTELLECT", "maxLength": 12 },
-    { "id": "band_angle", "type": "number", "role": "layout", "label": "Band angle", "description": "Diagonal angle of the distortion band in degrees.", "default": 12, "min": -30, "max": 30, "step": 1, "unit": "deg" }
+    { "id": "band_angle", "type": "number", "role": "layout", "label": "Band angle", "description": "Diagonal angle of the distortion band in degrees.", "default": 12, "min": -30, "max": 30, "step": 1, "unit": "deg" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -86,6 +87,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .sb-clip,
@@ -196,6 +204,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var text = vars.wordmark == null ? "MATINTELLECT" : String(vars.wordmark);
             var angleValue = vars.band_angle;

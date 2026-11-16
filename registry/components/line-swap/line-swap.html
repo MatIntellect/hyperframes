@@ -45,7 +45,8 @@
     {"id": "line_b", "type": "string", "role": "content", "label": "Line B", "description": "Replacement line; enters bottom-up on the swap beat and holds.", "default": "Почти никто не обещал контроль.", "maxLength": 48},
     {"id": "swap_at", "type": "number", "role": "timing", "label": "Swap at", "description": "Second (from mount start) of the beat replacement. Clamped so the swap and underline complete before any exit.", "default": 1.5, "min": 0, "step": 0.1, "unit": "s"},
     {"id": "underline_word", "type": "string", "role": "content", "label": "Underline word", "description": "First case-insensitive substring match in line B gets the accent underline after landing. Empty disables it.", "default": "контроль", "maxLength": 16},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the landed line holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the landed line holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -104,6 +105,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ls-clip {
@@ -206,6 +214,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             function asLine(value, fallback) {
               return value == null ? fallback : String(value).trim().replace(/\s+/g, " ");

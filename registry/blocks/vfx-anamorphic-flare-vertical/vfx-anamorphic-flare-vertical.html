@@ -69,7 +69,7 @@
     </style>
   </head>
   <body>
-    <div id="aflv-root" data-composition-id="vfx-anamorphic-flare-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="aflv-root" data-composition-id="vfx-anamorphic-flare-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="aflv-frame">
         <canvas id="aflv-canvas" width="1080" height="1920"></canvas>
       </div>
@@ -376,7 +376,7 @@
           },
         });
         // точки плывут всю длину блока; яркость – по родной дуге первых 10 с, дальше ровная
-        tl.to(driver, { t: 30, duration: 30, ease: "none" }, 0);
+        tl.to(driver, { t: 180, duration: 180, ease: "none" }, 0); /* lives 180 s: one mount covers a whole reel */
         if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 0 ? cues[0] : DUR);
         window.__timelines = window.__timelines || {};
         window.__timelines["vfx-anamorphic-flare-vertical"] = tl;

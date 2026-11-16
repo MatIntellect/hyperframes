@@ -43,7 +43,8 @@
     {"id": "emphasis_word", "type": "string", "role": "content", "label": "Emphasis word", "description": "First case-insensitive substring match in text receives the marker. Empty or unmatched draws no marker.", "default": "дешевле", "maxLength": 16},
     {"id": "style", "type": "enum", "role": "style", "label": "Marker style", "description": "Shape of the hand-drawn marker stroke.", "default": "highlight", "options": [{"value": "highlight", "label": "Highlight"}, {"value": "circle", "label": "Circle"}, {"value": "underline", "label": "Underline"}, {"value": "scribble", "label": "Scribble"}]},
     {"id": "draw_at", "type": "number", "role": "timing", "label": "Draw at", "description": "Second (from mount start) the marker starts drawing. Clamped so the stroke completes before any exit.", "default": 0.9, "min": 0, "step": 0.1, "unit": "s"},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "Optional departure. Default none: the lockup holds until the frame cuts.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -102,6 +103,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-display, "Bebas Neue", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .mh-clip {
@@ -224,6 +232,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var text =
               vars.text == null

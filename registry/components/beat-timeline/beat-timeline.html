@@ -47,7 +47,8 @@
   data-composition-variables='[
     { "id": "beatCount", "type": "number", "role": "content", "label": "Beat count", "description": "Number of beat rows in the sequence.", "default": 4, "min": 2, "max": 6, "step": 1 },
     { "id": "interval", "type": "number", "role": "layout", "label": "Interval", "description": "Base time between consecutive beat markers.", "default": 0.6, "min": 0.2, "max": 2, "step": 0.05, "unit": "s" },
-    { "id": "labels", "type": "string", "role": "content", "label": "Labels", "description": "Comma-separated beat titles, one per beat. Extra entries are ignored and missing entries fall back to Шаг N.", "default": "Идея,Съёмка,Монтаж,Публикация" }
+    { "id": "labels", "type": "string", "role": "content", "label": "Labels", "description": "Comma-separated beat titles, one per beat. Extra entries are ignored and missing entries fall back to Шаг N.", "default": "Идея,Съёмка,Монтаж,Публикация" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -117,6 +118,10 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+          #root.hf-no-ground {
+            background: transparent;
           }
 
           .bt-clip {
@@ -222,6 +227,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var parsedBeatCount = Number(vars.beatCount);
             // INVARIANT: exactly 2..6 integer rows reach the DOM and timeline.

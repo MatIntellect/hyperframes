@@ -53,7 +53,8 @@
     {"id": "chips", "type": "string", "role": "content", "label": "Chips", "description": "Comma-separated chip labels that surround the center (up to 12).", "default": "Документы,Задачи,Отчёты,Почта,Чат,Таблицы"},
     {"id": "close_in", "type": "boolean", "role": "timing", "label": "Close in", "description": "Converge the ring inward with a subtle edge dim after assembly. The center never moves.", "default": true},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated per-chip entrance times in seconds. Blank entries use the default cascade.", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the surrounded stage leaves the frame. Default none: the crowded hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the surrounded stage leaves the frame. Default none: the crowded hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -112,6 +113,16 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground,
+
+
+          #root.hf-no-ground .rs-vignette {
+
+            background: transparent;
+
           }
 
           .rs-clip {
@@ -265,6 +276,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var centerLabel =
               vars.center_label == null || String(vars.center_label).trim() === ""

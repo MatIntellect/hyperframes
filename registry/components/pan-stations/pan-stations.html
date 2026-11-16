@@ -46,7 +46,8 @@
   data-composition-variables='[
     { "id": "stationCount", "type": "number", "role": "layout", "label": "Station count", "description": "Number of feature stations in the row.", "default": 4, "min": 3, "max": 6, "step": 1 },
     { "id": "labels", "type": "string", "role": "content", "label": "Station labels", "description": "Comma-separated labels shown on the station cards.", "default": "Сценарий,Монтаж,Субтитры,Публикация" },
-    { "id": "dwell", "type": "number", "role": "timing", "label": "Dwell", "description": "Seconds the camera holds at each station before panning.", "default": 0.6, "min": 0.2, "max": 2, "step": 0.1, "unit": "s" }
+    { "id": "dwell", "type": "number", "role": "timing", "label": "Dwell", "description": "Seconds the camera holds at each station before panning.", "default": 0.6, "min": 0.2, "max": 2, "step": 0.1, "unit": "s" },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -116,6 +117,13 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ps-clip {
@@ -304,6 +312,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // INVARIANT: stationCount is always an integer in the declared 3-6 range.
             var rawCount = Number(vars.stationCount);

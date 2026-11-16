@@ -50,7 +50,8 @@
     {"id": "times", "type": "string", "role": "timing", "label": "Times", "description": "Comma-separated activation times in seconds, one per advance (state 1 onward). Blank entries use the default even rhythm.", "default": ""},
     {"id": "badge_state", "type": "number", "role": "content", "label": "Badge state", "description": "Index of the state the badges pop beside.", "default": 1, "min": 0, "max": 7, "step": 1},
     {"id": "badges", "type": "string", "role": "content", "label": "Badges", "description": "Comma-separated badge labels shown beside the badge state. Empty disables.", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the rail leaves the frame. Default none: the hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the rail leaves the frame. Default none: the hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -109,6 +110,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .scr-clip {
@@ -252,6 +260,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             function commaList(value, max) {
               return String(value == null ? "" : value)

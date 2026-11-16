@@ -50,7 +50,8 @@
     {"id": "bodies", "type": "string", "role": "content", "label": "Bodies", "description": "Comma-separated body lines matched to titles by index. Blank entries hide that body line.", "default": "Монтаж начат,Все 12 проверок зелёные,Выложен в Instagram и YouTube"},
     {"id": "expand", "type": "number", "role": "content", "label": "Expand", "description": "Index of the focus card in the titles list. -1 focuses the newest card (top of the stack).", "default": -1, "min": -1, "max": 4, "step": 1},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated per-card arrival times in seconds. Blank entries use the default rhythm.", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the stack leaves the frame. Default none: the hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "How the stack leaves the frame. Default none: the hold ends the film.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -109,6 +110,13 @@
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ns-clip {
@@ -212,6 +220,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             function toList(value, fallback) {
               var raw = value == null || String(value).trim() === "" ? fallback : String(value);

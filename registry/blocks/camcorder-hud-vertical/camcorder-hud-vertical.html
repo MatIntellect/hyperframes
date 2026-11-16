@@ -137,7 +137,7 @@
     </style>
   </head>
   <body>
-    <div id="cchv-root" data-composition-id="camcorder-hud-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="cchv-root" data-composition-id="camcorder-hud-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="cchv-hud">
         <div class="cchv-c cchv-rec"><span class="cchv-dot" id="cchv-dot"></span><span id="cchv-label"></span></div>
         <div class="cchv-c cchv-bat"></div>
@@ -186,7 +186,7 @@
             return parseFloat(v);
           });
         var tl = gsap.timeline({ paused: true });
-        tl.to(state, { s: 30, duration: 30, ease: "none", onUpdate: update }, 0);
+        tl.to(state, { s: 180, duration: 180, ease: "none", onUpdate: update }, 0); /* lives 180 s: one mount covers a whole reel */
         update();
         if (V.exit === "fade") tl.to("#cchv-hud", { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
         window.__timelines = window.__timelines || {};

@@ -45,7 +45,8 @@
   data-composition-variables='[
     { "id": "count", "type": "number", "role": "content", "label": "Notification count", "description": "Number of notification cards in the final pile.", "default": 7, "min": 4, "max": 10, "step": 1 },
     { "id": "speed", "type": "number", "role": "timing", "label": "Arrival speed", "description": "Pacing multiplier for the accelerating notification arrivals.", "default": 1, "min": 0.5, "max": 2, "step": 0.1 },
-    { "id": "showBadges", "type": "enum", "role": "content", "label": "Unread badges", "description": "Show or hide unread count badges on the notification cards.", "default": "yes", "options": [{ "value": "yes", "label": "Show badges" }, { "value": "no", "label": "Hide badges" }] }
+    { "id": "showBadges", "type": "enum", "role": "content", "label": "Unread badges", "description": "Show or hide unread count badges on the notification cards.", "default": "yes", "options": [{ "value": "yes", "label": "Show badges" }, { "value": "no", "label": "Hide badges" }] },
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -104,6 +105,16 @@
             background: var(--bg, #0c1014);
             color: var(--fg, #f2f2f2);
             font-family: var(--font-body, "Montserrat", sans-serif);
+          }
+
+
+          #root.hf-no-ground,
+
+
+          #root.hf-no-ground .np-backdrop {
+
+            background: transparent;
+
           }
 
           .np-clip,
@@ -299,6 +310,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             // INVARIANT: count is always an integer in the declared 4 to 10 range.
             var rawCount = Number(vars.count);

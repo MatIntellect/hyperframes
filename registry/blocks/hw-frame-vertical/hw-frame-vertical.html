@@ -136,7 +136,7 @@
     </style>
   </head>
   <body>
-    <div id="hwfv-root" data-composition-id="hw-frame-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div id="hwfv-root" data-composition-id="hw-frame-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
       <div id="hwfv-stage">
         <div id="hwfv-media"></div>
         <svg id="hwfv-svg" width="1080" height="1920" viewBox="0 0 1080 1920" data-layout-allow-overflow data-layout-ignore><path id="hwfv-border"></path></svg>
@@ -311,7 +311,7 @@
 
         // the exit fades the whole stage with its ground, not only the framed unit (the ground stayed on the full frame)
         if (exit === "fade") tl.to("#hwfv-stage", { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8);
-        tl.set({}, {}, 30);
+        tl.set({}, {}, 180); /* lives 180 s: one mount covers a whole reel */
         window.__timelines = window.__timelines || {};
         window.__timelines["hw-frame-vertical"] = tl;
         });

@@ -38,7 +38,8 @@
     {"id": "marks", "type": "string", "role": "content", "label": "Marks", "description": "Comma-separated wordmark texts (3 to 7 recommended).", "default": "Кофейня Зерно, Студия Свет, Клиника Плюс, Школа ИИ, Фабрика роликов"},
     {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Mark color: quiet muted or full-contrast ink.", "default": "muted", "options": [{"value": "muted", "label": "Muted"}, {"value": "ink", "label": "Ink"}]},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated reveal starts in seconds from mount start. Empty uses the authored 0.15s stagger.", "default": ""},
-    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "End-of-clip behavior. None holds to the last frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]}
+    {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "End-of-clip behavior. None holds to the last frame.", "default": "none", "options": [{"value": "none", "label": "None"}, {"value": "fade", "label": "Fade"}, {"value": "up", "label": "Up"}]},
+    { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
 >
   <head>
@@ -100,6 +101,13 @@
               sans-serif
             ); /* wordmarks are labels, not code: Montserrat (Mat 11.11) */
             pointer-events: none;
+          }
+
+
+          #root.hf-no-ground {
+
+            background: transparent;
+
           }
 
           .ts-clip {
@@ -164,6 +172,7 @@
               window.__hyperframes && window.__hyperframes.getVariables
                 ? window.__hyperframes.getVariables()
                 : {};
+            if (vars.ground === "none") root.classList.add("hf-no-ground");
 
             var marks = String(vars.marks == null ? "" : vars.marks)
               .split(",")
