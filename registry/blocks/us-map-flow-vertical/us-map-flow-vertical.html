@@ -121,7 +121,9 @@
         font-weight: 700;
         fill: var(--fg, #f2f2f2);
         stroke: var(--bg, #0c1014);
-        stroke-width: 5px;
+        /* a 5 px halo past the glyphs knocks out any arc under the word (arcs sit below the labels) */
+        stroke-width: 10px;
+        stroke-linejoin: round;
         paint-order: stroke;
         text-anchor: middle;
         dominant-baseline: central;
@@ -305,14 +307,28 @@
           return dotG.append("circle").attr("class", "usfv-dot").attr("cx", c.x).attr("cy", c.y).attr("r", 6).node();
         });
         // Подписи: по весу города, место рядом с точкой без наложений, прижатое внутрь карты (у края поля
-        // подпись встаёт над или под точкой со сдвигом внутрь, а не выкидывается); нет места нигде – не ставится
+        // подпись встаёт над или под точкой со сдвигом внутрь, а не выкидывается); нет места нигде – не ставится.
+        // Из свободных мест берётся то, через которое проходит меньше всего дуг: дуга не зачёркивает подпись.
+        // Две подписи на одной высоте разделены зазором шире пробела, иначе читаются одной строкой
         var boxes = order.map(function (c) {
           return { x: c.x - 8, y: c.y - 8, w: 16, h: 16 };
         });
         function hits(b) {
           return b.x < 0 || b.x + b.w > MAPW || b.y < 0 || b.y + b.h > MAPH || boxes.some(function (o) {
-            return b.x < o.x + o.w + 6 && o.x < b.x + b.w + 6 && b.y < o.y + o.h + 2 && o.y < b.y + b.h + 2;
+            var gx = o.label ? 24 : 6;
+            return b.x < o.x + o.w + gx && o.x < b.x + b.w + gx && b.y < o.y + o.h + 2 && o.y < b.y + b.h + 2;
           });
+        }
+        var arcPts = [];
+        arcs.forEach(function (a) {
+          for (var s = 0; s <= a.L; s += 4) arcPts.push(a.el.getPointAtLength(s));
+        });
+        function crossings(b) {
+          var n = 0;
+          arcPts.forEach(function (p) {
+            if (p.x > b.x - 4 && p.x < b.x + b.w + 4 && p.y > b.y + 2 && p.y < b.y + b.h - 2) n++;
+          });
+          return n;
         }
         var labels = [];
         order
@@ -338,17 +354,19 @@
               [c.x + gap + 4 + w / 2, c.y],
               [c.x - gap - 4 - w / 2, c.y],
             ];
-            for (var i = 0; i < spots.length; i++) {
+            var best = null;
+            for (var i = 0; i < spots.length && !(best && best.n === 0); i++) {
               var x = Math.max(w / 2, Math.min(MAPW - w / 2, spots[i][0]));
-              var b = { x: x - w / 2, y: spots[i][1] - h / 2, w: w, h: h };
+              var b = { x: x - w / 2, y: spots[i][1] - h / 2, w: w, h: h, label: true };
               if (!hits(b)) {
-                boxes.push(b);
-                t.attr("x", x).attr("y", spots[i][1]);
-                labels.push(t.node());
-                return;
+                var n = crossings(b);
+                if (!best || n < best.n) best = { b: b, n: n, x: x, y: spots[i][1] };
               }
             }
-            t.remove();
+            if (!best) return t.remove();
+            boxes.push(best.b);
+            t.attr("x", best.x).attr("y", best.y);
+            labels.push(t.node());
           });
 
         var cues = String(V.cues || "")

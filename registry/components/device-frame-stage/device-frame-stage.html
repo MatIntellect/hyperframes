@@ -43,7 +43,7 @@
       <template data-slot="device-frame-stage-screen"> ... </template>
     Content is authored at the device's logical viewport (390x844 phone,
     768x1024 tablet); img/video children fill it. Without the template the
-    screen shows a dark brand skeleton of an app.
+    screen shows a dark grey skeleton of an app.
 
     Variables (data-composition-variables above):
       device  enum phone|tablet          default "phone"     canonical outer ratio + logical viewport
@@ -259,8 +259,9 @@
           object-fit: cover;
         }
 
-        /* Default screen: a dark brand skeleton of an app (header with the
-           one red mark, hero block, three list rows), drawn in logical screen
+        /* Default screen: a dark grey skeleton of an app (header with the
+           app mark at L1, hero block, three list rows); placeholder, so no
+           accent (placeholder-material.md, Accent), drawn in logical screen
            pixels as percentages so it fits the phone and the tablet viewport.
            A host template with data-slot="device-frame-stage-screen" replaces
            it (see the SLOT note in the script). */
@@ -285,7 +286,7 @@
           height: 100%;
           aspect-ratio: 1;
           border-radius: 28%;
-          background: var(--brand, #ff0000);
+          background: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
         }
 
         .dfs-skel-line {
@@ -452,10 +453,12 @@
           viewport.style.setProperty("--logical-width", String(logicalWidth));
           viewport.style.setProperty("--logical-height", String(logicalHeight));
 
+          // The layout width, not getBoundingClientRect: at mount the frame stands at
+          // its entry scale 0.94, and a transformed width left the screen 6% short.
           function updateScreenScale() {
-            var rect = screen.getBoundingClientRect();
-            if (rect.width > 0)
-              viewport.style.setProperty("--screen-scale", String(rect.width / logicalWidth));
+            var width = screen.clientWidth;
+            if (width > 0)
+              viewport.style.setProperty("--screen-scale", String(width / logicalWidth));
           }
           updateScreenScale();
           if (typeof ResizeObserver !== "undefined") {

@@ -4,15 +4,15 @@
   data-composition-variables='[
     { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Small grey line over the question, after a red dot. Empty hides the line.", "maxLength": 28, "default": "Опрос в комментариях" },
     { "id": "question", "type": "string", "role": "content", "label": "Question", "description": "Bebas Neue, up to two lines; long text steps down in size, never below 72 px.", "maxLength": 40, "default": "ИИ-монтаж – это" },
-    { "id": "opt1", "type": "string", "role": "content", "label": "Option 1", "description": "First answer, one or two words.", "maxLength": 12, "default": "Норм" },
-    { "id": "opt2", "type": "string", "role": "content", "label": "Option 2", "description": "Second answer.", "maxLength": 12, "default": "Стрём" },
-    { "id": "opt3", "type": "string", "role": "content", "label": "Option 3", "description": "Third answer. Empty leaves a two-answer poll.", "maxLength": 12, "default": "" },
+    { "id": "opt1", "type": "string", "role": "content", "label": "Option 1", "description": "First answer, one or two words.", "maxLength": 9, "default": "Норм" },
+    { "id": "opt2", "type": "string", "role": "content", "label": "Option 2", "description": "Second answer.", "maxLength": 9, "default": "Стрём" },
+    { "id": "opt3", "type": "string", "role": "content", "label": "Option 3", "description": "Third answer. Empty leaves a two-answer poll.", "maxLength": 9, "default": "" },
     { "id": "pct1", "type": "number", "role": "content", "label": "Option 1 %", "description": "Share of option 1. With two answers option 2 gets the rest.", "default": 64, "min": 0, "max": 100, "step": 1 },
     { "id": "pct2", "type": "number", "role": "content", "label": "Option 2 %", "description": "Share of option 2 when there are three answers; option 3 gets the rest.", "default": 26, "min": 0, "max": 100, "step": 1 },
     { "id": "pick", "type": "number", "role": "content", "label": "Picked", "description": "The answer voted for: its bar fills in the accent and a check pops on it. 0 leaves every bar grey.", "default": 1, "min": 0, "max": 3, "step": 1 },
     { "id": "votes", "type": "number", "role": "content", "label": "Votes", "description": "Vote count rolling up under the answers. 0 hides the line.", "default": 2418, "min": 0, "step": 1 },
     { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "Word after the count.", "maxLength": 14, "default": "голосов" },
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 200, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1540, the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 200, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1360 (the bottom of the graphics field, above the caption band), the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands with its answers, empty and grey, 2 answer 1 fills, 3 answer 2, 4 answer 3 (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the card. none: no ground, the reel shows through around the card.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount; fade drops it away 0.3 s.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -283,11 +283,11 @@
             row.style.fontSize = s - 4 + "px";
         });
 
-        // placement inside the reel safe zone (y 180-1540)
+        // placement inside the graphics field of the reel (y 180-1360); y 1380-1540 belongs to the hook and the captions
         var card = $("#pv-card"),
           H = card.offsetHeight;
         var place = oneOf(V.placement, ["top", "center", "bottom"], "center");
-        var top = place === "top" ? 200 : place === "bottom" ? 1540 - H : Math.round(860 - H / 2);
+        var top = place === "top" ? 200 : place === "bottom" ? 1360 - H : Math.round(860 - H / 2);
         top = Math.max(180, top);
         card.style.top = top + "px";
         var glow = $("#pv-glow");

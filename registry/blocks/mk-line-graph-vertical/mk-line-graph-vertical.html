@@ -3,11 +3,11 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the graph in the 780x1180 field (y 180-1360). top / bottom: the graph on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, up to two lines. Empty hides it.", "maxLength": 28, "default": "Рендеры растут" },
+    { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, up to two lines. Empty hides it.", "maxLength": 27, "default": "Рендеры растут" },
     { "id": "labels", "type": "string", "role": "content", "label": "X labels", "description": "Point labels separated by ;, 2 to 7 items, each up to 5 characters.", "maxLength": 48, "default": "Янв;Фев;Мар;Апр;Май;Июн" },
-    { "id": "name1", "type": "string", "role": "content", "label": "Series 1 name", "description": "Legend name of the red line.", "maxLength": 18, "default": "Рендеры" },
+    { "id": "name1", "type": "string", "role": "content", "label": "Series 1 name", "description": "Legend name of the red line.", "maxLength": 17, "default": "Рендеры" },
     { "id": "values1", "type": "string", "role": "content", "label": "Series 1 values", "description": "Red line values separated by ;, one per label, each up to 5 characters, decimals with a comma or a dot. Shown as written.", "maxLength": 48, "default": "12;26;22;38;44;58" },
-    { "id": "name2", "type": "string", "role": "content", "label": "Series 2 name", "description": "Legend name of the grey line.", "maxLength": 18, "default": "Проекты" },
+    { "id": "name2", "type": "string", "role": "content", "label": "Series 2 name", "description": "Legend name of the grey line.", "maxLength": 17, "default": "Проекты" },
     { "id": "values2", "type": "string", "role": "content", "label": "Series 2 values", "description": "Grey line values separated by ;. Empty draws one line.", "maxLength": 48, "default": "8;14;18;16;28;36" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the axis and labels appear, 2 the red line starts drawing (1.3 s, values pop on its points), 3 the grey line starts drawing, 4 the graph fades out (only when exit is fade). Empty keeps 0.2, 0.6, 1.0.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the drawn graph to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }

@@ -156,6 +156,20 @@
         root.querySelector(".hf-catalog-pendulum-swing__body").textContent = vars.text.trim();
       }
     }
+
+    // Headroom: swinging about a top pivot lifts the far end of the sign above the pivot line by
+    // reach x sin(first swing). The root's top margin keeps that lift inside the box the host gives the
+    // snippet, so a sign hung at the top of the graphics field swings inside the zone. Measured after the
+    // fonts load, since the sign's width follows its text.
+    function headroom() {
+      var reach = origin === "50% 0%" ? 0.5 : 1;
+      var lift = Math.sin((parseFloat(maxAngle) * Math.PI) / 180);
+      for (var k = 0; k < roots.length; k += 1) {
+        roots[k].style.marginTop = Math.ceil(roots[k].offsetWidth * reach * lift) + "px";
+      }
+    }
+    headroom();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(headroom);
   })();
 </script>
 

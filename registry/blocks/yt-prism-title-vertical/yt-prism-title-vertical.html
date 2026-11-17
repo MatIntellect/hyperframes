@@ -108,8 +108,10 @@
         height: 1540px;
         align-items: center;
       }
+      /* the line grows to 1.035 and the bow leans back 6deg in perspective (~1.055 at its near edge), and the
+         red and grey copies ride up to 5.4 px to the sides: a 724 px box stays inside the 780 px zone (x 150-930) */
       #yptv-line {
-        max-width: 780px;
+        max-width: 724px;
       }
       
     </style>
@@ -144,12 +146,16 @@
         var n = title.length;
         
         
-        root.classList.add("yptv-" + oneOf(V.placement, ["bottom", "top", "center"], "center"));
+        var place = oneOf(V.placement, ["bottom", "top", "center"], "center");
+        root.classList.add("yptv-" + place);
+        // the slow grow keeps the edge the title hangs from in place (top: y 180, bottom: y 1360)
+        line.style.transformOrigin = place === "top" ? "50% 0%" : place === "bottom" ? "50% 100%" : "50% 50%";
         var longest = title.split(/\s+/).reduce(function (m, w) {
           return Math.max(m, w.length);
         }, 0);
         var perLine = Math.max(longest, Math.ceil(n / 2));
-        var size = Math.max(100, Math.min(220, 760 / (0.44 * perLine)));
+        // a line is sized to fill the 724 px box less a little air (704 px), so the title stays on two lines
+        var size = Math.max(100, Math.min(220, 704 / (0.44 * perLine)));
         
         line.style.fontSize = Math.round(size) + "px";
 

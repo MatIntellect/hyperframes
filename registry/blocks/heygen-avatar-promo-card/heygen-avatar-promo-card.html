@@ -17,7 +17,7 @@
     {"id": "pill1", "type": "string", "role": "content", "label": "Pill 1", "description": "First feature pill (full placement only).", "maxLength": 14, "default": "БЕЗ МОНТАЖЁРА"},
     {"id": "pill2", "type": "string", "role": "content", "label": "Pill 2", "description": "Second feature pill (full placement only).", "maxLength": 14, "default": "ЗА МИНУТЫ"},
     {"id": "offerValue", "type": "string", "role": "content", "label": "Offer value", "description": "Large offer value in the light tile. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 6, "default": ""},
-    {"id": "offerSuffix", "type": "string", "role": "content", "label": "Offer suffix", "description": "Large word in the adjacent light tile. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 7, "default": ""},
+    {"id": "offerSuffix", "type": "string", "role": "content", "label": "Offer suffix", "description": "Large word in the light tile under the offer value; with any offer field written the belt stops with the offer and the promo code whole in the field. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 7, "default": ""},
     {"id": "codeLabel", "type": "string", "role": "content", "label": "Promo code label", "description": "Small label above the promo code. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 10, "default": ""},
     {"id": "promoPrefix", "type": "string", "role": "content", "label": "Promo code prefix", "description": "Accent-colored promo-code prefix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 5, "default": ""},
     {"id": "promoSuffix", "type": "string", "role": "content", "label": "Promo code suffix", "description": "Light promo-code suffix. Empty by default: the tile stays a plain plate until an offer is written.", "maxLength": 3, "default": ""},
@@ -27,7 +27,7 @@
     {"id": "accentColor", "type": "string", "role": "style", "label": "Accent color", "description": "Brand accent used by tiles and promo-code prefix. Any CSS colour; by default the theme token --accent.", "default": "var(--accent, #ff0000)"},
     {"id": "lightTileColor", "type": "string", "role": "style", "label": "Light tile color", "description": "Light belt-tile surface. Any CSS colour; by default the theme token --surface.", "default": "var(--surface, #18181a)"},
     {"id": "darkTileColor", "type": "string", "role": "style", "label": "Dark tile color", "description": "Dark belt-tile surface. Any CSS colour; by default the theme token --border.", "default": "var(--border, #2e2e32)"},
-    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the header starts its fade-in (the belt moves for 10 s from the mount start, then holds), 2 the card leaves (only when exit is not none). Empty keeps 0, 9.5.", "default": ""},
+    {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the header starts its fade-in (the belt moves for 10 s from the mount start, 7 s when an offer is written, then holds), 2 the card leaves (only when exit is not none). Empty keeps 0, 9.5.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}]}
   ]'
 >
@@ -310,6 +310,28 @@
                 muted
                 playsinline
               ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k1-b"
+                src="assets/av_r1k1.mp4" data-var-src="video1"
+                style="left: 523.4px"
+                data-start="8.60"
+                data-duration="10.70"
+                data-track-index="1"
+                muted
+                playsinline
+              ></video>
+              <video
+                class="tile row1 clip"
+                id="apc-v-r1k1-c"
+                src="assets/av_r1k1.mp4" data-var-src="video1"
+                style="left: 523.4px"
+                data-start="19.30"
+                data-duration="10.70"
+                data-track-index="1"
+                muted
+                playsinline
+              ></video>
               <div id="apc-offer-value" class="tile row1 light serif-tile" style="left: 907.7px"></div>
               <video
                 class="tile row1 clip"
@@ -390,12 +412,12 @@
                 muted
                 playsinline
               ></video>
-              <div id="apc-offer-suffix" class="tile row2 light serif-tile" style="left: 523.4px"></div>
+              <div id="apc-offer-suffix" class="tile row2 light serif-tile" style="left: 907.7px"></div>
               <video
                 class="tile row2 clip"
                 id="apc-v-r2k2"
                 src="assets/av_r2k2.mp4" data-var-src="video5"
-                style="left: 907.7px"
+                style="left: 523.4px"
                 data-start="0"
                 data-duration="10"
                 data-track-index="5"
@@ -406,7 +428,7 @@
                 class="tile row2 clip"
                 id="apc-v-r2k2-b"
                 src="assets/av_r2k2.mp4" data-var-src="video5"
-                style="left: 907.7px"
+                style="left: 523.4px"
                 data-start="10"
                 data-duration="10"
                 data-track-index="5"
@@ -417,7 +439,7 @@
                 class="tile row2 clip"
                 id="apc-v-r2k2-c"
                 src="assets/av_r2k2.mp4" data-var-src="video5"
-                style="left: 907.7px"
+                style="left: 523.4px"
                 data-start="20"
                 data-duration="10"
                 data-track-index="5"
@@ -509,8 +531,12 @@
 
       const tl = gsap.timeline({ paused: true });
 
-      // Belt conveyor — measured from reference: 93.601 px/s constant, leftward; holds after 10 s
-      tl.fromTo("#apc-belt-linear", { x: 0 }, { x: -936.01, duration: 10, ease: "none" }, 0);
+      // Belt conveyor — measured from reference: 93.601 px/s constant, leftward; holds after 10 s.
+      // With an offer written it holds earlier, where the offer column (value over word, x 907.7) and the code
+      // column (x 1292) stand whole and centred in the field: belt + entry = 540 - (907.7 + 1654) / 2 = -740.85
+      const offer = ["offerValue", "offerSuffix", "codeLabel", "promoPrefix", "promoSuffix"].some((k) => text(k, ""));
+      const beltTo = offer ? -660.85 : -936.01;
+      tl.fromTo("#apc-belt-linear", { x: 0 }, { x: beltTo, duration: -beltTo / 93.601, ease: "none" }, 0);
       // Belt entry — measured offset table, one keyframe per source frame, linear between
       const entryX = [
         0, -11.39, -21.64, -30.9, -39.04, -46.29, -52.55, -57.98, -62.72, -66.71, -69.99, -72.75,

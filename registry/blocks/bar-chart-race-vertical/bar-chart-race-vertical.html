@@ -3,13 +3,13 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the race in the 780x1180 field (y 180-1360), 6 bars. top / bottom: the race on a brand card 780x760 at y 180-940 / 600-1360, 5 bars, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Headline, Bebas Neue, up to two lines.", "maxLength": 28, "default": "Кто растёт быстрее" },
-    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "One line under the headline; the unit goes here.", "maxLength": 36, "default": "Подписчики, тысяч" },
+    { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Headline, Bebas Neue, up to two lines.", "maxLength": 25, "default": "Кто растёт быстрее" },
+    { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "One line under the headline; the unit goes here.", "maxLength": 31, "default": "Подписчики, тысяч" },
     { "id": "periods", "type": "string", "role": "content", "label": "Periods", "description": "Period labels separated by commas, 2 to 12, each up to 6 characters. The current one is shown large.", "maxLength": 90, "default": "2019, 2020, 2021, 2022, 2023, 2024" },
     { "id": "series", "type": "string", "role": "content", "label": "Series", "description": "One series per line or separated by ;, as Name: v1, v2, ... with a dot for decimals; one value per period, a short row holds its last value. Names up to 14 characters, up to 12 series.", "maxLength": 900, "default": "Telegram: 42, 58, 71, 96, 118, 131\nYouTube: 30, 46, 68, 92, 126, 168\nInstagram: 55, 62, 66, 70, 74, 79\nTikTok: 18, 33, 52, 61, 88, 104\nВКонтакте: 25, 28, 44, 58, 63, 72\nДзен: 12, 20, 39, 47, 55, 90\nThreads: 8, 11, 15, 24, 40, 66\nX: 35, 37, 38, 40, 42, 44" },
     { "id": "barCount", "type": "number", "role": "layout", "label": "Bars shown", "description": "How many ranks are visible.", "default": 6, "min": 3, "max": 8, "step": 1 },
-    { "id": "valuePrefix", "type": "string", "role": "content", "label": "Value prefix", "maxLength": 2, "default": "" },
-    { "id": "valueSuffix", "type": "string", "role": "content", "label": "Value suffix", "maxLength": 4, "default": "" },
+    { "id": "valuePrefix", "type": "string", "role": "content", "label": "Value prefix", "maxLength": 1, "default": "" },
+    { "id": "valueSuffix", "type": "string", "role": "content", "label": "Value suffix", "maxLength": 3, "default": "" },
     { "id": "valueDecimals", "type": "number", "role": "content", "label": "Value decimals", "default": 0, "min": 0, "max": 2, "step": 1 },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first period are in and the race starts, 2 the race reaches the last period, 3 the chart fades out (only when exit is fade). Empty keeps 0.8 and 2 s per period.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the final ranking to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }

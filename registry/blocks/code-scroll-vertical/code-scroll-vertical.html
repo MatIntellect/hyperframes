@@ -605,7 +605,17 @@
           var idx = Math.max(0, Math.min(lines.length - 1, targetLine - 1));
           var lr = lines[idx].getBoundingClientRect();
           var lineCenter = lr.top + lr.height / 2 - surfRect.top;
-          var dy = surfRect.height * 0.5 - lineCenter;
+          // Scroll by whole rows, as an editor does: the target line as near the middle as the
+          // row grid allows, the top row at rest flush with the window's top edge (not cut by
+          // the title bar), never above line 1 or past the last row; the sliver under the last
+          // whole row is clipped, so no row rests half-cut at the bottom edge.
+          var LH = lr.height;
+          var pad = code.offsetTop;
+          var rows = Math.floor(surfRect.height / LH);
+          var n = Math.round((lineCenter - surfRect.height * 0.5 - pad) / LH);
+          n = Math.max(0, Math.min(Math.max(0, lines.length - rows), n));
+          var dy = -pad - n * LH;
+          surface.style.clipPath = "inset(0 0 " + (surfRect.height - rows * LH) + "px 0)";
           var box = document.createElement("div");
           box.className = "hl-box";
           box.style.left = lines[idx].offsetLeft - 8 + "px";

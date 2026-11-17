@@ -125,11 +125,13 @@
           ),
           var(--bg, #0c1014);
       }
+      /* the lock-screen date and clock are centred text: their box is the 780 px column (x 150-930),
+         so a long date wraps inside the zone instead of running to the frame edge */
       #nc-lock {
         position: absolute;
-        left: 0;
+        left: 150px;
         top: 196px;
-        width: 1080px;
+        width: 780px;
         text-align: center;
         color: var(--fg, #f2f2f2);
         font-family: var(--font-body, "Montserrat"), sans-serif;

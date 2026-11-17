@@ -9,6 +9,11 @@
   bare CTA lockup use cta-lockup. This is the whole closing card as one
   mountable scene.
 
+  Each feature's icon is a field (icon1-icon3), picked from the icons drawn
+  in this file, so a new label never keeps an icon that meant the old one.
+  Camera, sparkle and share are Phosphor Icons, fill weight (MIT), the set
+  the HyperFrames Studio draws its own icons with.
+
   #root only, container-type: size, one paused timeline registered under the
   literal "social-proof-card" key. Deterministic.
 -->
@@ -16,7 +21,7 @@
   lang="ru"
   data-composition-id="social-proof-card"
   data-composition-duration="4"
-  data-composition-variables='[{"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Wordmark at the top of the card.", "default": "MATINTELLECT", "maxLength": 12}, {"id": "proof", "type": "string", "role": "content", "label": "Proof line", "description": "Social-proof line under the stars.", "default": "12 000+ авторов", "maxLength": 28}, {"id": "cta", "type": "string", "role": "content", "label": "CTA", "description": "Label on the closing capsule.", "default": "Попробовать бесплатно", "maxLength": 16}, {"id": "f1", "type": "string", "role": "content", "label": "Feature 1", "description": "First feature, | breaks the line.", "default": "Снимаешь|на телефон", "maxLength": 28}, {"id": "f2", "type": "string", "role": "content", "label": "Feature 2", "description": "Second feature, | breaks the line.", "default": "ИИ|монтирует", "maxLength": 28}, {"id": "f3", "type": "string", "role": "content", "label": "Feature 3", "description": "Third feature, | breaks the line.", "default": "Выкладываешь|везде", "maxLength": 28}]'
+  data-composition-variables='[{"id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "Wordmark at the top of the card.", "default": "MATINTELLECT", "maxLength": 12}, {"id": "proof", "type": "string", "role": "content", "label": "Proof line", "description": "Social-proof line under the stars.", "default": "12 000+ авторов", "maxLength": 28}, {"id": "cta", "type": "string", "role": "content", "label": "CTA", "description": "Label on the closing capsule.", "default": "Попробовать бесплатно", "maxLength": 16}, {"id": "f1", "type": "string", "role": "content", "label": "Feature 1", "description": "First feature, | breaks the line.", "default": "Снимаешь|на телефон", "maxLength": 28}, {"id": "f2", "type": "string", "role": "content", "label": "Feature 2", "description": "Second feature, | breaks the line.", "default": "ИИ|монтирует", "maxLength": 28}, {"id": "f3", "type": "string", "role": "content", "label": "Feature 3", "description": "Third feature, | breaks the line.", "default": "Выкладываешь|везде", "maxLength": 28}, {"id": "icon1", "type": "enum", "role": "content", "label": "Icon 1", "description": "Icon in the circle above the first feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).", "default": "camera", "options": [{"value": "camera", "label": "Camera"}, {"value": "sparkle", "label": "Sparkle"}, {"value": "share", "label": "Share"}, {"value": "pencil", "label": "Pencil"}, {"value": "heart", "label": "Heart"}, {"value": "palette", "label": "Palette"}]}, {"id": "icon2", "type": "enum", "role": "content", "label": "Icon 2", "description": "Icon in the circle above the second feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).", "default": "sparkle", "options": [{"value": "camera", "label": "Camera"}, {"value": "sparkle", "label": "Sparkle"}, {"value": "share", "label": "Share"}, {"value": "pencil", "label": "Pencil"}, {"value": "heart", "label": "Heart"}, {"value": "palette", "label": "Palette"}]}, {"id": "icon3", "type": "enum", "role": "content", "label": "Icon 3", "description": "Icon in the circle above the third feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).", "default": "share", "options": [{"value": "camera", "label": "Camera"}, {"value": "sparkle", "label": "Sparkle"}, {"value": "share", "label": "Share"}, {"value": "pencil", "label": "Pencil"}, {"value": "heart", "label": "Heart"}, {"value": "palette", "label": "Palette"}]}]'
 >
   <head>
     <meta charset="UTF-8" />
@@ -192,22 +197,35 @@
                 '<svg viewBox="0 0 24 23"><path d="M12 0 L15 8.2 L23.4 8.2 L16.6 13.4 L19.2 21.8 L12 16.8 L4.8 21.8 L7.4 13.4 L0.6 8.2 L9 8.2 Z" style="fill: var(--brand, #ff0000)"/></svg>',
               );
             }
-            var ICONS = [
-              '<svg viewBox="0 0 24 24"><path d="M3 17.2 V21 h3.8 L18 9.8 l-3.8-3.8 L3 17.2 Z M20.7 7.1 c0.4-0.4 0.4-1 0-1.4 l-2.4-2.4 c-0.4-0.4-1-0.4-1.4 0 l-1.8 1.8 3.8 3.8 1.8-1.8 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
-              '<svg viewBox="0 0 24 22"><path d="M12 21 C12 21 1 14.4 1 7.6 C1 3.9 3.9 1 7.5 1 C9.4 1 11.1 1.9 12 3.3 C12.9 1.9 14.6 1 16.5 1 C20.1 1 23 3.9 23 7.6 C23 14.4 12 21 12 21 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
-              '<svg viewBox="0 0 24 24"><path d="M12 2 C6.5 2 2 6.5 2 12 s4.5 10 10 10 c0.9 0 1.6-0.7 1.6-1.6 0-0.4-0.2-0.8-0.4-1.1 -0.3-0.3-0.4-0.7-0.4-1.1 0-0.9 0.7-1.6 1.6-1.6 h1.9 c3.1 0 5.7-2.6 5.7-5.7 C22 7 17.5 2 12 2 Z M6.5 12 c-0.8 0-1.5-0.7-1.5-1.5 S5.7 9 6.5 9 8 9.7 8 10.5 7.3 12 6.5 12 Z M9.5 8 C8.7 8 8 7.3 8 6.5 S8.7 5 9.5 5 s1.5 0.7 1.5 1.5 S10.3 8 9.5 8 Z M14.5 8 c-0.8 0-1.5-0.7-1.5-1.5 S13.7 5 14.5 5 16 5.7 16 6.5 15.3 8 14.5 8 Z M17.5 12 c-0.8 0-1.5-0.7-1.5-1.5 S16.7 9 17.5 9 19 9.7 19 10.5 18.3 12 17.5 12 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
-            ];
+            var ICONS = {
+              camera:
+                '<svg viewBox="0 0 256 256"><path d="M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.71,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56Zm-44,76a36,36,0,1,1-36-36A36,36,0,0,1,164,132Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+              sparkle:
+                '<svg viewBox="0 0 256 256"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144ZM152,48h16V64a8,8,0,0,0,16,0V48h16a8,8,0,0,0,0-16H184V16a8,8,0,0,0-16,0V32H152a8,8,0,0,0,0,16Zm88,32h-8V72a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0V96h8a8,8,0,0,0,0-16Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+              share:
+                '<svg viewBox="0 0 256 256"><path d="M212,200a36,36,0,1,1-69.85-12.25l-53-34.05a36,36,0,1,1,0-51.4l53-34a36.09,36.09,0,1,1,8.67,13.45l-53,34.05a36,36,0,0,1,0,24.5l53,34.05A36,36,0,0,1,212,200Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+              pencil:
+                '<svg viewBox="0 0 24 24"><path d="M3 17.2 V21 h3.8 L18 9.8 l-3.8-3.8 L3 17.2 Z M20.7 7.1 c0.4-0.4 0.4-1 0-1.4 l-2.4-2.4 c-0.4-0.4-1-0.4-1.4 0 l-1.8 1.8 3.8 3.8 1.8-1.8 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+              heart:
+                '<svg viewBox="0 0 24 22"><path d="M12 21 C12 21 1 14.4 1 7.6 C1 3.9 3.9 1 7.5 1 C9.4 1 11.1 1.9 12 3.3 C12.9 1.9 14.6 1 16.5 1 C20.1 1 23 3.9 23 7.6 C23 14.4 12 21 12 21 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+              palette:
+                '<svg viewBox="0 0 24 24"><path d="M12 2 C6.5 2 2 6.5 2 12 s4.5 10 10 10 c0.9 0 1.6-0.7 1.6-1.6 0-0.4-0.2-0.8-0.4-1.1 -0.3-0.3-0.4-0.7-0.4-1.1 0-0.9 0.7-1.6 1.6-1.6 h1.9 c3.1 0 5.7-2.6 5.7-5.7 C22 7 17.5 2 12 2 Z M6.5 12 c-0.8 0-1.5-0.7-1.5-1.5 S5.7 9 6.5 9 8 9.7 8 10.5 7.3 12 6.5 12 Z M9.5 8 C8.7 8 8 7.3 8 6.5 S8.7 5 9.5 5 s1.5 0.7 1.5 1.5 S10.3 8 9.5 8 Z M14.5 8 c-0.8 0-1.5-0.7-1.5-1.5 S13.7 5 14.5 5 16 5.7 16 6.5 15.3 8 14.5 8 Z M17.5 12 c-0.8 0-1.5-0.7-1.5-1.5 S16.7 9 17.5 9 19 9.7 19 10.5 18.3 12 17.5 12 Z" style="fill: var(--fg, #f2f2f2)"/></svg>',
+            };
+            function iconOf(v, fb) {
+              return typeof v === "string" && ICONS[v] ? ICONS[v] : ICONS[fb];
+            }
             var feats = document.getElementById("spc-feats");
             [
-              text(vars.f1, "Снимаешь|на телефон", 30),
-              text(vars.f2, "ИИ|монтирует", 30),
-              text(vars.f3, "Выкладываешь|везде", 30),
-            ].forEach(function (raw, i) {
+              [text(vars.f1, "Снимаешь|на телефон", 30), iconOf(vars.icon1, "camera")],
+              [text(vars.f2, "ИИ|монтирует", 30), iconOf(vars.icon2, "sparkle")],
+              [text(vars.f3, "Выкладываешь|везде", 30), iconOf(vars.icon3, "share")],
+            ].forEach(function (pair) {
+              var raw = pair[0];
               var feat = document.createElement("div");
               feat.className = "spc-feat";
               var icon = document.createElement("div");
               icon.className = "spc-icon";
-              icon.innerHTML = ICONS[i];
+              icon.innerHTML = pair[1];
               feat.appendChild(icon);
               var label = document.createElement("div");
               label.className = "spc-label";

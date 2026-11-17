@@ -282,10 +282,12 @@
 
             // A standing box (vertical reel field) is narrow: nodes ride a tighter ellipse and
             // get wider plates, so a label at the 28px floor fits and wraps instead of cutting.
+            // Side row: hub 30 + two plates 30 + two 4cqw connectors = 98cqw, so the side
+            // plates stand clear of the hub with their connector showing, as top and bottom do.
             var standing = root.clientHeight > root.clientWidth;
-            var radiusX = standing ? 30 : 38;
+            var radiusX = standing ? 34 : 38;
             var nodeWidth = standing
-              ? 34
+              ? 30
               : Math.max(12, Math.min(21, 78 / Math.max(4, nodeLabels.length) + 2));
             if (standing) hub.style.width = "30cqw";
             var nodeFontSize = nodeLabels.length > 6 ? 1.75 : 2.25;

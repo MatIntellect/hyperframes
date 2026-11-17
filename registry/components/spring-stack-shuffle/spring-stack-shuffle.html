@@ -363,15 +363,26 @@
             var rect = root.getBoundingClientRect();
             var W = Math.max(1, rect.width);
             var H = Math.max(1, rect.height);
-            var STEP_Y = -0.055 * H; // deeper cards peek above the front card
             var STEP_S = 0.05;
-            var APEX_Y = STEP_Y * (cardCount - 1) - 0.09 * H; // arc above the stack
+            // deeper cards peek above the front card. The peek shows a back card's
+            // whole number chip, as in the developers' layout; the chip grew to the
+            // 28 px floor here, so the step follows its measured bottom (cards scale
+            // about their centre, which eats STEP_S * cardH / 2 of each peek).
+            var chip = root.querySelector(".sss-chip");
+            var chipBottom = chip ? chip.offsetTop + chip.offsetHeight : 0;
+            var cardH = cardEls[0].offsetHeight;
+            var STEP_Y = -Math.max(0.055 * H, chipBottom + 0.01 * H + (STEP_S * cardH) / 2);
+            // the deeper step raises the back cards and the throw over them; the whole
+            // stack sits that much lower, so the arc keeps the developers' headroom
+            // under the box top (#root clips: a higher apex is cut flat)
+            var DROP = (cardCount - 1) * (-STEP_Y - 0.055 * H);
+            var APEX_Y = DROP + STEP_Y * (cardCount - 1) - 0.09 * H; // arc above the stack
             var KICK_X = 0.12 * W; // lateral kick during the throw
             var BUMP_Y = 0.012 * H; // stack compress as the flyer lands
 
             function poseFor(depth) {
               return {
-                y: depth * STEP_Y,
+                y: DROP + depth * STEP_Y,
                 s: 1 - depth * STEP_S,
                 veil: Math.min(0.5, depth * 0.15),
               };

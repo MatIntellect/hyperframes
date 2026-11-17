@@ -5,7 +5,7 @@
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the tall now-playing card centred in the 780x1180 field (y 180-1360). top / bottom: the mini-player row (cover left, text right) in the 780x760 field at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "trackName", "type": "string", "role": "content", "label": "Track", "description": "Track title, bold, wraps to a second line when long.", "maxLength": 22, "default": "Монтаж без монтажёра" },
     { "id": "artistName", "type": "string", "role": "content", "label": "Artist", "description": "Artist line under the title.", "maxLength": 28, "default": "MatIntellect" },
-    { "id": "cover", "type": "image", "role": "content", "label": "Cover", "description": "Square album cover. Empty keeps the green placeholder with a note icon.", "default": "" },
+    { "id": "cover", "type": "image", "role": "content", "label": "Cover", "description": "Square album cover. Empty keeps a monochrome placeholder with a note icon.", "default": "" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 card lands and the words follow, 2 card leaves (only when exit is not none). Empty keeps 0.1, 4.2.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }, { "value": "up", "label": "Lift out" }] }
   ]'
@@ -119,7 +119,7 @@
         border-radius: 16px;
         flex-shrink: 0;
         overflow: hidden;
-        background: linear-gradient(145deg, #1db954 0%, #17a34a 30%, #0f7234 60%, #191414 100%);
+        background: rgba(255, 255, 255, 0.18);
         margin-bottom: 36px;
       }
       [data-composition-id="spotify-card"] .spc-art img {
@@ -134,7 +134,6 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        opacity: 0.2;
       }
       [data-composition-id="spotify-card"] .spc-text {
         position: relative;
@@ -224,9 +223,9 @@
         <div id="spc-card" class="clip spc-card" data-start="0" data-duration="30" data-track-index="0">
           <div id="spc-art" class="spc-art">
             <svg class="spc-art-icon" width="200" height="200" viewBox="0 0 24 24" fill="none">
-              <path d="M9 18V5l12-2v13" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
-              <circle cx="6" cy="18" r="3" stroke="rgba(255,255,255,0.7)" stroke-width="1" />
-              <circle cx="18" cy="16" r="3" stroke="rgba(255,255,255,0.7)" stroke-width="1" />
+              <path d="M9 18V5l12-2v13" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="6" cy="18" r="3" stroke="rgba(255,255,255,0.45)" stroke-width="1" />
+              <circle cx="18" cy="16" r="3" stroke="rgba(255,255,255,0.45)" stroke-width="1" />
             </svg>
           </div>
           <div class="spc-text">

@@ -33,8 +33,8 @@
       crossing, relative to mount start.
     - strength (subtle | standard, default standard): band opacity and
       highlight bloom multiplier. subtle is the barely-there pass.
-    The light itself is neutral (the reel's text colour); the one red is
-    the lit card bar, from --brand.
+    The light itself is neutral (the reel's text colour), and so is the
+    default scene: placeholder, no accent.
     - exit (none | fade | up, default none): outgoing transition. none
       holds the settled key (frame roots own transitions).
 
@@ -299,11 +299,8 @@
             width: 3.4cqh;
             height: 3.4cqh;
             border-radius: 50%;
-            background: color-mix(
-              in srgb,
-              var(--lsp-accent, var(--brand, #ff0000)) 72%,
-              var(--surface, #18181a)
-            );
+            /* placeholder icon: ink at L2, never the accent (placeholder-material.md) */
+            background: color-mix(in srgb, var(--fg, #f2f2f2) 45%, transparent);
           }
 
           .lsp-line {
@@ -425,8 +422,6 @@
 
             root.dataset.strength = strength;
             root.style.setProperty("--lsp-angle", String(angle));
-            // One palette: the lit card bar rides the reel's brand red.
-            root.style.setProperty("--lsp-accent", "var(--brand, #ff0000)");
 
             // RETIME RANGE: fixed IN and OUT scale together only when D is
             // too short. HOLD is the sole elastic phase. Never timeScale().

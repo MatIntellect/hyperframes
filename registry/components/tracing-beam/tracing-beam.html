@@ -268,7 +268,14 @@
               aria-hidden="true"
             >
               <defs>
-                <filter id="tracing-beam-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <filter
+                  id="tracing-beam-glow"
+                  filterUnits="userSpaceOnUse"
+                  x="-50"
+                  y="-50"
+                  width="1100"
+                  height="620"
+                >
                   <feGaussianBlur stdDeviation="7" result="blur" />
                   <feMerge>
                     <feMergeNode in="blur" />
@@ -357,13 +364,12 @@
             // One palette: the beam rides the reel brand red.
             root.style.setProperty("--tb-accent", "var(--brand, #ff0000)");
 
-            // Standing box: the route snakes down between the stacked cards
-            // (viewBox 0 0 1000 520 is stretched, so y follows 22/50/78%).
+            // Standing box: the beam runs down the empty margin left of the stacked cards
+            // (cards fill x 11-89%), level with each card's middle at 22/50/78% (viewBox
+            // 0 0 1000 520 is stretched). Snaking through the cards it crossed their labels:
+            // the cards are translucent and the red beam read as a strike-through.
             if (root.clientHeight > root.clientWidth) {
-              beam.setAttribute(
-                "d",
-                "M 500 114 C 820 150 820 224 500 260 C 180 296 180 370 500 406",
-              );
+              beam.setAttribute("d", "M 55 114 L 55 406");
             }
             var routeLength = beam.getTotalLength();
             var dashLength = routeLength * 0.24;

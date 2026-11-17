@@ -651,35 +651,51 @@
                 gsap.set(item.el, { autoAlpha: 0, y: 0 });
               });
               if (dotsItem) gsap.set(dotsItem, { autoAlpha: 0 });
-              items.forEach(function (item, k2) {
-                var at = starts[k2];
-                var bottom = viewH;
-                var yK = [];
-                for (var j = k2; j >= 0; j -= 1) {
-                  bottom -= heights[j];
-                  yK[j] = bottom;
+              /* One stack, one motion: the thread is a column pinned to the bottom of the view.
+                 A new entry (message or typing dots) joins at the bottom and the whole column,
+                 the newcomer included, slides up by the same amount with the same ease, so
+                 entries never cover each other mid-scroll. Dots leave the column when their
+                 message arrives; the message takes their place. */
+              var stack = [];
+              function push(entry, at) {
+                stack.push(entry);
+                var bottom = viewH,
+                  ys = [];
+                for (var j = stack.length - 1; j >= 0; j -= 1) {
+                  bottom -= stack[j].h;
+                  ys[j] = bottom;
                   bottom -= gap;
                 }
-                for (var i = 0; i <= k2; i += 1) {
-                  if (i === k2) {
-                    tl.set(item.el, { y: yK[i] }, at);
-                    tl.set(item.el, { autoAlpha: 1 }, at);
-                    tl.fromTo(
-                      item.pop,
-                      { scale: 0.75, autoAlpha: 0.6 },
-                      { scale: 1, autoAlpha: 1, duration: 0.12, ease: "power2.out" },
-                      at,
-                    );
-                  } else {
-                    tl.to(items[i].el, { y: yK[i], duration: 1.0, ease: "expo.out" }, at);
-                  }
+                var n = stack.length - 1;
+                var shift = n > 0 ? stack[n - 1].y - ys[n - 1] : entry.h + gap;
+                for (var i = 0; i < n; i += 1) {
+                  tl.to(stack[i].el, { y: ys[i], duration: 1.0, ease: "expo.out" }, at);
+                  stack[i].y = ys[i];
                 }
-                if (dotsItem && item.side === "recv" && item.kind !== "emoji" && k2 > 0) {
-                  var dAt = Math.max(starts[k2 - 1] + 0.35, at - beat * 0.55);
-                  tl.set(dotsItem, { y: viewH - dotsH }, dAt);
-                  tl.set(dotsItem, { autoAlpha: 1 }, dAt);
+                tl.set(entry.el, { autoAlpha: 1 }, at);
+                tl.fromTo(
+                  entry.el,
+                  { y: ys[n] + shift },
+                  { y: ys[n], duration: 1.0, ease: "expo.out", immediateRender: false },
+                  at,
+                );
+                entry.y = ys[n];
+              }
+              var dotsEntry = dotsItem ? { el: dotsItem, h: dotsH } : null;
+              items.forEach(function (item, k2) {
+                var at = starts[k2];
+                if (dotsEntry && item.side === "recv" && item.kind !== "emoji" && k2 > 0) {
+                  push(dotsEntry, Math.max(starts[k2 - 1] + 0.35, at - beat * 0.55));
+                  stack.pop();
                   tl.set(dotsItem, { autoAlpha: 0 }, at);
                 }
+                push({ el: item.el, h: heights[k2] }, at);
+                tl.fromTo(
+                  item.pop,
+                  { scale: 0.75, autoAlpha: 0.6 },
+                  { scale: 1, autoAlpha: 1, duration: 0.12, ease: "power2.out" },
+                  at,
+                );
               });
               tl.set({}, {}, duration);
               tl.seek(0);

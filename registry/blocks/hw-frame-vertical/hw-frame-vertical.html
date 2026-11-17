@@ -208,8 +208,11 @@
         var capText = txt(V.caption, "Наша поездка");
         caption.textContent = capText;
         caption.style.fontSize = CAP + "px";
-        caption.style.width = S.w + 80 + "px";
-        caption.style.left = S.x - 40 + "px";
+        // the whole unit tilts and boils about the window centre (below): a caption 300-400 px under that centre
+        // (three lines at the 36-letter limit) swings up to ~15 px sideways, so its box keeps 20 px off each side
+        // of the 780 px zone (x 170-910 in full)
+        caption.style.width = S.w + 40 + "px";
+        caption.style.left = S.x - 20 + "px";
         // раскладка зависит от высоты подписи: надпись уже стоит – разметка запускает загрузку её шрифта,
         // замер и шкала – после неё (runtimes.md:7)
         void document.body.offsetHeight;

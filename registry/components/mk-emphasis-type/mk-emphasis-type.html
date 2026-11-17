@@ -74,8 +74,9 @@
   </head>
   <body>
     <!-- Self-preview wrapper. WIRING: copy the .mk-emphasis CSS, the markup
-         below (keep aria-hidden + data-layout-allow-overflow — the word is
-         decorative and usually wider than the canvas), and the helpers. -->
+         below (keep aria-hidden + data-layout-allow-overflow + data-layout-ignore —
+         the word is decoration nobody reads, may run to the frame edge and is
+         usually wider than the canvas), and the helpers. -->
     <div
       id="mk-emph-root"
       data-composition-id="mk-emphasis-type"
@@ -89,6 +90,7 @@
         id="mk-emph-demo"
         aria-hidden="true"
         data-layout-allow-overflow
+        data-layout-ignore
         style="top: 400px; left: -40px"
       >
         Монтаж

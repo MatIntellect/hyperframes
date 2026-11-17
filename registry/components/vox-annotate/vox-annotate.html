@@ -166,10 +166,15 @@
              its intrinsic viewBox ratio); then preserveAspectRatio="none"
              stretches the authored path (and its stroke) into the box, which
              is exactly the marker-nib distortion we want on a dashed path. */
+          /* highlight: the round caps of the 26-unit nib reach 13 units past the
+             path ends (3 and 97 of 100), so the box is sized for the whole ink,
+             caps included, to span -3%..103% of the word: Bebas word gaps are
+             narrow, and the developers' -3%/106% box put the caps on the
+             neighbouring word. */
           .va-em[data-marker-style="highlight"] .va-mark {
-            left: -3%;
+            left: 5.8%;
             top: 14%;
-            width: 106%;
+            width: 88.4%;
             height: 76%;
           }
 

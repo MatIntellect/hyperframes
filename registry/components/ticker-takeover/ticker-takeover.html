@@ -191,7 +191,10 @@
         >
           <div class="tt-ticker">
             <div class="tt-label">монтаж</div>
-            <div class="tt-window">
+            <!-- The reel is a column of every word, clipped by this window; the off-window
+                 words keep DOM boxes below it that check's caption band counts by box, not paint
+                 (lint-validate-inspect.md:86). Only the window row is ever seen. -->
+            <div class="tt-window" data-layout-allow-caption-zone>
               <div class="tt-reel"></div>
             </div>
             <div class="tt-flash" aria-hidden="true"></div>

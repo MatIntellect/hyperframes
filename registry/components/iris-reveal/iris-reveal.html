@@ -17,7 +17,7 @@
     - [data-slot="before"]: state A, the base layer. Replace the children of
       this element in your installed copy. Default: a muted token wireframe.
     - [data-slot="after"]:  state B, revealed by the iris. Same mechanism.
-      Default: a brand-tinted version of the wireframe.
+      Default: a brighter version of the wireframe (grey placeholder steps).
     Direct img/video children of a slot are sized to cover the panel.
 
   Variables (declared in data-composition-variables below):
@@ -197,7 +197,8 @@
           }
 
           /* Token-styled default slot content: a wireframe card that reads
-             muted on the before layer and brand-tinted on the after layer.
+             muted on the before layer and brighter on the after layer; placeholder,
+             so grey ink steps and no accent (placeholder-material.md).
              Callers replacing slot children never see any of this. */
           .ir-default {
             position: absolute;
@@ -238,7 +239,7 @@
 
           .ir-after .ir-card {
             border-width: max(2px, 0.16cqw);
-            border-color: var(--ir-accent, var(--brand, #ff0000));
+            border-color: color-mix(in srgb, var(--fg, #f2f2f2) 14%, transparent);
             background: var(--surface, #18181a);
           }
 
@@ -252,7 +253,7 @@
           }
 
           .ir-after .ir-bar {
-            background: var(--ir-accent, var(--brand, #ff0000));
+            background: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
             opacity: 1;
           }
 

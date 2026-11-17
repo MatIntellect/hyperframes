@@ -60,6 +60,108 @@
       "description": "Third feature, | breaks the line.",
       "default": "Выкладываешь|везде",
       "maxLength": 28
+    },
+    {
+      "id": "icon1",
+      "type": "enum",
+      "role": "content",
+      "label": "Icon 1",
+      "description": "Icon in the circle above the first feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).",
+      "default": "camera",
+      "options": [
+        {
+          "value": "camera",
+          "label": "Camera"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "share",
+          "label": "Share"
+        },
+        {
+          "value": "pencil",
+          "label": "Pencil"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "palette",
+          "label": "Palette"
+        }
+      ]
+    },
+    {
+      "id": "icon2",
+      "type": "enum",
+      "role": "content",
+      "label": "Icon 2",
+      "description": "Icon in the circle above the second feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).",
+      "default": "sparkle",
+      "options": [
+        {
+          "value": "camera",
+          "label": "Camera"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "share",
+          "label": "Share"
+        },
+        {
+          "value": "pencil",
+          "label": "Pencil"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "palette",
+          "label": "Palette"
+        }
+      ]
+    },
+    {
+      "id": "icon3",
+      "type": "enum",
+      "role": "content",
+      "label": "Icon 3",
+      "description": "Icon in the circle above the third feature; pick the one that says what its label says (camera: filming, sparkle: AI, share: posting; pencil, heart and palette are drawn too).",
+      "default": "share",
+      "options": [
+        {
+          "value": "camera",
+          "label": "Camera"
+        },
+        {
+          "value": "sparkle",
+          "label": "Sparkle"
+        },
+        {
+          "value": "share",
+          "label": "Share"
+        },
+        {
+          "value": "pencil",
+          "label": "Pencil"
+        },
+        {
+          "value": "heart",
+          "label": "Heart"
+        },
+        {
+          "value": "palette",
+          "label": "Palette"
+        }
+      ]
     }
   ],
   "files": [

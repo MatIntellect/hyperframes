@@ -36,7 +36,7 @@
 >
   <div class="hf-ssu-sheet" id="hf-ssu-sheet-1">
     <div class="hf-ssu-title">Поделиться</div>
-    <div class="hf-ssu-body">Здесь содержимое листа</div>
+    <div class="hf-ssu-body" aria-hidden="true"><i></i><i></i><i></i></div>
   </div>
 </div>
 
@@ -197,11 +197,23 @@
     line-height: 1;
     letter-spacing: 0.2px;
   }
+  /* the body is placeholder material: three skeleton text rules at L3 (100 / 86 / 62 %), not words */
   .hf-ssu-body {
-    margin-top: 24px;
-    text-align: center;
-    font-size: 29px;
-    color: var(--hf-ssu-ink-muted, #313131);
+    margin-top: 32px;
+    display: grid;
+    gap: 16px;
+  }
+  .hf-ssu-body i {
+    display: block;
+    height: 16px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--hf-ssu-ink, #101010) 18%, transparent);
+  }
+  .hf-ssu-body i:nth-child(2) {
+    width: 86%;
+  }
+  .hf-ssu-body i:nth-child(3) {
+    width: 62%;
   }
 </style>
 

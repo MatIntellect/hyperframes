@@ -44,7 +44,7 @@
       "role": "content",
       "label": "Title",
       "description": "Address pill text (browser) or title bar text (window).",
-      "default": "app.example.com",
+      "default": "matintellect.com",
       "maxLength": 28
     },
     {

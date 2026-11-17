@@ -6,8 +6,9 @@
   slide-settle into a vertical stack on cues, newest on top: each new card
   drops into the top slot while the cards already present shift down one
   slot. After the last card lands, one card (the expand index) grows
-  slightly and brightens to resolve as the focus while the rest dim by
-  stack position (deeper cards dim more). Then the frame holds STILL.
+  slightly and brightens to resolve as the focus while the rest dim: their
+  titles step down to L1 (text never lower), their dots dim by stack position
+  (deeper cards dim more). Then the frame holds STILL.
 
   Variables (declared in data-composition-variables below):
     - titles (string, default "Ролик в очереди,Проверки пройдены,Ролик опубликован"):
@@ -406,8 +407,16 @@
                   resolve,
                 );
               } else {
+                // Text never dims below L1 (placeholder-material.md): the title steps
+                // down to ink at 72%, the body keeps --muted; the dot dims by depth.
                 tl.fromTo(
-                  card,
+                  card.querySelector(".ns-title"),
+                  { opacity: 1 },
+                  { opacity: 0.72, duration: resolveDur, ease: "power2.out", immediateRender: false },
+                  resolve,
+                );
+                tl.fromTo(
+                  card.querySelector(".ns-dot"),
                   { opacity: 1 },
                   {
                     opacity: Math.max(0.42, 0.72 - 0.07 * stackPos),

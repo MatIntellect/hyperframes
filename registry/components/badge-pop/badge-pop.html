@@ -76,6 +76,9 @@
     position: relative;
     display: inline-grid;
     place-items: center;
+    /* the badge overlaps the tile's top-right corner by 16 px: the root keeps that room inside its own box,
+       so a host that mounts the snippet at the top of the graphics field keeps the count in the zone */
+    padding: 16px 16px 0 0;
     font-family: "Montserrat", system-ui, sans-serif;
   }
   .hf-transition-badge-button {
@@ -100,8 +103,8 @@
   }
   .hf-transition-badge-count {
     position: absolute;
-    right: -16px;
-    top: -16px;
+    right: 0;
+    top: 0;
     display: grid;
     place-items: center;
     min-width: 60px;

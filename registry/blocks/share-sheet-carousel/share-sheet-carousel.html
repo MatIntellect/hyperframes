@@ -9,10 +9,10 @@
     { "id": "stripText", "type": "string", "role": "content", "label": "Brand strip", "description": "Small caps line beside the logo under the preview.", "maxLength": 24, "default": "MATINTELLECT.COM" },
     { "id": "acceptLabel", "type": "string", "role": "content", "label": "Accept label", "description": "Right-hand action button.", "maxLength": 12, "default": "Принять" },
     { "id": "declineLabel", "type": "string", "role": "content", "label": "Decline label", "description": "Left-hand action button.", "maxLength": 12, "default": "Отклонить" },
-    { "id": "slideImage1", "type": "image", "role": "content", "label": "Slide image 1", "description": "First carousel image; also fills the blurred ground in full placement.", "default": "assets/slide-01.jpg" },
-    { "id": "slideImage2", "type": "image", "role": "content", "label": "Slide image 2", "description": "Second carousel image.", "default": "assets/slide-02.jpg" },
-    { "id": "slideImage3", "type": "image", "role": "content", "label": "Slide image 3", "description": "Third carousel image.", "default": "assets/slide-03.jpg" },
-    { "id": "slideImage4", "type": "image", "role": "content", "label": "Slide image 4", "description": "Fourth carousel image.", "default": "assets/slide-04.jpg" },
+    { "id": "slideImage1", "type": "image", "role": "content", "label": "Slide image 1", "description": "First carousel image; also fills the blurred ground in full placement. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.", "default": "" },
+    { "id": "slideImage2", "type": "image", "role": "content", "label": "Slide image 2", "description": "Second carousel image. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.", "default": "" },
+    { "id": "slideImage3", "type": "image", "role": "content", "label": "Slide image 3", "description": "Third carousel image. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.", "default": "" },
+    { "id": "slideImage4", "type": "image", "role": "content", "label": "Slide image 4", "description": "Fourth carousel image. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.", "default": "" },
     { "id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Transparent brand mark in the preview strip, 56 px tall (square or horizontal).", "default": "assets/img/matintellect-mark.svg" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the sheet springs up, 2 the previews start cutting, 3 the accept tap, 4 the sheet leaves (only when exit is not none). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps 0.06, 0.99, 6.32.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the accepted sheet to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -274,7 +274,7 @@
           class="ssc-bg"
           id="ssc-bg-1"
           data-var-src="slideImage1"
-          src="assets/slide-01.jpg"
+          src="assets/slide-placeholder.svg"
           alt=""
           style="opacity: 1"
         />
@@ -282,7 +282,7 @@
           class="ssc-bg"
           id="ssc-bg-2"
           data-var-src="slideImage2"
-          src="assets/slide-02.jpg"
+          src="assets/slide-placeholder.svg"
           alt=""
           style="opacity: 0"
         />
@@ -290,7 +290,7 @@
           class="ssc-bg"
           id="ssc-bg-3"
           data-var-src="slideImage3"
-          src="assets/slide-03.jpg"
+          src="assets/slide-placeholder.svg"
           alt=""
           style="opacity: 0"
         />
@@ -298,7 +298,7 @@
           class="ssc-bg"
           id="ssc-bg-4"
           data-var-src="slideImage4"
-          src="assets/slide-04.jpg"
+          src="assets/slide-placeholder.svg"
           alt=""
           style="opacity: 0"
         />
@@ -311,7 +311,7 @@
                 class="ssc-slide"
                 id="ssc-slide-1"
                 data-var-src="slideImage1"
-                src="assets/slide-01.jpg"
+                src="assets/slide-placeholder.svg"
                 alt=""
                 style="opacity: 1"
               />
@@ -319,7 +319,7 @@
                 class="ssc-slide"
                 id="ssc-slide-2"
                 data-var-src="slideImage2"
-                src="assets/slide-02.jpg"
+                src="assets/slide-placeholder.svg"
                 alt=""
                 style="opacity: 0"
               />
@@ -327,7 +327,7 @@
                 class="ssc-slide"
                 id="ssc-slide-3"
                 data-var-src="slideImage3"
-                src="assets/slide-03.jpg"
+                src="assets/slide-placeholder.svg"
                 alt=""
                 style="opacity: 0"
               />
@@ -335,7 +335,7 @@
                 class="ssc-slide"
                 id="ssc-slide-4"
                 data-var-src="slideImage4"
-                src="assets/slide-04.jpg"
+                src="assets/slide-placeholder.svg"
                 alt=""
                 style="opacity: 0"
               />
@@ -366,6 +366,20 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+
+        /* an empty slide repeats the filled ones in order; with none filled the placeholder plate stays */
+        var given = [1, 2, 3, 4]
+          .map(function (k) {
+            var v = vars["slideImage" + k];
+            return typeof v === "string" ? v : v && typeof v === "object" ? v.url || "" : "";
+          });
+        var filled = given.filter(Boolean);
+        given.forEach(function (src, i) {
+          if (src || !filled.length) return;
+          ["#ssc-bg-", "#ssc-slide-"].forEach(function (id) {
+            document.querySelector(id + (i + 1)).setAttribute("src", filled[i % filled.length]);
+          });
+        });
 
         function text(value, fallback) {
           return typeof value === "string" && value.trim() ? value : fallback;

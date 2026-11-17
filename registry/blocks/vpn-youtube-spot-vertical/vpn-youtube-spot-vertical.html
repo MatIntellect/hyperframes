@@ -213,6 +213,7 @@
       }
 
       .store-title {
+        color: #111111;
         font-size: 38px;
         line-height: 1;
         font-weight: 900;
@@ -278,7 +279,7 @@
 
       .store-row {
         display: grid;
-        grid-template-columns: 72px 1fr 78px;
+        grid-template-columns: 72px 1fr auto;
         align-items: center;
         gap: 13px;
         min-height: 104px;
@@ -366,9 +367,11 @@
         letter-spacing: 0;
       }
 
+      /* the pill grows with its word, like the App Store's own button: ЗАГРУЗИТЬ in the Russian store */
       .get-button,
       .open-button {
-        width: 72px;
+        min-width: 72px;
+        padding: 0 12px;
         color: #007aff;
         background: #ececf1;
       }
@@ -438,7 +441,7 @@
 
       .install-button {
         position: relative;
-        width: 94px;
+        width: 128px;
         margin-top: 15px;
         color: #ffffff;
         background: #007aff;
@@ -464,7 +467,7 @@
       }
 
       .ring {
-        inset: 4px auto auto 34px;
+        inset: 4px auto auto 51px;
         width: 26px;
         height: 26px;
         transform: rotate(-90deg);
@@ -748,54 +751,54 @@
                     <div class="row-copy">
                       <div class="row-title">CloudPocket</div>
                       <div class="row-sub">Files and backups</div>
-                      <div class="stars">4.6 ★★★★★</div>
+                      <div class="stars">4,6 ★★★★★</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row">
                     <div class="app-icon icon-photo"></div>
                     <div class="row-copy">
                       <div class="row-title">LensLab</div>
                       <div class="row-sub">Photo editor</div>
-                      <div class="stars">4.8 ★★★★★</div>
+                      <div class="stars">4,8 ★★★★★</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row">
                     <div class="app-icon icon-music"></div>
                     <div class="row-copy">
                       <div class="row-title">BeatShelf</div>
                       <div class="row-sub">Music discovery</div>
-                      <div class="stars">4.4 ★★★★☆</div>
+                      <div class="stars">4,4 ★★★★☆</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row">
                     <div class="app-icon icon-bank"></div>
                     <div class="row-copy">
                       <div class="row-title">VaultPay</div>
                       <div class="row-sub">Budget tracker</div>
-                      <div class="stars">4.7 ★★★★★</div>
+                      <div class="stars">4,7 ★★★★★</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row">
                     <div class="app-icon icon-map"></div>
                     <div class="row-copy">
                       <div class="row-title">TrailPing</div>
                       <div class="row-sub">Maps for trips</div>
-                      <div class="stars">4.5 ★★★★☆</div>
+                      <div class="stars">4,5 ★★★★☆</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row" id="vpn-row">
                     <div class="app-icon icon-vpn"></div>
                     <div class="row-copy">
                       <div class="row-title app-name"></div>
                       <div class="row-sub">Монтаж из записи</div>
-                      <div class="stars">4.9 ★★★★★</div>
+                      <div class="stars">4,9 ★★★★★</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                     <div class="tap-dot"></div>
                   </div>
                   <div class="store-row">
@@ -803,18 +806,18 @@
                     <div class="row-copy">
                       <div class="row-title">QuickTunnel</div>
                       <div class="row-sub">Network tools</div>
-                      <div class="stars">4.2 ★★★★☆</div>
+                      <div class="stars">4,2 ★★★★☆</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                   <div class="store-row">
                     <div class="app-icon icon-photo"></div>
                     <div class="row-copy">
                       <div class="row-title">PrivateFrame</div>
                       <div class="row-sub">Photo lockers</div>
-                      <div class="stars">4.3 ★★★★☆</div>
+                      <div class="stars">4,3 ★★★★☆</div>
                     </div>
-                    <div class="get-button">GET</div>
+                    <div class="get-button">ЗАГРУЗИТЬ</div>
                   </div>
                 </div>
               </div>
@@ -828,7 +831,7 @@
                     <div class="detail-title app-name"></div>
                     <div class="detail-sub">Ролик из записи: монтаж, субтитры и графика.</div>
                     <div class="install-button">
-                      <span class="install-label">GET</span>
+                      <span class="install-label">ЗАГРУЗИТЬ</span>
                       <svg class="ring" viewBox="0 0 28 28" aria-hidden="true">
                         <circle class="track" cx="14" cy="14" r="11"></circle>
                         <circle class="progress" cx="14" cy="14" r="11"></circle>
@@ -841,7 +844,7 @@
                 <div class="stats">
                   <div class="stat">
                     <div class="stat-label">РЕЙТИНГ</div>
-                    <div class="stat-value">4.9</div>
+                    <div class="stat-value">4,9</div>
                   </div>
                   <div class="stat">
                     <div class="stat-label">РОЛИК</div>

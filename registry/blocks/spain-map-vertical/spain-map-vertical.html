@@ -324,8 +324,10 @@
         var can = countries.filter(function (f) {
           return f.id === "05";
         });
-        var projection = d3.geoConicConformal().center([0, 39.5]).rotate([3.5, 0]).fitSize([MAPW, MAPH], { type: "FeatureCollection", features: main });
+        // the peninsula fits the field right of the inset frame (frame line at inset[0] + 14, then a
+        // 10 px gap): fitted to the whole field, Andalusia ran under the frame's lines
         var inset = [MAPW * 0.24, MAPH * 0.2];
+        var projection = d3.geoConicConformal().center([0, 39.5]).rotate([3.5, 0]).fitExtent([[inset[0] + 24, 0], [MAPW, MAPH]], { type: "FeatureCollection", features: main });
         var projCan = d3.geoConicConformal().rotate([16, 0]).center([0, 28.3]).fitExtent([[6, MAPH - inset[1] - 6], [inset[0], MAPH - 6]], { type: "FeatureCollection", features: can });
         var pMain = d3.geoPath().projection(projection),
           pCan = d3.geoPath().projection(projCan);

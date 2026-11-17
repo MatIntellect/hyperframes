@@ -355,7 +355,7 @@
             av.appendChild(img);
           } else {
             av.textContent = c.user.replace(/^@/, "").charAt(0).toUpperCase() || "?";
-            av.style.background = "linear-gradient(135deg, hsl(" + HUES[i] + ", 58%, 40%), hsl(" + (HUES[i] + 40) + ", 58%, 32%))";
+            av.style.background = "hsl(" + HUES[i] + ", 58%, 40%)"; /* flat, as in the app: a real interface keeps its native colours (frame.md) */
           }
           card.appendChild(av);
           var body = document.createElement("div");

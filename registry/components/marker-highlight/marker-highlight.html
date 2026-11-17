@@ -258,7 +258,9 @@
             var markerStyles = {
               highlight: {
                 viewBox: "0 0 100 40",
-                d: "M 3 24 C 22 20.5, 47 25.5, 68 22.5 C 79 21, 90 23, 97 21.5",
+                // ends inset by half the stroke: the round caps of a 26-wide stroke reach 13 units
+                // past each end, so the ink fills the box (word + --mh-out) and stops at its edges
+                d: "M 13 24 C 28 20.5, 47.6 25.5, 64.2 22.5 C 72.8 21, 81.5 23, 87 21.5",
                 strokeWidth: 26,
                 opacity: 0.5,
               },

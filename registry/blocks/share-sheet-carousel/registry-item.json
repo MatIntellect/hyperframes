@@ -68,32 +68,32 @@
       "type": "image",
       "role": "content",
       "label": "Slide image 1",
-      "description": "First carousel image; also fills the blurred background.",
-      "default": "assets/slide-01.jpg"
+      "description": "First carousel image; also fills the blurred background. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.",
+      "default": ""
     },
     {
       "id": "slideImage2",
       "type": "image",
       "role": "content",
       "label": "Slide image 2",
-      "description": "Second carousel image; also fills the blurred background.",
-      "default": "assets/slide-02.jpg"
+      "description": "Second carousel image; also fills the blurred background. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.",
+      "default": ""
     },
     {
       "id": "slideImage3",
       "type": "image",
       "role": "content",
       "label": "Slide image 3",
-      "description": "Third carousel image; also fills the blurred background.",
-      "default": "assets/slide-03.jpg"
+      "description": "Third carousel image; also fills the blurred background. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.",
+      "default": ""
     },
     {
       "id": "slideImage4",
       "type": "image",
       "role": "content",
       "label": "Slide image 4",
-      "description": "Fourth carousel image; also fills the blurred background.",
-      "default": "assets/slide-04.jpg"
+      "description": "Fourth carousel image; also fills the blurred background. Empty repeats the filled slides in order; with all four empty the slides are a plain monochrome placeholder plate.",
+      "default": ""
     },
     {
       "id": "brandLogo",
@@ -112,23 +112,8 @@
       "type": "hyperframes:composition"
     },
     {
-      "path": "assets/slide-01.jpg",
-      "target": "assets/slide-01.jpg",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/slide-02.jpg",
-      "target": "assets/slide-02.jpg",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/slide-03.jpg",
-      "target": "assets/slide-03.jpg",
-      "type": "hyperframes:asset"
-    },
-    {
-      "path": "assets/slide-04.jpg",
-      "target": "assets/slide-04.jpg",
+      "path": "assets/slide-placeholder.svg",
+      "target": "assets/slide-placeholder.svg",
       "type": "hyperframes:asset"
     },
     {

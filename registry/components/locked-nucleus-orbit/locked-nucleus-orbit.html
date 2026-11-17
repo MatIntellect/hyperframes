@@ -322,8 +322,22 @@
               });
               probe.remove();
               var core = Math.min(30, Math.max(22, longest / 0.78 / cqmin + 1));
+              // The inner orbits also move out for the chips: a chip is centred on its orbit, so
+              // at its final phase it reaches inward by its own half-extent toward the centre.
+              // Grow until every chip on a growing orbit clears the nucleus by a 1.5cqmin gap
+              // (orbit radius = base + grow x share, the same shares as the rings and arms).
+              var grow = core - 22;
+              (satellites || []).forEach(function (sat) {
+                var share = [0.5, 0.25, 0][sat.ring];
+                if (!share) return;
+                var a = (sat.finalPhase * Math.PI) / 180;
+                var reach =
+                  (Math.abs(Math.cos(a)) * sat.chip.offsetWidth) / 2 / cqmin +
+                  (Math.abs(Math.sin(a)) * sat.chip.offsetHeight) / 2 / cqmin;
+                grow = Math.max(grow, (core / 2 + 1.5 + reach - radii[sat.ring]) / share);
+              });
               root.style.setProperty("--lno-core", core.toFixed(2) + "cqmin");
-              root.style.setProperty("--lno-grow", (core - 22).toFixed(2) + "cqmin");
+              root.style.setProperty("--lno-grow", grow.toFixed(2) + "cqmin");
             }
             fitNucleus();
             window.__hf = window.__hf || {};
@@ -364,6 +378,7 @@
               satellites.push({
                 arm: arm,
                 chip: chip,
+                ring: index % radii.length,
                 startPhase: finalPhase - travel,
                 finalPhase: finalPhase,
               });

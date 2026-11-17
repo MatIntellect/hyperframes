@@ -5,7 +5,7 @@
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the stat centred in the 780x1180 field (y 180-1360). top / bottom: the stat on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "value", "type": "number", "role": "content", "label": "Value", "description": "The number the count runs up to.", "default": 22, "min": 0, "max": 9999999, "step": 1 },
     { "id": "decimals", "type": "number", "role": "content", "label": "Decimals", "default": 0, "min": 0, "max": 2, "step": 1 },
-    { "id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Before the number, for example $ or +.", "maxLength": 2, "default": "" },
+    { "id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Before the number, for example $ or +.", "maxLength": 1, "default": "" },
     { "id": "suffix", "type": "string", "role": "content", "label": "Suffix", "description": "After the number, for example % or K.", "maxLength": 3, "default": "" },
     { "id": "max", "type": "number", "role": "content", "label": "Track maximum", "description": "The track fills to value / max. 0 hides the track.", "default": 30, "min": 0, "max": 9999999, "step": 1 },
     { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Line under the number, up to two lines.", "maxLength": 40, "default": "Целей достигнуто" },

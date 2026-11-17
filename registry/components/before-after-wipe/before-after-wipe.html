@@ -281,7 +281,8 @@
             border: 0.14cqw solid var(--border, #2e2e32);
             border-radius: 999cqw;
             background: color-mix(in srgb, var(--surface, #18181a) 88%, var(--bg, #0c1014));
-            color: var(--muted, #8a8a90);
+            /* a label is text: never below L1, ink at 72% (placeholder-material.md); the after chip keeps full ink */
+            color: color-mix(in srgb, var(--fg, #f2f2f2) 72%, transparent);
             font-family: var(
               --font-body,
               "Montserrat",
