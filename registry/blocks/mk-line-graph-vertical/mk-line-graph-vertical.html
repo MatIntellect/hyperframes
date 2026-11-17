@@ -348,6 +348,9 @@
         var DRAW = 1.3;
 
         var tl = gsap.timeline({ paused: true });
+        /* card placements: the card lands instead of popping in on the mount's first frame */
+        if (placement !== "full")
+          tl.fromTo("#mlgv-field", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, Math.max(0, c0 - 0.05));
         tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 0.8, ease: "power1.inOut" }, c0);
         tl.to(key, { opacity: 1, duration: 0.4, ease: "power2.out" }, c0 + 0.3);
         tl.to([axis].concat(grid), { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }, c0);

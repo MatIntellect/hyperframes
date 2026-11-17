@@ -3,7 +3,7 @@
   "name": "code-snippet-apple-terminal-pro-vertical",
   "type": "hyperframes:block",
   "title": "Apple Terminal Pro (vertical)",
-  "description": "Vertical macOS Terminal in the Pro profile: the command types after the prompt, the output prints, a new prompt blinks. Title, prompt, command and output (lines up to 42 characters) are fields; placement full, top or bottom; holds.",
+  "description": "Vertical macOS Terminal in the Pro profile: the command types after the prompt, the output prints, a new prompt blinks. Title, prompt, command and output (lines up to 42 characters) are fields; the text is as large as its lines allow, 28 to 44 px, and the window as tall as they need; placement full, top or bottom; holds.",
   "tags": ["code", "developer", "showcase", "terminal", "apple", "vertical"],
   "dimensions": {
     "width": 1080,

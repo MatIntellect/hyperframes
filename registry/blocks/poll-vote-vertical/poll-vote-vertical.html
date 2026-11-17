@@ -13,7 +13,7 @@
     { "id": "votes", "type": "number", "role": "content", "label": "Votes", "description": "Vote count rolling up under the answers. 0 hides the line.", "default": 2418, "min": 0, "step": 1 },
     { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "Word after the count.", "maxLength": 14, "default": "голосов" },
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 200, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1540, the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands, 2 answer 1 lands and fills, 3 answer 2, 4 answer 3 (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands with its answers, empty and grey, 2 answer 1 fills, 3 answer 2, 4 answer 3 (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the card. none: no ground, the reel shows through around the card.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount; fade drops it away 0.3 s.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -60,8 +60,9 @@
         height: 1920px;
       }
       /* A two- or three-answer poll card in the brand, 780 px wide inside the reel safe zone (x 150-930).
-         Each answer lands on the second the speaker says it; its bar fills to its share while the
-         percent counts up; the picked answer fills in the accent and gets a check. */
+         The answers land with the card, empty and grey; each fills to its share on the second the
+         speaker says it while the percent counts up; the picked answer fills in the accent and gets
+         a check. */
       #pv-root {
         position: absolute;
         inset: 0;
@@ -340,8 +341,12 @@
             o,
             { opacity: 0, x: i % 2 ? 90 : -90, scale: 0.9 },
             { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.6)" },
-            t - 0.08,
+            IN + 0.3 + i * 0.12,
           );
+          /* the answers land with the card, empty and grey: a card that holds only the question reads as broken.
+             The answer is said: its row pulses as the bar starts to fill */
+          tl.to(o, { scale: 1.04, duration: 0.12, ease: "power2.out" }, t - 0.04);
+          tl.to(o, { scale: 1, duration: 0.3, ease: "power2.out" }, t + 0.08);
           tl.fromTo(
             o.querySelector(".pv-fill"),
             { scaleX: 0 },

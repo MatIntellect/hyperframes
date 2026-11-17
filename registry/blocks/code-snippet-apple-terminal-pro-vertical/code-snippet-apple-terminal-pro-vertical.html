@@ -2,13 +2,13 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone in the 780x760 slot at y 180-940 / 600-1360, rest of the frame transparent. The text takes the largest size from 28 to 44 px at which the longest line and every line fit; the window is as tall as its lines and sits in the middle of its field.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title in the window bar.", "maxLength": 30, "default": "bash — 80×24" },
     { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Dim line already on screen above the prompt. Empty hides it. Up to 42 characters.", "maxLength": 42, "default": "Last login: Mon Jun 2 on ttys008" },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "Prompt before the command, green.", "maxLength": 18, "default": "user@Mac myapp %" },
     { "id": "command", "type": "string", "role": "content", "label": "Command", "description": "Command typed after the prompt, up to 24 characters.", "maxLength": 24, "default": "npm run build" },
     { "id": "output", "type": "string", "role": "content", "label": "Output", "description": "Output lines, one per line, up to 12 lines of 42 characters. A line starting with ! is green and bold, with ~ is dim, with * is white and bold.", "maxLength": 520, "default": "~Building production bundle...\nvite v5.3.1 building for production\n✓ 142 modules transformed.\ndist/index.html             0.48 kB\ndist/assets/index.js      284.12 kB\ndist/assets/index.css      42.08 kB\n!✓ built in 2.31s" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts (it takes 1.5 s), 2 the output starts, 3 the window fades out (only when exit is fade). Empty keeps 0.5 and 2.3.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts (it takes 1.5 s, less when cue 2 comes sooner), 2 the output starts, 3 the window fades out (only when exit is fade). Empty keeps 0.5 and 2.3.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the last frame to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -113,14 +113,14 @@
         flex: 1;
         padding: 22px 24px;
         font-size: 28px;
-        line-height: 42px;
+        line-height: 1.5;
         color: #bbbbbb;
         overflow: hidden;
       }
       .atpv-l {
         display: block;
         white-space: pre;
-        min-height: 42px;
+        min-height: 1.5em;
       }
       .atpv-dim {
         color: #666666;
@@ -139,10 +139,10 @@
       }
       .atpv-cur {
         display: inline-block;
-        width: 17px;
-        height: 32px;
+        width: 0.6em;
+        height: 1.14em;
         background: #88ff67;
-        vertical-align: -6px;
+        vertical-align: -0.21em;
         margin-left: 2px;
       }
       .atpv-ch {
@@ -218,6 +218,23 @@
         var command = txt(V.command, "npm run build").trim() || "npm run build";
         var output = (typeof V.output === "string" && V.output.trim() ? V.output : D.output).replace(/\r/g, "").split("\n");
 
+        // текст как можно крупнее: самая длинная строка во всю ширину окна и все строки в высоту поля,
+        // от 28 до 44 px (знак JetBrains Mono шириной 0.6 кегля); окно по высоте строк, в середине поля
+        var rows = (header ? 1 : 0) + output.length + 2;
+        var longest = output.reduce(
+          function (m, t) {
+            return Math.max(m, /^[!~*]/.test(t) ? t.length - 1 : t.length);
+          },
+          Math.max(header.length, prompt.length + command.length + 1),
+        );
+        var field = placement === "full" ? [270, 1000] : placement === "top" ? [180, 760] : [600, 760];
+        var size = Math.max(28, Math.min(44, Math.floor(744 / (0.61 * longest)), Math.floor((field[1] - 97) / (1.5 * rows))));
+        var winH = Math.min(field[1], Math.max(380, Math.ceil(97 + 1.5 * size * (rows + 0.5))));
+        var win = document.getElementById("atpv-win");
+        canvas.style.fontSize = size + "px";
+        win.style.height = winH + "px";
+        win.style.top = Math.round(field[0] + (field[1] - winH) / 2) + "px";
+
         function line(cls, text) {
           var el = document.createElement("span");
           el.className = "atpv-l" + (cls ? " atpv-" + cls : "");
@@ -263,8 +280,9 @@
             return parseFloat(v);
           });
         var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.5;
-        var per = 1.5 / letters.length;
         var cO = isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 1.8;
+        // печать кончается до вывода: 1.5 с или меньше, если вывод назначен раньше
+        var per = Math.min(1.5, Math.max(0.3, cO - c0 - 0.3)) / letters.length;
         var exit = oneOf(V.exit, ["none", "fade"], "none");
 
         var tl = gsap.timeline({ paused: true });

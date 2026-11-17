@@ -407,8 +407,11 @@
         /* each comment: avatar pops, handle fades, text types at most 2.2 s, like row fades; the next starts at its cue or right after */
         var t = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.3;
         /* the sheet comes up from the field's foot as YouTube's comments do, by the time the first comment starts */
-        if (onSheet)
-          tl.fromTo(sheet, { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, Math.max(0, t - 0.3));
+        if (onSheet) {
+          /* the sheet slides up solid: while it faded in, the scene behind showed through it */
+          tl.fromTo(sheet, { y: 300 }, { y: 0, duration: 0.4, ease: "power3.out" }, Math.max(0, t - 0.3));
+          tl.fromTo(sheet, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, Math.max(0, t - 0.3));
+        }
         parts.forEach(function (p, i) {
           if (i > 0 && isFinite(cues[i])) t = cues[i]; /* a cue wins: each comment starts on its own word, even while the one above is still finishing */
           var next = isFinite(cues[i + 1]) ? cues[i + 1] : Infinity;

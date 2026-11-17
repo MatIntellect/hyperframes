@@ -205,8 +205,9 @@
         var text = String(typeof V.boardText === "string" && V.boardText.trim() ? V.boardText : "МОНТАЖ ГОТОВ")
           .toUpperCase()
           .trim();
-        /* words into rows of COLS cells; a word longer than a row is split. When the rows run out,
-           the row takes more, narrower cells, so no word is ever dropped */
+        /* words into rows of COLS cells. The rows widen to the longest word (up to 28 cells), so a word
+           is never split across rows; when the rows run out, the row takes more, narrower cells, so no
+           word is ever dropped */
         function pack(width) {
           var out = [""];
           text.split(/\s+/).forEach(function (w) {
@@ -223,6 +224,9 @@
           });
           return out.filter(Boolean);
         }
+        text.split(/\s+/).forEach(function (w) {
+          COLS = Math.min(28, Math.max(COLS, w.length));
+        });
         var lines = pack(COLS);
         while (lines.length > ROWS && COLS < 28) lines = pack(++COLS);
         var cols = Math.max.apply(
@@ -367,6 +371,9 @@
         var tl = gsap.timeline({ paused: true });
         tl.fromTo(driver, { t: 0 }, { t: 30, duration: 30, ease: "none" }, 0);
         tl.fromTo(board, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, Math.max(0, c0 - 0.2));
+        /* card placements: the card fades in with the board instead of popping in on the mount's first frame */
+        if (placement !== "full")
+          tl.fromTo("#sfbv-field", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, Math.max(0, c0 - 0.2));
         if (exit === "fade") tl.to(board, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c1 + 3);
         paint(0);
         window.__timelines = window.__timelines || {};

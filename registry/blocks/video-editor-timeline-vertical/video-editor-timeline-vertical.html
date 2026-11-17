@@ -416,7 +416,9 @@
         var X0 = 170,
           X1 = 750,
           GAP = 16;
-        var CUT_X = X0 + ((X1 - X0) * (CUT_T - PLAY0)) / (PLAY1 - PLAY0);
+        /* the playhead enters a third of the way in, so the razor splits the strip mid-lane, not on its first pixels */
+        var XS = X0 + (X1 - X0) * 0.3;
+        var CUT_X = XS + ((X1 - XS) * (CUT_T - PLAY0)) / (PLAY1 - PLAY0);
 
         // ruler: round steps whatever the reel length (5 s ticks, numbers every 10 s for a 30 s reel),
         // no number closer than 60 px to the end of the track
@@ -494,7 +496,7 @@
 
         var play = $("#vet-play"),
           tc = $("#vet-tc");
-        var pp = { x: X0 };
+        var pp = { x: XS };
         function writePlay() {
           play.style.transform = "translateX(" + pp.x + "px)";
           var secs = Math.round(((pp.x - X0) / (X1 - X0)) * reel);
@@ -518,7 +520,7 @@
         // the playhead runs at constant speed (linear is the point), the timecode follows it
         tl.fromTo(
           pp,
-          { x: X0 },
+          { x: XS },
           { x: X1, duration: PLAY1 - PLAY0, ease: "none", onUpdate: writePlay },
           PLAY0,
         );
