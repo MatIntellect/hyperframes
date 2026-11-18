@@ -14,11 +14,16 @@
       shape (the flagship problem morph). NEVER width/height tweens; the
       reshape rides transforms only, so it stays layout-free and seek-safe.
 
-  Slots (see README.md for a worked example):
+  Slots:
     - [data-slot="a"]: the outgoing content. Replace the children of this
       element in your installed copy. Default: a muted token wireframe card.
     - [data-slot="b"]: the incoming content. Same mechanism. Default: a
       taller brand-tinted token card so the swap reads at a glance.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/morph-swap.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file:
+      <img src="../../assets/shot.png" alt="" />
 
   Variables (declared in data-composition-variables below):
     - swap_at (number, seconds, default 1.4): when the morph starts, relative

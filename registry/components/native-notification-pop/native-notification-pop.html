@@ -25,11 +25,25 @@
   the backdrop-filter lines; the color-mix surface fill underneath is opaque
   enough to carry the banner on its own (verified fallback).
 
-  Slot (see README.md for a worked example):
+  Slot:
     - [data-slot="scene"]: the full-bleed background the banner drops over.
       Replace the children of this element in your installed copy. Default:
       a token backdrop with soft color fields and a skeleton card, saturated
       enough that the banner blur visibly reads.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/native-notification-pop.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file.
+      A picture or a clip:
+        <img src="../../assets/shot.png" alt="" />
+      A registry block, installed with `add`, on its own ground:
+        <div style="position: absolute; inset: 0; background: var(--bg, #0c1014)"></div>
+        <div data-composition-id="NAME" data-composition-src="compositions/NAME.html"
+             data-variable-values='{"placement":"center"}' data-start="0" data-duration="2.5"
+             data-track-index="1" data-width="1080" data-height="1920"
+             style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+      NAME is the block's name. Its data-start counts from this component's
+      start, and it shows only while this component shows.
 
   Variables (declared in data-composition-variables below):
     - title (string): the notification title line.
@@ -132,11 +146,8 @@
             pointer-events: none;
           }
 
-
           #root.hf-no-ground {
-
             background: transparent;
-
           }
 
           .nnp-clip {

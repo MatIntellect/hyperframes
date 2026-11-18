@@ -25,11 +25,16 @@
   tween is a fromTo with both endpoints authored, so any seek in either
   direction reproduces the same frame.
 
-  Slots (see README.md for a worked example):
+  Slots:
     - [data-slot="card-1"] ... [data-slot="card-5"]: card bodies, front to
       back at mount. Replace the children of a slot in your installed copy.
       Defaults: numbered token skeleton cards. Direct img/video children
       cover the card area.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/spring-stack-shuffle.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file:
+      <img src="../../assets/shot.png" alt="" />
 
   Variables (declared in data-composition-variables below):
     - cards (number 3..5, default 4): how many cards are in the stack.

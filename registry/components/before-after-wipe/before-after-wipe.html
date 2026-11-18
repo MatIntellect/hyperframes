@@ -12,12 +12,26 @@
   Ports the divider-wipe mechanic from comparison-split, with real content
   slots instead of baked demo art (Wave J, U-B).
 
-  Slots (see README.md for a worked example):
+  Slots:
     - [data-slot="before"]: base layer content. Replace the children of this
       element in your installed copy. Default: a muted token wireframe.
     - [data-slot="after"]:  revealed layer content. Same mechanism. Default:
       a brand-tinted version of the wireframe.
     Direct img/video children of a slot are sized to cover the panel.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/before-after-wipe.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file.
+      A picture or a clip:
+        <img src="../../assets/shot.png" alt="" />
+      A registry block, installed with `add`, on its own ground:
+        <div style="position: absolute; inset: 0; background: var(--bg, #0c1014)"></div>
+        <div data-composition-id="NAME" data-composition-src="compositions/NAME.html"
+             data-variable-values='{"placement":"center"}' data-start="0" data-duration="2.5"
+             data-track-index="1" data-width="1080" data-height="1920"
+             style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+      NAME is the block's name. Its data-start counts from this component's
+      start, and it shows only while this component shows.
 
   Variables (declared in data-composition-variables below):
     - label_a (string, default "До"): chip on the base panel. Empty hides it.

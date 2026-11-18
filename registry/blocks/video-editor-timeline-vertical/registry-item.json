@@ -3,7 +3,7 @@
   "name": "video-editor-timeline-vertical",
   "type": "hyperframes:block",
   "title": "Video Editor Timeline (vertical)",
-  "description": "Vertical video editor at work: a panel with video, hook, sound and titles lanes, a red playhead crossing them with a running timecode, the razor cutting the clip, a transition mark, the hook clip slamming in, the waveform growing, title clips piling in, then a render button pressed and the tracks dimming for a progress ring or match cut. Lane names, file, button and every beat are variables; own brand ground or none; holds.",
+  "description": "Vertical video editor at work: a panel with video, hook, sound and titles lanes, a red playhead crossing them with a running timecode, the razor cutting the clip, a transition mark, the hook clip slamming in, the waveform growing, title clips piling in, then the render button pressed, the editor staying lit for the transition that opens over it. Lane names, file, button and every beat are variables; own brand ground or none; holds.",
   "tags": [
     "editor",
     "timeline",

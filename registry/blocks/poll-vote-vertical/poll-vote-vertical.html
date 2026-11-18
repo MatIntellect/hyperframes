@@ -11,9 +11,9 @@
     { "id": "pct2", "type": "number", "role": "content", "label": "Option 2 %", "description": "Share of option 2 when there are three answers; option 3 gets the rest.", "default": 26, "min": 0, "max": 100, "step": 1 },
     { "id": "pick", "type": "number", "role": "content", "label": "Picked", "description": "The answer voted for: its bar fills in the accent and a check pops on it. 0 leaves every bar grey.", "default": 1, "min": 0, "max": 3, "step": 1 },
     { "id": "votes", "type": "number", "role": "content", "label": "Votes", "description": "Vote count rolling up under the answers. 0 hides the line.", "default": 2418, "min": 0, "step": 1 },
-    { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "Word after the count.", "maxLength": 14, "default": "голосов" },
+    { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "The word after the count in three Russian forms, one|few|many, e.g. голос|голоса|голосов: it follows the number while it counts. A single word stays as it is. Each form up to 14 characters.", "maxLength": 44, "default": "голос|голоса|голосов" },
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 200, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1360 (the bottom of the graphics field, above the caption band), the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands with its answers, empty and grey, 2 answer 1 fills, 3 answer 2, 4 answer 3 (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands with its answers, empty and grey, 2 every bar fills to its share and answer 1 pulses, 3 answer 2 pulses, 4 answer 3 pulses (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the card. none: no ground, the reel shows through around the card.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount; fade drops it away 0.3 s.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -60,9 +60,10 @@
         height: 1920px;
       }
       /* A two- or three-answer poll card in the brand, 780 px wide inside the reel safe zone (x 150-930).
-         The answers land with the card, empty and grey; each fills to its share on the second the
-         speaker says it while the percent counts up; the picked answer fills in the accent and gets
-         a check. */
+         The answers land with the card, empty and grey; on the second the speaker says the first
+         one every bar fills to its share while the percents count up, so the shares on screen always
+         belong together; each answer pulses on its own second; the picked answer fills in the accent
+         and gets a check. */
       #pv-root {
         position: absolute;
         inset: 0;
@@ -185,9 +186,9 @@
       }
       #pv-foot {
         margin-top: 34px;
-        font-size: 32px;
+        font-size: 44px;
         font-weight: 600;
-        line-height: 40px;
+        line-height: 52px;
         color: var(--muted, #8a8a90);
       }
     </style>
@@ -268,8 +269,20 @@
           return o;
         });
 
+        // the word belongs to the number, so one function writes both. Three Russian forms,
+        // one|few|many, as week-in-merges takes them; a single word stays as it is
         var votes = Math.max(0, Math.round(num("votes", 2418)));
-        if (votes) $("#pv-votes-word").textContent = text("votesLabel", "") || "голосов";
+        var forms = (text("votesLabel", "") || "голос|голоса|голосов").split("|");
+        if (forms.length < 3) forms = [forms[0], forms[0], forms[0]];
+        function showVotes(count) {
+          var m10 = count % 10;
+          var m100 = count % 100;
+          var i =
+            m10 === 1 && m100 !== 11 ? 0 : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 1 : 2;
+          $("#pv-votes").textContent = count.toLocaleString("ru-RU");
+          $("#pv-votes-word").textContent = forms[i].trim();
+        }
+        if (votes) showVotes(0);
         else $("#pv-foot").remove();
 
         // the question steps down until it fits two lines; an answer steps down until it fits its row
@@ -344,14 +357,15 @@
             IN + 0.3 + i * 0.12,
           );
           /* the answers land with the card, empty and grey: a card that holds only the question reads as broken.
-             The answer is said: its row pulses as the bar starts to fill */
+             The answer is said: its row pulses. Every bar fills on the first answer's second: shares that
+             fill one by one show a result that is not true (64 % against 0 %) until the last one lands */
           tl.to(o, { scale: 1.04, duration: 0.12, ease: "power2.out" }, t - 0.04);
           tl.to(o, { scale: 1, duration: 0.3, ease: "power2.out" }, t + 0.08);
           tl.fromTo(
             o.querySelector(".pv-fill"),
             { scaleX: 0 },
             { scaleX: pct / 100, duration: 0.6, ease: "power3.out" },
-            t + 0.12,
+            at[1] + 0.12,
           );
           var c = { v: 0 },
             p = o.querySelector(".pv-p");
@@ -366,7 +380,7 @@
                 p.textContent = Math.round(c.v) + "%";
               },
             },
-            t + 0.12,
+            at[1] + 0.12,
           );
           if (pick === i + 1)
             tl.fromTo(
@@ -378,8 +392,7 @@
         });
 
         if (votes) {
-          var vv = { v: 0 },
-            vEl = $("#pv-votes");
+          var vv = { v: 0 };
           tl.fromTo(
             vv,
             { v: 0 },
@@ -388,7 +401,7 @@
               duration: last + 0.7 - (IN + 0.3),
               ease: "power1.out",
               onUpdate: function () {
-                vEl.textContent = Math.round(vv.v).toLocaleString("ru-RU");
+                showVotes(Math.round(vv.v));
               },
             },
             IN + 0.3,

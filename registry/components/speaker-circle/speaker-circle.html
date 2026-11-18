@@ -20,8 +20,12 @@
      how it gets there: a GSAP ease name for the move (default power3.inOut), or cut – the circle is
      at its place on that frame, no move (the second half of a match cut; move seconds are ignored,
      so leave them empty: "23.3|540|700|1.4||cut").
+     A leave is time|0: the circle shrinks and fades in 0.3 s. Under a flash, a wipe or any other
+     cover it leaves by cut instead, time|0|cut, on the second the cover peaks: a fading circle
+     under a cover reads as a grey veil ("2.06|0|cut" under a flash that peaks at 2.06).
      Moves never overlap: each place starts after the previous move has finished (a leave
-     takes 0.3 s, a come-back 0.45 s); a leave while the circle is already gone is an error.
+     takes 0.3 s, a come-back 0.45 s, a cut none); a leave while the circle is already gone is
+     an error.
      At rest the whole circle stays inside x 60–930, y 180–1360 (the reel's safe zone for graphics
      and the circle); a place outside it, or a size outside 1–1.95, throws an error naming the place.
   The circle moves with transforms on the wrapper (overlays.md: "move it with transforms on a
@@ -60,9 +64,18 @@
       .filter(Boolean)
       .map(function (p) {
         var f = p.split("|").map(Number);
-        var how = (p.split("|")[5] || "").trim();
-        var pl = { at: f[0], x: f[1], y: f[2], size: f.length === 2 ? f[1] : f[3], text: p };
+        var leave = f.length <= 3 && f[1] === 0;
+        var how = (p.split("|")[leave ? 2 : 5] || "").trim();
+        var pl = {
+          at: f[0],
+          x: f[1],
+          y: f[2],
+          size: f.length === 2 || leave ? f[1] : f[3],
+          text: p,
+        };
         pl.cut = how === "cut";
+        if (leave && how && !pl.cut)
+          throw new Error("speakerCircle: a leave is time|0 or time|0|cut in '" + p + "'");
         pl.ease = how && !pl.cut ? how : "power3.inOut";
         if (!(pl.at >= 0)) throw new Error("speakerCircle: bad time in '" + p + "'");
         if (f.length >= 5 && !pl.cut && !(f[4] > 0))
@@ -94,7 +107,7 @@
     list.forEach(function (pl, k) {
       if (pl.size === 0 && !shownAt)
         throw new Error("speakerCircle: the circle is already gone at '" + pl.text + "'");
-      pl.len = pl.size === 0 ? 0.3 : pl.cut ? 0 : shownAt ? pl.dur : 0.45;
+      pl.len = pl.cut ? 0 : pl.size === 0 ? 0.3 : shownAt ? pl.dur : 0.45;
       var prev = list[k - 1];
       if (prev && pl.at < prev.at + prev.len)
         throw new Error(
@@ -107,8 +120,8 @@
     var shown = true;
     list.forEach(function (pl) {
       if (pl.size === 0) {
-        if (shown)
-          tl.to(sel, { scale: "*=0.8", opacity: 0, duration: 0.3, ease: "power2.in" }, pl.at);
+        if (pl.cut) tl.set(sel, { opacity: 0 }, pl.at);
+        else tl.to(sel, { scale: "*=0.8", opacity: 0, duration: 0.3, ease: "power2.in" }, pl.at);
         shown = false;
         return;
       }

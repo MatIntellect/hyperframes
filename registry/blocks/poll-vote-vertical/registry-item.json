@@ -3,7 +3,7 @@
   "name": "poll-vote-vertical",
   "type": "hyperframes:block",
   "title": "Poll Vote (vertical)",
-  "description": "Vertical social poll card: a question in Bebas Neue and two or three answers landing with the card, empty and grey, each bar filling to its share on the second the speaker says it while the percent counts up, the picked answer filling in the accent with a check, and a vote count rolling up. Question, answers, shares, pick, votes and every beat are variables; top, center or bottom placement in the reel safe zone; own brand ground or none; holds or fades.",
+  "description": "Vertical social poll card: a question in Bebas Neue and two or three answers landing with the card, empty and grey, every bar filling to its share together while the percents count up, each answer pulsing on the second the speaker says it, the picked answer filling in the accent with a check, and a vote count rolling up with its word in the right form for the number (голос, голоса, голосов). Question, answers, shares, pick, votes and every beat are variables; top, center or bottom placement in the reel safe zone; own brand ground or none; holds or fades.",
   "tags": ["poll", "vote", "survey", "social", "comments", "percent", "mock-ui", "vertical"],
   "dimensions": {
     "width": 1080,

@@ -13,12 +13,17 @@
   Realizes the comparison-split blueprint's signature move as its own unit
   and resolves the blueprint's name collision (Wave J2, J2-10).
 
-  Slots (see README.md for a worked example):
+  Slots:
     - [data-slot="card-a"]: left card body. Replace the children of this
       element in your installed copy. Default: a muted token wireframe.
     - [data-slot="card-b"]: right card body. Same mechanism. Default: an
       accent-tinted version of the wireframe.
     Direct img/video children of a slot are sized to cover the slot area.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/split-tilt-cards.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file:
+      <img src="../../assets/shot.png" alt="" />
 
   Variables (declared in data-composition-variables below):
     - label_a (string, default "До"): mono header on the left card.

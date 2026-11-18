@@ -10,9 +10,9 @@
     { "id": "lane4", "type": "string", "role": "content", "label": "Lane 4", "description": "Label of the titles lane: seven title clips.", "maxLength": 7, "default": "Титры" },
     { "id": "hookLabel", "type": "string", "role": "content", "label": "Hook clip", "description": "Word on the red hook clip, Bebas Neue.", "maxLength": 5, "default": "ХУК" },
     { "id": "buttonLabel", "type": "string", "role": "content", "label": "Button", "description": "Red button under the tracks, pressed at the last cue. Empty removes the button.", "maxLength": 10, "default": "Рендер" },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the playhead starts, 2 the razor cuts the video clip, 3 the transition mark lands in the cut, 4 the hook clip slams in, 5 the waveform grows, 6 the title clips pile in, 7 the button is pressed and the tracks dim (the playhead stops 0.1 s before), 8 the editor fades out (only when exit is fade). Empty keeps 0.3, 2.4, 3.4, 4.5, 5.1, 6.2, 7.5.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the playhead starts, 2 the razor cuts the video clip, 3 the transition mark lands in the cut, 4 the hook clip slams in, 5 the waveform grows, 6 the title clips pile in, 7 the button is pressed (the playhead stops 0.1 s before), 8 the editor fades out (only when exit is fade). Empty keeps 0.3, 2.4, 3.4, 4.5, 5.1, 6.2, 7.5.", "default": "" },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the panel. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
-    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the dimmed editor to the end of the mount, so a ring or a match cut can sit over it.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
+    { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the editor, lit, to the end of the mount, so a transition can open over it.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
   <head>
@@ -153,7 +153,7 @@
         align-items: center;
         font-size: 28px;
         font-weight: 600;
-        color: var(--muted, #8a8a90);
+        color: color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent);
       }
       .vet-lane {
         position: absolute;
@@ -577,18 +577,11 @@
           TITLES_T + 0.17,
         );
 
-        // the button is pressed and the timeline steps back
+        // the button is pressed; the editor stays lit for the transition that opens over it
         if (button) {
           tl.to("#vet-button", { scale: 0.93, duration: 0.08, ease: "power2.out" }, PRESS_T);
           tl.to("#vet-button", { scale: 1, duration: 0.2, ease: "power2.out" }, PRESS_T + 0.08);
         }
-        tl.to(
-          ["#vet-lanes", "#vet-head", "#vet-ruler", "#vet-button"].filter(function (s) {
-            return $(s);
-          }),
-          { opacity: 0.22, duration: 0.3, ease: "power2.inOut" },
-          PRESS_T + 0.12,
-        );
 
         if (oneOf(V.exit, ["none", "fade"], "none") === "fade")
           tl.to(

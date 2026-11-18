@@ -1,11 +1,13 @@
 <!--
   Grid Pixelate Wipe — transition effect.
 
-  Usage: place this overlay in your composition. To transition between
-  scenes, animate .grid-cell scale from 0→1 (cover) then 1→0 (reveal)
-  using GSAP stagger with a "from" pattern. The cells start at scale 0
-  from the first tween (fromTo), not from CSS: GSAP overwrites a CSS
-  transform it animates.
+  Usage: mount this overlay above both scenes in a clip 1.2 s long. Its own
+  timeline (see below) grows the cells from the center until they cover the
+  whole frame, holds, then shrinks them from the edges. The frame is fully
+  covered from 0.55 s to 0.65 s after the clip's start: put the cut between
+  the scenes at 0.6 s, so the clip starts 0.6 s before the cut. The cells
+  start at scale 0 from the first tween (fromTo), not from CSS: GSAP
+  overwrites a CSS transform it animates.
 
   Customize:
   - COLS / ROWS: grid density (default 16×9, turned to 9×16 in a box taller
@@ -76,27 +78,24 @@
       { scale: 0 },
       {
         scale: 1,
-        duration: 0.6,
-        stagger: { amount: 0.6, from: "center" },
+        duration: 0.3,
+        stagger: { amount: 0.25, from: "center" },
         ease: "power2.inOut",
       },
       startTime,
     );
 
-    // Swap scene content at midpoint
-    tl.set("#scene-a", { opacity: 0 }, startTime + 0.6);
-    tl.set("#scene-b", { opacity: 1 }, startTime + 0.6);
-
-    // Reveal scene B by removing grid
+    // The last cell has covered by 0.55 s; the host cuts between its scenes at 0.6 s.
+    // Reveal the next scene by removing the grid
     tl.to(
       "#grid-pixelate-overlay .grid-cell",
       {
         scale: 0,
-        duration: 0.6,
-        stagger: { amount: 0.6, from: "edges" },
+        duration: 0.3,
+        stagger: { amount: 0.25, from: "edges" },
         ease: "power2.inOut",
       },
-      startTime + 0.6,
+      startTime + 0.65,
     );
     window.__timelines = window.__timelines || {};
     window.__timelines["grid-pixelate-wipe"] = tl;

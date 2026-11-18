@@ -13,12 +13,26 @@
   the opening tween are authored (fromTo via a seeded proxy), so seeks are
   deterministic in both directions.
 
-  Slots (see README.md for a worked example):
+  Slots:
     - [data-slot="before"]: state A, the base layer. Replace the children of
       this element in your installed copy. Default: a muted token wireframe.
     - [data-slot="after"]:  state B, revealed by the iris. Same mechanism.
       Default: a brighter version of the wireframe (grey placeholder steps).
     Direct img/video children of a slot are sized to cover the panel.
+
+    Worked example. `grep -n 'data-slot=' compositions/components/iris-reveal.html`
+    prints the line of each slot. Replace what stands between a slot's tags
+    in the installed copy and nothing else in the file.
+      A picture or a clip:
+        <img src="../../assets/shot.png" alt="" />
+      A registry block, installed with `add`, on its own ground:
+        <div style="position: absolute; inset: 0; background: var(--bg, #0c1014)"></div>
+        <div data-composition-id="NAME" data-composition-src="compositions/NAME.html"
+             data-variable-values='{"placement":"center"}' data-start="0" data-duration="2.5"
+             data-track-index="1" data-width="1080" data-height="1920"
+             style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+      NAME is the block's name. Its data-start counts from this component's
+      start, and it shows only while this component shows.
 
   Variables (declared in data-composition-variables below):
     - iris_x (number, default 50, 0 to 100%): iris origin, percent of width.
@@ -31,7 +45,7 @@
     - exit (none | fade | up, default none): outgoing transition. none holds
       the final frame (frame roots own transitions; holds end films).
 
-  The iris rim is a thin accent circle (SVG stroke, fixed width) that rides
+  The iris rim is an accent circle (SVG stroke, 0.6% of the frame's short side) that rides
   the exact same radius proxy as the clip-path, so rim and clip edge are
   locked on every frame. It fades in as the pass starts and dissolves just
   before the iris clears the frame corners.
@@ -393,7 +407,10 @@
             rim.setAttribute("viewBox", "0 0 " + width + " " + height);
             rimCircle.setAttribute("cx", String(centerX));
             rimCircle.setAttribute("cy", String(centerY));
-            rimCircle.setAttribute("stroke-width", String(Math.max(2, width * 0.0021)));
+            rimCircle.setAttribute(
+              "stroke-width",
+              String(Math.max(2, Math.min(width, height) * 0.006)),
+            );
 
             // RETIME RANGE: fixed IN and OUT scale together only when D is too
             // short. HOLD is the sole elastic phase. Never use timeScale().
