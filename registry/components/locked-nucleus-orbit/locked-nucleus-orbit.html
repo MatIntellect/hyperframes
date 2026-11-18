@@ -218,7 +218,8 @@
             background: color-mix(in srgb, var(--surface, #18181a) 90%, transparent);
             box-shadow: 0 1.2cqmin 3.6cqmin color-mix(in srgb, var(--bg, #0c1014) 60%, transparent);
             opacity: 0;
-            will-change: transform, opacity;
+            /* no will-change: a will-change layer keeps the raster scale of its first paint, so a
+               chip first painted at another scale (a seek from the end) keeps different pixels */
           }
 
           .lno-marker {

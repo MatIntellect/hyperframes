@@ -149,7 +149,8 @@
             border-radius: var(--radius, 1.8cqmin);
             background: var(--surface, #18181a);
             box-shadow: 0 1cqmin 3cqmin color-mix(in srgb, var(--bg, #0c1014) 45%, transparent);
-            will-change: transform, opacity, filter;
+            /* no will-change: a will-change layer keeps the raster scale of its first paint, so the
+               focus card's 1.045 grow drew its text differently after a seek than in playback */
           }
 
           .ns-dot {

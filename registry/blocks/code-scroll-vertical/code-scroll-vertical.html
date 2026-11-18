@@ -601,35 +601,50 @@
           renderState(code, state);
           var lines = code.querySelectorAll(".line");
           fillGutter(parts.gutter, lines.length);
-          var surfRect = surface.getBoundingClientRect();
           var idx = Math.max(0, Math.min(lines.length - 1, targetLine - 1));
-          var lr = lines[idx].getBoundingClientRect();
-          var lineCenter = lr.top + lr.height / 2 - surfRect.top;
+          // geometry comes from computed styles, not client rects or offsets: the runtime keeps a
+          // host that starts later display:none while this runs, where layout reads 0
+          var edCs = getComputedStyle(surface.parentElement);
+          var barCs = getComputedStyle(surface.parentElement.querySelector(".titlebar"));
+          var codeCs = getComputedStyle(code);
+          var lineCs = getComputedStyle(lines[idx]);
+          var surfH =
+            parseFloat(edCs.height) -
+            parseFloat(edCs.borderTopWidth) -
+            parseFloat(edCs.borderBottomWidth) -
+            parseFloat(barCs.height);
+          var LH = Math.max(parseFloat(lineCs.lineHeight) || 0, parseFloat(lineCs.minHeight) || 0);
+          var pad = parseFloat(codeCs.top);
+          var lineCenter = pad + parseFloat(codeCs.paddingTop) + idx * LH + LH / 2;
           // Scroll by whole rows, as an editor does: the target line as near the middle as the
           // row grid allows, the top row at rest flush with the window's top edge (not cut by
           // the title bar), never above line 1 or past the last row; the sliver under the last
           // whole row is clipped, so no row rests half-cut at the bottom edge.
-          var LH = lr.height;
-          var pad = code.offsetTop;
-          var rows = Math.floor(surfRect.height / LH);
-          var n = Math.round((lineCenter - surfRect.height * 0.5 - pad) / LH);
+          var rows = Math.floor(surfH / LH);
+          var n = Math.round((lineCenter - surfH * 0.5 - pad) / LH);
           n = Math.max(0, Math.min(Math.max(0, lines.length - rows), n));
           var dy = -pad - n * LH;
-          surface.style.clipPath = "inset(0 0 " + (surfRect.height - rows * LH) + "px 0)";
+          surface.style.clipPath = "inset(0 0 " + (surfH - rows * LH) + "px 0)";
+          // the box is placed by layout inside its line: 8 px into the gutter side, flush with the
+          // line's right end so the code's right padding keeps it clear of the window edge
           var box = document.createElement("div");
           box.className = "hl-box";
-          box.style.left = lines[idx].offsetLeft - 8 + "px";
-          box.style.top = lines[idx].offsetTop - 1 + "px";
-          box.style.width = lr.width + 18 + "px";
-          box.style.height = lr.height + 2 + "px";
-          code.insertBefore(box, code.firstChild);
+          box.style.left = "-8px";
+          box.style.right = "0";
+          box.style.top = "-1px";
+          box.style.bottom = "-1px";
+          box.style.zIndex = "-1";
+          lines[idx].insertBefore(box, lines[idx].firstChild);
           tl.set(parts.scene, { opacity: 0 }, 0);
           tl.to(parts.scene, { opacity: 1, duration: FADE, ease: "power1.out" }, start);
           tl.set(box, { opacity: 0 }, 0);
           var at = start + FADE + 0.35;
+          // the start rests on the same row grid as the end (the nearest whole row at or below the
+          // natural top): with the 28 px top it left the clip cutting the last row in half before the scroll
+          var y0 = Math.ceil(pad / LH) * LH - pad;
           tl.fromTo(
             [code, parts.gutter],
-            { y: 0 },
+            { y: y0 },
             { y: dy, duration: SCROLL, ease: "power2.inOut" },
             at,
           );

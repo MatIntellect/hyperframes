@@ -557,14 +557,10 @@
           tl.set({}, {}, T.end);
         }
 
-        /* Build once synchronously so the timeline exists at parse time, then rebuild when the
-           fonts report ready; the renderer only seeks after fonts are loaded. */
+        /* Build once, synchronously: the runtime runs this script after the fonts load, with the
+           host laid out, so the card heights are measured here. A later rebuild would measure a
+           host hidden again by then (offsetHeight 0) and break the stack's peek. */
         build();
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(function () {
-            build();
-          });
-        }
 
         /* cues: each stretch of the authored timeline runs at the speed that lands its beat on its cue */
         var exit = oneOf(variables.exit, ["none", "fade"], "none");

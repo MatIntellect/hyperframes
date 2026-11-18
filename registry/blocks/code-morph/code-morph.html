@@ -81,7 +81,8 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
+        /* centred by GSAP (xPercent/yPercent in the entrance fromTo): a CSS transform is lost when
+           GSAP first reads it on a host the runtime keeps display:none */
         width: 1380px;
         height: 800px;
         background: #0b0f17;
@@ -448,12 +449,31 @@
           return keyToEl;
         }
 
-        function rectsOf(keyToEl) {
+        // Token spots on the monospace grid (computed styles + canvas glyph advance), relative to
+        // codeEl's box, not client rects: rects read 0 while the runtime keeps a host that starts
+        // later display:none, and read scaled while the editor entrance tween holds scale 0.985
+        var gridCtx = document.createElement("canvas").getContext("2d");
+        function spotsOf(codeEl, state) {
+          var cs = getComputedStyle(codeEl);
+          var lineCs = getComputedStyle(codeEl.querySelector(".line"));
+          gridCtx.font = cs.fontSize + " " + cs.fontFamily;
+          var cw = gridCtx.measureText("M").width;
+          var rowH = Math.max(parseFloat(lineCs.lineHeight) || 0, parseFloat(lineCs.minHeight) || 0);
+          var padL = parseFloat(cs.paddingLeft) || 0;
+          var padT = parseFloat(cs.paddingTop) || 0;
           var m = new Map();
-          keyToEl.forEach(function (el, k) {
-            var r = el.getBoundingClientRect();
-            m.set(k, { left: r.left, top: r.top });
-          });
+          var row = 0;
+          var col = 0;
+          for (var i = 0; i < state.tokens.length; i++) {
+            var t = state.tokens[i];
+            if (t.content === "\n") {
+              row++;
+              col = 0;
+              continue;
+            }
+            m.set(t.key, { left: padL + col * cw, top: padT + row * rowH });
+            col += t.content.length;
+          }
           return m;
         }
 
@@ -538,11 +558,10 @@
           for (var s = 0; s < states.length - 1; s++) {
             var parts = makeScene(surface, false);
             var code = parts.code;
-            var fromEls = renderState(code, states[s]);
-            var fromR = rectsOf(fromEls);
+            renderState(code, states[s]);
+            var fromR = spotsOf(code, states[s]);
             var toEls = renderState(code, states[s + 1]);
-            var toR = rectsOf(toEls);
-            var base = code.getBoundingClientRect();
+            var toR = spotsOf(code, states[s + 1]);
             var seg = gsap.timeline();
             var ENTER_AT = STEP * 0.45;
             var FD = STEP * 0.5;
@@ -575,8 +594,8 @@
               span.className = "tok";
               span.textContent = tok.content;
               span.style.position = "absolute";
-              span.style.left = r.left - base.left + "px";
-              span.style.top = r.top - base.top + "px";
+              span.style.left = r.left + "px";
+              span.style.top = r.top + "px";
               span.style.color = tok.color;
               code.appendChild(span);
               seg.fromTo(span, { opacity: 1 }, { opacity: 0, duration: FD, ease: "power1.in" }, 0);
@@ -612,7 +631,13 @@
           // would be nested empty and never re-nested → blank render when used as
           // a sub-composition. See the contract in engine frameCapture.ts.
           document.fonts.ready.then(function () {
-            tl.from("#kdmorp-editor", { opacity: 0, scale: 0.985, duration: 0.5, ease: "power2.out" }, 0);
+            // GSAP owns the whole editor transform, centring included (lint gsap_css_transform_conflict)
+            tl.fromTo(
+              "#kdmorp-editor",
+              { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.985 },
+              { xPercent: -50, yPercent: -50, opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" },
+              0,
+            );
             buildEffect(tl, surface, spec);
             var dur = parseFloat(root.dataset.duration) || tl.duration();
             tl.to({}, { duration: dur }, 0); // pad to full composition length

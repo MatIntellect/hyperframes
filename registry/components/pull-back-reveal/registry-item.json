@@ -58,8 +58,8 @@
       "role": "content",
       "label": "Card A label",
       "description": "Label of the first supporting card.",
-      "default": "Досмотры",
-      "maxLength": 16
+      "default": "Досмотр",
+      "maxLength": 7
     },
     {
       "id": "support_a_value",
@@ -77,7 +77,7 @@
       "label": "Card B label",
       "description": "Label of the second supporting card.",
       "default": "Ролики",
-      "maxLength": 16
+      "maxLength": 7
     },
     {
       "id": "support_b_value",

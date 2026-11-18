@@ -80,7 +80,8 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
+        /* centred by GSAP (xPercent/yPercent in the entrance fromTo): a CSS transform is lost when
+           GSAP first reads it on a host the runtime keeps display:none */
         width: 1380px;
         height: 800px;
         background: #0b0f17;
@@ -537,18 +538,31 @@
           renderState(code, state);
           var lines = code.querySelectorAll(".line");
           fillGutter(parts.gutter, lines.length);
-          var surfRect = surface.getBoundingClientRect();
           var idx = Math.max(0, Math.min(lines.length - 1, targetLine - 1));
-          var lr = lines[idx].getBoundingClientRect();
-          var lineCenter = lr.top + lr.height / 2 - surfRect.top;
-          var dy = surfRect.height * 0.5 - lineCenter;
+          // geometry comes from computed styles, not client rects or offsets: the runtime keeps a
+          // host that starts later display:none while this runs, where layout reads 0
+          var edCs = getComputedStyle(surface.parentElement);
+          var barCs = getComputedStyle(surface.parentElement.querySelector(".titlebar"));
+          var codeCs = getComputedStyle(code);
+          var lineCs = getComputedStyle(lines[idx]);
+          var surfH =
+            parseFloat(edCs.height) -
+            parseFloat(edCs.borderTopWidth) -
+            parseFloat(edCs.borderBottomWidth) -
+            parseFloat(barCs.height);
+          var LH = Math.max(parseFloat(lineCs.lineHeight) || 0, parseFloat(lineCs.minHeight) || 0);
+          var lineCenter = parseFloat(codeCs.top) + parseFloat(codeCs.paddingTop) + idx * LH + LH / 2;
+          var dy = surfH * 0.5 - lineCenter;
+          // the box is placed by layout inside its line: 8 px into the gutter side, flush with the
+          // line's right end so the code's right padding keeps it clear of the window edge
           var box = document.createElement("div");
           box.className = "hl-box";
-          box.style.left = lines[idx].offsetLeft - 8 + "px";
-          box.style.top = lines[idx].offsetTop - 1 + "px";
-          box.style.width = lr.width + 18 + "px";
-          box.style.height = lr.height + 2 + "px";
-          code.insertBefore(box, code.firstChild);
+          box.style.left = "-8px";
+          box.style.right = "0";
+          box.style.top = "-1px";
+          box.style.bottom = "-1px";
+          box.style.zIndex = "-1";
+          lines[idx].insertBefore(box, lines[idx].firstChild);
           tl.set(parts.scene, { opacity: 0 }, 0);
           tl.to(parts.scene, { opacity: 1, duration: FADE, ease: "power1.out" }, start);
           tl.set(box, { opacity: 0 }, 0);
@@ -591,7 +605,13 @@
           // would be nested empty and never re-nested → blank render when used as
           // a sub-composition. See the contract in engine frameCapture.ts.
           document.fonts.ready.then(function () {
-            tl.from("#kdscro-editor", { opacity: 0, scale: 0.985, duration: 0.5, ease: "power2.out" }, 0);
+            // GSAP owns the whole editor transform, centring included (lint gsap_css_transform_conflict)
+            tl.fromTo(
+              "#kdscro-editor",
+              { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.985 },
+              { xPercent: -50, yPercent: -50, opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" },
+              0,
+            );
             buildEffect(tl, surface, spec);
             var dur = parseFloat(root.dataset.duration) || tl.duration();
             tl.to({}, { duration: dur }, 0); // pad to full composition length

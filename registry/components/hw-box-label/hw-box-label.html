@@ -110,9 +110,11 @@
   <body>
     <!-- Self-preview. WIRING: copy the .hw-box CSS + markup pattern (position
          wrapper > .hw-bx-deform > .hw-bx-boil > svg + label), the CONFIG
-         block, the hw family runtime, the spring library, the stroke matrix,
-         AND the hwWobbleRect / hwBoxBuild / hwBoxOn / hwBoxOff helpers. Size
-         the wrapper over your target, then wire with positions only:
+         block with the hwVars / hwVar lines above it, the hw family runtime,
+         the spring library, the stroke matrix, AND the hwWobbleRect /
+         hwBxPick / hwBoxBuild / hwBoxOn / hwBoxOff helpers. Size the wrapper
+         over your target and give its svg viewBox="0 0 <width> <height>" of
+         the wrapper in px (hwBoxBuild reads it), then wire with positions only:
 
            hwBoxBuild("#hw-my-box", { seed: 3, label: "Europe" });
            hwBoxOn(tl, "#hw-my-box", 2.0); // entrance + boil per CONFIG

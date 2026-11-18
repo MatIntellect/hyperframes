@@ -103,6 +103,10 @@
              .setAttribute("d", hwMarkPath(420, 34, "underline", 4));
            hwMarkOn(tl, "#hw-my-mark", 2.0);
            hwBoil(tl, "#hw-my-mark", { frameDrop: 3, seed: 4 });
+           hwMarkOff(tl, "#hw-my-mark", 8.0);
+
+         The svg has no viewBox: the path draws in the wrapper's px, so size
+         the wrapper to the w x h you pass to hwMarkPath (here 420 x 34).
     -->
     <div id="hw-un-root" data-composition-id="hw-underline" data-start="0" data-duration="4">
       <div id="hw-un-scene"><div id="hw-un-text"></div></div>

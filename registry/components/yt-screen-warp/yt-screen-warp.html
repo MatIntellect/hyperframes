@@ -111,7 +111,9 @@
            <template data-slot="yt-screen-warp-screen"><video ...></video></template>
          img/video children fill the screen. Self-preview wrapper. WIRING: copy the two CSS classes; add
          class="yt-screen-warp3d" to your media wrapper and
-         <div class="yt-screen-fx" id="yt-my-fx"></div> as its LAST child. Then:
+         <div class="yt-screen-fx" id="yt-my-fx"></div> as its LAST child.
+         ytScreenOn / ytScreenOff are globals (window.*) defined in the last
+         <script> of this file; copy those two functions. Then:
 
            ytScreenOn(tl, "#yt-my-fx", 2.0);
            ytScreenOff(tl, "#yt-my-fx", 8.0);

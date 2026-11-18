@@ -122,6 +122,10 @@
     opacity: var(--hf-avatar-opacity, 1);
     transform: translateY(var(--hf-avatar-y, 0px));
   }
+  /* the overlap pulls each avatar onto the previous one; the first starts on the card's content edge */
+  .hf-catalog-x-follow-card .avatars span:first-child {
+    margin-left: 0;
+  }
 </style>
 
 <!--

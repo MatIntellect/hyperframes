@@ -105,7 +105,8 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    will-change: transform, opacity, filter, background-position;
+    /* no will-change: a will-change layer keeps the raster of its first paint (scale and sub-pixel
+       offset), so a word met mid-rise after a seek from the end lands half a pixel off */
   }
 </style>
 

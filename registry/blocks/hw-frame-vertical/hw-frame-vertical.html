@@ -216,10 +216,33 @@
         // раскладка зависит от высоты подписи: надпись уже стоит – разметка запускает загрузку её шрифта,
         // замер и шкала – после неё (runtimes.md:7)
         void document.body.offsetHeight;
+        // the caption's wrapped height: words laid into lines of the caption's width, as the browser wraps them
+        // (a word wider than the line breaks inside, overflow-wrap: break-word)
+        function captionHeight() {
+          var cs = getComputedStyle(caption);
+          var ctx = document.createElement("canvas").getContext("2d");
+          ctx.font = cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+          var maxW = parseFloat(caption.style.width);
+          var space = ctx.measureText(" ").width;
+          var lines = 0,
+            lineW = 0;
+          capText.split(/\s+/).filter(Boolean).forEach(function (word) {
+            var w = ctx.measureText(word).width;
+            if (lines && lineW + space + w <= maxW) {
+              lineW += space + w;
+            } else {
+              lines += Math.max(1, Math.ceil(w / maxW));
+              lineW = w > maxW ? w % maxW : w;
+            }
+          });
+          return Math.max(1, lines) * parseFloat(cs.lineHeight);
+        }
         document.fonts.ready.then(function () {
         
         // по вертикали окно и подпись вместе – по центру поля (высота подписи – настоящая)
-        var capH = capText ? caption.offsetHeight : 0;
+        // counted on a canvas from the computed font, not read from layout: this runs after fonts.ready,
+        // when the runtime has put a later-starting host back to display:none and offsetHeight is 0
+        var capH = capText ? captionHeight() : 0;
         S.y = Math.round(FY - (S.h + (capText ? 42 + capH : 0)) / 2);
         
         caption.style.top = S.y + S.h + 42 + "px";
@@ -296,8 +319,14 @@
         var unit = [media, svg, caption];
         var cx = S.x + S.w / 2,
           cy = S.y + S.h / 2;
-        unit.forEach(function (el) {
-          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - (el.offsetLeft || 0) + "px " + (cy - (el.offsetTop || 0)) + "px" });
+        // each element's own top-left, as set above (svg sits at 0,0): offsetLeft/offsetTop read 0 in a hidden host
+        var corners = [
+          [S.x, S.y],
+          [0, 0],
+          [S.x - 20, S.y + S.h + 42],
+        ];
+        unit.forEach(function (el, i) {
+          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - corners[i][0] + "px " + (cy - corners[i][1]) + "px" });
         });
         function boil() {
           var step = Math.floor((tl.time() * 30) / CONFIG.boil.frameDrop);

@@ -331,27 +331,26 @@
         z-index: 20;
         overflow: hidden;
       }
-      .comp-text {
+      /* The text line and its placeholders stand midway between the composer's top edge and the
+         buttons: the row below is 60 px with 32 px buttons centred in it, so their tops are 46 px
+         up. */
+      .comp-text,
+      .comp-ph {
         position: absolute;
-        bottom: 40px;
+        top: 0;
+        bottom: 46px;
         left: 18px;
-        right: 18px;
-        height: 34px;
         display: flex;
         align-items: center;
-        color: var(--ink);
         font-size: 17px;
+      }
+      .comp-text {
+        right: 18px;
+        color: var(--ink);
         white-space: pre;
       }
       .comp-ph {
-        position: absolute;
-        bottom: 40px;
-        left: 18px;
-        height: 34px;
-        display: flex;
-        align-items: center;
         color: #8c8c84;
-        font-size: 17px;
       }
       .typed {
         white-space: pre;
@@ -382,10 +381,15 @@
         bottom: 0;
         height: 60px;
       }
+      /* Centred by layout, not by a transform: the timeline scales these buttons, and GSAP owns
+         the whole transform of what it animates. A CSS translate here was lost whenever a button
+         was first tweened while its scene was still hidden, and the button dropped half its
+         height. */
       .comp-ctrls > * {
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -929,6 +933,7 @@
         `<div class="stop-btn" id="cle-stop-btn"></div>` +
         `</div>`;
 
+      const compTextEl = composer.querySelector("#cle-comp-text");
       const typedEl = composer.querySelector("#cle-typed");
       const chEls = [];
       const curEls = [];
@@ -1077,6 +1082,7 @@
         blocks.forEach((b) => (b.meta = lineGroups(b.words, b.node, b.gapTop)));
 
         const bubbleTop = bubble.offsetTop;
+        const bubbleBottom = bubbleTop + bubble.offsetHeight;
         const rowThinkH = boxThink.offsetHeight;
         const rowSearchH = boxSearch.offsetHeight;
         const rowCollapsedH = boxCollapsed.offsetHeight;
@@ -1244,7 +1250,10 @@
           tGo + 0.16,
         );
 
-        const dyBubble = H - 34 + COMP_UP - 40 - 34 - bubbleTop; // composer text row -> slot
+        // the bubble leaves from the composer's text line, wherever the layout puts that line
+        const textLineMid =
+          composer.offsetTop + composer.clientTop + compTextEl.offsetTop + compTextEl.offsetHeight / 2;
+        const dyBubble = textLineMid + COMP_UP - (bubbleTop + bubbleBottom) / 2;
         tl.fromTo(
           bubble,
           { autoAlpha: 0, y: dyBubble, scale: 0.94, transformOrigin: "100% 50%" },
@@ -1365,50 +1374,30 @@
 
         /* ---- caret-following scroll in the composer.
            `prompt` is an editable slot, but `.comp-text` is a fixed-width single line with
-           `white-space: pre` inside a composer that clips, and the packaged prompt already
-           reaches the mic. A longer one therefore slides under the mic and the send button and
-           loses its tail, with the caret hidden behind them. A real single-line input scrolls its
-           text left to keep the caret in view; this does the same, on the very times the reveal
-           already uses. Shrinking the type instead would shrink the packaged prompt too, since
-           that prompt has no headroom, and still could not absorb a prompt twice as long without
-           becoming unreadable. A prompt that fits emits no keyframes, so the packaged
-           composition is untouched. Lives inside build(), which is re-run once the embedded
-           faces are ready, so the measurement is taken against the final font. */
-        const compTextEl = composer.querySelector("#cle-comp-text");
-        // The obstacle is the opaque round button, not the mic glyph the text may abut. Take the
-        // leftmost of the two that occupy that corner, since one swaps in for the other.
-        const compStops = ["#cle-voice-btn", "#cle-send-btn"]
-          .map((sel) => composer.querySelector(sel))
-          .filter(Boolean);
-        const CARET_PAD = 8;
-        if (compTextEl && compStops.length) {
-          // Rects live in the scaled .screen space while offsets are layout px, so convert with
-          // the element's own ratio rather than reading --scale.
-          const box = compTextEl.getBoundingClientRect();
-          const ratio = compTextEl.offsetWidth ? box.width / compTextEl.offsetWidth : 1;
-          const stopLeft = Math.min(...compStops.map((el) => el.getBoundingClientRect().left));
-          const limit = (stopLeft - box.left) / (ratio || 1) - CARET_PAD;
-          if (limit > 0) {
-            // Collect the steps first, so a prompt that fits leaves typedEl alone entirely: even a
-            // zero translate stamps a transform, which changes how the text rasterizes and would
-            // make the packaged render differ from before for no reason.
-            const steps = [];
-            let shift = 0;
-            chars.forEach((c, i) => {
-              const caret = curEls[i + 1];
-              if (!caret) return;
-              const want = Math.max(0, caret.offsetLeft - limit);
-              if (want > shift + 0.5) {
-                shift = want;
-                steps.push([charT[i], -shift]);
-              }
-            });
-            if (steps.length) {
-              steps.forEach(([at, x]) => tl.to(typedEl, { x, duration: 0.08, ease: "none" }, at));
-              // Back to the start when the composer empties, so the collapse animates from x=0.
-              tl.to(typedEl, { x: 0, duration: 0.01 }, tGo);
-            }
+           `white-space: pre` inside a composer that clips, so a prompt longer than the line loses
+           its tail, and the caret with it. A real single-line input scrolls its text left to keep
+           the caret in view; this does the same, on the very times the reveal already uses.
+           Shrinking the type instead would shrink every prompt, and still could not absorb one
+           twice as long without becoming unreadable. Lives inside build(), which is re-run once
+           the embedded faces are ready, so the measurement is taken against the final font. */
+        const limit = compTextEl.offsetWidth - 4; // the line's own width, less the caret
+        // Collect the steps first, so a prompt that fits leaves typedEl alone entirely: even a
+        // zero translate stamps a transform, which changes how the text rasterizes.
+        const steps = [];
+        let shift = 0;
+        chars.forEach((c, i) => {
+          const caret = curEls[i + 1];
+          if (!caret) return;
+          const want = Math.max(0, caret.offsetLeft - limit);
+          if (want > shift + 0.5) {
+            shift = want;
+            steps.push([charT[i], -shift]);
           }
+        });
+        if (steps.length) {
+          steps.forEach(([at, x]) => tl.to(typedEl, { x, duration: 0.08, ease: "none" }, at));
+          // Back to the start when the composer empties, so the collapse animates from x=0.
+          tl.to(typedEl, { x: 0, duration: 0.01 }, tGo);
         }
       }
 

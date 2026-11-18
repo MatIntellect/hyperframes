@@ -153,6 +153,9 @@
         },
         duration: 2.4,
         ease: "power1.inOut",
+        /* place the chip on its path start now, while the host is laid out: a lazy first render
+           would land on a hidden host after a seek and leave the chip at the CSS corner before its start */
+        immediateRender: true,
       },
       startTime,
     );
@@ -166,6 +169,8 @@
         },
         duration: 2.1,
         ease: "sine.inOut",
+        /* same as chip-a: start on the path from the build, not at the CSS corner until 0.25 s */
+        immediateRender: true,
       },
       startTime + 0.25,
     );

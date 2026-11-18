@@ -928,6 +928,10 @@
               return read(t)[prop];
             });
           });
+          // The immediate start render is a separate set built from `from` alone, so without the
+          // modifiers it would rest at the raw time 0 (scale 0) before C0, while a seek back
+          // before C0 rests at read(0). Sharing them makes both rests read(0).
+          from.modifiers = to.modifiers;
           tl.fromTo(el, from, to, C0);
         }
 

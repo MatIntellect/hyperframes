@@ -604,12 +604,16 @@
           line.className = "line";
           code.appendChild(line);
           var chars = [];
+          var row = 0;
+          var col = 0;
           for (var i = 0; i < state.tokens.length; i++) {
             var t = state.tokens[i];
             if (t.content === "\n") {
               line = document.createElement("div");
               line.className = "line";
               code.appendChild(line);
+              row++;
+              col = 0;
               continue;
             }
             for (var c = 0; c < t.content.length; c++) {
@@ -620,7 +624,7 @@
               if (t.fontStyle & 1) span.style.fontStyle = "italic";
               if (t.fontStyle & 2) span.style.fontWeight = "700";
               line.appendChild(span);
-              chars.push({ el: span, ws: t.content[c] === " " });
+              chars.push({ el: span, ws: t.content[c] === " ", row: row, col: col++ });
             }
           }
           var last = code.lastChild;
@@ -628,18 +632,36 @@
             code.removeChild(last);
 
           fillGutter(parts.gutter, code.querySelectorAll(".line").length);
-          var base = code.getBoundingClientRect();
           var caret = document.createElement("div");
           caret.className = "caret";
           code.appendChild(caret);
+          // caret spots come from the monospace grid (computed styles + canvas glyph advance), not
+          // client rects: rects read 0 while the runtime keeps a later host display:none, and read
+          // scaled while the editor entrance tween holds scale 0.985
+          var codeCs = getComputedStyle(code);
+          var lineCs = getComputedStyle(code.querySelector(".line"));
+          var padL = parseFloat(codeCs.paddingLeft) || 0;
+          var padT = parseFloat(codeCs.paddingTop) || 0;
+          var rowH = Math.max(parseFloat(lineCs.lineHeight) || 0, parseFloat(lineCs.minHeight) || 0);
+          var gridCtx = document.createElement("canvas").getContext("2d");
+          var cw = 0;
+          if (chars.length) {
+            var tokCs = getComputedStyle(chars[0].el);
+            gridCtx.font = tokCs.fontSize + " " + tokCs.fontFamily;
+            cw = gridCtx.measureText("M").width;
+          }
+          function spot(c, after) {
+            // 2 px clear of the glyph, as the code-snippet blocks keep their caret
+            return { x: padL + (c.col + (after ? 1 : 0)) * cw + (after ? 2 : 0), y: padT + c.row * rowH };
+          }
 
           tl.set(parts.scene, { opacity: 0 }, 0);
           tl.to(parts.scene, { opacity: 1, duration: FADE, ease: "power1.out" }, start);
 
           var t0 = start + FADE;
           if (chars.length) {
-            var r0 = chars[0].el.getBoundingClientRect();
-            tl.set(caret, { x: r0.left - base.left, y: r0.top - base.top, opacity: 1 }, 0);
+            var p0 = spot(chars[0], false);
+            tl.set(caret, { x: p0.x, y: p0.y, opacity: 1 }, 0);
           }
           chars.forEach(function (c, i) {
             var at = t0 + i * PER;
@@ -647,12 +669,8 @@
             // soft per-char fade (overlaps neighbors → smooth wave); whitespace appears instantly
             tl.to(c.el, { opacity: 1, duration: c.ws ? 0.01 : 0.12, ease: "power1.out" }, at);
             // caret glides at constant speed to each char's right edge (linear = no stop-start jitter)
-            var r = c.el.getBoundingClientRect();
-            tl.to(
-              caret,
-              { x: r.right - base.left, y: r.top - base.top, duration: PER, ease: "none" },
-              at,
-            );
+            var p = spot(c, true);
+            tl.to(caret, { x: p.x, y: p.y, duration: PER, ease: "none" }, at);
           });
         }
 

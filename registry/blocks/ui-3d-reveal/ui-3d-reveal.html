@@ -2192,8 +2192,15 @@
           // address pill: as wide as its text plus 28 px a side, centred under the tagline
           var urlEl = document.querySelector(S + " .url-text");
           urlEl.textContent = text(V.url, "matintellect.com");
+          // measured on a canvas from the computed font, not with getComputedTextLength: the runtime
+          // keeps a host that starts later display:none, where SVG text measures 0 and the pill
+          // collapses to a 56 px circle when fonts.ready re-runs this after the host is hidden again
+          var pillCtx = document.createElement("canvas").getContext("2d");
           function layoutPill() {
-            var w = urlEl.getComputedTextLength() + 56;
+            var cs = getComputedStyle(urlEl);
+            pillCtx.font = cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+            pillCtx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
+            var w = pillCtx.measureText(urlEl.textContent).width + 56;
             var x = parseFloat(urlEl.getAttribute("x")) - w / 2;
             document.querySelectorAll(S + " .url-border, " + S + " .url-bg").forEach(function (r) {
               r.setAttribute("x", x);

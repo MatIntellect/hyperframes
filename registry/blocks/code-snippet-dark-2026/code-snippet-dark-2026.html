@@ -503,7 +503,9 @@
             user-select: none;
           }
 
-          .line.is-active .line-number {
+          /* data-active is written by tl.set on the timeline (not a tl.call class toggle), so a seek
+             back reverts it and the active line number is the same whatever the seek order */
+          .line[data-active="1"] .line-number {
             color: var(--gutter-active-fg);
           }
 
@@ -802,6 +804,8 @@
                 const line = document.createElement("div");
                 line.className = "line";
                 line.dataset.lineIndex = String(index);
+                // explicit start state for the timeline's attr sets to revert to
+                line.dataset.active = "0";
 
                 const lineNumber = document.createElement("span");
                 lineNumber.className = "line-number";
@@ -832,12 +836,18 @@
               root.querySelector(".editor").appendChild(caret);
             }
 
+            // client rects are measured while the workbench entrance is scaled; convert to editor-local px
+            function editorScale(editor, editorBox) {
+              return editorBox.width / editor.offsetWidth;
+            }
+
             function caretPointForElement(editor, el) {
               const editorBox = editor.getBoundingClientRect();
               const charBox = el.getBoundingClientRect();
+              const s = editorScale(editor, editorBox);
               return {
-                x: charBox.right - editorBox.left + 2,
-                y: charBox.top - editorBox.top + 3,
+                x: (charBox.right - editorBox.left) / s + 2,
+                y: (charBox.top - editorBox.top) / s + 3,
               };
             }
 
@@ -845,16 +855,17 @@
               const editorBox = editor.getBoundingClientRect();
               const lineBox = line.getBoundingClientRect();
               const codeBox = line.querySelector(".line-code").getBoundingClientRect();
+              const s = editorScale(editor, editorBox);
               return {
-                x: codeBox.left - editorBox.left,
-                y: lineBox.top - editorBox.top + 3,
+                x: (codeBox.left - editorBox.left) / s,
+                y: (lineBox.top - editorBox.top) / s + 3,
               };
             }
 
             function lineHighlightY(editor, line) {
               const editorBox = editor.getBoundingClientRect();
               const lineBox = line.getBoundingClientRect();
-              return lineBox.top - editorBox.top;
+              return (lineBox.top - editorBox.top) / editorScale(editor, editorBox);
             }
 
             function buildTimeline(root, compositionId) {
@@ -906,13 +917,10 @@
                 tl.set(activeLine, { y: lineHighlightY(editor, line) - sy }, time);
                 const p0 = caretPointForLineStart(editor, line);
                 tl.set(caret, { x: p0.x, y: p0.y - sy }, time);
-                tl.call(
-                  () => {
-                    lineEls.forEach((item) => item.classList.toggle("is-active", item === line));
-                  },
-                  [],
-                  time,
-                );
+                // the active line is timeline state: a tl.call toggle is not undone on a seek back,
+                // tl.set is (lint-rules.mdx css_transition_used: the visual change on the timeline)
+                tl.set(line, { attr: { "data-active": 1 } }, time);
+                if (lineIndex > 0) tl.set(lineEls[lineIndex - 1], { attr: { "data-active": 0 } }, time);
               });
               charSchedule.forEach(({ char, line, time }) => {
                 const p = caretPointForElement(editor, char);

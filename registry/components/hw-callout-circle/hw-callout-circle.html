@@ -144,7 +144,8 @@
          boil / deform / conn-layer / pop wrapper stack is REQUIRED — boil
          owns x/y/rotation, the squash owns the deform, the label pops on
          .hw-co-pop) and ALL helpers below. Size the wrapper around your
-         target, then:
+         target and give its first svg viewBox="0 0 <width> <height>" of the
+         wrapper in px (hwCalloutBuild reads it), then:
 
            hwCalloutBuild("#hw-my-callout", { scribble: true, seed: 4,
              label: "look here!", labelAt: "right",

@@ -787,7 +787,9 @@
             var tl = gsap.timeline({ paused: true });
 
             // IN: chrome settles, then the pen stroke and anchors reveal.
-            tl.to(stage, { opacity: 1, y: 0, duration: STAGE_IN, ease: "power2.out" }, 0);
+            // the end keeps the start's cqh unit: a bare 0 makes GSAP convert 1.8cqh to px by measuring the
+            // container, which reads wrong while the host is hidden before its start
+            tl.to(stage, { opacity: 1, y: "0cqh", duration: STAGE_IN, ease: "power2.out" }, 0);
             tl.to(
               path,
               { strokeDashoffset: 0, duration: PATH_DRAW_DURATION, ease: "none" },

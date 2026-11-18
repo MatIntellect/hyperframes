@@ -91,7 +91,12 @@
   <body>
     <!-- Self-preview wrapper. WIRING: copy the .yt-hl CSS and drop
          <div class="yt-hl" id="yt-my-hl"></div> ABOVE the content to spotlight
-         (same region). Then:
+         (same region). x / y / rx / ry are percent of the .yt-hl box: it is
+         position:absolute; inset:0, so it covers its positioned parent (the
+         host box when mounted whole; the whole frame when the host fills it).
+         ytHighlightIn / ytHighlightTo / ytHighlightOut are globals (window.*)
+         defined in the last <script> of this file; copy those three
+         functions. Then:
 
            ytHighlightIn(tl, "#yt-my-hl", 3.0, { x: "28%", y: "50%", rx: "20%", ry: "30%" });
            ytHighlightTo(tl, "#yt-my-hl", 5.0, { x: "72%" }, 0.8);   // glide to the next target
@@ -100,7 +105,7 @@
     <div
       id="yt-hl-root"
       data-composition-id="yt-feather-highlight"
-      data-composition-variables='[{"id": "x", "type": "number", "role": "layout", "label": "Across", "description": "Horizontal centre of the spotlight, percent of the frame width.", "default": 50, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "first_y", "type": "number", "role": "layout", "label": "First target", "description": "Vertical centre of the first spotlit area, percent of the frame height.", "default": 30, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "second_y", "type": "number", "role": "layout", "label": "Second target", "description": "Vertical centre the spotlight glides to, percent of the frame height.", "default": 70, "min": 10, "max": 90, "step": 1, "unit": "%"}]'
+      data-composition-variables='[{"id": "x", "type": "number", "role": "layout", "label": "Across", "description": "Horizontal centre of the spotlight, percent of the host box width (of the frame when the host fills the frame).", "default": 50, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "first_y", "type": "number", "role": "layout", "label": "First target", "description": "Vertical centre of the first spotlit area, percent of the host box height (of the frame when the host fills the frame).", "default": 30, "min": 10, "max": 90, "step": 1, "unit": "%"}, {"id": "second_y", "type": "number", "role": "layout", "label": "Second target", "description": "Vertical centre the spotlight glides to, percent of the host box height (of the frame when the host fills the frame).", "default": 70, "min": 10, "max": 90, "step": 1, "unit": "%"}]'
       data-start="0"
       data-duration="5"
     >

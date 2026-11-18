@@ -1,5 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  data-composition-variables='[
+    { "id": "word", "type": "string", "role": "content", "label": "Word", "description": "The one word the beat is about, shown huge and faint behind the subject as background texture; fitted to the host width, up to 14 letters.", "default": "Монтаж", "maxLength": 14 }
+  ]'
+>
   <head>
     <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
@@ -70,31 +75,35 @@
         color: var(--mk-emph-color);
         pointer-events: none;
       }
+      /* the unit: the word fills the host box, which gives place and size */
+      #mk-emph-root {
+        position: absolute;
+        inset: 0;
+      }
     </style>
   </head>
   <body>
-    <!-- Self-preview wrapper. WIRING: copy the .mk-emphasis CSS, the markup
-         below (keep aria-hidden + data-layout-allow-overflow + data-layout-ignore —
-         the word is decoration nobody reads, may run to the frame edge and is
-         usually wider than the canvas), and the helpers. -->
-    <div
-      id="mk-emph-root"
-      data-composition-id="mk-emphasis-type"
-      data-start="0"
-      data-duration="4"
-      data-width="1920"
-      data-height="1080"
-    >
+    <!-- Two ways in.
+         WHOLE: mount by the data-composition-src line on a host that sets place
+         and size in style (usually the full frame behind the subject); variable
+         `word`. The word is fitted to the host width and centred, fades in at
+         0.3 s, drifts left, and fades out over the host clip's last 0.6 s.
+         WIRING (your own element): copy the .mk-emphasis CSS and the
+         mkEmphasisIn / mkEmphasisOut helpers from this file, add the word
+         behind the subject (the attributes stay: a 260px word is decoration,
+         usually wider than the canvas; place it with top/left):
+           <div class="mk-emphasis" id="mk-my-word" aria-hidden="true" data-layout-allow-overflow data-layout-ignore style="top: 800px; left: 60px">Монтаж</div>
+         then:
+           mkEmphasisIn(tl, "#mk-my-word", 1.0, { drift: -120, hold: 6 });
+           mkEmphasisOut(tl, "#mk-my-word", 7.5); -->
+    <div id="mk-emph-root" data-composition-id="mk-emphasis-type" data-start="0" data-duration="4">
       <div
         class="mk-emphasis"
         id="mk-emph-demo"
         aria-hidden="true"
         data-layout-allow-overflow
         data-layout-ignore
-        style="top: 400px; left: -40px"
-      >
-        Монтаж
-      </div>
+      ></div>
       <div
         id="mk-emph-drv"
         class="clip"
@@ -131,12 +140,48 @@
           tl.to(target, { opacity: 0, duration: 0.5, ease: "power2.in" }, at);
         };
 
-        // Self-preview timeline (not part of the snippet you copy).
-        var tl = gsap.timeline({ paused: true });
-        window.mkEmphasisIn(tl, "#mk-emph-demo", 0.3, { drift: -110, hold: 3.2 });
-        window.mkEmphasisOut(tl, "#mk-emph-demo", 3.4);
-        tl.set("#mk-emph-root", { visibility: "hidden" }, 3.98);
-        window.__timelines["mk-emphasis-type"] = tl;
+        // ---- the unit (not part of the snippet you copy) ----
+        var root = document.getElementById("mk-emph-root");
+        var el = document.getElementById("mk-emph-demo");
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        var word =
+          typeof vars.word === "string" && vars.word.trim() !== "" ? vars.word.trim() : "Монтаж";
+        el.textContent = word;
+        // length from the host clip: the runtime strips data-duration from a mounted root (flattenedRoot.ts:8-19)
+        var D = parseFloat(
+          ((root.parentElement && root.parentElement.closest("[data-duration]")) || root).dataset
+            .duration || "4",
+        );
+        // fonts first (format.md:151): the word is sized from its measured width
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["mk-emphasis-type"] = document.fonts
+          .load('700 100px "Bebas Neue"', word)
+          .then(function () {
+            var W = root.clientWidth;
+            var H = root.clientHeight;
+            var fit = window.__hyperframes.fitTextFontSize(word.toUpperCase(), {
+              fontFamily: "Bebas Neue",
+              fontWeight: 700,
+              maxWidth: W * 0.8,
+              baseFontSize: 260,
+              minFontSize: 28,
+              step: 1,
+            });
+            el.style.fontSize = fit.fontSize + "px";
+            // centred; the drift runs from +40 to -60 px, inside the 10% margins
+            el.style.left = (W - el.offsetWidth) / 2 + "px";
+            el.style.top = (H - el.offsetHeight) / 2 + "px";
+            var out = Math.max(1.4, D - 0.6);
+            var tl = gsap.timeline({ paused: true });
+            window.mkEmphasisIn(tl, el, 0.3, { drift: -100, hold: out - 0.3 });
+            window.mkEmphasisOut(tl, el, out);
+            tl.set({}, {}, D);
+            window.__timelines["mk-emphasis-type"] = tl;
+          });
       })();
     </script>
   </body>

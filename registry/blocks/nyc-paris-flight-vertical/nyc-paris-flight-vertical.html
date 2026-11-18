@@ -227,7 +227,7 @@
         white-space: nowrap;
         box-shadow: 0 20px 44px rgb(0 0 0 / 40%);
         opacity: 0;
-        transform: scale(0.78);
+        /* the start scale is set in the script: GSAP owns the whole transform of what it tweens */
       }
       #npfv-title {
         position: absolute;
@@ -556,6 +556,9 @@
 
         // ритм родной, привязан к звуку
         var tl = gsap.timeline({ paused: true });
+        // The badge's start scale lives here, not in CSS, so its pop-in starts from the same size whatever
+        // order the frames are reached in.
+        gsap.set("#npfv-badge", { scale: 0.78 });
         tl.from("#npfv-map-plane", { scale: 1.1, x: -38, y: 20, opacity: 0.94, duration: 1.05, ease: "power2.out" }, 0.16);
         tl.from("#npfv-title", { y: 28, scale: 0.97, opacity: 0, duration: 0.52, ease: "expo.out" }, 0.24);
         tl.from("#npfv-eyebrow", { x: -22, opacity: 0, duration: 0.36, ease: "power3.out" }, 0.32);
@@ -564,15 +567,20 @@
         tl.from("#npfv-from", { scale: 0.12, opacity: 0, duration: 0.34, ease: "back.out(2.8)" }, 0.7);
         tl.from("#npfv-to", { scale: 0.12, opacity: 0, duration: 0.34, ease: "elastic.out(1, 0.5)" }, 0.86);
         tl.from("#npfv-plane", { scale: 0.48, opacity: 0, duration: 0.3, ease: "back.out(2.2)" }, 1.08);
-        tl.to("#npfv-route-glow", { strokeDashoffset: 0, duration: 3.1, ease: "power1.inOut" }, 1.16);
-        tl.to("#npfv-route-path", { strokeDashoffset: 0, duration: 3.05, ease: "power2.inOut" }, 1.2);
-        tl.to("#npfv-route-thread", { strokeDashoffset: 0, duration: 2.92, ease: "sine.inOut" }, 1.26);
+        // The hidden start is given as the exact L (fromTo), not read back from the page, and not rounded
+        // (autoRound: false): a start even a hair below L lets the round caps peek out as a dot at the city
+        // whenever a seek comes back before the draw
+        tl.fromTo("#npfv-route-glow", { strokeDashoffset: L, autoRound: false }, { strokeDashoffset: 0, duration: 3.1, ease: "power1.inOut", autoRound: false }, 1.16);
+        tl.fromTo("#npfv-route-path", { strokeDashoffset: L, autoRound: false }, { strokeDashoffset: 0, duration: 3.05, ease: "power2.inOut", autoRound: false }, 1.2);
+        tl.fromTo("#npfv-route-thread", { strokeDashoffset: L, autoRound: false }, { strokeDashoffset: 0, duration: 2.92, ease: "sine.inOut", autoRound: false }, 1.26);
         tl.to("#npfv-plane", { offsetDistance: "100%", duration: 3.25, ease: "sine.inOut" }, 1.17);
         tl.to("#npfv-plane-core", { scale: 1.06, duration: 0.2, repeat: 12, yoyo: true, ease: "sine.inOut" }, 1.22);
         tl.to("#npfv-map-plane", { scale: PUSH, duration: 3.2, ease: "sine.inOut" }, 1.28);
         ticks.forEach(function (tick, k) {
           tl.fromTo(tick, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "back.out(3)", immediateRender: false }, 1.34 + k * 0.44);
-          tl.to(tick, { scale: 0.6, opacity: 0.18, duration: 0.34, ease: "power2.out" }, 1.48 + k * 0.44);
+          // Starts where the pop ends (1.50), not inside it: two tweens on the same scale and opacity made
+          // the later one's start depend on which frame rendered last, so a seek drew the tick differently.
+          tl.to(tick, { scale: 0.6, opacity: 0.18, duration: 0.34, ease: "power2.out" }, 1.5 + k * 0.44);
         });
         tl.fromTo("#npfv-pulse", { scale: 0.52, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)", immediateRender: false }, 4.06);
         tl.to("#npfv-doodle-a", { strokeDashoffset: 0, duration: 0.54, ease: "power2.out" }, 4.18);

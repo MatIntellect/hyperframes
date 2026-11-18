@@ -88,7 +88,8 @@
       var(--hf-line-y, 0px)
     );
     filter: blur(var(--hf-line-blur, 0px));
-    will-change: transform, filter, opacity;
+    /* no will-change: a will-change layer keeps the raster of its first paint (scale and sub-pixel
+       offset), so a line met mid-slide after a seek from the end is drawn differently */
   }
 </style>
 

@@ -601,22 +601,25 @@
           renderState(code, state);
           var lines = code.querySelectorAll(".line");
           fillGutter(parts.gutter, lines.length);
-          var base = code.getBoundingClientRect();
           var idx = Math.max(0, Math.min(lines.length - 1, targetIdx));
-          var lr = lines[idx].getBoundingClientRect();
+          // the box is placed by layout inside its line, not by measured rects: the runtime keeps a
+          // host that starts later display:none while this runs, where rects measure 0. It ends
+          // flush with the line so the code's right padding keeps it clear of the window edge
           var box = document.createElement("div");
           box.className = "hl-box";
-          box.style.left = lr.left - base.left - 8 + "px";
-          box.style.top = lr.top - base.top - 1 + "px";
-          box.style.height = lr.height + 2 + "px";
-          code.insertBefore(box, code.firstChild);
+          box.style.left = "-8px";
+          box.style.right = "0";
+          box.style.top = "-1px";
+          box.style.bottom = "-1px";
+          box.style.zIndex = "-1";
+          lines[idx].insertBefore(box, lines[idx].firstChild);
           tl.set(parts.scene, { opacity: 0 }, 0);
           tl.to(parts.scene, { opacity: 1, duration: FADE, ease: "power1.out" }, start);
           var at = start + FADE + 0.2;
           tl.fromTo(
             box,
-            { width: 0, opacity: 0 },
-            { width: lr.width + 18, opacity: 1, duration: SWEEP, ease: "power2.inOut" },
+            { clipPath: "inset(0% 100% 0% 0%)", opacity: 0 },
+            { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: SWEEP, ease: "power2.inOut" },
             at,
           );
           for (var i = 0; i < lines.length; i++) {

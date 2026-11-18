@@ -123,7 +123,8 @@
             align-items: center;
             justify-content: center;
             padding: var(--space-2, 2cqmin);
-            will-change: transform, opacity;
+            /* no will-change: a will-change layer keeps the sub-pixel raster of its first paint, so a
+               seek that first paints the stage at another y offset shifts every later frame */
           }
 
           .cs-stage svg {

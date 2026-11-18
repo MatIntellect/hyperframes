@@ -262,8 +262,14 @@
         var unit = [media, svg, caption];
         var cx = S.x + S.w / 2,
           cy = S.y + S.h / 2;
-        unit.forEach(function (el) {
-          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - (el.offsetLeft || 0) + "px " + (cy - (el.offsetTop || 0)) + "px" });
+        // each element's own top-left, as set above (svg sits at 0,0): offsetLeft/offsetTop read 0 in a hidden host
+        var corners = [
+          [S.x, S.y],
+          [0, 0],
+          [S.x - 40, S.y + S.h + 42],
+        ];
+        unit.forEach(function (el, i) {
+          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - corners[i][0] + "px " + (cy - corners[i][1]) + "px" });
         });
         function boil() {
           var step = Math.floor((tl.time() * 30) / CONFIG.boil.frameDrop);

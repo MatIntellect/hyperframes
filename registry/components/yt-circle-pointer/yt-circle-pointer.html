@@ -1,5 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  data-composition-variables='[
+    { "id": "chip", "type": "string", "role": "content", "label": "Chip unit", "description": "Abbreviated unit of the seconds left while the ring holds, the same after any number (сек, с, s); empty means no chip.", "default": "сек", "maxLength": 8 }
+  ]'
+>
   <head>
     <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
@@ -100,8 +105,15 @@
     </style>
   </head>
   <body>
-    <!-- Self-preview wrapper. WIRING: copy the .yt-circle / .yt-count CSS and
-         markup patterns, position over your target, then:
+    <!-- A red ring drawn on around a target, with a countdown chip.
+         Whole: mount on a host whose style box is the target; the ring fills
+         the box (at most 520x260), the chip sits top right and counts the
+         seconds the ring holds; the ring leaves before the host ends.
+         WIRING, for elements of your own: copy the CSS rules .yt-circle,
+         .yt-circle svg, .yt-circle ellipse, .yt-count, .yt-count .num; the
+         markup of #yt-ptr-circle and #yt-ptr-count with new ids, placed over
+         your target; the helpers block under "copy these helpers into the
+         host script" (before your timeline code); then on your timeline:
 
            ytCircleOn(tl, "#yt-my-circle", 3.0);          // draws the ring
            ytCircleOff(tl, "#yt-my-circle", 6.0);
@@ -182,14 +194,65 @@
           }
         };
 
-        // Self-preview timeline.
+        // ---- the unit: ring sized to the host box, timing from the host clip ----
+        var root = document.getElementById("yt-ptr-root");
+        var vars =
+          window.__hyperframes && window.__hyperframes.getVariables
+            ? window.__hyperframes.getVariables()
+            : {};
+        var chip = typeof vars.chip === "string" ? vars.chip.trim() : "сек";
+        // length from the host clip: the runtime strips data-duration from a mounted root (flattenedRoot.ts:8-19)
+        var D = parseFloat(
+          ((root.parentElement && root.parentElement.closest("[data-duration]")) || root).dataset
+            .duration || "5",
+        );
+        // The ring fills the host box, capped at the 520x260 ring of a full-frame host.
+        var W = root.clientWidth || 1080;
+        var H = root.clientHeight || 1920;
+        var on = Math.min(1.0, D * 0.2);
+        var off = Math.max(on + 0.8, D - 0.8);
+        // the chip counts the whole seconds the ring holds; no whole second, no chip
+        var from = Math.floor(off - 0.7);
+        if (from < 1) chip = "";
+        var countEl = document.getElementById("yt-ptr-count");
+        if (chip) countEl.querySelector(".num").nextElementSibling.textContent = chip;
+        else countEl.style.display = "none";
+        // On a small host the ring takes the box below the chip, so the chip never covers it.
+        var top0 = 0;
+        var rw = Math.max(80, Math.min(W - 24, 520));
+        var rh = Math.max(40, Math.min(H - 24, 260));
+        if (chip && countEl.offsetTop + countEl.offsetHeight + 12 > (H - rh) / 2) {
+          top0 = countEl.offsetTop + countEl.offsetHeight + 12;
+          rh = Math.max(40, Math.min(H - top0 - 12, 260));
+        }
+        var ring = document.getElementById("yt-ptr-circle");
+        ring.style.cssText =
+          "left:" +
+          (W - rw) / 2 +
+          "px;top:" +
+          (top0 + (H - top0 - rh) / 2) +
+          "px;width:" +
+          rw +
+          "px;height:" +
+          rh +
+          "px";
+        ring.querySelector("svg").setAttribute("viewBox", "0 0 " + rw + " " + rh);
+        var ell = ring.querySelector("ellipse");
+        ell.setAttribute("cx", rw / 2);
+        ell.setAttribute("cy", rh / 2);
+        ell.setAttribute("rx", rw / 2 - 16);
+        ell.setAttribute("ry", rh / 2 - 20);
+
         var tl = gsap.timeline({ paused: true });
-        window.ytCountIn(tl, "#yt-ptr-count", 0.3);
-        window.ytCountdown(tl, "#yt-ptr-count", 0.7, 3);
-        window.ytCircleOn(tl, "#yt-ptr-circle", 1.0);
-        window.ytCircleOff(tl, "#yt-ptr-circle", 4.2);
-        tl.to("#yt-ptr-count", { opacity: 0, duration: 0.3, ease: "power2.in" }, 4.3);
-        tl.set("#yt-ptr-root", { visibility: "hidden" }, 4.98);
+        window.ytCircleOn(tl, "#yt-ptr-circle", on);
+        window.ytCircleOff(tl, "#yt-ptr-circle", off);
+        if (chip) {
+          document.querySelector("#yt-ptr-count .num").textContent = String(from);
+          window.ytCountIn(tl, "#yt-ptr-count", Math.min(0.3, D * 0.06));
+          window.ytCountdown(tl, "#yt-ptr-count", 0.7, from);
+          tl.to("#yt-ptr-count", { opacity: 0, duration: 0.3, ease: "power2.in" }, off + 0.1);
+        }
+        tl.set("#yt-ptr-root", { visibility: "hidden" }, D - 0.02);
         window.__timelines["yt-circle-pointer"] = tl;
       })();
     </script>

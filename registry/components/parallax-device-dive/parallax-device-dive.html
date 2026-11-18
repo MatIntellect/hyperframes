@@ -228,6 +228,10 @@
           }
 
           .pdd-hero {
+            /* The fitted dive keeps the header in view: grown from its centre, the card's top climbed
+               another ~13 px into the title and met it 2 px apart at the deepest pose. Growing from the
+               top edge keeps the authored offsets and leaves the header clear. */
+            transform-origin: 50% 0;
             min-height: 24cqh;
             padding: 2.1cqh;
             overflow: hidden;

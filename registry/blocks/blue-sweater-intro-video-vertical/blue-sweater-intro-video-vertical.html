@@ -138,7 +138,8 @@
         position: absolute;
         left: 0;
         top: 0;
-        transform: translate(-50%, -50%);
+        /* centred by gsap.set xPercent/yPercent in the script, not a CSS translate: GSAP re-reads a CSS
+           percentage translate from layout, which a host hidden until its start does not have */
         font-family: var(--font-display, "Bebas Neue"), sans-serif;
         font-weight: 700;
         font-size: 150px;
@@ -598,6 +599,7 @@
         var INTRO = txt(V.intro, "Представляем"),
           BRAND = txt(V.brand, "MatIntellect");
         $("intro").textContent = INTRO;
+        gsap.set($("intro"), { xPercent: -50, yPercent: -50 });
         $("prompt").textContent = txt(V.prompt, "Посоветуй, кто смонтирует мне рилсы из записи с ИИ: быстро, по делу и без монтажёра.");
         Array.prototype.forEach.call(document.querySelectorAll(".bswv-mname"), function (e) {
           e.textContent = txt(V.model, "Opus 5.5");
@@ -627,7 +629,16 @@
           cut = function (a, b) {
             return INTRO.slice(Math.round(n * a), Math.max(Math.round(n * a) + 1, Math.round(n * b)));
           };
-        var introW = $("intro").offsetWidth,
+        // sizes come from the computed font on a canvas, not from layout: this callback runs after the font
+        // wait, when a host that starts later is display:none again and every offsetWidth reads 0
+        var measureCtx = document.createElement("canvas").getContext("2d");
+        function textBox(el, str) {
+          var cs = getComputedStyle(el);
+          measureCtx.font = cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+          measureCtx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
+          return { w: Math.round(measureCtx.measureText(str).width), h: Math.round(parseFloat(cs.lineHeight)) };
+        }
+        var introW = textBox($("intro"), INTRO).w,
           kw = introW / 560;
         var rems = [
           [cut(0, 0.45), -220, -44],
@@ -639,16 +650,18 @@
           e.className = "bswv-piece bswv-rem";
           e.textContent = r[0];
           $("rems").appendChild(e);
-          e.style.left = r[1] * kw - e.offsetWidth / 2 + "px";
-          e.style.top = r[2] - e.offsetHeight / 2 + "px";
+          var eb = textBox(e, r[0]);
+          e.style.left = r[1] * kw - eb.w / 2 + "px";
+          e.style.top = r[2] - eb.h / 2 + "px";
           return e;
         });
 
         // знак: целиком по середине; куски – те же буквы на своих местах в знаке (замер), прилетают родными путями
         var mark = $("mark");
         mark.textContent = BRAND;
-        var mw = mark.offsetWidth,
-          mh = mark.offsetHeight;
+        var markBox = textBox(mark, BRAND),
+          mw = markBox.w,
+          mh = markBox.h;
         mark.style.left = -mw / 2 + "px";
         mark.style.top = -mh / 2 - 6 + "px";
         var probe = document.createElement("span");
@@ -662,7 +675,7 @@
         for (var i = 0; i < 5; i++) {
           if (bounds[i + 1] <= bounds[i]) continue;
           probe.textContent = BRAND.slice(0, bounds[i]);
-          var x0 = bounds[i] ? probe.offsetWidth : 0;
+          var x0 = bounds[i] ? textBox(probe, probe.textContent).w : 0;
           var e = document.createElement("span");
           e.className = "bswv-piece bswv-frag";
           e.textContent = BRAND.slice(bounds[i], bounds[i + 1]);
@@ -684,11 +697,36 @@
         // ход разработчиков, 11 с; вся цепочка – вложенная шкала, ставится на первый момент
         var s = gsap.timeline({ defaults: { ease: "power3.out" } });
         var cur = $("cursor");
-        function to(x, y, rot, t, d, ease) {
-          var p = P(x, y);
-          s.to(cur, { x: p.x, y: p.y, rotation: rot, duration: d, ease: ease || "power2.inOut", overwrite: "auto" }, t);
+        // No two tweens own a property of an element at the same moment. Overlapping tweens render in timeline
+        // order going forward and in reverse order going back, and overwrite: "auto" kills a tween on its first
+        // render, which a jump makes at another moment: either way a moment reached from the end differed
+        // from the same moment played forward. A tween the next one used to cut off now runs only up to that
+        // moment, with the full tween's curve: handOver() gives the fraction it reaches and the ease that keeps it
+        // (not named cut: the word's slicing helper above is a var named cut and would shadow it)
+        function handOver(easeName, full, run) {
+          var E = gsap.parseEase(easeName),
+            r = Math.min(1, run / full),
+            f = E(r);
+          return {
+            f: f,
+            ease: function (u) {
+              return E(u * r) / f;
+            },
+          };
+        }
+        function mix(a, b, f) {
+          return a + (b - a) * f;
+        }
+        var last;
+        // run: how long the leg plays before the next leg takes over (default: all of it)
+        function to(x, y, rot, t, d, ease, run) {
+          var p = P(x, y),
+            c = handOver(ease || "power2.inOut", d, run || d);
+          last = { x: mix(last.x, p.x, c.f), y: mix(last.y, p.y, c.f), rot: mix(last.rot, rot, c.f) };
+          s.to(cur, { x: last.x, y: last.y, rotation: last.rot, duration: Math.min(d, run || d), ease: c.ease }, t);
         }
         var p0 = P(690, 846);
+        last = { x: p0.x, y: p0.y, rot: -8 };
         s.set(cur, { x: p0.x, y: p0.y, rotation: -8, scale: 0.72, opacity: 0 }, 0);
         s.to($("warmup"), { opacity: 1, duration: 0.01 }, 0);
         s.fromTo($("warm"), { x: -820 * K, scaleX: 0.42, opacity: 0, filter: "blur(14px)" }, { x: -25 * K, scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, 0.02);
@@ -701,7 +739,14 @@
         to(982, 642, -6, 1.28, 0.24);
         s.to($("intro"), { opacity: 0.26, filter: "blur(4px)", duration: 0.03, ease: "power2.in" }, 1.43);
         s.to($("burst"), { opacity: 1, duration: 0.02 }, 1.4);
-        s.fromTo(rems, { opacity: 0, x: 0, y: 0, filter: "blur(2px)" }, { opacity: 0.32, x: function (k) { return [-22, 8, 32, -10][k]; }, y: function (k) { return [-10, 5, -18, 28][k]; }, filter: "blur(7px)", duration: 0.055, stagger: 0.004, ease: "power2.out" }, 1.435);
+        // the fade-out at 1.49 takes over opacity and blur from each piece's entrance: the entrance's opacity and
+        // blur run only up to 1.49 (handOver), its drift runs whole
+        rems.forEach(function (e, k) {
+          var t0 = 1.435 + k * 0.004,
+            c = handOver("power2.out", 0.055, 1.49 - t0);
+          s.fromTo(e, { x: 0, y: 0 }, { x: [-22, 8, 32, -10][k], y: [-10, 5, -18, 28][k], duration: 0.055, ease: "power2.out" }, t0);
+          s.fromTo(e, { opacity: 0, filter: "blur(2px)" }, { opacity: 0.32 * c.f, filter: "blur(" + mix(2, 7, c.f) + "px)", duration: Math.min(0.055, 1.49 - t0), ease: c.ease }, t0);
+        });
         s.to($("intro"), { opacity: 0, y: -8, filter: "blur(10px)", duration: 0.08, ease: "power2.in" }, 1.47);
         s.to(rems, { opacity: 0, filter: "blur(11px)", duration: 0.07, ease: "power2.in" }, 1.49);
         s.to($("introsc"), { opacity: 0, duration: 0.06 }, 1.56);
@@ -718,16 +763,26 @@
           var p = PATHS[k],
             r = k % 2 ? 1 : -1;
           s.set(b, { x: p.source[0], y: p.source[1], scale: 0.78, rotation: 3 * r, filter: "blur(8px)" }, 1.45);
-          s.to(b, { opacity: 1, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.055 }, 1.455);
+          // the scatter at 1.5 takes over rotation: the settle's rotation runs only up to 1.5 (handOver)
+          var cr = handOver("power3.out", 0.055, 0.045);
+          s.to(b, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.055 }, 1.455);
+          s.to(b, { rotation: mix(3 * r, 0, cr.f), duration: 0.045, ease: cr.ease }, 1.455);
           s.to(b, { x: p.scatter[0], y: p.scatter[1], rotation: 2 * r, duration: 0.2, ease: "sine.out" }, 1.5);
           s.to(b, { x: p.drift[0], y: p.drift[1], rotation: r, duration: 0.2, ease: "sine.inOut" }, 1.7);
           s.to(b, { x: p.select[0], y: p.select[1], rotation: 0, duration: 0.2, ease: "sine.inOut" }, 1.9);
           s.to(b, { x: p.squeeze[0], y: p.squeeze[1], scale: 1, filter: "blur(0.6px)", duration: 0.07, ease: "sine.inOut" }, 2.1);
-          s.to(b, { x: p.release[0], y: p.release[1], scale: 0.84, filter: "blur(1.5px)", duration: 0.05, ease: "sine.inOut" }, 2.17);
+          // a block that fades at 2.17 has its scale and blur from the fade alone (the fade, later in the
+          // timeline, always won them); the release keeps only the move
+          var release = { x: p.release[0], y: p.release[1], duration: 0.05, ease: "sine.inOut" };
+          if (p.fade >= 2.22) {
+            release.scale = 0.84;
+            release.filter = "blur(1.5px)";
+          }
+          s.to(b, release, 2.17);
           s.to(b, { opacity: 0, scale: 0.38, filter: "blur(7px)", duration: 0.05, ease: "power2.in" }, p.fade);
         });
         to(1540, 112, -9, 1.56, 0.26);
-        to(380, 252, -7, 1.82, 0.16);
+        to(380, 252, -7, 1.82, 0.16, null, 0.14);
         s.fromTo($("sel"), { opacity: 0, scaleX: 0.06, scaleY: 0.1, x: 0, y: 0, filter: "blur(3px)" }, { opacity: 1, scaleX: 1, scaleY: 1, x: 42, y: 52, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 1.96);
         to(930, 478, -4, 1.96, 0.14);
         to(1168, 560, -4, 2.12, 0.14);
@@ -743,9 +798,20 @@
         ];
         frags.forEach(function (f, k) {
           var q = FM[k];
-          s.fromTo(f, { opacity: 0, x: q.from[0], y: q.from[1], scale: 0.99, filter: "blur(" + q.from[2] + "px)" }, { opacity: q.vis, x: q.carry[0], y: q.carry[1], scale: 1, filter: "blur(1.2px)", duration: 0.16, ease: "sine.out", overwrite: "auto" }, 2.12 + k * 0.004);
-          s.to(f, { x: q.settle[0], y: q.settle[1], filter: "blur(0.35px)", duration: 0.28, overwrite: "auto" }, 2.28 + k * 0.003);
-          s.to(f, { opacity: 0, x: q.settle[0] + [8, -6, 2, -8, 6][k], y: q.settle[1] + [-6, 7, 4, -5, 3][k], filter: "blur(4px)", duration: 0.14, ease: "power2.out", overwrite: "auto" }, 2.31 + k * 0.002);
+          // carry (tf), settle (ta) and fade (tb) hand x, y and blur on to each other: each runs only up to
+          // the next one's start (handOver), as overwrite: "auto" used to stop it
+          var tf = 2.12 + k * 0.004,
+            ta = 2.28 + k * 0.003,
+            tb = 2.31 + k * 0.002,
+            cf = handOver("sine.out", 0.16, ta - tf),
+            ca = handOver("power3.out", 0.28, tb - ta);
+          var ax = mix(q.from[0], q.carry[0], cf.f),
+            ay = mix(q.from[1], q.carry[1], cf.f),
+            ab = mix(q.from[2], 1.2, cf.f);
+          s.fromTo(f, { opacity: 0, scale: 0.99 }, { opacity: q.vis, scale: 1, duration: 0.16, ease: "sine.out" }, tf);
+          s.fromTo(f, { x: q.from[0], y: q.from[1], filter: "blur(" + q.from[2] + "px)" }, { x: ax, y: ay, filter: "blur(" + ab + "px)", duration: Math.min(0.16, ta - tf), ease: cf.ease }, tf);
+          s.to(f, { x: mix(ax, q.settle[0], ca.f), y: mix(ay, q.settle[1], ca.f), filter: "blur(" + mix(ab, 0.35, ca.f) + "px)", duration: tb - ta, ease: ca.ease }, ta);
+          s.to(f, { opacity: 0, x: q.settle[0] + [8, -6, 2, -8, 6][k], y: q.settle[1] + [-6, 7, 4, -5, 3][k], filter: "blur(4px)", duration: 0.14, ease: "power2.out" }, tb);
         });
         s.fromTo(mark, { opacity: 0, x: -12, y: 8, scale: 0.995, filter: "blur(5px)" }, { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.24, ease: "power4.out", overwrite: "auto" }, 2.38);
         s.to($("bstar"), { opacity: 0, duration: 0.12, ease: "power2.in" }, 2.32);
@@ -757,14 +823,44 @@
 
         // окно Claude: курсор целится в настоящие кнопки (замер в покое), а не в зашитые точки
         s.to($("ui"), { opacity: 1, duration: 0.08 }, 3.02);
-        var fr = frame.getBoundingClientRect();
-        function at(el, dx, dy) {
-          var r = el.getBoundingClientRect();
-          return { x: r.left - fr.left + r.width * dx, y: r.top - fr.top + r.height * dy };
+        // the boxes come from computed styles, not getBoundingClientRect: this callback runs after the font
+        // wait, when a host that starts later is display:none again and every rect reads 0 (the cursor flew
+        // to the frame corner). Each box: border-box x, y, w, h in frame coordinates plus its own borders
+        function len(v, base) {
+          return /%$/.test(v) ? (base * parseFloat(v)) / 100 : parseFloat(v);
         }
-        var sendP = at($("sendf"), 0.45, 0.55),
-          xP = at($("xbtn"), 0.45, 0.55),
-          fbP = at($("fbtn"), 0.5, 0.55);
+        function borders(box, cs) {
+          box.bl = parseFloat(cs.borderLeftWidth) || 0;
+          box.br = parseFloat(cs.borderRightWidth) || 0;
+          box.bt = parseFloat(cs.borderTopWidth) || 0;
+          box.bb = parseFloat(cs.borderBottomWidth) || 0;
+          return box;
+        }
+        // a box inside its parent's padding box, by its computed left/right/top/bottom/width/height;
+        // a box with neither left nor right (a static flex item) sits at the parent's start
+        function placed(el, parent) {
+          var cs = getComputedStyle(el),
+            iw = parent.w - parent.bl - parent.br,
+            ih = parent.h - parent.bt - parent.bb,
+            w = len(cs.width, iw),
+            h = len(cs.height, ih);
+          var x = cs.left !== "auto" ? len(cs.left, iw) : cs.right !== "auto" ? iw - len(cs.right, iw) - w : 0;
+          var y = cs.top !== "auto" ? len(cs.top, ih) : cs.bottom !== "auto" ? ih - len(cs.bottom, ih) - h : 0;
+          return borders({ x: parent.x + parent.bl + x, y: parent.y + parent.bt + y, w: w, h: h }, cs);
+        }
+        function at(box, dx, dy) {
+          return { x: box.x + box.w * dx, y: box.y + box.h * dy };
+        }
+        var frameBox = borders({ x: 0, y: 0, w: 0, h: 0 }, getComputedStyle(frame));
+        // scenes fill the frame's padding box; .bswv-c is the zero-size centre point at CX, CY
+        var centre = { x: frameBox.bl + CX, y: frameBox.bt + CY, w: 0, h: 0, bl: 0, br: 0, bt: 0, bb: 0 },
+          stackBox = placed($("stack"), centre),
+          ptBox = placed($("pt"), stackBox),
+          resultBox = placed(document.querySelector("#bswv-pt .bswv-result"), ptBox),
+          cardBox = placed($("card"), centre);
+        var sendP = at(placed($("sendf"), placed($("pf"), stackBox)), 0.45, 0.55),
+          xP = at(placed($("xbtn"), resultBox), 0.45, 0.55),
+          fbP = at(placed($("fbtn"), cardBox), 0.5, 0.55);
         s.fromTo($("stack"), { opacity: 0, scale: 0.88, y: 92, filter: "blur(14px)" }, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.66, ease: "expo.out" }, 3.05);
         s.fromTo($("pstar"), { opacity: 0, scale: 0.5, rotation: -16 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.38 }, 3.18);
         s.fromTo("#bswv-pe .bswv-placeholder", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.34 }, 3.3);
@@ -787,7 +883,12 @@
         var D1 = Math.max(0, ptext.length / 20 - 2.85 - 0.87),
           D2 = Math.max(1.3, $("res").textContent.length * 0.072) - 0.4;
         s.to($("sendf"), { opacity: 1, scale: 1, duration: 0.24 }, 7.32 + D1);
-        s.fromTo(cur, { x: sendP.x - 180, y: sendP.y + 280, rotation: -6, scale: 1, opacity: 0 }, { x: sendP.x, y: sendP.y + 280, rotation: -5, scale: 1, opacity: 1, duration: 0.48, ease: "power2.inOut" }, 6.92 + D1);
+        // the cursor's jump to the window's start point and full size is a set at its own moment, not a fromTo
+        // start: a fromTo start holds for every time before it once the playhead comes back from the end, so the
+        // intro cursor showed at full size and, until it faded at 2.99, at this start point; a set going back
+        // restores what was there before it
+        s.set(cur, { x: sendP.x - 180, y: sendP.y + 280, rotation: -6, scale: 1 }, 6.92 + D1);
+        s.to(cur, { x: sendP.x, rotation: -5, opacity: 1, duration: 0.48, ease: "power2.inOut" }, 6.92 + D1);
         s.to(cur, { x: sendP.x, y: sendP.y, rotation: -5, duration: 0.5, ease: "power2.inOut" }, 7.44 + D1);
         s.to($("sendf"), { scale: 0.86, duration: 0.08, ease: "power2.in" }, 7.9 + D1);
         s.to($("sendf"), { scale: 1, duration: 0.14, ease: "back.out(1.7)" }, 7.98 + D1);

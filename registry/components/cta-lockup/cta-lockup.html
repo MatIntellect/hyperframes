@@ -231,10 +231,12 @@
 
             var tl = gsap.timeline({ paused: true });
 
+            // Every y below keeps the cqh unit on both ends. A bare 0 made GSAP convert cqh to pixels by
+            // measuring, and on a host the runtime still keeps hidden that gave a different place.
             tl.fromTo(
               actionLine,
               { opacity: 0, y: "3.4cqh" },
-              { opacity: 1, y: 0, duration: ACTION_DURATION, ease: "power3.out" },
+              { opacity: 1, y: "0cqh", duration: ACTION_DURATION, ease: "power3.out" },
               0,
             );
             tl.fromTo(
@@ -242,7 +244,7 @@
               { scale: 0.72, y: "2.2cqh" },
               {
                 scale: 1,
-                y: 0,
+                y: "0cqh",
                 duration: BUTTON_DURATION,
                 ease: "back.out(1.7)",
               },
@@ -263,7 +265,7 @@
               { opacity: 0, y: "1.8cqh" },
               {
                 opacity: 1,
-                y: 0,
+                y: "0cqh",
                 duration: MICROCOPY_DURATION,
                 ease: "power2.out",
               },
@@ -273,7 +275,7 @@
             if (HOLD > 0) {
               tl.fromTo(
                 lockup,
-                { y: 0 },
+                { y: "0cqh" },
                 {
                   y: "-0.35cqh",
                   duration: HOLD / 2,

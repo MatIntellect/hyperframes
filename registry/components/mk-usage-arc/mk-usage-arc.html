@@ -126,9 +126,16 @@
     </style>
   </head>
   <body>
-    <!-- Self-preview wrapper. WIRING: copy the .mk-arc CSS, the markup below,
-         and the helpers into your host. r=92 with 220px box; the helper reads
-         the circle's radius, so resizing the box + r just works. -->
+    <!-- Self-preview wrapper. WIRING: copy the .mk-arc CSS, the .mk-arc markup
+         below (give it your own id) and the globals (window.*) mkArcIn /
+         mkArcOut from the last <script> into your host. The gauge sizes from its
+         container: wrap it in a box with position:absolute and
+         container-type:size; the gauge takes 60% of the box's smaller side,
+         centred, and the number and label scale with it. Then:
+
+           mkArcIn(tl, "#mk-my-arc", 1.0, 0.76);  // at 1.0 s draw to 76%, count the number
+           mkArcOut(tl, "#mk-my-arc", 8.5);
+    -->
     <div id="mk-arc-root" data-composition-id="mk-usage-arc" data-start="0" data-duration="4">
       <div class="mk-arc" id="mk-arc-demo">
         <svg viewBox="0 0 220 220">

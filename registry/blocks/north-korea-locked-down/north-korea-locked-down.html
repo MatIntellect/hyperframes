@@ -127,7 +127,7 @@
         position: absolute;
         left: 50%;
         bottom: calc(100% - 24px);
-        transform: translateX(-50%) scale(0.82);
+        /* centring and start scale are set in the script: GSAP owns the whole transform of what it tweens */
         transform-origin: 50% 100%;
         width: max-content;
         min-width: 370px;
@@ -349,6 +349,9 @@
 
         // ход родной, сдвинут на момент начала наезда
         var tl = gsap.timeline({ paused: true });
+        // The label's centring and start scale live here, not in CSS: a CSS translate was lost whenever the
+        // label was first tweened while the scene was still hidden, and it stood half its width to the right.
+        gsap.set("#nkl-label", { xPercent: -50, scale: 0.82 });
         tl.fromTo(
           "#nkl-camera",
           { scale: 0.92, x: -70, y: 18, filter: "saturate(0.92) contrast(0.98)" },

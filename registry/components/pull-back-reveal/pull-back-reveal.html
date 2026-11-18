@@ -12,6 +12,9 @@
     - headline (string, default "Рост складывается"): the scene headline.
     - detail_label, detail_context, support_a_label, support_a_value,
       support_b_label, support_b_value (strings): the card words.
+      support_a_label and support_b_label hold 7 characters (measured): seven of the
+      widest capitals (Ш, Ю) fill one line of the card, an eighth wraps the label and
+      pushes the value into the caption band during the pull-back.
 
   Layout: a landscape field keeps the source layout (detail card left, two
   supporting cards stacked right). A portrait field (a vertical reel's
@@ -39,9 +42,9 @@
     { "id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Headline revealed around the focused detail.", "default": "Рост складывается", "maxLength": 28 },
     { "id": "detail_label", "type": "string", "role": "content", "label": "Detail label", "description": "Small caps label at the top of the detail card.", "default": "Рост за месяц", "maxLength": 16 },
     { "id": "detail_context", "type": "string", "role": "content", "label": "Detail context", "description": "Line at the bottom of the detail card; wraps by words.", "default": "Во всех проектах", "maxLength": 48 },
-    { "id": "support_a_label", "type": "string", "role": "content", "label": "Card A label", "description": "Label of the first supporting card.", "default": "Досмотры", "maxLength": 16 },
+    { "id": "support_a_label", "type": "string", "role": "content", "label": "Card A label", "description": "Label of the first supporting card.", "default": "Досмотр", "maxLength": 7 },
     { "id": "support_a_value", "type": "string", "role": "content", "label": "Card A value", "description": "Value of the first supporting card.", "default": "94%", "maxLength": 6 },
-    { "id": "support_b_label", "type": "string", "role": "content", "label": "Card B label", "description": "Label of the second supporting card.", "default": "Ролики", "maxLength": 16 },
+    { "id": "support_b_label", "type": "string", "role": "content", "label": "Card B label", "description": "Label of the second supporting card.", "default": "Ролики", "maxLength": 7 },
     { "id": "support_b_value", "type": "string", "role": "content", "label": "Card B value", "description": "Value of the second supporting card.", "default": "48", "maxLength": 6 },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: on its own dark ground. none: no ground, the reel shows through.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] }
   ]'
@@ -142,7 +145,8 @@
                 color-mix(in srgb, var(--surface, #18181a) 82%, var(--bg, #0c1014)),
                 var(--bg, #0c1014) 72%
               );
-            will-change: transform;
+            /* no will-change: a will-change layer keeps the raster scale of its first paint, so the
+               world scaled 2.2 -> 1 stays blurred or sharp depending on which frame was painted first */
           }
 
           .pbr-headline {
@@ -334,7 +338,8 @@
             filter: blur(3.2cqh);
             opacity: 0;
             transform-origin: 50% 50%;
-            will-change: transform, opacity;
+            /* no will-change: the ground is scaled too, and a will-change layer keeps the raster
+               scale of its first paint whatever frame that was */
           }
         </style>
 
@@ -355,7 +360,7 @@
             </section>
 
             <section class="pbr-card pbr-support-card pbr-support-card-a">
-              <div class="pbr-support-label">Досмотры</div>
+              <div class="pbr-support-label">Досмотр</div>
               <div class="pbr-support-value">94%</div>
               <div class="pbr-support-rule"></div>
             </section>

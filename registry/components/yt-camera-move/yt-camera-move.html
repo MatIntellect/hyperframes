@@ -112,10 +112,21 @@
     </style>
   </head>
   <body>
-    <!-- Self-preview wrapper. WIRING: copy the .yt-cm-defocus CSS (if you want
-         the edge blur), add <div class="yt-cm-defocus" id="yt-my-defocus"></div>
-         as a sibling ABOVE your moving layer, and copy the helpers into your
-         host script. Then drive any wrapper:
+    <!-- Two ways in.
+         WHOLE: mount this file on a host box (its style gives place and size).
+         It moves the host's own shot: punch-in (zoom +11%, slide up, slight
+         tilt/pan) with an edge-defocus pulse at 0.4 s, back to rest 1.5 s
+         before the clip ends (never before 1.8 s). Put the shot in an inert
+         template anywhere in the HOST page, no edit of this file; any HTML,
+         give its root position:absolute;inset:0 to fill the box:
+           <template data-slot="yt-camera-move-shot">
+             <div style="position:absolute;inset:0;background:#123">...</div>
+           </template>
+         Without the template a grid stand-in moves (preview only).
+         WIRING (your own element, your own timing): copy the .yt-cm-defocus
+         CSS (if you want the edge blur), add <div class="yt-cm-defocus"
+         id="yt-my-defocus"></div> as a sibling ABOVE your moving layer, and
+         copy the helpers into your host script. Then drive any wrapper:
 
            ytCameraMove(tl, "#video-wrap", 5.0, { zoom: 0.11, slideY: -24 });
            ytDefocusPulse(tl, "#yt-my-defocus", 5.0, 1.2);

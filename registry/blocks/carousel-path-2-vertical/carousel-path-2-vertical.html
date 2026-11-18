@@ -65,7 +65,8 @@
         position: absolute;
         left: 0;
         top: 0;
-        will-change: transform;
+        /* no will-change: a will-change layer keeps the raster scale of its first paint, so a card
+           scaled up later stays blurred depending on which frame was painted first */
         backface-visibility: visible;
       }
       .card-inner {

@@ -136,7 +136,7 @@
             display: flex;
             align-items: flex-start;
             gap: var(--space-1, 1.6cqw);
-            min-height: 18cqh;
+            /* height comes from the text (see .tp-size), so the line sits between equal paddings */
             padding: var(--space-2, 3.4cqh) var(--space-2, 3cqw);
             border: 0.16cqmin solid color-mix(in srgb, var(--border, #2e2e32) 72%, transparent);
             border-radius: var(--radius, 2.4cqmin);
@@ -164,6 +164,16 @@
             line-height: 1.45;
             overflow-wrap: anywhere;
             white-space: pre-wrap;
+            display: grid;
+          }
+
+          /* The longest typed string, invisible, stacked under the live text: the card takes its
+             final height on the first frame instead of growing when the typing wraps a line. */
+          .tp-line > * {
+            grid-area: 1 / 1;
+          }
+          .tp-size {
+            visibility: hidden;
           }
 
           .tp-caret {
@@ -188,7 +198,8 @@
             <div class="tp-shell">
               <span class="tp-glyph" aria-hidden="true"></span>
               <span class="tp-line" aria-hidden="true"
-                ><span class="tp-text"></span><span class="tp-caret"></span
+                ><span class="tp-type"><span class="tp-text"></span><span class="tp-caret"></span></span
+                ><span class="tp-size"></span
               ></span>
             </div>
           </div>
@@ -361,6 +372,13 @@
               "--tp-font-size",
               "max(28px, min(" + fittedCqw.toFixed(3) + "cqw, 9cqh))",
             );
+
+            var longestRow = rows.reduce(function (best, row) {
+              return row.x.length > best.length ? row.x : best;
+            }, "");
+            var sizeElement = root.querySelector(".tp-size");
+            sizeElement.textContent = longestRow;
+            sizeElement.appendChild(caretElement.cloneNode(false));
 
             gsap.set(stage, { opacity: 0, y: "2.6cqh" });
             textElement.textContent = "";

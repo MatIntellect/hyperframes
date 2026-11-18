@@ -162,7 +162,11 @@
     <!--
       WIRING (what you copy into a host composition):
         1. the .camera-shake-frame / .camera-shake-rig CSS above
-        2. the cameraShake() helper in the script below (profile table included)
+        2. the cameraShake() helper in the script below (profile table included):
+           in the last <script>, copy the inside of its (function () { ... })
+           from the top down to the line "self-preview (not part of the
+           snippet)": the profile table and csHash / csNoise / csChannel /
+           csSample come with it, cameraShake() calls them
         3. wrap the thing you want shot:
              <div class="camera-shake-frame">
                <div class="camera-shake-rig" id="shot">  <video .../>  </div>
@@ -172,6 +176,10 @@
       In a reel the scene fills the host box and shakes the host's own shot, given as
       an inert template at host document level (particle-image-reveal's slot pattern):
         <template data-slot="camera-shake-shot"> <video .../> or HTML </template>
+      The template is shown enlarged to keep the shake's edges covered, so its
+      edges are cut off: about 13% of its width and height on each side at the
+      defaults, about 23% with handheld-wideangle-strong at intensity 1, 27% or
+      more at intensity 2. Keep what matters in the middle half.
       The source's 1920x1080 night-city preview, guides and readout are gone.
     -->
     <div
