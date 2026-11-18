@@ -7,7 +7,14 @@
   leaves. The ink is revealed exactly under the nib: both read the same path length.
 
   mount contract: loaded by a host through data-composition-src; only <template> is
-  cloned. #root fills the host clip (inset:0). See demo.html.
+  cloned. #root fills the host clip (inset:0). Mount it over the scene it marks up:
+    <div id="pen" class="clip" data-composition-id="cursor-annotate"
+      data-composition-src="compositions/components/cursor-annotate.html"
+      data-variable-values='{"shape":"circle","target_x":40,"target_y":38,"target_w":20,"target_h":16}'
+      data-start="<when the pen comes in>" data-duration="2.95" data-track-index="<a free track>"
+      data-width="1080" data-height="1920"
+      style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+  The target is the region the mark goes around: left, top, width and height in % of that box.
 
   variables:
     shape (circle|underline|arrow)   the mark the pen draws

@@ -7,7 +7,14 @@
   smears with motion blur along its path, squashes on each click, and whips out.
 
   mount contract: loaded by a host through data-composition-src; only <template> is
-  cloned. #root fills the host clip (inset:0). See demo.html.
+  cloned. #root fills the host clip (inset:0). Mount it over the scene it clicks in:
+    <div id="dart" class="clip" data-composition-id="dart-cursor"
+      data-composition-src="compositions/components/dart-cursor.html"
+      data-variable-values='{"tone":"light","target_x":34,"target_y":58,"target2_x":64,"target2_y":46,"enter_from":"right","exit_to":"right"}'
+      data-start="<when the dart dives in>" data-duration="3.6" data-track-index="<a free track>"
+      data-width="1080" data-height="1920"
+      style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+  The two targets are the points it clicks, in % of that box.
 
   variables:
     tone (dark|light)                   light body with a dark outline (default: the reels are dark), or the reverse

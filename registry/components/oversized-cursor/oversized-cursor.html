@@ -17,8 +17,14 @@
   skills/hyperframes/references/format.md); everything outside
   <template>, including this <head>, is discarded at render. The root is #root:
   elastic, no data-width/data-height declared here, it fills whatever box the host
-  clip gives it (position:absolute; inset:0). See demo.html for the mount usage
-  (data-composition-src="./oversized-cursor.html" on a sized host clip).
+  clip gives it (position:absolute; inset:0). Mount it over the scene it points at:
+    <div id="arrow" class="clip" data-composition-id="oversized-cursor"
+      data-composition-src="compositions/components/oversized-cursor.html"
+      data-variable-values='{"cursor_variant":"light","target_x":55,"target_y":55,"click_label":"Создать"}'
+      data-start="<when the arrow comes in>" data-duration="2.6" data-track-index="<a free track>"
+      data-width="1080" data-height="1920"
+      style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+  The target is the point its tip lands on, in % of that box.
 
   variables:
     cursor_variant (enum light|dark)  pointer fill/stroke pairing, pick per scene contrast

@@ -7,7 +7,14 @@
   small ring. The label slides to the tip's left on the right of the frame. The last step shows a check.
 
   mount contract: loaded by a host through data-composition-src; only <template> is
-  cloned. #root fills the host clip (inset:0). See demo.html.
+  cloned. #root fills the host clip (inset:0). Mount it over the scene the agent works in:
+    <div id="agent" class="clip" data-composition-id="agent-cursor"
+      data-composition-src="compositions/components/agent-cursor.html"
+      data-variable-values='{"agent_name":"Агент","steps":"Читаю страницу,Открываю настройки,Включаю копии,Готово","targets":"25,47;76,30"}'
+      data-start="<when the agent enters>" data-duration="4.8" data-track-index="<a free track>"
+      data-width="1080" data-height="1920"
+      style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
+  The targets are the centres of the controls it clicks, in % of that box.
 
   variables:
     agent_name (string)   the name on the tag

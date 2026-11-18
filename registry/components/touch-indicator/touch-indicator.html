@@ -56,7 +56,17 @@
     lift-off    OUT + 0s    -> physical release tick
 
   TARGET RESPONSE: the host owns it. Put the target's reaction on the host
-  timeline at the mount's data-start + 0.067s (see demo.html).
+  timeline at the mount's data-start + 0.067s.
+
+  WORKED EXAMPLE: the mount covers the screen the finger touches, and the
+  target is the point of contact in % of that box:
+    <div id="touch" class="clip" data-composition-id="touch-indicator"
+      data-composition-src="compositions/components/touch-indicator.html"
+      data-variable-values='{"gesture":"tap","polarity":"light","targetX":50,"targetY":55}'
+      data-start="0.4" data-duration="1.1" data-track-index="<a free track>"
+      style="position: absolute; left: 150px; top: 180px; width: 780px; height: 1180px"></div>
+  and on the host timeline, the answer of the control under the finger:
+    tl.to("#like", { scale: 1.2, duration: 0.15, yoyo: true, repeat: 1 }, 0.4 + 0.067);
 -->
 <html
   lang="en"

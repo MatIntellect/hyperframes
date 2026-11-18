@@ -8,7 +8,13 @@
   presses one (the plate squashes, the icon dips and turns accent), and leaves as a dot.
 
   mount contract: loaded by a host through data-composition-src; only <template> is cloned.
-  #root fills the host clip (inset:0) and centres its own toolbar. See demo.html.
+  #root fills the host clip (inset:0) and centres its own toolbar. Mount it as a scene of its own:
+    <div id="pointer" class="clip" data-composition-id="magnetic-cursor"
+      data-composition-src="compositions/components/magnetic-cursor.html"
+      data-variable-values='{"tone":"dark","visits":"0,3","press":2}'
+      data-start="<when the pointer comes in>" data-duration="3.6" data-track-index="<a free track>"
+      data-width="1080" data-height="1920"
+      style="position: absolute; inset: 0; width: 1080px; height: 1920px"></div>
 
   variables:
     pressed (active) icon: --brand of the reel palette (set on the reel root)
