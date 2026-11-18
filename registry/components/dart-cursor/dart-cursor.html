@@ -31,14 +31,14 @@
   data-composition-id="dart-cursor"
   data-composition-duration="3.6"
   data-composition-variables='[
-    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "default": "light", "options": [ { "value": "dark", "label": "Dark body, white outline" }, { "value": "light", "label": "Light body, dark outline" } ] },
-    { "id": "target_x", "type": "number", "role": "layout", "label": "First click X", "default": 34, "min": 5, "max": 95, "step": 1, "unit": "%" },
-    { "id": "target_y", "type": "number", "role": "layout", "label": "First click Y", "default": 58, "min": 5, "max": 95, "step": 1, "unit": "%" },
-    { "id": "target2_x", "type": "number", "role": "layout", "label": "Second click X", "default": 64, "min": 5, "max": 95, "step": 1, "unit": "%" },
-    { "id": "target2_y", "type": "number", "role": "layout", "label": "Second click Y", "default": 46, "min": 5, "max": 95, "step": 1, "unit": "%" },
-    { "id": "enter_from", "type": "enum", "role": "timing", "label": "Enter from", "default": "right", "options": [ { "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ] },
-    { "id": "exit_to", "type": "enum", "role": "timing", "label": "Exit to", "default": "right", "options": [ { "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ] },
-    { "id": "blur", "type": "number", "role": "style", "label": "Motion blur", "default": 1, "min": 0, "max": 1.5, "step": 0.1 }
+    { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "light is a light body with a dark outline, for dark scenes. dark is the reverse.", "default": "light", "options": [ { "value": "dark", "label": "Dark body, white outline" }, { "value": "light", "label": "Light body, dark outline" } ] },
+    { "id": "target_x", "type": "number", "role": "layout", "label": "First click X", "description": "First click: where the tip lands, from the left edge, % of the host box width.", "default": 34, "min": 5, "max": 95, "step": 1, "unit": "%" },
+    { "id": "target_y", "type": "number", "role": "layout", "label": "First click Y", "description": "First click: where the tip lands, from the top edge, % of the host box height.", "default": 58, "min": 5, "max": 95, "step": 1, "unit": "%" },
+    { "id": "target2_x", "type": "number", "role": "layout", "label": "Second click X", "description": "Second click: where the tip lands, from the left edge, % of the host box width.", "default": 64, "min": 5, "max": 95, "step": 1, "unit": "%" },
+    { "id": "target2_y", "type": "number", "role": "layout", "label": "Second click Y", "description": "Second click: where the tip lands, from the top edge, % of the host box height.", "default": 46, "min": 5, "max": 95, "step": 1, "unit": "%" },
+    { "id": "enter_from", "type": "enum", "role": "timing", "label": "Enter from", "description": "The edge of the host box the dart arrives from.", "default": "right", "options": [ { "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ] },
+    { "id": "exit_to", "type": "enum", "role": "timing", "label": "Exit to", "description": "The edge of the host box the dart leaves by.", "default": "right", "options": [ { "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ] },
+    { "id": "blur", "type": "number", "role": "style", "label": "Motion blur", "description": "Strength of the motion blur along the flight path. 0 turns it off.", "default": 1, "min": 0, "max": 1.5, "step": 0.1 }
   ]'
 >
   <head>

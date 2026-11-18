@@ -4,9 +4,9 @@
   data-composition-id="device-frame-stage"
   data-composition-duration="5"
   data-composition-variables='[
-    { "id": "device", "type": "enum", "role": "layout", "label": "Device kind", "default": "phone", "options": [{ "value": "phone", "label": "Phone" }, { "value": "tablet", "label": "Tablet" }] },
-    { "id": "cutout", "type": "enum", "role": "layout", "label": "Camera cutout", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "island", "label": "Island" }, { "value": "notch", "label": "Notch" }] },
-    { "id": "body", "type": "enum", "role": "style", "label": "Body material", "default": "graphite", "options": [{ "value": "graphite", "label": "Graphite" }, { "value": "silver", "label": "Silver" }] }
+    { "id": "device", "type": "enum", "role": "layout", "label": "Device kind", "description": "phone or tablet: sets the outer proportions of the device and the logical viewport its screen content is authored at.", "default": "phone", "options": [{ "value": "phone", "label": "Phone" }, { "value": "tablet", "label": "Tablet" }] },
+    { "id": "cutout", "type": "enum", "role": "layout", "label": "Camera cutout", "description": "Camera cutout at the top of the screen. It must match the safe area of the screen content.", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "island", "label": "Island" }, { "value": "notch", "label": "Notch" }] },
+    { "id": "body", "type": "enum", "role": "style", "label": "Body material", "description": "Tone of the device body material.", "default": "graphite", "options": [{ "value": "graphite", "label": "Graphite" }, { "value": "silver", "label": "Silver" }] }
   ]'
 >
   <!--

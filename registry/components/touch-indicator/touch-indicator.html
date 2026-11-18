@@ -71,10 +71,10 @@
 <html
   lang="en"
   data-composition-variables='[
-    {"id":"gesture","type":"enum","label":"Gesture","default":"tap","options":[{"value":"tap","label":"Tap"},{"value":"swipe","label":"Swipe"}]},
-    {"id":"polarity","type":"enum","label":"Polarity","default":"light","options":[{"value":"light","label":"Light (on dark UI)"},{"value":"dark","label":"Dark (on light UI)"}]},
-    {"id":"targetX","type":"number","label":"Target X","default":50,"min":0,"max":100,"unit":"%"},
-    {"id":"targetY","type":"number","label":"Target Y","default":55,"min":0,"max":100,"unit":"%"}
+    {"id":"gesture","type":"enum","label":"Gesture","description":"tap touches the target and lifts. swipe touches it and travels straight up by 40% of the host height, as in scrolling a list.","default":"tap","options":[{"value":"tap","label":"Tap"},{"value":"swipe","label":"Swipe"}]},
+    {"id":"polarity","type":"enum","label":"Polarity","description":"Colour of the touch disc: light for a dark UI, dark for a light UI.","default":"light","options":[{"value":"light","label":"Light (on dark UI)"},{"value":"dark","label":"Dark (on light UI)"}]},
+    {"id":"targetX","type":"number","label":"Target X","description":"Where the finger touches down, from the left edge, % of the host width.","default":50,"min":0,"max":100,"unit":"%"},
+    {"id":"targetY","type":"number","label":"Target Y","description":"Where the finger touches down, from the top edge, % of the host height. A swipe starts here.","default":55,"min":0,"max":100,"unit":"%"}
   ]'
 >
   <head>
@@ -147,10 +147,10 @@
         id="root"
         data-composition-id="touch-indicator"
         data-composition-variables='[
-          {"id":"gesture","type":"enum","label":"Gesture","default":"tap","options":[{"value":"tap","label":"Tap"},{"value":"swipe","label":"Swipe"}]},
-          {"id":"polarity","type":"enum","label":"Polarity","default":"light","options":[{"value":"light","label":"Light (on dark UI)"},{"value":"dark","label":"Dark (on light UI)"}]},
-          {"id":"targetX","type":"number","label":"Target X","default":50,"min":0,"max":100,"unit":"%"},
-          {"id":"targetY","type":"number","label":"Target Y","default":55,"min":0,"max":100,"unit":"%"}
+          {"id":"gesture","type":"enum","label":"Gesture","description":"tap touches the target and lifts. swipe touches it and travels straight up by 40% of the host height, as in scrolling a list.","default":"tap","options":[{"value":"tap","label":"Tap"},{"value":"swipe","label":"Swipe"}]},
+          {"id":"polarity","type":"enum","label":"Polarity","description":"Colour of the touch disc: light for a dark UI, dark for a light UI.","default":"light","options":[{"value":"light","label":"Light (on dark UI)"},{"value":"dark","label":"Dark (on light UI)"}]},
+          {"id":"targetX","type":"number","label":"Target X","description":"Where the finger touches down, from the left edge, % of the host width.","default":50,"min":0,"max":100,"unit":"%"},
+          {"id":"targetY","type":"number","label":"Target Y","description":"Where the finger touches down, from the top edge, % of the host height. A swipe starts here.","default":55,"min":0,"max":100,"unit":"%"}
         ]'
       >
         <div class="hf-touch-indicator__actor">

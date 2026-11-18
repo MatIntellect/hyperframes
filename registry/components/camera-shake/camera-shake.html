@@ -6,6 +6,7 @@
       "id": "shakeProfile",
       "type": "enum",
       "label": "Shake profile",
+      "description": "Which measured camera movement plays: handheld on a normal, wide-angle or tele lens at mild, strong or extreme strength, or a rig shake or wobble.",
       "default": "handheld-normal-mild",
       "options": [
         { "value": "handheld-normal-mild", "label": "Handheld - normal lens, mild" },
@@ -23,6 +24,7 @@
       "id": "shakeIntensity",
       "type": "number",
       "label": "Intensity multiplier",
+      "description": "Multiplier of the shake amplitude. 0 holds the shot still.",
       "default": 1,
       "min": 0,
       "max": 3,
@@ -32,6 +34,7 @@
       "id": "shakeFrequency",
       "type": "number",
       "label": "Frequency multiplier",
+      "description": "Multiplier of the shake speed: below 1 the camera sways slower, above 1 it trembles faster.",
       "default": 1,
       "min": 0.1,
       "max": 4,
@@ -41,6 +44,7 @@
       "id": "shakeRotation",
       "type": "boolean",
       "label": "Include rotation (roll + tilt/pan)",
+      "description": "true adds roll, tilt and pan to the shift of the frame. false leaves the shift alone, the look of a gimbal.",
       "default": true
     }
   ]'

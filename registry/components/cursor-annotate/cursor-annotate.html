@@ -30,11 +30,11 @@
   data-composition-id="cursor-annotate"
   data-composition-duration="2.95"
   data-composition-variables='[
-    { "id": "shape", "type": "enum", "role": "style", "label": "Mark", "default": "circle", "options": [ { "value": "circle", "label": "Loose loop" }, { "value": "underline", "label": "Underline" }, { "value": "arrow", "label": "Arrow" } ] },
-    { "id": "target_x", "type": "number", "role": "layout", "label": "Region left", "default": 40, "min": 0, "max": 95, "step": 1, "unit": "%" },
-    { "id": "target_y", "type": "number", "role": "layout", "label": "Region top", "default": 38, "min": 0, "max": 95, "step": 1, "unit": "%" },
-    { "id": "target_w", "type": "number", "role": "layout", "label": "Region width", "default": 20, "min": 2, "max": 90, "step": 1, "unit": "%" },
-    { "id": "target_h", "type": "number", "role": "layout", "label": "Region height", "default": 16, "min": 2, "max": 90, "step": 1, "unit": "%" }
+    { "id": "shape", "type": "enum", "role": "style", "label": "Mark", "description": "The mark the pen draws on the region: a loose loop around it, an underline or an arrow.", "default": "circle", "options": [ { "value": "circle", "label": "Loose loop" }, { "value": "underline", "label": "Underline" }, { "value": "arrow", "label": "Arrow" } ] },
+    { "id": "target_x", "type": "number", "role": "layout", "label": "Region left", "description": "Left edge of the region being marked, % of the host box width.", "default": 40, "min": 0, "max": 95, "step": 1, "unit": "%" },
+    { "id": "target_y", "type": "number", "role": "layout", "label": "Region top", "description": "Top edge of the region being marked, % of the host box height.", "default": 38, "min": 0, "max": 95, "step": 1, "unit": "%" },
+    { "id": "target_w", "type": "number", "role": "layout", "label": "Region width", "description": "Width of the region being marked, % of the host box width.", "default": 20, "min": 2, "max": 90, "step": 1, "unit": "%" },
+    { "id": "target_h", "type": "number", "role": "layout", "label": "Region height", "description": "Height of the region being marked, % of the host box height.", "default": 16, "min": 2, "max": 90, "step": 1, "unit": "%" }
   ]'
 >
   <head>
