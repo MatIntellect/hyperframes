@@ -218,8 +218,8 @@
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var s =
           placement === "full"
-            ? { x0: 150, x1: 930, T: 285, rh: 190, rf: 56, g1: 110, ah: 150, af: 40, g2: 60, lh: 210, lf: 34, g3: 40, ind: 56 }
-            : { x0: 180, x1: 900, T: (placement === "top" ? 288 : 708) + 60, rh: 130, rf: 38, g1: 50, ah: 100, af: 30, g2: 30, lh: 130, lf: 28, g3: 16, ind: 48 };
+            ? { x0: 150, x1: 930, T: 393, rh: 190, rf: 56, g1: 74, ah: 150, af: 40, g2: 44, lh: 188, lf: 34, g3: 28, ind: 56 }
+            : { x0: 180, x1: 900, T: (placement === "top" ? 288 : 708) + 30, rh: 116, rf: 38, g1: 32, ah: 90, af: 30, g2: 30, lh: 116, lf: 28, g3: 16, ind: 48 };
         if (placement === "full") board.style.cssText = "left:0;top:0;width:1080px;height:1920px";
         else board.style.cssText = "left:150px;top:" + (placement === "top" ? 288 : 708) + "px;width:780px;height: 652px;border:2px solid var(--border, #2e2e32);border-radius:32px";
         Q = { x: s.x0, y: s.T, w: s.x1 - s.x0, h: s.rh, f: s.rf };
