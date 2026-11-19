@@ -639,7 +639,8 @@
       
       .headline {
         left: 150px;
-        top: 288px;
+        /* the headline's glyph box (112 px, line-height 0.9) starts about 17 px above its line: the line sits under the 288 top by that */
+        top: 305px;
         width: 780px;
       }
       .headline span {
@@ -652,16 +653,21 @@
         padding: 0;
         place-items: start center;
       }
+      /* the headline sits 125 px lower, under the 288 top: the phone keeps the author's 28 px gap under the
+         sub line and its bottom (y 1327), so it is drawn at 0.77 instead of 0.9 (its screen is a picture,
+         data-layout-ignore; type is not shrunk) */
       .phone {
-        top: 470px;
+        top: 595px;
         transform-origin: 50% 0;
-        scale: 0.9;
+        scale: 0.77;
       }
       .ambient-line,
       .snap-shadow {
         display: none;
       }
-      /* top / bottom: the phone on a card 780x652, rest of the frame transparent */
+      /* top / bottom: the phone on the author's 780x760 card, rest of the frame transparent. The phone needs
+         the 760: the card is taller than the 652 field beside the speaker, so it hangs from y 288 (top) or
+         stands on y 1360 (bottom) and is placed full: the face is never under a card (vertical.md:19) */
       #root.card {
         background: transparent;
       }
@@ -670,7 +676,7 @@
         left: 150px;
         top: 288px;
         width: 780px;
-        height: 652px;
+        height: 760px;
         overflow: hidden;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
@@ -679,7 +685,7 @@
           var(--bg, #0c1014);
       }
       #root.card.bottom .stage {
-        top: 708px;
+        top: 600px;
       }
       #root.card .headline {
         display: none;
@@ -701,7 +707,7 @@
     {"id": "line1", "type": "string", "role": "content", "label": "Headline line 1", "description": "First Bebas line, white.", "maxLength": 12, "default": "МОНТАЖ"},
     {"id": "line2", "type": "string", "role": "content", "label": "Headline line 2", "description": "Second Bebas line, red.", "maxLength": 12, "default": "ЗА МИНУТЫ"},
     {"id": "sub", "type": "string", "role": "content", "label": "Subline", "description": "Grey line under the headline.", "maxLength": 34, "default": "Ролик из записи без монтажёра"},
-{"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, headline and phone in the 780x1072 field. top / bottom: the phone alone on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+{"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, headline and phone in the 780x1072 field. top / bottom: the phone alone on the 780x760 card at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
 {"id": "app", "type": "string", "role": "content", "label": "App name", "description": "Name in the store list and on the app page.", "maxLength": 14, "default": "MatIntellect"},
     {"id": "query", "type": "string", "role": "content", "label": "Search", "description": "Text in the store search field.", "maxLength": 18, "default": "монтаж видео"},
     {"id": "status", "type": "string", "role": "content", "label": "Ready line", "description": "Green line under the ring when the install finishes.", "maxLength": 22, "default": "Готово к монтажу"},
