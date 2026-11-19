@@ -42,7 +42,7 @@
     ══════════════════════════════════════════ -->
       <div class="intro-layer" id="introLayer">
         <svg class="intro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(410 640) scale(0.6915)">
+          <g transform="translate(410 694) scale(0.6915)">
             <g class="intro-logo">
               <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
               <path class="il-fill il-fill-1" d="M188 0L376 188L188 376L0 188Z" fill="#EFEDEA" opacity="0" />
@@ -977,7 +977,7 @@
     ══════════════════════════════════════════ -->
       <div class="outro-layer" id="outroLayer">
         <svg class="outro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(420 540) scale(0.6383)">
+          <g transform="translate(420 594) scale(0.6383)">
             <g class="outro-logo">
               <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
               <path class="ol-fill ol-fill-1" d="M188 0L376 188L188 376L0 188Z" fill="#EFEDEA" opacity="0" />
@@ -989,12 +989,12 @@
           </g>
 
           <!-- Tagline — individual tspan letters for stagger -->
-          <text class="outro-tagline" x="540" y="878" text-anchor="middle"></text>
+          <text class="outro-tagline" x="540" y="932" text-anchor="middle"></text>
 
           <!-- URL pill -->
-          <rect class="url-border" pathLength="100" x="0" y="918" width="0" height="56" rx="28" fill="none" stroke="#3C3C3C" stroke-width="1.5" />
-          <rect class="url-bg" x="0" y="918" width="0" height="56" rx="28" fill="#2C2C2C" opacity="0" />
-          <text class="url-text" x="540" y="956" text-anchor="middle" fill="#a0a0a6" font-size="28" font-weight="500" opacity="0"></text>
+          <rect class="url-border" pathLength="100" x="0" y="972" width="0" height="56" rx="28" fill="none" stroke="#3C3C3C" stroke-width="1.5" />
+          <rect class="url-bg" x="0" y="972" width="0" height="56" rx="28" fill="#2C2C2C" opacity="0" />
+          <text class="url-text" x="540" y="1010" text-anchor="middle" fill="#a0a0a6" font-size="28" font-weight="500" opacity="0"></text>
         </svg>
       </div>
       </div>
@@ -1063,13 +1063,13 @@
           inset: 0;
         }
         
-        /* top / bottom: the frame is clipped to the card, the layers move to its centre (y 560 / 980) */
+        /* top / bottom: the frame is clipped to the card, the layers move to its centre (y 614 / 1034) */
         [data-composition-id="ui-3d-reveal-vertical"].card {
           background: transparent;
-          clip-path: inset(180px 150px 980px 150px round 32px);
+          clip-path: inset(288px 150px 980px 150px round 32px);
         }
         [data-composition-id="ui-3d-reveal-vertical"].card.bottom {
-          clip-path: inset(600px 150px 560px 150px round 32px);
+          clip-path: inset(708px 150px 560px 150px round 32px);
         }
         [data-composition-id="ui-3d-reveal-vertical"].card .pl {
           transform: translateY(-210px);
@@ -2250,7 +2250,7 @@
           if (placement !== "full") document.querySelector(S).classList.add("card", placement);
           // vertical: the 1100 px program window, tilted in 3D at its widest, fits the 780 field and the card (x ≤ 930;
           // 780/1100 flat reached x 968 once tilted) and sits on the field's centre y 824
-          gsap.set(scene, { y: -190, scale: 0.64 });
+          gsap.set(scene, { y: -136, scale: 0.64 });
           
           var cardGlow = document.querySelector(S + " .card-glow");
 
