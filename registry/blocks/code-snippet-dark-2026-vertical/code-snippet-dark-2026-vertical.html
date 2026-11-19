@@ -16,11 +16,11 @@
         data-start="0"
         data-duration="30"
         data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, title and the editor in the 780x1072 field. top / bottom: the editor window alone as a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}], "default": "full"},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, title and the editor in the 780x1072 field. top / bottom: the editor window alone as a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent. A file of more than 11 lines (42 px a line under the window header) keeps the 780x760 window it was made with, at y 288-1048 / 600-1360: taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}], "default": "full"},
     {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the title.", "maxLength": 26, "default": "Встроенная тема VS Code"},
     {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "Big Bebas title; empty keeps the theme name.", "maxLength": 18, "default": "Dark 2026"},
     {"id": "file", "type": "string", "role": "content", "label": "File name", "description": "File in the tab, the tree, the path and the window title.", "maxLength": 24, "default": "functional_toolkit.py"},
-    {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The typed file, lines split by a line break: up to 14 lines of 38 characters (18 in full), Python colours; a longer file scrolls like the editor.", "maxLength": 560, "default": "# A small functional toolkit\ndef compose(*fns):\n    def run(x):\n        for fn in fns:\n            x = fn(x)\n        return x\n    return run\n\ndef unfold(f, seed):\n    acc = []\n    while (r := f(seed)):\n        acc.append(r[0])\n        seed = r[1]\n    return acc"},
+    {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The typed file, lines split by a line break: up to 14 lines of 38 characters (15 in full), Python colours; a longer file scrolls like the editor.", "maxLength": 560, "default": "# A small functional toolkit\ndef compose(*fns):\n    def run(x):\n        for fn in fns:\n            x = fn(x)\n        return x\n    return run\n\ndef unfold(f, seed):\n    acc = []\n    while (r := f(seed)):\n        acc.append(r[0])\n        seed = r[1]\n    return acc"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts (12 ms a character, 45 ms a line), 2 the terminal rises (not before typing ends), 3 the block fades out (only when exit is fade). Empty keeps 0.95, typing end + 0.35 and terminal + 4.5.", "default": ""},
     {"id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the typed file to the end of the mount; fade fades the block out.", "options": [{"value": "none", "label": "Hold"}, {"value": "fade", "label": "Fade"}], "default": "none"}
   ]'
@@ -668,6 +668,12 @@
           #root.cs-bottom .scene-content {
             padding: 708px 150px 560px;
           }
+          #root.cs-top.cs-tall .scene-content {
+            padding: 288px 150px 872px;
+          }
+          #root.cs-bottom.cs-tall .scene-content {
+            padding: 600px 150px 560px;
+          }
           
         </style>
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
@@ -1026,6 +1032,10 @@
               
               applyTheme(root, theme);
               renderCode(root);
+              // the 652 px top / bottom window holds 11 lines; a longer file keeps the 760 px window
+              // it was made with, hanging from y 288 / standing on y 1360
+              const editor = root.querySelector(".editor");
+              if (placement !== "full" && editor.scrollHeight > editor.clientHeight) root.classList.add("cs-tall");
               buildTimeline(root, compositionId);
             };
           })();
