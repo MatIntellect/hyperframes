@@ -100,7 +100,8 @@
         align-items: flex-end;
       }
       #yptv-root.yptv-top #yptv-bow {
-        top: 288px;
+        /* the title's glyph box starts 1.5 px above its line: the line sits 2 px under the 288 top */
+        top: 290px;
         align-items: flex-start;
       }
       #yptv-root.yptv-center #yptv-bow {
@@ -148,7 +149,7 @@
         
         var place = oneOf(V.placement, ["bottom", "top", "center"], "center");
         root.classList.add("yptv-" + place);
-        // the slow grow keeps the edge the title hangs from in place (top: y 288, bottom: y 1360)
+        // the slow grow keeps the edge the title hangs from in place (top: y 290, bottom: y 1360)
         line.style.transformOrigin = place === "top" ? "50% 0%" : place === "bottom" ? "50% 100%" : "50% 50%";
         var longest = title.split(/\s+/).reduce(function (m, w) {
           return Math.max(m, w.length);
