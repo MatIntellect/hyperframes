@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the ground (brand lock screen or photo, see ground) to the frame edge, the stack in the 780x1072 field (y 288-1360). top / bottom: the stack alone in the 780x652 field at y 288-940 / 708-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the ground (brand lock screen or photo, see ground) to the frame edge, the stack in the 780x1072 field (y 288-1360). top / bottom: the stack alone in the 780x760 field at y 288-1048 / 600-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "notifTitle", "type": "string", "role": "content", "label": "Notification title", "description": "Bold first line on every banner that has no title of its own, one line clear of the time label.", "maxLength": 18, "default": "Новый ролик" },
     { "id": "title1", "type": "string", "role": "content", "label": "Title 1", "description": "Bold first line of the first banner, e.g. the app it comes from. Empty takes the notification title.", "maxLength": 18, "default": "" },
     { "id": "title2", "type": "string", "role": "content", "label": "Title 2", "description": "Bold first line of the second banner. Empty takes the notification title.", "maxLength": 18, "default": "" },
@@ -90,12 +90,15 @@
         top: 288px;
         height: 1072px;
       }
+      /* the author's 760 field keeps its size: the pill and three banners need 700 px of it; it is taller
+         than the 652 field beside the speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom)
+         and is placed full: the face is never under a card (vertical.md:19) */
       .nc-top #nc-field,
       .nc-bottom #nc-field {
-        height: 652px;
+        height: 760px;
       }
       .nc-bottom #nc-field {
-        top: 708px;
+        top: 600px;
       }
       .clip {
         position: absolute;
@@ -126,11 +129,12 @@
           var(--bg, #0c1014);
       }
       /* the lock-screen date and clock are centred text: their box is the 780 px column (x 150-930),
-         so a long date wraps inside the zone instead of running to the frame edge */
+         so a long date wraps inside the zone instead of running to the frame edge.
+         top 289: the date's glyph box (1 px over its 46 px line) at the zone top 288 */
       #nc-lock {
         position: absolute;
         left: 150px;
-        top: 196px;
+        top: 289px;
         width: 780px;
         text-align: center;
         color: var(--fg, #f2f2f2);
@@ -159,8 +163,9 @@
       }
 
       /* ---------------- notification stack ---------------- */
-      /* geometry measured from the reference: 810px banners (780 here, to fit the field) on a 214px pitch,
-         entries every 2.000s, expo.out restack (spec provenance: measured) */
+      /* geometry measured from the reference: 810px banners (780 here, to fit the field) on a 214px pitch
+         (191 under the lock-screen clock of the full field, see placement), entries every 2.000s,
+         expo.out restack (spec provenance: measured) */
       #nc-stack-inner {
         position: absolute;
         inset: 0;
@@ -402,12 +407,18 @@
         var placement = oneOf(vars.placement, ["full", "top", "bottom"], "full");
         root.classList.add("nc-" + placement);
         var full = placement === "full";
-        /* the newest banner ends 14 px above the field bottom; the pill rides 96 px above banner 1 */
-        var baseTop = full ? 990 : 570;
-        root.style.setProperty("--nc-base-top", baseTop + "px");
-        root.style.setProperty("--nc-pill-top", baseTop - 96 + "px");
-        if (!full) document.getElementById("nc-base").remove();
         var ground = oneOf(vars.ground, ["lock", "photo"], "lock");
+        /* the newest banner ends 14 px above the field bottom; the pill rides 96 px above banner 1.
+           Under the lock-screen date and clock the stack of four is 108 px taller than the 1072 field
+           (y 288-1360) leaves: the date gives up its 16 px over the zone top, the air between the clock,
+           the pill and the banners the rest (the pill rides 81 px above banner 1, the pitch is 191);
+           the banners keep their size and the newest banner its place */
+        var underLock = full && ground === "lock";
+        var PILL = underLock ? 81 : 96;
+        var baseTop = full ? 882 : 570;
+        root.style.setProperty("--nc-base-top", baseTop + "px");
+        root.style.setProperty("--nc-pill-top", baseTop - PILL + "px");
+        if (!full) document.getElementById("nc-base").remove();
         function drop(id) {
           var el = document.getElementById(id);
           if (el) el.remove();
@@ -469,7 +480,7 @@
         /* -------- timeline: every decisive number is measured from the reference -------- */
         var tl = gsap.timeline({ paused: true });
 
-        var PITCH = 214; /* banner-to-banner spacing, px */
+        var PITCH = underLock ? 191 : 214; /* banner-to-banner spacing, px */
         var cues = String(vars.cues || "")
           .split(",")
           .map(function (v) {
