@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and source in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and source in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x760 at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "20 крупнейших городов США" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Размер круга – население города" },
     { "id": "cities", "type": "string", "role": "content", "label": "Cities", "description": "Cities separated by ;, each as Name: latitude, longitude, value (decimal point in the coordinates). Up to 25 cities; circle area follows the value, the five largest (three on the vertical card) get a label where it fits clear of the other circles and labels, arcs run from the largest to the next four.", "maxLength": 1000, "default": "Нью-Йорк: 40.71, -74.01, 8300000; Лос-Анджелес: 34.05, -118.24, 3900000; Чикаго: 41.88, -87.63, 2700000; Хьюстон: 29.76, -95.37, 2300000; Финикс: 33.45, -112.07, 1600000; Филадельфия: 39.95, -75.17, 1600000; Сан-Антонио: 29.42, -98.49, 1400000; Сан-Диего: 32.72, -117.16, 1400000; Даллас: 32.78, -96.8, 1300000; Джэксонвилл: 30.33, -81.66, 950000; Остин: 30.27, -97.74, 960000; Сан-Хосе: 37.34, -121.89, 1000000; Форт-Уэрт: 32.76, -97.33, 930000; Колумбус: 39.96, -83, 910000; Шарлотт: 35.23, -80.84, 870000; Индианаполис: 39.77, -86.16, 880000; Сан-Франциско: 37.77, -122.42, 870000; Сиэтл: 47.61, -122.33, 740000; Денвер: 39.74, -104.99, 710000; Нашвилл: 36.16, -86.78, 690000" },
@@ -174,15 +174,18 @@
         align-items: stretch;
         gap: 22px;
       }
+      /* the author's 760 card keeps its size: headline, subtitle, map and source fill it at the text limits;
+         it is taller than the 652 field beside the speaker, so it hangs from y 288 (top) or stands on y 1360
+         (bottom) and is placed full: the face is never under a card (vertical.md:19) */
       #usbv-root.usbv-card #usbv-box {
-        height: 652px;
+        height: 760px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #usbv-root.usbv-bottom #usbv-box {
-        top: 708px;
+        top: 600px;
       }
       #usbv-root.usbv-card #usbv-title {
         font-size: 68px;
