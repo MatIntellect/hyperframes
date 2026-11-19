@@ -115,7 +115,7 @@
         top: 0;
         left: 0;
         width: 402px;
-        height: var(--cle-h, 608px);
+        height: var(--cle-h, 552px);
         background: var(--bg);
         overflow: hidden;
         transform-origin: top left;
@@ -183,12 +183,14 @@
       }
 
       /* --------------------------------------------------------- empty state */
+      /* above the header scrim: on the 552 pt screen the mark stands in the header row, between its
+         buttons, so the heading clears the raised composer */
       .empty {
         position: absolute;
         left: 0;
         right: 0;
-        top: var(--cle-empty-top, 66px);
-        z-index: 12;
+        top: var(--cle-empty-top, 12.35px);
+        z-index: 35;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -309,7 +311,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: var(--cle-chev-top, 454px);
+        top: var(--cle-chev-top, 398px);
         z-index: 25;
         display: flex;
         justify-content: center;
@@ -576,11 +578,13 @@
       const full = placement === "full";
       root.classList.add("cle-" + placement);
       if (!full) root.classList.add("cle-half");
-      const H = full ? 608 : 391;
+      const H = full ? 552 : 336;
       const COMP_UP = full ? -309 : 0; // the composer rides the keyboard in full only
       root.style.setProperty("--cle-h", H + "px");
       root.style.setProperty("--cle-pad-top", (full ? 70 : 20) + "px");
-      root.style.setProperty("--cle-empty-top", (full ? 66 : 86) + "px");
+      // full: the mark centred on the header row (8 + 44 / 2 = 30); half: the empty state centred
+      // over the docked composer
+      root.style.setProperty("--cle-empty-top", (full ? 12.35 : 58) + "px");
       root.style.setProperty("--cle-chev-top", H - 154 + "px");
 
       const CONFIG = {
