@@ -128,7 +128,7 @@
         top: 0;
         left: 0;
         width: 402px;
-        height: var(--cge-h, 608px);
+        height: var(--cge-h, 552px);
         background: #000;
         overflow: hidden;
         transform-origin: top left;
@@ -328,7 +328,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: var(--cge-chev-top, 472.7px);
+        top: var(--cge-chev-top, 416.7px);
         z-index: 25;
         display: flex;
         justify-content: center;
@@ -352,8 +352,9 @@
         bottom: 407.7px;
         z-index: 15;
       }
+      /* three rows fit between the header and the raised composer of the 552 pt screen */
       .sug {
-        height: 47px;
+        height: 28px;
         display: flex;
         align-items: center;
         gap: 16px;
@@ -374,11 +375,11 @@
         left: 0;
         right: 0;
         bottom: 0;
-        /* solid up to the composer's top edge (38.3 + 48 = 86px), then the fade above it: rows
-           scrolled down under the composer are hidden beside it, not cut through around it */
-        height: 150px;
+        /* solid up to the composer's top edge (38.3 + 48 = 86px), then a fade of about a line (28) above
+           it: rows scrolled down under the composer are hidden beside it, not cut through around it */
+        height: 114px;
         z-index: 18;
-        background: linear-gradient(to top, #000 58%, rgba(0, 0, 0, 0) 100%);
+        background: linear-gradient(to top, #000 76%, rgba(0, 0, 0, 0) 100%);
       }
       .composer {
         position: absolute;
@@ -596,7 +597,7 @@
         const full = placement === "full";
         root.classList.add("cge-" + placement);
         if (!full) root.classList.add("cge-half");
-        const H = full ? 608 : 391;
+        const H = full ? 552 : 336;
         root.style.setProperty("--cge-h", H + "px");
         root.style.setProperty("--cge-pad-top", (full ? 74 : 28) + "px");
         root.style.setProperty("--cge-bar-top", (full ? 91 : 30) + "px");
@@ -1030,9 +1031,10 @@
         const anchorOf = (node) => Math.min(0, ANCHOR - (node.offsetTop + node.offsetHeight));
         paraEls.forEach((pe) => (pe.anchor = anchorOf(pe.p)));
         rowEls.forEach((re) => (re.anchor = anchorOf(re.row)));
-        // read-back rest: in full the bubble tucks under the frosted header (the source frame);
-        // a half card is too short for that, so it rests on the table head, the payoff
-        const Y_FINAL = full ? -17 - bubble.offsetTop : 8 - tbl.offsetTop;
+        // read-back rest: in full the answer starts at the frosted header's lower edge, the bubble
+        // tucked under the header (the source frame); a half card is too short for that, so it
+        // rests on the table head, the payoff
+        const Y_FINAL = full ? 64 - answer.offsetTop : 8 - tbl.offsetTop;
 
         /* ====================================================== initial state */
         const COMP_UP = full ? -309 : 0; // composer rides the keyboard in full only
