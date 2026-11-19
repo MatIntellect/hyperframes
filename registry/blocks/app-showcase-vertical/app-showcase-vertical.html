@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the three phones fanned inside the 780x1072 field (y 288-1360); the side screens carry no words here, the centre phone carries them all. top / bottom: the fan on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the three phones fanned inside the 780x1072 field (y 288-1360); the side screens carry no words here, the centre phone carries them all. top / bottom: the fan on a 780x760 card at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
 
     { "id": "userName", "type": "string", "role": "content", "label": "User name", "description": "Centre phone header; the avatar shows its first letter.", "maxLength": 10, "default": "Мат" },
     { "id": "goalLabel", "type": "string", "role": "content", "label": "Goal label", "description": "Label over the progress ring.", "maxLength": 14, "default": "Цель недели" },
@@ -374,16 +374,20 @@
         flex-shrink: 0;
       }
       
+      /* the author's 760 card keeps its size: the fanned phones (0.95, side phones turned 12 deg) are about 670
+         tall and breathe to 1.02, their words at the 28 px floor; it is taller than the 652 field beside the
+         speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom) and is placed full: the face is never
+         under a card (vertical.md:19) */
       #apsv-root.apsv-card #apsv-stage {
         left: 150px;
         width: 780px;
-        height: 652px;
+        height: 760px;
         top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #apsv-root.apsv-bottom #apsv-stage {
-        top: 708px;
+        top: 600px;
       }
       
     </style>
@@ -486,7 +490,7 @@
           d =   118 ;
         
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
-        cy = 770;
+        cy = 824;
         if (placement !== "full") {
           root.classList.add("apsv-card", "apsv-" + placement);
           sw = 780;
