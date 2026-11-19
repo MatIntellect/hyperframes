@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x760 at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "ВВП на душу по регионам Испании" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Евро на человека, оценка 2024" },
     { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "Autonomous communities separated by ;, each as code: value. Codes: AND ARA AST BAL CAN CNT CYL CLM CAT VAL EXT GAL MAD MUR NAV PVA RIO CEU MEL. Colour runs from the lowest to the highest value.", "maxLength": 400, "default": "AND: 20200; ARA: 30500; AST: 24100; BAL: 28900; CAN: 21500; CNT: 25200; CYL: 25800; CLM: 21400; CAT: 33700; VAL: 23800; EXT: 19200; GAL: 24500; MAD: 38100; MUR: 22100; NAV: 35200; PVA: 36800; RIO: 29800; CEU: 21000; MEL: 19500" },
@@ -177,15 +177,18 @@
         align-items: stretch;
         gap: 22px;
       }
+      /* the author's 760 card keeps its size: headline, subtitle, map, legend and source fill it at the text
+         limits; it is taller than the 652 field beside the speaker, so it hangs from y 288 (top) or stands
+         on y 1360 (bottom) and is placed full: the face is never under a card (vertical.md:19) */
       #esmv-root.esmv-card #esmv-box {
-        height: 652px;
+        height: 760px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #esmv-root.esmv-bottom #esmv-box {
-        top: 708px;
+        top: 600px;
       }
       #esmv-root.esmv-card #esmv-title {
         font-size: 68px;
@@ -238,7 +241,10 @@
         
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         MAPW = 780;
-        MAPH = 500;
+        // 500 in the 1180 field: the peninsula is 569x475 in its box and the Canaries keep their width, the box
+        // gives up 8 px of its empty top and bottom so that at the text limits the headline's glyphs (104 px,
+        // the breve of Й 11 px above its line) stay under 288 in the 1072 field; the map keeps its size
+        MAPH = 492;
         if (placement !== "full") {
           root.classList.add("esmv-card", "esmv-" + placement);
           root.querySelector(".esmv-ground").remove();
