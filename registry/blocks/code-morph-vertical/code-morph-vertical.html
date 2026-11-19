@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  const out = []\n  for (const u of users) {\n    if (u.active) {\n      out.push(u.name)\n    }\n  }\n  return out\n}"},
     {"id": "codeAfter", "type": "string", "role": "content", "label": "Code after", "description": "The code after the change, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  return users\n    .filter((u) => u.active)\n    .map((u) => u.name)\n}"},
     {"id": "codeFinal", "type": "string", "role": "content", "label": "Code final", "description": "The last version of the code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "const activeNames = (users) =>\n  users\n    .filter((u) => u.active)\n    .map((u) => u.name)"},
@@ -256,7 +256,7 @@
         width: 780px;
       }
       #kdmorpv-root.kdmorpv-full .editor {
-        top: 270px;
+        top: 324px;
         height: 1000px;
       }
       #kdmorpv-root.kdmorpv-top .editor {
@@ -301,6 +301,15 @@
       .caret {
         height: 30px;
         margin-top: 6px;
+      }
+      #kdmorpv-root.kdmorpv-top .code,
+      #kdmorpv-root.kdmorpv-bottom .code {
+        top: 16px;
+        line-height: 40px;
+      }
+      #kdmorpv-root.kdmorpv-top .line,
+      #kdmorpv-root.kdmorpv-bottom .line {
+        min-height: 40px;
       }
       
     </style>

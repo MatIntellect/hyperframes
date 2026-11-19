@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "async function loadConfig(path) {\n  const raw = await readFile(path)\n  const config = JSON.parse(raw)\n  return validate(config)\n}"},
     {"id": "line", "type": "string", "role": "content", "label": "Line", "description": "Number of the line to bring forward (1 is the first line).", "maxLength": 3, "default": "2"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
@@ -255,7 +255,7 @@
         width: 780px;
       }
       #kdhighv-root.kdhighv-full .editor {
-        top: 270px;
+        top: 324px;
         height: 1000px;
       }
       #kdhighv-root.kdhighv-top .editor {
@@ -300,6 +300,21 @@
       .caret {
         height: 30px;
         margin-top: 6px;
+      }
+      #kdhighv-root.kdhighv-top .code,
+      #kdhighv-root.kdhighv-bottom .code,
+      #kdhighv-root.kdhighv-top .gutter,
+      #kdhighv-root.kdhighv-bottom .gutter {
+        top: 16px;
+        line-height: 40px;
+      }
+      #kdhighv-root.kdhighv-top .ln,
+      #kdhighv-root.kdhighv-bottom .ln {
+        height: 40px;
+      }
+      #kdhighv-root.kdhighv-top .line,
+      #kdhighv-root.kdhighv-bottom .line {
+        min-height: 40px;
       }
       
     </style>

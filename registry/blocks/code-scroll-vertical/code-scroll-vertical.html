@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 60 lines, a line up to 38 characters.", "maxLength": 2340, "default": "import { createClient } from \"./client\"\nimport { logger } from \"./logger\"\n\nconst RETRIES = 3\n\nexport async function fetchRetry(url) {\n  const client = createClient()\n  let lastError = null\n\n  for (let i = 1; i <= RETRIES; i++) {\n    try {\n      const res = await client.get(url)\n      if (res.ok) return res.body\n      lastError = new Error(res.status)\n    } catch (err) {\n      lastError = err\n      logger.warn(\"attempt \" + i)\n    }\n    await sleep(i * 250)\n  }\n\n  throw lastError\n}"},
     {"id": "line", "type": "string", "role": "content", "label": "Line", "description": "Number of the line to bring forward (1 is the first line).", "maxLength": 3, "default": "12"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
@@ -255,7 +255,7 @@
         width: 780px;
       }
       #kdscrov-root.kdscrov-full .editor {
-        top: 270px;
+        top: 324px;
         height: 1000px;
       }
       #kdscrov-root.kdscrov-top .editor {
