@@ -88,18 +88,18 @@
         inset: 0;
         background: var(--apc-canvas);
       }
-      /* the authored 1080-wide layout, from the logo (y 118) to the pills (y 1682), as one stage */
+      /* the authored 1080-wide layout, from the logo (y 118) to the pills (y 1602), as one stage */
       #apc-stage {
         position: absolute;
         left: 0;
         top: 0;
         width: 1080px;
-        height: 1564px;
+        height: 1484px;
         transform-origin: 0 0;
       }
       /* the stage is the 780 field: 1080 x 0.7222 = 780 at x 150; the belt is clipped to it */
       .apc-full #apc-stage {
-        transform: translate(150px, 180px) scale(0.7222);
+        transform: translate(150px, 288px) scale(0.7222);
         overflow: hidden;
       }
       #apc-card {
@@ -127,7 +127,7 @@
       }
       .apc-top #apc-stage,
       .apc-bottom #apc-stage {
-        transform: translate(23px, -128px) scale(0.68);
+        transform: translate(23px, -236px) scale(0.68);
       }
       .apc-top #apc-hdr-logo,
       .apc-bottom #apc-hdr-logo,
@@ -139,9 +139,9 @@
       }
       .apc-top #apc-hdr-title,
       .apc-bottom #apc-hdr-title {
-        top: 240px;
-        font-size: 128px;
-        line-height: 128px;
+        top: 367px;
+        font-size: 75px;
+        line-height: 75px;
       }
 
       .hdr {
@@ -180,7 +180,7 @@
         letter-spacing: -0.01em;
       }
       #apc-hdr-pills {
-        top: 1472px;
+        top: 1392px;
         display: flex;
         justify-content: center;
         gap: 28px;
