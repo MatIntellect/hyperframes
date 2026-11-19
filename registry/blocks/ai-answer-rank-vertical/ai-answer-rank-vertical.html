@@ -9,7 +9,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the card centred in the 780 column on y 824. top / bottom: the card hangs from y 288 / sits on y 1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the card centred in the 780 column on y 824. top / bottom: the card hangs from y 288 / sits on y 1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "The question typed into the user bubble, up to two lines.", "maxLength": 50, "default": "Кто смонтирует ролик без монтажёра?" },
     { "id": "lead", "type": "string", "role": "content", "label": "Answer lead-in", "description": "The assistant line above the ranked list.", "maxLength": 26, "default": "Вот лучшие варианты:" },
     { "id": "rowA", "type": "string", "role": "content", "label": "Pick 1", "description": "First pick in the original answer: a product other than the brand this video promotes.", "portrays": ["competitor_name"], "maxLength": 16, "default": "Студия А" },
@@ -291,23 +291,6 @@
       .aarv-row {
         height: 116px;
       }
-      /* top / bottom: the 652 px field takes the card with less air and shorter rows, type unchanged */
-      #aarv-root:not(.aarv-full) #aarv-card {
-        padding: 32px 40px 8px;
-      }
-      #aarv-root:not(.aarv-full) #aarv-answer {
-        margin-top: 28px;
-      }
-      #aarv-root:not(.aarv-full) #aarv-list {
-        height: 384px;
-        margin-top: 16px;
-        -webkit-mask-image: linear-gradient(to bottom, #000 344px, transparent 384px);
-        mask-image: linear-gradient(to bottom, #000 344px, transparent 384px);
-      }
-      #aarv-root:not(.aarv-full) .aarv-rank,
-      #aarv-root:not(.aarv-full) .aarv-row {
-        height: 104px;
-      }
       
     </style>
   </head>
@@ -410,10 +393,10 @@
         var slot = ["1", "2", "3"].indexOf(String(V.brandRank));
         if (slot < 0) slot = 0;
 
-        /* slot pitch and row height follow the version: 142/124 wide, 132/116 vertical, 120/104 vertical top and bottom */
+        /* slot pitch and row height follow the version: 142/124 wide, 132/116 vertical */
         var SLOT = 142;
         
-        SLOT = placement === "full" ? 132 : 120;
+        SLOT = 132;
         
         [1, 2, 3].forEach(function (n) {
           document.getElementById("aarv-rank-" + n).style.top = (n - 1) * SLOT + "px";
