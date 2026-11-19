@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the graph in the 780x1072 field (y 288-1360). top / bottom: the graph on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the graph in the 780x1072 field (y 288-1360). top / bottom: the graph on a brand card 780x760 at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, up to two lines. Empty hides it.", "maxLength": 27, "default": "Рендеры растут" },
     { "id": "labels", "type": "string", "role": "content", "label": "X labels", "description": "Point labels separated by ;, 2 to 7 items, each up to 5 characters.", "maxLength": 48, "default": "Янв;Фев;Мар;Апр;Май;Июн" },
     { "id": "name1", "type": "string", "role": "content", "label": "Series 1 name", "description": "Legend name of the red line.", "maxLength": 17, "default": "Рендеры" },
@@ -126,15 +126,19 @@
         font-size: 32px;
         margin-top: 26px;
       }
+      /* the author's 760 card keeps its size: the headline, the key and the 440 graph need 581-643 px
+         inside its 40 px padding; it is taller than the 652 field beside the speaker, so it hangs from
+         y 288 (top) or stands on y 1360 (bottom) and is placed full: the face is never under a card
+         (vertical.md:19) */
       #mlgv-root.mlgv-card #mlgv-field {
-        height: 652px;
+        height: 760px;
         padding: 40px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #mlgv-root.mlgv-bottom #mlgv-field {
-        top: 708px;
+        top: 600px;
       }
       #mlgv-root.mlgv-card #mlgv-title {
         font-size: 64px;
@@ -225,7 +229,9 @@
         svg.setAttribute("width", CW);
         svg.setAttribute("height", CH);
         svg.setAttribute("viewBox", "0 0 " + CW + " " + CH);
-        svg.style.marginTop = "28px";
+        /* full: a two-line headline, the key and the 760 graph overfill the 1072 field (y 288-1360), the
+           headline's glyph 2 px over y 288, so the air over the graph gives up 6 px there */
+        svg.style.marginTop = (placement === "full" ? 22 : 28) + "px";
         var NS = "http://www.w3.org/2000/svg";
         function el(tag, attrs, text) {
           var e = document.createElementNS(NS, tag);
