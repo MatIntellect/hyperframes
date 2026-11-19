@@ -14,7 +14,7 @@
                 data-start="0" data-duration="<recording length>" data-track-index="0"></video>
        </div>
   3. In the reel's paused timeline, one line:
-       speakerCircle(tl, "#krug", "2.0|540|1150|1; 9.4|540|390|1; 14.7|0; 21.95|540|940|1.6");
+       speakerCircle(tl, "#krug", "2.0|540|1150|1; 9.4|540|498|1; 14.7|0; 21.95|540|940|1.6");
      Each place is time|x|y|size[|move seconds[|how]]: seconds on the reel's timeline, the circle's
      centre in frame pixels, size 1–1.95 (0 = leaves the frame), the move length (default 0.6 s), and
      how it gets there: a GSAP ease name for the move (default power3.inOut), or cut – the circle is
@@ -26,7 +26,7 @@
      Moves never overlap: each place starts after the previous move has finished (a leave
      takes 0.3 s, a come-back 0.45 s, a cut none); a leave while the circle is already gone is
      an error.
-     At rest the whole circle stays inside x 60–930, y 180–1360 (the reel's safe zone for graphics
+     At rest the whole circle stays inside x 60–930, y 288–1360 (the reel's safe zone for graphics
      and the circle); a place outside it, or a size outside 1–1.95, throws an error naming the place.
   The circle moves with transforms on the wrapper (overlays.md: "move it with transforms on a
   wrapper").
@@ -55,7 +55,7 @@
 
 <script>
   window.speakerCircle = function (tl, sel, places) {
-    var ZONE = { x0: 60, x1: 930, y0: 180, y1: 1360 };
+    var ZONE = { x0: 60, x1: 930, y0: 288, y1: 1360 };
     var list = String(places || "")
       .split(";")
       .map(function (p) {
@@ -94,7 +94,7 @@
             )
           )
             throw new Error(
-              "speakerCircle: circle leaves the safe zone x 60–930, y 180–1360 in '" + p + "'",
+              "speakerCircle: circle leaves the safe zone x 60–930, y 288–1360 in '" + p + "'",
             );
         }
         return pl;
