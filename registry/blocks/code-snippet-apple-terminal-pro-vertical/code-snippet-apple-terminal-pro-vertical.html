@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone in the 780x652 slot at y 288-940 / 708-1360, rest of the frame transparent. The text takes the largest size from 28 to 44 px at which the longest line and every line fit; the window is as tall as its lines and sits in the middle of its field.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone in the 780x652 slot at y 288-940 / 708-1360, rest of the frame transparent. The text takes the largest size from 28 to 44 px at which the longest line and every line fit (in 1000 px full, 760 px top / bottom); the window is as tall as its lines and sits in the middle of its field. A window taller than 652 sits in the middle of a 780x760 slot at y 288-1048 / 600-1360: taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title in the window bar.", "maxLength": 30, "default": "bash — 80×24" },
     { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Dim line already on screen above the prompt. Empty hides it. Up to 42 characters.", "maxLength": 42, "default": "Last login: Mon Jun 2 on ttys008" },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "Prompt before the command, green.", "maxLength": 18, "default": "user@Mac myapp %" },
@@ -227,9 +227,12 @@
           },
           Math.max(header.length, prompt.length + command.length + 1),
         );
-        var field = placement === "full" ? [270, 1000] : placement === "top" ? [180, 760] : [600, 760];
+        var field = placement === "full" ? [324, 1000] : placement === "top" ? [288, 760] : [600, 760];
         var size = Math.max(28, Math.min(44, Math.floor(744 / (0.61 * longest)), Math.floor((field[1] - 97) / (1.5 * rows))));
         var winH = Math.min(field[1], Math.max(380, Math.ceil(97 + 1.5 * size * (rows + 0.5))));
+        // у говорящего поле 652 (y 288-940 / 708-1360): окно до 652 стоит в его середине, окно выше – в авторском
+        // поле 760, подвешенном от 288 (до 1048) или стоящем на 1360 (от 600)
+        if (placement !== "full" && winH <= 652) field = [placement === "top" ? 288 : 708, 652];
         var win = document.getElementById("atpv-win");
         canvas.style.fontSize = size + "px";
         win.style.height = winH + "px";
