@@ -160,7 +160,10 @@
         left: 0;
         top: 272px;
         width: 1080px;
-        height: 593px;
+        /* 443: the zone top went from 180 to 288, so the note between the nav and the format bar is one
+           line (150 px here, 108 in the frame) shorter than the 593 of the 1180 field; the format bar and
+           the keyboard below keep their place in the frame */
+        height: 443px;
         overflow: hidden;
         /* the scroll edge under the toolbar, as iOS 26 softens it: a line scrolling up fades, never cut through its letters
            (the title rests 52 px down, clear of the 44 px edge) */
@@ -214,7 +217,7 @@
       #fmtbar {
         position: absolute;
         left: 35px;
-        top: 878px;
+        top: 728px;
         width: 1010px;
         height: 118px;
         background: #fdfdfd;
@@ -234,7 +237,7 @@
       #keyboard {
         position: absolute;
         left: 0;
-        top: 1033px;
+        top: 883px;
         width: 1080px;
         height: 887px;
         background: #cfd3da;
@@ -472,7 +475,7 @@
                 style="
                   left: 52px;
                   width: 100px;
-                  top: 878px;
+                  top: 728px;
                   font-size: 54px;
                   font-weight: 700;
                   color: #111;
@@ -485,7 +488,7 @@
               </div>
               <svg
                 class="fmticon icon"
-                style="left: 252px; top: 910px"
+                style="left: 252px; top: 760px"
                 width="64"
                 height="54"
                 viewBox="0 0 64 54"
@@ -520,7 +523,7 @@
               </svg>
               <svg
                 class="fmticon icon"
-                style="left: 432px; top: 906px"
+                style="left: 432px; top: 756px"
                 width="62"
                 height="62"
                 viewBox="0 0 62 62"
@@ -542,7 +545,7 @@
               </svg>
               <svg
                 class="fmticon icon"
-                style="left: 612px; top: 902px"
+                style="left: 612px; top: 752px"
                 width="46"
                 height="70"
                 viewBox="0 0 46 70"
@@ -557,7 +560,7 @@
               </svg>
               <svg
                 class="fmticon icon"
-                style="left: 774px; top: 906px"
+                style="left: 774px; top: 756px"
                 width="62"
                 height="62"
                 viewBox="0 0 62 62"
@@ -567,7 +570,7 @@
               </svg>
               <svg
                 class="fmticon icon"
-                style="left: 944px; top: 906px"
+                style="left: 944px; top: 756px"
                 width="64"
                 height="62"
                 viewBox="0 0 64 62"
@@ -851,8 +854,8 @@
         root.classList.add("nrv-" + placement);
         if (placement !== "full") {
           root.classList.add("nrv-half");
-          document.getElementById("note-viewport").style.height = "860px";
-          VIEW_EXTRA = 860 - 593;
+          document.getElementById("note-viewport").style.height = "710px";
+          VIEW_EXTRA = 710 - 443;
         }
         EXIT = vars.exit === "fade" ? "fade" : "none";
         CUES = String(vars.cues || "")
@@ -1172,6 +1175,14 @@
           ],
         },
       ];
+      // the full field's note is a line shorter than the 1180 field's (443, not 593), so its text starts
+      // scrolling one line earlier: on the caret's jump to line 1, with the measured curve of the first
+      // 150 px scroll. VIEW_EXTRA of a card (710 - 443) takes it back where the note is taller.
+      SCROLLS.unshift({
+        f0: JUMPS[0][0],
+        px: SCROLLS[1].px,
+        pts: SCROLLS[1].pts.map(([f, dy]) => [f - SCROLLS[1].f0 + JUMPS[0][0], dy]),
+      });
       const EASE = [0.0, 0.062, 0.297, 0.498, 0.684, 0.786, 0.889, 0.934, 0.968, 0.992, 0.999, 1.0];
       const CARET_H = 54,
         CARET_GAP = 2;
