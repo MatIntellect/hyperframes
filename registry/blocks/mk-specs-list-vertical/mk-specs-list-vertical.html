@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1072 field (y 288-1360), up to 6 rows. top / bottom: the list on a brand card 780x652 at y 288-940 / 708-1360, up to 4 rows, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1072 field (y 288-1360), up to 6 rows. top / bottom: the list on a brand card 780x760 at y 288-1048 / 600-1360, up to 4 rows, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line; the vertical sets it smaller to keep a long headline on one line. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
     { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 32.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first row land, 2 the last row lands (rows between are spread evenly), 3 the list fades out (only when exit is fade). Empty keeps 0.3 and 0.25 s per row.", "default": "" },
@@ -138,15 +138,18 @@
       .mslv-line {
         margin-top: 16px;
       }
+      /* the author's 760 card keeps its size: the headline and four rows fill it with the author's air; it is
+         taller than the 652 field beside the speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom)
+         and is placed full: the face is never under a card (vertical.md:19) */
       #mslv-root.mslv-card #mslv-field {
-        height: 652px;
+        height: 760px;
         padding: 44px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #mslv-root.mslv-bottom #mslv-field {
-        top: 708px;
+        top: 600px;
       }
       #mslv-root.mslv-card #mslv-title {
         font-size: 72px;
@@ -260,6 +263,31 @@
           rowEls.push(row);
           fills.push(fill);
         });
+        // The full list was laid out for the author's 1180 field. In the 1072 field (y 288-1360) the air between its
+        // groups (under the headline, between the rows) gives up what the list needs to stand 20 px inside the field
+        // edges, as six single-line rows under a headline stood in 1180, and never more than the 108 px the field lost.
+        // Measured once the faces have loaded: a value near its 32 characters can wrap. Type, line heights and rows
+        // stay the author's
+        if (placement === "full" && rowEls.length > 1) {
+          var face = getComputedStyle(rowEls[0]).fontFamily;
+          window.__hf.buildReady["mk-specs-list-vertical-air"] = Promise.all([
+            window.__hf.buildReady["mk-specs-list-vertical-title"],
+            document.fonts.load("700 56px " + face, field.textContent),
+            document.fonts.load("400 42px " + face, field.textContent),
+          ]).then(function () {
+            var first = title ? titleEl : rowEls[0],
+              last = rowEls[rowEls.length - 1],
+              tg = title ? parseFloat(getComputedStyle(titleEl).marginBottom) : 0,
+              rg = parseFloat(getComputedStyle(rowEls[1]).marginTop),
+              air = tg + rg * (rowEls.length - 1),
+              give = Math.min(108, air, last.offsetTop + last.offsetHeight - first.offsetTop + 40 - field.clientHeight);
+            if (give <= 0) return;
+            if (title) titleEl.style.marginBottom = tg * (1 - give / air) + "px";
+            rowEls.slice(1).forEach(function (r) {
+              r.style.marginTop = rg * (1 - give / air) + "px";
+            });
+          });
+        }
 
         var cues = String(V.cues || "")
           .split(",")
