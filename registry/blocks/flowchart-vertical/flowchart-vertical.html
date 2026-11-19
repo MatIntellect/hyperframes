@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own board to the frame edge, the tree in the 780x1072 field (y 288-1360). top / bottom: the tree on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own board to the frame edge, the tree in the 780x1072 field (y 288-1360). top / bottom: the tree on a brand card 780x760 at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "question", "type": "string", "role": "content", "label": "Question", "description": "Root note, up to two lines.", "maxLength": 40, "default": "Стоит ли учиться программировать?" },
     { "id": "answers", "type": "string", "role": "content", "label": "Answers", "description": "Two second-level notes separated by ;, each up to 22 characters.", "maxLength": 46, "default": "Да; Не уверен" },
     { "id": "leaves", "type": "string", "role": "content", "label": "Leaves", "description": "Four leaf notes separated by ;, each up to 32 characters: two under the first answer, two under the second.", "maxLength": 134, "default": "Начать с Python; Сначала без кода; Сделать свой сайт; Пройти вводный курс" },
@@ -218,10 +218,10 @@
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var s =
           placement === "full"
-            ? { x0: 150, x1: 930, T: 393, rh: 190, rf: 56, g1: 74, ah: 150, af: 40, g2: 44, lh: 188, lf: 34, g3: 28, ind: 56 }
-            : { x0: 180, x1: 900, T: (placement === "top" ? 288 : 708) + 30, rh: 116, rf: 38, g1: 32, ah: 90, af: 30, g2: 30, lh: 116, lf: 28, g3: 16, ind: 48 };
+            ? { x0: 150, x1: 930, T: 296, rh: 190, rf: 56, g1: 110, ah: 150, af: 40, g2: 60, lh: 210, lf: 34, g3: 40, ind: 56 }
+            : { x0: 180, x1: 900, T: (placement === "top" ? 288 : 600) + 60, rh: 130, rf: 38, g1: 50, ah: 100, af: 30, g2: 30, lh: 130, lf: 28, g3: 16, ind: 48 };
         if (placement === "full") board.style.cssText = "left:0;top:0;width:1080px;height:1920px";
-        else board.style.cssText = "left:150px;top:" + (placement === "top" ? 288 : 708) + "px;width:780px;height: 652px;border:2px solid var(--border, #2e2e32);border-radius:32px";
+        else board.style.cssText = "left:150px;top:" + (placement === "top" ? 288 : 600) + "px;width:780px;height:760px;border:2px solid var(--border, #2e2e32);border-radius:32px";
         Q = { x: s.x0, y: s.T, w: s.x1 - s.x0, h: s.rh, f: s.rf };
         var mid = (s.x0 + s.x1) / 2,
           colW = (s.x1 - s.x0 - 30) / 2;
