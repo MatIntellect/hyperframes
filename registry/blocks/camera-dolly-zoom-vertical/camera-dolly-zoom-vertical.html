@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the scene fills the frame, the subject in the middle of the 780x1072 field (y 288-1360). top / bottom: the scene inside a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the scene fills the frame, the subject in the middle of the 780x1072 field (y 288-1360). top / bottom: the scene inside a 780x760 card at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Plate in the lower left corner of the scene. Empty hides it.", "maxLength": 30, "default": "Эффект Хичкока" },
     { "id": "direction", "type": "enum", "role": "style", "label": "Dolly direction", "description": "out pulls the camera back and zooms in, the background rushes in. in pushes the camera forward and zooms out, the background falls away.", "default": "out", "options": [{ "value": "out", "label": "Dolly out + zoom in (background rushes in)" }, { "value": "in", "label": "Dolly in + zoom out (background falls away)" }] },
     { "id": "strength", "type": "number", "role": "style", "label": "Move strength (end / start distance ratio)", "description": "How many times the camera-to-subject distance changes over the move: at 2 it doubles for out and halves for in. The subject keeps its size; a larger number bends the background harder.", "default": 2, "min": 1.1, "max": 4, "step": 0.1 },
@@ -129,15 +129,18 @@
         bottom: 580px;
         max-width: 780px;
       }
+      /* the author's 760 card keeps its size: the figure (465 px) is centred on its y 380 and the label sits
+         28 px from its bottom, 54 px under the figure; in 652 they would touch. It is taller than the 652 field
+         beside the speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom) and is placed full */
       #cdzv-root.cdzv-card #cdzv-win {
         left: 150px;
         width: 780px;
-        height: 652px;
+        height: 760px;
         top: 288px;
         border-radius: 32px;
       }
       #cdzv-root.cdzv-bottom #cdzv-win {
-        top: 708px;
+        top: 600px;
       }
       #cdzv-root.cdzv-card #cdzv-label {
         left: 28px;
@@ -191,18 +194,18 @@
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         W = 1080;
         H = 1920;
-        subTop = 460;
-        // точка схода, стена и проём – в центре поля y 824; проём короче и по центру, чтобы при самой длинной фокусной (камера 12000 px) он оставался в y 288–1360
-        OY = 770;
+        subTop = 514;
+        // точка схода, стена и проём – в центре поля y 824; проём короче и по центру, чтобы при самой длинной фокусной (камера 12000 px) он оставался в y 271–1377 – фон, не надпись
+        OY = 824;
         portalH = 1400;
         portalDy = 0;
         if (placement !== "full") {
           root.classList.add("cdzv-card", "cdzv-" + placement);
           W = 780;
-          H = 652;
+          H = 760;
           k = 0.75;
           OY = 380;
-          // the figure centred on the vanishing point, as in full (460 + 310 = 770): half its height 310 * k above OY
+          // the figure centred on the vanishing point, as in full (514 + 310 = 824): half its height 310 * k above OY
           subTop = OY - 310 * k;
         }
         
