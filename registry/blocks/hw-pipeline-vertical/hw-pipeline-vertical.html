@@ -145,7 +145,7 @@
         // вертикаль: блоки сверху вниз (в поле 780 три в ряд с читаемыми подписями не встают)
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var zc = placement === "top" ? 614 : placement === "bottom" ? 1034 : 824;
-        var AH = placement === "full" ? 1180 : 680;
+        var AH = placement === "full" ? 1072 : 572;
         var bw = Math.max(need, placement === "full" ? 560 : 480),
           bh = Math.min(170, AH / (n + 0.6 * (n - 1))),
           gap = bh * 0.6;
