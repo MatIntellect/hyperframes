@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the blurred slide ground to the frame edge, the sheet centred in the 780x1072 field (y 288-1360). top / bottom: the sheet alone, preview shortened so it fills the 780x652 field at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the blurred slide ground to the frame edge, the sheet centred in the 780x1072 field (y 288-1360). top / bottom: the sheet alone, preview shortened so it fills 760 px at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "shareTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Heading at the top of the share sheet.", "maxLength": 20, "default": "Поделиться" },
     { "id": "senderName", "type": "string", "role": "content", "label": "Sender", "description": "Who offers the item, bold, before \"хочет поделиться\".", "maxLength": 16, "default": "MatIntellect" },
     { "id": "itemLabel", "type": "string", "role": "content", "label": "Item", "description": "What is offered, after \"хочет поделиться\".", "maxLength": 14, "default": "видео" },
@@ -215,16 +215,20 @@
         color: #6f6f73;
         font-weight: 400;
       }
+      /* full: the 974 sheet centred on y 824, the middle of the 1072 field (y 288-1360) */
       #ssc-root.ssc-full #ssc-card {
-        top: 283px;
+        top: 337px;
       }
+      /* the author's 760 sheet keeps its size: title, preview, strip and the button row fill it; it is taller
+         than the 652 field beside the speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom) and is
+         placed full: the face is never under a card (vertical.md:19) */
       #ssc-root.ssc-top #ssc-card,
       #ssc-root.ssc-bottom #ssc-card {
         top: 288px;
-        height: 652px;
+        height: 760px;
       }
       #ssc-root.ssc-bottom #ssc-card {
-        top: 708px;
+        top: 600px;
       }
       #ssc-root.ssc-top #ssc-imagebox,
       #ssc-root.ssc-bottom #ssc-imagebox {
