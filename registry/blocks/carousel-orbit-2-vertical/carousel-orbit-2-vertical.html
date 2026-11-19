@@ -2,7 +2,7 @@
 <html
   lang="en"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, the carousel rebuilt for the 780x1072 field (y 288-1360). top / bottom: the carousel in the 780x652 field at y 288-940 / 708-1360, rest of the frame transparent. Cards may run past the side edges; nothing enters the caption band.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, the carousel rebuilt for the 780x1072 field (y 288-1360). top / bottom: the carousel in the 780x760 field it was built for, at y 288-1048 / 600-1360, rest of the frame transparent: taller than the 652 field beside the speaker, so place it full, the face is never under a card. Cards may run past the side edges; nothing enters the caption band.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     {"id": "image1", "type": "image", "role": "content", "label": "Card image 1", "description": "Image on card 1 of 24. Any aspect; it is fitted into the card box. Empty repeats the filled cards in order; with every card empty the cards are plain monochrome placeholder plates, so fill at least one.", "portrays": ["subject_image"], "default": ""},
     {"id": "image2", "type": "image", "role": "content", "label": "Card image 2", "description": "Image on card 2 of 24. Any aspect; it is fitted into the card box. Empty repeats the filled cards in order; with every card empty the cards are plain monochrome placeholder plates, so fill at least one.", "portrays": ["subject_image"], "default": ""},
     {"id": "image3", "type": "image", "role": "content", "label": "Card image 3", "description": "Image on card 3 of 24. Any aspect; it is fitted into the card box. Empty repeats the filled cards in order; with every card empty the cards are plain monochrome placeholder plates, so fill at least one.", "portrays": ["subject_image"], "default": ""},
@@ -691,7 +691,9 @@
            its own proportion */
         const placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement !== "full") root.classList.add("korbi2v-clear");
-        const field = placement === "top" ? [288, 940] : placement === "bottom" ? [708, 1360] : [288, 1360];
+        /* top / bottom: the 760 field the sphere was built for, hung from y 288 / standing on y 1360; squeezed
+           into the 652 field beside the speaker the whole sphere and its cards would shrink to 652/760 */
+        const field = placement === "top" ? [288, 1048] : placement === "bottom" ? [600, 1360] : [288, 1360];
         SHIFT = (field[0] + field[1]) / 2 - comp.outHeight / 2;
         const fieldH = ((field[1] - field[0]) * comp.width) / comp.outWidth;
         const fieldW = (780 * comp.width) / comp.outWidth;
