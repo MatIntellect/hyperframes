@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, hex map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent; the hexes there are too small for 28 px codes, so codes are hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, hex map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x760 at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card; the hexes there are too small for 28 px codes, so codes are hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "Медианный доход по штатам" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Доход домохозяйства в год, долларов, 2024" },
     { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "States separated by ;, each as code: value with the two-letter postal code (CA, NY, TX, DC...). Every state is one equal hex with its code; colour runs from the lowest to the highest value.", "maxLength": 800, "default": "MD: 106998; NJ: 101778; MA: 101079; CT: 92545; HI: 91010; NH: 90845; WA: 90325; CA: 89648; CO: 87598; VA: 87249; UT: 86833; MN: 84313; AK: 83601; NY: 81386; RI: 81370; IL: 79253; OR: 76632; DE: 75932; WI: 72458; NV: 71646; VT: 71560; PA: 71610; ND: 71017; NE: 70654; TX: 70813; AZ: 70821; ID: 69973; MT: 68091; GA: 67992; ME: 67587; FL: 67917; IA: 67684; WY: 67249; SD: 66894; MI: 66986; IN: 65834; OH: 64018; MO: 63594; KS: 66354; NC: 65070; TN: 63426; SC: 62064; OK: 60438; KY: 57584; NM: 58257; AL: 57563; LA: 55728; WV: 52520; AR: 53289; MS: 52434; DC: 101722" },
@@ -170,24 +170,32 @@
         font-size: 36px;
         margin-top: 14px;
       }
+      /* full field 780x1072: at the text limits the column is 108 px taller than the field holds with the
+         headline's glyphs (104 px, line-height 1, the breve of Й 11 px above its line) under 288. The air
+         between the groups gives up down to the author's 14 px gap (56 -> 14 above the map, 40 -> 14 under
+         it) and the hex map is drawn 560 high instead of 600 (MAPH below); type, line heights and the source's
+         bottom stay the author's, the codes keep 28 px inside their hexes */
       #ushv-map {
-        margin-top: 56px;
+        margin-top: 14px;
       }
       #ushv-foot {
-        margin-top: 40px;
+        margin-top: 14px;
         flex-direction: column-reverse;
         align-items: stretch;
         gap: 22px;
       }
+      /* the author's 760 card keeps its size: headline, subtitle, map, legend and source fill it at the text
+         limits; it is taller than the 652 field beside the speaker, so it hangs from y 288 (top) or stands
+         on y 1360 (bottom) and is placed full: the face is never under a card (vertical.md:19) */
       #ushv-root.ushv-card #ushv-box {
-        height: 652px;
+        height: 760px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #ushv-root.ushv-bottom #ushv-box {
-        top: 708px;
+        top: 600px;
       }
       #ushv-root.ushv-card #ushv-title {
         font-size: 68px;
@@ -241,7 +249,7 @@
         
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         MAPW = 780;
-        MAPH = 600;
+        MAPH = 560; // 600 in the 1180 field: the grid fills the height, so 40 px of the 108 come from the map (0.93)
         if (placement !== "full") {
           root.classList.add("ushv-card", "ushv-" + placement);
           root.querySelector(".ushv-ground").remove();
