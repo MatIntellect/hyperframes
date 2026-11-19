@@ -101,7 +101,7 @@
         left: 0;
         top: 0;
         width: 750px;
-        height: var(--acr-stage-h, 1135px);
+        height: var(--acr-stage-h, 1031px);
         transform: scale(1.04);
         transform-origin: top left;
         overflow: hidden;
@@ -159,6 +159,10 @@
         visibility: hidden;
         opacity: 0;
       }
+      /* the 652 px half card holds the thread tighter, so the longest answer clears the composer */
+      .acr-half #acr-bubble {
+        padding: 16px 30px;
+      }
 
       /* answer */
       #acr-answer {
@@ -177,6 +181,12 @@
       #acr-answer .acr-ali {
         display: flex;
         margin: 0 0 6.5px 0;
+      }
+      .acr-half #acr-answer .acr-ap {
+        margin-bottom: 8px;
+      }
+      .acr-half #acr-answer .acr-ali {
+        margin-bottom: 0;
       }
       #acr-answer .acr-mark {
         width: 30px;
@@ -591,8 +601,8 @@
         root.classList.add("acr-" + placement);
         if (!full) root.classList.add("acr-half");
         /* stage height in authored px: the field height / 1.04 */
-        root.style.setProperty("--acr-stage-h", (full ? 1135 : 731) + "px");
-        root.style.setProperty("--acr-bubble-top", (full ? 84 : 28) + "px");
+        root.style.setProperty("--acr-stage-h", (full ? 1031 : 627) + "px");
+        root.style.setProperty("--acr-bubble-top", (full ? 84 : 24) + "px");
         if (!full) {
           document.getElementById("acr-ground").remove();
           document.getElementById("acr-header").remove();
@@ -650,8 +660,8 @@
           row.appendChild(body);
           answerEl.appendChild(row);
         });
-        /* the answer starts 60 px under the bubble, whatever its line count */
-        var answerTop = bubble.offsetTop + bubble.offsetHeight + 60;
+        /* the answer starts 60 px under the bubble (28 in the half card), whatever its line count */
+        var answerTop = bubble.offsetTop + bubble.offsetHeight + (full ? 60 : 28);
         answerEl.style.top = answerTop + "px";
         document.getElementById("acr-dot").style.top = answerTop + 12 + "px";
 
