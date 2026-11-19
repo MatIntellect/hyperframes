@@ -3,7 +3,7 @@
   lang="ru"
   data-resolution="portrait"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the card colour to the frame edge, logo, headline, subhead, moving avatar belt and pills in the 780x1072 field (y 288-1360). top / bottom: a 780x652 card with the headline over the belt at y 288-940 / 708-1360, rest of the frame transparent; subhead and pills are not shown there.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the card colour to the frame edge, logo, headline, subhead, moving avatar belt and pills in the 780x1072 field (y 288-1360). top / bottom: a 780x760 card with the headline over the belt at y 288-1048 / 600-1360, rest of the frame transparent; subhead and pills are not shown there; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Square brand mark: in the header next to the name and on two belt tiles.", "default": "assets/img/matintellect-mark.svg"},
     {"id": "brandName", "type": "string", "role": "content", "label": "Brand name", "description": "Name next to the mark in the header (full placement only).", "maxLength": 14, "default": "MatIntellect"},
     {"id": "video1", "type": "string", "role": "content", "label": "Belt video 1", "description": "Video file (path or URL) on belt tile 1, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r1k1.mp4"},
@@ -107,7 +107,7 @@
         left: 150px;
         width: 780px;
         top: 288px;
-        height: 652px;
+        height: 760px;
         overflow: hidden;
       }
       .apc-full #apc-card {
@@ -118,7 +118,7 @@
         overflow: visible;
       }
       .apc-bottom #apc-card {
-        top: 708px;
+        top: 600px;
       }
       .apc-top #apc-card,
       .apc-bottom #apc-card {
@@ -127,7 +127,7 @@
       }
       .apc-top #apc-stage,
       .apc-bottom #apc-stage {
-        transform: translate(23px, -236px) scale(0.68);
+        transform: translate(23px, -128px) scale(0.68);
       }
       .apc-top #apc-hdr-logo,
       .apc-bottom #apc-hdr-logo,
@@ -139,9 +139,9 @@
       }
       .apc-top #apc-hdr-title,
       .apc-bottom #apc-hdr-title {
-        top: 367px;
-        font-size: 75px;
-        line-height: 75px;
+        top: 240px;
+        font-size: 128px;
+        line-height: 128px;
       }
 
       .hdr {
