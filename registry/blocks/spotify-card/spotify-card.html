@@ -180,6 +180,23 @@
         font-weight: 600;
         color: rgba(255, 255, 255, 0.6);
       }
+      /* full: with a two-line track the card is about 1082.5 px tall, 10.5 more than the 1072 field
+         (y 288-1360) holds. The 36 px gap under the cover is a spacer that gives up only what the field
+         lacks (about 25.5 then, the author's 36 with a one-line track); type, line heights, the cover and
+         the paddings stay the author's */
+      [data-composition-id="spotify-card"].spc-full .spc-card {
+        max-height: 100%;
+      }
+      [data-composition-id="spotify-card"].spc-full .spc-art {
+        margin-bottom: 0;
+      }
+      [data-composition-id="spotify-card"].spc-full .spc-card::after {
+        content: "";
+        flex: 0 1 36px;
+      }
+      [data-composition-id="spotify-card"].spc-full .spc-text {
+        order: 1;
+      }
 
       /* top / bottom: the mini-player row */
       [data-composition-id="spotify-card"].spc-top .spc-card,
