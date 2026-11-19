@@ -1,103 +1,106 @@
+<!doctype html>
 <!--
-  Grid Pixelate Wipe — transition effect.
+  Grid Pixelate Wipe: a transition between two scenes. Opaque cells grow from the center until
+  they cover the whole frame, hold, then shrink from the edges with the next scene behind them.
 
-  Usage: mount this overlay above both scenes in a clip 1.2 s long. Its own
-  timeline (see below) grows the cells from the center until they cover the
-  whole frame, holds, then shrinks them from the edges. The frame is fully
-  covered from 0.55 s to 0.65 s after the clip's start: put the cut between
-  the scenes at 0.6 s, so the clip starts 0.6 s before the cut. The cells
-  start at scale 0 from the first tween (fromTo), not from CSS: GSAP
-  overwrites a CSS transform it animates.
+  Usage: mount it over both scenes, once for each cut it covers. The host fills the frame
+  (style="position: absolute; inset: 0"), sits on a track above the scenes and runs 1.2 s. The
+  frame is fully covered from 0.55 s to 0.65 s after the host's start: put the cut between the
+  scenes at 0.6 s, so the host starts 0.6 s before the cut.
 
-  Customize:
+  Customize in the installed copy:
   - COLS / ROWS: grid density (default 16×9, turned to 9×16 in a box taller
     than wide so the cells stay square), edit in the script below
   - --grid-color: cell fill color (default the reel brand red --brand: opaque
     cells that read on the reel ground --bg)
-  - Stagger "from": "center" for radial, "edges" for inward, "random" for scatter
+  - Stagger "from": "center" for radial, "edges" for inward
+
+  Mount contract: the runtime clones only this template. #root fills the host
+  box and has no data-width or data-height. One paused timeline registers under
+  the literal grid-pixelate-wipe key. The cells start at scale 0 from the first
+  tween (fromTo), not from CSS: GSAP overwrites a CSS transform it animates.
 -->
+<html lang="en" data-composition-id="grid-pixelate-wipe" data-composition-duration="1.2">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Grid Pixelate Wipe</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="grid-pixelate-wipe" data-duration="1.2" data-fps="30">
+        <style>
+          #root {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+          }
 
-<div
-  id="grid-pixelate-overlay"
-  data-layout-allow-occlusion
-  style="
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 999;
-    display: grid;
-  "
-></div>
+          .gpw-grid {
+            --grid-color: var(--brand, #ff0000);
+            position: absolute;
+            inset: 0;
+            display: grid;
+          }
 
-<style>
-  #grid-pixelate-overlay {
-    --grid-color: var(--brand, #ff0000);
-  }
+          .gpw-cell {
+            background: var(--grid-color);
+            transform-origin: center center;
+          }
+        </style>
 
-  #grid-pixelate-overlay .grid-cell {
-    background: var(--grid-color);
-    transform-origin: center center;
-  }
-</style>
+        <div class="gpw-grid" data-layout-allow-occlusion></div>
 
-<script>
-  (function () {
-    const overlay = document.getElementById("grid-pixelate-overlay");
-    if (!overlay) return;
-    const tall = overlay.clientHeight > overlay.clientWidth;
-    const COLS = tall ? 9 : 16;
-    const ROWS = tall ? 16 : 9;
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            // The cells are this mount's own: a film mounts the wipe once for each cut.
+            var grid = document.getElementById("root").querySelector(".gpw-grid");
+            var tall = grid.clientHeight > grid.clientWidth;
+            var COLS = tall ? 9 : 16;
+            var ROWS = tall ? 16 : 9;
 
-    overlay.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
-    overlay.style.gridTemplateRows = `repeat(${ROWS}, 1fr)`;
+            grid.style.gridTemplateColumns = "repeat(" + COLS + ", 1fr)";
+            grid.style.gridTemplateRows = "repeat(" + ROWS + ", 1fr)";
 
-    for (let i = 0; i < COLS * ROWS; i++) {
-      const cell = document.createElement("div");
-      cell.className = "grid-cell";
-      overlay.appendChild(cell);
-    }
-  })();
-</script>
+            var cells = [];
+            for (var i = 0; i < COLS * ROWS; i++) {
+              var cell = document.createElement("div");
+              cell.className = "gpw-cell";
+              grid.appendChild(cell);
+              cells.push(cell);
+            }
 
-<!--
-  Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["grid-pixelate-wipe"]; mount the snippet inside a clip with data-composition-id="grid-pixelate-wipe"
-  and the runtime nests it at that clip's start.
--->
+            var tl = gsap.timeline({ paused: true });
+            tl.fromTo(
+              cells,
+              { scale: 0 },
+              {
+                scale: 1,
+                duration: 0.3,
+                stagger: { amount: 0.25, from: "center" },
+                ease: "power2.inOut",
+              },
+              0,
+            );
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="grid-pixelate-wipe" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    tl.fromTo(
-      "#grid-pixelate-overlay .grid-cell",
-      { scale: 0 },
-      {
-        scale: 1,
-        duration: 0.3,
-        stagger: { amount: 0.25, from: "center" },
-        ease: "power2.inOut",
-      },
-      startTime,
-    );
+            // The last cell has covered by 0.55 s; the host cuts between its scenes at 0.6 s.
+            // Reveal the next scene by removing the grid
+            tl.to(
+              cells,
+              {
+                scale: 0,
+                duration: 0.3,
+                stagger: { amount: 0.25, from: "edges" },
+                ease: "power2.inOut",
+              },
+              0.65,
+            );
 
-    // The last cell has covered by 0.55 s; the host cuts between its scenes at 0.6 s.
-    // Reveal the next scene by removing the grid
-    tl.to(
-      "#grid-pixelate-overlay .grid-cell",
-      {
-        scale: 0,
-        duration: 0.3,
-        stagger: { amount: 0.25, from: "edges" },
-        ease: "power2.inOut",
-      },
-      startTime + 0.65,
-    );
-    window.__timelines = window.__timelines || {};
-    window.__timelines["grid-pixelate-wipe"] = tl;
-  })();
-</script>
+            window.__timelines = window.__timelines || {};
+            window.__timelines["grid-pixelate-wipe"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

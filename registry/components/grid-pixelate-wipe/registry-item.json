@@ -3,7 +3,7 @@
   "name": "grid-pixelate-wipe",
   "type": "hyperframes:component",
   "title": "Grid Pixelate Wipe",
-  "description": "Transition effect where the screen dissolves into a grid of squares that fade out with staggered timing — use between scenes. Mount it inside a clip with data-composition-id=\"grid-pixelate-wipe\": its own timeline nests there, 1.2 s long, with the frame fully covered at 0.6 s, where the cut goes.",
+  "description": "Transition effect where the screen dissolves into a grid of squares that fade out with staggered timing — use between scenes. A composition of its own: mount it over both scenes once for each cut, in a host 1.2 s long that starts 0.6 s before the cut; the frame is fully covered at 0.6 s, where the cut goes.",
   "tags": ["transition", "wipe", "grid", "pixelate", "vertical"],
   "files": [
     {
