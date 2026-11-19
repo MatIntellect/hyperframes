@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent. Code of more than 13 lines keeps the 780x760 window it was made with, at y 288-1048 / 600-1360: taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "async function loadConfig(path) {\n  const raw = await readFile(path)\n  const config = JSON.parse(raw)\n  return validate(config)\n}"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
     {"id": "filename", "type": "string", "role": "content", "label": "File name", "description": "Name in the window title bar.", "maxLength": 28, "default": "loadConfig.js"},
@@ -265,6 +265,13 @@
         top: 708px;
         height: 652px;
       }
+      #kdtypiv-root.kdtypiv-top.kdtypiv-tall .editor {
+        height: 760px;
+      }
+      #kdtypiv-root.kdtypiv-bottom.kdtypiv-tall .editor {
+        top: 600px;
+        height: 760px;
+      }
       #kdtypiv-root.kdtypiv-top .bg-field,
       #kdtypiv-root.kdtypiv-top .bg-grid,
       #kdtypiv-root.kdtypiv-top .bg-glow,
@@ -299,21 +306,6 @@
       .caret {
         height: 30px;
         margin-top: 6px;
-      }
-      #kdtypiv-root.kdtypiv-top .code,
-      #kdtypiv-root.kdtypiv-bottom .code,
-      #kdtypiv-root.kdtypiv-top .gutter,
-      #kdtypiv-root.kdtypiv-bottom .gutter {
-        top: 16px;
-        line-height: 40px;
-      }
-      #kdtypiv-root.kdtypiv-top .ln,
-      #kdtypiv-root.kdtypiv-bottom .ln {
-        height: 40px;
-      }
-      #kdtypiv-root.kdtypiv-top .line,
-      #kdtypiv-root.kdtypiv-bottom .line {
-        min-height: 40px;
       }
       
     </style>
@@ -466,6 +458,15 @@
         
         var PL = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         root.classList.add("kdtypiv-" + PL);
+        // the 652 px top and bottom windows hold 13 rows of 42 px under the code's 28 px top: longer code
+        // keeps the author's 760 px window
+        var rows = Math.max.apply(
+          null,
+          codes.map(function (c) {
+            return c.replace(/\n$/, "").split("\n").length;
+          }),
+        );
+        if (28 + 42 * rows > 586) root.classList.add("kdtypiv-tall");
         window.__kodFill = PL === "full" ? 0.72 : 0.95;
         var cv = document.getElementById("kdtypiv-gl");
         if (cv && PL !== "full") {
