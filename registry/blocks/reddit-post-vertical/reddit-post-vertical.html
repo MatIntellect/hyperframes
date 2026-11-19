@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, card centred in the 780x1072 field (y 288-1360). top: card in the 780x652 field at y 288-940, rest of the frame transparent. bottom: same field at y 708-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, card centred in the 780x1072 field (y 288-1360). top: card in the 780x652 field at y 288-940, rest of the frame transparent. bottom: same field at y 708-1360. A card taller than 652 px keeps its size and hangs from y 288 (top) or stands on y 1360 (bottom): place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "subreddit", "type": "string", "role": "content", "label": "Subreddit", "description": "Community name with r/.", "maxLength": 22, "default": "r/matintellect" },
     { "id": "author", "type": "string", "role": "content", "label": "Author line", "description": "Grey line under the community: user and age.", "maxLength": 26, "default": "u/matjester · 3 ч" },
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Post title, bold; up to three lines.", "maxLength": 80, "default": "Собрал систему, которая монтирует ролики без человека" },
@@ -169,6 +169,15 @@
       }
       #rdpv-root.rdpv-bottom #rdpv-field {
         top: 708px;
+      }
+      /* a card taller than the 652 field beside the speaker keeps its size (spec.md:48) and hangs from the
+         frame edge: wrap puts an overflowing line at y 288, wrap-reverse stands it on y 1360; a card that
+         fits stays centred. Such a card is placed full: the face is never under a card (vertical.md:19) */
+      #rdpv-root.rdpv-top #rdpv-field {
+        flex-wrap: wrap;
+      }
+      #rdpv-root.rdpv-bottom #rdpv-field {
+        flex-wrap: wrap-reverse;
       }
       #rdpv-card {
         width: 780px;
