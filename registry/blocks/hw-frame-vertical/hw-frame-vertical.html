@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the framed picture 700x452 with its caption centred on the field (y 824). top / bottom: the same on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the framed picture 700x452 with its caption centred on the field (y 824). top / bottom: the same on a 780x760 card at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "image", "type": "string", "role": "content", "label": "Image", "description": "Path to an IMAGE for the frame window (for example assets/shot.jpg). Media inside a block is not seeked, so live footage stays in the host over the window. Empty shows a stand-in.", "maxLength": 200, "default": "" },
     { "id": "caption", "type": "string", "role": "content", "label": "Caption", "description": "Line under the frame in Montserrat. Empty hides it.", "maxLength": 36, "default": "Наша поездка" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the border starts to draw (the picture, corner sparks and caption follow in the native 1.4 s), 2 the framed unit fades out (only when exit is fade; empty – 2 s after the caption lands, cue 1 + 3.8). Empty keeps 0.", "default": "" },
@@ -118,16 +118,20 @@
         text-shadow: 0 2px 14px rgb(0 0 0 / 40%);
       }
       
+      /* the author's 760 card keeps its size: the framed window, its sparks and a three-line caption take 628 of
+         it, centred as the author set them (FY 380); it is taller than the 652 field beside the speaker, so it
+         hangs from y 288 (top) or stands on y 1360 (bottom) and is placed full: the face is never under a card
+         (vertical.md:19) */
       #hwfv-root.hwfv-card #hwfv-stage {
         left: 150px;
         width: 780px;
-        height: 652px;
+        height: 760px;
         top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #hwfv-root.hwfv-bottom #hwfv-stage {
-        top: 708px;
+        top: 600px;
       }
       #hwfv-root.hwfv-card #hwfv-caption {
         font-size: 48px;
@@ -164,7 +168,7 @@
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         // окно в пропорции родного, рамка с искрами (до 40 px наружу) – в поле 780; окно и подпись – по центру поля
         S = { x: 190, y: 0, w: 700, h: 452 };
-        var FY = 770;
+        var FY = 824;
         if (placement !== "full") {
           root.classList.add("hwfv-card", "hwfv-" + placement);
           S = { x: 110, y: 0, w: 560, h: 361 };
