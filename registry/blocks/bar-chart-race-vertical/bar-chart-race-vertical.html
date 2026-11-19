@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the race in the 780x1072 field (y 288-1360), 6 bars. top / bottom: the race on a brand card 780x652 at y 288-940 / 708-1360, 5 bars, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the race in the 780x1072 field (y 288-1360), 6 bars. top / bottom: the race on a brand card 780x760 at y 288-1048 / 600-1360, 5 bars, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Headline, Bebas Neue, up to two lines.", "maxLength": 25, "default": "Кто растёт быстрее" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "One line under the headline; the unit goes here.", "maxLength": 31, "default": "Подписчики, тысяч" },
     { "id": "periods", "type": "string", "role": "content", "label": "Periods", "description": "Period labels separated by commas, 2 to 12, each up to 6 characters. The current one is shown large.", "maxLength": 90, "default": "2019, 2020, 2021, 2022, 2023, 2024" },
@@ -205,18 +205,18 @@
           };
         } else {
           G = {
-            box: [150, placement === "top" ? 288 : 708, 780, 652],
-            head: [36, 28, 520],
+            box: [150, placement === "top" ? 288 : 600, 780, 760],
+            head: [36, 34, 520],
             titleSize: 64,
             subSize: 28,
-            period: { right: 36, top: 24, size: 104 },
-            plot: [0, 256, 780, 380],
+            period: { right: 36, top: 30, size: 104 },
+            plot: [0, 268, 780, 470],
             stacked: true,
             nameX: 36,
             trackX: 36,
             trackW: 520,
             fs: 28,
-            tickTop: 206,
+            tickTop: 212,
             tickSize: 28,
             bars: 5,
           };
