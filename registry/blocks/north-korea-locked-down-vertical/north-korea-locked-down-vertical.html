@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the map fills the frame, corner marks on the 780x1072 field (y 288-1360), the circled country in its middle. top / bottom: the map on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the map fills the frame, corner marks on the 780x1072 field (y 288-1360), the circled country in its middle. top / bottom: the map on a 780x760 card at y 288-1048 / 600-1360, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "country", "type": "string", "role": "content", "label": "Country", "description": "Country the camera zooms into and the scribble circles: the Natural Earth English name (North Korea, Iran, Russia, United States of America...) or the ISO 3166 numeric code. Overseas parts are left out of the framing.", "maxLength": 40, "default": "North Korea" },
     { "id": "label", "type": "string", "role": "content", "label": "Label", "description": "Pop-up label above the circle, Bebas Neue, up to two lines separated by |.", "maxLength": 20, "default": "Под|замком" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the camera starts its zoom (the circle draws 3.1 s later, the label and the red wash follow), 2 the map fades out (only when exit is fade). Empty keeps 0.", "default": "" },
@@ -226,16 +226,19 @@
         right: 150px;
         bottom: 560px;
       }
+      /* the author's 760 card keeps its size: the map is framed in it with the label and the circle at the
+         author's scale (0.8); it is taller than the 652 field beside the speaker, so it hangs from y 288 (top)
+         or stands on y 1360 (bottom) and is placed full: the face is never under a card (vertical.md:19) */
       #nklv-root.nklv-card #nklv-stage {
         left: 150px;
         width: 780px;
-        height: 652px;
+        height: 760px;
         top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #nklv-root.nklv-bottom #nklv-stage {
-        top: 708px;
+        top: 600px;
       }
       #nklv-root.nklv-card .nklv-corner {
         width: 60px;
@@ -314,7 +317,7 @@
         if (placement !== "full") {
           root.classList.add("nklv-card", "nklv-" + placement);
           W = 780;
-          H = 652;
+          H = 760;
           S = [390, 460];
           K = 0.8;
         }
