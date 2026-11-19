@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the fill covers the whole frame, the 16:9 picture 780x439 sits in the middle of the field (y 551-990). top / bottom: fill and picture inside a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the fill covers the whole frame, the 16:9 picture 780x439 sits in the middle of the field (y 605-1044). top / bottom: fill and picture inside a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "image", "type": "string", "role": "content", "label": "Landscape image", "description": "Path to a landscape IMAGE (for example assets/shot.jpg). Media inside a block is not seeked, so live footage stays in the host over the picture slot. Empty shows a 16:9 stand-in.", "maxLength": 200, "default": "" },
     { "id": "mode", "type": "enum", "role": "style", "label": "Fill mode", "description": "scale: a big blurred copy behind. mirror: dimmed mirrored copies above and below. copy: dimmed straight copies above and below.", "default": "scale", "options": [{ "value": "scale", "label": "Blurred scale" }, { "value": "mirror", "label": "Mirror" }, { "value": "copy", "label": "Copy" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the picture rises in over the fill (then eases out of a slow 5% push), 2 the block fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
@@ -110,16 +110,16 @@
       .yvfv-side {
         left: 0;
         right: 0;
-        height: 551px;
+        height: 605px;
       }
-      /* картинка стоит по центру поля, не кадра: нижняя полоса – от картинки (990) до низа кадра */
+      /* картинка стоит по центру поля, не кадра: нижняя полоса – от картинки (1044) до низа кадра */
       #yvfv-side-b {
-        height: 930px;
+        height: 876px;
       }
       #yvfv-fg {
         left: 150px;
         width: 780px;
-        top: 551px;
+        top: 605px;
         height: 439px;
       }
       #yvfv-root.yvfv-card #yvfv-stage {
@@ -133,11 +133,11 @@
         top: 708px;
       }
       #yvfv-root.yvfv-card .yvfv-side {
-        height: 161px;
+        height: 107px;
       }
       #yvfv-root.yvfv-card #yvfv-fg {
         left: 0;
-        top: 161px;
+        top: 107px;
       }
       
     </style>
