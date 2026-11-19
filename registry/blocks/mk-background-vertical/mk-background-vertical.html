@@ -106,10 +106,10 @@
         if (placement !== "full") {
           // пятна – по размеру карточки, иначе второе уходит за её край
           k = 780 / 1920;
-          place(b1, 0.28, 0.32, 950 * k, 780, 760);
-          place(b2, 0.74, 0.66, 1100 * k, 780, 760);
+          place(b1, 0.28, 0.32, 950 * k, 780, 652);
+          place(b2, 0.74, 0.66, 1100 * k, 780, 652);
         }
-        if (placement !== "full") gsap.set(card, { x: 150, y: placement === "top" ? 288 : 708, width: 780, height: 760, borderRadius: 32 });
+        if (placement !== "full") gsap.set(card, { x: 150, y: placement === "top" ? 288 : 708, width: 780, height: 652, borderRadius: 32 });
         
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cB + 4);
         tl.set({}, {}, LIFE);
