@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent. A version of the code of more than 13 lines keeps the 780x760 window it was made with, at y 288-1048 / 600-1360: taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  const out = []\n  for (const u of users) {\n    if (u.active) {\n      out.push(u.name)\n    }\n  }\n  return out\n}"},
     {"id": "codeAfter", "type": "string", "role": "content", "label": "Code after", "description": "The code after the change, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  return users\n    .filter((u) => u.active)\n    .map((u) => u.name)\n}"},
     {"id": "codeFinal", "type": "string", "role": "content", "label": "Code final", "description": "The last version of the code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "const activeNames = (users) =>\n  users\n    .filter((u) => u.active)\n    .map((u) => u.name)"},
@@ -267,6 +267,13 @@
         top: 708px;
         height: 652px;
       }
+      #kdmorpv-root.kdmorpv-top.kdmorpv-tall .editor {
+        height: 760px;
+      }
+      #kdmorpv-root.kdmorpv-bottom.kdmorpv-tall .editor {
+        top: 600px;
+        height: 760px;
+      }
       #kdmorpv-root.kdmorpv-top .bg-field,
       #kdmorpv-root.kdmorpv-top .bg-grid,
       #kdmorpv-root.kdmorpv-top .bg-glow,
@@ -301,15 +308,6 @@
       .caret {
         height: 30px;
         margin-top: 6px;
-      }
-      #kdmorpv-root.kdmorpv-top .code,
-      #kdmorpv-root.kdmorpv-bottom .code {
-        top: 16px;
-        line-height: 40px;
-      }
-      #kdmorpv-root.kdmorpv-top .line,
-      #kdmorpv-root.kdmorpv-bottom .line {
-        min-height: 40px;
       }
       
     </style>
@@ -462,6 +460,15 @@
         
         var PL = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         root.classList.add("kdmorpv-" + PL);
+        // the 652 px top and bottom windows hold 13 rows of 42 px under the code's 28 px top: longer code
+        // keeps the author's 760 px window
+        var rows = Math.max.apply(
+          null,
+          codes.map(function (c) {
+            return c.replace(/\n$/, "").split("\n").length;
+          }),
+        );
+        if (28 + 42 * rows > 586) root.classList.add("kdmorpv-tall");
         window.__kodFill = PL === "full" ? 0.72 : 0.95;
         var cv = document.getElementById("kdmorpv-gl");
         if (cv && PL !== "full") {
