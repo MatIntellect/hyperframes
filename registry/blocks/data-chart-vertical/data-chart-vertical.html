@@ -163,7 +163,7 @@
       #dchv-root.dchv-top .dchv-box,
       #dchv-root.dchv-bottom .dchv-box {
         height: 652px;
-        padding: 40px;
+        padding: 28px 40px;
         justify-content: center;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
@@ -268,14 +268,14 @@
         
         
         var CW = placement === "full" ? 780 : 696;
-        var CH = placement === "full" ? 700 : 400;
+        var CH = placement === "full" ? 636 : 328;
         var FS = placement === "full" ? 32 : 28;
         
         var svg = document.getElementById("dchv-svg");
         svg.setAttribute("width", CW);
         svg.setAttribute("height", CH);
         svg.setAttribute("viewBox", "0 0 " + CW + " " + CH);
-        svg.style.marginTop = "28px";
+        svg.style.marginTop = placement === "full" ? "28px" : "16px";
         var NS = "http://www.w3.org/2000/svg";
         function el(tag, attrs, text) {
           var e = document.createElementNS(NS, tag);
