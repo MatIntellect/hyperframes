@@ -291,6 +291,23 @@
       .aarv-row {
         height: 116px;
       }
+      /* top / bottom: the 652 px field takes the card with less air and shorter rows, type unchanged */
+      #aarv-root:not(.aarv-full) #aarv-card {
+        padding: 32px 40px 8px;
+      }
+      #aarv-root:not(.aarv-full) #aarv-answer {
+        margin-top: 28px;
+      }
+      #aarv-root:not(.aarv-full) #aarv-list {
+        height: 384px;
+        margin-top: 16px;
+        -webkit-mask-image: linear-gradient(to bottom, #000 344px, transparent 384px);
+        mask-image: linear-gradient(to bottom, #000 344px, transparent 384px);
+      }
+      #aarv-root:not(.aarv-full) .aarv-rank,
+      #aarv-root:not(.aarv-full) .aarv-row {
+        height: 104px;
+      }
       
     </style>
   </head>
@@ -393,10 +410,10 @@
         var slot = ["1", "2", "3"].indexOf(String(V.brandRank));
         if (slot < 0) slot = 0;
 
-        /* slot pitch and row height follow the version: 142/124 wide, 132/116 vertical */
+        /* slot pitch and row height follow the version: 142/124 wide, 132/116 vertical, 120/104 vertical top and bottom */
         var SLOT = 142;
         
-        SLOT = 132;
+        SLOT = placement === "full" ? 132 : 120;
         
         [1, 2, 3].forEach(function (n) {
           document.getElementById("aarv-rank-" + n).style.top = (n - 1) * SLOT + "px";
