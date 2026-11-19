@@ -48,7 +48,7 @@
       "type": "string",
       "role": "content",
       "label": "Note title line 2",
-      "description": "Second line of the note title.",
+      "description": "Second line of the note title. Set to empty, the title is one line and the place of its second line stays blank above the body.",
       "maxLength": 16,
       "default": "про ролики."
     },
@@ -57,7 +57,7 @@
       "type": "string",
       "role": "content",
       "label": "Note body line 1",
-      "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes.",
+      "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes. A line set to empty is no line: the note is as long as the lines that carry text, and they close up from the top.",
       "maxLength": 30,
       "default": "ролики выходили скучными"
     },
@@ -121,7 +121,7 @@
       "type": "string",
       "role": "timing",
       "label": "Cues",
-      "description": "Comma-separated seconds from mount start: 1 typing starts, 2-8 body lines 1-7 finish typing, 9 the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.",
+      "description": "Comma-separated seconds from mount start: 1 typing starts, then one for each body line that carries text, the second it has finished typing (2-8 for seven lines), then the second the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.",
       "default": ""
     },
     {

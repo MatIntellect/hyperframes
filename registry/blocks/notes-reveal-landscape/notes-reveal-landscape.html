@@ -4,15 +4,15 @@
   data-resolution="landscape"
   data-composition-variables='[
     { "id": "titleL1", "type": "string", "role": "content", "label": "Note title line 1", "description": "First line of the bold note title.", "maxLength": 16, "default": "Что я понял" },
-    { "id": "titleL2", "type": "string", "role": "content", "label": "Note title line 2", "description": "Second line of the note title.", "maxLength": 16, "default": "про ролики." },
-    { "id": "noteLine1", "type": "string", "role": "content", "label": "Note body line 1", "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes.", "maxLength": 30, "default": "ролики выходили скучными" },
+    { "id": "titleL2", "type": "string", "role": "content", "label": "Note title line 2", "description": "Second line of the note title. Set to empty, the title is one line and the place of its second line stays blank above the body.", "maxLength": 16, "default": "про ролики." },
+    { "id": "noteLine1", "type": "string", "role": "content", "label": "Note body line 1", "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes. A line set to empty is no line: the note is as long as the lines that carry text, and they close up from the top.", "maxLength": 30, "default": "ролики выходили скучными" },
     { "id": "noteLine2", "type": "string", "role": "content", "label": "Note body line 2", "description": "Second typed line.", "maxLength": 30, "default": "монтажёр стоил дорого" },
     { "id": "noteLine3", "type": "string", "role": "content", "label": "Note body line 3", "description": "Third typed line.", "maxLength": 30, "default": "и правки не кончались." },
     { "id": "noteLine4", "type": "string", "role": "content", "label": "Note body line 4", "description": "Fourth typed line: the turn, where the brand enters.", "maxLength": 30, "default": "потом отдал запись ИИ" },
     { "id": "noteLine5", "type": "string", "role": "content", "label": "Note body line 5", "description": "Fifth typed line: name the brand here.", "portrays": ["subject_name"], "maxLength": 30, "default": "три недели с MatIntellect" },
     { "id": "noteLine6", "type": "string", "role": "content", "label": "Note body line 6", "description": "Sixth typed line.", "maxLength": 30, "default": "рутина ушла, а главное –" },
     { "id": "noteLine7", "type": "string", "role": "content", "label": "Note body line 7", "description": "Last typed line: the payoff.", "maxLength": 30, "default": "ролики выходят каждую неделю." },
-    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, 2-8 body lines 1-7 finish typing, 9 the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.", "default": "" },
+    { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, then one for each body line that carries text, the second it has finished typing (2-8 for seven lines), then the second the note fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the finished note to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
 >
@@ -38,14 +38,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -763,7 +768,8 @@
       let EXIT = "none";
       let CUES = [];
 
-      // variables: every override falls back to its declared default
+      // variables: a slot the host leaves out takes its declared default, a slot it sets to empty
+      // stays empty (docs/concepts/variables.mdx: a default is for a value that is not given)
       (function () {
         var vars =
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
@@ -774,9 +780,7 @@
         // the string inside its box -- it is not what keeps the design intact.
         // no silent cut and no shrinking: maxLength is what keeps a line inside the note
         function t(v, fb) {
-          if (typeof v !== "string") return fb;
-          var s = v.trim();
-          return s || fb;
+          return typeof v === "string" ? v.trim() : fb;
         }
         document.getElementById("title-l1").textContent = t(vars.titleL1, "Что я понял");
         document.getElementById("title-l2").textContent = t(vars.titleL2, "про ролики.");
@@ -794,19 +798,24 @@
           "рутина ушла, а главное –",
           "ролики выходят каждую неделю.",
         ];
-        BODY_DEFAULTS.forEach(function (fallback, li) {
-          var text = t(vars["noteLine" + (li + 1)], fallback);
-          NOTE_LINES.push(text);
-          var host = document.getElementById("line-" + li);
-          host.textContent = "";
-          for (var ri = 0; ri < text.length; ri++) {
-            var ch = document.createElement("span");
-            ch.className = "ch";
-            ch.id = "ch-" + li + "-" + ri;
-            ch.textContent = text.charAt(ri);
-            host.appendChild(ch);
-          }
-        });
+        // A line set to empty is no line: the lines that carry text close up from the top, and the
+        // caret and the scroll stop at the last of them (build() below).
+        BODY_DEFAULTS.map(function (fallback, li) {
+          return t(vars["noteLine" + (li + 1)], fallback);
+        })
+          .filter(Boolean)
+          .forEach(function (text, li) {
+            NOTE_LINES.push(text);
+            var host = document.getElementById("line-" + li);
+            host.textContent = "";
+            for (var ri = 0; ri < text.length; ri++) {
+              var ch = document.createElement("span");
+              ch.className = "ch";
+              ch.id = "ch-" + li + "-" + ri;
+              ch.textContent = text.charAt(ri);
+              host.appendChild(ch);
+            }
+          });
 
         // the note viewport runs to the field bottom; the text scrolls only once the typed line
         // reaches it. The five scrolls add up to 720; the threshold leaves exactly one line
@@ -1206,14 +1215,16 @@
           tl.set(caret, { x: cx, y: cy }, t_at(f));
         });
 
-        // caret paragraph jumps
-        JUMPS.forEach(([f, li]) => {
+        // caret paragraph jumps, to the lines the note has
+        const jumps = JUMPS.filter(([, li]) => li < NOTE_LINES.length);
+        jumps.forEach(([f, li]) => {
           tl.set(caret, { x: TEXT_X, y: LINE_TOPS[li] - 8 }, t_at(f) - 0.0005);
         });
 
-        // scrolls: each scroll's own measured per-frame curve, cumulative
+        // scrolls: each scroll's own measured per-frame curve, cumulative. A scroll starts on the
+        // caret's jump to a line and brings that line into view, so it goes with its jump.
         let cum = 0;
-        SCROLLS.forEach((s) => {
+        SCROLLS.filter((s) => jumps.some(([f]) => f === s.f0)).forEach((s) => {
           const yOf = (d) => -Math.max(0, cum + d - VIEW_EXTRA);
           s.pts.forEach(([f, dy]) => tl.set(body, { y: yOf(dy) }, t_at(f)));
           // hard settle one frame after the last measured point
@@ -1221,6 +1232,10 @@
           tl.set(body, { y: yOf(s.px) }, t_at(lastF + 1));
           cum += s.px;
         });
+
+        // the timeline is as long as the 30 s the master plays it over, whichever line is the last:
+        // a line's end beat is 0.05 s after its last letter, and has to be a time the timeline has
+        tl.set({}, {}, 30);
       }
 
       build(); // timeline exists immediately for the renderer
