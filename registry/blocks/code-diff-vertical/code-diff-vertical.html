@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 324-1324). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent. A diff whose rows do not fit 652 (an unchanged line 46 px, a changed one 42 px, under a 28 px top: 12 lines always fit, 14 never) keeps the 780x760 window it was made with, at y 288-1048 / 600-1360: taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function greet(name) {\n  console.log(\"hi \" + name)\n}"},
     {"id": "codeAfter", "type": "string", "role": "content", "label": "Code after", "description": "The code after the change, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function greet(name, lang) {\n  const msg = translate(\"hi\", lang)\n  console.log(`${msg} ${name}`)\n}"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
@@ -266,6 +266,13 @@
         top: 708px;
         height: 652px;
       }
+      #kddiffv-root.kddiffv-top.kddiffv-tall .editor {
+        height: 760px;
+      }
+      #kddiffv-root.kddiffv-bottom.kddiffv-tall .editor {
+        top: 600px;
+        height: 760px;
+      }
       #kddiffv-root.kddiffv-top .bg-field,
       #kddiffv-root.kddiffv-top .bg-grid,
       #kddiffv-root.kddiffv-top .bg-glow,
@@ -300,15 +307,6 @@
       .caret {
         height: 30px;
         margin-top: 6px;
-      }
-      #kddiffv-root.kddiffv-top .code,
-      #kddiffv-root.kddiffv-bottom .code {
-        top: 16px;
-        line-height: 40px;
-      }
-      #kddiffv-root.kddiffv-top .diff-line,
-      #kddiffv-root.kddiffv-bottom .diff-line {
-        line-height: 40px;
       }
       
     </style>
@@ -609,8 +607,6 @@
           var ops = lineDiff(splitLines(states[0]), splitLines(states[1]));
           var parts = makeScene(surface, false);
           var code = parts.code;
-          // a changed line is one code row tall: 42 px, 40 px in the 652 px top and bottom windows
-          var ROW = parseFloat(getComputedStyle(code).lineHeight) || 42;
           var delEls = [];
           var addEls = [];
           ops.forEach(function (op) {
@@ -633,13 +629,18 @@
             if (op.type === "del") delEls.push(ln);
             if (op.type === "add") addEls.push(ln);
           });
+          // the 652 px top and bottom windows hold the rows under the code's 28 px top (an unchanged line
+          // 46 px, a changed one 42 px); a taller diff keeps the author's 760 px window
+          var same = ops.length - delEls.length - addEls.length;
+          if (28 + 46 * same + 42 * Math.max(delEls.length, addEls.length) > 586)
+            document.getElementById("kddiffv-root").classList.add("kddiffv-tall");
           tl.set(parts.scene, { opacity: 0 }, 0);
           tl.to(parts.scene, { opacity: 1, duration: FADE, ease: "power1.out" }, start);
           var atDel = start + FADE + 0.3;
           delEls.forEach(function (el, k) {
             tl.fromTo(
               el,
-              { height: ROW, opacity: 1 },
+              { height: 42, opacity: 1 },
               { height: 0, opacity: 0, duration: DEL, ease: "power2.inOut" },
               atDel + k * 0.08,
             );
@@ -650,7 +651,7 @@
             tl.fromTo(
               el,
               { height: 0, opacity: 0 },
-              { height: ROW, opacity: 1, duration: ADD, ease: "power2.out" },
+              { height: 42, opacity: 1, duration: ADD, ease: "power2.out" },
               atAdd + k * 0.12,
             );
           });
