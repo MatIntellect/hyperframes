@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 288. center: centred on y 824. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card with its header, as tall as its comments and placed as they are (never taller than the field: 760 top and bottom, 1180 centre), sliding up as in the app.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
+    { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card with its header, as tall as its comments and placed as they are (never taller than the field: 652 top and bottom, 1072 centre), sliding up as in the app.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
     { "id": "sheetTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Header of the YouTube sheet.", "maxLength": 16, "default": "Комментарии" },
     { "id": "sheetCount", "type": "string", "role": "content", "label": "Sheet count", "description": "Grey comment count after the header. Empty removes it.", "maxLength": 8, "default": "214" },
     { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
@@ -209,7 +209,7 @@
       #yccv-root.yccv-sheet #yccv-col {
         left: 186px;
         width: 708px;
-        top: 324px;
+        top: 432px;
         bottom: auto;
         transform: none;
       }
@@ -244,7 +244,7 @@
         height: 40px;
       }
       #yccv-root.yccv-fit #yccv-col {
-        gap: 20px;
+        gap: 16px;
       }
       #yccv-root.yccv-fit .yccv-card {
         gap: 24px;
@@ -256,13 +256,13 @@
       }
       #yccv-root.yccv-fit .yccv-user,
       #yccv-root.yccv-fit .yccv-time {
-        font-size: 34px;
+        font-size: 30px;
       }
       #yccv-root.yccv-fit .yccv-text {
-        font-size: 42px;
+        font-size: 38px;
       }
       #yccv-root.yccv-fit .yccv-row {
-        margin-top: 10px;
+        margin-top: 8px;
         font-size: 30px;
       }
       #yccv-root.yccv-fit .yccv-row svg {
@@ -315,7 +315,7 @@
           if (count) document.getElementById("yccv-head-n").textContent = count;
           else document.getElementById("yccv-head-n").remove();
         } else sheet.remove();
-        /* the comments set large; when the column is taller than its field (760 on top / bottom, 1180 centred) they set
+        /* the comments set large; when the column is taller than its field (652 on top / bottom, 1072 centred) they set
            medium; on the sheet the field is less its header and margins (160). Measured once the face has loaded; render waits on buildReady (path-tracing.md:18) */
         window.__hf = window.__hf || {};
         window.__hf.buildReady = window.__hf.buildReady || {};
@@ -331,7 +331,7 @@
             /* the sheet is as tall as its comments (header and margins 180), never taller than the field, and sits where the
                bare comments would: hung from y 288, centred on y 824 or standing on y 1360 */
             var h = Math.min(field, col.offsetHeight + 180);
-            var top = placement === "top" ? 180 : placement === "bottom" ? 1360 - h : 770 - h / 2;
+            var top = placement === "top" ? 288 : placement === "bottom" ? 1360 - h : 824 - h / 2;
             sheet.style.top = top + "px";
             sheet.style.height = h + "px";
             col.style.top = top + 144 + "px";
