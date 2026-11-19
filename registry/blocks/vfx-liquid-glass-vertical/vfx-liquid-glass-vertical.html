@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the glass wall to the frame edge, the page text centred on the 780x1180 field (y 770). top / bottom: the wall on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the glass wall to the frame edge, the page text centred on the 780x1072 field (y 824). top / bottom: the wall on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "badge", "type": "string", "role": "content", "label": "Badge", "description": "Small red caps line above the headline.", "maxLength": 24, "default": "Запись → готовый ролик" },
     { "id": "head1", "type": "string", "role": "content", "label": "Headline line 1", "description": "First headline line behind the glass, Bebas Neue, one line (a long line shrinks to the field width).", "maxLength": 14, "default": "Ролики сами" },
     { "id": "head2", "type": "string", "role": "content", "label": "Headline line 2", "description": "Second headline line in red, Bebas Neue, one line (a long line shrinks to the field width).", "maxLength": 14, "default": "в 10 раз быстрее" },
@@ -84,14 +84,14 @@
       
       #lglv-root.lglv-card #lglv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #lglv-root.lglv-card.lglv-bottom #lglv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #lglv-cap,
@@ -228,7 +228,7 @@
       if (placement !== "full") {
         root.classList.add("lglv-card", "lglv-" + placement);
         W = 780;
-        H = 760;
+        H = 652;
         // the card shows the page at about 1.08: readable lines start at 28 here to stay over 28 px (spec.md:48)
         T = { w: 700, badge: 28, h1: 96, sub: 28, subW: 590, val: 60, lab: 28, gap: 32 }; // w 700: three numbers with 28 px labels keep one row in the 780 card
         SHIFT = 0;

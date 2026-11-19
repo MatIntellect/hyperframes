@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1180 field (y 180-1360), up to 6 rows. top / bottom: the list on a brand card 780x760 at y 180-940 / 600-1360, up to 4 rows, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1072 field (y 288-1360), up to 6 rows. top / bottom: the list on a brand card 780x652 at y 288-940 / 708-1360, up to 4 rows, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line; the vertical sets it smaller to keep a long headline on one line. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
     { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 32.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first row land, 2 the last row lands (rows between are spread evenly), 3 the list fades out (only when exit is fade). Empty keeps 0.3 and 0.25 s per row.", "default": "" },
@@ -114,8 +114,8 @@
       #mslv-field {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       .mslv-text {
         flex-direction: column;
@@ -139,14 +139,14 @@
         margin-top: 16px;
       }
       #mslv-root.mslv-card #mslv-field {
-        height: 760px;
+        height: 652px;
         padding: 44px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #mslv-root.mslv-bottom #mslv-field {
-        top: 600px;
+        top: 708px;
       }
       #mslv-root.mslv-card #mslv-title {
         font-size: 72px;

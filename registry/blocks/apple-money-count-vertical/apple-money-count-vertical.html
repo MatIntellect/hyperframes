@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the amount centred in the 780x1180 field (y 180-1360), the burst may reach the frame edge. top / bottom: the amount and the burst on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the amount centred in the 780x1072 field (y 288-1360), the burst may reach the frame edge. top / bottom: the amount and the burst on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "amount", "type": "number", "role": "content", "label": "Amount", "description": "The count runs from 0 to this number in 3.2 s, then flashes red and bursts bills and coins, with its own sound.", "default": 10000, "min": 1, "max": 9999999, "step": 1 },
     { "id": "currency", "type": "string", "role": "content", "label": "Currency", "description": "Currency sign, also printed on the bills and coins.", "maxLength": 1, "default": "$" },
     { "id": "currencyAfter", "type": "boolean", "role": "content", "label": "Sign after the number", "description": "true prints 10 000 ₽, false prints $10 000.", "default": false },
@@ -143,9 +143,9 @@
       }
       #amcv-center {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 1180px;
+        height: 1072px;
       }
       #amcv-label {
         font-size: 48px;
@@ -155,14 +155,14 @@
         inset: auto;
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #amcv-root.amcv-bottom #amcv-stage {
-        top: 600px;
+        top: 708px;
       }
       #amcv-root.amcv-card #amcv-center {
         left: 40px;

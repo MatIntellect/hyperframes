@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the devices in the 780x1180 field (centre y 770), the scene to the frame edge. top / bottom: the same show on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the devices in the 780x1072 field (centre y 824), the scene to the frame edge. top / bottom: the same show on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "phone", "type": "image", "role": "content", "label": "Phone screen", "description": "Screenshot on the iPhone screen, fitted to the screen width; a page taller than the screen scrolls during the show. Default: the MatIntellect mobile page.", "default": "assets/device/phone-page.jpg" },
     { "id": "laptop", "type": "image", "role": "content", "label": "Laptop screen", "description": "Screenshot on the MacBook screen, fitted to the screen width; a page taller than the screen scrolls. Default: the MatIntellect desktop page.", "default": "assets/device/laptop-page.jpg" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). The show runs 15 s from the mount start: phone close-up, spin to the back, MacBook enters, both on a turntable; then rests. Empty keeps 15.", "default": "" },
@@ -44,14 +44,14 @@
       
       #devv-root.devv-card #devv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #devv-root.devv-card.devv-bottom #devv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #devv-theater {
@@ -110,13 +110,13 @@
       var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
       W = 1080;
       H = 1920;
-      LIFT = 0.0605; // середина поля y 770: взгляд ниже на долю высоты видимого
+      LIFT = 0.0605; // середина поля y 824: взгляд ниже на долю высоты видимого
       // a5: laptop 4.6 and phone 1.5 units wide, 3.22 apart (no overlap), the pair 760 px wide in the 780 field
       CAM = { a1: 8.8, a2: 13.6, a3: 10.5, a4: 17.6, a5: 26.5, phX: -2.3, lpX: 0.92, cX: 0.08 };
       if (placement !== "full") {
         root.classList.add("devv-card", "devv-" + placement);
         W = 780;
-        H = 760;
+        H = 652;
         LIFT = 0;
         CAM = { a1: 6.2, a2: 10.2, a3: 7.9, a4: 7.4, a5: 12.9, phX: -2.3, lpX: 0.92, cX: 0.08 };
       }

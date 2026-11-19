@@ -639,7 +639,7 @@
       
       .headline {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
       }
       .headline span {
@@ -661,16 +661,16 @@
       .snap-shadow {
         display: none;
       }
-      /* top / bottom: the phone on a card 780x760, rest of the frame transparent */
+      /* top / bottom: the phone on a card 780x652, rest of the frame transparent */
       #root.card {
         background: transparent;
       }
       #root.card .stage {
         inset: auto;
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         overflow: hidden;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
@@ -679,7 +679,7 @@
           var(--bg, #0c1014);
       }
       #root.card.bottom .stage {
-        top: 600px;
+        top: 708px;
       }
       #root.card .headline {
         display: none;
@@ -701,7 +701,7 @@
     {"id": "line1", "type": "string", "role": "content", "label": "Headline line 1", "description": "First Bebas line, white.", "maxLength": 12, "default": "МОНТАЖ"},
     {"id": "line2", "type": "string", "role": "content", "label": "Headline line 2", "description": "Second Bebas line, red.", "maxLength": 12, "default": "ЗА МИНУТЫ"},
     {"id": "sub", "type": "string", "role": "content", "label": "Subline", "description": "Grey line under the headline.", "maxLength": 34, "default": "Ролик из записи без монтажёра"},
-{"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, headline and phone in the 780x1180 field. top / bottom: the phone alone on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+{"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, headline and phone in the 780x1072 field. top / bottom: the phone alone on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
 {"id": "app", "type": "string", "role": "content", "label": "App name", "description": "Name in the store list and on the app page.", "maxLength": 14, "default": "MatIntellect"},
     {"id": "query", "type": "string", "role": "content", "label": "Search", "description": "Text in the store search field.", "maxLength": 18, "default": "монтаж видео"},
     {"id": "status", "type": "string", "role": "content", "label": "Ready line", "description": "Green line under the ring when the install finishes.", "maxLength": 22, "default": "Готово к монтажу"},

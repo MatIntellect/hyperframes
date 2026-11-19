@@ -3,7 +3,7 @@
   "name": "vfx-iphone-device-vertical",
   "type": "hyperframes:block",
   "title": "iPhone & MacBook Showcase (vertical)",
-  "description": "Vertical iPhone and MacBook show in the 780x1180 field, or on a top / bottom card: phone close-up, spin, MacBook, both on a turntable. Screens are image variables (long pages scroll); holds or fades.",
+  "description": "Vertical iPhone and MacBook show in the 780x1072 field, or on a top / bottom card: phone close-up, spin, MacBook, both on a turntable. Screens are image variables (long pages scroll); holds or fades.",
   "tags": ["3d", "device", "iphone", "macbook", "gltf", "showcase", "screenshot", "vertical"],
   "dimensions": {
     "width": 1080,

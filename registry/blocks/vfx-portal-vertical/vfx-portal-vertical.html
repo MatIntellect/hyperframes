@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: both pages to the frame edge, their text centred on the 780x1180 field. top / bottom: the pages on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: both pages to the frame edge, their text centred on the 780x1072 field. top / bottom: the pages on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "labelA", "type": "string", "role": "content", "label": "Light page label", "description": "Small label above the headline of the light page the portal tears open.", "maxLength": 20, "default": "Было" },
     { "id": "headA", "type": "string", "role": "content", "label": "Light page headline", "description": "Headline of the light page, Bebas Neue, up to two lines.", "maxLength": 28, "default": "Монтаж руками неделями" },
     { "id": "subA", "type": "string", "role": "content", "label": "Light page text", "description": "Text of the light page, Montserrat, up to two lines.", "maxLength": 60, "default": "Склейка, субтитры и графика – всё по кадру" },
@@ -76,14 +76,14 @@
       
       #prtv-root.prtv-card #prtv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #prtv-root.prtv-card.prtv-bottom #prtv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #prtv-canvas {
@@ -151,7 +151,7 @@
         if (placement !== "full") {
           root.classList.add("prtv-card", "prtv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           L = { cx: 390, w: 700, head: 96, label: 30, sub: 30, btn: 30 };
         }
         

@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the grid fills the 780x1180 field (y 180-1360). top / bottom: the grid fills 780x760 at y 180-940 / 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the grid fills the 780x1072 field (y 288-1360). top / bottom: the grid fills 780x652 at y 288-940 / 708-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "layout", "type": "enum", "role": "layout", "label": "Layout", "description": "Cell layout. Wide: 2up and 3up are a row, 4up is 2x2, 3x2 is three by two, 1+2 is a hero left with two stacked right. Vertical turns them for the tall field: 2up and 3up stack, 3x2 is two by three, 1+2 is a hero on top with two side by side under it.", "default": "1+2", "options": [{ "value": "2up", "label": "Two" }, { "value": "3up", "label": "Three" }, { "value": "4up", "label": "Four" }, { "value": "3x2", "label": "Six" }, { "value": "1+2", "label": "Hero plus two" }] },
     { "id": "images", "type": "string", "role": "content", "label": "Images", "description": "Image paths in layout order separated by ; (for example assets/a.jpg; assets/b.jpg). An empty slot shows a numbered brand well.", "maxLength": 600, "default": "" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first cell boxes in (the rest follow 0.15 s apart), 2 the grid fades out (only when exit is fade). Empty keeps 0.3 and 7.5.", "default": "" },
@@ -122,7 +122,7 @@
         var x0 = 150,
           iw = 780,
           y0 = placement === "bottom" ? 600 : 180,
-          ih = placement === "full" ? 1180 : 760,
+          ih = placement === "full" ? 1072 : 652,
           g = 30;
         if (layout === "2up") R = grid(x0, y0, iw, ih, g, 1, 2);
         else if (layout === "3up") R = grid(x0, y0, iw, ih, g, 1, 3);

@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the tall now-playing card centred in the 780x1180 field (y 180-1360). top / bottom: the mini-player row (cover left, text right) in the 780x760 field at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the tall now-playing card centred in the 780x1072 field (y 288-1360). top / bottom: the mini-player row (cover left, text right) in the 780x652 field at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "trackName", "type": "string", "role": "content", "label": "Track", "description": "Track title, bold, wraps to a second line when long.", "maxLength": 22, "default": "Монтаж без монтажёра" },
     { "id": "artistName", "type": "string", "role": "content", "label": "Artist", "description": "Artist line under the title.", "maxLength": 28, "default": "MatIntellect" },
     { "id": "cover", "type": "image", "role": "content", "label": "Cover", "description": "Square album cover. Empty keeps a monochrome placeholder with a note icon.", "default": "" },
@@ -69,18 +69,18 @@
         position: absolute;
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       [data-composition-id="spotify-card"].spc-top .spc-field {
-        height: 760px;
+        height: 652px;
       }
       [data-composition-id="spotify-card"].spc-bottom .spc-field {
-        top: 600px;
-        height: 760px;
+        top: 708px;
+        height: 652px;
       }
 
       [data-composition-id="spotify-card"] .spc-card {

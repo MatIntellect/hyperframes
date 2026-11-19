@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: both pages to the frame edge, their content on the 780x1180 field. top / bottom: the pages on a card 780x760 at y 180-940 / 600-1360 (stats page without the cards), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: both pages to the frame edge, their content on the 780x1072 field. top / bottom: the pages on a card 780x652 at y 288-940 / 708-1360 (stats page without the cards), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "label", "type": "string", "role": "content", "label": "Stats label", "description": "Small caps label above the big number of the stats page.", "maxLength": 24, "default": "Просмотры за месяц" },
     { "id": "number", "type": "string", "role": "content", "label": "Big number", "description": "The big number, Montserrat, one line; set no wider than the field.", "maxLength": 11, "default": "2 847 391" },
     { "id": "change", "type": "string", "role": "content", "label": "Change badge", "description": "Red badge next to the number.", "maxLength": 8, "default": "+12,4%" },
@@ -82,14 +82,14 @@
       
       #lqbv-root.lqbv-card #lqbv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #lqbv-root.lqbv-card.lqbv-bottom #lqbv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #lqbv-canvas {
@@ -175,7 +175,7 @@
         if (placement !== "full") {
           root.classList.add("lqbv-card", "lqbv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           L = { x: 70, y: 70, w: 640, h: 620, num: 130, lab: 30, badge: 30, cards: 0, cardRow: false, statLab: 28, statVal: 60, name: 34, handle: 28, post: 36, small: 28 };
         }
         

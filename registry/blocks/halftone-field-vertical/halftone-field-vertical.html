@@ -35,14 +35,14 @@
       
       #hlfv-backdrop.hlfv-card {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #hlfv-backdrop.hlfv-bottom {
-        top: 600px;
+        top: 708px;
       }
       
       #hlfv-canvas {
@@ -64,7 +64,7 @@
       data-start="0"
       data-duration="30"
       data-composition-variables='[
-        {"id":"placement","type":"enum","role":"layout","label":"Placement","description":"full: the field to the frame edge. top / bottom: the field on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.","default":"full","options":[{"value":"full","label":"Full screen"},{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"}]},
+        {"id":"placement","type":"enum","role":"layout","label":"Placement","description":"full: the field to the frame edge. top / bottom: the field on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.","default":"full","options":[{"value":"full","label":"Full screen"},{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"}]},
         {"id":"frequency","type":"number","label":"Field frequency","default":2,"min":1,"max":10,"step":0.1},
         {"id":"speed","type":"number","label":"Flow speed","default":5,"min":0,"max":10,"step":0.1},
         {"id":"cellSize","type":"number","label":"Cell size","default":54,"min":1,"max":100,"step":1},
@@ -155,7 +155,7 @@
         if (placement !== "full") {
           document.getElementById("hlfv-backdrop").classList.add("hlfv-card", "hlfv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         }
         
         var QUANTIZE = bool("quantize");

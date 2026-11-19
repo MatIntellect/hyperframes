@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1180 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x760 at y 180-940 / 600-1360 with the nav and the note (no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1072 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x652 at y 288-940 / 708-1360 with the nav and the note (no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "titleL1", "type": "string", "role": "content", "label": "Note title line 1", "description": "First line of the bold note title.", "maxLength": 16, "default": "Что я понял" },
     { "id": "titleL2", "type": "string", "role": "content", "label": "Note title line 2", "description": "Second line of the note title. Set to empty, the title is one line and the place of its second line stays blank above the body.", "maxLength": 16, "default": "про ролики." },
     { "id": "noteLine1", "type": "string", "role": "content", "label": "Note body line 1", "description": "First typed line. The seven body lines are the bulk of the video: they tell the story of the brand this video promotes. A line set to empty is no line: the note is as long as the lines that carry text, and they close up from the top.", "maxLength": 30, "default": "ролики выходили скучными" },
@@ -101,19 +101,19 @@
       #nrv-field {
         position: absolute;
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 1180px;
+        height: 1072px;
         overflow: hidden;
       }
       .nrv-half #nrv-field {
-        height: 760px;
+        height: 652px;
         border-radius: 44px;
         background: #fefefe;
         box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
       }
       .nrv-bottom #nrv-field {
-        top: 600px;
+        top: 708px;
       }
       #notes-fade {
         position: absolute;

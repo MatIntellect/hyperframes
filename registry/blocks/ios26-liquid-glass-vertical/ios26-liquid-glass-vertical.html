@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the phone in the middle of the 780x1180 field (y 180-1360), the scene to the frame edge. top / bottom: a close-up of the top of the phone with the notifications on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the phone in the middle of the 780x1072 field (y 288-1360), the scene to the frame edge. top / bottom: a close-up of the top of the phone with the notifications on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "n1app", "type": "string", "role": "content", "label": "Notification 1 app", "description": "Bold app name of the first glass notification, Messages icon.", "maxLength": 12, "default": "Сообщения" },
     { "id": "n1time", "type": "string", "role": "content", "label": "Notification 1 time", "description": "Time on the right of the first notification.", "maxLength": 6, "default": "сейчас" },
     { "id": "n1text", "type": "string", "role": "content", "label": "Notification 1 text", "description": "Text of the first notification, up to three lines.", "maxLength": 40, "default": "Аня: ролик огонь, выкладываем?" },
@@ -79,14 +79,14 @@
       
       #iosv-root.iosv-card #iosv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #iosv-root.iosv-card.iosv-bottom #iosv-frame {
-        top: 600px;
+        top: 708px;
       }
       /* the close-up of the phone ends in a soft edge: the camera drifts, so whichever row of the home screen the card's
          lower edge crosses fades out instead of being cut through (5а, 058) */
@@ -375,11 +375,11 @@
       W = 1080;
       H = 1920;
       K = 1.469; // телефон ~1150 px в высоту – в поле 1180
-      OFF = -0.53; // середина телефона на y 770
+      OFF = -0.53; // середина телефона на y 824
       if (placement !== "full") {
         root.classList.add("iosv-card", "iosv-" + placement);
         W = 780;
-        H = 760;
+        H = 652;
         K = 0.523; // крупно верх телефона с уведомлениями
         OFF = 0.86; // the card's lower edge under the notifications, clear of the dock and the search pill; the soft edge takes the drift
       }

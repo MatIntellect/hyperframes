@@ -3,7 +3,7 @@
   "name": "snow-vertical",
   "type": "hyperframes:block",
   "title": "Snow (vertical)",
-  "description": "Vertical falling-snow overlay with the centre kept clear. Placement full covers the frame; top or bottom snows inside a 780x760 card slot. Density, speed and cues are variables; holds or fades.",
+  "description": "Vertical falling-snow overlay with the centre kept clear. Placement full covers the frame; top or bottom snows inside a 780x652 card slot. Density, speed and cues are variables; holds or fades.",
   "tags": [
     "snow",
     "snowfall",

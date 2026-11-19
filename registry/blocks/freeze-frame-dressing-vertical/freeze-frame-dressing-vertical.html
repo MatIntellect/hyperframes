@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the dressing frames the whole picture. top / bottom: it frames a 780x760 card at y 180-940 / 600-1360, where a frozen shot sits in the top or bottom slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the dressing frames the whole picture. top / bottom: it frames a 780x652 card at y 288-940 / 708-1360, where a frozen shot sits in the top or bottom slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the flash hits on the freeze (paper and two strips of tape follow within 0.5 s), 2 the dressing fades out (only when exit is fade). Empty keeps 1.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the paper and tape to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -76,13 +76,13 @@
       #ffdv-root.ffdv-card #ffdv-box {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         overflow: hidden;
       }
       #ffdv-root.ffdv-bottom #ffdv-box {
-        top: 600px;
+        top: 708px;
       }
       
     </style>

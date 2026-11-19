@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the flares fill the frame to the edge. top / bottom: on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the flares fill the frame to the edge. top / bottom: on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "color1", "type": "color", "role": "style", "label": "Main colour", "description": "Colour of most light points. Empty takes the theme accent.", "default": "" },
     { "id": "color2", "type": "color", "role": "style", "label": "Second colour", "description": "Colour of the other light points. Empty takes the theme text colour.", "default": "" },
     { "id": "share", "type": "number", "role": "style", "label": "Main colour share", "description": "Share of points in the main colour.", "default": 0.7, "min": 0, "max": 1, "step": 0.05 },
@@ -51,14 +51,14 @@
       
       #aflv-root.aflv-card #aflv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #aflv-root.aflv-card.aflv-bottom #aflv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #aflv-canvas {
@@ -89,7 +89,7 @@
         if (placement !== "full") {
           root.classList.add("aflv-card", "aflv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         }
         
         var cv = document.getElementById("aflv-canvas");

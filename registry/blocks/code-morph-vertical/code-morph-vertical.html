@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  const out = []\n  for (const u of users) {\n    if (u.active) {\n      out.push(u.name)\n    }\n  }\n  return out\n}"},
     {"id": "codeAfter", "type": "string", "role": "content", "label": "Code after", "description": "The code after the change, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function activeNames(users) {\n  return users\n    .filter((u) => u.active)\n    .map((u) => u.name)\n}"},
     {"id": "codeFinal", "type": "string", "role": "content", "label": "Code final", "description": "The last version of the code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "const activeNames = (users) =>\n  users\n    .filter((u) => u.active)\n    .map((u) => u.name)"},
@@ -260,12 +260,12 @@
         height: 1000px;
       }
       #kdmorpv-root.kdmorpv-top .editor {
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
       }
       #kdmorpv-root.kdmorpv-bottom .editor {
-        top: 600px;
-        height: 760px;
+        top: 708px;
+        height: 652px;
       }
       #kdmorpv-root.kdmorpv-top .bg-field,
       #kdmorpv-root.kdmorpv-top .bg-grid,
@@ -457,8 +457,8 @@
         var cv = document.getElementById("kdmorpv-gl");
         if (cv && PL !== "full") {
           window.__kodW = 780;
-          window.__kodH = 760;
-          cv.style.cssText = "left:150px;top:" + (PL === "top" ? 180 : 600) + "px;width:780px;height:760px;border-radius:32px";
+          window.__kodH = 652;
+          cv.style.cssText = "left:150px;top:" + (PL === "top" ? 288 : 708) + "px;width:780px;height: 652px;border-radius:32px";
         }
         
         var fname = document.getElementById("kdmorpv-fname");

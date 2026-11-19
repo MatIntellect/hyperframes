@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the leak washes over the whole frame. top / bottom: it glows inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the leak washes over the whole frame. top / bottom: it glows inside a 780x652 card at y 288-940 / 708-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the leak blooms in (peaks 1 s later, then settles to a soft glow that keeps drifting), 2 it fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none keeps the soft drifting glow to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -73,12 +73,12 @@
       #ollv-root.ollv-card #ollv-box {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
       }
       #ollv-root.ollv-bottom #ollv-box {
-        top: 600px;
+        top: 708px;
       }
       
     </style>

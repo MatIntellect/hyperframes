@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the bubble centred on the field (y 770). top / bottom: centred in the card zone y 180-940 / 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the bubble centred on the field (y 824). top / bottom: centred in the card zone y 288-940 / 708-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "What the bubble says, typed letter by letter in Montserrat.", "maxLength": 32, "default": "На что ты смотришь?" },
     { "id": "tip", "type": "enum", "role": "layout", "label": "Tail", "description": "Which lower corner the tail points from.", "default": "bottom-left", "options": [{ "value": "bottom-left", "label": "Bottom left" }, { "value": "bottom-right", "label": "Bottom right" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the outline starts to draw (the paper fills at +0.55 s, the text types from +0.6 s in up to 1.8 s), 2 the bubble fades out (only when exit is fade; empty – once the text has been read: 0.5 s + 0.3 s a word, at least 2 s after typing ends). Empty keeps 0.3.", "default": "" },
@@ -132,7 +132,7 @@
         
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         // облачко с хвостом (низ хвоста – около y + 340 + 30) по центру зоны
-        var zc = placement === "top" ? 560 : placement === "bottom" ? 980 : 770;
+        var zc = placement === "top" ? 614 : placement === "bottom" ? 1034 : 824;
         C.x = 540 - C.w / 2;
         C.y = Math.round(zc - (C.h + 30) / 2);
         

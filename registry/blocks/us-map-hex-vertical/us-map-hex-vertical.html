@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, hex map and legend in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent; the hexes there are too small for 28 px codes, so codes are hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, hex map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent; the hexes there are too small for 28 px codes, so codes are hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "Медианный доход по штатам" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Доход домохозяйства в год, долларов, 2024" },
     { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "States separated by ;, each as code: value with the two-letter postal code (CA, NY, TX, DC...). Every state is one equal hex with its code; colour runs from the lowest to the highest value.", "maxLength": 800, "default": "MD: 106998; NJ: 101778; MA: 101079; CT: 92545; HI: 91010; NH: 90845; WA: 90325; CA: 89648; CO: 87598; VA: 87249; UT: 86833; MN: 84313; AK: 83601; NY: 81386; RI: 81370; IL: 79253; OR: 76632; DE: 75932; WI: 72458; NV: 71646; VT: 71560; PA: 71610; ND: 71017; NE: 70654; TX: 70813; AZ: 70821; ID: 69973; MT: 68091; GA: 67992; ME: 67587; FL: 67917; IA: 67684; WY: 67249; SD: 66894; MI: 66986; IN: 65834; OH: 64018; MO: 63594; KS: 66354; NC: 65070; TN: 63426; SC: 62064; OK: 60438; KY: 57584; NM: 58257; AL: 57563; LA: 55728; WV: 52520; AR: 53289; MS: 52434; DC: 101722" },
@@ -159,8 +159,8 @@
       #ushv-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
         justify-content: center;
       }
       #ushv-title {
@@ -180,14 +180,14 @@
         gap: 22px;
       }
       #ushv-root.ushv-card #ushv-box {
-        height: 760px;
+        height: 652px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #ushv-root.ushv-bottom #ushv-box {
-        top: 600px;
+        top: 708px;
       }
       #ushv-root.ushv-card #ushv-title {
         font-size: 68px;

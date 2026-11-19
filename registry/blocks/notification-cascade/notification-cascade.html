@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the ground (brand lock screen or photo, see ground) to the frame edge, the stack in the 780x1180 field (y 180-1360). top / bottom: the stack alone in the 780x760 field at y 180-940 / 600-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the ground (brand lock screen or photo, see ground) to the frame edge, the stack in the 780x1072 field (y 288-1360). top / bottom: the stack alone in the 780x652 field at y 288-940 / 708-1360, the oldest banner and the pill fade out when the fourth lands, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "notifTitle", "type": "string", "role": "content", "label": "Notification title", "description": "Bold first line on every banner that has no title of its own, one line clear of the time label.", "maxLength": 18, "default": "Новый ролик" },
     { "id": "title1", "type": "string", "role": "content", "label": "Title 1", "description": "Bold first line of the first banner, e.g. the app it comes from. Empty takes the notification title.", "maxLength": 18, "default": "" },
     { "id": "title2", "type": "string", "role": "content", "label": "Title 2", "description": "Bold first line of the second banner. Empty takes the notification title.", "maxLength": 18, "default": "" },
@@ -87,15 +87,15 @@
         position: absolute;
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       .nc-top #nc-field,
       .nc-bottom #nc-field {
-        height: 760px;
+        height: 652px;
       }
       .nc-bottom #nc-field {
-        top: 600px;
+        top: 708px;
       }
       .clip {
         position: absolute;

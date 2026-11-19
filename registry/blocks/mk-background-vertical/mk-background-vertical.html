@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the backdrop fills the frame. top / bottom: the backdrop is a rounded card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the backdrop fills the frame. top / bottom: the backdrop is a rounded card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the backdrop fades in (0: it is already there on the first frame), 2 it shrinks into the card (wide, shape card), 3 it fades out (only when exit is fade). Empty keeps 0 and 1.6. The block lives 180 s, so one mount covers a whole reel.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the backdrop to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -109,7 +109,7 @@
           place(b1, 0.28, 0.32, 950 * k, 780, 760);
           place(b2, 0.74, 0.66, 1100 * k, 780, 760);
         }
-        if (placement !== "full") gsap.set(card, { x: 150, y: placement === "top" ? 180 : 600, width: 780, height: 760, borderRadius: 32 });
+        if (placement !== "full") gsap.set(card, { x: 150, y: placement === "top" ? 288 : 708, width: 780, height: 760, borderRadius: 32 });
         
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cB + 4);
         tl.set({}, {}, LIFE);

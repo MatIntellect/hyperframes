@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: a close-up of the top right of the MacBook screen with the notification, the screen corner at x 960, y 180, the scene to the frame edge. top / bottom: the same close-up on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: a close-up of the top right of the MacBook screen with the notification, the screen corner at x 960, y 288, the scene to the frame edge. top / bottom: the same close-up on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "icon", "type": "image", "role": "content", "label": "Notification icon", "description": "Square app icon of the glass notification, rounded.", "default": "assets/tahoe/icons/toast-messages.jpg" },
     { "id": "app", "type": "string", "role": "content", "label": "Notification app", "description": "Bold app name of the notification.", "maxLength": 14, "default": "Сообщения" },
     { "id": "time", "type": "string", "role": "content", "label": "Notification time", "description": "Time on the right of the notification.", "maxLength": 6, "default": "сейчас" },
@@ -73,14 +73,14 @@
       
       #mtgv-root.mtgv-card #mtgv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #mtgv-root.mtgv-card.mtgv-bottom #mtgv-frame {
-        top: 600px;
+        top: 708px;
       }
       /* full: the laptop body below the field fades into the brand ground – the subtitle band stays dark */
       #mtgv-ground {
@@ -171,7 +171,7 @@
       if (placement !== "full") {
         root.classList.add("mtgv-card", "mtgv-" + placement);
         W = 780;
-        H = 760;
+        H = 652;
         CLOSE = { s: 1.0, fx: 760, fy: 40 };
       }
       

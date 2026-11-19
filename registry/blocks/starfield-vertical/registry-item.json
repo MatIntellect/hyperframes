@@ -3,7 +3,7 @@
   "name": "starfield-vertical",
   "type": "hyperframes:block",
   "title": "Starfield (vertical)",
-  "description": "Vertical night-sky overlay with the centre kept clear. Placement full covers the frame; top or bottom shines inside a 780x760 card slot. Density, tone, speed and cues are variables; holds or fades.",
+  "description": "Vertical night-sky overlay with the centre kept clear. Placement full covers the frame; top or bottom shines inside a 780x652 card slot. Density, tone, speed and cues are variables; holds or fades.",
   "tags": [
     "starfield",
     "night-sky",

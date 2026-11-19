@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the product on its plinth in the 780x1180 field (y 180-1360), caption at the bottom of the field. top / bottom: the turntable on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the product on its plinth in the 780x1072 field (y 288-1360), caption at the bottom of the field. top / bottom: the turntable on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "model_url", "type": "string", "role": "content", "label": "Model URL (.glb or .gltf)", "description": "Leave empty for the built-in drink can.", "default": "" },
     { "id": "product_name", "type": "string", "role": "content", "label": "Label wordmark", "description": "Bebas Neue on the can label, twice around.", "default": "MATINTELLECT", "maxLength": 12 },
     { "id": "flavor", "type": "string", "role": "content", "label": "Label line", "description": "Line under the wordmark, on the front face.", "default": "Для монтажа", "maxLength": 11 },
@@ -100,13 +100,13 @@
       #pttv-root.pttv-card #pttv-stage {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #pttv-root.pttv-bottom #pttv-stage {
-        top: 600px;
+        top: 708px;
       }
       #pttv-root.pttv-card #pttv-caption {
         left: 0;
@@ -142,11 +142,11 @@
           fit = 1;
         
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
-        top0 = 770 - H / 2;
+        top0 = 824 - H / 2;
         if (placement !== "full") {
           root.classList.add("pttv-card", "pttv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           top0 = 0;
           fit = 0.75; // the native 800 px of can and plinth inside the 760 card
         }

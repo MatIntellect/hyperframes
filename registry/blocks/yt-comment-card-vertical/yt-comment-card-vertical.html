@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 180. center: centred on y 770. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 288. center: centred on y 824. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card with its header, as tall as its comments and placed as they are (never taller than the field: 760 top and bottom, 1180 centre), sliding up as in the app.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
     { "id": "sheetTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Header of the YouTube sheet.", "maxLength": 16, "default": "Комментарии" },
     { "id": "sheetCount", "type": "string", "role": "content", "label": "Sheet count", "description": "Grey comment count after the header. Empty removes it.", "maxLength": 8, "default": "214" },
@@ -160,10 +160,10 @@
         width: 780px;
       }
       #yccv-root.yccv-top #yccv-col {
-        top: 180px;
+        top: 288px;
       }
       #yccv-root.yccv-center #yccv-col {
-        top: 770px;
+        top: 824px;
         transform: translateY(-50%);
       }
       #yccv-root.yccv-bottom #yccv-col {
@@ -174,9 +174,9 @@
         display: none;
         position: absolute;
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         background: #0f0f0f;
         border: 2px solid #272727;
@@ -325,11 +325,11 @@
           document.fonts.load('500 40px "Montserrat"', "Жж Aa 0"),
         ]).then(function () {
           var col = document.getElementById("yccv-col");
-          var field = placement === "center" ? 1180 : 760;
+          var field = placement === "center" ? 1072 : 652;
           if (col.offsetHeight > field - (onSheet ? 160 : 0)) root.classList.add("yccv-fit");
           if (onSheet) {
             /* the sheet is as tall as its comments (header and margins 180), never taller than the field, and sits where the
-               bare comments would: hung from y 180, centred on y 770 or standing on y 1360 */
+               bare comments would: hung from y 288, centred on y 824 or standing on y 1360 */
             var h = Math.min(field, col.offsetHeight + 180);
             var top = placement === "top" ? 180 : placement === "bottom" ? 1360 - h : 770 - h / 2;
             sheet.style.top = top + "px";

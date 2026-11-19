@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, both shots in the 780x1180 field (y 180-1360), shot two stacked. top / bottom: inside a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent; the card has no room for the paragraph, it is hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, both shots in the 780x1072 field (y 288-1360), shot two stacked. top / bottom: inside a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent; the card has no room for the paragraph, it is hidden.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "intro", "type": "string", "role": "content", "label": "Intro label", "description": "Spaced pill shown from the start until the first beat; it needs beat 1 at 1.5 s or later to be read.", "maxLength": 18, "default": "В такт" },
     { "id": "hit", "type": "string", "role": "content", "label": "Hit word", "description": "Big Bebas word slammed on the freeze.", "maxLength": 10, "default": "Дроп" },
     { "id": "kicker", "type": "string", "role": "content", "label": "Card kicker", "description": "Spaced line at the foot of the shot one card.", "maxLength": 14, "default": "Промо" },
@@ -354,8 +354,8 @@
       #bfcv-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       /* увеличение сцены при читаемом тексте доходит до 1,125 (удар 3 при силе 1,4): раскладка в 780/1,125 и 1180/1,125, после увеличения – ровно поле */
       #bfcv-stage {
@@ -408,14 +408,14 @@
       #bfcv-root.bfcv-cardmode #bfcv-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
         border-radius: 32px;
         overflow: hidden;
       }
       #bfcv-root.bfcv-bottom #bfcv-ground,
       #bfcv-root.bfcv-bottom #bfcv-box {
-        top: 600px;
+        top: 708px;
       }
       #bfcv-root.bfcv-cardmode #bfcv-ground {
         border: 2px solid var(--border, #2e2e32);

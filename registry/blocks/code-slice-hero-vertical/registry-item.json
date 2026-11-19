@@ -3,7 +3,7 @@
   "name": "code-slice-hero-vertical",
   "type": "hyperframes:block",
   "title": "Code Slice Hero (vertical)",
-  "description": "Vertical tiled headline flip: the light tile surface fills the frame (or a 780x760 card), the Bebas headline sits centred on the field and a cursor sweep flips the cells under the type to reveal the rear headline. Placement full, top or bottom card; holds or fades.",
+  "description": "Vertical tiled headline flip: the light tile surface fills the frame (or a 780x652 card), the Bebas headline sits centred on the field and a cursor sweep flips the cells under the type to reveal the rear headline. Placement full, top or bottom card; holds or fades.",
   "tags": [
     "3d-motion",
     "transition",

@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the chat app white to the frame edge, header, question, answer and the composer with the rising keyboard in the 780x1180 field. top / bottom: a white chat card 780x760 at y 180-940 / 600-1360 with the question, the answer and the composer (no header, no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the chat app white to the frame edge, header, question, answer and the composer with the rising keyboard in the 780x1072 field. top / bottom: a white chat card 780x652 at y 288-940 / 708-1360 with the question, the answer and the composer (no header, no keyboard), rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "botName", "type": "string", "role": "content", "label": "Assistant name", "description": "Name of the assistant in the chat header (full placement).", "maxLength": 20, "default": "ChatGPT" },
     { "id": "userMessage", "type": "string", "role": "content", "label": "User message", "description": "The question typed in the composer and sent, up to two lines in the bubble.", "maxLength": 50, "default": "Как смонтировать рилс без монтажёра?" },
     { "id": "answer1", "type": "string", "role": "content", "label": "Answer paragraph 1", "description": "First streamed paragraph, up to three lines.", "maxLength": 100, "default": "Монтажёр не нужен. MatIntellect собирает ролик из твоей записи сам: субтитры, графика, звук." },
@@ -82,19 +82,19 @@
       #acr-field {
         position: absolute;
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 1180px;
+        height: 1072px;
         overflow: hidden;
       }
       .acr-half #acr-field {
-        height: 760px;
+        height: 652px;
         background: #fdfdfd;
         border-radius: 44px;
         box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
       }
       .acr-bottom #acr-field {
-        top: 600px;
+        top: 708px;
       }
       .acr-stage {
         position: absolute;

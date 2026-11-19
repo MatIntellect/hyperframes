@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the scene drawn in the field band y 180-1360 (fading into the ground at its edges), the hero card held in the 780x1180 field. top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the scene drawn in the field band y 288-1360 (fading into the ground at its edges), the hero card held in the 780x1072 field. top / bottom: the scene on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "card1Category", "type": "string", "role": "content", "label": "Card 1 category", "description": "Accent line on top of card 1.", "maxLength": 16, "default": "Монтаж" },
     { "id": "card1Title", "type": "string", "role": "content", "label": "Card 1 title", "description": "Bebas Neue, up to two lines.", "maxLength": 26, "default": "Нарезать интервью" },
     { "id": "card1Status", "type": "string", "role": "content", "label": "Card 1 status", "description": "First pill.", "maxLength": 11, "default": "В работе" },
@@ -115,13 +115,13 @@
       #cubv-stage.cubv-card {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #cubv-stage.cubv-bottom {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -173,7 +173,7 @@
         top0 = 0;
       
       const placement = ["full", "top", "bottom"].includes(VM.placement) ? VM.placement : "full";
-      // full: холст только на поле y 180–1360 (масштаб тот же – px на единицу от высоты): на входе ближняя
+      // full: холст только на поле y 288–1360 (масштаб тот же – px на единицу от высоты): на входе ближняя
       // карточка цепи уходила до y 1730 – через полосу субтитров; к краям поля она растворяется в фоне сцены
       const fieldFade = placement === "full";
       H = 1180;
@@ -181,7 +181,7 @@
       if (placement !== "full") {
         stage.classList.add("cubv-card", "cubv-" + placement);
         W = 780;
-        H = 760;
+        H = 652;
         top0 = 0;
       }
       

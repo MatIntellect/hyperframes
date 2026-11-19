@@ -3,7 +3,7 @@
   "name": "liquid-glass-notification-vertical",
   "type": "hyperframes:block",
   "title": "Liquid Glass Notification (vertical)",
-  "description": "Vertical liquid glass notifications: two glass cards 780 wide from the top of the field over a moving glow, or inside a 780x760 card. Words, icon, glow colours, cues and exit are variables; placement full, top or bottom; holds, slides out or fades.",
+  "description": "Vertical liquid glass notifications: two glass cards 780 wide from the top of the field over a moving glow, or inside a 780x652 card. Words, icon, glow colours, cues and exit are variables; placement full, top or bottom; holds, slides out or fades.",
   "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu", "notification", "vertical"],
   "dimensions": {
     "width": 1080,

@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the outro centred in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the outro centred in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "wordmark", "type": "string", "role": "content", "label": "Wordmark", "description": "The logo word, Bebas Neue, one line: its letters fly in one by one and assemble. Size follows the length.", "maxLength": 16, "default": "MatIntellect" },
     { "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the wordmark, up to two lines. Empty hides it.", "maxLength": 48, "default": "Монтаж без монтажёра" },
     { "id": "url", "type": "string", "role": "content", "label": "URL", "description": "Text in the pill under the tagline. Empty hides the pill.", "maxLength": 28, "default": "matintellect.com" },
@@ -122,8 +122,8 @@
       #lgov-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       #lgov-tag {
         font-size: 46px;
@@ -135,7 +135,7 @@
         padding: 12px 34px;
       }
       #lgov-root.lgov-card #lgov-box {
-        height: 760px;
+        height: 652px;
         padding: 0 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
@@ -143,7 +143,7 @@
         overflow: hidden;
       }
       #lgov-root.lgov-bottom #lgov-box {
-        top: 600px;
+        top: 708px;
       }
       #lgov-root.lgov-card #lgov-tag {
         font-size: 38px;

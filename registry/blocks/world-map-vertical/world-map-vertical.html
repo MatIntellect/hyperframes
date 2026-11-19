@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "ВВП на душу населения" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Номинальный, долларов на человека, 2024" },
     { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "Countries separated by ;, each as Country: value. Country is the Natural Earth English name (Russia, China, United States of America, United Kingdom, South Korea...) or the ISO 3166 numeric code. Up to 40 countries; colour runs from the lowest to the highest value, the top five pulse.", "maxLength": 900, "default": "United States of America: 85373; China: 13136; India: 2731; Germany: 54291; United Kingdom: 48913; France: 44408; Japan: 33950; Brazil: 10412; Australia: 65366; Canada: 54866; Russia: 14403; South Korea: 33147; Mexico: 13434; Indonesia: 5108; Nigeria: 1621; South Africa: 6190; Egypt: 4295; Turkey: 13110; Saudi Arabia: 32270; Thailand: 7647; Vietnam: 4623; Poland: 22393; Sweden: 59324; Norway: 94660; Switzerland: 105669; Argentina: 13709; Colombia: 7230; Kenya: 2198; Pakistan: 1658; Bangladesh: 2688" },
@@ -143,8 +143,8 @@
       #wmapv-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
         justify-content: center;
       }
       #wmapv-title {
@@ -164,14 +164,14 @@
         gap: 22px;
       }
       #wmapv-root.wmapv-card #wmapv-box {
-        height: 760px;
+        height: 652px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #wmapv-root.wmapv-bottom #wmapv-box {
-        top: 600px;
+        top: 708px;
       }
       #wmapv-root.wmapv-card #wmapv-title {
         font-size: 68px;

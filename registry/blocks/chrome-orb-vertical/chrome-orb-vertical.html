@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object about 760 px across, centred on the field (y 770). top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the object about 760 px across, centred on the field (y 824). top / bottom: the shader on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "tint", "type": "color", "role": "style", "label": "Tint", "description": "Metal tint multiplied into the reflection — white for silver chrome, warm ivory for gold, dusky rose for copper", "default": "#ffffff"},
     {"id": "warmColor", "type": "color", "role": "style", "label": "Warm Light", "description": "Color of the warm strip light hugging the studio horizon — the amber band that fringes the reflections", "default": "#ffa94d"},
@@ -53,14 +53,14 @@
       
       #shchromeorbv-stage.shchromeorbv-card {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #shchromeorbv-stage.shchromeorbv-bottom {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -130,12 +130,12 @@
         if (placement !== "full") {
           stage.classList.add("shchromeorbv-card", "shchromeorbv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         } else {
           // the object's size follows the canvas height: 1920 would make it wider than the frame.
-          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 770).
+          // 1080/1920 keeps the landscape size (about 760 px across), centred on the field (y 824).
           props.scale = 0.5625;
-          props.center = { x: 0.5, y: 770 / 1920 };
+          props.center = { x: 0.5, y: 824 / 1920 };
         }
         
         cv.width = W;

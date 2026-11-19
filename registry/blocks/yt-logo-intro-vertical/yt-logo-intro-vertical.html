@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own lined ground to the frame edge, the intro centred in the 780x1180 field (y 180-1360). top / bottom: on a lined brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own lined ground to the frame edge, the intro centred in the 780x1072 field (y 288-1360). top / bottom: on a lined brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "logoText", "type": "string", "role": "content", "label": "Logo text", "description": "Letters in the logo circle, Bebas Neue. Shown when logo image is empty.", "maxLength": 3, "default": "MI" },
     { "id": "logoImage", "type": "string", "role": "content", "label": "Logo image", "description": "Image path for the logo circle (for example assets/logo.png), contained in the circle. Empty shows the logo text.", "maxLength": 200, "default": "" },
     { "id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Spaced capitals line shown first, then replaced by the title.", "maxLength": 22, "default": "Начинаем" },
@@ -152,8 +152,8 @@
       #yliv-center {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
         gap: 48px;
       }
       #yliv-logo {
@@ -179,18 +179,18 @@
       #yliv-root.yliv-card #yliv-board {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #yliv-root.yliv-card #yliv-center {
-        height: 760px;
+        height: 652px;
         gap: 34px;
       }
       #yliv-root.yliv-bottom #yliv-board,
       #yliv-root.yliv-bottom #yliv-center {
-        top: 600px;
+        top: 708px;
       }
       #yliv-root.yliv-card #yliv-logo {
         width: 180px;

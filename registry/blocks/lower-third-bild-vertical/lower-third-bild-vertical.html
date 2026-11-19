@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column. bottom: the plate sits on y 1360, above the caption band. top: it hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column. bottom: the plate sits on y 1360, above the caption band. top: it hangs from y 288. center: centred on y 824.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
     { "id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Bebas Neue on a light bar with a red offset shadow; long lines wrap, each line on its own bar.", "maxLength": 30, "default": "Монтаж без человека" },
     { "id": "sub", "type": "string", "role": "content", "label": "Sub line", "description": "Upper-case line on a red bar under the headline. Empty hides it.", "maxLength": 36, "default": "Эксклюзив MatIntellect" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the bars wipe in, 2 they wipe out (only when exit is out). Empty keeps 0.1, 4.5.", "default": "" },
@@ -103,10 +103,10 @@
         bottom: 572px;
       }
       #ltbv-root.ltbv-top #ltbv-plate {
-        top: 180px;
+        top: 288px;
       }
       #ltbv-root.ltbv-center #ltbv-plate {
-        top: 770px;
+        top: 824px;
         transform: translateY(-50%);
       }
       #ltbv-main {

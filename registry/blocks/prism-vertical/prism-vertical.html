@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "beamColor", "type": "string", "role": "style", "label": "Beam Color", "description": "color of the beam before it splits. Any CSS colour; by default the theme token --fg.", "default": "var(--fg, #f2f2f2)"},
     {"id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the shader fades in over 0.6 s (0 = already on the first frame), 2 it fades out over the 0.5 s before it when exit is fade (without cue 2, at the mount end). Empty keeps 0.", "default": ""},
@@ -51,14 +51,14 @@
       
       #shprismv-stage.shprismv-card {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #shprismv-stage.shprismv-bottom {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -128,7 +128,7 @@
         if (placement !== "full") {
           stage.classList.add("shprismv-card", "shprismv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         }
         
         cv.width = W;

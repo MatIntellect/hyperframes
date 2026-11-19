@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 288. center: centred on y 824.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
     { "id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small red tag above the name, upper case. Empty hides it.", "maxLength": 24, "default": "Выпуск 47" },
     { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Heavy upper-case name; wraps to up to three lines in the vertical version.", "maxLength": 24, "default": "Мат Джестер" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the kicker drops in and the name and red baseline follow, 2 the plate leaves (only when exit is not none). Empty keeps 0.1, 4.25.", "default": "" },
@@ -100,10 +100,10 @@
         bottom: 560px;
       }
       #lknv-root.lknv-top #lknv-lt {
-        top: 180px;
+        top: 288px;
       }
       #lknv-root.lknv-center #lknv-lt {
-        top: 770px;
+        top: 824px;
         transform: translateY(-50%);
       }
       #lknv-kicker {

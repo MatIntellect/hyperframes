@@ -3,7 +3,7 @@
   "name": "ios26-liquid-glass-vertical",
   "type": "hyperframes:block",
   "title": "iOS 26 Glass Notifications (vertical)",
-  "description": "Vertical iOS 26 notifications: the 3D iPhone in the 780x1180 field, or a close-up of the top of the phone on a top / bottom card; three glass notifications drop in with readable text. Texts and the second icon are variables; holds or fades.",
+  "description": "Vertical iOS 26 notifications: the 3D iPhone in the 780x1072 field, or a close-up of the top of the phone on a top / bottom card; three glass notifications drop in with readable text. Texts and the second icon are variables; holds or fades.",
   "tags": ["html-in-canvas", "3d", "iphone", "ios26", "notifications", "gltf", "glass", "vertical"],
   "dimensions": {
     "width": 1080,

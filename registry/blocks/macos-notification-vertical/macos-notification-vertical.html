@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, centred on the frame. top: the banner hangs from y 180. center: centred on y 770. bottom: the banner sits on y 1360, above the caption band.", "default": "top", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, centred on the frame. top: the banner hangs from y 288. center: centred on y 824. bottom: the banner sits on y 1360, above the caption band.", "default": "top", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "appName", "type": "string", "role": "content", "label": "App name", "description": "Small grey app name, upper case as macOS writes it.", "maxLength": 16, "default": "MatIntellect" },
     { "id": "icon", "type": "image", "role": "content", "label": "App icon", "description": "Square app icon, rounded like macOS.", "default": "assets/img/matintellect-avatar.svg" },
     { "id": "time", "type": "string", "role": "content", "label": "Time", "description": "Grey time on the right.", "maxLength": 10, "default": "сейчас" },
@@ -131,10 +131,10 @@
         transform-origin: top left;
       }
       #mnov-root.mnov-top #mnov-scale {
-        top: 180px;
+        top: 288px;
       }
       #mnov-root.mnov-center #mnov-scale {
-        top: 770px;
+        top: 824px;
         transform-origin: left center;
         translate: 0 -50%;
       }

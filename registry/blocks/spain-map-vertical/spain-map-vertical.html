@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1180 field (y 180-1360). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, headline, map and legend in the 780x1072 field (y 288-1360). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline, Bebas Neue, one line wide, up to two lines vertical.", "maxLength": 32, "default": "ВВП на душу по регионам Испании" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Line under the headline. Empty hides it.", "maxLength": 60, "default": "Евро на человека, оценка 2024" },
     { "id": "data", "type": "string", "role": "content", "label": "Data", "description": "Autonomous communities separated by ;, each as code: value. Codes: AND ARA AST BAL CAN CNT CYL CLM CAT VAL EXT GAL MAD MUR NAV PVA RIO CEU MEL. Colour runs from the lowest to the highest value.", "maxLength": 400, "default": "AND: 20200; ARA: 30500; AST: 24100; BAL: 28900; CAN: 21500; CNT: 25200; CYL: 25800; CLM: 21400; CAT: 33700; VAL: 23800; EXT: 19200; GAL: 24500; MAD: 38100; MUR: 22100; NAV: 35200; PVA: 36800; RIO: 29800; CEU: 21000; MEL: 19500" },
@@ -157,8 +157,8 @@
       #esmv-box {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
         justify-content: center;
       }
       #esmv-title {
@@ -178,14 +178,14 @@
         gap: 22px;
       }
       #esmv-root.esmv-card #esmv-box {
-        height: 760px;
+        height: 652px;
         padding: 40px 30px;
         background: var(--bg, #0c1014);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #esmv-root.esmv-bottom #esmv-box {
-        top: 600px;
+        top: 708px;
       }
       #esmv-root.esmv-card #esmv-title {
         font-size: 68px;

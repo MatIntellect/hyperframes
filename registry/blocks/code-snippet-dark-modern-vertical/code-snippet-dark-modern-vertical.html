@@ -16,7 +16,7 @@
         data-start="0"
         data-duration="30"
         data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, title and the editor in the 780x1180 field. top / bottom: the editor window alone as a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}], "default": "full"},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, title and the editor in the 780x1072 field. top / bottom: the editor window alone as a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}], "default": "full"},
     {"id": "kicker", "type": "string", "role": "content", "label": "Kicker", "description": "Small line above the title.", "maxLength": 26, "default": "Встроенная тема VS Code"},
     {"id": "title", "type": "string", "role": "content", "label": "Title", "description": "Big Bebas title; empty keeps the theme name.", "maxLength": 18, "default": "Dark Modern"},
     {"id": "file", "type": "string", "role": "content", "label": "File name", "description": "File in the tab, the tree, the path and the window title.", "maxLength": 24, "default": "functional_toolkit.py"},
@@ -219,7 +219,7 @@
             width: 100%;
             height: 100%;
             
-            padding: 180px 150px 560px;
+            padding: 288px 150px 560px;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -663,10 +663,10 @@
             grid-template-rows: 36px 30px 1fr;
           }
           #root.cs-top .scene-content {
-            padding: 180px 150px 980px;
+            padding: 288px 150px 980px;
           }
           #root.cs-bottom .scene-content {
-            padding: 600px 150px 560px;
+            padding: 708px 150px 560px;
           }
           
         </style>

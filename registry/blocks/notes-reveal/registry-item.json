@@ -17,7 +17,7 @@
       "type": "enum",
       "role": "layout",
       "label": "Placement",
-      "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1180 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x760 at y 180-940 / 600-1360 with the nav and the note (no keyboard), rest of the frame transparent.",
+      "description": "full: the white notes app to the frame edge; nav, note, format bar and the Russian keyboard in the 780x1072 field, the keyboard grey running to the frame bottom. top / bottom: a white note card 780x652 at y 288-940 / 708-1360 with the nav and the note (no keyboard), rest of the frame transparent.",
       "default": "full",
       "options": [
         {

@@ -3,7 +3,7 @@
   "name": "camcorder-hud-vertical",
   "type": "hyperframes:block",
   "title": "Camcorder HUD (vertical)",
-  "description": "Vertical camcorder overlay: REC dot, battery, date and running counter in the corners of the safe zone (x 150-930, y 180-1360, clear of the caption band). Label, date, mode and counter start are fields; holds or fades.",
+  "description": "Vertical camcorder overlay: REC dot, battery, date and running counter in the corners of the safe zone (x 150-930, y 288-1360, clear of the caption band). Label, date, mode and counter start are fields; holds or fades.",
   "tags": ["camcorder", "camera", "recording", "hud", "overlay", "creator", "vertical"],
   "dimensions": {
     "width": 1080,

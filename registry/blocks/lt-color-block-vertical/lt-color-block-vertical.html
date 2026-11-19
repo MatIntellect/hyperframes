@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 180. center: centred on y 770.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the plate sits on y 1360, just above the caption band. top: the plate hangs from y 288. center: centred on y 824.", "default": "bottom", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
     { "id": "name", "type": "string", "role": "content", "label": "Name", "description": "Upper-case name in the red block; wraps to up to three lines in the vertical version.", "maxLength": 28, "default": "Мат Джестер" },
     { "id": "role", "type": "string", "role": "content", "label": "Role", "description": "Line under the name. Empty hides it.", "maxLength": 40, "default": "Основатель MatIntellect" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the red block slides in, name and role rise inside it, 2 the plate leaves (only when exit is out). Empty keeps 0.1, 4.3.", "default": "" },
@@ -77,10 +77,10 @@
         bottom: 560px;
       }
       #lclv-root.lclv-top #lclv-lt {
-        top: 180px;
+        top: 288px;
       }
       #lclv-root.lclv-center #lclv-lt {
-        top: 770px;
+        top: 824px;
         transform: translateY(-50%);
       }
       #lclv-block { align-items: center; text-align: center; max-width: 780px; }

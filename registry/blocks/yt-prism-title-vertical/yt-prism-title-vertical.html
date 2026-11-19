@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the title sits on y 1360, just above the caption band. top: the title hangs from y 180. center: centred on y 770.", "default": "center", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, centred on the frame, no ground. bottom: the title sits on y 1360, just above the caption band. top: the title hangs from y 288. center: centred on y 824.", "default": "center", "options": [{ "value": "bottom", "label": "Bottom" }, { "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "The title, Bebas Neue. Size follows the length: one line wide, up to two lines vertical.", "maxLength": 24, "default": "Монтаж без монтажёра" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the title starts to focus in, 2 it blurs out (only when exit is fade). Empty keeps 0.1 and 5.4.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the title to the end of the mount; fade blurs it out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Blur out" }] }
@@ -100,7 +100,7 @@
         align-items: flex-end;
       }
       #yptv-root.yptv-top #yptv-bow {
-        top: 180px;
+        top: 288px;
         align-items: flex-start;
       }
       #yptv-root.yptv-center #yptv-bow {
@@ -148,7 +148,7 @@
         
         var place = oneOf(V.placement, ["bottom", "top", "center"], "center");
         root.classList.add("yptv-" + place);
-        // the slow grow keeps the edge the title hangs from in place (top: y 180, bottom: y 1360)
+        // the slow grow keeps the edge the title hangs from in place (top: y 288, bottom: y 1360)
         line.style.transformOrigin = place === "top" ? "50% 0%" : place === "bottom" ? "50% 100%" : "50% 50%";
         var longest = title.split(/\s+/).reduce(function (m, w) {
           return Math.max(m, w.length);

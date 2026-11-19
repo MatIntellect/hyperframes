@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the night scene fills the frame, its two subjects centred on the middle of the field (y 770). top / bottom: the scene inside a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the night scene fills the frame, its two subjects centred on the middle of the field (y 824). top / bottom: the scene inside a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "nearfocus", "type": "number", "role": "style", "label": "Near focal distance", "default": 1.2, "min": 0.2, "max": 100, "step": 0.05, "unit": "m" },
     { "id": "farfocus", "type": "number", "role": "style", "label": "Far focal distance", "default": 80, "min": 0.3, "max": 400, "step": 0.5, "unit": "m" },
     { "id": "focallength", "type": "number", "role": "style", "label": "Focal length", "default": 85, "min": 12, "max": 300, "step": 1, "unit": "mm" },
@@ -54,13 +54,13 @@
       
       #rkfv-root.rkfv-card #rkfv-canvas {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
       }
       #rkfv-root.rkfv-bottom #rkfv-canvas {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -90,7 +90,7 @@
         if (placement !== "full") {
           root.classList.add("rkfv-card", "rkfv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           LENS = 1152;
           CY = H / 2;
         }

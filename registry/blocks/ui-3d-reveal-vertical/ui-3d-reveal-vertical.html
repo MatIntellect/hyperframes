@@ -28,7 +28,7 @@
       data-height="1920"
       data-start="0"
       data-duration="30"
-      data-composition-variables='[{ "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, the scene on the 780 field centred at y 770. top / bottom: the same scene on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+      data-composition-variables='[{ "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: brand ground to the frame edge, the scene on the 780 field centred at y 824. top / bottom: the same scene on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
 { "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the mark at the end, typed in letter by letter.", "maxLength": 28, "default": "Ролик из записи за минуты." }, { "id": "url", "type": "string", "role": "content", "label": "Address pill", "description": "Address in the pill under the tagline.", "maxLength": 24, "default": "matintellect.com" }, { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the screen flies away and the closing mark starts drawing, 2 the block fades out (only when exit is fade). The motion before the first cue is sped up or slowed to land on it. Empty keeps 7.3 and 14.5.", "default": "" }, { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the mark, tagline and address to the end of the mount; fade fades the block out.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }]'
     >
       <!-- one wrapper for every layer: the vertical card moves it to the card centre -->
@@ -1084,15 +1084,15 @@
           display: block;
           position: absolute;
           left: 150px;
-          top: 180px;
+          top: 288px;
           width: 780px;
-          height: 760px;
+          height: 652px;
           border-radius: 32px;
           border: 2px solid var(--border, #2e2e32);
           pointer-events: none;
         }
         [data-composition-id="ui-3d-reveal-vertical"].card.bottom .card-edge {
-          top: 600px;
+          top: 708px;
         }
         
 
@@ -2249,7 +2249,7 @@
           var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
           if (placement !== "full") document.querySelector(S).classList.add("card", placement);
           // vertical: the 1100 px program window, tilted in 3D at its widest, fits the 780 field and the card (x ≤ 930;
-          // 780/1100 flat reached x 968 once tilted) and sits on the field's centre y 770
+          // 780/1100 flat reached x 968 once tilted) and sits on the field's centre y 824
           gsap.set(scene, { y: -190, scale: 0.64 });
           
           var cardGlow = document.querySelector(S + " .card-glow");

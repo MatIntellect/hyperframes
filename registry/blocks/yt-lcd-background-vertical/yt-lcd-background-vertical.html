@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own screen board to the frame edge, the text centred in the 780x1180 field (y 180-1360). top / bottom: on a board card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own screen board to the frame edge, the text centred in the 780x1072 field (y 288-1360). top / bottom: on a board card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Display word in Bebas Neue with a chromatic fringe, one line; size follows the length.", "maxLength": 14, "default": "Экран" },
     { "id": "subtitle", "type": "string", "role": "content", "label": "Subtitle", "description": "Spaced capitals line under the title. Empty hides it.", "maxLength": 22, "default": "Фон 01" },
     { "id": "grid", "type": "enum", "role": "style", "label": "Pixel grid", "description": "on draws a faint pixel grid over the scanlines.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] },
@@ -129,8 +129,8 @@
       #ylbv-bow {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       #ylbv-sub {
         font-size: 32px;
@@ -138,17 +138,17 @@
       #ylbv-root.ylbv-card #ylbv-board {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #ylbv-root.ylbv-card #ylbv-bow {
-        height: 760px;
+        height: 652px;
       }
       #ylbv-root.ylbv-bottom #ylbv-board,
       #ylbv-root.ylbv-bottom #ylbv-bow {
-        top: 600px;
+        top: 708px;
       }
       #ylbv-root.ylbv-card #ylbv-sub {
         font-size: 28px;

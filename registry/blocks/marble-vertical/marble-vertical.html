@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge. top / bottom: the shader on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "ground", "type": "string", "role": "style", "label": "Background", "description": "Ground behind the shader, seen where it is transparent. Any CSS colour; by default the theme token --bg.", "default": "var(--bg, #0c1014)"},
     {"id": "colorA", "type": "string", "role": "style", "label": "Base", "description": "Base background color of the marble. Any CSS colour; by default the theme token --surface.", "default": "var(--surface, #18181a)"},
     {"id": "colorB", "type": "string", "role": "style", "label": "Tone", "description": "Secondary marble tone. Any CSS colour; by default the theme token --muted.", "default": "var(--muted, #8a8a90)"},
@@ -53,14 +53,14 @@
       
       #shmarblev-stage.shmarblev-card {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #shmarblev-stage.shmarblev-bottom {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -130,7 +130,7 @@
         if (placement !== "full") {
           stage.classList.add("shmarblev-card", "shmarblev-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         }
         
         cv.width = W;

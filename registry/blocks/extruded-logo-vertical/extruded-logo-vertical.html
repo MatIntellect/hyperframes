@@ -7,7 +7,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the word and the tagline in the 780x1180 field (y 180-1360). top / bottom: the word on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the word and the tagline in the 780x1072 field (y 288-1360). top / bottom: the word on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "text", "type": "string", "role": "content", "label": "Word or lettermark", "description": "Bebas Neue in 3D, Latin and Cyrillic letters, digits and punctuation; other characters render as ?. A word wider than the frame scales down as one piece.", "default": "MATINTELLECT", "maxLength": 12 },
     { "id": "tagline", "type": "string", "role": "content", "label": "Tagline", "description": "Line under the word. Empty hides it.", "default": "Монтаж роликов с ИИ", "maxLength": 40 },
     { "id": "finish", "type": "enum", "role": "style", "label": "Finish", "default": "chrome", "options": [ { "value": "chrome", "label": "Chrome" }, { "value": "gold", "label": "Gold" }, { "value": "matte", "label": "Matte clay" } ] },
@@ -108,8 +108,8 @@
       #exlv-stage.exlv-card {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
         background:
@@ -117,7 +117,7 @@
           var(--bg, #0c1014);
       }
       #exlv-stage.exlv-bottom {
-        top: 600px;
+        top: 708px;
       }
       #exlv-stage.exlv-card #exlv-tagline {
         left: 40px;
@@ -154,12 +154,12 @@
           maxW = 7.4;
         
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
-        top0 = 770 - H / 2;
+        top0 = 824 - H / 2;
         maxW = 3.5; // 742 px inside the 780 field
         if (placement !== "full") {
           stage.classList.add("exlv-card", "exlv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           top0 = 0;
           maxW = 3.3; // 700 px inside the card
         }

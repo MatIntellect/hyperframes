@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the thread grows up from y 1360 in the 780x1180 field. top / bottom: the thread in the 780x760 field at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the thread grows up from y 1360 in the 780x1072 field. top / bottom: the thread in the 780x652 field at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "thread", "type": "string", "role": "content", "label": "Messages", "description": "Messages separated by |, up to 8. A message starting with > is yours (right, blue); the others come in (left, light). Each wraps inside its bubble.", "maxLength": 420, "default": "Видел ролик? Как это вообще смонтировано|>Система собрала за шесть минут|Без монтажёра?|>Ни одного человека|Это нереально|>Уже делаем следующий" },
     { "id": "sender", "type": "string", "role": "content", "label": "Sender", "description": "Name above the first incoming message. Empty hides it.", "maxLength": 24, "default": "Аня" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the first message pops in, 2 the last one does (the rest spread evenly between), 3 the thread fades (only when exit is fade). Empty keeps 0.25 and 0.86 s between messages.", "default": "" },
@@ -111,15 +111,15 @@
       #tmsv-view {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       #tmsv-root.tmsv-top #tmsv-view,
       #tmsv-root.tmsv-bottom #tmsv-view {
-        height: 760px;
+        height: 652px;
       }
       #tmsv-root.tmsv-bottom #tmsv-view {
-        top: 600px;
+        top: 708px;
       }
       .tmsv-sender {
         font-size: 28px;

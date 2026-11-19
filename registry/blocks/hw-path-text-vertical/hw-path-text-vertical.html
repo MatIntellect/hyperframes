@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the wave crosses the field at its centre (y 770). top / bottom: the same at the centre of the card zone y 180-940 / 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: the wave crosses the field at its centre (y 824). top / bottom: the same at the centre of the card zone y 288-940 / 708-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "text", "type": "string", "role": "content", "label": "Text", "description": "What is written along the wave, letter by letter, Montserrat 64 px.", "maxLength": 20, "default": "Поехали со мной!" },
     { "id": "guide", "type": "enum", "role": "style", "label": "Guide", "description": "show draws a faint dotted line along the path under the text; none writes without it.", "default": "show", "options": [{ "value": "show", "label": "Show" }, { "value": "none", "label": "None" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the text starts to write (the guide draws from 0.5 s earlier; letters every 0.05 s, all within 2.6 s), 2 the text fades out (only when exit is fade; empty – once it has been read: 0.5 s + 0.3 s a word, at least 2 s after the last letter). Empty keeps 0.7.", "default": "" },
@@ -118,7 +118,7 @@
         
         // вертикаль: та же родная волна, ужатая в поле 150-930 (длина пути около 860 px)
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
-        var zc = placement === "top" ? 560 : placement === "bottom" ? 980 : 770;
+        var zc = placement === "top" ? 614 : placement === "bottom" ? 1034 : 824;
         function y(dy) {
           return zc + 30 + dy; // буквы поднимаются над линией на 60 px – середина надписи на zc
         }

@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the board centred in the 780x1180 field (y 180-1360), up to 4 rows of 8 cells. top / bottom: the board on a brand card that wraps it (at most 780x760) at the top of y 180-940 / the bottom of y 600-1360, up to 4 rows of 8 cells, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the board centred in the 780x1072 field (y 288-1360), up to 4 rows of 8 cells. top / bottom: the board on a brand card that wraps it (at most 780x652) at the top of y 288-940 / the bottom of y 708-1360, up to 4 rows of 8 cells, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "boardText", "type": "string", "role": "content", "label": "Board text", "description": "Text the board flips to, upper case, Bebas Neue. Words wrap into rows (wide: 2 rows of 14 cells; vertical: rows of 8 cells, more and narrower cells when the words need them). Russian and Latin letters, digits and . , ! ? - : are on the drum; other characters stay blank.", "maxLength": 28, "default": "МОНТАЖ ГОТОВ" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the board starts flipping, 2 the last cell lands (the flap speed is set so every cell walks its drum by then), 3 the board fades out (only when exit is fade). Empty keeps 0.2 and 2.6.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed board to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -141,10 +141,10 @@
       #sfbv-field {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
-      /* the card wraps the board (no empty card around a short word, montazher.md:22): at most 780x760, at the top / bottom
+      /* the card wraps the board (no empty card around a short word, montazher.md:22): at most 780x652, at the top / bottom
          edge of its zone */
       #sfbv-root.sfbv-card #sfbv-field {
         height: auto;
@@ -190,7 +190,7 @@
           root.classList.add("sfbv-card", "sfbv-" + placement);
           root.querySelector(".sfbv-ground").remove();
         }
-        /* room for the board: the field (780x1180), or inside the card (at most 780x760) less its padding and border */
+        /* room for the board: the field (780x1072), or inside the card (at most 780x652) less its padding and border */
         var cs = getComputedStyle(root.querySelector("#sfbv-field")),
           edge = function (a, b) {
             return parseFloat(cs["padding" + a]) + parseFloat(cs["padding" + b]) + parseFloat(cs["border" + a + "Width"]) + parseFloat(cs["border" + b + "Width"]);
@@ -198,7 +198,7 @@
         var COLS = 8,
           ROWS = 4,
           WIDTH = placement === "full" ? 780 : 780 - edge("Left", "Right"),
-          HMAX = placement === "full" ? 1180 : 760 - edge("Top", "Bottom"),
+          HMAX = placement === "full" ? 1072 : 652 - edge("Top", "Bottom"),
           CMAX = 120;
         
 

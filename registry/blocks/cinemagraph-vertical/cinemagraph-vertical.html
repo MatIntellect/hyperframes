@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the still scene to the frame edge, enlarged so the cup and its steam sit centred on the field (y 770). top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the still scene to the frame edge, enlarged so the cup and its steam sit centred on the field (y 824). top / bottom: the scene on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "loop", "type": "string", "role": "content", "label": "Loop video", "description": "Project path of a muted looping video (e.g. assets/loop.mp4), the base layer that lives inside the window; it repeats to the end of the mount. Empty keeps the drawn cup with rising steam.", "default": "" },
     { "id": "still", "type": "image", "role": "content", "label": "Freeze-frame", "description": "The first frame of the loop video as an image; it covers the frame except the window, so only the window moves. Empty with a loop video – the loop plays over the whole frame.", "default": "" },
     { "id": "wx", "type": "number", "role": "layout", "label": "Window centre x", "description": "Centre of the living window, % of the frame width (in the vertical card – of the card).", "default": 50, "min": 0, "max": 100, "step": 1, "unit": "%" },
@@ -94,13 +94,13 @@
       #cmgv-clip.cmgv-card {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #cmgv-clip.cmgv-bottom {
-        top: 600px;
+        top: 708px;
       }
       
       /* сцена разработчиков 1920x1080; в вертикали увеличена или уменьшена целиком */

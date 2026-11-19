@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the canopy and the headlines in the 780x1180 field (y 180-1360). top / bottom: the scene on a 780x760 card at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the canopy and the headlines in the 780x1072 field (y 288-1360). top / bottom: the scene on a 780x652 card at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "headline1", "type": "string", "role": "content", "label": "Headline 1", "description": "Bebas Neue, one line; uncovered as the leaves part.", "maxLength": 18, "default": "Под листвой" },
     { "id": "headline2", "type": "string", "role": "content", "label": "Headline 2", "description": "Bebas Neue, one line; carried in by the second, depth-lifted batch.", "maxLength": 18, "default": "Монтаж без спешки" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the leaves sweep in (headline 1 lands about 3.6 s after it, headline 2 about 8.4 s, the scene settles at 10.5 s and holds), 2 the block fades out (only when exit is fade). Empty keeps 0.", "default": "" },
@@ -85,13 +85,13 @@
       #cptv-root.cptv-card #cptv-scene {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #cptv-root.cptv-bottom #cptv-scene {
-        top: 600px;
+        top: 708px;
       }
       
     </style>
@@ -129,7 +129,7 @@
         var L = { w: 1080, h: 1920, top: 0, pxu: 84.5, sy: 1 };
         
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
-        // холст на весь кадр, центр вида на поле (y 770) – вид из кадра высотой 2300 (setViewOffset);
+        // холст на весь кадр, центр вида на поле (y 824) – вид из кадра высотой 2300 (setViewOffset);
         // раньше холст 1920 сдвигался вверх на 190 px и снизу на y 1730 оставался шов
         L = { w: 1080, h: 1920, top: 0, pxu: 51.8, sy: 2.4, vh: 2 * (1920 - 770), vy: 2 * (1920 - 770) / 2 - 770 };
         if (placement !== "full") {

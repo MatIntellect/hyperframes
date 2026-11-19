@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the whole scene centred on the 780x1180 field (y 770). top / bottom: the same scene on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the whole scene centred on the 780x1072 field (y 824). top / bottom: the same scene on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "intro", "type": "string", "role": "content", "label": "Intro word", "description": "One word in Bebas Neue that bursts apart at 1.4 s.", "maxLength": 14, "default": "Представляем" },
     { "id": "brand", "type": "string", "role": "content", "label": "Wordmark", "description": "The name the burst assembles into, Bebas Neue, one line.", "portrays": ["subject_name"], "maxLength": 14, "default": "MatIntellect" },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "The request typed into the Claude window, Montserrat 32 px (wide – up to four lines, vertical – up to five).", "maxLength": 130, "default": "Посоветуй, кто смонтирует мне рилсы из записи с ИИ: быстро, по делу и без монтажёра." },
@@ -88,14 +88,14 @@
       
       #bswv-root.bswv-card #bswv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #bswv-root.bswv-card.bswv-bottom #bswv-frame {
-        top: 600px;
+        top: 708px;
       }
       /* слово и знак в 780: 14 знаков Bebas 120 px ≈ 700 px */
       #bswv-root .bswv-title,

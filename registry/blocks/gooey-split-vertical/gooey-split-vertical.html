@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the mark centred in the 780x1180 field (y 770). top / bottom: on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the mark centred in the 780x1072 field (y 824). top / bottom: on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the move starts (the native 4.7 s: split into three dots, swirl mark, back to three dots, merge into one), 2 the block fades out (only when exit is fade). Empty keeps 0.3.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "fade (default) fades the block out 2 s after the merge, so a lone dot never holds the frame; none holds the single dot to the end of the mount.", "default": "fade", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -53,13 +53,13 @@
       #goov-root.goov-card #goov-ground {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #goov-root.goov-bottom #goov-ground {
-        top: 600px;
+        top: 708px;
       }
       
       .goov-stage {
@@ -798,7 +798,7 @@
         function inkA(a) {
           return "rgba(" + INK.join(", ") + ", " + a + ")";
         }
-        // сцена: центр 960,540 в широкой; в вертикали – центр поля y 770, в карточке – центр карточки, знак 0,8
+        // сцена: центр 960,540 в широкой; в вертикали – центр поля y 824, в карточке – центр карточки, знак 0,8
         var cx = 960,
           cy = 540,
           k = 1;
@@ -808,7 +808,7 @@
         var placement = ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0 ? String(V.placement) : "full";
         if (placement !== "full") {
           root.classList.add("goov-card", "goov-" + placement);
-          cy = placement === "top" ? 560 : 980;
+          cy = placement === "top" ? 614 : 1034;
           k = 0.8;
         }
         

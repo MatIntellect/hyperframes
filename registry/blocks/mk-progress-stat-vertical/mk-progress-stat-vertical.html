@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the stat centred in the 780x1180 field (y 180-1360). top / bottom: the stat on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the stat centred in the 780x1072 field (y 288-1360). top / bottom: the stat on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "value", "type": "number", "role": "content", "label": "Value", "description": "The number the count runs up to.", "default": 22, "min": 0, "max": 9999999, "step": 1 },
     { "id": "decimals", "type": "number", "role": "content", "label": "Decimals", "description": "Digits after the decimal comma in the counted number, 0 to 2.", "default": 0, "min": 0, "max": 2, "step": 1 },
     { "id": "prefix", "type": "string", "role": "content", "label": "Prefix", "description": "Before the number, for example $ or +.", "maxLength": 1, "default": "" },
@@ -114,8 +114,8 @@
       #mpsv-field {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       #mpsv-group {
         width: 780px;
@@ -134,13 +134,13 @@
         font-size: 38px;
       }
       #mpsv-root.mpsv-card #mpsv-field {
-        height: 760px;
+        height: 652px;
         background: var(--surface, #18181a);
         border: 2px solid var(--border, #2e2e32);
         border-radius: 32px;
       }
       #mpsv-root.mpsv-bottom #mpsv-field {
-        top: 600px;
+        top: 708px;
       }
       #mpsv-root.mpsv-card #mpsv-group {
         width: 700px;

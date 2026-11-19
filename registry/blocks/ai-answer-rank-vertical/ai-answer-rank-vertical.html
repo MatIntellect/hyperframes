@@ -9,7 +9,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the card centred in the 780 column on y 770. top / bottom: the card hangs from y 180 / sits on y 1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the card centred in the 780 column on y 824. top / bottom: the card hangs from y 288 / sits on y 1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "The question typed into the user bubble, up to two lines.", "maxLength": 50, "default": "Кто смонтирует ролик без монтажёра?" },
     { "id": "lead", "type": "string", "role": "content", "label": "Answer lead-in", "description": "The assistant line above the ranked list.", "maxLength": 26, "default": "Вот лучшие варианты:" },
     { "id": "rowA", "type": "string", "role": "content", "label": "Pick 1", "description": "First pick in the original answer: a product other than the brand this video promotes.", "portrays": ["competitor_name"], "maxLength": 16, "default": "Студия А" },
@@ -266,11 +266,11 @@
         padding: 40px 40px 16px;
       }
       #aarv-root.aarv-full #aarv-card {
-        top: 770px;
+        top: 824px;
         translate: 0 -50%;
       }
       #aarv-root.aarv-top #aarv-card {
-        top: 180px;
+        top: 288px;
       }
       #aarv-root.aarv-bottom #aarv-card {
         bottom: 560px;

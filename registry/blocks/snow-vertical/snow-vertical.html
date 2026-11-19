@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: snow falls over the whole frame, the centre kept clear. top / bottom: it falls inside a 780x760 card at y 180-940 / 600-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Transparent overlay. full: snow falls over the whole frame, the centre kept clear. top / bottom: it falls inside a 780x652 card at y 288-940 / 708-1360, over a shot in that slot.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "density", "type": "enum", "role": "style", "label": "Density", "description": "Flake count across the frame.", "default": "sparse", "options": [{ "value": "sparse", "label": "Sparse" }, { "value": "dense", "label": "Dense" }] },
     { "id": "speed", "type": "enum", "role": "style", "label": "Fall speed", "description": "How fast flakes fall and sway.", "default": "calm", "options": [{ "value": "calm", "label": "Calm" }, { "value": "gust", "label": "Gust" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the snow fades in over 0.6 s (0 = already falling on the first frame), 2 it fades out (only when exit is fade). Empty keeps 0.", "default": "" },
@@ -58,12 +58,12 @@
       #snwv-root.snwv-card #snwv-box {
         left: 150px;
         width: 780px;
-        height: 760px;
-        top: 180px;
+        height: 652px;
+        top: 288px;
         border-radius: 32px;
       }
       #snwv-root.snwv-bottom #snwv-box {
-        top: 600px;
+        top: 708px;
       }
       #snwv-root.snwv-card #snwv-snow {
         -webkit-mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
@@ -97,7 +97,7 @@
         if (placement !== "full") {
           root.classList.add("snwv-card", "snwv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           k = 760 / 1080;
         }
         

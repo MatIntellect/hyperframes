@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, card centred in the 780x1180 field (y 180-1360). top: card in the 780x760 field at y 180-940, rest of the frame transparent. bottom: same field at y 600-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, card centred in the 780x1072 field (y 288-1360). top: card in the 780x652 field at y 288-940, rest of the frame transparent. bottom: same field at y 708-1360.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "subreddit", "type": "string", "role": "content", "label": "Subreddit", "description": "Community name with r/.", "maxLength": 22, "default": "r/matintellect" },
     { "id": "author", "type": "string", "role": "content", "label": "Author line", "description": "Grey line under the community: user and age.", "maxLength": 26, "default": "u/matjester · 3 ч" },
     { "id": "title", "type": "string", "role": "content", "label": "Title", "description": "Post title, bold; up to three lines.", "maxLength": 80, "default": "Собрал систему, которая монтирует ролики без человека" },
@@ -160,15 +160,15 @@
       #rdpv-field {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 1180px;
+        top: 288px;
+        height: 1072px;
       }
       #rdpv-root.rdpv-top #rdpv-field,
       #rdpv-root.rdpv-bottom #rdpv-field {
-        height: 760px;
+        height: 652px;
       }
       #rdpv-root.rdpv-bottom #rdpv-field {
-        top: 600px;
+        top: 708px;
       }
       #rdpv-card {
         width: 780px;

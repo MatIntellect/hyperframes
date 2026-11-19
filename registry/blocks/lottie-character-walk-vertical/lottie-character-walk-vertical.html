@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the character walks in at the foot of the 780x1180 field and points at the card beside it. top / bottom: the same scene on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the character walks in at the foot of the 780x1072 field and points at the card beside it. top / bottom: the same scene on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Card title", "description": "Card title in Bebas Neue.", "maxLength": 28, "default": "Это ваш гид" },
     { "id": "body", "type": "string", "role": "content", "label": "Card text", "description": "Grey text under the title. Empty hides it.", "maxLength": 90, "default": "Входит уверенным шагом, останавливается и показывает, куда смотреть" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "The character plays the native acting from 2.5 s, so it walks in from the frame edge at the mount start, stops and points at 2.7 s, when the card lands. Comma-separated seconds from mount start: 1 the block fades out (only when exit is fade). Empty keeps 8.5 – the card text reads 5 s.", "default": "" },
@@ -152,8 +152,8 @@
       #lcwv-root.lcwv-card #lcwv-stage {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
         border-radius: 32px;
       }
       #lcwv-root.lcwv-card #lcwv-ground {
@@ -161,7 +161,7 @@
       }
       #lcwv-root.lcwv-bottom #lcwv-ground,
       #lcwv-root.lcwv-bottom #lcwv-stage {
-        top: 600px;
+        top: 708px;
       }
       #lcwv-root.lcwv-card #lcwv-line {
         top: 700px;

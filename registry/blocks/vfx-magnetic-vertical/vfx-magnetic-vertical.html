@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own page to the frame edge, the content centred on the 780x1180 field (cards stacked with descriptions). top / bottom: the page on a card 780x760 at y 180-940 / 600-1360, cards show their titles only, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own page to the frame edge, the content centred on the 780x1072 field (cards stacked with descriptions). top / bottom: the page on a card 780x652 at y 288-940 / 708-1360, cards show their titles only, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "head1", "type": "string", "role": "content", "label": "Headline line 1", "description": "First headline line, Bebas Neue.", "maxLength": 14, "default": "Кадр тянется" },
     { "id": "head2", "type": "string", "role": "content", "label": "Headline line 2", "description": "Second headline line in red, Bebas Neue.", "maxLength": 14, "default": "к курсору" },
     { "id": "sub", "type": "string", "role": "content", "label": "Text", "description": "Text under the headline, Montserrat, up to three lines.", "maxLength": 90, "default": "Каждый пиксель страницы проходит через шейдер и тянется к точке, как железные опилки к магниту" },
@@ -77,14 +77,14 @@
       
       #mgcv-root.mgcv-card #mgcv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #mgcv-root.mgcv-card.mgcv-bottom #mgcv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #mgcv-canvas {
@@ -154,7 +154,7 @@
         if (placement !== "full") {
           root.classList.add("mgcv-card", "mgcv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
           L = { x: 40, y: 40, w: 700, h: 680, head: 88, sub: 30, title: 30, desc: 28, row: false, desc_on: false };
         }
         

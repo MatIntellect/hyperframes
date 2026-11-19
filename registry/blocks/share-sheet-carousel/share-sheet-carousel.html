@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the blurred slide ground to the frame edge, the sheet centred in the 780x1180 field (y 180-1360). top / bottom: the sheet alone, preview shortened so it fills the 780x760 field at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the blurred slide ground to the frame edge, the sheet centred in the 780x1072 field (y 288-1360). top / bottom: the sheet alone, preview shortened so it fills the 780x652 field at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "shareTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Heading at the top of the share sheet.", "maxLength": 20, "default": "Поделиться" },
     { "id": "senderName", "type": "string", "role": "content", "label": "Sender", "description": "Who offers the item, bold, before \"хочет поделиться\".", "maxLength": 16, "default": "MatIntellect" },
     { "id": "itemLabel", "type": "string", "role": "content", "label": "Item", "description": "What is offered, after \"хочет поделиться\".", "maxLength": 14, "default": "видео" },
@@ -220,11 +220,11 @@
       }
       #ssc-root.ssc-top #ssc-card,
       #ssc-root.ssc-bottom #ssc-card {
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
       }
       #ssc-root.ssc-bottom #ssc-card {
-        top: 600px;
+        top: 708px;
       }
       #ssc-root.ssc-top #ssc-imagebox,
       #ssc-root.ssc-bottom #ssc-imagebox {

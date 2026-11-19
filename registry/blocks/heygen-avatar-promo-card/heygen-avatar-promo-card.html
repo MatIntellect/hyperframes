@@ -3,7 +3,7 @@
   lang="ru"
   data-resolution="portrait"
   data-composition-variables='[
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the card colour to the frame edge, logo, headline, subhead, moving avatar belt and pills in the 780x1180 field (y 180-1360). top / bottom: a 780x760 card with the headline over the belt at y 180-940 / 600-1360, rest of the frame transparent; subhead and pills are not shown there.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: the card colour to the frame edge, logo, headline, subhead, moving avatar belt and pills in the 780x1072 field (y 288-1360). top / bottom: a 780x652 card with the headline over the belt at y 288-940 / 708-1360, rest of the frame transparent; subhead and pills are not shown there.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "brandLogo", "type": "image", "role": "content", "label": "Brand logo", "description": "Square brand mark: in the header next to the name and on two belt tiles.", "default": "assets/img/matintellect-mark.svg"},
     {"id": "brandName", "type": "string", "role": "content", "label": "Brand name", "description": "Name next to the mark in the header (full placement only).", "maxLength": 14, "default": "MatIntellect"},
     {"id": "video1", "type": "string", "role": "content", "label": "Belt video 1", "description": "Video file (path or URL) on belt tile 1, at least 10 s; the default is a sample clip of a person talking to camera.", "default": "assets/av_r1k1.mp4"},
@@ -106,8 +106,8 @@
         position: absolute;
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
         overflow: hidden;
       }
       .apc-full #apc-card {
@@ -118,7 +118,7 @@
         overflow: visible;
       }
       .apc-bottom #apc-card {
-        top: 600px;
+        top: 708px;
       }
       .apc-top #apc-card,
       .apc-bottom #apc-card {

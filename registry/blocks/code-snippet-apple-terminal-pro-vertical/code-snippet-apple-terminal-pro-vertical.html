@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone in the 780x760 slot at y 180-940 / 600-1360, rest of the frame transparent. The text takes the largest size from 28 to 44 px at which the longest line and every line fit; the window is as tall as its lines and sits in the middle of its field.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone in the 780x652 slot at y 288-940 / 708-1360, rest of the frame transparent. The text takes the largest size from 28 to 44 px at which the longest line and every line fit; the window is as tall as its lines and sits in the middle of its field.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Window title", "description": "Title in the window bar.", "maxLength": 30, "default": "bash — 80×24" },
     { "id": "header", "type": "string", "role": "content", "label": "Header", "description": "Dim line already on screen above the prompt. Empty hides it. Up to 42 characters.", "maxLength": 42, "default": "Last login: Mon Jun 2 on ttys008" },
     { "id": "prompt", "type": "string", "role": "content", "label": "Prompt", "description": "Prompt before the command, green.", "maxLength": 18, "default": "user@Mac myapp %" },
@@ -157,12 +157,12 @@
         height: 1000px;
       }
       #atpv-root.atpv-top #atpv-win {
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
       }
       #atpv-root.atpv-bottom #atpv-win {
-        top: 600px;
-        height: 760px;
+        top: 708px;
+        height: 652px;
       }
       #atpv-canvas {
         padding: 20px 18px;

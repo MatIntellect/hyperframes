@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the headline centred on the 780x1180 field (y 770), up to three lines. top / bottom: the same on a brand card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the headline centred on the 780x1072 field (y 824), up to three lines. top / bottom: the same on a brand card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "text", "type": "string", "role": "content", "label": "Headline", "description": "Montserrat, constant size; wraps between words (wide – up to two lines, vertical – up to three). Each letter keeps its own place, the crest of weight runs through them.", "maxLength": 28, "default": "МОНТАЖ БЕЗ СПЕШКИ" },
     { "id": "weightFrom", "type": "number", "role": "style", "label": "Weight (rest)", "description": "Montserrat weight of the letters the crest is not on.", "default": 200, "min": 100, "max": 900, "step": 10 },
     { "id": "weightTo", "type": "number", "role": "style", "label": "Weight (crest)", "description": "Montserrat weight at the top of the crest.", "default": 900, "min": 100, "max": 900, "step": 10 },
@@ -105,8 +105,8 @@
       #wwvv-root.wwvv-card #wwvv-stage {
         left: 150px;
         width: 780px;
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
       }
       #wwvv-root.wwvv-card #wwvv-ground {
         border-radius: 32px;
@@ -114,7 +114,7 @@
       }
       #wwvv-root.wwvv-card.wwvv-bottom #wwvv-ground,
       #wwvv-root.wwvv-card.wwvv-bottom #wwvv-stage {
-        top: 600px;
+        top: 708px;
       }
       #wwvv-root.wwvv-card #wwvv-line {
         width: 700px;

@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
 
-    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
+    {"id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground, the window in the 780 field (y 270-1270). top / bottom: the window alone, 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{"value": "full", "label": "Full screen"}, {"value": "top", "label": "Top"}, {"value": "bottom", "label": "Bottom"}]},
     {"id": "code", "type": "string", "role": "content", "label": "Code", "description": "The code, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function greet(name) {\n  console.log(\"hi \" + name)\n}"},
     {"id": "codeAfter", "type": "string", "role": "content", "label": "Code after", "description": "The code after the change, newlines kept: up to 14 lines, a line up to 38 characters.", "maxLength": 546, "default": "function greet(name, lang) {\n  const msg = translate(\"hi\", lang)\n  console.log(`${msg} ${name}`)\n}"},
     {"id": "lang", "type": "enum", "role": "content", "label": "Language", "description": "Language of the code, for the colours.", "default": "js", "options": [{"value": "js", "label": "JavaScript"}, {"value": "ts", "label": "TypeScript"}, {"value": "python", "label": "Python"}, {"value": "bash", "label": "Bash"}, {"value": "json", "label": "JSON"}]},
@@ -259,12 +259,12 @@
         height: 1000px;
       }
       #kddiffv-root.kddiffv-top .editor {
-        top: 180px;
-        height: 760px;
+        top: 288px;
+        height: 652px;
       }
       #kddiffv-root.kddiffv-bottom .editor {
-        top: 600px;
-        height: 760px;
+        top: 708px;
+        height: 652px;
       }
       #kddiffv-root.kddiffv-top .bg-field,
       #kddiffv-root.kddiffv-top .bg-grid,
@@ -456,8 +456,8 @@
         var cv = document.getElementById("kddiffv-gl");
         if (cv && PL !== "full") {
           window.__kodW = 780;
-          window.__kodH = 760;
-          cv.style.cssText = "left:150px;top:" + (PL === "top" ? 180 : 600) + "px;width:780px;height:760px;border-radius:32px";
+          window.__kodH = 652;
+          cv.style.cssText = "left:150px;top:" + (PL === "top" ? 288 : 708) + "px;width:780px;height: 652px;border-radius:32px";
         }
         
         var fname = document.getElementById("kddiffv-fname");

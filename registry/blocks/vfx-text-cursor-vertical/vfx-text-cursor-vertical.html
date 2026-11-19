@@ -2,7 +2,7 @@
 <html
   lang="ru"
   data-composition-variables='[
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own black stage to the frame edge, the wordmark and the glass card centred on the 780x1180 field (y 770). top / bottom: the same on a card 780x760 at y 180-940 / 600-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own black stage to the frame edge, the wordmark and the glass card centred on the 780x1072 field (y 824). top / bottom: the same on a card 780x652 at y 288-940 / 708-1360, rest of the frame transparent.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "logo", "type": "string", "role": "content", "label": "Wordmark", "description": "The wordmark the light sweeps across, Bebas Neue, one line.", "portrays": ["subject_name"], "maxLength": 12, "default": "MatIntellect" },
     { "id": "typed", "type": "string", "role": "content", "label": "Typed word", "description": "Typed letter by letter in red with a caret, then slides into the first line.", "maxLength": 6, "default": "ИИ" },
     { "id": "tail", "type": "string", "role": "content", "label": "First line, rest", "description": "Words after the typed word on the first line.", "maxLength": 8, "default": "монтаж" },
@@ -76,14 +76,14 @@
       
       #vtcv-root.vtcv-card #vtcv-frame {
         left: 150px;
-        top: 180px;
+        top: 288px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
       }
       #vtcv-root.vtcv-card.vtcv-bottom #vtcv-frame {
-        top: 600px;
+        top: 708px;
       }
       
       #vtcv-canvas {
@@ -153,7 +153,7 @@
         left: 150px;
         top: 390px;
         width: 780px;
-        height: 760px;
+        height: 652px;
         border-radius: 40px;
       }
       #vtcv-root.vtcv-card #vtcv-next {
@@ -224,7 +224,7 @@
         if (placement !== "full") {
           root.classList.add("vtcv-card", "vtcv-" + placement);
           W = 780;
-          H = 760;
+          H = 652;
         }
         
         canvas.width = W;
