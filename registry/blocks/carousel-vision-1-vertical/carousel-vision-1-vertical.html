@@ -1072,7 +1072,13 @@
             });
           }
           if (x0 < x1) {
-            const k = Math.min(1, 780 / (x1 - x0), (field[1] - field[0]) / (y1 - y0));
+            /* top / bottom: the ring fills the 652 field in height, its side cards run past the frame edges (the
+               placement description); fitted to the 780 width it was a band of about 330 px in an empty card, the
+               void with small things floating in it (spec.md "BANNED by default") */
+            const k =
+              placement === "full"
+                ? Math.min(1, 780 / (x1 - x0), (field[1] - field[0]) / (y1 - y0))
+                : (field[1] - field[0]) / (y1 - y0);
             const tx = 540 - (k * (x0 + x1)) / 2,
               ty = (field[0] + field[1]) / 2 - (k * (y0 + y1)) / 2;
             sc.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + k + ") " + base;
