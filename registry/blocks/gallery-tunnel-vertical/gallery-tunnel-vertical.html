@@ -58,7 +58,7 @@
         top: 0;
         left: 0;
       }
-      
+
       #gtnv-stage.gtnv-card {
         left: 150px;
         width: 780px;
@@ -70,7 +70,7 @@
       #gtnv-stage.gtnv-bottom {
         top: 708px;
       }
-      
+
       /* Off-screen decode well: the <img> elements live in the DOM so the page
          load event waits for them, but they are never composited themselves —
          WebGL reads them as textures. The well is clipped to 1px; the images
@@ -90,7 +90,14 @@
     </style>
   </head>
   <body>
-    <div id="gtnv-root" data-composition-id="gallery-tunnel-vertical" data-start="0" data-duration="180" data-width="1080" data-height="1920">
+    <div
+      id="gtnv-root"
+      data-composition-id="gallery-tunnel-vertical"
+      data-start="0"
+      data-duration="180"
+      data-width="1080"
+      data-height="1920"
+    >
       <div id="gtnv-stage">
         <div id="gtnv-backdrop"></div>
         <canvas id="gtnv-canvas"></canvas>
@@ -134,7 +141,9 @@
         // source. Precedence: host CSS custom property, runtime variable bag,
         // declared default.
         var DECL = {};
-        JSON.parse(document.documentElement.getAttribute("data-composition-variables") || "[]").forEach(function (v) {
+        JSON.parse(
+          document.documentElement.getAttribute("data-composition-variables") || "[]",
+        ).forEach(function (v) {
           DECL[v.id] = v.default;
         });
         var HF = window.__hyperframes;
@@ -198,8 +207,10 @@
 
         // layout: the native 1920x1080 view keeps its px per world unit; vertical full
         // shifts the vanishing point to the field centre (y 824) with a view offset
-        var VH = H, VY = 0, ZOOM = 1;
-        
+        var VH = H,
+          VY = 0,
+          ZOOM = 1;
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement === "full") {
           VH = 2 * (H - 770);
@@ -212,7 +223,6 @@
           H = 652;
           VH = H;
         }
-        
 
         var THREEJS = window.THREE;
         var canvas = document.getElementById("gtnv-canvas");
@@ -236,7 +246,8 @@
         // Camera sits still at the origin looking down -z; the corridor moves.
         // Same picture as a moving camera, and the modulo keeps every coordinate
         // bounded no matter how long the clip runs.
-        var vfov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * (VH / 1080 / ZOOM)) * 180) / Math.PI;
+        var vfov =
+          (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * (VH / 1080 / ZOOM)) * 180) / Math.PI;
         var camera = new THREEJS.PerspectiveCamera(vfov, W / VH, 0.05, 40);
         camera.position.set(0, 0, 0);
         camera.lookAt(0, 0, -1);
@@ -472,9 +483,14 @@
           .split(",")
           .map(parseFloat);
         var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
-        if (c0 > 0) tl.fromTo(ROOT, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (c0 > 0)
+          tl.fromTo(ROOT, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
         if (V.exit === "fade")
-          tl.to(ROOT, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 11.5);
+          tl.to(
+            ROOT,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 11.5,
+          );
         window.__timelines["gallery-tunnel-vertical"] = tl;
 
         draw(0);

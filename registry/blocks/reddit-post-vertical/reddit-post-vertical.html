@@ -38,14 +38,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -155,8 +160,7 @@
       .rdpv-label {
         color: #818384;
       }
-      
-      
+
       #rdpv-field {
         left: 150px;
         width: 780px;
@@ -222,18 +226,35 @@
       .rdpv-label {
         font-size: 30px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="rdpv-root" data-composition-id="reddit-post-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="rdpv-root"
+      data-composition-id="reddit-post-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="rdpv-ground"></div>
       <div id="rdpv-field">
         <div id="rdpv-card">
           <div id="rdpv-head">
             <svg id="rdpv-icon" viewBox="0 0 48 48" fill="none">
               <circle cx="24" cy="24" r="24" fill="#4A90D9" />
-              <text data-layout-ignore x="24" y="30" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="20" font-weight="700" fill="#fff">r/</text>
+              <text
+                data-layout-ignore
+                x="24"
+                y="30"
+                text-anchor="middle"
+                font-family="Montserrat, sans-serif"
+                font-size="20"
+                font-weight="700"
+                fill="#fff"
+              >
+                r/
+              </text>
             </svg>
             <div id="rdpv-meta">
               <span id="rdpv-sub">r/matintellect</span>
@@ -244,16 +265,42 @@
           <div id="rdpv-body"></div>
           <div id="rdpv-bar">
             <div class="rdpv-pill">
-              <svg id="rdpv-up" viewBox="0 0 24 24" fill="none"><path id="rdpv-arrow" d="M12 4L3 14h5v6h8v-6h5L12 4z" fill="#818384" /></svg>
-              <span id="rdpv-votebox"><span id="rdpv-votes">4,2 тыс</span><span id="rdpv-votes2">4,3 тыс</span></span>
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 20l9-10h-5V4H8v6H3l9 10z" fill="#818384" /></svg>
+              <svg id="rdpv-up" viewBox="0 0 24 24" fill="none">
+                <path id="rdpv-arrow" d="M12 4L3 14h5v6h8v-6h5L12 4z" fill="#818384" />
+              </svg>
+              <span id="rdpv-votebox"
+                ><span id="rdpv-votes">4,2 тыс</span><span id="rdpv-votes2">4,3 тыс</span></span
+              >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 20l9-10h-5V4H8v6H3l9 10z" fill="#818384" />
+              </svg>
             </div>
             <div class="rdpv-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#818384" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#818384"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
               <span id="rdpv-comments" class="rdpv-label">328</span>
             </div>
             <div class="rdpv-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#818384" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#818384"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" />
+                <polyline points="16 6 12 2 8 6" />
+                <line x1="12" y1="2" x2="12" y2="15" />
+              </svg>
               <span id="rdpv-share" class="rdpv-label">Поделиться</span>
             </div>
           </div>
@@ -273,16 +320,21 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         root.classList.add("rdpv-" + placement);
         if (placement !== "full") root.querySelector(".rdpv-ground").remove();
-        
 
         document.getElementById("rdpv-sub").textContent = str(V.subreddit, "r/matintellect");
         document.getElementById("rdpv-author").textContent = str(V.author, "u/matjester · 3 ч");
-        document.getElementById("rdpv-title").textContent = str(V.title, "Собрал систему, которая монтирует ролики без человека");
-        var body = typeof V.body === "string" ? V.body.trim() : "Запись приходит в Telegram, через шесть минут готовый ролик с графикой и субтитрами. Спрашивайте, как устроено";
+        document.getElementById("rdpv-title").textContent = str(
+          V.title,
+          "Собрал систему, которая монтирует ролики без человека",
+        );
+        var body =
+          typeof V.body === "string"
+            ? V.body.trim()
+            : "Запись приходит в Telegram, через шесть минут готовый ролик с графикой и субтитрами. Спрашивайте, как устроено";
         var bodyEl = document.getElementById("rdpv-body");
         if (body) bodyEl.textContent = body;
         else bodyEl.remove();
@@ -303,16 +355,25 @@
 
         /* how far the card travels: from under the frame edge in the wide version, a short lift in the vertical one */
         var RISE = 400;
-        
+
         RISE = 60;
-        
+
         var card = document.getElementById("rdpv-card");
         var up = document.getElementById("rdpv-up");
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo(card, { y: RISE, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, c0);
+        tl.fromTo(
+          card,
+          { y: RISE, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+          c0,
+        );
         tl.to(up, { scale: 0.85, duration: 0.12, ease: "power2.out" }, c1);
         tl.to(up, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.4)" }, c1 + 0.12);
-        tl.to("#rdpv-arrow", { attr: { fill: "#ff4500" }, duration: 0.12, ease: "none" }, c1 + 0.12);
+        tl.to(
+          "#rdpv-arrow",
+          { attr: { fill: "#ff4500" }, duration: 0.12, ease: "none" },
+          c1 + 0.12,
+        );
         tl.to("#rdpv-votes", { opacity: 0, duration: 0.08, ease: "none" }, c1 + 0.12);
         tl.to("#rdpv-votes2", { opacity: 1, duration: 0.12, ease: "none" }, c1 + 0.12);
         var tOut = isFinite(cues[2]) ? cues[2] : c1 + 2.7;

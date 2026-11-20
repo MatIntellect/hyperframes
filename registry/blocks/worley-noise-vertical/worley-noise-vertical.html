@@ -50,7 +50,7 @@
         height: 100%;
         display: block;
       }
-      
+
       #shworleynoisev-stage.shworleynoisev-card {
         left: 150px;
         top: 288px;
@@ -62,11 +62,18 @@
       #shworleynoisev-stage.shworleynoisev-bottom {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="shworleynoisev-root" data-composition-id="worley-noise-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-requires-webgpu>
+    <div
+      id="shworleynoisev-root"
+      data-composition-id="worley-noise-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+      data-requires-webgpu
+    >
       <div id="shworleynoisev-stage">
         <canvas data-shader="WorleyNoise" width="1080" height="1920"></canvas>
       </div>
@@ -88,7 +95,7 @@
         var COMP_ID = "worley-noise-vertical";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"colorA": "var(--muted, #8a8a90)", "colorB": "var(--bg, #0c1014)"};
+        var COLORS = { colorA: "var(--muted, #8a8a90)", colorB: "var(--bg, #0c1014)" };
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = ["f1", "f2", "f2MinusF1", "f1PlusF2", "f1TimesF2"];
@@ -122,17 +129,19 @@
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
         probe.remove();
         // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
-        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shworleynoisev-ground", vars.ground.trim());
+        if (typeof vars.ground === "string" && vars.ground.trim())
+          root.style.setProperty("--shworleynoisev-ground", vars.ground.trim());
         var W = 1080,
           H = 1920;
-        
-        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
         if (placement !== "full") {
           stage.classList.add("shworleynoisev-card", "shworleynoisev-" + placement);
           W = 780;
           H = 652;
         }
-        
+
         cv.width = W;
         cv.height = H;
         cv.dataset.shaderProps = JSON.stringify(props);
@@ -144,8 +153,10 @@
         var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DURATION;
         window.__timelines = window.__timelines || {};
         var tl = gsap.timeline({ paused: true });
-        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
-        if (vars.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        if (c0 > 0)
+          tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (vars.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         tl.set({}, {}, DURATION);
         window.__timelines[COMP_ID] = tl;
       })();

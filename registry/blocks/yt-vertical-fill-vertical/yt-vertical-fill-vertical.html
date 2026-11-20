@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -90,8 +95,16 @@
         position: absolute;
         inset: 0;
         background:
-          repeating-linear-gradient(0deg, color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px, transparent 1px 28px),
-          repeating-linear-gradient(90deg, color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px, transparent 1px 28px);
+          repeating-linear-gradient(
+            0deg,
+            color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px,
+            transparent 1px 28px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--fg, #f2f2f2) 5%, transparent) 0 1px,
+            transparent 1px 28px
+          );
       }
       #yvfv-fg {
         box-shadow: 0 0 90px rgb(0 0 0 / 55%);
@@ -103,10 +116,14 @@
         font-weight: 700;
         font-size: 120px;
         color: var(--muted, #8a8a90);
-        background: linear-gradient(160deg, color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%, var(--surface, #18181a) 60%, color-mix(in srgb, var(--surface, #18181a) 80%, var(--accent, #ff0000)) 100%);
+        background: linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%,
+          var(--surface, #18181a) 60%,
+          color-mix(in srgb, var(--surface, #18181a) 80%, var(--accent, #ff0000)) 100%
+        );
       }
-      
-      
+
       .yvfv-side {
         left: 0;
         right: 0;
@@ -139,11 +156,17 @@
         left: 0;
         top: 107px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="yvfv-root" data-composition-id="yt-vertical-fill-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="yvfv-root"
+      data-composition-id="yt-vertical-fill-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="yvfv-stage">
         <div class="yvfv-media" id="yvfv-bg" data-layout-allow-overflow data-layout-ignore></div>
         <div class="yvfv-media yvfv-side" id="yvfv-side-a" data-layout-ignore></div>
@@ -171,15 +194,14 @@
           fg = document.getElementById("yvfv-fg");
         var stand = "9:16",
           flip = "scaleX(-1)";
-        
-        
+
         stand = "16:9";
         flip = "scaleY(-1)";
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") root.classList.add("yvfv-card", "yvfv-" + placement);
         sA.style.top = "0";
         sB.style.bottom = "0";
-        
+
         function media() {
           if (!src) {
             var d = document.createElement("div");
@@ -215,9 +237,19 @@
 
         var tl = gsap.timeline({ paused: true });
         tl.from("#yvfv-stage", { opacity: 0, duration: 0.6, ease: "power2.out" }, 0);
-        tl.fromTo(fg, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.96, ease: "power3.out" }, c0);
+        tl.fromTo(
+          fg,
+          { y: 34, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.96, ease: "power3.out" },
+          c0,
+        );
         tl.fromTo(fg.firstChild, { scale: 1.05 }, { scale: 1, duration: 7, ease: "sine.out" }, c0);
-        if (exit === "fade") tl.to("#yvfv-stage", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
+        if (exit === "fade")
+          tl.to(
+            "#yvfv-stage",
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["yt-vertical-fill-vertical"] = tl;

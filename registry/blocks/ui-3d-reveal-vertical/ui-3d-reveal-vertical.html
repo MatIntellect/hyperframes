@@ -33,1002 +33,1103 @@
     >
       <!-- one wrapper for every layer: the vertical card moves it to the card centre -->
       <div class="pl">
-      <!-- Background: Figma outer canvas dark -->
-      <div class="bg-base"></div>
-      <div class="bg-glow" id="bgGlow"></div>
+        <!-- Background: Figma outer canvas dark -->
+        <div class="bg-base"></div>
+        <div class="bg-glow" id="bgGlow"></div>
 
-      <!-- ══════════════════════════════════════════
+        <!-- ══════════════════════════════════════════
          INTRO: Figma logo stroke draw + fill
     ══════════════════════════════════════════ -->
-      <div class="intro-layer" id="introLayer">
-        <svg class="intro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(410 694) scale(0.6915)">
-            <g class="intro-logo">
-              <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
-              <path class="il-fill il-fill-1" d="M188 0L376 188L188 376L0 188Z" fill="#EFEDEA" opacity="0" />
-              <path class="il-fill il-fill-2" d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z" fill="#212121" opacity="0" />
-              <!-- Stroke layer -->
-              <path class="il-stroke il-stroke-1" d="M188 0L376 188L188 376L0 188Z" fill="none" stroke="#EFEDEA" stroke-width="3" />
-              <path class="il-stroke il-stroke-2" d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z" fill="none" stroke="#EFEDEA" stroke-width="3" />
+        <div class="intro-layer" id="introLayer">
+          <svg class="intro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(410 694) scale(0.6915)">
+              <g class="intro-logo">
+                <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
+                <path
+                  class="il-fill il-fill-1"
+                  d="M188 0L376 188L188 376L0 188Z"
+                  fill="#EFEDEA"
+                  opacity="0"
+                />
+                <path
+                  class="il-fill il-fill-2"
+                  d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z"
+                  fill="#212121"
+                  opacity="0"
+                />
+                <!-- Stroke layer -->
+                <path
+                  class="il-stroke il-stroke-1"
+                  d="M188 0L376 188L188 376L0 188Z"
+                  fill="none"
+                  stroke="#EFEDEA"
+                  stroke-width="3"
+                />
+                <path
+                  class="il-stroke il-stroke-2"
+                  d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z"
+                  fill="none"
+                  stroke="#EFEDEA"
+                  stroke-width="3"
+                />
+              </g>
             </g>
-          </g>
-        </svg>
-      </div>
+          </svg>
+        </div>
 
-      <!-- 3D scene -->
-      <div class="scene" id="scene">
-        <div class="card-glow" id="cardGlow"></div>
+        <!-- 3D scene -->
+        <div class="scene" id="scene">
+          <div class="card-glow" id="cardGlow"></div>
 
-        <div class="card-wrapper" id="cardWrapper">
-          <!-- ═══════════════════════════════════════
+          <div class="card-wrapper" id="cardWrapper">
+            <!-- ═══════════════════════════════════════
              FRONT FACE — Figma Interface
         ═══════════════════════════════════════ -->
-          <div class="ui-card" id="uiCard" data-layout-ignore>
-            <!-- ── TOOLBAR ── -->
-            <div class="fig-toolbar" id="figToolbar">
-              <!-- Left: logo + tools -->
-              <div class="tb-left">
-                <div class="fig-logo">
-                  <svg width="18" height="26" viewBox="0 0 18 26" fill="none">
-                    <rect x="0" y="0" width="9" height="9" rx="4.5" fill="#F24E1E" />
-                    <rect x="9" y="0" width="9" height="9" rx="4.5" fill="#FF7262" />
-                    <rect x="0" y="8.5" width="9" height="9" rx="4.5" fill="#A259FF" />
-                    <circle cx="13.5" cy="13" r="4.5" fill="#1ABCFE" />
-                    <rect x="0" y="17" width="9" height="9" rx="4.5" fill="#0ACF83" />
-                  </svg>
-                </div>
-                <div class="tool-divider"></div>
-                <div class="tool-group">
-                  <div class="tool-btn active" title="Move (V)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <path d="M2 2l5 12 2-4 4-2L2 2z" fill="currentColor" />
-                    </svg>
-                  </div>
-                  <div class="tool-btn" title="Scale (K)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <path
-                        d="M3 3l10 10M10 3h3v3M3 10H6"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                      />
+            <div class="ui-card" id="uiCard" data-layout-ignore>
+              <!-- ── TOOLBAR ── -->
+              <div class="fig-toolbar" id="figToolbar">
+                <!-- Left: logo + tools -->
+                <div class="tb-left">
+                  <div class="fig-logo">
+                    <svg width="18" height="26" viewBox="0 0 18 26" fill="none">
+                      <rect x="0" y="0" width="9" height="9" rx="4.5" fill="#F24E1E" />
+                      <rect x="9" y="0" width="9" height="9" rx="4.5" fill="#FF7262" />
+                      <rect x="0" y="8.5" width="9" height="9" rx="4.5" fill="#A259FF" />
+                      <circle cx="13.5" cy="13" r="4.5" fill="#1ABCFE" />
+                      <rect x="0" y="17" width="9" height="9" rx="4.5" fill="#0ACF83" />
                     </svg>
                   </div>
                   <div class="tool-divider"></div>
-                  <div class="tool-btn" title="Frame (F)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <rect
-                        x="2"
-                        y="5"
-                        width="12"
-                        height="9"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                      />
-                      <path
-                        d="M5 5V3M11 5V3M5 14v2M11 14v2M2 8H0M14 8h2"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                      />
-                    </svg>
+                  <div class="tool-group">
+                    <div class="tool-btn active" title="Move (V)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path d="M2 2l5 12 2-4 4-2L2 2z" fill="currentColor" />
+                      </svg>
+                    </div>
+                    <div class="tool-btn" title="Scale (K)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M3 3l10 10M10 3h3v3M3 10H6"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Frame (F)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <rect
+                          x="2"
+                          y="5"
+                          width="12"
+                          height="9"
+                          rx="1"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                        />
+                        <path
+                          d="M5 5V3M11 5V3M5 14v2M11 14v2M2 8H0M14 8h2"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tool-btn" title="Rectangle (R)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <rect
+                          x="2"
+                          y="4"
+                          width="12"
+                          height="9"
+                          rx="1.5"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tool-btn" title="Text (T)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M2 4h12M8 4v9M5 13h6"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tool-btn" title="Pen (P)">
+                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                        <path
+                          d="M3 13L8 3l5 10M5.5 8.5h5"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                  <div class="tool-btn" title="Rectangle (R)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <rect
-                        x="2"
-                        y="4"
-                        width="12"
-                        height="9"
-                        rx="1.5"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                      />
-                    </svg>
+                </div>
+
+                <!-- Center: file breadcrumb -->
+                <div class="tb-center">
+                  <span class="file-name">App Redesign</span>
+                  <span class="file-chevron">›</span>
+                  <span class="file-page">Design System</span>
+                  <svg class="file-arrow" viewBox="0 0 10 6" width="10" height="6" fill="none">
+                    <path
+                      d="M1 1l4 4 4-4"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+
+                <!-- Right: mode tabs + share + avatars -->
+                <div class="tb-right">
+                  <div class="mode-tabs">
+                    <span class="mode-tab">Design</span>
+                    <span class="mode-tab active">Dev</span>
                   </div>
-                  <div class="tool-btn" title="Text (T)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                  <div class="share-btn">
+                    <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
                       <path
-                        d="M2 4h12M8 4v9M5 13h6"
-                        stroke="currentColor"
+                        d="M4 8H12M9 5l3 3-3 3"
+                        stroke="white"
                         stroke-width="1.5"
                         stroke-linecap="round"
                       />
                     </svg>
+                    Share
                   </div>
-                  <div class="tool-btn" title="Pen (P)">
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <path
-                        d="M3 13L8 3l5 10M5.5 8.5h5"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                      />
-                    </svg>
+                  <div class="avatar-cluster">
+                    <div class="fig-avatar" style="background: #a259ff; z-index: 3">S</div>
+                    <div
+                      class="fig-avatar"
+                      style="background: #f24e1e; z-index: 2; margin-left: -8px"
+                    >
+                      J
+                    </div>
+                    <div
+                      class="fig-avatar"
+                      style="background: #1abcfe; z-index: 1; margin-left: -8px"
+                    >
+                      K
+                    </div>
                   </div>
+                  <div class="present-btn">▶</div>
                 </div>
               </div>
 
-              <!-- Center: file breadcrumb -->
-              <div class="tb-center">
-                <span class="file-name">App Redesign</span>
-                <span class="file-chevron">›</span>
-                <span class="file-page">Design System</span>
-                <svg class="file-arrow" viewBox="0 0 10 6" width="10" height="6" fill="none">
-                  <path
-                    d="M1 1l4 4 4-4"
-                    stroke="currentColor"
-                    stroke-width="1.4"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </div>
-
-              <!-- Right: mode tabs + share + avatars -->
-              <div class="tb-right">
-                <div class="mode-tabs">
-                  <span class="mode-tab">Design</span>
-                  <span class="mode-tab active">Dev</span>
-                </div>
-                <div class="share-btn">
-                  <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
-                    <path
-                      d="M4 8H12M9 5l3 3-3 3"
-                      stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  Share
-                </div>
-                <div class="avatar-cluster">
-                  <div class="fig-avatar" style="background: #a259ff; z-index: 3">S</div>
-                  <div
-                    class="fig-avatar"
-                    style="background: #f24e1e; z-index: 2; margin-left: -8px"
-                  >
-                    J
+              <!-- ── BODY ── -->
+              <div class="fig-body">
+                <!-- LAYERS PANEL -->
+                <div class="fig-layers" id="figLayers">
+                  <div class="panel-tabs">
+                    <span class="ptab active">Layers</span>
+                    <span class="ptab">Assets</span>
                   </div>
-                  <div
-                    class="fig-avatar"
-                    style="background: #1abcfe; z-index: 1; margin-left: -8px"
-                  >
-                    K
-                  </div>
-                </div>
-                <div class="present-btn">▶</div>
-              </div>
-            </div>
 
-            <!-- ── BODY ── -->
-            <div class="fig-body">
-              <!-- LAYERS PANEL -->
-              <div class="fig-layers" id="figLayers">
-                <div class="panel-tabs">
-                  <span class="ptab active">Layers</span>
-                  <span class="ptab">Assets</span>
-                </div>
-
-                <div class="layer-search">
-                  <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
-                    <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3" />
-                    <path
-                      d="M9.5 9.5l2.5 2.5"
-                      stroke="currentColor"
-                      stroke-width="1.3"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  <span class="search-placeholder">Search layers</span>
-                </div>
-
-                <div class="layer-list">
-                  <div class="layer-item page-item">
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <rect
-                        x="1"
-                        y="1"
-                        width="8"
-                        height="10"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
+                  <div class="layer-search">
+                    <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+                      <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3" />
                       <path
-                        d="M3 4h5M3 7h3"
+                        d="M9.5 9.5l2.5 2.5"
                         stroke="currentColor"
-                        stroke-width="1.2"
+                        stroke-width="1.3"
                         stroke-linecap="round"
                       />
                     </svg>
-                    <span>Page 1</span>
+                    <span class="search-placeholder">Search layers</span>
                   </div>
 
-                  <div class="layer-item frame-item expanded">
-                    <svg class="li-collapse" viewBox="0 0 8 8" width="8" height="8" fill="none">
-                      <path
-                        d="M2 3l2 2 2-2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <svg
-                      class="li-icon frame-icon"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      width="12"
-                      height="12"
-                    >
-                      <rect
-                        x="2"
-                        y="3"
-                        width="8"
-                        height="6"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
-                      <path
-                        d="M4 3V1M8 3V1M4 9v2M8 9v2M2 6H0M10 6h2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <span>MatIntellect – Главная</span>
-                  </div>
-
-                  <div class="layer-item group-item indent-1">
-                    <svg class="li-collapse" viewBox="0 0 8 8" width="8" height="8" fill="none">
-                      <path
-                        d="M2 3l2 2 2-2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <rect
-                        x="1"
-                        y="1"
-                        width="10"
-                        height="10"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Navigation</span>
-                  </div>
-
-                  <div class="layer-item comp-item indent-2">
-                    <svg
-                      class="li-icon comp-icon"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      width="12"
-                      height="12"
-                    >
-                      <path
-                        d="M6 1L11 6 6 11 1 6z"
-                        fill="none"
-                        stroke="#A259FF"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Logo / Mark</span>
-                  </div>
-
-                  <div class="layer-item text-item indent-2">
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <path
-                        d="M2 3h8M6 3v7M3 10h6"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <span>Nav Links</span>
-                  </div>
-
-                  <div class="layer-item comp-item indent-2 selected-layer" id="selectedLayer">
-                    <svg
-                      class="li-icon comp-icon"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      width="12"
-                      height="12"
-                    >
-                      <path
-                        d="M6 1L11 6 6 11 1 6z"
-                        fill="none"
-                        stroke="#A259FF"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Create Card</span>
-                  </div>
-
-                  <div class="layer-item group-item indent-1 collapsed">
-                    <svg
-                      class="li-collapse"
-                      viewBox="0 0 8 8"
-                      width="8"
-                      height="8"
-                      fill="none"
-                      style="transform: rotate(-90deg)"
-                    >
-                      <path
-                        d="M2 3l2 2 2-2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <rect
-                        x="1"
-                        y="1"
-                        width="10"
-                        height="10"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Hero</span>
-                  </div>
-
-                  <div class="layer-item group-item indent-1 collapsed">
-                    <svg
-                      class="li-collapse"
-                      viewBox="0 0 8 8"
-                      width="8"
-                      height="8"
-                      fill="none"
-                      style="transform: rotate(-90deg)"
-                    >
-                      <path
-                        d="M2 3l2 2 2-2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <rect
-                        x="1"
-                        y="1"
-                        width="10"
-                        height="10"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Feature Grid</span>
-                  </div>
-
-                  <div class="layer-item group-item indent-1 collapsed">
-                    <svg
-                      class="li-collapse"
-                      viewBox="0 0 8 8"
-                      width="8"
-                      height="8"
-                      fill="none"
-                      style="transform: rotate(-90deg)"
-                    >
-                      <path
-                        d="M2 3l2 2 2-2"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
-                      <rect
-                        x="1"
-                        y="1"
-                        width="10"
-                        height="10"
-                        rx="1"
-                        stroke="currentColor"
-                        stroke-width="1.2"
-                      />
-                    </svg>
-                    <span>Footer</span>
-                  </div>
-                </div>
-
-                <div class="page-bar">
-                  <div class="pbar-tab active">Design System</div>
-                  <div class="pbar-tab">Landing</div>
-                  <div class="pbar-add">+</div>
-                </div>
-              </div>
-
-              <!-- CANVAS -->
-              <div class="fig-canvas" id="figCanvas">
-                <div class="canvas-frame-label">MatIntellect – Главная</div>
-
-                <!-- The artboard / HeyGen app.heygen.com — light mode -->
-                <div class="artboard" id="artboard">
-                  <!-- ══ LEFT ICON NAV (56px) ══ -->
-                  <div class="hg-icnav">
-                    <div class="hg-iclogo">
-                      <img src="assets/img/matintellect-avatar.svg" width="30" height="30" style="display: block" alt="MatIntellect" />
-                    </div>
-                    <div class="hg-icitem">
-                      <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                        <circle cx="8" cy="5.5" r="2.8" stroke="currentColor" stroke-width="1.3" />
-                        <path
-                          d="M2 14.5c0-3.31 2.69-6 6-6s6 2.69 6 6"
-                          stroke="currentColor"
-                          stroke-width="1.3"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                      <span>Avatar</span>
-                    </div>
-                    <div class="hg-icitem hg-icactive">
-                      <div class="hg-icbg">
-                        <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
-                          <circle cx="8" cy="5.5" r="2.5" stroke="white" stroke-width="1.3" />
-                          <path
-                            d="M2.5 14c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5"
-                            stroke="white"
-                            stroke-width="1.3"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                      </div>
-                      <span>Монтажёр</span>
-                    </div>
-                    <div class="hg-icitem">
-                      <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                        <path
-                          d="M3 4l3 8M10 4l3 8M6 10h4"
-                          stroke="currentColor"
-                          stroke-width="1.4"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                      <span>Motion Cut</span>
-                    </div>
-                    <div class="hg-icitem">
-                      <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                        <path
-                          d="M2 4h12M8 4v9M5 13h6"
-                          stroke="currentColor"
-                          stroke-width="1.4"
-                          stroke-linecap="round"
-                        />
-                        <circle cx="12" cy="3" r="1.5" fill="#3B82F6" />
-                      </svg>
-                      <span>Translate</span>
-                    </div>
-                    <div class="hg-icitem">
-                      <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                        <rect
-                          x="2"
-                          y="2"
-                          width="5"
-                          height="5"
-                          rx="1.5"
-                          fill="currentColor"
-                          opacity="0.45"
-                        />
-                        <rect
-                          x="9"
-                          y="2"
-                          width="5"
-                          height="5"
-                          rx="1.5"
-                          fill="currentColor"
-                          opacity="0.45"
-                        />
-                        <rect
-                          x="2"
-                          y="9"
-                          width="5"
-                          height="5"
-                          rx="1.5"
-                          fill="currentColor"
-                          opacity="0.45"
-                        />
-                        <rect
-                          x="9"
-                          y="9"
-                          width="5"
-                          height="5"
-                          rx="1.5"
-                          fill="currentColor"
-                          opacity="0.45"
-                        />
-                      </svg>
-                      <span>Apps</span>
-                    </div>
-                    <div class="hg-icitem">
-                      <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
-                        <path
-                          d="M2 6a2 2 0 012-2h2l2 2h4a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                          stroke="currentColor"
-                          stroke-width="1.3"
-                        />
-                      </svg>
-                      <span>Projects</span>
-                    </div>
-                    <div class="hg-icuser">J</div>
-                  </div>
-
-                  <!-- ══ HISTORY PANEL (105px) ══ -->
-                  <div class="hg-histpanel">
-                    <div class="hg-histhead">
-                      <span>Монтажёр</span>
-                      <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+                  <div class="layer-list">
+                    <div class="layer-item page-item">
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
                         <rect
                           x="1"
                           y="1"
-                          width="4.5"
-                          height="12"
+                          width="8"
+                          height="10"
                           rx="1"
                           stroke="currentColor"
                           stroke-width="1.2"
                         />
-                        <rect
-                          x="8.5"
-                          y="1"
-                          width="4.5"
-                          height="12"
-                          rx="1"
-                          stroke="currentColor"
-                          stroke-width="1.2"
-                        />
-                      </svg>
-                    </div>
-                    <div class="hg-newitem">
-                      <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
                         <path
-                          d="M1 6.5L6 1.5l5 5V11H7.5V8H4.5v3H1V6.5Z"
-                          fill="#3B82F6"
-                          fill-opacity="0.85"
+                          d="M3 4h5M3 7h3"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
                         />
                       </svg>
-                      New video
+                      <span>Page 1</span>
                     </div>
-                    <div class="hg-histcat">YESTERDAY</div>
-                    <div class="hg-histrow">AI Skills Gap: Alien</div>
-                    <div class="hg-histcat">PREVIOUS 3 DAYS</div>
-                    <div class="hg-histrow">AI Skills Gap: Alien</div>
-                    <div class="hg-histrow">Product Strategy: An AI...</div>
-                    <div class="hg-histrow">S9</div>
-                    <div class="hg-histrow">S7</div>
-                    <div class="hg-histrow">S5</div>
-                    <div class="hg-histrow">S3</div>
-                    <div class="hg-histcat">PREVIOUS 7 DAYS</div>
-                    <div class="hg-histrow">S8 lock</div>
-                    <div class="hg-histrow">S4</div>
-                    <div class="hg-histrow">S2</div>
-                    <div class="hg-histrow">Moody t2</div>
+
+                    <div class="layer-item frame-item expanded">
+                      <svg class="li-collapse" viewBox="0 0 8 8" width="8" height="8" fill="none">
+                        <path
+                          d="M2 3l2 2 2-2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <svg
+                        class="li-icon frame-icon"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        width="12"
+                        height="12"
+                      >
+                        <rect
+                          x="2"
+                          y="3"
+                          width="8"
+                          height="6"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        />
+                        <path
+                          d="M4 3V1M8 3V1M4 9v2M8 9v2M2 6H0M10 6h2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <span>MatIntellect – Главная</span>
+                    </div>
+
+                    <div class="layer-item group-item indent-1">
+                      <svg class="li-collapse" viewBox="0 0 8 8" width="8" height="8" fill="none">
+                        <path
+                          d="M2 3l2 2 2-2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
+                        <rect
+                          x="1"
+                          y="1"
+                          width="10"
+                          height="10"
+                          rx="1"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Navigation</span>
+                    </div>
+
+                    <div class="layer-item comp-item indent-2">
+                      <svg
+                        class="li-icon comp-icon"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        width="12"
+                        height="12"
+                      >
+                        <path
+                          d="M6 1L11 6 6 11 1 6z"
+                          fill="none"
+                          stroke="#A259FF"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Logo / Mark</span>
+                    </div>
+
+                    <div class="layer-item text-item indent-2">
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
+                        <path
+                          d="M2 3h8M6 3v7M3 10h6"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <span>Nav Links</span>
+                    </div>
+
+                    <div class="layer-item comp-item indent-2 selected-layer" id="selectedLayer">
+                      <svg
+                        class="li-icon comp-icon"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        width="12"
+                        height="12"
+                      >
+                        <path
+                          d="M6 1L11 6 6 11 1 6z"
+                          fill="none"
+                          stroke="#A259FF"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Create Card</span>
+                    </div>
+
+                    <div class="layer-item group-item indent-1 collapsed">
+                      <svg
+                        class="li-collapse"
+                        viewBox="0 0 8 8"
+                        width="8"
+                        height="8"
+                        fill="none"
+                        style="transform: rotate(-90deg)"
+                      >
+                        <path
+                          d="M2 3l2 2 2-2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
+                        <rect
+                          x="1"
+                          y="1"
+                          width="10"
+                          height="10"
+                          rx="1"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Hero</span>
+                    </div>
+
+                    <div class="layer-item group-item indent-1 collapsed">
+                      <svg
+                        class="li-collapse"
+                        viewBox="0 0 8 8"
+                        width="8"
+                        height="8"
+                        fill="none"
+                        style="transform: rotate(-90deg)"
+                      >
+                        <path
+                          d="M2 3l2 2 2-2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
+                        <rect
+                          x="1"
+                          y="1"
+                          width="10"
+                          height="10"
+                          rx="1"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Feature Grid</span>
+                    </div>
+
+                    <div class="layer-item group-item indent-1 collapsed">
+                      <svg
+                        class="li-collapse"
+                        viewBox="0 0 8 8"
+                        width="8"
+                        height="8"
+                        fill="none"
+                        style="transform: rotate(-90deg)"
+                      >
+                        <path
+                          d="M2 3l2 2 2-2"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                      <svg class="li-icon" viewBox="0 0 12 12" fill="none" width="12" height="12">
+                        <rect
+                          x="1"
+                          y="1"
+                          width="10"
+                          height="10"
+                          rx="1"
+                          stroke="currentColor"
+                          stroke-width="1.2"
+                        />
+                      </svg>
+                      <span>Footer</span>
+                    </div>
                   </div>
 
-                  <!-- ══ MAIN CONTENT (359px) ══ -->
-                  <div class="hg-maincnt">
-                    <!-- Top-right icon cluster -->
-                    <div class="hg-toprighticons">
-                      <div class="hg-ticon">
-                        <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
-                          <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3" />
+                  <div class="page-bar">
+                    <div class="pbar-tab active">Design System</div>
+                    <div class="pbar-tab">Landing</div>
+                    <div class="pbar-add">+</div>
+                  </div>
+                </div>
+
+                <!-- CANVAS -->
+                <div class="fig-canvas" id="figCanvas">
+                  <div class="canvas-frame-label">MatIntellect – Главная</div>
+
+                  <!-- The artboard / HeyGen app.heygen.com — light mode -->
+                  <div class="artboard" id="artboard">
+                    <!-- ══ LEFT ICON NAV (56px) ══ -->
+                    <div class="hg-icnav">
+                      <div class="hg-iclogo">
+                        <img
+                          src="assets/img/matintellect-avatar.svg"
+                          width="30"
+                          height="30"
+                          style="display: block"
+                          alt="MatIntellect"
+                        />
+                      </div>
+                      <div class="hg-icitem">
+                        <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
+                          <circle
+                            cx="8"
+                            cy="5.5"
+                            r="2.8"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                          />
                           <path
-                            d="M9.5 9.5l2.5 2.5"
+                            d="M2 14.5c0-3.31 2.69-6 6-6s6 2.69 6 6"
                             stroke="currentColor"
                             stroke-width="1.3"
                             stroke-linecap="round"
                           />
                         </svg>
+                        <span>Avatar</span>
                       </div>
-                      <div class="hg-ticon hg-notifico">
-                        <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
-                          <path
-                            d="M7 1.5a4 4 0 00-4 4v3l-1 2h10l-1-2v-3a4 4 0 00-4-4z"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                          />
-                          <path
-                            d="M5.5 10.5a1.5 1.5 0 003 0"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                          />
-                        </svg>
-                        <div class="hg-notifbadge">99+</div>
-                      </div>
-                      <div class="hg-ticon">
-                        <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
-                          <path
-                            d="M7 2l1.2 3.8H12L9 8.2l1.2 3.8L7 9.5l-3.2 2.5L5 8.2 2 5.8h3.8z"
-                            stroke="currentColor"
-                            stroke-width="1.1"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-
-                    <!-- Hero heading -->
-                    <div class="hg-herotitle">Ролик из записи<br />за минуты</div>
-
-                    <!-- ─ Create card ─ -->
-                    <div class="hg-createcard" id="hgCreateCard">
-                      <!-- Selector row: Avatar | Voice | Style -->
-                      <div class="hg-selrow">
-                        <div class="hg-sel">
-                          <span class="hg-sellbl">Avatar</span>
-                          <div class="hg-selbox">
-                            <div class="hg-avphoto"></div>
-                            <span class="hg-seltxt">Jordan</span>
-                          </div>
-                        </div>
-                        <div class="hg-seldiv"></div>
-                        <div class="hg-sel">
-                          <span class="hg-sellbl">Voice</span>
-                          <div class="hg-selbox">
-                            <div class="hg-voicebars">
-                              <div class="hg-vbar" style="height: 5px"></div>
-                              <div class="hg-vbar" style="height: 9px"></div>
-                              <div class="hg-vbar" style="height: 7px"></div>
-                              <div class="hg-vbar" style="height: 11px"></div>
-                              <div class="hg-vbar" style="height: 5px"></div>
-                            </div>
-                            <span class="hg-seltxt">Auto</span>
-                          </div>
-                        </div>
-                        <div class="hg-seldiv"></div>
-                        <div class="hg-sel">
-                          <span class="hg-sellbl">Style</span>
-                          <div class="hg-selbox">
-                            <div class="hg-styleico">
-                              <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
-                                <rect
-                                  x="1"
-                                  y="1"
-                                  width="12"
-                                  height="12"
-                                  rx="2"
-                                  stroke="currentColor"
-                                  stroke-width="1.2"
-                                />
-                                <path
-                                  d="M4.5 7l2 2 3-3"
-                                  stroke="currentColor"
-                                  stroke-width="1.2"
-                                  stroke-linecap="round"
-                                />
-                              </svg>
-                            </div>
-                            <span class="hg-seltxt">Auto</span>
-                          </div>
-                        </div>
-                        <div class="hg-settico">
-                          <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
-                            <circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.2" />
+                      <div class="hg-icitem hg-icactive">
+                        <div class="hg-icbg">
+                          <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+                            <circle cx="8" cy="5.5" r="2.5" stroke="white" stroke-width="1.3" />
                             <path
-                              d="M7 1.5V3M7 11v1.5M1.5 7H3M11 7h1.5M3.4 3.4l1 1M9.6 9.6l1 1M3.4 10.6l1-1M9.6 4.4l1-1"
-                              stroke="currentColor"
-                              stroke-width="1.2"
+                              d="M2.5 14c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5"
+                              stroke="white"
+                              stroke-width="1.3"
                               stroke-linecap="round"
                             />
                           </svg>
                         </div>
+                        <span>Монтажёр</span>
                       </div>
-                      <!-- Input -->
-                      <div class="hg-cinput">Опишите идею ролика…</div>
-                      <!-- Bottom bar -->
-                      <div class="hg-cbottom">
-                        <div class="hg-cbleft">
-                          <div class="hg-cbtn">
-                            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
-                              <path
-                                d="M6 2v8M2 6h8"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                              />
-                            </svg>
-                          </div>
-                          <div class="hg-cbtn">
-                            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
-                              <path
-                                d="M6 1.5l1 3H10L7.5 6.5l1 3L6 8 3.5 9.5l1-3L2 4.5H5z"
-                                fill="#9CA3AF"
-                              />
-                            </svg>
-                          </div>
-                          <div class="hg-cbtn">
-                            <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
-                              <path
-                                d="M1.5 3h9M1.5 6h9M1.5 9h6"
-                                stroke="currentColor"
-                                stroke-width="1.3"
-                                stroke-linecap="round"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="hg-cbright">
-                          <div class="hg-genbtn">
-                            <svg viewBox="0 0 10 10" fill="none" width="9" height="9">
-                              <path d="M5 1l1 3h3L7 6l1 3L5 7.5 2 9l1-3L1 4h3z" fill="#6B7280" />
-                            </svg>
-                            Generate
-                            <svg viewBox="0 0 8 6" fill="none" width="8" height="6">
-                              <path
-                                d="M1 1l3 3 3-3"
-                                stroke="#6B7280"
-                                stroke-width="1.3"
-                                stroke-linecap="round"
-                              />
-                            </svg>
-                          </div>
-                          <div class="hg-submitbtn">
-                            <svg viewBox="0 0 12 12" fill="none" width="10" height="10">
-                              <path
-                                d="M6 9V3M3 6l3-3 3 3"
-                                stroke="white"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </div>
-                        </div>
+                      <div class="hg-icitem">
+                        <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
+                          <path
+                            d="M3 4l3 8M10 4l3 8M6 10h4"
+                            stroke="currentColor"
+                            stroke-width="1.4"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                        <span>Motion Cut</span>
                       </div>
+                      <div class="hg-icitem">
+                        <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
+                          <path
+                            d="M2 4h12M8 4v9M5 13h6"
+                            stroke="currentColor"
+                            stroke-width="1.4"
+                            stroke-linecap="round"
+                          />
+                          <circle cx="12" cy="3" r="1.5" fill="#3B82F6" />
+                        </svg>
+                        <span>Translate</span>
+                      </div>
+                      <div class="hg-icitem">
+                        <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
+                          <rect
+                            x="2"
+                            y="2"
+                            width="5"
+                            height="5"
+                            rx="1.5"
+                            fill="currentColor"
+                            opacity="0.45"
+                          />
+                          <rect
+                            x="9"
+                            y="2"
+                            width="5"
+                            height="5"
+                            rx="1.5"
+                            fill="currentColor"
+                            opacity="0.45"
+                          />
+                          <rect
+                            x="2"
+                            y="9"
+                            width="5"
+                            height="5"
+                            rx="1.5"
+                            fill="currentColor"
+                            opacity="0.45"
+                          />
+                          <rect
+                            x="9"
+                            y="9"
+                            width="5"
+                            height="5"
+                            rx="1.5"
+                            fill="currentColor"
+                            opacity="0.45"
+                          />
+                        </svg>
+                        <span>Apps</span>
+                      </div>
+                      <div class="hg-icitem">
+                        <svg viewBox="0 0 16 16" fill="none" width="16" height="16">
+                          <path
+                            d="M2 6a2 2 0 012-2h2l2 2h4a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                          />
+                        </svg>
+                        <span>Projects</span>
+                      </div>
+                      <div class="hg-icuser">J</div>
                     </div>
 
-                    <!-- Styles from community -->
-                    <div class="hg-stylessec">
-                      <div class="hg-stitle">Styles from the community</div>
-                      <div class="hg-spills">
-                        <div class="hg-spill hg-spactive">All Styles</div>
-                        <div class="hg-spill">Retro Tech</div>
-                        <div class="hg-spill">Iconic Artist</div>
-                        <div class="hg-spill">Pop Culture</div>
-                        <div class="hg-spill">Print</div>
-                        <div class="hg-spill">Cinematic</div>
+                    <!-- ══ HISTORY PANEL (105px) ══ -->
+                    <div class="hg-histpanel">
+                      <div class="hg-histhead">
+                        <span>Монтажёр</span>
+                        <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+                          <rect
+                            x="1"
+                            y="1"
+                            width="4.5"
+                            height="12"
+                            rx="1"
+                            stroke="currentColor"
+                            stroke-width="1.2"
+                          />
+                          <rect
+                            x="8.5"
+                            y="1"
+                            width="4.5"
+                            height="12"
+                            rx="1"
+                            stroke="currentColor"
+                            stroke-width="1.2"
+                          />
+                        </svg>
                       </div>
-                      <div class="hg-scards">
-                        <div
-                          class="hg-sc"
-                          style="background: linear-gradient(135deg, #1b2a5e, #2d4a9a)"
-                        >
-                          <span class="hg-sclbl">IMPLEMENTATION DEPTH</span>
+                      <div class="hg-newitem">
+                        <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                          <path
+                            d="M1 6.5L6 1.5l5 5V11H7.5V8H4.5v3H1V6.5Z"
+                            fill="#3B82F6"
+                            fill-opacity="0.85"
+                          />
+                        </svg>
+                        New video
+                      </div>
+                      <div class="hg-histcat">YESTERDAY</div>
+                      <div class="hg-histrow">AI Skills Gap: Alien</div>
+                      <div class="hg-histcat">PREVIOUS 3 DAYS</div>
+                      <div class="hg-histrow">AI Skills Gap: Alien</div>
+                      <div class="hg-histrow">Product Strategy: An AI...</div>
+                      <div class="hg-histrow">S9</div>
+                      <div class="hg-histrow">S7</div>
+                      <div class="hg-histrow">S5</div>
+                      <div class="hg-histrow">S3</div>
+                      <div class="hg-histcat">PREVIOUS 7 DAYS</div>
+                      <div class="hg-histrow">S8 lock</div>
+                      <div class="hg-histrow">S4</div>
+                      <div class="hg-histrow">S2</div>
+                      <div class="hg-histrow">Moody t2</div>
+                    </div>
+
+                    <!-- ══ MAIN CONTENT (359px) ══ -->
+                    <div class="hg-maincnt">
+                      <!-- Top-right icon cluster -->
+                      <div class="hg-toprighticons">
+                        <div class="hg-ticon">
+                          <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
+                            <circle
+                              cx="6"
+                              cy="6"
+                              r="4.5"
+                              stroke="currentColor"
+                              stroke-width="1.3"
+                            />
+                            <path
+                              d="M9.5 9.5l2.5 2.5"
+                              stroke="currentColor"
+                              stroke-width="1.3"
+                              stroke-linecap="round"
+                            />
+                          </svg>
                         </div>
-                        <div
-                          class="hg-sc"
-                          style="background: linear-gradient(160deg, #c9ad88, #b89668)"
-                        >
-                          <span
-                            class="hg-sclbl"
-                            style="font-style: italic; color: #3d2810; font-size: 5.5px"
-                            >Strategy means saying NO</span
+                        <div class="hg-ticon hg-notifico">
+                          <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
+                            <path
+                              d="M7 1.5a4 4 0 00-4 4v3l-1 2h10l-1-2v-3a4 4 0 00-4-4z"
+                              stroke="currentColor"
+                              stroke-width="1.2"
+                            />
+                            <path
+                              d="M5.5 10.5a1.5 1.5 0 003 0"
+                              stroke="currentColor"
+                              stroke-width="1.2"
+                            />
+                          </svg>
+                          <div class="hg-notifbadge">99+</div>
+                        </div>
+                        <div class="hg-ticon">
+                          <svg viewBox="0 0 14 14" fill="none" width="11" height="11">
+                            <path
+                              d="M7 2l1.2 3.8H12L9 8.2l1.2 3.8L7 9.5l-3.2 2.5L5 8.2 2 5.8h3.8z"
+                              stroke="currentColor"
+                              stroke-width="1.1"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <!-- Hero heading -->
+                      <div class="hg-herotitle">Ролик из записи<br />за минуты</div>
+
+                      <!-- ─ Create card ─ -->
+                      <div class="hg-createcard" id="hgCreateCard">
+                        <!-- Selector row: Avatar | Voice | Style -->
+                        <div class="hg-selrow">
+                          <div class="hg-sel">
+                            <span class="hg-sellbl">Avatar</span>
+                            <div class="hg-selbox">
+                              <div class="hg-avphoto"></div>
+                              <span class="hg-seltxt">Jordan</span>
+                            </div>
+                          </div>
+                          <div class="hg-seldiv"></div>
+                          <div class="hg-sel">
+                            <span class="hg-sellbl">Voice</span>
+                            <div class="hg-selbox">
+                              <div class="hg-voicebars">
+                                <div class="hg-vbar" style="height: 5px"></div>
+                                <div class="hg-vbar" style="height: 9px"></div>
+                                <div class="hg-vbar" style="height: 7px"></div>
+                                <div class="hg-vbar" style="height: 11px"></div>
+                                <div class="hg-vbar" style="height: 5px"></div>
+                              </div>
+                              <span class="hg-seltxt">Auto</span>
+                            </div>
+                          </div>
+                          <div class="hg-seldiv"></div>
+                          <div class="hg-sel">
+                            <span class="hg-sellbl">Style</span>
+                            <div class="hg-selbox">
+                              <div class="hg-styleico">
+                                <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+                                  <rect
+                                    x="1"
+                                    y="1"
+                                    width="12"
+                                    height="12"
+                                    rx="2"
+                                    stroke="currentColor"
+                                    stroke-width="1.2"
+                                  />
+                                  <path
+                                    d="M4.5 7l2 2 3-3"
+                                    stroke="currentColor"
+                                    stroke-width="1.2"
+                                    stroke-linecap="round"
+                                  />
+                                </svg>
+                              </div>
+                              <span class="hg-seltxt">Auto</span>
+                            </div>
+                          </div>
+                          <div class="hg-settico">
+                            <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+                              <circle
+                                cx="7"
+                                cy="7"
+                                r="2"
+                                stroke="currentColor"
+                                stroke-width="1.2"
+                              />
+                              <path
+                                d="M7 1.5V3M7 11v1.5M1.5 7H3M11 7h1.5M3.4 3.4l1 1M9.6 9.6l1 1M3.4 10.6l1-1M9.6 4.4l1-1"
+                                stroke="currentColor"
+                                stroke-width="1.2"
+                                stroke-linecap="round"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <!-- Input -->
+                        <div class="hg-cinput">Опишите идею ролика…</div>
+                        <!-- Bottom bar -->
+                        <div class="hg-cbottom">
+                          <div class="hg-cbleft">
+                            <div class="hg-cbtn">
+                              <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                                <path
+                                  d="M6 2v8M2 6h8"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                              </svg>
+                            </div>
+                            <div class="hg-cbtn">
+                              <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                                <path
+                                  d="M6 1.5l1 3H10L7.5 6.5l1 3L6 8 3.5 9.5l1-3L2 4.5H5z"
+                                  fill="#9CA3AF"
+                                />
+                              </svg>
+                            </div>
+                            <div class="hg-cbtn">
+                              <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
+                                <path
+                                  d="M1.5 3h9M1.5 6h9M1.5 9h6"
+                                  stroke="currentColor"
+                                  stroke-width="1.3"
+                                  stroke-linecap="round"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                          <div class="hg-cbright">
+                            <div class="hg-genbtn">
+                              <svg viewBox="0 0 10 10" fill="none" width="9" height="9">
+                                <path d="M5 1l1 3h3L7 6l1 3L5 7.5 2 9l1-3L1 4h3z" fill="#6B7280" />
+                              </svg>
+                              Generate
+                              <svg viewBox="0 0 8 6" fill="none" width="8" height="6">
+                                <path
+                                  d="M1 1l3 3 3-3"
+                                  stroke="#6B7280"
+                                  stroke-width="1.3"
+                                  stroke-linecap="round"
+                                />
+                              </svg>
+                            </div>
+                            <div class="hg-submitbtn">
+                              <svg viewBox="0 0 12 12" fill="none" width="10" height="10">
+                                <path
+                                  d="M6 9V3M3 6l3-3 3 3"
+                                  stroke="white"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Styles from community -->
+                      <div class="hg-stylessec">
+                        <div class="hg-stitle">Styles from the community</div>
+                        <div class="hg-spills">
+                          <div class="hg-spill hg-spactive">All Styles</div>
+                          <div class="hg-spill">Retro Tech</div>
+                          <div class="hg-spill">Iconic Artist</div>
+                          <div class="hg-spill">Pop Culture</div>
+                          <div class="hg-spill">Print</div>
+                          <div class="hg-spill">Cinematic</div>
+                        </div>
+                        <div class="hg-scards">
+                          <div
+                            class="hg-sc"
+                            style="background: linear-gradient(135deg, #1b2a5e, #2d4a9a)"
                           >
-                        </div>
-                        <div
-                          class="hg-sc"
-                          style="
-                            background: #ede9e0;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          <span style="color: #cc4422; font-size: 14px; font-weight: 700">?</span>
-                        </div>
-                        <div
-                          class="hg-sc"
-                          style="background: linear-gradient(135deg, #8b1515, #c92020)"
-                        >
-                          <span class="hg-sclbl" style="color: #ffd9a0; font-size: 5px"
-                            >THINK BIG.<br />START SMALL.</span
+                            <span class="hg-sclbl">IMPLEMENTATION DEPTH</span>
+                          </div>
+                          <div
+                            class="hg-sc"
+                            style="background: linear-gradient(160deg, #c9ad88, #b89668)"
                           >
+                            <span
+                              class="hg-sclbl"
+                              style="font-style: italic; color: #3d2810; font-size: 5.5px"
+                              >Strategy means saying NO</span
+                            >
+                          </div>
+                          <div
+                            class="hg-sc"
+                            style="
+                              background: #ede9e0;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          >
+                            <span style="color: #cc4422; font-size: 14px; font-weight: 700">?</span>
+                          </div>
+                          <div
+                            class="hg-sc"
+                            style="background: linear-gradient(135deg, #8b1515, #c92020)"
+                          >
+                            <span class="hg-sclbl" style="color: #ffd9a0; font-size: 5px"
+                              >THINK BIG.<br />START SMALL.</span
+                            >
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  <!-- Figma selection handles on the first video card -->
+                  <div class="selection-ring" id="selectionRing">
+                    <div class="sel-handle tl"></div>
+                    <div class="sel-handle tr"></div>
+                    <div class="sel-handle bl"></div>
+                    <div class="sel-handle br"></div>
+                    <div class="sel-label">Create Card · W 322 H 110</div>
+                  </div>
                 </div>
 
-                <!-- Figma selection handles on the first video card -->
-                <div class="selection-ring" id="selectionRing">
-                  <div class="sel-handle tl"></div>
-                  <div class="sel-handle tr"></div>
-                  <div class="sel-handle bl"></div>
-                  <div class="sel-handle br"></div>
-                  <div class="sel-label">Create Card · W 322 H 110</div>
+                <!-- DESIGN PROPERTIES PANEL -->
+                <div class="fig-props" id="figProps">
+                  <div class="panel-tabs">
+                    <span class="ptab active">Design</span>
+                    <span class="ptab">Prototype</span>
+                    <span class="ptab">Inspect</span>
+                  </div>
+
+                  <!-- Alignment row -->
+                  <div class="prop-align">
+                    <div class="align-btn">⬓</div>
+                    <div class="align-btn">⬒</div>
+                    <div class="align-btn active-align">⬔</div>
+                    <div class="align-divider"></div>
+                    <div class="align-btn">⬕</div>
+                    <div class="align-btn">⬗</div>
+                  </div>
+
+                  <!-- Frame section -->
+                  <div class="prop-section">
+                    <div class="prop-row-2">
+                      <div class="prop-field">
+                        <span class="prop-pre">W</span>
+                        <span class="prop-val">108</span>
+                      </div>
+                      <div class="prop-field">
+                        <span class="prop-pre">H</span>
+                        <span class="prop-val">34</span>
+                      </div>
+                    </div>
+                    <div class="prop-row-2">
+                      <div class="prop-field">
+                        <span class="prop-pre">X</span>
+                        <span class="prop-val">1244</span>
+                      </div>
+                      <div class="prop-field">
+                        <span class="prop-pre">Y</span>
+                        <span class="prop-val">18</span>
+                      </div>
+                    </div>
+                    <div class="prop-row-2">
+                      <div class="prop-field">
+                        <span class="prop-pre">↺</span>
+                        <span class="prop-val">0°</span>
+                      </div>
+                      <div class="prop-field">
+                        <span class="prop-pre">⌐</span>
+                        <span class="prop-val">8</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Auto layout -->
+                  <div class="prop-section">
+                    <div class="prop-section-head">
+                      <span class="prop-section-label">Auto layout</span>
+                      <span class="prop-section-icon">−</span>
+                    </div>
+                    <div class="prop-row-2">
+                      <div class="prop-field">
+                        <span class="prop-pre">→</span>
+                        <span class="prop-val">12px</span>
+                      </div>
+                      <div class="prop-field">
+                        <span class="prop-pre">⊡</span>
+                        <span class="prop-val">14 / 8</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fill -->
+                  <div class="prop-section">
+                    <div class="prop-section-head">
+                      <span class="prop-section-label">Fill</span>
+                      <span class="prop-section-icon">+</span>
+                    </div>
+                    <div class="fill-row">
+                      <div class="fill-preview" style="background: #ffffff"></div>
+                      <span class="fill-hex">FFFFFF</span>
+                      <span class="fill-pct">100%</span>
+                    </div>
+                  </div>
+
+                  <!-- Stroke -->
+                  <div class="prop-section">
+                    <div class="prop-section-head">
+                      <span class="prop-section-label">Stroke</span>
+                      <span class="prop-section-icon">+</span>
+                    </div>
+                    <div class="fill-row muted">
+                      <span class="prop-empty">No strokes</span>
+                    </div>
+                  </div>
+
+                  <!-- Effects -->
+                  <div class="prop-section">
+                    <div class="prop-section-head">
+                      <span class="prop-section-label">Effects</span>
+                      <span class="prop-section-icon">+</span>
+                    </div>
+                    <div class="effect-row">
+                      <div class="effect-dot"></div>
+                      <span class="effect-name">Drop shadow</span>
+                    </div>
+                  </div>
+
+                  <!-- Export -->
+                  <div class="prop-section">
+                    <div class="prop-section-head">
+                      <span class="prop-section-label">Export</span>
+                      <span class="prop-section-icon">+</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <!-- DESIGN PROPERTIES PANEL -->
-              <div class="fig-props" id="figProps">
-                <div class="panel-tabs">
-                  <span class="ptab active">Design</span>
-                  <span class="ptab">Prototype</span>
-                  <span class="ptab">Inspect</span>
-                </div>
-
-                <!-- Alignment row -->
-                <div class="prop-align">
-                  <div class="align-btn">⬓</div>
-                  <div class="align-btn">⬒</div>
-                  <div class="align-btn active-align">⬔</div>
-                  <div class="align-divider"></div>
-                  <div class="align-btn">⬕</div>
-                  <div class="align-btn">⬗</div>
-                </div>
-
-                <!-- Frame section -->
-                <div class="prop-section">
-                  <div class="prop-row-2">
-                    <div class="prop-field">
-                      <span class="prop-pre">W</span>
-                      <span class="prop-val">108</span>
-                    </div>
-                    <div class="prop-field">
-                      <span class="prop-pre">H</span>
-                      <span class="prop-val">34</span>
-                    </div>
-                  </div>
-                  <div class="prop-row-2">
-                    <div class="prop-field">
-                      <span class="prop-pre">X</span>
-                      <span class="prop-val">1244</span>
-                    </div>
-                    <div class="prop-field">
-                      <span class="prop-pre">Y</span>
-                      <span class="prop-val">18</span>
-                    </div>
-                  </div>
-                  <div class="prop-row-2">
-                    <div class="prop-field">
-                      <span class="prop-pre">↺</span>
-                      <span class="prop-val">0°</span>
-                    </div>
-                    <div class="prop-field">
-                      <span class="prop-pre">⌐</span>
-                      <span class="prop-val">8</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Auto layout -->
-                <div class="prop-section">
-                  <div class="prop-section-head">
-                    <span class="prop-section-label">Auto layout</span>
-                    <span class="prop-section-icon">−</span>
-                  </div>
-                  <div class="prop-row-2">
-                    <div class="prop-field">
-                      <span class="prop-pre">→</span>
-                      <span class="prop-val">12px</span>
-                    </div>
-                    <div class="prop-field">
-                      <span class="prop-pre">⊡</span>
-                      <span class="prop-val">14 / 8</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Fill -->
-                <div class="prop-section">
-                  <div class="prop-section-head">
-                    <span class="prop-section-label">Fill</span>
-                    <span class="prop-section-icon">+</span>
-                  </div>
-                  <div class="fill-row">
-                    <div class="fill-preview" style="background: #ffffff"></div>
-                    <span class="fill-hex">FFFFFF</span>
-                    <span class="fill-pct">100%</span>
-                  </div>
-                </div>
-
-                <!-- Stroke -->
-                <div class="prop-section">
-                  <div class="prop-section-head">
-                    <span class="prop-section-label">Stroke</span>
-                    <span class="prop-section-icon">+</span>
-                  </div>
-                  <div class="fill-row muted">
-                    <span class="prop-empty">No strokes</span>
-                  </div>
-                </div>
-
-                <!-- Effects -->
-                <div class="prop-section">
-                  <div class="prop-section-head">
-                    <span class="prop-section-label">Effects</span>
-                    <span class="prop-section-icon">+</span>
-                  </div>
-                  <div class="effect-row">
-                    <div class="effect-dot"></div>
-                    <span class="effect-name">Drop shadow</span>
-                  </div>
-                </div>
-
-                <!-- Export -->
-                <div class="prop-section">
-                  <div class="prop-section-head">
-                    <span class="prop-section-label">Export</span>
-                    <span class="prop-section-icon">+</span>
-                  </div>
-                </div>
-              </div>
+              <!-- /fig-body -->
             </div>
-            <!-- /fig-body -->
+            <!-- /ui-card -->
+
+            <!-- RIGHT DEPTH FACE -->
+            <div class="depth-right" id="depthRight"></div>
           </div>
-          <!-- /ui-card -->
-
-          <!-- RIGHT DEPTH FACE -->
-          <div class="depth-right" id="depthRight"></div>
+          <!-- /card-wrapper -->
         </div>
-        <!-- /card-wrapper -->
-      </div>
-      <!-- /scene -->
+        <!-- /scene -->
 
-      <!-- ══════════════════════════════════════════
+        <!-- ══════════════════════════════════════════
          OUTRO: Logo rebuild + tagline + URL pill
     ══════════════════════════════════════════ -->
-      <div class="outro-layer" id="outroLayer">
-        <svg class="outro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(420 594) scale(0.6383)">
-            <g class="outro-logo">
-              <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
-              <path class="ol-fill ol-fill-1" d="M188 0L376 188L188 376L0 188Z" fill="#EFEDEA" opacity="0" />
-              <path class="ol-fill ol-fill-2" d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z" fill="#212121" opacity="0" />
-              <!-- Stroke layer -->
-              <path class="ol-stroke ol-stroke-1" d="M188 0L376 188L188 376L0 188Z" fill="none" stroke="#EFEDEA" stroke-width="3" />
-              <path class="ol-stroke ol-stroke-2" d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z" fill="none" stroke="#EFEDEA" stroke-width="3" />
+        <div class="outro-layer" id="outroLayer">
+          <svg class="outro-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(420 594) scale(0.6383)">
+              <g class="outro-logo">
+                <!-- Fill layer: the MatIntellect mark, light diamond with the dark M -->
+                <path
+                  class="ol-fill ol-fill-1"
+                  d="M188 0L376 188L188 376L0 188Z"
+                  fill="#EFEDEA"
+                  opacity="0"
+                />
+                <path
+                  class="ol-fill ol-fill-2"
+                  d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z"
+                  fill="#212121"
+                  opacity="0"
+                />
+                <!-- Stroke layer -->
+                <path
+                  class="ol-stroke ol-stroke-1"
+                  d="M188 0L376 188L188 376L0 188Z"
+                  fill="none"
+                  stroke="#EFEDEA"
+                  stroke-width="3"
+                />
+                <path
+                  class="ol-stroke ol-stroke-2"
+                  d="M131.0063252258301 257.0V116.0H171.90156051635742L183.2952021789551 169.72222778320312L185.8366847229004 234.6449365234375H190.32819107055664L192.69342361450197 169.72222778320312L204.2633152770996 116.0H244.9936747741699V257.0H219.6594728088379V213.81311309814453L224.5432386779785 138.30956665039065H219.84135971069338L212.29099502563474 215.48461944580077L201.70472122192382 256.95450317382813H174.2839045715332L163.87388076782227 215.48461944580077L156.15864028930665 138.30956665039065H151.6330113220215L156.34052719116212 213.81311309814453V257.0Z"
+                  fill="none"
+                  stroke="#EFEDEA"
+                  stroke-width="3"
+                />
+              </g>
             </g>
-          </g>
 
-          <!-- Tagline — individual tspan letters for stagger -->
-          <text class="outro-tagline" x="540" y="932" text-anchor="middle"></text>
+            <!-- Tagline — individual tspan letters for stagger -->
+            <text class="outro-tagline" x="540" y="932" text-anchor="middle"></text>
 
-          <!-- URL pill -->
-          <rect class="url-border" pathLength="100" x="0" y="972" width="0" height="56" rx="28" fill="none" stroke="#3C3C3C" stroke-width="1.5" />
-          <rect class="url-bg" x="0" y="972" width="0" height="56" rx="28" fill="#2C2C2C" opacity="0" />
-          <text class="url-text" x="540" y="1010" text-anchor="middle" fill="#a0a0a6" font-size="28" font-weight="500" opacity="0"></text>
-        </svg>
-      </div>
+            <!-- URL pill -->
+            <rect
+              class="url-border"
+              pathLength="100"
+              x="0"
+              y="972"
+              width="0"
+              height="56"
+              rx="28"
+              fill="none"
+              stroke="#3C3C3C"
+              stroke-width="1.5"
+            />
+            <rect
+              class="url-bg"
+              x="0"
+              y="972"
+              width="0"
+              height="56"
+              rx="28"
+              fill="#2C2C2C"
+              opacity="0"
+            />
+            <text
+              class="url-text"
+              x="540"
+              y="1010"
+              text-anchor="middle"
+              fill="#a0a0a6"
+              font-size="28"
+              font-weight="500"
+              opacity="0"
+            ></text>
+          </svg>
+        </div>
       </div>
       <div class="card-edge"></div>
 
-
       <style>
         @font-face {
-        font-family: "Bebas Neue";
-        src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-        font-weight: 700;
-        font-display: block;
-      }
-      @font-face {
-        font-family: "Montserrat";
-        src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-        font-weight: 100 900;
-        font-display: block;
-        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-      }
-      @font-face {
-        font-family: "Montserrat";
-        src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-        font-weight: 100 900;
-        font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-      }
-      @font-face {
-        font-family: "Montserrat";
-        src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-        font-weight: 100 900;
-        font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-      }
+          font-family: "Bebas Neue";
+          src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+          font-weight: 700;
+          font-display: block;
+        }
+        @font-face {
+          font-family: "Montserrat";
+          src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+          font-weight: 100 900;
+          font-display: block;
+          unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
+        @font-face {
+          font-family: "Montserrat";
+          src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+          font-weight: 100 900;
+          font-display: block;
+          unicode-range:
+            U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+            U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+        @font-face {
+          font-family: "Montserrat";
+          src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+          font-weight: 100 900;
+          font-display: block;
+          unicode-range:
+            U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+            U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+            U+2C60-2C7F, U+A720-A7FF;
+        }
 
         /*
         Figma palette:
@@ -1062,7 +1163,7 @@
           position: absolute;
           inset: 0;
         }
-        
+
         /* top / bottom: the frame is clipped to the card, the layers move to its centre (y 614 / 1034) */
         [data-composition-id="ui-3d-reveal-vertical"].card {
           background: transparent;
@@ -1094,7 +1195,6 @@
         [data-composition-id="ui-3d-reveal-vertical"].card.bottom .card-edge {
           top: 708px;
         }
-        
 
         [data-composition-id="ui-3d-reveal-vertical"] .bg-base {
           position: absolute;
@@ -2231,7 +2331,8 @@
           var pillCtx = document.createElement("canvas").getContext("2d");
           function layoutPill() {
             var cs = getComputedStyle(urlEl);
-            pillCtx.font = cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+            pillCtx.font =
+              cs.fontStyle + " " + cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
             pillCtx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
             var w = pillCtx.measureText(urlEl.textContent).width + 56;
             var x = parseFloat(urlEl.getAttribute("x")) - w / 2;
@@ -2245,13 +2346,14 @@
 
           var wrapper = document.querySelector(S + " .card-wrapper");
           var scene = document.querySelector(S + " .scene");
-          
-          var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+
+          var placement =
+            ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
           if (placement !== "full") document.querySelector(S).classList.add("card", placement);
           // vertical: the 1100 px program window, tilted in 3D at its widest, fits the 780 field and the card (x ≤ 930;
           // 780/1100 flat reached x 968 once tilted) and sits on the field's centre y 824
           gsap.set(scene, { y: -136, scale: 0.64 });
-          
+
           var cardGlow = document.querySelector(S + " .card-glow");
 
           // ── Calculate intro stroke lengths ──

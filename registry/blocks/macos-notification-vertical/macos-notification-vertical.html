@@ -35,14 +35,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -122,8 +127,7 @@
         line-height: 1.35;
         overflow-wrap: break-word;
       }
-      
-      
+
       /* 362 x 2.155 = 780 px wide, centred on x 540 */
       #mnov-scale {
         left: 150px;
@@ -142,11 +146,17 @@
         bottom: 560px;
         transform-origin: bottom left;
       }
-      
     </style>
   </head>
   <body>
-    <div id="mnov-root" data-composition-id="macos-notification-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="mnov-root"
+      data-composition-id="macos-notification-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="mnov-scale">
         <div id="mnov-card">
           <img id="mnov-icon" src="assets/img/matintellect-avatar.svg" alt="" />
@@ -174,14 +184,20 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         root.classList.add("mnov-" + oneOf(V.placement, ["top", "center", "bottom"], "top"));
-        
+
         document.getElementById("mnov-app").textContent = str(V.appName, "MatIntellect");
-        document.getElementById("mnov-icon").src = str(V.icon, "assets/img/matintellect-avatar.svg");
+        document.getElementById("mnov-icon").src = str(
+          V.icon,
+          "assets/img/matintellect-avatar.svg",
+        );
         document.getElementById("mnov-time").textContent = str(V.time, "сейчас");
         document.getElementById("mnov-title").textContent = str(V.title, "Ролик готов");
-        document.getElementById("mnov-body").textContent = str(V.body, "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»");
+        document.getElementById("mnov-body").textContent = str(
+          V.body,
+          "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»",
+        );
 
         var cues = String(V.cues || "")
           .split(",")
@@ -192,13 +208,23 @@
         var exit = oneOf(V.exit, ["none", "out"], "none");
         /* macOS slides the banner in from the right screen edge; in the vertical version a short slide keeps it off the frame edge */
         var SLIDE = 420;
-        
+
         SLIDE = 40;
-        
+
         var card = document.getElementById("mnov-card");
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo(card, { x: SLIDE, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, c0);
-        if (exit === "out") tl.to(card, { x: SLIDE, opacity: 0, duration: 0.3, ease: "power3.in" }, isFinite(cues[1]) ? cues[1] : c0 + 4);
+        tl.fromTo(
+          card,
+          { x: SLIDE, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+          c0,
+        );
+        if (exit === "out")
+          tl.to(
+            card,
+            { x: SLIDE, opacity: 0, duration: 0.3, ease: "power3.in" },
+            isFinite(cues[1]) ? cues[1] : c0 + 4,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["macos-notification-vertical"] = tl;

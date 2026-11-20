@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -86,8 +91,7 @@
         color: var(--muted, #8a8a90);
         line-height: 1.2;
       }
-      
-      
+
       #ldcv-lt {
         left: 150px;
         width: 780px;
@@ -117,11 +121,17 @@
       #ldcv-role {
         font-size: 36px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="ldcv-root" data-composition-id="lt-dark-card-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="ldcv-root"
+      data-composition-id="lt-dark-card-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="ldcv-lt">
         <div id="ldcv-card">
           <div id="ldcv-name">Мат Джестер</div>
@@ -140,10 +150,11 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         root.classList.add("ldcv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
-        
-        document.getElementById("ldcv-name").textContent = typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+
+        document.getElementById("ldcv-name").textContent =
+          typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role : "Основатель MatIntellect";
         var roleEl = document.getElementById("ldcv-role");
         roleEl.textContent = role;
@@ -158,11 +169,36 @@
         var exit = oneOf(V.exit, ["none", "down"], "none");
 
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#ldcv-card", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, c0);
-        tl.fromTo("#ldcv-name", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, c0 + 0.16);
-        tl.fromTo("#ldcv-underline", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power4.out" }, c0 + 0.32);
-        tl.fromTo("#ldcv-role", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.out" }, c0 + 0.46);
-        if (exit === "down") tl.to("#ldcv-card", { y: 24, opacity: 0, duration: 0.35, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : c0 + 4.2);
+        tl.fromTo(
+          "#ldcv-card",
+          { y: 60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+          c0,
+        );
+        tl.fromTo(
+          "#ldcv-name",
+          { y: 14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" },
+          c0 + 0.16,
+        );
+        tl.fromTo(
+          "#ldcv-underline",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.5, ease: "power4.out" },
+          c0 + 0.32,
+        );
+        tl.fromTo(
+          "#ldcv-role",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, ease: "power2.out" },
+          c0 + 0.46,
+        );
+        if (exit === "down")
+          tl.to(
+            "#ldcv-card",
+            { y: 24, opacity: 0, duration: 0.35, ease: "power2.in" },
+            isFinite(cues[1]) ? cues[1] : c0 + 4.2,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["lt-dark-card-vertical"] = tl;

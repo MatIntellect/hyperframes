@@ -38,14 +38,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       *,
       *::before,
@@ -73,7 +78,7 @@
         overflow: hidden;
         background: var(--bg, #0c1014);
       }
-      
+
       #vtcv-root.vtcv-card #vtcv-frame {
         left: 150px;
         top: 288px;
@@ -85,7 +90,7 @@
       #vtcv-root.vtcv-card.vtcv-bottom #vtcv-frame {
         top: 708px;
       }
-      
+
       #vtcv-canvas {
         position: absolute;
         left: 0;
@@ -95,7 +100,13 @@
       #vtcv-next {
         position: absolute;
         border-radius: 56px;
-        background: linear-gradient(160deg, rgb(255 255 255 / 11%) 0%, rgb(255 255 255 / 4.5%) 42%, rgb(255 255 255 / 1.8%) 70%, rgb(255 255 255 / 7.5%) 100%);
+        background: linear-gradient(
+          160deg,
+          rgb(255 255 255 / 11%) 0%,
+          rgb(255 255 255 / 4.5%) 42%,
+          rgb(255 255 255 / 1.8%) 70%,
+          rgb(255 255 255 / 7.5%) 100%
+        );
         backdrop-filter: blur(14px) saturate(1.12);
         border: 1px solid rgb(255 255 255 / 17%);
         box-shadow:
@@ -110,8 +121,16 @@
         position: absolute;
         inset: 0;
         background:
-          radial-gradient(circle at 18% 78%, color-mix(in srgb, var(--vtcv-cool) 12%, transparent), transparent 38%),
-          radial-gradient(circle at 82% 22%, color-mix(in srgb, var(--vtcv-warm) 16%, transparent), transparent 34%);
+          radial-gradient(
+            circle at 18% 78%,
+            color-mix(in srgb, var(--vtcv-cool) 12%, transparent),
+            transparent 38%
+          ),
+          radial-gradient(
+            circle at 82% 22%,
+            color-mix(in srgb, var(--vtcv-warm) 16%, transparent),
+            transparent 34%
+          );
       }
       .vtcv-text {
         position: absolute;
@@ -147,8 +166,7 @@
         top: 0;
         opacity: 0;
       }
-      
-      
+
       #vtcv-next {
         left: 150px;
         top: 390px;
@@ -174,19 +192,32 @@
       #vtcv-root.vtcv-card #vtcv-b {
         font-size: 80px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="vtcv-root" data-composition-id="vfx-text-cursor-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="vtcv-root"
+      data-composition-id="vfx-text-cursor-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="vtcv-frame">
         <canvas id="vtcv-canvas" aria-hidden="true"></canvas>
         <div id="vtcv-next">
           <h1 id="vtcv-a" class="vtcv-text">
-            <span><span id="vtcv-tw" class="vtcv-word"><span id="vtcv-type"></span><span id="vtcv-caret">|</span></span> <span id="vtcv-tail" class="vtcv-word vtcv-sup"></span></span>
+            <span
+              ><span id="vtcv-tw" class="vtcv-word"
+                ><span id="vtcv-type"></span><span id="vtcv-caret">|</span></span
+              >
+              <span id="vtcv-tail" class="vtcv-word vtcv-sup"></span
+            ></span>
             <span><span id="vtcv-l2" class="vtcv-word vtcv-sup"></span></span>
           </h1>
-          <h2 id="vtcv-b" class="vtcv-text"><span id="vtcv-b1"></span><span id="vtcv-b2"></span></h2>
+          <h2 id="vtcv-b" class="vtcv-text">
+            <span id="vtcv-b1"></span><span id="vtcv-b2"></span>
+          </h2>
         </div>
       </div>
     </div>
@@ -215,7 +246,7 @@
           H = 1080,
           LOGO_PX = 260,
           SLIDE = 1480;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         W = 1080;
         H = 1920;
@@ -226,7 +257,7 @@
           W = 780;
           H = 652;
         }
-        
+
         canvas.width = W;
         canvas.height = H;
         canvas.style.width = W + "px";
@@ -271,18 +302,22 @@
         mask.height = colorMask.height = H;
         [mask, colorMask].forEach(function (c, k) {
           var g = c.getContext("2d");
-          g.font = '700 ' + LOGO_PX + 'px "Bebas Neue"';
+          g.font = "700 " + LOGO_PX + 'px "Bebas Neue"';
           g.textAlign = "center";
           g.textBaseline = "middle";
           g.fillStyle = k ? "rgb(" + COOL.join(",") + ")" : "#fff";
           g.fillText(LOGO, W / 2, H / 2 - 8);
         });
 
-        var gl = canvas.getContext("webgl", { premultipliedAlpha: false, preserveDrawingBuffer: true });
+        var gl = canvas.getContext("webgl", {
+          premultipliedAlpha: false,
+          preserveDrawingBuffer: true,
+        });
         var state = { progress: 0, logoY: H * 0.7, effectMix: 0, logoScale: 1 };
         var render = function () {};
         if (gl) {
-          var vs = "attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}";
+          var vs =
+            "attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}";
           var fs = [
             "precision highp float;",
             "varying vec2 vUv;",
@@ -339,7 +374,11 @@
             "  c.rgb+=grain*0.07*(0.42+logoDust)*effectMix;",
             "  c.rgb+=spectrum(grain+cursorX)*abs(grain)*0.045*smoothstep(0.02,0.5,acc)*effectMix;",
             // light is added onto the theme ground, not onto black
-            "  c.rgb+=vec3(" + GROUND.map(function (v) { return v.toFixed(4); }).join(",") + ");",
+            "  c.rgb+=vec3(" +
+              GROUND.map(function (v) {
+                return v.toFixed(4);
+              }).join(",") +
+              ");",
             "  c.a=1.0;gl_FragColor=c;",
             "}",
           ].join("\n");
@@ -347,7 +386,8 @@
             var sh = gl.createShader(type);
             gl.shaderSource(sh, src);
             gl.compileShader(sh);
-            if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+            if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS))
+              throw new Error(gl.getShaderInfoLog(sh));
             return sh;
           };
           var program = gl.createProgram();
@@ -369,9 +409,23 @@
             colorTexture = tex(colorMask);
           var buffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+          gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+            gl.STATIC_DRAW,
+          );
           var L = {};
-          ["resolution", "mouse", "logoY", "logoScale", "effectMix", "uWarm", "uCool", "src", "colorSrc"].forEach(function (n) {
+          [
+            "resolution",
+            "mouse",
+            "logoY",
+            "logoScale",
+            "effectMix",
+            "uWarm",
+            "uCool",
+            "src",
+            "colorSrc",
+          ].forEach(function (n) {
             L[n] = gl.getUniformLocation(program, n);
           });
           var posLoc = gl.getAttribLocation(program, "position");
@@ -432,7 +486,10 @@
         // набираемое слово сперва крупно по середине карточки, потом встаёт на своё место в строке
         var nr = next.getBoundingClientRect(),
           wr = tw.getBoundingClientRect();
-        var off = { x: nr.left + nr.width / 2 - (wr.left + wr.width / 2), y: nr.top + nr.height / 2 - (wr.top + wr.height / 2) };
+        var off = {
+          x: nr.left + nr.width / 2 - (wr.left + wr.width / 2),
+          y: nr.top + nr.height / 2 - (wr.top + wr.height / 2),
+        };
         var STEP = 0.085,
           T0 = 3.15,
           n = TYPED.length;
@@ -444,12 +501,35 @@
         }
         s.set(tw, { x: off.x, y: off.y, scale: 1.8, transformOrigin: "50% 50%" }, 0);
         s.set(caret, { opacity: 1 }, T0 - 0.05);
-        s.fromTo(typing, { k: 0 }, { k: n, duration: (n - 1) * STEP + 0.001, ease: "none", onUpdate: paintType, immediateRender: false }, T0 - 0.001);
+        s.fromTo(
+          typing,
+          { k: 0 },
+          {
+            k: n,
+            duration: (n - 1) * STEP + 0.001,
+            ease: "none",
+            onUpdate: paintType,
+            immediateRender: false,
+          },
+          T0 - 0.001,
+        );
         var typeEnd = T0 + (n - 1) * STEP;
         s.set(caret, { opacity: 0 }, typeEnd);
         var slideStart = typeEnd + 0.25;
         s.to(tw, { x: 0, y: 0, scale: 1, duration: 0.05, ease: "power2.out" }, slideStart);
-        s.to(sup, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.42, stagger: 0.08, ease: "expo.out" }, slideStart + 0.05);
+        s.to(
+          sup,
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.42,
+            stagger: 0.08,
+            ease: "expo.out",
+          },
+          slideStart + 0.05,
+        );
         var aExit = slideStart + 0.05 + 0.42 + (sup.length - 1) * 0.08 + 0.5,
           bStart = aExit + 0.36;
         s.to(A, { x: -SLIDE, filter: "blur(8px)", duration: 0.36, ease: "power2.in" }, aExit);
@@ -459,7 +539,12 @@
 
         var tl = gsap.timeline({ paused: true, onUpdate: render });
         tl.add(s, c0);
-        if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 + bStart ? cues[1] : c0 + 7);
+        if (exit === "fade")
+          tl.to(
+            frame,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > c0 + bStart ? cues[1] : c0 + 7,
+          );
         tl.set({}, {}, 30);
         paintType();
         render();

@@ -49,7 +49,7 @@
         inset: 0;
         background: var(--bg, #0c1014);
       }
-      
+
       #goov-root.goov-card #goov-ground {
         left: 150px;
         width: 780px;
@@ -61,7 +61,7 @@
       #goov-root.goov-bottom #goov-ground {
         top: 708px;
       }
-      
+
       .goov-stage {
         position: absolute;
         left: 0;
@@ -124,13 +124,23 @@
     </style>
   </head>
   <body>
-    <div id="goov-root" data-composition-id="gooey-split-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="goov-root"
+      data-composition-id="gooey-split-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="goov-ground"></div>
       <svg width="0" height="0" style="position: absolute" aria-hidden="true">
         <filter id="goov-goo" color-interpolation-filters="sRGB">
           <feGaussianBlur stdDeviation="28" />
           <!-- Ink wherever the blurred alpha clears 0.392, the alpha at a lone dot's own edge. -->
-          <feColorMatrix id="goov-goo-ink" values="0 0 0 0 0.110  0 0 0 0 0.094  0 0 0 0 0.059  0 0 0 24 -8.9" />
+          <feColorMatrix
+            id="goov-goo-ink"
+            values="0 0 0 0 0.110  0 0 0 0 0.094  0 0 0 0 0.059  0 0 0 24 -8.9"
+          />
         </filter>
       </svg>
       <div class="goov-stage" id="goov-stage" data-layout-allow-overflow>
@@ -794,7 +804,18 @@
           return parseInt(ink.substr(i, 2), 16);
         });
         if (INK.some(isNaN)) INK = [242, 242, 242];
-        document.getElementById("goov-goo-ink").setAttribute("values", "0 0 0 0 " + (INK[0] / 255).toFixed(3) + "  0 0 0 0 " + (INK[1] / 255).toFixed(3) + "  0 0 0 0 " + (INK[2] / 255).toFixed(3) + "  0 0 0 24 -8.9");
+        document
+          .getElementById("goov-goo-ink")
+          .setAttribute(
+            "values",
+            "0 0 0 0 " +
+              (INK[0] / 255).toFixed(3) +
+              "  0 0 0 0 " +
+              (INK[1] / 255).toFixed(3) +
+              "  0 0 0 0 " +
+              (INK[2] / 255).toFixed(3) +
+              "  0 0 0 24 -8.9",
+          );
         function inkA(a) {
           return "rgba(" + INK.join(", ") + ", " + a + ")";
         }
@@ -802,17 +823,21 @@
         var cx = 960,
           cy = 540,
           k = 1;
-        
+
         cx = 540;
         cy = 824;
-        var placement = ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0 ? String(V.placement) : "full";
+        var placement =
+          ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0
+            ? String(V.placement)
+            : "full";
         if (placement !== "full") {
           root.classList.add("goov-card", "goov-" + placement);
           cy = placement === "top" ? 614 : 1034;
           k = 0.8;
         }
-        
-        document.getElementById("goov-stage").style.transform = "translate(" + (cx - 960) + "px, " + (cy - 540) + "px) scale(" + k + ")";
+
+        document.getElementById("goov-stage").style.transform =
+          "translate(" + (cx - 960) + "px, " + (cy - 540) + "px) scale(" + k + ")";
         var SPREAD = 190; // dot spacing in the menu
         var ORBIT = 197; // where each dot rests inside its blade
         var R_OUT = 298;
@@ -998,7 +1023,12 @@
         // The press on the menu before it spins.
         tl.to(tile, { backgroundColor: inkA(0.1), duration: 0.05 }, C0 + 0.93);
         tl.to(tile, { backgroundColor: inkA(0.07), duration: 0.07 }, C0 + 1.03);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > C0 + DUR ? cues[1] : C0 + DUR + 2);
+        if (exit === "fade")
+          tl.to(
+            root,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > C0 + DUR ? cues[1] : C0 + DUR + 2,
+          );
         tl.set({}, {}, 30);
 
         // After every tween: the blur's tracker needs the timeline's final duration. No crisp

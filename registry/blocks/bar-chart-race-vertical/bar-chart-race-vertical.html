@@ -38,7 +38,9 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F,
+          U+20AC, U+20BD, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       * {
         margin: 0;
@@ -149,7 +151,14 @@
     </style>
   </head>
   <body>
-    <div id="bcrv-root" data-composition-id="bar-chart-race-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="bcrv-root"
+      data-composition-id="bar-chart-race-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="bcrv-ground"></div>
       <div id="bcrv-box">
         <div id="bcrv-head">
@@ -182,8 +191,7 @@
         }
 
         /* geometry: every number of the layout in one place */
-        
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var G;
         if (placement === "full") {
@@ -223,7 +231,6 @@
           root.classList.add("bcrv-card");
           root.querySelector(".bcrv-ground").remove();
         }
-        
 
         var box = document.getElementById("bcrv-box");
         box.style.left = G.box[0] + "px";
@@ -335,11 +342,22 @@
           return RANKS[m0][j] + (RANKS[m0 + 1][j] - RANKS[m0][j]) * e;
         }
         function formatValue(v) {
-          return PREFIX + v.toLocaleString("ru-RU", { minimumFractionDigits: DECIMALS, maximumFractionDigits: DECIMALS }) + SUFFIX;
+          return (
+            PREFIX +
+            v.toLocaleString("ru-RU", {
+              minimumFractionDigits: DECIMALS,
+              maximumFractionDigits: DECIMALS,
+            }) +
+            SUFFIX
+          );
         }
         function formatTick(v, step) {
           var d = step >= 1 ? 0 : Math.min(2, Math.ceil(-Math.log10(step)));
-          return PREFIX + v.toLocaleString("ru-RU", { minimumFractionDigits: d, maximumFractionDigits: d }) + SUFFIX;
+          return (
+            PREFIX +
+            v.toLocaleString("ru-RU", { minimumFractionDigits: d, maximumFractionDigits: d }) +
+            SUFFIX
+          );
         }
         function niceStep(x) {
           var e = Math.pow(10, Math.floor(Math.log10(x)));
@@ -423,15 +441,20 @@
           var leader = byValue[0];
           var scaleMax = Math.max(values[leader] * 1.06, 1e-6);
           var step = niceStep(scaleMax / 4);
-          var widest = formatTick(Math.floor(scaleMax / step) * step, step).length * G.tickSize * 0.62 + 24;
+          var widest =
+            formatTick(Math.floor(scaleMax / step) * step, step).length * G.tickSize * 0.62 + 24;
           var every = Math.max(1, Math.ceil(widest / ((step / scaleMax) * G.trackW)));
           for (var i = 0; i < ticks.length; i++) {
             var tv = i * step;
-            var visible = tv <= scaleMax && i % every === 0 && (i === 0 || (tv / scaleMax) * G.trackW > widest * 0.75);
+            var visible =
+              tv <= scaleMax &&
+              i % every === 0 &&
+              (i === 0 || (tv / scaleMax) * G.trackW > widest * 0.75);
             var tx = G.trackX + (tv / scaleMax) * G.trackW;
             ticks[i].line.style.transform = "translateX(" + tx.toFixed(2) + "px)";
             ticks[i].line.style.opacity = visible ? "1" : "0";
-            ticks[i].label.style.transform = "translateX(" + tx.toFixed(2) + "px)" + (i === 0 ? "" : " translateX(-50%)");
+            ticks[i].label.style.transform =
+              "translateX(" + tx.toFixed(2) + "px)" + (i === 0 ? "" : " translateX(-50%)");
             ticks[i].label.style.opacity = visible ? "1" : "0";
             ticks[i].label.textContent = visible ? formatTick(tv, step) : "";
           }
@@ -443,7 +466,8 @@
             el.row.style.opacity = clamp(BAR_COUNT - rankPos, 0, 1).toFixed(3);
             el.row.style.zIndex = String(1000 - zRank[j]);
             el.bar.style.width = barW.toFixed(2) + "px";
-            el.bar.style.backgroundColor = j === leader ? "var(--accent, #ff0000)" : "var(--muted, #8a8a90)";
+            el.bar.style.backgroundColor =
+              j === leader ? "var(--accent, #ff0000)" : "var(--muted, #8a8a90)";
             el.value.style.transform = "translate(" + barW.toFixed(2) + "px, -50%)";
             el.value.textContent = formatValue(values[j]);
           }
@@ -473,10 +497,33 @@
         var tl = gsap.timeline({ paused: true });
         var lead = Math.min(start, 0.8);
         var t0 = start - lead;
-        tl.to("#bcrv-title", { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: lead * 0.9 + 0.001, ease: "power1.inOut" }, t0);
-        tl.to(["#bcrv-subtitle", "#bcrv-period", "#bcrv-axis", "#bcrv-plot"], { opacity: 1, duration: lead * 0.6 + 0.001, stagger: lead * 0.1, ease: "power2.out" }, t0 + lead * 0.2);
-        if (T > 1) tl.fromTo(driver, { u: 0 }, { u: T - 1, duration: end - start, ease: "none", immediateRender: false }, start);
-        if (exit === "fade") tl.to(box, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : end + 3);
+        tl.to(
+          "#bcrv-title",
+          {
+            clipPath: "inset(-0.3em 0% -0.3em 0)",
+            duration: lead * 0.9 + 0.001,
+            ease: "power1.inOut",
+          },
+          t0,
+        );
+        tl.to(
+          ["#bcrv-subtitle", "#bcrv-period", "#bcrv-axis", "#bcrv-plot"],
+          { opacity: 1, duration: lead * 0.6 + 0.001, stagger: lead * 0.1, ease: "power2.out" },
+          t0 + lead * 0.2,
+        );
+        if (T > 1)
+          tl.fromTo(
+            driver,
+            { u: 0 },
+            { u: T - 1, duration: end - start, ease: "none", immediateRender: false },
+            start,
+          );
+        if (exit === "fade")
+          tl.to(
+            box,
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[2]) ? cues[2] : end + 3,
+          );
         tl.set({}, {}, 30);
         render(0);
         window.__timelines = window.__timelines || {};

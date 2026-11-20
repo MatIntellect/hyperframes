@@ -23,14 +23,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         box-sizing: border-box;
@@ -53,8 +58,16 @@
         overflow: hidden;
         color: var(--fg, #f2f2f2);
         background:
-          radial-gradient(circle at 20% 16%, color-mix(in srgb, var(--accent, #ff0000) 14%, transparent), transparent 26%),
-          radial-gradient(circle at 82% 22%, color-mix(in srgb, var(--accent, #ff0000) 7%, transparent), transparent 22%),
+          radial-gradient(
+            circle at 20% 16%,
+            color-mix(in srgb, var(--accent, #ff0000) 14%, transparent),
+            transparent 26%
+          ),
+          radial-gradient(
+            circle at 82% 22%,
+            color-mix(in srgb, var(--accent, #ff0000) 7%, transparent),
+            transparent 22%
+          ),
           var(--bg, #0c1014);
       }
 
@@ -321,7 +334,8 @@
       }
 
       .icon-vpn {
-        background: var(--bg, #0c1014) url("assets/img/matintellect-avatar.svg") center / cover no-repeat;
+        background: var(--bg, #0c1014) url("assets/img/matintellect-avatar.svg") center / cover
+          no-repeat;
       }
 
       .row-copy {
@@ -636,7 +650,7 @@
         z-index: 40;
         pointer-events: none;
       }
-      
+
       .headline {
         left: 150px;
         /* the headline's glyph box (112 px, line-height 0.9) starts about 17 px above its line: the line sits under the 288 top by that */
@@ -681,7 +695,11 @@
         border-radius: 32px;
         border: 2px solid var(--border, #2e2e32);
         background:
-          radial-gradient(circle at 20% 16%, color-mix(in srgb, var(--accent, #ff0000) 14%, transparent), transparent 30%),
+          radial-gradient(
+            circle at 20% 16%,
+            color-mix(in srgb, var(--accent, #ff0000) 14%, transparent),
+            transparent 30%
+          ),
           var(--bg, #0c1014);
       }
       #root.card.bottom .stage {
@@ -694,7 +712,6 @@
         top: 36px;
         scale: 0.72;
       }
-      
     </style>
   </head>
   <body>
@@ -732,7 +749,7 @@
           <span class="blue l2"></span>
           <div class="sub"></div>
         </div>
-        
+
         <div class="ambient-line line-a"></div>
         <div class="ambient-line line-b"></div>
         <div class="snap-shadow"></div>
@@ -879,7 +896,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <script>
@@ -892,10 +908,10 @@
       const cues = String(V.cues || "")
         .split(",")
         .map((v) => parseFloat(v));
-      
+
       const placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
       if (placement !== "full") document.getElementById("root").classList.add("card", placement);
-      
+
       const put = (sel, v) => document.querySelectorAll(sel).forEach((el) => (el.textContent = v));
       put(".headline .l1", text(V.line1, "МОНТАЖ"));
       put(".headline .l2", text(V.line2, "ЗА МИНУТЫ"));
@@ -1051,7 +1067,6 @@
           { scale: 1.025, duration: 0.18, yoyo: true, repeat: 1, ease: "back.out(1.5)" },
           4.7,
         );
-
 
       if (V.exit === "fade") {
         const out = isFinite(cues[0]) && cues[0] > 5.2 ? cues[0] : 7;

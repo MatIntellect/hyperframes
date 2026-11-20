@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -85,7 +90,11 @@
         font-weight: 700;
         font-size: 110px;
         color: color-mix(in srgb, var(--fg, #f2f2f2) 60%, transparent);
-        background: linear-gradient(150deg, color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%, var(--surface, #18181a) 100%);
+        background: linear-gradient(
+          150deg,
+          color-mix(in srgb, var(--surface, #18181a) 70%, var(--fg, #f2f2f2)) 0%,
+          var(--surface, #18181a) 100%
+        );
       }
       #hwfv-svg {
         position: absolute;
@@ -117,7 +126,7 @@
         opacity: 0;
         text-shadow: 0 2px 14px rgb(0 0 0 / 40%);
       }
-      
+
       /* the author's 760 card keeps its size: the framed window, its sparks and a three-line caption take 628 of
          it, centred as the author set them (FY 380); it is taller than the 652 field beside the speaker, so it
          hangs from y 288 (top) or stands on y 1360 (bottom) and is placed full: the face is never under a card
@@ -136,14 +145,29 @@
       #hwfv-root.hwfv-card #hwfv-caption {
         font-size: 48px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="hwfv-root" data-composition-id="hw-frame-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
+    <div
+      id="hwfv-root"
+      data-composition-id="hw-frame-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="180"
+    >
       <div id="hwfv-stage">
         <div id="hwfv-media"></div>
-        <svg id="hwfv-svg" width="1080" height="1920" viewBox="0 0 1080 1920" data-layout-allow-overflow data-layout-ignore><path id="hwfv-border"></path></svg>
+        <svg
+          id="hwfv-svg"
+          width="1080"
+          height="1920"
+          viewBox="0 0 1080 1920"
+          data-layout-allow-overflow
+          data-layout-ignore
+        >
+          <path id="hwfv-border"></path>
+        </svg>
         <div id="hwfv-caption"></div>
       </div>
     </div>
@@ -164,7 +188,7 @@
         // окно картинки (родное 960x620 в кадре 1920x1080) и размер подписи
         var S = { x: 480, y: 180, w: 960, h: 620 };
         var CAP = 58;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         // окно в пропорции родного, рамка с искрами (до 40 px наружу) – в поле 780; окно и подпись – по центру поля
         S = { x: 190, y: 0, w: 700, h: 452 };
@@ -175,7 +199,6 @@
           CAP = 48;
           FY = 380;
         }
-        
 
         // родной ход рисунка: рамка, картинка, искры, подпись; наклон и дрожь – как у разработчиков
         var CONFIG = { tilt: -1.2, seed: 14, boil: { amp: 1.6, rot: 0.35, frameDrop: 3 } };
@@ -197,7 +220,15 @@
           d += " Q " + (w + wob(7)) + " " + wob(8) + " " + (w + wob(9)) + " " + (r + wob(10));
           d += " L " + (w + wob(11)) + " " + (h / 2 + wob(12));
           d += " L " + (w + wob(13)) + " " + (h - r + wob(14));
-          d += " Q " + (w + wob(15)) + " " + (h + wob(16)) + " " + (w - r + wob(17)) + " " + (h + wob(18));
+          d +=
+            " Q " +
+            (w + wob(15)) +
+            " " +
+            (h + wob(16)) +
+            " " +
+            (w - r + wob(17)) +
+            " " +
+            (h + wob(18));
           d += " L " + (w / 2 + wob(19)) + " " + (h + wob(20));
           d += " L " + (r + wob(21)) + " " + (h + wob(22));
           d += " Q " + wob(23) + " " + (h + wob(24)) + " " + wob(25) + " " + (h - r + wob(26));
@@ -230,126 +261,153 @@
           var space = ctx.measureText(" ").width;
           var lines = 0,
             lineW = 0;
-          capText.split(/\s+/).filter(Boolean).forEach(function (word) {
-            var w = ctx.measureText(word).width;
-            if (lines && lineW + space + w <= maxW) {
-              lineW += space + w;
-            } else {
-              lines += Math.max(1, Math.ceil(w / maxW));
-              lineW = w > maxW ? w % maxW : w;
-            }
-          });
+          capText
+            .split(/\s+/)
+            .filter(Boolean)
+            .forEach(function (word) {
+              var w = ctx.measureText(word).width;
+              if (lines && lineW + space + w <= maxW) {
+                lineW += space + w;
+              } else {
+                lines += Math.max(1, Math.ceil(w / maxW));
+                lineW = w > maxW ? w % maxW : w;
+              }
+            });
           return Math.max(1, lines) * parseFloat(cs.lineHeight);
         }
         document.fonts.ready.then(function () {
-        
-        // по вертикали окно и подпись вместе – по центру поля (высота подписи – настоящая)
-        // counted on a canvas from the computed font, not read from layout: this runs after fonts.ready,
-        // when the runtime has put a later-starting host back to display:none and offsetHeight is 0
-        var capH = capText ? captionHeight() : 0;
-        S.y = Math.round(FY - (S.h + (capText ? 42 + capH : 0)) / 2);
-        
-        caption.style.top = S.y + S.h + 42 + "px";
-        if (!capText) caption.style.display = "none";
+          // по вертикали окно и подпись вместе – по центру поля (высота подписи – настоящая)
+          // counted on a canvas from the computed font, not read from layout: this runs after fonts.ready,
+          // when the runtime has put a later-starting host back to display:none and offsetHeight is 0
+          var capH = capText ? captionHeight() : 0;
+          S.y = Math.round(FY - (S.h + (capText ? 42 + capH : 0)) / 2);
 
-        media.style.left = S.x + "px";
-        media.style.top = S.y + "px";
-        media.style.width = S.w + "px";
-        media.style.height = S.h + "px";
-        var src = txt(V.image, "");
-        if (src) {
-          var img = document.createElement("img");
-          img.src = src;
-          media.appendChild(img);
-        } else {
-          var fill = document.createElement("div");
-          fill.className = "hwfv-fill";
-          fill.textContent = "фото";
-          fill.setAttribute("data-layout-ignore", "");
-          media.appendChild(fill);
-        }
+          caption.style.top = S.y + S.h + 42 + "px";
+          if (!capText) caption.style.display = "none";
 
-        /* рамка чуть снаружи окна */
-        var NS = "http://www.w3.org/2000/svg";
-        var svg = document.getElementById("hwfv-svg");
-        var border = document.getElementById("hwfv-border");
-        var m = 16;
-        border.setAttribute("d", wobbleRect(S.w + m * 2, S.h + m * 2, 18, CONFIG.seed, 5));
-        border.setAttribute("transform", "translate(" + (S.x - m) + " " + (S.y - m) + ")");
-
-        /* искры по трём углам */
-        var doodles = [];
-        [
-          [S.x - 40, S.y - 34],
-          [S.x + S.w + 40, S.y - 26],
-          [S.x + S.w + 36, S.y + S.h + 30],
-        ].forEach(function (pt, i) {
-          var p = document.createElementNS(NS, "path");
-          p.setAttribute("class", "hwfv-doodle");
-          var dd = "";
-          for (var k = 0; k < 3; k++) {
-            var a = -0.6 - k * 0.5 + hash(i * 9 + k, CONFIG.seed) * 0.2;
-            var l = 26 + hash(i * 9 + k + 4, CONFIG.seed) * 8;
-            dd += "M " + pt[0] + " " + pt[1] + " l " + (Math.cos(a) * l).toFixed(1) + " " + (Math.sin(a) * l).toFixed(1) + " ";
+          media.style.left = S.x + "px";
+          media.style.top = S.y + "px";
+          media.style.width = S.w + "px";
+          media.style.height = S.h + "px";
+          var src = txt(V.image, "");
+          if (src) {
+            var img = document.createElement("img");
+            img.src = src;
+            media.appendChild(img);
+          } else {
+            var fill = document.createElement("div");
+            fill.className = "hwfv-fill";
+            fill.textContent = "фото";
+            fill.setAttribute("data-layout-ignore", "");
+            media.appendChild(fill);
           }
-          p.setAttribute("d", dd);
-          svg.appendChild(p);
-          doodles.push(p);
-        });
 
-        var cues = String(V.cues || "")
-          .split(",")
-          .map(function (v) {
-            return parseFloat(v);
+          /* рамка чуть снаружи окна */
+          var NS = "http://www.w3.org/2000/svg";
+          var svg = document.getElementById("hwfv-svg");
+          var border = document.getElementById("hwfv-border");
+          var m = 16;
+          border.setAttribute("d", wobbleRect(S.w + m * 2, S.h + m * 2, 18, CONFIG.seed, 5));
+          border.setAttribute("transform", "translate(" + (S.x - m) + " " + (S.y - m) + ")");
+
+          /* искры по трём углам */
+          var doodles = [];
+          [
+            [S.x - 40, S.y - 34],
+            [S.x + S.w + 40, S.y - 26],
+            [S.x + S.w + 36, S.y + S.h + 30],
+          ].forEach(function (pt, i) {
+            var p = document.createElementNS(NS, "path");
+            p.setAttribute("class", "hwfv-doodle");
+            var dd = "";
+            for (var k = 0; k < 3; k++) {
+              var a = -0.6 - k * 0.5 + hash(i * 9 + k, CONFIG.seed) * 0.2;
+              var l = 26 + hash(i * 9 + k + 4, CONFIG.seed) * 8;
+              dd +=
+                "M " +
+                pt[0] +
+                " " +
+                pt[1] +
+                " l " +
+                (Math.cos(a) * l).toFixed(1) +
+                " " +
+                (Math.sin(a) * l).toFixed(1) +
+                " ";
+            }
+            p.setAttribute("d", dd);
+            svg.appendChild(p);
+            doodles.push(p);
           });
-        var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
-        var exit = oneOf(V.exit, ["none", "fade"], "none");
 
-        var tl = gsap.timeline({ paused: true });
-        gsap.set(media, { opacity: 0, scale: 0.96 });
-        tl.to(media, { opacity: 1, scale: 1, duration: IN * 1.4, ease: "power2.out" }, c0 + IN * 0.8);
-        var blen = border.getTotalLength();
-        gsap.set(border, { strokeDasharray: blen, strokeDashoffset: blen });
-        tl.to(border, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, c0 + 0.2);
-        doodles.forEach(function (p, i) {
-          var l = p.getTotalLength();
-          gsap.set(p, { strokeDasharray: l, strokeDashoffset: l });
-          tl.to(p, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, c0 + 1.1 + i * 0.12);
-        });
-        if (capText) tl.to(caption, { opacity: 1, duration: 0.4, ease: "power2.out" }, c0 + 1.4);
-
-        /* весь блок наклонён и дрожит вместе – общий центр поворота: центр окна
-           (у разработчиков у рамки он был в центре кадра; в узком кадре это сдвиг ~5 px) */
-        var unit = [media, svg, caption];
-        var cx = S.x + S.w / 2,
-          cy = S.y + S.h / 2;
-        // each element's own top-left, as set above (svg sits at 0,0): offsetLeft/offsetTop read 0 in a hidden host
-        var corners = [
-          [S.x, S.y],
-          [0, 0],
-          [S.x - 20, S.y + S.h + 42],
-        ];
-        unit.forEach(function (el, i) {
-          gsap.set(el, { rotation: CONFIG.tilt, transformOrigin: cx - corners[i][0] + "px " + (cy - corners[i][1]) + "px" });
-        });
-        function boil() {
-          var step = Math.floor((tl.time() * 30) / CONFIG.boil.frameDrop);
-          for (var i = 0; i < unit.length; i++) {
-            gsap.set(unit[i], {
-              x: hash(step * 3 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
-              y: hash(step * 3 + 1 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
-              rotation: CONFIG.tilt + hash(step * 3 + 2 + i * 97, CONFIG.seed) * CONFIG.boil.rot,
+          var cues = String(V.cues || "")
+            .split(",")
+            .map(function (v) {
+              return parseFloat(v);
             });
-          }
-        }
-        tl.eventCallback("onUpdate", boil);
-        boil();
+          var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
+          var exit = oneOf(V.exit, ["none", "fade"], "none");
 
-        // the exit fades the whole stage with its ground, not only the framed unit (the ground stayed on the full frame)
-        if (exit === "fade") tl.to("#hwfv-stage", { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8);
-        tl.set({}, {}, 180); /* lives 180 s: one mount covers a whole reel */
-        window.__timelines = window.__timelines || {};
-        window.__timelines["hw-frame-vertical"] = tl;
+          var tl = gsap.timeline({ paused: true });
+          gsap.set(media, { opacity: 0, scale: 0.96 });
+          tl.to(
+            media,
+            { opacity: 1, scale: 1, duration: IN * 1.4, ease: "power2.out" },
+            c0 + IN * 0.8,
+          );
+          var blen = border.getTotalLength();
+          gsap.set(border, { strokeDasharray: blen, strokeDashoffset: blen });
+          tl.to(border, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, c0 + 0.2);
+          doodles.forEach(function (p, i) {
+            var l = p.getTotalLength();
+            gsap.set(p, { strokeDasharray: l, strokeDashoffset: l });
+            tl.to(
+              p,
+              { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" },
+              c0 + 1.1 + i * 0.12,
+            );
+          });
+          if (capText) tl.to(caption, { opacity: 1, duration: 0.4, ease: "power2.out" }, c0 + 1.4);
+
+          /* весь блок наклонён и дрожит вместе – общий центр поворота: центр окна
+           (у разработчиков у рамки он был в центре кадра; в узком кадре это сдвиг ~5 px) */
+          var unit = [media, svg, caption];
+          var cx = S.x + S.w / 2,
+            cy = S.y + S.h / 2;
+          // each element's own top-left, as set above (svg sits at 0,0): offsetLeft/offsetTop read 0 in a hidden host
+          var corners = [
+            [S.x, S.y],
+            [0, 0],
+            [S.x - 20, S.y + S.h + 42],
+          ];
+          unit.forEach(function (el, i) {
+            gsap.set(el, {
+              rotation: CONFIG.tilt,
+              transformOrigin: cx - corners[i][0] + "px " + (cy - corners[i][1]) + "px",
+            });
+          });
+          function boil() {
+            var step = Math.floor((tl.time() * 30) / CONFIG.boil.frameDrop);
+            for (var i = 0; i < unit.length; i++) {
+              gsap.set(unit[i], {
+                x: hash(step * 3 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
+                y: hash(step * 3 + 1 + i * 97, CONFIG.seed) * CONFIG.boil.amp,
+                rotation: CONFIG.tilt + hash(step * 3 + 2 + i * 97, CONFIG.seed) * CONFIG.boil.rot,
+              });
+            }
+          }
+          tl.eventCallback("onUpdate", boil);
+          boil();
+
+          // the exit fades the whole stage with its ground, not only the framed unit (the ground stayed on the full frame)
+          if (exit === "fade")
+            tl.to(
+              "#hwfv-stage",
+              { opacity: 0, duration: OUT, ease: "power2.in" },
+              isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 3.8,
+            );
+          tl.set({}, {}, 180); /* lives 180 s: one mount covers a whole reel */
+          window.__timelines = window.__timelines || {};
+          window.__timelines["hw-frame-vertical"] = tl;
         });
       })();
     </script>

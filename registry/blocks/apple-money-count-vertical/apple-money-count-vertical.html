@@ -34,14 +34,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -136,8 +141,7 @@
       .amcv-icon.amcv-coin span {
         color: var(--bg, #0c1014);
       }
-      
-      
+
       #amcv-stage {
         inset: 0;
       }
@@ -177,11 +181,17 @@
       #amcv-root.amcv-card .amcv-icon.amcv-bill {
         background: var(--card-inner, #242427);
       }
-      
     </style>
   </head>
   <body>
-    <div id="amcv-root" data-composition-id="apple-money-count-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="amcv-root"
+      data-composition-id="apple-money-count-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="amcv-ground"></div>
       <div id="amcv-stage">
         <div id="amcv-flash"></div>
@@ -191,7 +201,14 @@
         </div>
         <div id="amcv-burst" data-layout-allow-overflow data-layout-ignore></div>
       </div>
-      <audio id="amcv-sfx" data-start="0" data-duration="5" data-track-index="9" src="assets/money-count.wav" data-volume="0.92"></audio>
+      <audio
+        id="amcv-sfx"
+        data-start="0"
+        data-duration="5"
+        data-track-index="9"
+        src="assets/money-count.wav"
+        data-volume="0.92"
+      ></audio>
     </div>
     <script>
       (function () {
@@ -209,8 +226,6 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
 
-        
-        
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") {
           root.classList.add("amcv-card", "amcv-" + placement);
@@ -221,7 +236,6 @@
           SPREAD = placement === "full" ? [480, 700] : [330, 330],
           ICON = placement === "full" ? 1.5 : 1.1,
           LOW = placement === "full" ? 520 : 330;
-        
 
         var AMOUNT = Math.round(num(V.amount, 10000, 1, 9999999));
         var SIGN = typeof V.currency === "string" ? V.currency : "$";
@@ -236,7 +250,8 @@
         if (!label) labelEl.style.display = "none";
 
         var amountEl = document.getElementById("amcv-amount");
-        amountEl.style.fontSize = Math.round(Math.min(SIZE, FIT / (fmt(AMOUNT).length * 0.68))) + "px";
+        amountEl.style.fontSize =
+          Math.round(Math.min(SIZE, FIT / (fmt(AMOUNT).length * 0.68))) + "px";
         amountEl.textContent = fmt(0);
 
         /* bills and coins: placed by index (golden angle), no randomness */
@@ -277,7 +292,12 @@
         var st = { v: 0 };
         var tl = gsap.timeline({ paused: true });
         gsap.set(icons, { x: 0, y: 0, xPercent: -50, yPercent: -50, opacity: 0, scale: 0.18 });
-        tl.fromTo(center, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }, 0);
+        tl.fromTo(
+          center,
+          { y: 26, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
+          0,
+        );
         tl.fromTo(
           st,
           { v: 0 },
@@ -301,10 +321,37 @@
         tl.to("#amcv-flash", { opacity: 0, duration: 0.16, ease: "power2.out" }, 4);
         icons.forEach(function (icon, i) {
           var s = specs[i];
-          tl.to(icon, { x: s.x, y: s.y, rotation: s.rotation, scale: s.scale, opacity: 1, duration: s.duration, ease: "power4.out" }, 3.28 + s.delay);
-          tl.to(icon, { y: s.y + (s.y < 0 ? -58 : Math.min(58, LOW - s.y)), scale: s.scale * 0.54, opacity: 0, duration: 0.38, ease: "power2.in" }, 4.18 + s.fadeDelay);
+          tl.to(
+            icon,
+            {
+              x: s.x,
+              y: s.y,
+              rotation: s.rotation,
+              scale: s.scale,
+              opacity: 1,
+              duration: s.duration,
+              ease: "power4.out",
+            },
+            3.28 + s.delay,
+          );
+          tl.to(
+            icon,
+            {
+              y: s.y + (s.y < 0 ? -58 : Math.min(58, LOW - s.y)),
+              scale: s.scale * 0.54,
+              opacity: 0,
+              duration: 0.38,
+              ease: "power2.in",
+            },
+            4.18 + s.fadeDelay,
+          );
         });
-        if (exit === "fade") tl.to(center, { opacity: 0, duration: 0.3, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        if (exit === "fade")
+          tl.to(
+            center,
+            { opacity: 0, duration: 0.3, ease: "power2.in" },
+            isFinite(cues[0]) ? cues[0] : 6,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["apple-money-count-vertical"] = tl;

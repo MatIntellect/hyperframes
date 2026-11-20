@@ -16,7 +16,10 @@
     <title>Code Particle Assemble</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=block" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=block"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
@@ -72,13 +75,35 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
-        var DEF = {"seq": "assemble", "codes": ["const app = pipe(\n  parse,\n  optimize,\n  emit,\n)"], "fields": ["code"], "block": {"id": "code-particle-assemble", "effect": "particles", "seq": "assemble", "duration": 8, "seed": 23}, "start": 0.45, "exitAt": 8, "filename": "main.js", "lineBase": 1, "line1": 0};
-        var LANGS = { js: "javascript", ts: "typescript", python: "python", bash: "bash", json: "json" };
+        var DEF = {
+          seq: "assemble",
+          codes: ["const app = pipe(\n  parse,\n  optimize,\n  emit,\n)"],
+          fields: ["code"],
+          block: {
+            id: "code-particle-assemble",
+            effect: "particles",
+            seq: "assemble",
+            duration: 8,
+            seed: 23,
+          },
+          start: 0.45,
+          exitAt: 8,
+          filename: "main.js",
+          lineBase: 1,
+          line1: 0,
+        };
+        var LANGS = {
+          js: "javascript",
+          ts: "typescript",
+          python: "python",
+          bash: "bash",
+          json: "json",
+        };
         var lang = LANGS[V.lang] ? V.lang : "js";
         var COLORS = {
           keyword: "#F97583",
           operator: "#F97583",
-          "function": "#B392F0",
+          function: "#B392F0",
           "class-name": "#B392F0",
           decorator: "#B392F0",
           number: "#79B8FF",
@@ -105,7 +130,8 @@
           var out = [];
           flat(Prism.tokenize(code, Prism.languages[LANGS[lang]]), null, []).forEach(function (t) {
             t.content.split(/(\n)/).forEach(function (part) {
-              if (part) out.push({ content: part, color: part === "\n" ? FG : t.color, fontStyle: 0 });
+              if (part)
+                out.push({ content: part, color: part === "\n" ? FG : t.color, fontStyle: 0 });
             });
           });
           return out;
@@ -118,7 +144,10 @@
           for (var i = 0; i <= n; i++) dp.push(new Array(m + 1).fill(0));
           for (var i = n - 1; i >= 0; i--)
             for (var j = m - 1; j >= 0; j--)
-              dp[i][j] = prev[i].content === cur[j].content ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+              dp[i][j] =
+                prev[i].content === cur[j].content
+                  ? dp[i + 1][j + 1] + 1
+                  : Math.max(dp[i + 1][j], dp[i][j + 1]);
           var i = 0,
             j = 0;
           while (i < n && j < m) {
@@ -135,7 +164,9 @@
         }
         var codes = DEF.codes.map(function (d, k) {
           var v = V[DEF.fields[k]];
-          return typeof v === "string" && v.replace(/\s/g, "") ? v.replace(/\r/g, "").replace(/\t/g, "  ") : d;
+          return typeof v === "string" && v.replace(/\s/g, "")
+            ? v.replace(/\r/g, "").replace(/\t/g, "  ")
+            : d;
         });
         var states = [];
         codes.forEach(function (code, k) {
@@ -148,11 +179,18 @@
           states.push({ code: code, tokens: tk });
         });
         window.__TOKENS = {};
-        window.__TOKENS[DEF.seq] = { lang: lang, theme: "github-dark", bg: "#24292e", fg: "#e1e4e8", states: states };
+        window.__TOKENS[DEF.seq] = {
+          lang: lang,
+          theme: "github-dark",
+          bg: "#24292e",
+          fg: "#e1e4e8",
+          states: states,
+        };
         var line = parseInt(V.line, 10);
         window.__BLOCK = DEF.block;
         window.__BLOCK.id = "code-particle-assemble-vertical";
-        if (DEF.block.line) window.__BLOCK.line = (line >= 1 ? line : DEF.line1) - (1 - DEF.lineBase);
+        if (DEF.block.line)
+          window.__BLOCK.line = (line >= 1 ? line : DEF.line1) - (1 - DEF.lineBase);
         var cues = String(V.cues || "")
           .split(",")
           .map(function (v) {
@@ -164,9 +202,14 @@
           // default: 2 s after the last move of the content (the pad to the mount length is not content)
           var end = 0;
           tl.getChildren(false, true, true).forEach(function (c) {
-            if (!(c.startTime() === 0 && c.duration() >= tl.duration() - 0.001)) end = Math.max(end, c.endTime());
+            if (!(c.startTime() === 0 && c.duration() >= tl.duration() - 0.001))
+              end = Math.max(end, c.endTime());
           });
-          tl.to(document.getElementById("kdpartv-root"), { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[1]) ? cues[1] : Math.max(DEF.exitAt, end + 2));
+          tl.to(
+            document.getElementById("kdpartv-root"),
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[1]) ? cues[1] : Math.max(DEF.exitAt, end + 2),
+          );
         };
         var root = document.getElementById("kdpartv-root");
         // своя графика сцены – из меток темы: фон и кромка растворения
@@ -184,7 +227,7 @@
           .join(",");
         window.__kodAccentCss = getComputedStyle(probe).color;
         probe.remove();
-        
+
         var PL = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         root.classList.add("kdpartv-" + PL);
         window.__kodFill = PL === "full" ? 0.72 : 0.95;
@@ -192,11 +235,16 @@
         if (cv && PL !== "full") {
           window.__kodW = 780;
           window.__kodH = 652;
-          cv.style.cssText = "left:150px;top:" + (PL === "top" ? 288 : 708) + "px;width:780px;height: 652px;border-radius:32px";
+          cv.style.cssText =
+            "left:150px;top:" +
+            (PL === "top" ? 288 : 708) +
+            "px;width:780px;height: 652px;border-radius:32px";
         }
-        
+
         var fname = document.getElementById("kdpartv-fname");
-        if (fname) fname.textContent = typeof V.filename === "string" && V.filename.trim() ? V.filename.trim() : DEF.filename;
+        if (fname)
+          fname.textContent =
+            typeof V.filename === "string" && V.filename.trim() ? V.filename.trim() : DEF.filename;
       })();
     </script>
     <script>
@@ -357,7 +405,10 @@
           geo.setAttribute("aColor", new THREE.BufferAttribute(aColor, 3));
           geo.setAttribute("aDelay", new THREE.BufferAttribute(aDelay, 1));
 
-          var uniforms = { uProgress: { value: 0 }, uSize: { value: 3.4 * Math.min(1, 609 / cw) * ((window.__kodH || 1920) / 1920) } };
+          var uniforms = {
+            uProgress: { value: 0 },
+            uSize: { value: 3.4 * Math.min(1, 609 / cw) * ((window.__kodH || 1920) / 1920) },
+          };
           var mat = new THREE.ShaderMaterial({
             uniforms: uniforms,
             transparent: true,
@@ -400,8 +451,8 @@
           camera.position.set(0, 0, 10);
           var vfov = (camera.fov * Math.PI) / 180;
           var sa = camera.aspect;
-          var fitH = worldH / 2 / Math.tan(vfov / 2) / (window.__kodFill);
-          var fitW = worldW / 2 / (Math.tan(vfov / 2) * sa) / (window.__kodFill);
+          var fitH = worldH / 2 / Math.tan(vfov / 2) / window.__kodFill;
+          var fitW = worldW / 2 / (Math.tan(vfov / 2) * sa) / window.__kodFill;
           camera.position.z = Math.max(fitH, fitW);
           camera.lookAt(0, 0, 0);
 

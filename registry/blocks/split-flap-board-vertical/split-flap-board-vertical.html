@@ -31,14 +31,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -136,8 +141,7 @@
         background: var(--bg, #0c1014);
         z-index: 4;
       }
-      
-      
+
       #sfbv-field {
         left: 150px;
         width: 780px;
@@ -160,11 +164,17 @@
         top: auto;
         bottom: 560px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="sfbv-root" data-composition-id="split-flap-board-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="sfbv-root"
+      data-composition-id="split-flap-board-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="sfbv-ground"></div>
       <div id="sfbv-field"><div id="sfbv-board"></div></div>
     </div>
@@ -179,12 +189,11 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
         /* drum order: blank, Russian, Latin, digits, punctuation. A cell walks forward from blank */
-        var ALPHABET = " АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-:";
+        var ALPHABET =
+          " АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-:";
         var N = ALPHABET.length;
         var DEG = Math.PI / 180;
 
-        
-        
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") {
           root.classList.add("sfbv-card", "sfbv-" + placement);
@@ -193,16 +202,22 @@
         /* room for the board: the field (780x1072), or inside the card (at most 780x652) less its padding and border */
         var cs = getComputedStyle(root.querySelector("#sfbv-field")),
           edge = function (a, b) {
-            return parseFloat(cs["padding" + a]) + parseFloat(cs["padding" + b]) + parseFloat(cs["border" + a + "Width"]) + parseFloat(cs["border" + b + "Width"]);
+            return (
+              parseFloat(cs["padding" + a]) +
+              parseFloat(cs["padding" + b]) +
+              parseFloat(cs["border" + a + "Width"]) +
+              parseFloat(cs["border" + b + "Width"])
+            );
           };
         var COLS = 8,
           ROWS = 4,
           WIDTH = placement === "full" ? 780 : 780 - edge("Left", "Right"),
           HMAX = placement === "full" ? 1072 : 652 - edge("Top", "Bottom"),
           CMAX = 120;
-        
 
-        var text = String(typeof V.boardText === "string" && V.boardText.trim() ? V.boardText : "МОНТАЖ ГОТОВ")
+        var text = String(
+          typeof V.boardText === "string" && V.boardText.trim() ? V.boardText : "МОНТАЖ ГОТОВ",
+        )
           .toUpperCase()
           .trim();
         /* words into rows of COLS cells. The rows widen to the longest word (up to 28 cells), so a word
@@ -238,7 +253,11 @@
 
         var GAP = 10;
         /* the largest cell that keeps the board inside its field, across and down (a cell is 1.45 times as tall as wide) */
-        var cw = Math.min(CMAX, Math.floor((WIDTH - (cols - 1) * GAP) / cols), Math.floor((HMAX - (lines.length - 1) * GAP * 1.6) / lines.length / 1.45));
+        var cw = Math.min(
+          CMAX,
+          Math.floor((WIDTH - (cols - 1) * GAP) / cols),
+          Math.floor((HMAX - (lines.length - 1) * GAP * 1.6) / lines.length / 1.45),
+        );
         var chh = Math.round(cw * 1.45);
         var board = document.getElementById("sfbv-board");
         board.style.gap = GAP * 1.6 + "px";
@@ -286,7 +305,15 @@
             cell.appendChild(leafB);
             cell.appendChild(seam);
             rowBox.appendChild(cell);
-            cells.push({ steps: g < 0 ? 0 : g, top: top.firstChild, bot: bot.firstChild, leafA: leafA, leafB: leafB, glyphA: leafA.firstChild, glyphB: leafB.firstChild });
+            cells.push({
+              steps: g < 0 ? 0 : g,
+              top: top.firstChild,
+              bot: bot.firstChild,
+              leafA: leafA,
+              leafB: leafB,
+              glyphA: leafA.firstChild,
+              glyphB: leafB.firstChild,
+            });
           }
           board.appendChild(rowBox);
         });
@@ -370,11 +397,26 @@
         });
         var tl = gsap.timeline({ paused: true });
         tl.fromTo(driver, { t: 0 }, { t: 30, duration: 30, ease: "none" }, 0);
-        tl.fromTo(board, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, Math.max(0, c0 - 0.2));
+        tl.fromTo(
+          board,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.3, ease: "power2.out" },
+          Math.max(0, c0 - 0.2),
+        );
         /* card placements: the card fades in with the board instead of popping in on the mount's first frame */
         if (placement !== "full")
-          tl.fromTo("#sfbv-field", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, Math.max(0, c0 - 0.2));
-        if (exit === "fade") tl.to(board, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c1 + 3);
+          tl.fromTo(
+            "#sfbv-field",
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3, ease: "power2.out" },
+            Math.max(0, c0 - 0.2),
+          );
+        if (exit === "fade")
+          tl.to(
+            board,
+            { opacity: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[2]) ? cues[2] : c1 + 3,
+          );
         paint(0);
         window.__timelines = window.__timelines || {};
         window.__timelines["split-flap-board-vertical"] = tl;

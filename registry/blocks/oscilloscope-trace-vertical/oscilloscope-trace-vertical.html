@@ -47,14 +47,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -122,10 +127,13 @@
         font-size: 28px;
         line-height: 1.4;
       }
-      
-      
+
       .oscv-vignette {
-        background: radial-gradient(90% 60% at 50% 30%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.5) 100%);
+        background: radial-gradient(
+          90% 60% at 50% 30%,
+          rgba(0, 0, 0, 0) 55%,
+          rgba(0, 0, 0, 0.5) 100%
+        );
       }
       #oscv-readout {
         left: 150px;
@@ -143,21 +151,37 @@
       .oscv-note {
         margin-top: 10px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="oscv-root" data-composition-id="oscilloscope-trace-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="oscv-root"
+      data-composition-id="oscilloscope-trace-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="oscv-ground"></div>
       <canvas id="oscv-screen" width="1080" height="1920"></canvas>
       <div class="oscv-vignette"></div>
       <div id="oscv-readout">
         <div class="oscv-title" id="oscv-r-title">Осциллограф</div>
-        <div class="oscv-row"><span class="oscv-lbl">Сигнал</span><span class="oscv-val" id="oscv-r-wave">-</span></div>
-        <div class="oscv-row"><span class="oscv-lbl">Частота</span><span class="oscv-val" id="oscv-r-freq">-</span></div>
-        <div class="oscv-row"><span class="oscv-lbl">Развёртка</span><span class="oscv-val" id="oscv-r-time">-</span></div>
-        <div class="oscv-row"><span class="oscv-lbl">Размах</span><span class="oscv-val" id="oscv-r-amp">-</span></div>
-        <div class="oscv-row"><span class="oscv-lbl">Люминофор</span><span class="oscv-val" id="oscv-r-phos">-</span></div>
+        <div class="oscv-row">
+          <span class="oscv-lbl">Сигнал</span><span class="oscv-val" id="oscv-r-wave">-</span>
+        </div>
+        <div class="oscv-row">
+          <span class="oscv-lbl">Частота</span><span class="oscv-val" id="oscv-r-freq">-</span>
+        </div>
+        <div class="oscv-row">
+          <span class="oscv-lbl">Развёртка</span><span class="oscv-val" id="oscv-r-time">-</span>
+        </div>
+        <div class="oscv-row">
+          <span class="oscv-lbl">Размах</span><span class="oscv-val" id="oscv-r-amp">-</span>
+        </div>
+        <div class="oscv-row">
+          <span class="oscv-lbl">Люминофор</span><span class="oscv-val" id="oscv-r-phos">-</span>
+        </div>
         <div class="oscv-note" id="oscv-r-note"></div>
       </div>
     </div>
@@ -180,9 +204,11 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
         function parts(v, d, n) {
-          var a = str(v, "").split("|").map(function (s) {
-            return s.trim();
-          });
+          var a = str(v, "")
+            .split("|")
+            .map(function (s) {
+              return s.trim();
+            });
           return a.length >= n && a.every(Boolean) ? a : d.split("|");
         }
 
@@ -192,7 +218,7 @@
         var DIV = 100;
         var SX = 140;
         var SY = 140;
-        
+
         DIV = 78;
         SX = 150;
         SY = 288;
@@ -203,7 +229,7 @@
           document.getElementById("oscv-readout").remove();
           SY = placement === "top" ? 302 : 722;
         }
-        
+
         var S = DIV / 100;
         var DIVS_X = 10;
         var DIVS_Y = 8;
@@ -267,10 +293,13 @@
         else if (waveform === "triangle") slopeBound = 4 * frequency;
         else if (waveform === "data") {
           var maxStep = 0;
-          for (var si = 1; si < series.length; si++) maxStep = Math.max(maxStep, Math.abs(series[si] - series[si - 1]));
+          for (var si = 1; si < series.length; si++)
+            maxStep = Math.max(maxStep, Math.abs(series[si] - series[si - 1]));
           slopeBound = maxStep * (series.length - 1) * frequency;
         } else slopeBound = 2 * Math.PI * frequency;
-        var beamSpeedMax = Math.sqrt(Math.pow(SW * sweepRate, 2) + Math.pow(slopeBound * amplitude * DIV, 2));
+        var beamSpeedMax = Math.sqrt(
+          Math.pow(SW * sweepRate, 2) + Math.pow(slopeBound * amplitude * DIV, 2),
+        );
 
         /* graticule, drawn once offscreen */
         var grat = document.createElement("canvas");
@@ -330,7 +359,10 @@
           ctx.clearRect(0, 0, W, H);
           ctx.drawImage(grat, 0, 0);
           var windowS = TAIL_TAUS * tau;
-          var K = Math.max(K_MIN, Math.min(K_MAX, Math.round((windowS * beamSpeedMax) / SEG_TARGET_PX)));
+          var K = Math.max(
+            K_MIN,
+            Math.min(K_MAX, Math.round((windowS * beamSpeedMax) / SEG_TARGET_PX)),
+          );
           var dt = windowS / K;
           /* slowest possible beam travel per sub-step: the brightness reference, so the weight never exceeds 1 */
           var lRef = SW * sweepRate * dt;
@@ -367,7 +399,8 @@
                 ctx.lineWidth = 3 * S;
                 ctx.stroke();
                 if (a > 0.55) {
-                  ctx.strokeStyle = "rgba(255,255,255," + (((a - 0.55) / 0.45) * 0.7).toFixed(4) + ")";
+                  ctx.strokeStyle =
+                    "rgba(255,255,255," + (((a - 0.55) / 0.45) * 0.7).toFixed(4) + ")";
                   ctx.lineWidth = 1.4 * S;
                   ctx.stroke();
                 }
@@ -406,9 +439,12 @@
             el.textContent = labels[i];
           });
           document.getElementById("oscv-r-title").textContent = str(V.title, "") || "Осциллограф";
-          document.getElementById("oscv-r-wave").textContent = names[["sine", "square", "triangle", "data"].indexOf(waveform)];
-          document.getElementById("oscv-r-freq").textContent = ru(frequency, frequency < 10 ? 2 : 1) + " Гц";
-          document.getElementById("oscv-r-time").textContent = ru(msPerDiv, msPerDiv >= 10 ? 0 : 2) + " мс/дел";
+          document.getElementById("oscv-r-wave").textContent =
+            names[["sine", "square", "triangle", "data"].indexOf(waveform)];
+          document.getElementById("oscv-r-freq").textContent =
+            ru(frequency, frequency < 10 ? 2 : 1) + " Гц";
+          document.getElementById("oscv-r-time").textContent =
+            ru(msPerDiv, msPerDiv >= 10 ? 0 : 2) + " мс/дел";
           document.getElementById("oscv-r-amp").textContent = ru(amplitude, 1) + " дел";
           document.getElementById("oscv-r-phos").textContent = cls + " · τ " + ru(tauMs, 0) + " мс";
           var note = str(V.note, "Свечение гаснет за лучом и ярче там, где луч идёт медленнее");
@@ -437,7 +473,12 @@
         var exit = oneOf(V.exit, ["none", "fade"], "none");
         var tl = gsap.timeline({ paused: true });
         tl.to(driver, { t: 30, duration: 30, ease: "none", lazy: false }, 0);
-        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        if (exit === "fade")
+          tl.to(
+            root,
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[0]) ? cues[0] : 6,
+          );
         draw(0);
         window.__timelines = window.__timelines || {};
         window.__timelines["oscilloscope-trace-vertical"] = tl;

@@ -48,7 +48,7 @@
         height: 100%;
         display: block;
       }
-      
+
       #shhologramv-stage.shhologramv-card {
         left: 150px;
         top: 288px;
@@ -60,11 +60,18 @@
       #shhologramv-stage.shhologramv-bottom {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="shhologramv-root" data-composition-id="hologram-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-requires-webgpu>
+    <div
+      id="shhologramv-root"
+      data-composition-id="hologram-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+      data-requires-webgpu
+    >
       <div id="shhologramv-stage">
         <canvas data-shader="Hologram" width="1080" height="1920"></canvas>
       </div>
@@ -86,7 +93,7 @@
         var COMP_ID = "hologram-vertical";
         var DURATION = 30;
         // colour variables: id -> default (the same default as in the variables list above)
-        var COLORS = {"color": "var(--accent, #ff0000)"};
+        var COLORS = { color: "var(--accent, #ff0000)" };
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
         var STOPS = null;
         var MODE = null;
@@ -120,11 +127,13 @@
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
         probe.remove();
         // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
-        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shhologramv-ground", vars.ground.trim());
+        if (typeof vars.ground === "string" && vars.ground.trim())
+          root.style.setProperty("--shhologramv-ground", vars.ground.trim());
         var W = 1080,
           H = 1920;
-        
-        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
         if (placement !== "full") {
           stage.classList.add("shhologramv-card", "shhologramv-" + placement);
           W = 780;
@@ -135,7 +144,7 @@
           props.scale = 0.5625;
           props.center = { x: 0.5, y: 824 / 1920 };
         }
-        
+
         cv.width = W;
         cv.height = H;
         cv.dataset.shaderProps = JSON.stringify(props);
@@ -147,8 +156,10 @@
         var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DURATION;
         window.__timelines = window.__timelines || {};
         var tl = gsap.timeline({ paused: true });
-        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
-        if (vars.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        if (c0 > 0)
+          tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (vars.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         tl.set({}, {}, DURATION);
         window.__timelines[COMP_ID] = tl;
       })();

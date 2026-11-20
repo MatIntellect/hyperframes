@@ -51,7 +51,12 @@
         font: 16px system-ui;
       }
       #frost-stage.nogpu {
-        background: radial-gradient(ellipse 78% 78% at 50% 150%, #2a2a2a, var(--bg, #0c1014) 70%, var(--bg, #0c1014));
+        background: radial-gradient(
+          ellipse 78% 78% at 50% 150%,
+          #2a2a2a,
+          var(--bg, #0c1014) 70%,
+          var(--bg, #0c1014)
+        );
       }
       /* the motion checker needs a moving layout box on every frame: a background-coloured 1.5 px plate */
       #frost-plate {
@@ -1970,8 +1975,18 @@
             max: 1,
             step: 0.005,
           },
-          { id: "backdropTop", type: "string", label: "Backdrop - Top colour", default: "var(--bg, #0c1014)" },
-          { id: "backdropMid", type: "string", label: "Backdrop - Mid colour", default: "var(--bg, #0c1014)" },
+          {
+            id: "backdropTop",
+            type: "string",
+            label: "Backdrop - Top colour",
+            default: "var(--bg, #0c1014)",
+          },
+          {
+            id: "backdropMid",
+            type: "string",
+            label: "Backdrop - Mid colour",
+            default: "var(--bg, #0c1014)",
+          },
           {
             id: "backdropBottom",
             type: "string",
@@ -2538,7 +2553,8 @@
           const probe = document.createElement("span");
           document.getElementById("frost-root").appendChild(probe);
           for (const v of [...schema, ...rigSchema]) {
-            if (typeof values[v.id] !== "string" || !values[v.id].trim().startsWith("var(")) continue;
+            if (typeof values[v.id] !== "string" || !values[v.id].trim().startsWith("var("))
+              continue;
             probe.style.color = values[v.id];
             values[v.id] = getComputedStyle(probe).color;
           }
@@ -2590,20 +2606,24 @@
         const stage = document.createElement("div");
         stage.id = "frost-stage";
         surfaceRoot.appendChild(stage);
-        
+
         // top / bottom: the frame is clipped to the card, the sequence moves to its centre (y 560 / 980)
         if (values.placement === "top" || values.placement === "bottom") {
           const top = values.placement === "top";
           stage.style.transform = "translateY(" + (top ? -210 : 210) + "px)";
           const rootEl = document.getElementById("frost-root");
           rootEl.style.background = "transparent";
-          rootEl.style.clipPath = top ? "inset(180px 150px 980px 150px round 32px)" : "inset(600px 150px 560px 150px round 32px)";
+          rootEl.style.clipPath = top
+            ? "inset(180px 150px 980px 150px round 32px)"
+            : "inset(600px 150px 560px 150px round 32px)";
           const edge = document.createElement("div");
           edge.style.cssText =
-            "position:absolute;left:150px;top:" + (top ? 288 : 708) + "px;width:780px;height: 652px;border-radius:32px;border:2px solid var(--border, #2e2e32);box-sizing:border-box;pointer-events:none;z-index:10";
+            "position:absolute;left:150px;top:" +
+            (top ? 288 : 708) +
+            "px;width:780px;height: 652px;border-radius:32px;border:2px solid var(--border, #2e2e32);box-sizing:border-box;pointer-events:none;z-index:10";
           rootEl.appendChild(edge);
         }
-        
+
         surfaceRoot.appendChild(document.createElement("slot"));
         stage.dataset.build = window.Frost.REVIEW_BUILD;
         const buildStatus = document.createElement("span");
@@ -3118,7 +3138,8 @@
         );
         window.__timelines = window.__timelines || {};
         window.__timelines["frost-sequence-camera-orbit-vertical"] = timeline;
-        const activeTimeline = () => window.__timelines["frost-sequence-camera-orbit-vertical"] || timeline;
+        const activeTimeline = () =>
+          window.__timelines["frost-sequence-camera-orbit-vertical"] || timeline;
         function rigRevision() {
           const clean = (v) =>
             Array.isArray(v)
@@ -3305,7 +3326,7 @@
             rotate(world.rig.lookAt, aim, angle);
             camera.lookAt(world.rig.lookAt);
             camera.updateMatrixWorld(true);
-            
+
             // vertical: the readable field is 780 wide, so the camera sees 2.4x more around the
             // object (zoom keeps the rig's own lens and path), and the picture is lifted 190 px
             // onto the field centre y 824: camera and aim move down along the camera's up axis
@@ -3316,7 +3337,10 @@
             const e = camera.matrixWorld.elements,
               aimV = world.rig.lookAt,
               lift =
-                (190 * 2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.distanceTo(aimV)) /
+                (190 *
+                  2 *
+                  Math.tan((camera.fov * Math.PI) / 360) *
+                  camera.position.distanceTo(aimV)) /
                 camera.zoom /
                 H;
             camera.position.set(
@@ -3326,7 +3350,6 @@
             );
             camera.lookAt(aimV.x - e[4] * lift, aimV.y - e[5] * lift, aimV.z - e[6] * lift);
             camera.updateMatrixWorld(true);
-            
           };
           frost.invalidate();
           renderAt(lastTime);

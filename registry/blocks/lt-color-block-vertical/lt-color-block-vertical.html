@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -61,11 +66,27 @@
       #lclv-lt {
         position: absolute;
       }
-      #lclv-block { background: var(--accent, #ff0000); padding: 20px 36px 24px 32px; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35); display: inline-flex; flex-direction: column; gap: 10px; }
-      #lclv-name { font-weight: 800; color: var(--fg, #f2f2f2); line-height: 0.98; text-transform: uppercase; }
-      #lclv-role { color: var(--fg, #f2f2f2); font-weight: 500; line-height: 1.2; letter-spacing: 0.02em; }
-      
-      
+      #lclv-block {
+        background: var(--accent, #ff0000);
+        padding: 20px 36px 24px 32px;
+        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
+        display: inline-flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      #lclv-name {
+        font-weight: 800;
+        color: var(--fg, #f2f2f2);
+        line-height: 0.98;
+        text-transform: uppercase;
+      }
+      #lclv-role {
+        color: var(--fg, #f2f2f2);
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+      }
+
       #lclv-lt {
         left: 150px;
         width: 780px;
@@ -83,14 +104,28 @@
         top: 824px;
         transform: translateY(-50%);
       }
-      #lclv-block { align-items: center; text-align: center; max-width: 780px; }
-      #lclv-name { font-size: 80px; }
-      #lclv-role { font-size: 34px; }
-      
+      #lclv-block {
+        align-items: center;
+        text-align: center;
+        max-width: 780px;
+      }
+      #lclv-name {
+        font-size: 80px;
+      }
+      #lclv-role {
+        font-size: 34px;
+      }
     </style>
   </head>
   <body>
-    <div id="lclv-root" data-composition-id="lt-color-block-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="lclv-root"
+      data-composition-id="lt-color-block-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="lclv-lt">
         <div id="lclv-block">
           <div id="lclv-name"></div>
@@ -108,10 +143,11 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         root.classList.add("lclv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
-        
-        document.getElementById("lclv-name").textContent = typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+
+        document.getElementById("lclv-name").textContent =
+          typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role : "Основатель MatIntellect";
         var roleEl = document.getElementById("lclv-role");
         roleEl.textContent = role;
@@ -126,9 +162,24 @@
         var exit = oneOf(V.exit, ["none", "out"], "none");
 
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#lclv-block", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }, c0);
-        tl.fromTo("#lclv-name", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, c0 + 0.2);
-        tl.fromTo("#lclv-role", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, c0 + 0.3);
+        tl.fromTo(
+          "#lclv-block",
+          { x: -80, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" },
+          c0,
+        );
+        tl.fromTo(
+          "#lclv-name",
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+          c0 + 0.2,
+        );
+        tl.fromTo(
+          "#lclv-role",
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+          c0 + 0.3,
+        );
         if (exit === "out") {
           var out = isFinite(cues[1]) ? cues[1] : c0 + 4.2;
           tl.to("#lclv-block", { x: -60, opacity: 0, duration: 0.35, ease: "power2.in" }, out);

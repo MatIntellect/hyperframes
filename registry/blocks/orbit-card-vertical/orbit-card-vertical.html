@@ -33,14 +33,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         box-sizing: border-box;
@@ -75,7 +80,7 @@
         opacity: 0;
         pointer-events: none;
       }
-      
+
       #orcv-stage.orcv-card {
         left: 150px;
         width: 780px;
@@ -87,14 +92,28 @@
       #orcv-stage.orcv-bottom {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="orcv-root" data-composition-id="orbit-card-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
-      <section id="orcv-stage" class="clip" data-start="0" data-duration="30" data-track-index="1"></section>
+    <div
+      id="orcv-root"
+      data-composition-id="orbit-card-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <section
+        id="orcv-stage"
+        class="clip"
+        data-start="0"
+        data-duration="30"
+        data-track-index="1"
+      ></section>
       <div id="orcv-fontload" aria-hidden="true">
-        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span>Аа</span>
+        <span style="font-family: var(--font-display, &quot;Bebas Neue&quot;); font-weight: 700"
+          >Аа</span
+        ><span>Аа</span>
       </div>
     </div>
     <script type="importmap">
@@ -109,8 +128,8 @@
       const root = stage.closest("[data-composition-id]");
       let width = 1080,
         height = 1920,
-        vScale =   1920 / 1080 ;
-      
+        vScale = 1920 / 1080;
+
       const placement = ["full", "top", "bottom"].includes(V.placement) ? V.placement : "full";
       if (placement !== "full") {
         stage.classList.add("orcv-card", "orcv-" + placement);
@@ -119,7 +138,7 @@
         // the card shows the wide frame's height (vScale 1): the orbit's near pass fits it as it fits 1080
         vScale = 1;
       }
-      
+
       // цвета и шрифты темы: в three.js и на холст – готовыми значениями
       const cs = getComputedStyle(root);
       const css = (name, d) => {
@@ -140,7 +159,7 @@
         width,
         height,
         vScale,
-        card:   placement !== "full" ,
+        card: placement !== "full",
         start,
         bg: css("--bg", "#0c1014"),
         surface: css("--surface", "#18181a"),
@@ -159,7 +178,14 @@
         ease: "none",
         onUpdate: () => renderAt(state.time),
       });
-      if (V.exit === "fade") timeline.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, Number.isFinite(cues[1]) && cues[1] > start ? Math.min(cues[1], start + 6.85) : start + 6.85);
+      if (V.exit === "fade")
+        timeline.to(
+          root,
+          { opacity: 0, duration: 0.5, ease: "power2.in" },
+          Number.isFinite(cues[1]) && cues[1] > start
+            ? Math.min(cues[1], start + 6.85)
+            : start + 6.85,
+        );
       // the runtime has already put the timeline at the block's own time; event.detail.time is the reel's
       window.addEventListener("hf-seek", () => renderAt(Math.min(30, timeline.time())));
       window.__timelines = window.__timelines || {};

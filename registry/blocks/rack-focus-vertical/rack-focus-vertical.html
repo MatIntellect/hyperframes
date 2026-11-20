@@ -51,7 +51,7 @@
         width: 1080px;
         height: 1920px;
       }
-      
+
       #rkfv-root.rkfv-card #rkfv-canvas {
         left: 150px;
         top: 288px;
@@ -62,11 +62,17 @@
       #rkfv-root.rkfv-bottom #rkfv-canvas {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="rkfv-root" data-composition-id="rack-focus-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="rkfv-root"
+      data-composition-id="rack-focus-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <canvas id="rkfv-canvas" width="1080" height="1920"></canvas>
     </div>
     <script>
@@ -84,7 +90,7 @@
           H = 1920,
           LENS = 1920,
           CY = H / 2;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         CY = 1920 - 770;
         if (placement !== "full") {
@@ -94,7 +100,6 @@
           LENS = 1152;
           CY = H / 2;
         }
-        
 
         var SENSOR_W_MM = 36;
         var PX_PER_MM = LENS / SENSOR_W_MM;
@@ -141,7 +146,6 @@
           var inv = 1 / NEAR + (1 / FAR - 1 / NEAR) * e;
           return 1 / inv;
         }
-
 
         function mulberry32(a) {
           return function () {
@@ -517,7 +521,14 @@
         });
         tl.to(driver, { t: DUR, duration: DUR, ease: "none" }, 0);
         var exit = oneOf(V.exit, ["none", "fade"], "none");
-        if (exit === "fade") tl.to(canvas, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[2]) && cues[2] > PULL_START + PULL_DUR ? cues[2] : PULL_START + PULL_DUR + 2);
+        if (exit === "fade")
+          tl.to(
+            canvas,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[2]) && cues[2] > PULL_START + PULL_DUR
+              ? cues[2]
+              : PULL_START + PULL_DUR + 2,
+          );
         window.__timelines["rack-focus-vertical"] = tl;
 
         draw(0);

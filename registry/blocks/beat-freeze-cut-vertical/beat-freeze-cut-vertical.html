@@ -42,14 +42,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -78,7 +83,11 @@
         inset: 0;
         overflow: hidden;
         background:
-          radial-gradient(ellipse 80% 60% at 50% 40%, color-mix(in srgb, var(--accent, #ff0000) 7%, transparent) 0%, transparent 55%),
+          radial-gradient(
+            ellipse 80% 60% at 50% 40%,
+            color-mix(in srgb, var(--accent, #ff0000) 7%, transparent) 0%,
+            transparent 55%
+          ),
           var(--bg, #0c1014);
       }
       #bfcv-grid {
@@ -86,15 +95,26 @@
         inset: 0;
         opacity: 0.22;
         background-image:
-          linear-gradient(color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px, transparent 1px),
-          linear-gradient(90deg, color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px, transparent 1px);
+          linear-gradient(
+            color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--fg, #f2f2f2) 4%, transparent) 1px,
+            transparent 1px
+          );
         background-size: 80px 80px;
         mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 20%, transparent 75%);
       }
       #bfcv-vignette {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 45%, rgb(0 0 0 / 55%) 100%);
+        background: radial-gradient(
+          ellipse 75% 70% at 50% 50%,
+          transparent 45%,
+          rgb(0 0 0 / 55%) 100%
+        );
         opacity: 0.85;
       }
       #bfcv-box {
@@ -121,7 +141,11 @@
         position: relative;
         border-radius: 36px;
         background:
-          linear-gradient(160deg, color-mix(in srgb, var(--fg, #f2f2f2) 6%, transparent) 0%, transparent 40%),
+          linear-gradient(
+            160deg,
+            color-mix(in srgb, var(--fg, #f2f2f2) 6%, transparent) 0%,
+            transparent 40%
+          ),
           linear-gradient(180deg, var(--panel2) 0%, var(--surface, #18181a) 100%);
         border: 2px solid var(--border, #2e2e32);
         box-shadow: 0 40px 120px rgb(0 0 0 / 55%);
@@ -135,7 +159,11 @@
         height: 420px;
         margin: -210px 0 0 -210px;
         border-radius: 50%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--accent, #ff0000) 28%, transparent) 0%, transparent 68%);
+        background: radial-gradient(
+          circle,
+          color-mix(in srgb, var(--accent, #ff0000) 28%, transparent) 0%,
+          transparent 68%
+        );
         opacity: 0.85;
       }
       #bfcv-a-wave {
@@ -174,7 +202,11 @@
       .bfcv-bar {
         flex: 1;
         border-radius: 6px 6px 2px 2px;
-        background: linear-gradient(180deg, var(--accent, #ff0000) 0%, color-mix(in srgb, var(--accent, #ff0000) 25%, transparent) 100%);
+        background: linear-gradient(
+          180deg,
+          var(--accent, #ff0000) 0%,
+          color-mix(in srgb, var(--accent, #ff0000) 25%, transparent) 100%
+        );
         transform-origin: 50% 100%;
       }
       #bfcv-a-meta {
@@ -332,8 +364,17 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent, #ff0000) 8%, transparent) 48%, transparent 52%),
-          radial-gradient(ellipse 40% 55% at 50% 48%, transparent 40%, color-mix(in srgb, var(--accent, #ff0000) 18%, transparent) 100%);
+          linear-gradient(
+            90deg,
+            transparent 0%,
+            color-mix(in srgb, var(--accent, #ff0000) 8%, transparent) 48%,
+            transparent 52%
+          ),
+          radial-gradient(
+            ellipse 40% 55% at 50% 48%,
+            transparent 40%,
+            color-mix(in srgb, var(--accent, #ff0000) 18%, transparent) 100%
+          );
         mix-blend-mode: screen;
       }
       #bfcv-badge {
@@ -346,11 +387,17 @@
         inset: -8% -20%;
         opacity: 0;
         visibility: hidden;
-        background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 35%, rgb(255 255 255 / 55%) 50%, color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 65%, transparent 100%);
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 35%,
+          rgb(255 255 255 / 55%) 50%,
+          color-mix(in srgb, var(--accent, #ff0000) 12%, transparent) 65%,
+          transparent 100%
+        );
         filter: blur(18px);
       }
-      
-      
+
       #bfcv-box {
         left: 150px;
         width: 780px;
@@ -453,11 +500,17 @@
       #bfcv-root.bfcv-cardmode #bfcv-hit span {
         font-size: 170px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="bfcv-root" data-composition-id="beat-freeze-cut-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="bfcv-root"
+      data-composition-id="beat-freeze-cut-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="bfcv-ground">
         <div id="bfcv-grid" data-layout-ignore></div>
         <div id="bfcv-vignette" data-layout-ignore></div>
@@ -470,12 +523,20 @@
                 <div id="bfcv-a-glow" data-layout-ignore></div>
                 <div id="bfcv-a-wave" data-layout-ignore>
                   <svg viewBox="0 0 592 220" preserveAspectRatio="none">
-                    <path id="bfcv-wave-fill" d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80 L592,220 L0,220 Z" />
-                    <path id="bfcv-wave-path" d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80" />
+                    <path
+                      id="bfcv-wave-fill"
+                      d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80 L592,220 L0,220 Z"
+                    />
+                    <path
+                      id="bfcv-wave-path"
+                      d="M0,160 C40,150 60,90 100,100 C140,110 160,40 200,55 C240,70 260,150 300,140 C340,130 360,30 400,45 C440,60 460,130 500,120 C540,110 560,70 592,80"
+                    />
                   </svg>
                 </div>
                 <div id="bfcv-a-bars"></div>
-                <div id="bfcv-a-meta"><span id="bfcv-kicker"></span><span id="bfcv-pill" class="bfcv-red"></span></div>
+                <div id="bfcv-a-meta">
+                  <span id="bfcv-kicker"></span><span id="bfcv-pill" class="bfcv-red"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -518,10 +579,10 @@
         function $(id) {
           return document.getElementById("bfcv-" + id);
         }
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") root.classList.add("bfcv-cardmode", "bfcv-" + placement);
-        
+
         $("intro-t").textContent = txt(V.intro, "В такт");
         $("hit-t").textContent = txt(V.hit, "Дроп") || "Дроп";
         $("kicker").textContent = txt(V.kicker, "Промо");
@@ -615,49 +676,156 @@
         tl.to(intro, { opacity: 0, y: -8, duration: 0.18, ease: "power2.in" }, beat1 - 0.18);
         tl.set(intro, { visibility: "hidden" }, beat1);
         // бит 1: рывок
-        tl.to(aCrop, { scale: 1 + 0.18 * intensity, x: -80 * intensity, y: 24 * intensity, duration: 0.22, ease: "power4.out" }, beat1);
-        tl.to(stage, { scale: Math.min(1.2, 1 + 0.08 * intensity), duration: 0.28, ease: "expo.out" }, beat1);
+        tl.to(
+          aCrop,
+          {
+            scale: 1 + 0.18 * intensity,
+            x: -80 * intensity,
+            y: 24 * intensity,
+            duration: 0.22,
+            ease: "power4.out",
+          },
+          beat1,
+        );
+        tl.to(
+          stage,
+          { scale: Math.min(1.2, 1 + 0.08 * intensity), duration: 0.28, ease: "expo.out" },
+          beat1,
+        );
         var pattern = [0.55, 1.15, 0.7, 1.35, 0.9, 1.4, 0.65, 1.1, 0.5, 1.25, 0.8, 1.45];
-        tl.to(bars, { scaleY: function (i) { return pattern[i]; }, duration: 0.18, ease: "power3.out", stagger: 0.01 }, beat1);
+        tl.to(
+          bars,
+          {
+            scaleY: function (i) {
+              return pattern[i];
+            },
+            duration: 0.18,
+            ease: "power3.out",
+            stagger: 0.01,
+          },
+          beat1,
+        );
         // разгон к стоп-кадру
         var rampStart = Math.min(beat1 + 0.65, freezeAt - 0.2);
         var rampDur = Math.max(0.2, freezeAt - rampStart);
-        tl.to(aCrop, { scale: 1.28 * (0.9 + 0.1 * intensity), x: 28 * intensity, y: -12 * intensity, duration: rampDur, ease: "power3.in" }, rampStart);
-        tl.to(stage, { scale: 1.12, filter: "blur(0px) brightness(1.08)", duration: rampDur, ease: "power2.in" }, rampStart);
-        tl.to(bars, { scaleY: 1.55, duration: rampDur * 0.85, ease: "power2.in", stagger: { each: 0.012, from: "center" } }, rampStart);
+        tl.to(
+          aCrop,
+          {
+            scale: 1.28 * (0.9 + 0.1 * intensity),
+            x: 28 * intensity,
+            y: -12 * intensity,
+            duration: rampDur,
+            ease: "power3.in",
+          },
+          rampStart,
+        );
+        tl.to(
+          stage,
+          {
+            scale: 1.12,
+            filter: "blur(0px) brightness(1.08)",
+            duration: rampDur,
+            ease: "power2.in",
+          },
+          rampStart,
+        );
+        tl.to(
+          bars,
+          {
+            scaleY: 1.55,
+            duration: rampDur * 0.85,
+            ease: "power2.in",
+            stagger: { each: 0.012, from: "center" },
+          },
+          rampStart,
+        );
         // стоп-кадр
         tl.set(freeze, { visibility: "visible", opacity: 1 }, freezeAt);
         tl.set(fOut, { opacity: 1 }, freezeAt);
         tl.set(fCont, { opacity: 0.85 }, freezeAt);
         tl.set(badge, { opacity: 1 }, freezeAt);
         tl.set(hit, { visibility: "visible", opacity: 1, scale: 1 }, freezeAt);
-        tl.to(stage, { scale: 1.12, filter: "blur(0px) brightness(1.15)", duration: 0.05, ease: "power4.out" }, freezeAt);
-        tl.fromTo(fFlash, { opacity: 0.55 * intensity }, { opacity: 0, duration: 0.28, ease: "power2.out" }, freezeAt);
+        tl.to(
+          stage,
+          { scale: 1.12, filter: "blur(0px) brightness(1.15)", duration: 0.05, ease: "power4.out" },
+          freezeAt,
+        );
+        tl.fromTo(
+          fFlash,
+          { opacity: 0.55 * intensity },
+          { opacity: 0, duration: 0.28, ease: "power2.out" },
+          freezeAt,
+        );
         tl.to(hit, { opacity: 0, scale: 0.96, duration: 0.2, ease: "power2.in" }, freezeAt + 0.55);
         tl.set(hit, { visibility: "hidden" }, freezeAt + 0.78);
-        tl.to([fOut, fCont, badge], { opacity: 0.75, duration: 0.35, ease: "sine.out" }, freezeAt + 0.35);
+        tl.to(
+          [fOut, fCont, badge],
+          { opacity: 0.75, duration: 0.35, ease: "sine.out" },
+          freezeAt + 0.35,
+        );
         // резкая склейка
         tl.set(cutFx, { visibility: "visible" }, cutAt);
-        tl.fromTo(cutFx, { opacity: 0, scaleX: 0.35, x: -280 }, { opacity: 0.95, scaleX: 1.6, x: 120, duration: 0.12, ease: "power4.in" }, cutAt);
-        tl.to(stage, { filter: "blur(14px) brightness(1.35)", scaleX: 1.35, scaleY: 0.92, duration: 0.12, ease: "power3.in" }, cutAt);
+        tl.fromTo(
+          cutFx,
+          { opacity: 0, scaleX: 0.35, x: -280 },
+          { opacity: 0.95, scaleX: 1.6, x: 120, duration: 0.12, ease: "power4.in" },
+          cutAt,
+        );
+        tl.to(
+          stage,
+          {
+            filter: "blur(14px) brightness(1.35)",
+            scaleX: 1.35,
+            scaleY: 0.92,
+            duration: 0.12,
+            ease: "power3.in",
+          },
+          cutAt,
+        );
         var sw = cutAt + 0.14;
         tl.set(shotA, { opacity: 0, visibility: "hidden" }, sw);
         tl.set(shotB, { opacity: 1, visibility: "visible" }, sw);
         tl.set(freeze, { opacity: 0, visibility: "hidden" }, sw);
         tl.set(bLeft, { opacity: 1, x: -24 }, sw);
         tl.set(cards, { opacity: 1, x: 24 }, sw);
-        tl.to(stage, { filter: "blur(0px) brightness(1)", scale: 1, scaleX: 1, scaleY: 1, x: 0, y: 0, duration: 0.18, ease: "power3.out" }, sw);
+        tl.to(
+          stage,
+          {
+            filter: "blur(0px) brightness(1)",
+            scale: 1,
+            scaleX: 1,
+            scaleY: 1,
+            x: 0,
+            y: 0,
+            duration: 0.18,
+            ease: "power3.out",
+          },
+          sw,
+        );
         tl.to(cutFx, { opacity: 0, x: 360, duration: 0.16, ease: "power2.out" }, cutAt + 0.16);
         tl.set(cutFx, { visibility: "hidden" }, cutAt + 0.34);
         tl.to(bLeft, { x: 0, duration: 0.4, ease: "power3.out" }, sw);
         tl.to(cards, { x: 0, duration: 0.38, ease: "power3.out", stagger: 0.06 }, sw + 0.04);
-        tl.to(stage, { scale: 1.02, duration: Math.max(0.3, beat3 - sw - 0.2), ease: "sine.out" }, sw + 0.18);
+        tl.to(
+          stage,
+          { scale: 1.02, duration: Math.max(0.3, beat3 - sw - 0.2), ease: "sine.out" },
+          sw + 0.18,
+        );
         // бит 3
-        tl.to(stage, { scale: 1.08 * (0.9 + 0.1 * intensity), duration: 0.14, ease: "power4.out" }, beat3);
+        tl.to(
+          stage,
+          { scale: 1.08 * (0.9 + 0.1 * intensity), duration: 0.14, ease: "power4.out" },
+          beat3,
+        );
         tl.to(cards[1], { scale: 1.04, duration: 0.12, ease: "power3.out" }, beat3);
         tl.to(cards[1], { scale: 1, duration: 0.22, ease: "power2.out" }, beat3 + 0.14);
         tl.to(stage, { scale: 1.03, duration: 0.35, ease: "power2.out" }, holdAt);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[4]) && cues[4] > holdAt ? cues[4] : holdAt + 2);
+        if (exit === "fade")
+          tl.to(
+            root,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[4]) && cues[4] > holdAt ? cues[4] : holdAt + 2,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["beat-freeze-cut-vertical"] = tl;

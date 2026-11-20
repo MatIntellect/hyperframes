@@ -49,14 +49,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -147,7 +152,7 @@
         align-items: center;
         justify-content: center;
       }
-      
+
       #wpt-card {
         padding-bottom: 380px; /* copy centred on the field, y 824 */
       }
@@ -166,7 +171,6 @@
       #wpt-scene.wptv-card #wpt-card {
         padding-bottom: 0;
       }
-      
     </style>
   </head>
   <body>
@@ -214,8 +218,12 @@
           String(vars.title || "Прорыв")
             .trim()
             .toUpperCase() || "ПРОРЫВ";
-        var subtitle = String(typeof vars.subtitle === "string" ? vars.subtitle : "Ролики для экспертов");
-        var kicker = String(typeof vars.kicker === "string" ? vars.kicker : "MATINTELLECT представляет");
+        var subtitle = String(
+          typeof vars.subtitle === "string" ? vars.subtitle : "Ролики для экспертов",
+        );
+        var kicker = String(
+          typeof vars.kicker === "string" ? vars.kicker : "MATINTELLECT представляет",
+        );
         // Preserve every word. The 3D layout wraps whole words and scales to fit.
         window.__wptPhrase =
           String(vars.replacementPhrase || "Монтаж без спешки")
@@ -238,8 +246,9 @@
         // width a line may take; BW x BH the phrase box (native 1520 x 620 of 1920 x 1080).
         var root = document.getElementById("wptv-root");
         var L = { W: 1080, H: 1920, VHV: 1920, VY: 0, FW: 1760, BW: 1520, BH: 620 };
-        
-        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
         if (placement === "full") {
           L.VHV = 2 * (1920 - 770);
           L.VY = L.VHV / 2 - 770;
@@ -250,7 +259,7 @@
           document.getElementById("wpt-scene").classList.add("wptv-card", "wptv-" + placement);
           L = { W: 780, H: 760, VHV: 760, VY: 0, FW: 700, BW: 640, BH: 436 };
         }
-        
+
         window.__wptLayout = L;
         var cs = getComputedStyle(root);
         var probe = function (name, d) {
@@ -261,7 +270,9 @@
           p.remove();
           return c;
         };
-        var accent = /^#[0-9a-f]{3,8}$/i.test(String(vars.accent || "")) ? String(vars.accent) : probe("--accent", "#ff0000");
+        var accent = /^#[0-9a-f]{3,8}$/i.test(String(vars.accent || ""))
+          ? String(vars.accent)
+          : probe("--accent", "#ff0000");
         window.__wptAccent = accent;
         window.__wptTheme = {
           fg: probe("--fg", "#f2f2f2"),
@@ -321,7 +332,10 @@
 
       const tl = gsap.timeline({ paused: true });
       const V0 =
-        (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        (window.__hyperframes &&
+          window.__hyperframes.getVariables &&
+          window.__hyperframes.getVariables()) ||
+        {};
       const cues = String(V0.cues || "")
         .split(",")
         .map(parseFloat);
@@ -340,7 +354,11 @@
         { y: 44, opacity: 0, duration: 0.5, stagger: 0.025, ease: "power3.out" },
         C0 + 0.03,
       );
-      tl.from("#wpt-subtitle", { y: 18, opacity: 0, duration: 0.45, ease: "power3.out" }, C0 + 0.22);
+      tl.from(
+        "#wpt-subtitle",
+        { y: 18, opacity: 0, duration: 0.45, ease: "power3.out" },
+        C0 + 0.22,
+      );
 
       // IN — portal irises open (p = 0.5 around t ~= 1.47s)
       tl.to(S, { portal: 1, duration: 2.05, ease: "power2.inOut" }, C0 + 0.45);
@@ -383,7 +401,10 @@
         "phrase-handoff",
         C0 + window.__wptTransition.start + window.__wptTransition.duration * 0.6,
       );
-      tl.addLabel("phrase-hold", C0 + window.__wptTransition.start + window.__wptTransition.duration);
+      tl.addLabel(
+        "phrase-hold",
+        C0 + window.__wptTransition.start + window.__wptTransition.duration,
+      );
 
       tl.eventCallback("onUpdate", function () {
         if (window.__wptRender) window.__wptRender(tl.time() - C0);
@@ -911,7 +932,9 @@
       // ---------- fonts: local TTF -> three Font (blocks the load event) ----------
       // Bebas Neue Bold for the title letters, Montserrat 600 for the kicker and subtitle lines.
       const loadFont = async (path) =>
-        new FontLoader().parse(new TTFLoader().parse(await fetch(path).then((r) => r.arrayBuffer())));
+        new FontLoader().parse(
+          new TTFLoader().parse(await fetch(path).then((r) => r.arrayBuffer())),
+        );
       const font = await loadFont("assets/fonts/BebasNeue-Bold.ttf");
       const bodyFont = await loadFont("assets/fonts/Montserrat-SemiBold.ttf");
       try {
@@ -1267,7 +1290,11 @@
           }
           if (line) lines.push(line);
           const widths = lines.map(width);
-          const scale = Math.min(1, LAY.BW / Math.max(...widths), LAY.BH / (lines.length * 176 * 1.18));
+          const scale = Math.min(
+            1,
+            LAY.BW / Math.max(...widths),
+            LAY.BH / (lines.length * 176 * 1.18),
+          );
           const balance = Math.min(...widths) / Math.max(...widths);
           const score = scale * (0.94 + 0.06 * balance);
           if (!best || score > best.score) best = { lines, widths, scale, score };

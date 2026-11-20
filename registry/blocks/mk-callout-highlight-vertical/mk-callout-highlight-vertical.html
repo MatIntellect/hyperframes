@@ -33,14 +33,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -75,8 +80,7 @@
         letter-spacing: 0.01em;
         text-align: center;
       }
-      
-      
+
       #mchv-field {
         left: 150px;
         width: 780px;
@@ -101,11 +105,17 @@
         width: 684px;
         font-size: 88px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="mchv-root" data-composition-id="mk-callout-highlight-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="mchv-root"
+      data-composition-id="mk-callout-highlight-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="mchv-ground"></div>
       <div id="mchv-field">
         <div id="mchv-box"></div>
@@ -124,13 +134,12 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") {
           root.classList.add("mchv-card", "mchv-" + placement);
           root.querySelector(".mchv-ground").remove();
         }
-        
 
         var box = document.getElementById("mchv-box");
         box.style.textAlign = oneOf(V.align, ["center", "left"], "center");
@@ -177,7 +186,15 @@
                   }
                 : function (f) {
                     // the browser mixes in srgb whatever form the palette is written in (camera-scan-gate.html:125-127)
-                    return tok("color-mix(in srgb, " + FULL + " " + Math.round(f * 1000) / 10 + "%, " + FAINT + ")");
+                    return tok(
+                      "color-mix(in srgb, " +
+                        FULL +
+                        " " +
+                        Math.round(f * 1000) / 10 +
+                        "%, " +
+                        FAINT +
+                        ")",
+                    );
                   },
           });
         });
@@ -185,7 +202,8 @@
         var st = { _p: 0 };
         function render() {
           var k = st._p * words.length;
-          for (var i = 0; i < words.length; i++) words[i].el.style.color = words[i].mix(Math.max(0, Math.min(1, k - i)));
+          for (var i = 0; i < words.length; i++)
+            words[i].el.style.color = words[i].mix(Math.max(0, Math.min(1, k - i)));
         }
 
         /* a property setter drives the colours: it runs on every seek, back or forth */
@@ -210,9 +228,24 @@
         var exit = oneOf(V.exit, ["none", "fade"], "none");
 
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo(box, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, c0);
-        tl.fromTo(st, { p: 0 }, { p: 1, duration: c2 - c1, ease: "none", immediateRender: false }, c1);
-        if (exit === "fade") tl.to(box, { opacity: 0, y: -16, duration: 0.4, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : c2 + 3);
+        tl.fromTo(
+          box,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+          c0,
+        );
+        tl.fromTo(
+          st,
+          { p: 0 },
+          { p: 1, duration: c2 - c1, ease: "none", immediateRender: false },
+          c1,
+        );
+        if (exit === "fade")
+          tl.to(
+            box,
+            { opacity: 0, y: -16, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[3]) ? cues[3] : c2 + 3,
+          );
         tl.set({}, {}, 30);
         render();
         window.__timelines = window.__timelines || {};

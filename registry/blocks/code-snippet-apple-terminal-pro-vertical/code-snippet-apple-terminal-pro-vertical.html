@@ -17,7 +17,10 @@
     <meta name="viewport" content="width=1080, height=1920" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=block" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=block"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       @font-face {
@@ -38,14 +41,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -69,7 +77,11 @@
       .atpv-ground {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse at center, var(--surface, #18181a) 0%, var(--bg, #0c1014) 70%);
+        background: radial-gradient(
+          ellipse at center,
+          var(--surface, #18181a) 0%,
+          var(--bg, #0c1014) 70%
+        );
       }
       #atpv-win {
         position: absolute;
@@ -148,8 +160,7 @@
       .atpv-ch {
         display: none;
       }
-      
-      
+
       #atpv-win {
         left: 150px;
         width: 780px;
@@ -167,11 +178,17 @@
       #atpv-canvas {
         padding: 20px 18px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="atpv-root" data-composition-id="code-snippet-apple-terminal-pro-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="atpv-root"
+      data-composition-id="code-snippet-apple-terminal-pro-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="atpv-ground"></div>
       <div id="atpv-win">
         <div class="atpv-bar">
@@ -200,23 +217,22 @@
           return typeof v === "string" ? v : d;
         }
         var D = {
-          
-          
           header: "Last login: Mon Jun 2 on ttys008",
           output:
             "~Building production bundle...\nvite v5.3.1 building for production\n✓ 142 modules transformed.\ndist/index.html             0.48 kB\ndist/assets/index.js      284.12 kB\ndist/assets/index.css      42.08 kB\n!✓ built in 2.31s",
-          
         };
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         root.classList.add("atpv-" + placement);
         if (placement !== "full") root.querySelector(".atpv-ground").remove();
-        
+
         document.getElementById("atpv-title").textContent = txt(V.title, "bash — 80×24");
         var header = txt(V.header, D.header).trim();
         var prompt = (txt(V.prompt, "user@Mac myapp %").trim() || "user@Mac myapp %") + " ";
         var command = txt(V.command, "npm run build").trim() || "npm run build";
-        var output = (typeof V.output === "string" && V.output.trim() ? V.output : D.output).replace(/\r/g, "").split("\n");
+        var output = (typeof V.output === "string" && V.output.trim() ? V.output : D.output)
+          .replace(/\r/g, "")
+          .split("\n");
 
         // текст как можно крупнее: самая длинная строка во всю ширину окна и все строки в высоту поля,
         // от 28 до 44 px (знак JetBrains Mono шириной 0.6 кегля); окно по высоте строк, в середине поля
@@ -227,8 +243,16 @@
           },
           Math.max(header.length, prompt.length + command.length + 1),
         );
-        var field = placement === "full" ? [324, 1000] : placement === "top" ? [288, 760] : [600, 760];
-        var size = Math.max(28, Math.min(44, Math.floor(744 / (0.61 * longest)), Math.floor((field[1] - 97) / (1.5 * rows))));
+        var field =
+          placement === "full" ? [324, 1000] : placement === "top" ? [288, 760] : [600, 760];
+        var size = Math.max(
+          28,
+          Math.min(
+            44,
+            Math.floor(744 / (0.61 * longest)),
+            Math.floor((field[1] - 97) / (1.5 * rows)),
+          ),
+        );
         var winH = Math.min(field[1], Math.max(380, Math.ceil(97 + 1.5 * size * (rows + 0.5))));
         // у говорящего поле 652 (y 288-940 / 708-1360): окно до 652 стоит в его середине, окно выше – в авторском
         // поле 760, подвешенном от 288 (до 1048) или стоящем на 1360 (от 600)
@@ -298,8 +322,14 @@
         });
         var tEnd = cO + 0.1 * outEls.length + 0.3;
         tl.set(last, { visibility: "visible" }, tEnd);
-        for (var t = tEnd + 0.4, i = 0; t < 30; t += 0.4, i++) tl.set(cur2, { opacity: i % 2 === 0 ? 0 : 1 }, t);
-        if (exit === "fade") tl.to("#atpv-root", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : tEnd + 3);
+        for (var t = tEnd + 0.4, i = 0; t < 30; t += 0.4, i++)
+          tl.set(cur2, { opacity: i % 2 === 0 ? 0 : 1 }, t);
+        if (exit === "fade")
+          tl.to(
+            "#atpv-root",
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[2]) ? cues[2] : tEnd + 3,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["code-snippet-apple-terminal-pro-vertical"] = tl;

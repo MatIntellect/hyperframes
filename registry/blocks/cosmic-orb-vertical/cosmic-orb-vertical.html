@@ -32,7 +32,7 @@
         overflow: hidden;
         background: var(--bg, #0c1014);
       }
-      
+
       #cobv-backdrop.cobv-card {
         left: 150px;
         top: 288px;
@@ -44,7 +44,7 @@
       #cobv-backdrop.cobv-bottom {
         top: 708px;
       }
-      
+
       #cobv-canvas {
         position: absolute;
         top: 0;
@@ -140,7 +140,7 @@
         var BACKDROP = str("backdrop");
 
         document.getElementById("cobv-backdrop").style.background = BACKDROP;
-        
+
         // full: canvas 1080x1540 so its centre is the field centre (y 824); the orb measured on 880 – about 760 px across.
         // card: canvas = card, the orb measured on the card height.
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
@@ -153,7 +153,6 @@
           H = 1540;
           BASE = 880;
         }
-        
 
         // Beat hook. A precomputed envelope (comma-separated 0-1 samples spread
         // evenly across the clip) is sampled closed-form at time t — no audio
@@ -466,8 +465,10 @@
           .map(parseFloat);
         var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
         var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DUR;
-        if (c0 > 0) tl.fromTo(ROOT, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
-        if (V.exit === "fade") tl.to(ROOT, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        if (c0 > 0)
+          tl.fromTo(ROOT, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (V.exit === "fade")
+          tl.to(ROOT, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         window.__timelines["cosmic-orb-vertical"] = tl;
 
         draw(0);

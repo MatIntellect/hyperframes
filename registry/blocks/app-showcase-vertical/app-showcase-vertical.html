@@ -46,14 +46,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -87,7 +92,11 @@
         width: 900px;
         height: 900px;
         border-radius: 50%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--accent, #ff0000) 16%, transparent) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          color-mix(in srgb, var(--accent, #ff0000) 16%, transparent) 0%,
+          transparent 70%
+        );
       }
       /* phone units: 320x650, scaled as a whole; every text is at least 30 units */
       #apsv-fan {
@@ -373,7 +382,7 @@
         border-radius: 50%;
         flex-shrink: 0;
       }
-      
+
       /* the author's 760 card keeps its size: the fanned phones (0.95, side phones turned 12 deg) are about 670
          tall and breathe to 1.02, their words at the 28 px floor; it is taller than the 652 field beside the
          speaker, so it hangs from y 288 (top) or stands on y 1360 (bottom) and is placed full: the face is never
@@ -389,11 +398,17 @@
       #apsv-root.apsv-bottom #apsv-stage {
         top: 600px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="apsv-root" data-composition-id="app-showcase-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="apsv-root"
+      data-composition-id="app-showcase-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="apsv-stage">
         <div id="apsv-glow"></div>
         <div id="apsv-fan">
@@ -402,7 +417,12 @@
               <div class="apsv-notch"></div>
               <div class="apsv-screen">
                 <svg id="apsv-shapes" viewBox="0 0 200 280" fill="none">
-                  <g stroke="var(--fg, #f2f2f2)" stroke-width="6" stroke-linecap="round" opacity="0.35">
+                  <g
+                    stroke="var(--fg, #f2f2f2)"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    opacity="0.35"
+                  >
                     <circle cx="100" cy="40" r="26" fill="var(--fg, #f2f2f2)" stroke="none" />
                     <line x1="100" y1="68" x2="100" y2="160" />
                     <line x1="100" y1="105" x2="63" y2="135" />
@@ -411,7 +431,6 @@
                     <line x1="100" y1="160" x2="138" y2="215" />
                   </g>
                 </svg>
-                
               </div>
             </div>
           </div>
@@ -419,7 +438,6 @@
             <div class="apsv-bezel">
               <div class="apsv-notch"></div>
               <div class="apsv-screen">
-                
                 <div id="apsv-graph-wrap">
                   <svg id="apsv-graph" viewBox="0 0 260 130" preserveAspectRatio="none">
                     <g stroke="var(--muted, #8a8a90)" stroke-width="0.6" opacity="0.6">
@@ -428,12 +446,24 @@
                       <line x1="6" y1="85" x2="254" y2="85" />
                       <line x1="6" y1="115" x2="254" y2="115" />
                     </g>
-                    <path id="apsv-area" d="M10,105 L50,80 90,90 130,45 170,60 210,25 250,35 250,115 10,115 Z" fill="var(--accent, #ff0000)" opacity="0.15" />
-                    <polyline id="apsv-line" points="10,105 50,80 90,90 130,45 170,60 210,25 250,35" fill="none" stroke="var(--accent, #ff0000)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                    <path
+                      id="apsv-area"
+                      d="M10,105 L50,80 90,90 130,45 170,60 210,25 250,35 250,115 10,115 Z"
+                      fill="var(--accent, #ff0000)"
+                      opacity="0.15"
+                    />
+                    <polyline
+                      id="apsv-line"
+                      points="10,105 50,80 90,90 130,45 170,60 210,25 250,35"
+                      fill="none"
+                      stroke="var(--accent, #ff0000)"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      vector-effect="non-scaling-stroke"
+                    />
                   </svg>
-                  
                 </div>
-                
               </div>
             </div>
           </div>
@@ -449,10 +479,29 @@
                   <div id="apsv-goal-label">Цель недели</div>
                   <div id="apsv-ring-wrap">
                     <svg viewBox="0 0 140 140">
-                      <circle cx="70" cy="70" r="52" fill="none" stroke="var(--border, #2e2e32)" stroke-width="12" />
-                      <circle id="apsv-ring" cx="70" cy="70" r="52" fill="none" stroke="var(--accent, #ff0000)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 70 70)" />
+                      <circle
+                        cx="70"
+                        cy="70"
+                        r="52"
+                        fill="none"
+                        stroke="var(--border, #2e2e32)"
+                        stroke-width="12"
+                      />
+                      <circle
+                        id="apsv-ring"
+                        cx="70"
+                        cy="70"
+                        r="52"
+                        fill="none"
+                        stroke="var(--accent, #ff0000)"
+                        stroke-width="12"
+                        stroke-linecap="round"
+                        transform="rotate(-90 70 70)"
+                      />
                     </svg>
-                    <div id="apsv-count"><b id="apsv-done">2</b>/<span id="apsv-total">3</span></div>
+                    <div id="apsv-count">
+                      <b id="apsv-done">2</b>/<span id="apsv-total">3</span>
+                    </div>
                   </div>
                   <div id="apsv-days"></div>
                 </div>
@@ -486,9 +535,9 @@
         var sw = 1080,
           sh = 1920,
           cy = 1920 / 2,
-          k =   1.1 ,
-          d =   118 ;
-        
+          k = 1.1,
+          d = 118;
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         cy = 824;
         if (placement !== "full") {
@@ -499,13 +548,13 @@
           k = 0.95;
           d = 158;
         }
-        
+
         var cx = sw / 2;
         gsap.set($("fan"), { left: cx - 160, top: cy - 325, scale: k, transformOrigin: "50% 50%" });
         gsap.set($("glow"), { left: cx - 450, top: cy - 450 });
 
         // words
-        
+
         var name = str(V.userName, "Мат");
         $("name").textContent = name;
         $("avatar").textContent = name.trim().charAt(0).toUpperCase();
@@ -535,7 +584,6 @@
           $("bars").appendChild(row);
           return row.querySelector(".apsv-fill");
         });
-        
 
         var cues = String(V.cues || "")
           .split(",")
@@ -554,7 +602,6 @@
         gsap.set($("glow"), { opacity: 0 });
         gsap.set($("center"), { opacity: 0, scale: 0.85 });
         gsap.set([$("left"), $("right")], { opacity: 0, x: 0, rotation: 0 });
-        
 
         var tl = gsap.timeline({ paused: true });
         var t = function (s) {
@@ -567,13 +614,21 @@
         tl.to($("left"), { x: -d, rotation: -12, duration: 1.2, ease: "expo.out" }, t(0.3));
         tl.to($("right"), { opacity: 1, duration: 0.7, ease: "back.out(1.4)" }, t(0.4));
         tl.to($("right"), { x: d, rotation: 12, duration: 1.2, ease: "expo.out" }, t(0.4));
-        tl.to($("ring"), { strokeDashoffset: CIRC * (1 - done / total), duration: 1.2, ease: "circ.out" }, t(1.8));
+        tl.to(
+          $("ring"),
+          { strokeDashoffset: CIRC * (1 - done / total), duration: 1.2, ease: "circ.out" },
+          t(1.8),
+        );
         fills.forEach(function (f, i) {
-          tl.to(f, { width: bars[i][2] + "%", duration: 0.8, ease: "power3.out" }, t(2.1 + i * 0.2));
+          tl.to(
+            f,
+            { width: bars[i][2] + "%", duration: 0.8, ease: "power3.out" },
+            t(2.1 + i * 0.2),
+          );
         });
         tl.to(line, { strokeDashoffset: 0, duration: 1.4, ease: "sine.inOut" }, t(2.0));
         tl.to($("area"), { opacity: 0.15, duration: 0.8, ease: "power1.out" }, t(2.6));
-        
+
         tl.to($("fan"), { scale: k * 1.02, duration: 3.5, ease: "sine.inOut" }, t(2.0));
         tl.to($("ring"), { opacity: 0.65, duration: 0.6, ease: "sine.inOut" }, t(4.0));
         tl.to($("ring"), { opacity: 1, duration: 0.6, ease: "sine.inOut" }, t(4.6));

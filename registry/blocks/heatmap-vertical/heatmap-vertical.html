@@ -53,7 +53,7 @@
         height: 100%;
         display: block;
       }
-      
+
       #shheatmapv-stage.shheatmapv-card {
         left: 150px;
         top: 288px;
@@ -65,11 +65,18 @@
       #shheatmapv-stage.shheatmapv-bottom {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="shheatmapv-root" data-composition-id="heatmap-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920" data-requires-webgpu>
+    <div
+      id="shheatmapv-root"
+      data-composition-id="heatmap-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+      data-requires-webgpu
+    >
       <div id="shheatmapv-stage">
         <canvas data-shader="Heatmap" width="1080" height="1920"></canvas>
       </div>
@@ -93,7 +100,14 @@
         // colour variables: id -> default (the same default as in the variables list above)
         var COLORS = {};
         // gradient stop variables stop1..stopN, at these positions; null when the shader has no stop list
-        var STOPS = [{"color": "var(--bg, #0c1014)", "position": 0}, {"color": "var(--border, #2e2e32)", "position": 0.2}, {"color": "color-mix(in srgb, var(--accent, #ff0000) 48%, #000)", "position": 0.45}, {"color": "var(--accent, #ff0000)", "position": 0.7}, {"color": "color-mix(in srgb, var(--accent, #ff0000) 50%, #fff)", "position": 0.9}, {"color": "var(--fg, #f2f2f2)", "position": 1}];
+        var STOPS = [
+          { color: "var(--bg, #0c1014)", position: 0 },
+          { color: "var(--border, #2e2e32)", position: 0.2 },
+          { color: "color-mix(in srgb, var(--accent, #ff0000) 48%, #000)", position: 0.45 },
+          { color: "var(--accent, #ff0000)", position: 0.7 },
+          { color: "color-mix(in srgb, var(--accent, #ff0000) 50%, #fff)", position: 0.9 },
+          { color: "var(--fg, #f2f2f2)", position: 1 },
+        ];
         var MODE = null;
         // settings the brand fixes that are not variables (colour blending)
         var FIXED = {};
@@ -125,11 +139,13 @@
         if (MODE) props.mode = MODE.indexOf(vars.mode) >= 0 ? vars.mode : MODE[0];
         probe.remove();
         // the ground stays CSS: the variable goes to the block's own token, as camera-scan-gate does (:370-382)
-        if (typeof vars.ground === "string" && vars.ground.trim()) root.style.setProperty("--shheatmapv-ground", vars.ground.trim());
+        if (typeof vars.ground === "string" && vars.ground.trim())
+          root.style.setProperty("--shheatmapv-ground", vars.ground.trim());
         var W = 1080,
           H = 1920;
-        
-        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
         if (placement !== "full") {
           stage.classList.add("shheatmapv-card", "shheatmapv-" + placement);
           W = 780;
@@ -140,7 +156,7 @@
           props.scale = 0.5625;
           props.center = { x: 0.5, y: 824 / 1920 };
         }
-        
+
         cv.width = W;
         cv.height = H;
         cv.dataset.shaderProps = JSON.stringify(props);
@@ -152,8 +168,10 @@
         var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DURATION;
         window.__timelines = window.__timelines || {};
         var tl = gsap.timeline({ paused: true });
-        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
-        if (vars.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        if (c0 > 0)
+          tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (vars.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         tl.set({}, {}, DURATION);
         window.__timelines[COMP_ID] = tl;
       })();

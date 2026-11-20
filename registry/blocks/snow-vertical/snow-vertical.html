@@ -44,7 +44,11 @@
         inset: 0;
         overflow: hidden;
         /* середина кадра свободна: человек или подпись под снегом читаются */
-        -webkit-mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
+        -webkit-mask-image: radial-gradient(
+          circle 230px at 50% 50%,
+          transparent 0 230px,
+          #000 653px
+        );
         mask-image: radial-gradient(circle 230px at 50% 50%, transparent 0 230px, #000 653px);
       }
       .snwv-flake {
@@ -54,7 +58,7 @@
         border-radius: 50%;
         background: var(--fg, #f2f2f2);
       }
-      
+
       #snwv-root.snwv-card #snwv-box {
         left: 150px;
         width: 780px;
@@ -66,14 +70,24 @@
         top: 708px;
       }
       #snwv-root.snwv-card #snwv-snow {
-        -webkit-mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
+        -webkit-mask-image: radial-gradient(
+          circle 162px at 50% 50%,
+          transparent 0 162px,
+          #000 460px
+        );
         mask-image: radial-gradient(circle 162px at 50% 50%, transparent 0 162px, #000 460px);
       }
-      
     </style>
   </head>
   <body>
-    <div id="snwv-root" data-composition-id="snow-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
+    <div
+      id="snwv-root"
+      data-composition-id="snow-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="180"
+    >
       <div id="snwv-box">
         <div id="snwv-snow" data-layout-allow-overflow></div>
       </div>
@@ -92,7 +106,7 @@
         var W = 1080,
           H = 1920,
           k = 1;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") {
           root.classList.add("snwv-card", "snwv-" + placement);
@@ -100,9 +114,9 @@
           H = 652;
           k = 760 / 1080;
         }
-        
+
         var duration = 180; /* lives 180 s: one mount covers a whole reel */
-        var COUNT = Math.round((V.density === "dense" ? 280 : 120) * (W * H) / (1920 * 1080));
+        var COUNT = Math.round(((V.density === "dense" ? 280 : 120) * (W * H)) / (1920 * 1080));
         var fallSeconds = V.speed === "gust" ? 2.2 : 4.5;
         var swaySeconds = V.speed === "gust" ? 2.2 : 4;
         // ровное покрытие без случайных чисел (последовательность Вейля)
@@ -151,7 +165,8 @@
             var f = flakes[s];
             var y = (-WRAP + frac(f.fallCycles * p + f.fallPhi) * (1 + 2 * WRAP)) * H;
             var x = f.laneX * W + f.swayPx * Math.sin(TAU * f.swayCycles * p + f.swayPhi);
-            f.el.style.transform = "translate(" + Math.round(x) + "px, " + Math.round(y) + "px) translate(-50%, -50%)";
+            f.el.style.transform =
+              "translate(" + Math.round(x) + "px, " + Math.round(y) + "px) translate(-50%, -50%)";
           }
         }
         var cues = String(V.cues || "")
@@ -165,8 +180,14 @@
         var tl = gsap.timeline({ paused: true });
         tl.to(state, { phase: 1, duration: duration, ease: "none", onUpdate: render }, 0);
         render();
-        if (c0 > 0) tl.fromTo(field, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, c0);
-        if (exit === "fade") tl.to(field, { opacity: 0, duration: 0.8, ease: "sine.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4);
+        if (c0 > 0)
+          tl.fromTo(field, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, c0);
+        if (exit === "fade")
+          tl.to(
+            field,
+            { opacity: 0, duration: 0.8, ease: "sine.in" },
+            isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 4,
+          );
         window.__timelines = window.__timelines || {};
         window.__timelines["snow-vertical"] = tl;
       })();

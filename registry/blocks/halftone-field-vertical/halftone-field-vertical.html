@@ -32,7 +32,7 @@
         overflow: hidden;
         background: var(--bg, #0c1014);
       }
-      
+
       #hlfv-backdrop.hlfv-card {
         left: 150px;
         top: 288px;
@@ -44,7 +44,7 @@
       #hlfv-backdrop.hlfv-bottom {
         top: 708px;
       }
-      
+
       #hlfv-canvas {
         position: absolute;
         top: 0;
@@ -150,14 +150,14 @@
         ];
         var BG = rgb("background", "var(--bg, #0c1014)");
         probe.remove();
-        
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement !== "full") {
           document.getElementById("hlfv-backdrop").classList.add("hlfv-card", "hlfv-" + placement);
           W = 780;
           H = 652;
         }
-        
+
         var QUANTIZE = bool("quantize");
 
         document.getElementById("hlfv-backdrop").style.background =
@@ -406,8 +406,10 @@ void main() {
         var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0;
         var end = isFinite(cues[1]) && cues[1] > c0 + 0.6 ? cues[1] : DUR;
         var root = document.getElementById("hlfv-root");
-        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
-        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
+        if (c0 > 0)
+          tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (V.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         window.__timelines["halftone-field-vertical"] = tl;
 
         draw(0);

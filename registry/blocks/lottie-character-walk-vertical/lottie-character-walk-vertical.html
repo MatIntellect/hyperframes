@@ -33,14 +33,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -131,8 +136,7 @@
         color: var(--muted, #8a8a90);
         overflow-wrap: break-word;
       }
-      
-      
+
       #lcwv-line {
         top: 1330px;
       }
@@ -179,11 +183,17 @@
       #lcwv-root.lcwv-card #lcwv-title {
         font-size: 72px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="lcwv-root" data-composition-id="lottie-character-walk-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="lcwv-root"
+      data-composition-id="lottie-character-walk-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="lcwv-ground"></div>
       <div id="lcwv-stage">
         <div id="lcwv-line" data-layout-ignore></div>
@@ -205,8 +215,12 @@
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
-        document.getElementById("lcwv-title").textContent = txt(V.title, "Это ваш гид") || "Это ваш гид";
-        var body = txt(V.body, "Входит уверенным шагом, останавливается и показывает, куда смотреть");
+        document.getElementById("lcwv-title").textContent =
+          txt(V.title, "Это ваш гид") || "Это ваш гид";
+        var body = txt(
+          V.body,
+          "Входит уверенным шагом, останавливается и показывает, куда смотреть",
+        );
         document.getElementById("lcwv-body").textContent = body;
         if (!body) document.getElementById("lcwv-body").style.display = "none";
 
@@ -216,8 +230,11 @@
           my = 0,
           k = 1,
           T0 = 0;
-        
-        var placement = ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0 ? String(V.placement) : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(String(V.placement)) >= 0
+            ? String(V.placement)
+            : "full";
         // бедро после остановки – x 764, земля – y 906 в сцене Lottie
         T0 = 2.5;
         mx = 300 - 764;
@@ -228,7 +245,7 @@
           mx = 150 - 764 * k;
           my = 700 - 906 * k;
         }
-        
+
         var box = document.getElementById("lcwv-mascot");
         box.style.transform = "translate(" + mx + "px, " + my + "px) scale(" + k + ")";
 
@@ -245,7 +262,15 @@
           initialSegment: [T0 * 30, 225],
         });
         var PARTS = {
-          near: ["arm.near.fore", "arm.near.upper", "head", "torso", "leg.near.foot", "leg.near.shin", "leg.near.thigh"],
+          near: [
+            "arm.near.fore",
+            "arm.near.upper",
+            "head",
+            "torso",
+            "leg.near.foot",
+            "leg.near.shin",
+            "leg.near.thigh",
+          ],
           far: ["leg.far.foot", "leg.far.shin", "leg.far.thigh", "arm.far.fore", "arm.far.upper"],
           eye: ["eye"],
           shadow: ["shadow"],
@@ -254,7 +279,8 @@
           (mascot.renderer.elements || []).forEach(function (el) {
             if (!el || !el.data || !el.layerElement) return;
             Object.keys(PARTS).forEach(function (part) {
-              if (PARTS[part].indexOf(el.data.nm) >= 0) el.layerElement.classList.add("lcwv-" + part);
+              if (PARTS[part].indexOf(el.data.nm) >= 0)
+                el.layerElement.classList.add("lcwv-" + part);
             });
           });
         });
@@ -270,10 +296,30 @@
 
         // карточка – на родной жест (5,2 с)
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#lcwv-card", { opacity: 0, x: 40, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 5.2 - T0);
-        tl.fromTo(["#lcwv-title", "#lcwv-body"], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 5.3 - T0);
-        tl.fromTo("#lcwv-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 5.5 - T0);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 5.8 - T0 ? cues[0] : 11 - T0);
+        tl.fromTo(
+          "#lcwv-card",
+          { opacity: 0, x: 40, scale: 0.96 },
+          { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          5.2 - T0,
+        );
+        tl.fromTo(
+          ["#lcwv-title", "#lcwv-body"],
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 },
+          5.3 - T0,
+        );
+        tl.fromTo(
+          "#lcwv-rule",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.5, ease: "expo.out" },
+          5.5 - T0,
+        );
+        if (exit === "fade")
+          tl.to(
+            root,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[0]) && cues[0] > 5.8 - T0 ? cues[0] : 11 - T0,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["lottie-character-walk-vertical"] = tl;

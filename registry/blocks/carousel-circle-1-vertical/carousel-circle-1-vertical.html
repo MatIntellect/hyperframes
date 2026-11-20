@@ -541,16 +541,17 @@
           rotationFollow: 0,
         },
         comp: {
-          width: 2160, height: 3840, outWidth: 1080, outHeight: 1920,
+          width: 2160,
+          height: 3840,
+          outWidth: 1080,
+          outHeight: 1920,
           cameraZoom: 5669.29,
           cameraDistance: 5669.29,
           duration: 30,
           fps: 30,
         },
         n: 12,
-        cards: [
-          { file: "placeholder-card.svg", width: 640, height: 640 },
-        ],
+        cards: [{ file: "placeholder-card.svg", width: 640, height: 640 }],
         path: {
           vertices: [
             { p: [2228.028, 354.208], in: [-357.877, 0], out: [357.877, 0] },
@@ -639,7 +640,9 @@
           const given = REG.imageVars.map((id) => varUrl(V[id])).filter(Boolean);
           const srcs = REG.imageVars.map(
             (id, i) =>
-              varUrl(V[id]) || given[i % given.length] || "assets/carousel-images/" + DATA.cards[i % DATA.cards.length].file,
+              varUrl(V[id]) ||
+              given[i % given.length] ||
+              "assets/carousel-images/" + DATA.cards[i % DATA.cards.length].file,
           );
           DATA.cards = await Promise.all(
             srcs.map(async (src, i) => {
@@ -667,16 +670,18 @@
         const root = document.getElementById("kcirc1v-root");
 
         let SHIFT = 0;
-        
+
         /* vertical rebuild: curve plus the largest card fill the 780 field width (a curve the wide design runs
            past the frame edges keeps its share of the frame width and runs past the edges here too); the curve
            is stretched or squeezed in height to fill the field with the largest card inside it, at most twice
            its own proportion */
-        const placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+        const placement =
+          ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement !== "full") root.classList.add("kcirc1v-clear");
         /* top / bottom: the 760 field the ring was built for, hung from y 288 / standing on y 1360; squeezed into the
            652 field beside the speaker the ring would flatten and its lower cards rise and shrink */
-        const field = placement === "top" ? [288, 1048] : placement === "bottom" ? [600, 1360] : [288, 1360];
+        const field =
+          placement === "top" ? [288, 1048] : placement === "bottom" ? [600, 1360] : [288, 1360];
         SHIFT = (field[0] + field[1]) / 2 - comp.outHeight / 2;
         const fieldH = ((field[1] - field[0]) * comp.width) / comp.outWidth;
         const fieldW = (780 * comp.width) / comp.outWidth;
@@ -684,7 +689,10 @@
         look.centerPath = true;
         if (DATA.path) {
           const probe = R.buildPath(DATA.path.vertices, DATA.path.closed, 64, null);
-          let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+          let x0 = Infinity,
+            x1 = -Infinity,
+            y0 = Infinity,
+            y1 = -Infinity;
           for (let k = 0; k <= 200; k++) {
             const q = probe.pointOnPath(k / 200);
             x0 = Math.min(x0, q[0]);
@@ -704,7 +712,7 @@
             v.out = sc(v.out);
           });
         }
-        
+
         const stage = document.getElementById(DATA.id + "-stage");
         root.style.setProperty("--card-radius", look.cardRadius + "px");
         root.style.setProperty("--card-shadow", look.cardShadow);
@@ -1045,8 +1053,15 @@
           }
         }
         render(0);
-        const cues = String(V.cues || "").split(",").map(parseFloat);
-        if (V.exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        const cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        if (V.exit === "fade")
+          tl.to(
+            root,
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[0]) ? cues[0] : 6,
+          );
         window.__timelines[DATA.id] = tl;
       })();
     </script>

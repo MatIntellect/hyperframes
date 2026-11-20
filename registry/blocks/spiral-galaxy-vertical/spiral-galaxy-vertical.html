@@ -64,7 +64,7 @@
         opacity: 0.12;
         background: radial-gradient(72% 46% at 50% 50%, var(--rim, #ff0000) 0%, #000000 70%);
       }
-      
+
       #sgxv-halo {
         background: radial-gradient(72% 26% at 50% 40%, var(--rim, #ff0000) 0%, #000000 70%);
       }
@@ -82,11 +82,17 @@
       #sgxv-stage.sgxv-card #sgxv-halo {
         background: radial-gradient(72% 46% at 50% 50%, var(--rim, #ff0000) 0%, #000000 70%);
       }
-      
     </style>
   </head>
   <body>
-    <div id="sgxv-root" data-composition-id="spiral-galaxy-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+    <div
+      id="sgxv-root"
+      data-composition-id="spiral-galaxy-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
       <div id="sgxv-stage">
         <canvas id="sgxv-gl"></canvas>
         <div id="sgxv-halo"></div>
@@ -162,8 +168,9 @@
           H = 1920,
           top0 = 0,
           fit = 1;
-        
-        var placement = ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
+
+        var placement =
+          ["full", "top", "bottom"].indexOf(vars.placement) >= 0 ? vars.placement : "full";
         top0 = 824 - H / 2;
         fit = 0.62; // disc about 1000 px across the 1080 frame
         if (placement !== "full") {
@@ -173,7 +180,7 @@
           top0 = 0;
           fit = 0.46; // disc about 740 px inside the card
         }
-        
+
         var cv = document.getElementById("sgxv-gl");
         cv.width = W;
         cv.height = H;
@@ -226,7 +233,8 @@
         renderer.setClearColor(new THREE.Color(getComputedStyle(stage).backgroundColor), 1); // the theme ground
 
         var scene = new THREE.Scene();
-        var vfov = (2 * Math.atan((Math.tan((22.5 * Math.PI) / 180) * (H / 1080)) / fit) * 180) / Math.PI;
+        var vfov =
+          (2 * Math.atan((Math.tan((22.5 * Math.PI) / 180) * (H / 1080)) / fit) * 180) / Math.PI;
         var camera = new THREE.PerspectiveCamera(vfov, W / H, 0.1, 200);
         camera.position.set(0, 2.9, 7.6);
         camera.lookAt(0, 0, 0);
@@ -328,7 +336,6 @@
         points.frustumCulled = false; // positions live in the shader, not in `position`
         scene.add(points);
 
-
         // ── Timeline ──────────────────────────────────────────────────────
         // `tl.eventCallback("onUpdate", ...)` does NOT fire on tl.seek(), so
         // the repaint hangs off a property setter on the tweened driver —
@@ -362,7 +369,8 @@
         var tl = gsap.timeline({ paused: true });
         // ease "none" over the full duration makes driver.t === tl.time().
         tl.to(driver, { t: DURATION, duration: DURATION, ease: "none", lazy: false }, 0);
-        if (c0 > 0) tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
+        if (c0 > 0)
+          tl.fromTo(root, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, c0);
         if (vars.exit === "fade")
           tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, end - 0.5);
         window.__timelines[COMP_ID] = tl;

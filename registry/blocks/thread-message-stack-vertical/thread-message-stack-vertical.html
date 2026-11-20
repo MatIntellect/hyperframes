@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -96,7 +101,9 @@
       }
       .tmsv-in .tmsv-bubble {
         color: #101216;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.05)), rgba(240, 240, 245, 0.92);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.05)),
+          rgba(240, 240, 245, 0.92);
         box-shadow: 0 12px 34px rgba(0, 0, 0, 0.3);
         transform-origin: 0 100%;
       }
@@ -106,8 +113,7 @@
         box-shadow: 0 12px 38px rgba(0, 0, 0, 0.38);
         transform-origin: 100% 100%;
       }
-      
-      
+
       #tmsv-view {
         left: 150px;
         width: 780px;
@@ -131,11 +137,17 @@
         border-radius: 36px;
         font-size: 38px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="tmsv-root" data-composition-id="thread-message-stack-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="tmsv-root"
+      data-composition-id="thread-message-stack-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="tmsv-ground"></div>
       <div id="tmsv-view"></div>
     </div>
@@ -149,13 +161,15 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         root.classList.add("tmsv-" + placement);
         if (placement !== "full") root.querySelector(".tmsv-ground").remove();
-        
 
-        var raw = typeof V.thread === "string" && V.thread.trim() ? V.thread : "Видел ролик? Как это вообще смонтировано|>Система собрала за шесть минут|Без монтажёра?|>Ни одного человека|Это нереально|>Уже делаем следующий";
+        var raw =
+          typeof V.thread === "string" && V.thread.trim()
+            ? V.thread
+            : "Видел ролик? Как это вообще смонтировано|>Система собрала за шесть минут|Без монтажёра?|>Ни одного человека|Это нереально|>Уже делаем следующий";
         var sender = typeof V.sender === "string" ? V.sender.trim() : "Аня";
         var messages = raw
           .split("|")
@@ -199,7 +213,10 @@
             return parseFloat(v);
           });
         var c0 = isFinite(cues[0]) && cues[0] >= 0 ? cues[0] : 0.25;
-        var step = rows.length > 1 && isFinite(cues[1]) && cues[1] > c0 ? (cues[1] - c0) / (rows.length - 1) : 0.86;
+        var step =
+          rows.length > 1 && isFinite(cues[1]) && cues[1] > c0
+            ? (cues[1] - c0) / (rows.length - 1)
+            : 0.86;
         var exit = oneOf(V.exit, ["none", "fade"], "none");
 
         /* each new message pops in at the bottom and pushes the earlier ones up; a message that would cross the top of the view fades out as it is pushed */
@@ -209,7 +226,12 @@
         rows.forEach(function (row, i) {
           var at = c0 + i * step;
           var dir = row.classList.contains("tmsv-in") ? -1 : 1;
-          tl.fromTo(row, { x: dir * 34, scale: 0.94, opacity: 0 }, { x: 0, scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.45)" }, at);
+          tl.fromTo(
+            row,
+            { x: dir * 34, scale: 0.94, opacity: 0 },
+            { x: 0, scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.45)" },
+            at,
+          );
           var lift = 0;
           for (var p = i - 1; p >= 0; p--) {
             lift += heights[p + 1];
@@ -221,7 +243,12 @@
           }
         });
         /* the exit takes the whole block, ground included */
-        if (exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : c0 + (rows.length - 1) * step + 3);
+        if (exit === "fade")
+          tl.to(
+            root,
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[2]) ? cues[2] : c0 + (rows.length - 1) * step + 3,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["thread-message-stack-vertical"] = tl;

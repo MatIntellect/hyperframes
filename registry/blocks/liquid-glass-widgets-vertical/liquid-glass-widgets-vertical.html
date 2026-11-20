@@ -58,14 +58,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       *,
       *::before,
@@ -112,7 +117,7 @@
         z-index: 2;
         pointer-events: none;
       }
-      
+
       #lgwv-stage.lgwv-card {
         left: 150px;
         top: 288px;
@@ -127,7 +132,6 @@
       #lgwv-stage.lgwv-card .lgwv-pill {
         display: none;
       }
-      
 
       /* glass panels: the library reads left, top, width and height of each .liquid-glass child */
       /* the library has its own opacity (--lg-opacity); the element's opacity does not reach the glass */
@@ -157,7 +161,12 @@
         border-radius: 36px;
         border: 1px solid rgba(255, 255, 255, 0.3);
         background:
-          linear-gradient(150deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 46%, rgba(255, 255, 255, 0.08)),
+          linear-gradient(
+            150deg,
+            rgba(255, 255, 255, 0.14),
+            rgba(255, 255, 255, 0.03) 46%,
+            rgba(255, 255, 255, 0.08)
+          ),
           color-mix(in srgb, var(--bg, #0c1014) 32%, transparent);
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.4),
@@ -170,7 +179,13 @@
         inset: 1px;
         border-radius: inherit;
         pointer-events: none;
-        background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), transparent 28%, transparent 66%, rgba(255, 255, 255, 0.14));
+        background: linear-gradient(
+          120deg,
+          rgba(255, 255, 255, 0.3),
+          transparent 28%,
+          transparent 66%,
+          rgba(255, 255, 255, 0.14)
+        );
         opacity: 0.32;
         mix-blend-mode: screen;
       }
@@ -340,7 +355,14 @@
     </style>
   </head>
   <body>
-    <div id="lgwv-root" data-composition-id="liquid-glass-widgets-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+    <div
+      id="lgwv-root"
+      data-composition-id="liquid-glass-widgets-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
       <div id="lgwv-stage">
         <canvas id="lgwv-three"></canvas>
         <canvas id="lgwv-glass" layoutsubtree>
@@ -355,31 +377,51 @@
         <div id="lgwv-words">
           <div class="lgwv-face lgwv-stat" id="lgwv-s1">
             <span class="lgwv-label" id="lgwv-label1">Охват</span>
-            <span class="lgwv-value"><span id="lgwv-v1">12</span><span class="lgwv-unit" id="lgwv-unit1">K</span></span>
+            <span class="lgwv-value"
+              ><span id="lgwv-v1">12</span><span class="lgwv-unit" id="lgwv-unit1">K</span></span
+            >
             <div class="lgwv-meter"><div id="lgwv-meter"></div></div>
           </div>
           <div class="lgwv-face lgwv-stat" id="lgwv-s2">
             <span class="lgwv-label" id="lgwv-label2">Досмотры</span>
             <div id="lgwv-battery"><div id="lgwv-bfill"></div></div>
-            <span class="lgwv-value"><span id="lgwv-v2">62</span><span class="lgwv-unit" id="lgwv-unit2">%</span></span>
+            <span class="lgwv-value"
+              ><span id="lgwv-v2">62</span><span class="lgwv-unit" id="lgwv-unit2">%</span></span
+            >
           </div>
           <div class="lgwv-face lgwv-stat" id="lgwv-s3">
             <span class="lgwv-label" id="lgwv-label3">Подписки</span>
-            <div id="lgwv-ring"><div id="lgwv-ring-in"><span id="lgwv-v3">1,2K</span></div></div>
+            <div id="lgwv-ring">
+              <div id="lgwv-ring-in"><span id="lgwv-v3">1,2K</span></div>
+            </div>
           </div>
           <div class="lgwv-face" id="lgwv-show">
             <img id="lgwv-icon" src="assets/img/matintellect-avatar.svg" alt="" />
             <div id="lgwv-title">Монтаж ролика</div>
-            <div id="lgwv-desc">Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»</div>
+            <div id="lgwv-desc">
+              Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»
+            </div>
             <div id="lgwv-status">
               <span id="lgwv-sdot"></span>
-              <span class="lgwv-swap"><span id="lgwv-busy">Собираю кадры</span><span id="lgwv-done">Ролик готов</span></span>
+              <span class="lgwv-swap"
+                ><span id="lgwv-busy">Собираю кадры</span
+                ><span id="lgwv-done">Ролик готов</span></span
+              >
             </div>
             <div id="lgwv-bar"><div id="lgwv-fill"></div></div>
           </div>
-          <div class="lgwv-face lgwv-pill" id="lgwv-p1"><span class="lgwv-pdot" style="background: var(--accent, #ff0000)"></span><span id="lgwv-chip1">Субтитры</span></div>
-          <div class="lgwv-face lgwv-pill" id="lgwv-p2"><span class="lgwv-pdot" style="background: var(--fg, #f2f2f2)"></span><span id="lgwv-chip2">Графика</span></div>
-          <div class="lgwv-face lgwv-pill" id="lgwv-p3"><span class="lgwv-pdot" style="background: var(--muted, #8a8a90)"></span><span id="lgwv-chip3">Звук</span></div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p1">
+            <span class="lgwv-pdot" style="background: var(--accent, #ff0000)"></span
+            ><span id="lgwv-chip1">Субтитры</span>
+          </div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p2">
+            <span class="lgwv-pdot" style="background: var(--fg, #f2f2f2)"></span
+            ><span id="lgwv-chip2">Графика</span>
+          </div>
+          <div class="lgwv-face lgwv-pill" id="lgwv-p3">
+            <span class="lgwv-pdot" style="background: var(--muted, #8a8a90)"></span
+            ><span id="lgwv-chip3">Звук</span>
+          </div>
         </div>
       </div>
     </div>
@@ -405,16 +447,30 @@
         }
         var stage = $("stage");
         var card = false;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         card = placement !== "full";
         if (card) stage.classList.add("lgwv-card", "lgwv-" + placement);
-        
 
         var S = [
-          { label: str(V.label1, "Охват"), from: num(V.from1, 12), to: num(V.to1, 48), unit: str(V.unit1, "K") },
-          { label: str(V.label2, "Досмотры"), from: num(V.from2, 62), to: num(V.to2, 78), unit: str(V.unit2, "%") },
-          { label: str(V.label3, "Подписки"), from: num(V.from3, 1.2), to: num(V.to3, 1.9), unit: str(V.unit3, "K") },
+          {
+            label: str(V.label1, "Охват"),
+            from: num(V.from1, 12),
+            to: num(V.to1, 48),
+            unit: str(V.unit1, "K"),
+          },
+          {
+            label: str(V.label2, "Досмотры"),
+            from: num(V.from2, 62),
+            to: num(V.to2, 78),
+            unit: str(V.unit2, "%"),
+          },
+          {
+            label: str(V.label3, "Подписки"),
+            from: num(V.from3, 1.2),
+            to: num(V.to3, 1.9),
+            unit: str(V.unit3, "K"),
+          },
         ];
         S.forEach(function (s, i) {
           s.dec = Math.round(s.to * 10) % 10 !== 0 || Math.round(s.from * 10) % 10 !== 0 ? 1 : 0;
@@ -431,7 +487,10 @@
         }
         $("icon").src = str(V.icon, "assets/img/matintellect-avatar.svg");
         $("title").textContent = str(V.title, "Монтаж ролика");
-        $("desc").textContent = str(V.desc, "Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»");
+        $("desc").textContent = str(
+          V.desc,
+          "Пишу сцены, ставлю графику и субтитры. Готовый файл придёт в ветку «Видео»",
+        );
         $("busy").textContent = str(V.busy, "Собираю кадры");
         $("done").textContent = str(V.done, "Ролик готов");
         $("chip1").textContent = str(V.chip1, "Субтитры");
@@ -466,7 +525,11 @@
           uWarm: { value: rgb(str(V.warm, "var(--accent, #ff0000)"), "var(--accent, #ff0000)") },
           uCool: { value: rgb(str(V.cool, "var(--muted, #8a8a90)"), "var(--muted, #8a8a90)") },
         };
-        var renderer = new THREE.WebGLRenderer({ canvas: three, antialias: false, preserveDrawingBuffer: true });
+        var renderer = new THREE.WebGLRenderer({
+          canvas: three,
+          antialias: false,
+          preserveDrawingBuffer: true,
+        });
         renderer.setSize(SW, SH, false);
         renderer.setPixelRatio(1);
         var scene = new THREE.Scene();
@@ -535,7 +598,8 @@
           new THREE.Mesh(
             new THREE.PlaneGeometry(2, 2),
             new THREE.ShaderMaterial({
-              vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }",
+              vertexShader:
+                "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }",
               fragmentShader: fs,
               uniforms: uniforms,
             }),
@@ -580,7 +644,7 @@
             STW = 290,
             SCX = 1155,
             SCW = 600;
-          
+
           COLX = 150;
           COLW = 780;
           GAP = 30;
@@ -593,7 +657,7 @@
           }
           SCX = COLX;
           SCW = COLW;
-          
+
           var ring = Math.min(150, STW - 60);
           $("ring").style.cssText = "width:" + ring + "px;height:" + ring + "px";
           $("ring-in").style.cssText = "width:" + (ring - 28) + "px;height:" + (ring - 28) + "px";
@@ -621,14 +685,13 @@
           });
           var PHT = ROWS.length * PH + (ROWS.length - 1) * 12;
           var top0, showY, pillY;
-          
-          
+
           var ROW = card ? 24 : GAP;
           var total = STH + ROW + SCH + (card ? 0 : ROW + PHT);
           top0 = card ? (SH - total) / 2 : 180 + (1180 - total) / 2;
           showY = top0 + STH + ROW;
           pillY = showY + SCH + ROW;
-          
+
           [0, 1, 2].forEach(function (i) {
             B["s" + (i + 1)] = [COLX + i * (STW + GAP), top0, STW, STH];
           });
@@ -636,9 +699,9 @@
           ROWS.forEach(function (row, r) {
             // wide: rows start at the column edge; vertical: each row centred in the column
             var px = COLX;
-            
+
             px = COLX + (COLW - RW[r]) / 2;
-            
+
             row.forEach(function (c) {
               B["p" + c[0]] = [px, pillY + r * (PH + 12), c[1], PH];
               px += c[1] + 20;
@@ -647,10 +710,22 @@
           var G = { s1: "gs1", s2: "gs2", s3: "gs3", show: "gsc", p1: "gp1", p2: "gp2", p3: "gp3" };
           Object.keys(B).forEach(function (k) {
             var b = B[k];
-            $(k).style.cssText += ";left:" + b[0] + "px;top:" + b[1] + "px;width:" + b[2] + "px;height:" + b[3] + "px";
+            $(k).style.cssText +=
+              ";left:" + b[0] + "px;top:" + b[1] + "px;width:" + b[2] + "px;height:" + b[3] + "px";
             var r = k.charAt(0) === "p" ? b[3] / 2 : 36;
             $(G[k]).style.cssText =
-              "left:" + b[0] + "px;top:" + b[1] + "px;width:" + b[2] + "px;height:" + b[3] + "px;border-radius:" + r + "px;--lg-corner-radius:" + r;
+              "left:" +
+              b[0] +
+              "px;top:" +
+              b[1] +
+              "px;width:" +
+              b[2] +
+              "px;height:" +
+              b[3] +
+              "px;border-radius:" +
+              r +
+              "px;--lg-corner-radius:" +
+              r;
             if (k.charAt(0) === "p") $(k).style.borderRadius = r + "px";
           });
 
@@ -681,9 +756,9 @@
           // wide: rise from below the frame (native); vertical: a short 120 px rise with a fade, so nothing
           // crosses the caption band on the way in or out
           var RISE = 0;
-          
+
           RISE = 120;
-          
+
           var FROM = RISE ? 0 : 1;
           gsap.set("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", {
             top: OFF,
@@ -708,20 +783,48 @@
               tl.set("#lgwv-gp3", { top: B.p3[1] + RISE }, t1 + 0.98);
             }
           }
-          tl.to("#lgwv-gs1", { top: B.s1[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1);
+          tl.to(
+            "#lgwv-gs1",
+            { top: B.s1[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" },
+            t1,
+          );
           tl.to($("s1"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1);
-          tl.to("#lgwv-gs2", { top: B.s2[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1 + 0.12);
+          tl.to(
+            "#lgwv-gs2",
+            { top: B.s2[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" },
+            t1 + 0.12,
+          );
           tl.to($("s2"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1 + 0.12);
-          tl.to("#lgwv-gs3", { top: B.s3[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" }, t1 + 0.24);
+          tl.to(
+            "#lgwv-gs3",
+            { top: B.s3[1], "--lg-opacity": 1, duration: 0.46, ease: "power3.out" },
+            t1 + 0.24,
+          );
           tl.to($("s3"), { y: 0, opacity: 1, duration: 0.46, ease: "power3.out" }, t1 + 0.24);
-          tl.to("#lgwv-gsc", { top: B.show[1], "--lg-opacity": 1, duration: 0.5, ease: "power3.out" }, t1 + 0.38);
+          tl.to(
+            "#lgwv-gsc",
+            { top: B.show[1], "--lg-opacity": 1, duration: 0.5, ease: "power3.out" },
+            t1 + 0.38,
+          );
           tl.to($("show"), { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, t1 + 0.38);
           if (!card) {
-            tl.to("#lgwv-gp1", { top: B.p1[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.78);
+            tl.to(
+              "#lgwv-gp1",
+              { top: B.p1[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" },
+              t1 + 0.78,
+            );
             tl.to($("p1"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.78);
-            tl.to("#lgwv-gp2", { top: B.p2[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.88);
+            tl.to(
+              "#lgwv-gp2",
+              { top: B.p2[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" },
+              t1 + 0.88,
+            );
             tl.to($("p2"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.88);
-            tl.to("#lgwv-gp3", { top: B.p3[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" }, t1 + 0.98);
+            tl.to(
+              "#lgwv-gp3",
+              { top: B.p3[1], "--lg-opacity": 1, duration: 0.32, ease: "power3.out" },
+              t1 + 0.98,
+            );
             tl.to($("p3"), { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, t1 + 0.98);
           }
           // numbers count up and bars fill from cue 2
@@ -729,7 +832,18 @@
             var s = S[i],
               c = { v: s.from };
             apply(s, s.from);
-            tl.to(c, { v: s.to, duration: dur, ease: "power2.out", onUpdate: function () { apply(s, c.v); } }, at);
+            tl.to(
+              c,
+              {
+                v: s.to,
+                duration: dur,
+                ease: "power2.out",
+                onUpdate: function () {
+                  apply(s, c.v);
+                },
+              },
+              at,
+            );
           }
           counter(0, null, t2, 2.2, function (s, v) {
             $("v1").textContent = fmt(s, v);
@@ -743,23 +857,72 @@
             var deg = Math.round(share(s, v) * 360);
             $("v3").textContent = fmt(s, v) + s.unit;
             $("ring").style.background =
-              "conic-gradient(var(--accent, #ff0000) 0deg " + deg + "deg, rgba(255, 255, 255, 0.18) " + deg + "deg)";
+              "conic-gradient(var(--accent, #ff0000) 0deg " +
+              deg +
+              "deg, rgba(255, 255, 255, 0.18) " +
+              deg +
+              "deg)";
           });
           tl.to($("fill"), { scaleX: 0.92, duration: t3 - t2 - 0.3, ease: "none" }, t2 + 0.3);
-          tl.to($("sdot"), { scale: 1.5, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 7 }, t2 + 0.5);
-          if (!card) tl.to(".lgwv-pdot", { scale: 1.55, duration: 0.2, ease: "power2.out", stagger: 0.12, yoyo: true, repeat: 3 }, t2 + 1.3);
+          tl.to(
+            $("sdot"),
+            { scale: 1.5, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 7 },
+            t2 + 0.5,
+          );
+          if (!card)
+            tl.to(
+              ".lgwv-pdot",
+              {
+                scale: 1.55,
+                duration: 0.2,
+                ease: "power2.out",
+                stagger: 0.12,
+                yoyo: true,
+                repeat: 3,
+              },
+              t2 + 1.3,
+            );
           // done: status changes, the bar closes, the showcase and then the stats nod
           tl.to($("busy"), { opacity: 0, duration: 0.15 }, t3);
           tl.to($("done"), { opacity: 1, duration: 0.15 }, t3);
           tl.to($("fill"), { scaleX: 1, duration: 0.2, ease: "power2.out" }, t3);
-          tl.to("#lgwv-gsc", { top: B.show[1] - 10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
-          tl.to($("show"), { y: -10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3);
-          tl.to("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3", { top: top0 - 12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3 + 0.5);
-          tl.to([$("s1"), $("s2"), $("s3")], { y: -12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, t3 + 0.5);
+          tl.to(
+            "#lgwv-gsc",
+            { top: B.show[1] - 10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+            t3,
+          );
+          tl.to(
+            $("show"),
+            { y: -10, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+            t3,
+          );
+          tl.to(
+            "#lgwv-gs1, #lgwv-gs2, #lgwv-gs3",
+            { top: top0 - 12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+            t3 + 0.5,
+          );
+          tl.to(
+            [$("s1"), $("s2"), $("s3")],
+            { y: -12, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+            t3 + 0.5,
+          );
           if (exit === "out") {
-            tl.to("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", { top: "+=" + (RISE || SH), "--lg-opacity": FROM, duration: 0.42, ease: "power2.in" }, t4);
-            tl.to($("words").children, { y: "+=" + (RISE || SH), opacity: FROM, duration: 0.42, ease: "power2.in" }, t4);
-            if (RISE) tl.set("#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3", { top: OFF }, t4 + 0.42);
+            tl.to(
+              "#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3",
+              { top: "+=" + (RISE || SH), "--lg-opacity": FROM, duration: 0.42, ease: "power2.in" },
+              t4,
+            );
+            tl.to(
+              $("words").children,
+              { y: "+=" + (RISE || SH), opacity: FROM, duration: 0.42, ease: "power2.in" },
+              t4,
+            );
+            if (RISE)
+              tl.set(
+                "#lgwv-gs1, #lgwv-gs2, #lgwv-gs3, #lgwv-gsc, #lgwv-gp1, #lgwv-gp2, #lgwv-gp3",
+                { top: OFF },
+                t4 + 0.42,
+              );
             tl.to(stage, { opacity: 0, duration: 0.4, ease: "power2.in" }, t4 + 0.45);
           } else if (exit === "fade") {
             tl.to(stage, { opacity: 0, duration: 0.5, ease: "power2.in" }, t4);

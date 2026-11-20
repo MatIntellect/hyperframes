@@ -35,14 +35,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -162,15 +167,43 @@
     </style>
   </head>
   <body>
-    <div id="fchv-root" data-composition-id="flowchart-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="fchv-root"
+      data-composition-id="flowchart-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="fchv-tree">
         <div id="fchv-board" class="fchv-board"></div>
-        <svg class="fchv-lines" id="fchv-lines" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+        <svg
+          class="fchv-lines"
+          id="fchv-lines"
+          width="1080"
+          height="1920"
+          viewBox="0 0 1080 1920"
+        ></svg>
         <div id="fchv-badge">
-          <svg width="36" height="36" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" style="stroke: var(--fg, #f2f2f2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <svg width="36" height="36" viewBox="0 0 24 24">
+            <path
+              d="M5 12.5l4.5 4.5L19 7.5"
+              fill="none"
+              style="stroke: var(--fg, #f2f2f2)"
+              stroke-width="3.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </div>
         <div id="fchv-cursor" data-layout-allow-occlusion data-layout-allow-overflow>
-          <svg width="40" height="40" viewBox="0 0 24 24"><path d="M5.65 12.37H5.46L5.32 12.5L0.5 16.88V1.2L11.78 12.37H5.65Z" style="fill: var(--fg, #f2f2f2); stroke: var(--bg, #0c1014)" stroke-width="1" /></svg>
+          <svg width="40" height="40" viewBox="0 0 24 24">
+            <path
+              d="M5.65 12.37H5.46L5.32 12.5L0.5 16.88V1.2L11.78 12.37H5.65Z"
+              style="fill: var(--fg, #f2f2f2); stroke: var(--bg, #0c1014)"
+              stroke-width="1"
+            />
+          </svg>
           <div id="fchv-tag">Вы</div>
         </div>
       </div>
@@ -203,25 +236,80 @@
         }
         var question = str(V.question, "Стоит ли учиться программировать?");
         var answers = list(V.answers, "Да; Не уверен", 2);
-        var leaves = list(V.leaves, "Начать с Python; Сначала без кода; Сделать свой сайт; Пройти вводный курс", 4);
+        var leaves = list(
+          V.leaves,
+          "Начать с Python; Сначала без кода; Сделать свой сайт; Пройти вводный курс",
+          4,
+        );
         var typo = typeof V.typo === "string" ? V.typo.trim() : "Pythom";
         document.getElementById("fchv-tag").textContent = str(V.cursorTag, "Вы");
 
         // Раскладка: коробки заметок {x,y,w,h,f} и линии между ними – заданы числами, без замеров текста
-        var Q, A = [], LV = [], lines = [];
+        var Q,
+          A = [],
+          LV = [],
+          lines = [];
         function tree3(pb, ct, px, cx) {
           var my = (pb + ct) / 2;
-          return "M " + px + " " + pb + " L " + px + " " + my + " L " + cx + " " + my + " L " + cx + " " + ct;
+          return (
+            "M " +
+            px +
+            " " +
+            pb +
+            " L " +
+            px +
+            " " +
+            my +
+            " L " +
+            cx +
+            " " +
+            my +
+            " L " +
+            cx +
+            " " +
+            ct
+          );
         }
-        
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var s =
           placement === "full"
-            ? { x0: 150, x1: 930, T: 296, rh: 190, rf: 56, g1: 110, ah: 150, af: 40, g2: 60, lh: 210, lf: 34, g3: 40, ind: 56 }
-            : { x0: 180, x1: 900, T: (placement === "top" ? 288 : 600) + 60, rh: 130, rf: 38, g1: 50, ah: 100, af: 30, g2: 30, lh: 130, lf: 28, g3: 16, ind: 48 };
+            ? {
+                x0: 150,
+                x1: 930,
+                T: 296,
+                rh: 190,
+                rf: 56,
+                g1: 110,
+                ah: 150,
+                af: 40,
+                g2: 60,
+                lh: 210,
+                lf: 34,
+                g3: 40,
+                ind: 56,
+              }
+            : {
+                x0: 180,
+                x1: 900,
+                T: (placement === "top" ? 288 : 600) + 60,
+                rh: 130,
+                rf: 38,
+                g1: 50,
+                ah: 100,
+                af: 30,
+                g2: 30,
+                lh: 130,
+                lf: 28,
+                g3: 16,
+                ind: 48,
+              };
         if (placement === "full") board.style.cssText = "left:0;top:0;width:1080px;height:1920px";
-        else board.style.cssText = "left:150px;top:" + (placement === "top" ? 288 : 600) + "px;width:780px;height:760px;border:2px solid var(--border, #2e2e32);border-radius:32px";
+        else
+          board.style.cssText =
+            "left:150px;top:" +
+            (placement === "top" ? 288 : 600) +
+            "px;width:780px;height:760px;border:2px solid var(--border, #2e2e32);border-radius:32px";
         Q = { x: s.x0, y: s.T, w: s.x1 - s.x0, h: s.rh, f: s.rf };
         var mid = (s.x0 + s.x1) / 2,
           colW = (s.x1 - s.x0 - 30) / 2;
@@ -235,16 +323,39 @@
           [0, 1].forEach(function (k) {
             var ly = ly0 + k * (s.lh + s.g3);
             LV.push({ x: cx0 + s.ind, y: ly, w: colW - s.ind, h: s.lh, f: s.lf });
-            lines.push("M " + rail + " " + (ay + s.ah) + " L " + rail + " " + (ly + s.lh / 2) + " L " + (cx0 + s.ind) + " " + (ly + s.lh / 2));
+            lines.push(
+              "M " +
+                rail +
+                " " +
+                (ay + s.ah) +
+                " L " +
+                rail +
+                " " +
+                (ly + s.lh / 2) +
+                " L " +
+                (cx0 + s.ind) +
+                " " +
+                (ly + s.lh / 2),
+            );
           });
         });
-        
 
         function note(box, cls, id) {
           var el = document.createElement("div");
           el.className = "fchv-node " + cls;
           el.id = id;
-          el.style.cssText = "left:" + box.x + "px;top:" + box.y + "px;width:" + box.w + "px;height:" + box.h + "px;font-size:" + box.f + "px";
+          el.style.cssText =
+            "left:" +
+            box.x +
+            "px;top:" +
+            box.y +
+            "px;width:" +
+            box.w +
+            "px;height:" +
+            box.h +
+            "px;font-size:" +
+            box.f +
+            "px";
           tree.insertBefore(el, document.getElementById("fchv-badge"));
           return el;
         }
@@ -314,7 +425,11 @@
           ry = lowest + 24;
         // the cursor appears at its own board's lower-right corner (the frame in full, the card on a top / bottom card)
         // and shows as it moves: from the frame corner it would cross the speaker's circle beside the card
-        gsap.set(cursor, { x: board.offsetLeft + board.offsetWidth - 30, y: board.offsetTop + board.offsetHeight - 30, autoAlpha: 0 });
+        gsap.set(cursor, {
+          x: board.offsetLeft + board.offsetWidth - 30,
+          y: board.offsetTop + board.offsetHeight - 30,
+          autoAlpha: 0,
+        });
         gsap.set(badge, { left: L0.x - 24, top: L0.y - 30 });
         // The nodes and the badge start at scale 0 here, not in CSS: a CSS transform is lost when GSAP first
         // reads it on a host the runtime still keeps hidden, and every node then stood full size before its entrance.
@@ -364,7 +479,12 @@
         tl.to(cursor, { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1 }, t + 0.3);
         tl.set(selbox, { opacity: 0 }, t + 0.3);
         tl.to(badge, { scale: 1, duration: 0.25, ease: "back.out(2)" }, t + 0.4);
-        if (exit === "fade") tl.to(tree, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : t + 3);
+        if (exit === "fade")
+          tl.to(
+            tree,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[3]) ? cues[3] : t + 3,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["flowchart-vertical"] = tl;

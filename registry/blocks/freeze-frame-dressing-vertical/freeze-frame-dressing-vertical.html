@@ -41,9 +41,20 @@
         inset: 0;
         opacity: 0;
         background:
-          linear-gradient(115deg, color-mix(in srgb, var(--accent, #ff0000) 86%, transparent) 0 16%, transparent 16%),
-          linear-gradient(345deg, color-mix(in srgb, var(--muted, #8a8a90) 92%, transparent) 0 17%, transparent 17%),
-          linear-gradient(color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent), color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent));
+          linear-gradient(
+            115deg,
+            color-mix(in srgb, var(--accent, #ff0000) 86%, transparent) 0 16%,
+            transparent 16%
+          ),
+          linear-gradient(
+            345deg,
+            color-mix(in srgb, var(--muted, #8a8a90) 92%, transparent) 0 17%,
+            transparent 17%
+          ),
+          linear-gradient(
+            color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent),
+            color-mix(in srgb, var(--fg, #f2f2f2) 78%, transparent)
+          );
         clip-path: polygon(2% 8%, 97% 2%, 94% 94%, 6% 98%);
         mix-blend-mode: screen;
       }
@@ -72,7 +83,7 @@
         opacity: 0;
         background: var(--fg, #f2f2f2);
       }
-      
+
       #ffdv-root.ffdv-card #ffdv-box {
         left: 150px;
         width: 780px;
@@ -84,11 +95,17 @@
       #ffdv-root.ffdv-bottom #ffdv-box {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="ffdv-root" data-composition-id="freeze-frame-dressing-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="ffdv-root"
+      data-composition-id="freeze-frame-dressing-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="ffdv-box">
         <div id="ffdv-paper"></div>
         <div id="ffdv-tape-a" class="ffdv-tape"></div>
@@ -106,10 +123,10 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") root.classList.add("ffdv-card", "ffdv-" + placement);
-        
+
         var cues = String(V.cues || "")
           .split(",")
           .map(function (v) {
@@ -122,10 +139,24 @@
         tl.to("#ffdv-flash", { opacity: 0.95, duration: 0.06, ease: "power2.out" }, hit);
         tl.to("#ffdv-flash", { opacity: 0, duration: 0.24, ease: "power2.in" }, hit + 0.06);
         tl.to("#ffdv-paper", { opacity: 0.64, duration: 0.18, ease: "power2.out" }, hit + 0.04);
-        tl.fromTo("#ffdv-tape-a", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" }, hit + 0.3);
-        tl.fromTo("#ffdv-tape-b", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" }, hit + 0.42);
+        tl.fromTo(
+          "#ffdv-tape-a",
+          { opacity: 0, scale: 1.18 },
+          { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" },
+          hit + 0.3,
+        );
+        tl.fromTo(
+          "#ffdv-tape-b",
+          { opacity: 0, scale: 1.18 },
+          { opacity: 1, scale: 1, duration: 0.24, ease: "power2.out" },
+          hit + 0.42,
+        );
         if (exit === "fade")
-          tl.to(["#ffdv-paper", "#ffdv-tape-a", "#ffdv-tape-b"], { opacity: 0, duration: 0.24, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > hit ? cues[1] : hit + 2.7);
+          tl.to(
+            ["#ffdv-paper", "#ffdv-tape-a", "#ffdv-tape-b"],
+            { opacity: 0, duration: 0.24, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > hit ? cues[1] : hit + 2.7,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["freeze-frame-dressing-vertical"] = tl;

@@ -72,14 +72,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -111,7 +116,7 @@
         opacity: 0;
         pointer-events: none;
       }
-      
+
       #cubv-stage.cubv-card {
         left: 150px;
         width: 780px;
@@ -123,14 +128,28 @@
       #cubv-stage.cubv-bottom {
         top: 708px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="cubv-root" data-composition-id="cuboid-carousel-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
-      <section id="cubv-stage" class="clip" data-start="0" data-duration="30" data-track-index="1"></section>
+    <div
+      id="cubv-root"
+      data-composition-id="cuboid-carousel-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <section
+        id="cubv-stage"
+        class="clip"
+        data-start="0"
+        data-duration="30"
+        data-track-index="1"
+      ></section>
       <div id="cubv-fontload" aria-hidden="true">
-        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span style="font-weight: 500">Аа</span><span style="font-weight: 600">Аа</span>
+        <span style="font-family: var(--font-display, &quot;Bebas Neue&quot;); font-weight: 700"
+          >Аа</span
+        ><span style="font-weight: 500">Аа</span><span style="font-weight: 600">Аа</span>
       </div>
     </div>
     <script type="module">
@@ -153,14 +172,43 @@
       // look knobs: the values the developers declared as defaults (the approved preview)
       const V = Object.assign(
         {
-          heroCard: 4, count: 8, gap: 0.01, cuboidWidth: 1.7, cuboidHeight: 2.4, cuboidDepth: 0.14,
-          cornerRadius: 0.105, bevelSize: 0.03, bevelThickness: 0.04, smoothness: 32, roughness: 0.6,
-          metalness: 0.4, heroScale: 1, heroFillIntensity: 0.55, heroExitX: 288, heroExitY: -234,
-          heroExitZ: 198, ambientIntensity: 0.35, ambientColor: "#ffffff", topIntensity: 3.1,
-          topColor: "#ffffff", bottomIntensity: 2.15, bottomColor: "#ffcaad", keyIntensity: 5,
-          keyColor: "#ffe9d6", shadowRadius: 44.5, shadowMapSize: 2048, cameraFov: 11, cameraX: -1.65,
-          cameraY: 8.5, cameraZ: -8.508708, cameraSettleFrame: 70, handheldStrength: 1,
-          cameraTargetFov: 34, cameraTargetX: -7.25, cameraTargetY: 1.15, cameraTargetZ: 6.2,
+          heroCard: 4,
+          count: 8,
+          gap: 0.01,
+          cuboidWidth: 1.7,
+          cuboidHeight: 2.4,
+          cuboidDepth: 0.14,
+          cornerRadius: 0.105,
+          bevelSize: 0.03,
+          bevelThickness: 0.04,
+          smoothness: 32,
+          roughness: 0.6,
+          metalness: 0.4,
+          heroScale: 1,
+          heroFillIntensity: 0.55,
+          heroExitX: 288,
+          heroExitY: -234,
+          heroExitZ: 198,
+          ambientIntensity: 0.35,
+          ambientColor: "#ffffff",
+          topIntensity: 3.1,
+          topColor: "#ffffff",
+          bottomIntensity: 2.15,
+          bottomColor: "#ffcaad",
+          keyIntensity: 5,
+          keyColor: "#ffe9d6",
+          shadowRadius: 44.5,
+          shadowMapSize: 2048,
+          cameraFov: 11,
+          cameraX: -1.65,
+          cameraY: 8.5,
+          cameraZ: -8.508708,
+          cameraSettleFrame: 70,
+          handheldStrength: 1,
+          cameraTargetFov: 34,
+          cameraTargetX: -7.25,
+          cameraTargetY: 1.15,
+          cameraTargetZ: 6.2,
         },
         { heroCard: VM.heroCard },
       );
@@ -171,7 +219,7 @@
       let W = 1080,
         H = 1920,
         top0 = 0;
-      
+
       const placement = ["full", "top", "bottom"].includes(VM.placement) ? VM.placement : "full";
       // full: холст только на поле y 288–1360 (масштаб тот же – px на единицу от высоты): на входе ближняя
       // карточка цепи уходила до y 1730 – через полосу субтитров; к краям поля она растворяется в фоне сцены
@@ -184,20 +232,28 @@
         H = 652;
         top0 = 0;
       }
-      
+
       const V_SCALE = H / 1080;
       const canvasEl = document.createElement("canvas");
       canvasEl.id = "cubv-canvas";
       canvasEl.width = W;
       canvasEl.height = H;
-      canvasEl.style.cssText = "display:block;position:absolute;left:0;top:" + top0 + "px;width:" + W + "px;height:" + H + "px";
-      
+      canvasEl.style.cssText =
+        "display:block;position:absolute;left:0;top:" +
+        top0 +
+        "px;width:" +
+        W +
+        "px;height:" +
+        H +
+        "px";
+
       if (fieldFade) {
-        const fade = "linear-gradient(to bottom, transparent 0, #000 60px, #000 calc(100% - 90px), transparent 100%)";
+        const fade =
+          "linear-gradient(to bottom, transparent 0, #000 60px, #000 calc(100% - 90px), transparent 100%)";
         canvasEl.style.maskImage = fade;
         canvasEl.style.webkitMaskImage = fade;
       }
-      
+
       stage.appendChild(canvasEl);
 
       // theme colours and fonts as ready values for three.js and the face canvas
@@ -324,7 +380,10 @@
       const ITEMS = DEF.map((d, i) => ({
         category: str(VM["card" + (i + 1) + "Category"], d[0]),
         title: str(VM["card" + (i + 1) + "Title"], d[1]),
-        pills: [str(VM["card" + (i + 1) + "Status"], d[2]), str(VM["card" + (i + 1) + "Date"], d[3])],
+        pills: [
+          str(VM["card" + (i + 1) + "Status"], d[2]),
+          str(VM["card" + (i + 1) + "Date"], d[3]),
+        ],
       }));
 
       const HERO = Math.max(0, Math.min(COUNT - 1, Math.round(num(V.heroCard, 4, 1, 8)) - 1));
@@ -542,7 +601,9 @@
         ctx.font = "500 " + F.pill + "px " + FONT_BODY;
         const pillH = F.pillH;
         // pills sit on the bottom edge; one that does not fit the row starts a row above
-        const pills = item.pills.filter(Boolean).map((label) => ({ label, w: ctx.measureText(label).width + F.pill * 2.3 }));
+        const pills = item.pills
+          .filter(Boolean)
+          .map((label) => ({ label, w: ctx.measureText(label).width + F.pill * 2.3 }));
         const rows = [[]];
         let rowW = 0;
         for (const p of pills) {

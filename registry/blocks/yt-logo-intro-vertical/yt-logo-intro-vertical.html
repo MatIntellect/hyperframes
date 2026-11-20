@@ -34,14 +34,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -147,8 +152,7 @@
         stroke-linejoin: round;
         fill: none;
       }
-      
-      
+
       #yliv-center {
         left: 150px;
         width: 780px;
@@ -204,11 +208,17 @@
       #yliv-root.yliv-card #yliv-kicker {
         font-size: 32px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="yliv-root" data-composition-id="yt-logo-intro-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="yliv-root"
+      data-composition-id="yt-logo-intro-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="yliv-board"><div id="yliv-lines" data-layout-ignore></div></div>
       <div id="yliv-center">
         <div id="yliv-logo"></div>
@@ -242,8 +252,7 @@
           lineN = 12,
           avail = 1500,
           cap = 120;
-        
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         lineH = 1920;
         lineN = 20;
@@ -256,7 +265,7 @@
           avail = 700;
           cap = 110;
         }
-        
+
         var lines = document.getElementById("yliv-lines");
         var gap = lineH / (lineN + 1);
         for (var i = 1; i <= lineN; i++) {
@@ -291,16 +300,41 @@
 
         var tl = gsap.timeline({ paused: true });
         tl.from("#yliv-board", { opacity: 0, duration: 0.4, ease: "power2.out" }, 0);
-        tl.fromTo(logo, { opacity: 0, scale: 0.55, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.5)" }, c0);
+        tl.fromTo(
+          logo,
+          { opacity: 0, scale: 0.55, y: 24 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.5)" },
+          c0,
+        );
         if (kicker) {
-          tl.fromTo(kEl, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, c0 + 0.45);
+          tl.fromTo(
+            kEl,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+            c0 + 0.45,
+          );
           tl.to(kEl, { opacity: 0, y: -12, duration: 0.3, ease: "power2.in" }, cT);
         } else kEl.style.display = "none";
         gsap.set(tEl, { opacity: 0 });
-        tl.fromTo(tEl, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, cT + 0.36);
-        tl.fromTo(arrow, { opacity: 0, scale: 0.5, x: -14 }, { opacity: 1, scale: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" }, cT + 0.6);
+        tl.fromTo(
+          tEl,
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+          cT + 0.36,
+        );
+        tl.fromTo(
+          arrow,
+          { opacity: 0, scale: 0.5, x: -14 },
+          { opacity: 1, scale: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" },
+          cT + 0.6,
+        );
         tl.to(lines, { y: 8, duration: 2.2, ease: "sine.inOut", yoyo: true, repeat: 13 }, 0.5);
-        if (exit === "fade") tl.to(root, { opacity: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[2]) ? cues[2] : cT + 3);
+        if (exit === "fade")
+          tl.to(
+            root,
+            { opacity: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[2]) ? cues[2] : cT + 3,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["yt-logo-intro-vertical"] = tl;

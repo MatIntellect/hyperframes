@@ -50,14 +50,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -84,7 +89,7 @@
         overflow: hidden;
         background: var(--bg, #0c1014); /* flat — no gradients, no glow */
       }
-      
+
       #gst-canvas-clip.gstv-card {
         left: 150px;
         width: 780px;
@@ -96,7 +101,7 @@
       #gst-canvas-clip.gstv-bottom {
         top: 708px;
       }
-      
+
       #gst-canvas {
         display: block;
         width: 100%;
@@ -136,7 +141,11 @@
         data-duration="30"
         data-media-start="0"
       >
-        <span data-hf-id="hf-kqtg" style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span>
+        <span
+          data-hf-id="hf-kqtg"
+          style="font-family: var(--font-display, &quot;Bebas Neue&quot;); font-weight: 700"
+          >Аа</span
+        >
       </div>
       <!-- glass-main.js reads these hrefs: a mounted block's src/href are rebased, strings in its script are not. -->
       <link
@@ -287,13 +296,17 @@
         vars.fog = Math.max(0, Math.min(400, vars.fog));
 
         /* ---- Layout and theme for glass-main.js ---- */
-        var V = (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+        var V =
+          (window.__hyperframes &&
+            window.__hyperframes.getVariables &&
+            window.__hyperframes.getVariables()) ||
+          {};
         var root = document.getElementById("gstv-root");
         var clip = document.getElementById("gst-canvas-clip");
         /* W x H canvas; VHV/VY: the full view the camera is built for and the canvas offset
            in it; FW x FH: the field that bounds text and glass. Wide = the native frame. */
         var layout = { W: 1080, H: 1920, VHV: 1920, VY: 0, FW: 1080, FH: 1920 };
-        
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement === "full") {
           layout.VHV = 2 * (1920 - 770); /* centre of the view on the field centre, y 824 */
@@ -307,7 +320,7 @@
           cv.width = 780;
           cv.height = 760;
         }
-        
+
         var cs = getComputedStyle(root);
         var probe = function (name, d) {
           var p = document.createElement("i");
@@ -397,8 +410,10 @@
 
         tl.to(st, { time: DUR, duration: DUR, ease: "none" }, 0);
         tl.to(st, { tin: 1, duration: IN_WINDOW, ease: "none" }, IN_START);
-        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, OUT_START);
-        else if (V.exit !== "none") tl.to(st, { tout: 1, duration: OUT_WINDOW, ease: "none" }, OUT_START);
+        if (V.exit === "fade")
+          tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, OUT_START);
+        else if (V.exit !== "none")
+          tl.to(st, { tout: 1, duration: OUT_WINDOW, ease: "none" }, OUT_START);
 
         /* Glass stays clear throughout. The old frosted->clear resolve made
            still-flying shards transmit a BLURRED copy of the already-seated

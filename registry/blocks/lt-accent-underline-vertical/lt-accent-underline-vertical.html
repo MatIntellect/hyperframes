@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -61,12 +66,32 @@
       #lauv-lt {
         position: absolute;
       }
-      #lauv-lt { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
-      #lauv-name { font-weight: 800; color: var(--fg, #f2f2f2); line-height: 1; text-transform: uppercase; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55); }
-      #lauv-rule { height: 6px; width: 100%; background: var(--accent, #ff0000); border-radius: 3px; transform-origin: 0% 50%; }
-      #lauv-role { color: var(--fg, #f2f2f2); line-height: 1.2; text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55); }
-      
-      
+      #lauv-lt {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      #lauv-name {
+        font-weight: 800;
+        color: var(--fg, #f2f2f2);
+        line-height: 1;
+        text-transform: uppercase;
+        text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55);
+      }
+      #lauv-rule {
+        height: 6px;
+        width: 100%;
+        background: var(--accent, #ff0000);
+        border-radius: 3px;
+        transform-origin: 0% 50%;
+      }
+      #lauv-role {
+        color: var(--fg, #f2f2f2);
+        line-height: 1.2;
+        text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55);
+      }
+
       #lauv-lt {
         left: 150px;
         width: 780px;
@@ -85,14 +110,30 @@
         top: 824px;
         transform: translateY(-50%);
       }
-      #lauv-name { font-size: 88px; max-width: 780px; text-align: center; }
-      #lauv-rule { transform-origin: 50% 50%; }
-      #lauv-role { font-size: 36px; max-width: 780px; text-align: center; }
-      
+      #lauv-name {
+        font-size: 88px;
+        max-width: 780px;
+        text-align: center;
+      }
+      #lauv-rule {
+        transform-origin: 50% 50%;
+      }
+      #lauv-role {
+        font-size: 36px;
+        max-width: 780px;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <div id="lauv-root" data-composition-id="lt-accent-underline-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="lauv-root"
+      data-composition-id="lt-accent-underline-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="lauv-lt">
         <div id="lauv-name"></div>
         <div id="lauv-rule"></div>
@@ -109,10 +150,11 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         root.classList.add("lauv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
-        
-        document.getElementById("lauv-name").textContent = typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+
+        document.getElementById("lauv-name").textContent =
+          typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role : "Основатель MatIntellect";
         var roleEl = document.getElementById("lauv-role");
         roleEl.textContent = role;
@@ -127,9 +169,24 @@
         var exit = oneOf(V.exit, ["none", "out"], "none");
 
         var tl = gsap.timeline({ paused: true });
-        tl.fromTo("#lauv-name", { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, c0);
-        tl.fromTo("#lauv-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power4.out" }, c0 + 0.2);
-        tl.fromTo("#lauv-role", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, c0 + 0.36);
+        tl.fromTo(
+          "#lauv-name",
+          { y: 28, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" },
+          c0,
+        );
+        tl.fromTo(
+          "#lauv-rule",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.5, ease: "power4.out" },
+          c0 + 0.2,
+        );
+        tl.fromTo(
+          "#lauv-role",
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" },
+          c0 + 0.36,
+        );
         if (exit === "out") {
           var out = isFinite(cues[1]) ? cues[1] : c0 + 4.2;
           tl.to("#lauv-role", { opacity: 0, duration: 0.3, ease: "power2.in" }, out);

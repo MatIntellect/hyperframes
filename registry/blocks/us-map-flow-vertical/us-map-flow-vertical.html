@@ -42,14 +42,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -140,8 +145,7 @@
         font-size: 28px;
         opacity: 0;
       }
-      
-      
+
       #usfv-box {
         left: 150px;
         width: 780px;
@@ -192,11 +196,17 @@
         margin-top: 26px;
         gap: 14px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="usfv-root" data-composition-id="us-map-flow-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="usfv-root"
+      data-composition-id="us-map-flow-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div class="usfv-ground"></div>
       <div id="usfv-box">
         <div id="usfv-title"></div>
@@ -222,7 +232,7 @@
         }
         var MAPW = 1380,
           MAPH = 680;
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         MAPW = 780;
         MAPH = 500;
@@ -232,7 +242,7 @@
           MAPW = 716;
           MAPH = 300;
         }
-        
+
         var DEFC =
           "Сан-Франциско: 37.77, -122.42; Нью-Йорк: 40.71, -74.01; Лос-Анджелес: 34.05, -118.24; Чикаго: 41.88, -87.63; Сиэтл: 47.61, -122.33; Остин: 30.27, -97.74; Майами: 25.76, -80.19; Денвер: 39.74, -104.99; Хьюстон: 29.76, -95.37; Атланта: 33.75, -84.39; Бостон: 42.36, -71.06; Даллас: 32.78, -96.8";
         var DEFF =
@@ -247,10 +257,22 @@
 
         var us = window.__hfUsStates10m;
         var states = topojson.feature(us, us.objects.states).features;
-        var svg = d3.select("#usfv-map").attr("width", MAPW).attr("height", MAPH).attr("viewBox", "0 0 " + MAPW + " " + MAPH);
-        var projection = d3.geoAlbersUsa().fitSize([MAPW, MAPH], { type: "FeatureCollection", features: states });
+        var svg = d3
+          .select("#usfv-map")
+          .attr("width", MAPW)
+          .attr("height", MAPH)
+          .attr("viewBox", "0 0 " + MAPW + " " + MAPH);
+        var projection = d3
+          .geoAlbersUsa()
+          .fitSize([MAPW, MAPH], { type: "FeatureCollection", features: states });
         var path = d3.geoPath().projection(projection);
-        svg.selectAll(".usfv-country").data(states).enter().append("path").attr("class", "usfv-country").attr("d", path);
+        svg
+          .selectAll(".usfv-country")
+          .data(states)
+          .enter()
+          .append("path")
+          .attr("class", "usfv-country")
+          .attr("d", path);
         var k0 = MAPW / 1380;
 
         // Города «Имя: широта, долгота», потоки «Откуда > Куда: объём»
@@ -261,9 +283,12 @@
           .forEach(function (item) {
             var k = item.indexOf(":");
             if (k < 0 || order.length >= 16) return;
-            var p = item.slice(k + 1).split(",").map(function (x) {
-              return parseFloat(x.replace(/[\s ]/g, ""));
-            });
+            var p = item
+              .slice(k + 1)
+              .split(",")
+              .map(function (x) {
+                return parseFloat(x.replace(/[\s ]/g, ""));
+              });
             var xy = p.length >= 2 && p.every(isFinite) ? projection([p[1], p[0]]) : null;
             var name = item.slice(0, k).trim();
             if (xy && name && !city[name]) {
@@ -280,16 +305,26 @@
             if (k < 0 || g < 0 || g > k || flows.length >= 16) return;
             var a = city[item.slice(0, g).trim()],
               b = city[item.slice(g + 1, k).trim()],
-              v = parseFloat(item.slice(k + 1).replace(/[\s ]/g, "").replace(",", "."));
+              v = parseFloat(
+                item
+                  .slice(k + 1)
+                  .replace(/[\s ]/g, "")
+                  .replace(",", "."),
+              );
             if (a && b && a !== b && isFinite(v)) {
               flows.push({ a: a, b: b, v: v });
               a.w += v;
               b.w += v;
             }
           });
-        var vmax = Math.max.apply(null, flows.map(function (f) {
-          return f.v;
-        }).concat([1]));
+        var vmax = Math.max.apply(
+          null,
+          flows
+            .map(function (f) {
+              return f.v;
+            })
+            .concat([1]),
+        );
         var arcG = svg.append("g"),
           runG = svg.append("g"),
           dotG = svg.append("g"),
@@ -304,10 +339,26 @@
             .attr("stroke-width", (1.5 + (f.v / vmax) * 2.5) * Math.max(1, k0 * 1.4))
             .style("opacity", 0.4 + (f.v / vmax) * 0.6)
             .node();
-          return { el: el, L: el.getTotalLength(), run: runG.append("circle").attr("class", "usfv-run").attr("r", 4).attr("cx", f.a.x).attr("cy", f.a.y).node() };
+          return {
+            el: el,
+            L: el.getTotalLength(),
+            run: runG
+              .append("circle")
+              .attr("class", "usfv-run")
+              .attr("r", 4)
+              .attr("cx", f.a.x)
+              .attr("cy", f.a.y)
+              .node(),
+          };
         });
         var dots = order.map(function (c) {
-          return dotG.append("circle").attr("class", "usfv-dot").attr("cx", c.x).attr("cy", c.y).attr("r", 6).node();
+          return dotG
+            .append("circle")
+            .attr("class", "usfv-dot")
+            .attr("cx", c.x)
+            .attr("cy", c.y)
+            .attr("r", 6)
+            .node();
         });
         // Подписи: по весу города, место рядом с точкой без наложений, прижатое внутрь карты (у края поля
         // подпись встаёт над или под точкой со сдвигом внутрь, а не выкидывается); нет места нигде – не ставится.
@@ -317,10 +368,21 @@
           return { x: c.x - 8, y: c.y - 8, w: 16, h: 16 };
         });
         function hits(b) {
-          return b.x < 0 || b.x + b.w > MAPW || b.y < 0 || b.y + b.h > MAPH || boxes.some(function (o) {
-            var gx = o.label ? 24 : 6;
-            return b.x < o.x + o.w + gx && o.x < b.x + b.w + gx && b.y < o.y + o.h + 2 && o.y < b.y + b.h + 2;
-          });
+          return (
+            b.x < 0 ||
+            b.x + b.w > MAPW ||
+            b.y < 0 ||
+            b.y + b.h > MAPH ||
+            boxes.some(function (o) {
+              var gx = o.label ? 24 : 6;
+              return (
+                b.x < o.x + o.w + gx &&
+                o.x < b.x + b.w + gx &&
+                b.y < o.y + o.h + 2 &&
+                o.y < b.y + b.h + 2
+              );
+            })
+          );
         }
         var arcPts = [];
         arcs.forEach(function (a) {
@@ -340,7 +402,11 @@
             return b.w - a.w;
           })
           .forEach(function (c) {
-            var t = labG.append("text").attr("class", "usfv-label").style("opacity", 0).text(c.name);
+            var t = labG
+              .append("text")
+              .attr("class", "usfv-label")
+              .style("opacity", 0)
+              .text(c.name);
             var w = t.node().getComputedTextLength(),
               h = 34,
               gap = 12;
@@ -383,31 +449,62 @@
         var exit = oneOf(V.exit, ["none", "fade"], "none");
 
         var tl = gsap.timeline({ paused: true });
-        tl.to(titleEl, { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" }, c0);
+        tl.to(
+          titleEl,
+          { clipPath: "inset(-0.3em 0% -0.3em 0)", duration: 1, ease: "power3.inOut" },
+          c0,
+        );
         tl.to(subEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, c0 + 0.4);
-        tl.to("#usfv-map .usfv-country", { opacity: 1, duration: 0.8, ease: "power2.out" }, cM - 0.2);
-        tl.from(dots, { attr: { r: 0 }, duration: 0.4, ease: "back.out(1.7)", stagger: 0.05 }, cM + 0.5);
+        tl.to(
+          "#usfv-map .usfv-country",
+          { opacity: 1, duration: 0.8, ease: "power2.out" },
+          cM - 0.2,
+        );
+        tl.from(
+          dots,
+          { attr: { r: 0 }, duration: 0.4, ease: "back.out(1.7)", stagger: 0.05 },
+          cM + 0.5,
+        );
         tl.to(labels, { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.05 }, cM + 1.2);
         arcs.forEach(function (a, i) {
           // круглый конец дуги нулевой длины – видимая точка, поэтому до старта дуга скрыта
           gsap.set(a.el, { visibility: "hidden" });
           tl.set(a.el, { visibility: "visible" }, cP + i * 0.2);
-          tl.fromTo(a.el, { strokeDasharray: a.L, strokeDashoffset: a.L }, { strokeDashoffset: 0, duration: 1, ease: "power2.inOut", immediateRender: false }, cP + i * 0.2);
+          tl.fromTo(
+            a.el,
+            { strokeDasharray: a.L, strokeDashoffset: a.L },
+            { strokeDashoffset: 0, duration: 1, ease: "power2.inOut", immediateRender: false },
+            cP + i * 0.2,
+          );
         });
         var tRun = cP + arcs.length * 0.2 + 1;
         arcs.forEach(function (a, i) {
           var pr = { v: 0 };
           var t0 = tRun + i * 0.1;
           tl.set(a.run, { opacity: 0.9 }, t0);
-          tl.to(pr, { v: 1, duration: 1.5, ease: "power1.inOut", onUpdate: function () {
-            var pt = a.el.getPointAtLength(pr.v * a.L);
-            a.run.setAttribute("cx", pt.x);
-            a.run.setAttribute("cy", pt.y);
-          } }, t0);
+          tl.to(
+            pr,
+            {
+              v: 1,
+              duration: 1.5,
+              ease: "power1.inOut",
+              onUpdate: function () {
+                var pt = a.el.getPointAtLength(pr.v * a.L);
+                a.run.setAttribute("cx", pt.x);
+                a.run.setAttribute("cy", pt.y);
+              },
+            },
+            t0,
+          );
           tl.to(a.run, { opacity: 0, duration: 0.3 }, t0 + 1.5);
         });
         tl.to(srcEl, { opacity: 1, duration: 0.6, ease: "power2.out" }, cM + 2);
-        if (exit === "fade") tl.to("#usfv-root", { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[3]) ? cues[3] : tRun + (arcs.length - 1) * 0.1 + 1.8); // по умолчанию – когда последняя точка пробежала дугу
+        if (exit === "fade")
+          tl.to(
+            "#usfv-root",
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[3]) ? cues[3] : tRun + (arcs.length - 1) * 0.1 + 1.8,
+          ); // по умолчанию – когда последняя точка пробежала дугу
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["us-map-flow-vertical"] = tl;

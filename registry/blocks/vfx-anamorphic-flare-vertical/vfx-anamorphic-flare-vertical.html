@@ -48,7 +48,7 @@
         inset: 0;
         overflow: hidden;
       }
-      
+
       #aflv-root.aflv-card #aflv-frame {
         left: 150px;
         top: 288px;
@@ -60,7 +60,7 @@
       #aflv-root.aflv-card.aflv-bottom #aflv-frame {
         top: 708px;
       }
-      
+
       #aflv-canvas {
         position: absolute;
         top: 0;
@@ -69,7 +69,14 @@
     </style>
   </head>
   <body>
-    <div id="aflv-root" data-composition-id="vfx-anamorphic-flare-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="180">
+    <div
+      id="aflv-root"
+      data-composition-id="vfx-anamorphic-flare-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="180"
+    >
       <div id="aflv-frame">
         <canvas id="aflv-canvas" width="1080" height="1920"></canvas>
       </div>
@@ -81,8 +88,12 @@
         var H = 1080;
         var root = document.getElementById("aflv-root"),
           frame = document.getElementById("aflv-frame");
-        var V = (window.__hyperframes && typeof window.__hyperframes.getVariables === "function" && window.__hyperframes.getVariables()) || {};
-        
+        var V =
+          (window.__hyperframes &&
+            typeof window.__hyperframes.getVariables === "function" &&
+            window.__hyperframes.getVariables()) ||
+          {};
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         W = 1080;
         H = 1920;
@@ -91,7 +102,7 @@
           W = 780;
           H = 652;
         }
-        
+
         var cv = document.getElementById("aflv-canvas");
         cv.width = W;
         cv.height = H;
@@ -103,7 +114,9 @@
         }
         function raw(id) {
           var slug = id.toLowerCase();
-          var css = CS.getPropertyValue("--hf-var-" + slug).trim() || CS.getPropertyValue("--" + slug).trim();
+          var css =
+            CS.getPropertyValue("--hf-var-" + slug).trim() ||
+            CS.getPropertyValue("--" + slug).trim();
           return css !== "" ? css : V[id];
         }
         function num(id, fallback) {
@@ -119,9 +132,11 @@
           var i = document.createElement("i");
           i.style.color = c;
           frame.appendChild(i);
-          var m = (getComputedStyle(i).color.match(/[\d.]+/g) || [255, 255, 255]).slice(0, 3).map(function (v) {
-            return Number(v) / 255;
-          });
+          var m = (getComputedStyle(i).color.match(/[\d.]+/g) || [255, 255, 255])
+            .slice(0, 3)
+            .map(function (v) {
+              return Number(v) / 255;
+            });
           i.remove();
           return m;
         }
@@ -376,8 +391,17 @@
           },
         });
         // точки плывут всю длину блока; яркость – по родной дуге первых 10 с, дальше ровная
-        tl.to(driver, { t: 180, duration: 180, ease: "none" }, 0); /* lives 180 s: one mount covers a whole reel */
-        if (exit === "fade") tl.to(frame, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[0]) && cues[0] > 0 ? cues[0] : DUR);
+        tl.to(
+          driver,
+          { t: 180, duration: 180, ease: "none" },
+          0,
+        ); /* lives 180 s: one mount covers a whole reel */
+        if (exit === "fade")
+          tl.to(
+            frame,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[0]) && cues[0] > 0 ? cues[0] : DUR,
+          );
         window.__timelines = window.__timelines || {};
         window.__timelines["vfx-anamorphic-flare-vertical"] = tl;
         draw(0);

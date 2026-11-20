@@ -38,14 +38,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -101,8 +106,7 @@
         text-transform: uppercase;
         white-space: nowrap;
       }
-      
-      
+
       #lnbv-wrap {
         left: 0;
         width: 1080px;
@@ -126,11 +130,17 @@
       #lnbv-name {
         font-size: 54px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="lnbv-root" data-composition-id="lt-neon-border-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="lnbv-root"
+      data-composition-id="lt-neon-border-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="lnbv-wrap">
         <svg id="lnbv-svg" data-layout-ignore fill="none" aria-hidden="true">
           <defs>
@@ -141,7 +151,11 @@
           </defs>
           <g transform="translate(150,150)">
             <g id="lnbv-bloom-under"></g>
-            <path id="lnbv-fill" d="" style="fill: color-mix(in srgb, var(--bg, #0c1014) 85%, transparent)" />
+            <path
+              id="lnbv-fill"
+              d=""
+              style="fill: color-mix(in srgb, var(--bg, #0c1014) 85%, transparent)"
+            />
             <path id="lnbv-rail" d="" fill="none" stroke-linejoin="round" />
             <g id="lnbv-bloom-over"></g>
           </g>
@@ -162,20 +176,20 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        
+
         root.classList.add("lnbv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
-        
-        document.getElementById("lnbv-name").textContent = typeof V.name === "string" && V.name.trim() ? V.name.trim() : "Мат Джестер";
+
+        document.getElementById("lnbv-name").textContent =
+          typeof V.name === "string" && V.name.trim() ? V.name.trim() : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role.trim() : "Основатель MatIntellect";
         if (role) document.getElementById("lnbv-role").textContent = role;
         else document.getElementById("lnbv-role").remove();
 
         /* the traced rectangle */
-        
-        
+
         var W = 780,
           H = 230;
-        
+
         var DUR = 30;
         var svgEl = document.getElementById("lnbv-svg");
         svgEl.setAttribute("width", W + 300);
@@ -395,12 +409,37 @@
         /* the driver spans the whole mount; every light position is recomputed from its own time, so seeking is exact */
         var tl = gsap.timeline({ paused: true });
         var driver = { t: 0 };
-        tl.to(driver, { t: DUR, duration: DUR, ease: "none", onUpdate: function () { render(driver.t); } }, 0);
-        tl.fromTo(wrap, { opacity: 0, scale: 0.965, transformOrigin: "50% 100%" }, { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out" }, c0);
-        tl.fromTo(words, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.14, ease: "power3.out" }, c0 + 0.22);
+        tl.to(
+          driver,
+          {
+            t: DUR,
+            duration: DUR,
+            ease: "none",
+            onUpdate: function () {
+              render(driver.t);
+            },
+          },
+          0,
+        );
+        tl.fromTo(
+          wrap,
+          { opacity: 0, scale: 0.965, transformOrigin: "50% 100%" },
+          { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out" },
+          c0,
+        );
+        tl.fromTo(
+          words,
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.14, ease: "power3.out" },
+          c0 + 0.22,
+        );
         if (exit === "fade") {
           var out = isFinite(cues[1]) ? cues[1] : c0 + 4.2;
-          tl.to(words.slice().reverse(), { y: -12, opacity: 0, duration: 0.3, stagger: 0.06, ease: "power2.in" }, out);
+          tl.to(
+            words.slice().reverse(),
+            { y: -12, opacity: 0, duration: 0.3, stagger: 0.06, ease: "power2.in" },
+            out,
+          );
           tl.to(wrap, { opacity: 0, scale: 0.985, duration: 0.36, ease: "power2.in" }, out + 0.12);
         }
         tl.set({}, {}, 30);

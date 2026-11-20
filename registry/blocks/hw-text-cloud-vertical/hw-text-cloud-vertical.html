@@ -32,14 +32,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -102,7 +107,14 @@
     </style>
   </head>
   <body>
-    <div id="hwcv-root" data-composition-id="hw-text-cloud-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="hwcv-root"
+      data-composition-id="hw-text-cloud-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <div id="hwcv-wrap" data-layout-allow-overflow>
         <svg id="hwcv-svg" data-layout-ignore>
           <path id="hwcv-fill"></path>
@@ -128,14 +140,13 @@
 
         // облачко 640x340 (родное 560x300 под Caveat; Montserrat шире – облачко больше, шрифт родной 58)
         var C = { x: 620, y: 160, w: 640, h: 340, len: 90 };
-        
-        
+
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         // облачко с хвостом (низ хвоста – около y + 340 + 30) по центру зоны
         var zc = placement === "top" ? 614 : placement === "bottom" ? 1034 : 824;
         C.x = 540 - C.w / 2;
         C.y = Math.round(zc - (C.h + 30) / 2);
-        
+
         var tipSide = oneOf(V.tip, ["bottom-left", "bottom-right"], "bottom-left");
         var SEED = 6,
           BOIL = { amp: 1.6, rot: 0.4, frameDrop: 3 },
@@ -166,7 +177,15 @@
           for (var j = 0; j < N; j++) {
             var p = pts[j],
               q = pts[(j + 1) % N];
-            d += " Q" + p[0].toFixed(1) + " " + p[1].toFixed(1) + " " + ((p[0] + q[0]) / 2).toFixed(1) + " " + ((p[1] + q[1]) / 2).toFixed(1);
+            d +=
+              " Q" +
+              p[0].toFixed(1) +
+              " " +
+              p[1].toFixed(1) +
+              " " +
+              ((p[0] + q[0]) / 2).toFixed(1) +
+              " " +
+              ((p[1] + q[1]) / 2).toFixed(1);
           }
           d += "Z";
           var left = side !== "bottom-right";
@@ -175,8 +194,24 @@
           var tx = bx + (left ? -len * 0.5 : len * 0.5),
             ty = by + len;
           d += " M " + (bx - 26).toFixed(1) + " " + (by - 6).toFixed(1);
-          d += " Q " + (bx - 8 + hash(31, seed) * 6).toFixed(1) + " " + ((by + ty) / 2).toFixed(1) + " " + tx.toFixed(1) + " " + ty.toFixed(1);
-          d += " Q " + (bx + 18).toFixed(1) + " " + ((by + ty) / 2).toFixed(1) + " " + (bx + 30).toFixed(1) + " " + (by - 2).toFixed(1);
+          d +=
+            " Q " +
+            (bx - 8 + hash(31, seed) * 6).toFixed(1) +
+            " " +
+            ((by + ty) / 2).toFixed(1) +
+            " " +
+            tx.toFixed(1) +
+            " " +
+            ty.toFixed(1);
+          d +=
+            " Q " +
+            (bx + 18).toFixed(1) +
+            " " +
+            ((by + ty) / 2).toFixed(1) +
+            " " +
+            (bx + 30).toFixed(1) +
+            " " +
+            (by - 2).toFixed(1);
           return d;
         }
 
@@ -232,7 +267,8 @@
         tl.to("#hwcv-fill", { opacity: 0.94, duration: 0.4, ease: "power2.out" }, t0 + 0.55);
         var chars = textEl.querySelectorAll(".hwcv-ch");
         var delay = Math.min(CHAR_DELAY, 1.8 / Math.max(1, chars.length));
-        if (chars.length) tl.to(chars, { opacity: 1, duration: 0.02, stagger: delay, ease: "none" }, t0 + 0.9);
+        if (chars.length)
+          tl.to(chars, { opacity: 1, duration: 0.02, stagger: delay, ease: "none" }, t0 + 0.9);
         var typed = t0 + 0.9 + chars.length * delay;
 
         /* дрожь всего облачка – родная */
@@ -248,7 +284,12 @@
         boil();
 
         var words = said ? said.split(/\s+/).length : 0;
-        if (exit === "fade") tl.to(wrap, { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > t0 ? cues[1] : typed + Math.max(2, 0.5 + 0.3 * words));
+        if (exit === "fade")
+          tl.to(
+            wrap,
+            { opacity: 0, duration: OUT, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > t0 ? cues[1] : typed + Math.max(2, 0.5 + 0.3 * words),
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["hw-text-cloud-vertical"] = tl;

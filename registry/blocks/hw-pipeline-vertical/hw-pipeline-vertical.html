@@ -34,14 +34,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         margin: 0;
@@ -102,7 +107,14 @@
     </style>
   </head>
   <body>
-    <div id="hwpv-root" data-composition-id="hw-pipeline-vertical" data-width="1080" data-height="1920" data-start="0" data-duration="30">
+    <div
+      id="hwpv-root"
+      data-composition-id="hw-pipeline-vertical"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="30"
+    >
       <svg id="hwpv-svg" viewBox="0 0 1080 1920" data-layout-ignore></svg>
       <div id="hwpv-labels"></div>
     </div>
@@ -134,14 +146,16 @@
         var ctx = document.createElement("canvas").getContext("2d");
         ctx.font = '700 46px "Montserrat"';
         var need = 0;
-        nodes.join(" ").split(/\s+/).forEach(function (w) {
-          need = Math.max(need, Math.ceil(ctx.measureText(w).width) + 48); // поля по 24 – слово не липнет к дрожащей рамке
-        });
+        nodes
+          .join(" ")
+          .split(/\s+/)
+          .forEach(function (w) {
+            need = Math.max(need, Math.ceil(ctx.measureText(w).width) + 48); // поля по 24 – слово не липнет к дрожащей рамке
+          });
 
         // раскладка: ряд по горизонтали (родной: блок 320x170, промежуток 190, ряд с y 455, по центру кадра)
         var B = [];
-        
-        
+
         // вертикаль: блоки сверху вниз (в поле 780 три в ряд с читаемыми подписями не встают)
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         var zc = placement === "top" ? 614 : placement === "bottom" ? 1034 : 824;
@@ -150,8 +164,8 @@
           bh = Math.min(170, AH / (n + 0.6 * (n - 1))),
           gap = bh * 0.6;
         var y0 = zc - (n * bh + (n - 1) * gap) / 2;
-        for (var i = 0; i < n; i++) B.push({ x: 540 - bw / 2, y: y0 + i * (bh + gap), w: bw, h: bh });
-        
+        for (var i = 0; i < n; i++)
+          B.push({ x: 540 - bw / 2, y: y0 + i * (bh + gap), w: bw, h: bh });
 
         /* hw family runtime (родной) */
         function hash(k, seed) {
@@ -169,7 +183,15 @@
           d += " Q " + (w + wob(7)) + " " + wob(8) + " " + (w + wob(9)) + " " + (r + wob(10));
           d += " L " + (w + wob(11)) + " " + (h / 2 + wob(12));
           d += " L " + (w + wob(13)) + " " + (h - r + wob(14));
-          d += " Q " + (w + wob(15)) + " " + (h + wob(16)) + " " + (w - r + wob(17)) + " " + (h + wob(18));
+          d +=
+            " Q " +
+            (w + wob(15)) +
+            " " +
+            (h + wob(16)) +
+            " " +
+            (w - r + wob(17)) +
+            " " +
+            (h + wob(18));
           d += " L " + (w / 2 + wob(19)) + " " + (h + wob(20));
           d += " L " + (r + wob(21)) + " " + (h + wob(22));
           d += " Q " + wob(23) + " " + (h + wob(24)) + " " + wob(25) + " " + (h - r + wob(26));
@@ -214,13 +236,12 @@
             var nb = B[i + 1];
             // от середины стороны к середине стороны следующего, изгиб вбок от направления
             // (у разработчиков для ряда – вверх; та же доля для любого направления и длины)
-            
-            
+
             var sx = b.x + b.w / 2,
               sy = b.y + b.h + 10,
               tx = nb.x + nb.w / 2,
               ty = nb.y - 10;
-            
+
             var L = Math.hypot(tx - sx, ty - sy),
               ux = (tx - sx) / L,
               uy = (ty - sy) / L;
@@ -236,13 +257,25 @@
             var c = document.createElementNS(NS, "g");
             c.setAttribute("class", "hwpv-conn");
             var line = document.createElementNS(NS, "path");
-            line.setAttribute("d", "M " + sx + " " + sy + " Q " + qx + " " + qy + " " + tx + " " + ty);
+            line.setAttribute(
+              "d",
+              "M " + sx + " " + sy + " Q " + qx + " " + qy + " " + tx + " " + ty,
+            );
             var head = document.createElementNS(NS, "path");
             head.setAttribute(
               "d",
-              "M " + (tx + BARB * Math.cos(ang - SPREAD)) + " " + (ty + BARB * Math.sin(ang - SPREAD)) +
-                " L " + tx + " " + ty +
-                " L " + (tx + BARB * Math.cos(ang + SPREAD)) + " " + (ty + BARB * Math.sin(ang + SPREAD)),
+              "M " +
+                (tx + BARB * Math.cos(ang - SPREAD)) +
+                " " +
+                (ty + BARB * Math.sin(ang - SPREAD)) +
+                " L " +
+                tx +
+                " " +
+                ty +
+                " L " +
+                (tx + BARB * Math.cos(ang + SPREAD)) +
+                " " +
+                (ty + BARB * Math.sin(ang + SPREAD)),
             );
             c.appendChild(line);
             c.appendChild(head);
@@ -297,7 +330,12 @@
         tl.eventCallback("onUpdate", boil);
         boil();
 
-        if (exit === "fade") tl.to([svg, labels], { opacity: 0, duration: OUT, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : lastLabel + 2);
+        if (exit === "fade")
+          tl.to(
+            [svg, labels],
+            { opacity: 0, duration: OUT, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > c0 ? cues[1] : lastLabel + 2,
+          );
         tl.set({}, {}, 30);
         window.__timelines = window.__timelines || {};
         window.__timelines["hw-pipeline-vertical"] = tl;

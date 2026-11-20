@@ -554,16 +554,17 @@
           spinTurns: { x: -1, y: 0, z: 0 },
         },
         comp: {
-          width: 2160, height: 3840, outWidth: 1080, outHeight: 1920,
+          width: 2160,
+          height: 3840,
+          outWidth: 1080,
+          outHeight: 1920,
           cameraZoom: 5669.2913,
           cameraDistance: 5669.2913,
           duration: 30,
           fps: 30,
         },
         n: 24,
-        cards: [
-          { file: "placeholder-card.svg", width: 640, height: 640 },
-        ],
+        cards: [{ file: "placeholder-card.svg", width: 640, height: 640 }],
         path: null,
         keys: {
           "Rotation X": [
@@ -656,7 +657,9 @@
           const given = REG.imageVars.map((id) => varUrl(V[id])).filter(Boolean);
           const srcs = REG.imageVars.map(
             (id, i) =>
-              varUrl(V[id]) || given[i % given.length] || "assets/carousel-images/" + DATA.cards[i % DATA.cards.length].file,
+              varUrl(V[id]) ||
+              given[i % given.length] ||
+              "assets/carousel-images/" + DATA.cards[i % DATA.cards.length].file,
           );
           DATA.cards = await Promise.all(
             srcs.map(async (src, i) => {
@@ -684,16 +687,18 @@
         const root = document.getElementById("korbi3v-root");
 
         let SHIFT = 0;
-        
+
         /* vertical rebuild: curve plus the largest card fill the 780 field width (a curve the wide design runs
            past the frame edges keeps its share of the frame width and runs past the edges here too); the curve
            is stretched or squeezed in height to fill the field with the largest card inside it, at most twice
            its own proportion */
-        const placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
+        const placement =
+          ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         if (placement !== "full") root.classList.add("korbi3v-clear");
         /* top / bottom: the 760 field the sphere was built for, hung from y 288 / standing on y 1360; squeezed
            into the 652 field beside the speaker the whole sphere and its cards would shrink to 652/760 */
-        const field = placement === "top" ? [288, 1048] : placement === "bottom" ? [600, 1360] : [288, 1360];
+        const field =
+          placement === "top" ? [288, 1048] : placement === "bottom" ? [600, 1360] : [288, 1360];
         SHIFT = (field[0] + field[1]) / 2 - comp.outHeight / 2;
         const fieldH = ((field[1] - field[0]) * comp.width) / comp.outWidth;
         const fieldW = (780 * comp.width) / comp.outWidth;
@@ -707,10 +712,18 @@
         scalerBox.height = comp.height + "px";
         if (ctl.parent) {
           const d = [comp.width / 2 - 1920, comp.height / 2 - 1080];
-          ctl.parent.anchor = [ctl.parent.anchor[0] + d[0], ctl.parent.anchor[1] + d[1], ctl.parent.anchor[2] || 0];
-          ctl.parent.position = [ctl.parent.position[0] + d[0], ctl.parent.position[1] + d[1], ctl.parent.position[2] || 0];
+          ctl.parent.anchor = [
+            ctl.parent.anchor[0] + d[0],
+            ctl.parent.anchor[1] + d[1],
+            ctl.parent.anchor[2] || 0,
+          ];
+          ctl.parent.position = [
+            ctl.parent.position[0] + d[0],
+            ctl.parent.position[1] + d[1],
+            ctl.parent.position[2] || 0,
+          ];
         }
-        
+
         const stage = document.getElementById(DATA.id + "-stage");
         root.style.setProperty("--card-radius", look.cardRadius + "px");
         root.style.setProperty("--card-shadow", look.cardShadow);
@@ -1050,7 +1063,7 @@
             );
           }
         }
-        
+
         {
           /* 3D families: the scene renders in its own depth; the flat picture is then scaled on the outer
              scaler so every card, measured on screen at every frame of the mount, stays inside the field */
@@ -1081,10 +1094,17 @@
             sc.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + k + ") " + base;
           }
         }
-        
+
         render(0);
-        const cues = String(V.cues || "").split(",").map(parseFloat);
-        if (V.exit === "fade") tl.to(root, { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, isFinite(cues[0]) ? cues[0] : 6);
+        const cues = String(V.cues || "")
+          .split(",")
+          .map(parseFloat);
+        if (V.exit === "fade")
+          tl.to(
+            root,
+            { autoAlpha: 0, duration: 0.4, ease: "power2.in" },
+            isFinite(cues[0]) ? cues[0] : 6,
+          );
         window.__timelines[DATA.id] = tl;
       })();
     </script>

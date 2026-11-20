@@ -36,14 +36,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       html,
       body {
@@ -65,7 +70,11 @@
         inset: 0;
         overflow: hidden;
         background:
-          radial-gradient(1100px 760px at 50% 38%, color-mix(in srgb, var(--fg, #f2f2f2) 7%, transparent), transparent 70%),
+          radial-gradient(
+            1100px 760px at 50% 38%,
+            color-mix(in srgb, var(--fg, #f2f2f2) 7%, transparent),
+            transparent 70%
+          ),
           var(--bg, #0c1014);
       }
       #pttv-canvas {
@@ -89,7 +98,7 @@
         opacity: 0;
         pointer-events: none;
       }
-      
+
       /* подпись по центру поля, как всё в вертикали */
       #pttv-caption {
         left: 150px;
@@ -112,24 +121,41 @@
         left: 0;
         bottom: 34px;
       }
-      
     </style>
   </head>
   <body>
-    <div id="pttv-root" data-composition-id="product-turntable-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+    <div
+      id="pttv-root"
+      data-composition-id="product-turntable-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
       <div id="pttv-stage">
-        <canvas id="pttv-canvas" class="clip" data-start="0" data-duration="30" data-track-index="1"></canvas>
+        <canvas
+          id="pttv-canvas"
+          class="clip"
+          data-start="0"
+          data-duration="30"
+          data-track-index="1"
+        ></canvas>
         <div id="pttv-caption"></div>
       </div>
       <div id="pttv-fontload" aria-hidden="true">
-        <span style="font-family: var(--font-display, 'Bebas Neue'); font-weight: 700">Аа</span><span style="font-weight: 700">Аа</span>
+        <span style="font-family: var(--font-display, &quot;Bebas Neue&quot;); font-weight: 700"
+          >Аа</span
+        ><span style="font-weight: 700">Аа</span>
       </div>
     </div>
 
     <script>
       (function () {
         var V =
-          (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+          (window.__hyperframes &&
+            window.__hyperframes.getVariables &&
+            window.__hyperframes.getVariables()) ||
+          {};
         var root = document.getElementById("pttv-root");
         var str = function (v, d) {
           return typeof v === "string" ? v : d;
@@ -140,7 +166,7 @@
           H = 1920,
           top0 = 0,
           fit = 1;
-        
+
         var placement = ["full", "top", "bottom"].indexOf(V.placement) >= 0 ? V.placement : "full";
         top0 = 824 - H / 2;
         if (placement !== "full") {
@@ -150,7 +176,7 @@
           top0 = 0;
           fit = 0.75; // the native 800 px of can and plinth inside the 760 card
         }
-        
+
         var cv = document.getElementById("pttv-canvas");
         cv.width = W;
         cv.height = H;
@@ -204,7 +230,12 @@
             if (host.render) host.render(host.clock.t);
           },
         });
-        if (V.exit === "fade") tl.to(root, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 5.5);
+        if (V.exit === "fade")
+          tl.to(
+            root,
+            { opacity: 0, duration: 0.5, ease: "power2.in" },
+            isFinite(cues[1]) && cues[1] > c0 ? cues[1] : c0 + 5.5,
+          );
         window.__timelines = window.__timelines || {};
         window.__timelines["product-turntable-vertical"] = tl;
       })();
@@ -263,8 +294,14 @@
       scene.environment = pmrem.fromScene(studio, 0.02).texture;
 
       // Can and plinth vertically centred; the same px per world unit as the native frame (card: 0.75 of it).
-      const vfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(12)) * (host.H / 1080) / host.fit);
-      const camera = new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(vfov), host.W / host.H, 0.1, 100);
+      const vfov =
+        2 * Math.atan((Math.tan(THREE.MathUtils.degToRad(12)) * (host.H / 1080)) / host.fit);
+      const camera = new THREE.PerspectiveCamera(
+        THREE.MathUtils.radToDeg(vfov),
+        host.W / host.H,
+        0.1,
+        100,
+      );
       camera.position.set(0, 2.1, 9.4);
       camera.lookAt(0, 0.9, 0);
 
@@ -278,7 +315,11 @@
       // Plinth with a soft baked contact shadow: no shadow maps, no per-frame cost.
       const plinth = new THREE.Mesh(
         new THREE.CylinderGeometry(1.42, 1.46, 0.2, 96),
-        new THREE.MeshStandardMaterial({ color: new THREE.Color(host.surface), roughness: 0.55, metalness: 0 }),
+        new THREE.MeshStandardMaterial({
+          color: new THREE.Color(host.surface),
+          roughness: 0.55,
+          metalness: 0,
+        }),
       );
       plinth.position.y = -0.1;
       scene.add(plinth);
@@ -390,7 +431,10 @@
           clearcoat: 1,
           clearcoatRoughness: 0.12,
         });
-        const label = new THREE.Mesh(new THREE.CylinderGeometry(0.674, 0.674, 1.8, 128, 1, true), labelMat);
+        const label = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.674, 0.674, 1.8, 128, 1, true),
+          labelMat,
+        );
         label.position.y = 1.1;
         can.add(label);
         // Pull tab: a thin rounded plate on the lid.

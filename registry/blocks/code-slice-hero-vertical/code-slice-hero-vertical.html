@@ -49,14 +49,19 @@
         src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
       }
       @font-face {
         font-family: "Montserrat";
         src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
         font-weight: 100 900;
         font-display: block;
-        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
       }
       * {
         box-sizing: border-box;
@@ -81,7 +86,7 @@
         inset: 0;
         overflow: hidden;
       }
-      
+
       #cshv-clip.cshv-card {
         left: 150px;
         width: 780px;
@@ -93,7 +98,7 @@
       #cshv-clip.cshv-bottom {
         top: 708px;
       }
-      
+
       #cshv-stage,
       #cshv-flat {
         position: absolute;
@@ -114,9 +119,23 @@
     </style>
   </head>
   <body>
-    <div id="cshv-root" data-composition-id="code-slice-hero-vertical" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+    <div
+      id="cshv-root"
+      data-composition-id="code-slice-hero-vertical"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
       <div id="cshv-clip">
-        <section id="cshv-stage" class="clip" data-start="0" data-duration="30" data-track-index="1" aria-hidden="true"></section>
+        <section
+          id="cshv-stage"
+          class="clip"
+          data-start="0"
+          data-duration="30"
+          data-track-index="1"
+          aria-hidden="true"
+        ></section>
         <div id="cshv-flat" aria-hidden="true"></div>
       </div>
       <h1 id="cshv-accessible" class="cshv-accessible"></h1>
@@ -130,8 +149,7 @@
         const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
 
         // раскладка: размер поверхности, кегль и середина надписи
-        
-        
+
         const placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         const card = placement !== "full";
         if (card) clip.classList.add("cshv-card");
@@ -143,7 +161,6 @@
           TW = card ? 696 : 780,
           CX = W / 2,
           CY = card ? H / 2 : 770;
-        
 
         // цвета темы: бумага --fg, буквы --bg (у разработчиков белая бумага и чёрные буквы)
         const cs = getComputedStyle(root);
@@ -153,11 +170,20 @@
           root.appendChild(i);
           const m = getComputedStyle(i).color.match(/\d+/g) || [];
           i.remove();
-          return "#" + m.slice(0, 3).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
+          return (
+            "#" +
+            m
+              .slice(0, 3)
+              .map((n) => Number(n).toString(16).padStart(2, "0"))
+              .join("")
+          );
         };
         const PAPER = hexOf("--fg", "#f2f2f2"),
           INK = hexOf("--bg", "#0c1014");
-        const FONT = (cs.getPropertyValue("--font-display").trim() || '"Bebas Neue"').split(",")[0].replace(/["']/g, "").trim();
+        const FONT = (cs.getPropertyValue("--font-display").trim() || '"Bebas Neue"')
+          .split(",")[0]
+          .replace(/["']/g, "")
+          .trim();
 
         const DURATION = 30;
         const cuesIn = String(V.cues || "")
@@ -185,7 +211,10 @@
         };
         const values = { ...D, ...V };
         const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
-        const number = (key, a, b) => (values[key] !== "" && values[key] !== null && Number.isFinite(Number(values[key])) ? clamp(Number(values[key]), a, b) : D[key]);
+        const number = (key, a, b) =>
+          values[key] !== "" && values[key] !== null && Number.isFinite(Number(values[key]))
+            ? clamp(Number(values[key]), a, b)
+            : D[key];
         const smooth = (v) => {
           const u = clamp(v);
           return u * u * u * (10 + u * (-15 + 6 * u));
@@ -282,7 +311,10 @@
           const lines = wrap(ctx, text);
           const box = ctx.measureText(text || " ");
           const lh = FS * 0.95;
-          const baseline0 = CY - ((lines.length - 1) * lh) / 2 + (box.actualBoundingBoxAscent - box.actualBoundingBoxDescent) / 2;
+          const baseline0 =
+            CY -
+            ((lines.length - 1) * lh) / 2 +
+            (box.actualBoundingBoxAscent - box.actualBoundingBoxDescent) / 2;
           ctx.fillStyle = INK;
           lines.forEach((l, i) => ctx.fillText(l, CX, baseline0 + i * lh));
           const ink = ctx.getImageData(0, 0, W, H).data;
@@ -318,8 +350,10 @@
         }
 
         // One analytic ease-out and its inverse drive every passage/window time.
-        const easeSweep = (u) => (sweepPower === 1 ? clamp(u) : 1 - Math.pow(1 - clamp(u), sweepPower));
-        const inverseSweep = (u) => (sweepPower === 1 ? clamp(u) : 1 - Math.pow(1 - clamp(u), 1 / sweepPower));
+        const easeSweep = (u) =>
+          sweepPower === 1 ? clamp(u) : 1 - Math.pow(1 - clamp(u), sweepPower);
+        const inverseSweep = (u) =>
+          sweepPower === 1 ? clamp(u) : 1 - Math.pow(1 - clamp(u), 1 / sweepPower);
         function cursorTimeAtX(x) {
           const rank = (direction === 1 ? x - cursorLeft : W - x - cursorLeft) / cursorSpan;
           return SWEEP_START + sweepDuration * inverseSweep(rank);
@@ -340,14 +374,17 @@
           const turn = smooth(progress / 0.64);
           // Analytic damped oscillation: overshoot, return past 180, settle exactly.
           const ringT = clamp((progress - 0.64) / 0.36);
-          const ringEnvelope = smooth(ringT / 0.12) * Math.exp(-3.3 * ringT) * (1 - smooth((ringT - 0.72) / 0.28));
+          const ringEnvelope =
+            smooth(ringT / 0.12) * Math.exp(-3.3 * ringT) * (1 - smooth((ringT - 0.72) / 0.28));
           const bounce = flipBounce * 36 * Math.sin(ringT * Math.PI * 3.3) * ringEnvelope;
           const flight = Math.sin(Math.PI * progress) ** 0.7;
           const cursor = cursorAt(t);
           const radial = fieldAt(tile.cx, tile.cy, cursor.x, cursor.y);
           const automatic = t >= SWEEP_START && t <= SWEEP_START + sweepDuration;
           const approach = smooth((t - tile.passTime + 0.2) / 0.16);
-          const pull = (automatic ? radial * approach * (1 - smooth(progress / 0.32)) : 0) * (tile.active ? 1 : 0.55);
+          const pull =
+            (automatic ? radial * approach * (1 - smooth(progress / 0.32)) : 0) *
+            (tile.active ? 1 : 0.55);
           const dx = cursor.x - tile.cx,
             dy = cursor.y - tile.cy;
           const variation = noiseStrength * Math.max(pull, flight * tile.peak);
@@ -357,10 +394,17 @@
           const jitter = variation * (n1 * 0.7 + n2 * 0.3);
           const formation = Math.max(pull, flight * (0.55 + 0.45 * tile.peak));
           const depthGain = cursor.z / 160;
-          const pullTiltX = depthGain * ((dy / cursorRadius) * tiltStrength * 1.6 * pull + tile.seedX * tiltStrength * 0.16 * pull);
+          const pullTiltX =
+            depthGain *
+            ((dy / cursorRadius) * tiltStrength * 1.6 * pull +
+              tile.seedX * tiltStrength * 0.16 * pull);
           const yawDx = tile.active ? direction * Math.max(0, -direction * dx) : -dx;
           const yawHandoff = tile.active ? 1 - smooth((t - tile.passTime + 0.04) / 0.12) : 1;
-          const pullTiltY = depthGain * ((yawDx / cursorRadius) * tiltStrength * 1.8 * pull + tile.seedY * tiltStrength * 0.12 * pull) * yawHandoff;
+          const pullTiltY =
+            depthGain *
+            ((yawDx / cursorRadius) * tiltStrength * 1.8 * pull +
+              tile.seedY * tiltStrength * 0.12 * pull) *
+            yawHandoff;
           const pullZ = (tiltStrength / 30) * cursor.z * 0.45 * pull;
           const rx = pullTiltX + tile.seedX * variation * 3 * flight + jitter;
           const ry = direction * (180 * turn + bounce) + pullTiltY + jitter * 0.7;
@@ -382,19 +426,31 @@
           const rest = tile.active && rear ? 1 : 0;
           if (tile.restState === rest) return;
           tile.restState = rest;
-          surface.set(tile.index, { x: 0, y: 0, z: 0, rx: 0, ry: rest * direction * 180, rz: 0, scale: 1, formation: 0, shade: 1 });
+          surface.set(tile.index, {
+            x: 0,
+            y: 0,
+            z: 0,
+            rx: 0,
+            ry: rest * direction * 180,
+            rz: 0,
+            scale: 1,
+            formation: 0,
+            shade: 1,
+          });
         }
 
         function renderAt(time) {
           lastTime = clamp(time, 0, DURATION);
           if (lastTime === lastRenderedTime) return;
           lastRenderedTime = lastTime;
-          const mode = lastTime <= firstMotion ? "front" : lastTime >= lastMotion ? "rear" : "moving";
+          const mode =
+            lastTime <= firstMotion ? "front" : lastTime >= lastMotion ? "rear" : "moving";
           if (mode !== frameMode) {
             frameMode = mode;
             stage.style.visibility = mode === "moving" ? "visible" : "hidden";
             flat.style.visibility = mode === "moving" ? "hidden" : "visible";
-            if (mode !== "moving") flat.style.backgroundImage = `var(--cshv-${mode === "front" ? "front" : "back"})`;
+            if (mode !== "moving")
+              flat.style.backgroundImage = `var(--cshv-${mode === "front" ? "front" : "back"})`;
           }
           for (const tile of tiles) {
             if (mode !== "moving" || lastTime < tile.motionStart || lastTime > tile.motionEnd) {
@@ -405,7 +461,10 @@
             surface.set(tile.index, poseAt(tile, lastTime));
           }
           if (mode === "moving") surface.draw();
-          const copy = lastTime < SWEEP_START + sweepDuration / 2 + flipDuration / 2 ? headline : reverseHeadline;
+          const copy =
+            lastTime < SWEEP_START + sweepDuration / 2 + flipDuration / 2
+              ? headline
+              : reverseHeadline;
           if (accessible.textContent !== copy) accessible.textContent = copy;
         }
 
@@ -425,15 +484,31 @@
                 y1 = y + cellSize;
               const frontInk = countInk(front.ink, x, y, x1, y1),
                 backInk = countInk(back.ink, x, y, x1, y1);
-              const cell = { col, row, x, y, width: x1 - x, height: y1 - y, frontInk, backInk, active: frontInk + backInk > 0 };
+              const cell = {
+                col,
+                row,
+                x,
+                y,
+                width: x1 - x,
+                height: y1 - y,
+                frontInk,
+                backInk,
+                active: frontInk + backInk > 0,
+              };
               cells.push(cell);
               const cx = x + cell.width / 2,
                 cy = y + cell.height / 2;
               const peak = fieldAt(cx, cy, cx, CY);
               const passTime = cursorTimeAtX(cx);
-              const columnSeconds = Math.abs(cursorTimeAtX(cx + cellSize / 2) - cursorTimeAtX(cx - cellSize / 2));
+              const columnSeconds = Math.abs(
+                cursorTimeAtX(cx + cellSize / 2) - cursorTimeAtX(cx - cellSize / 2),
+              );
               // The turn starts at passage, with at most 12 ms of seeded stagger.
-              const flipStart = passTime + hash(col, row, 269.5, 183.3) * Math.min(0.012, columnSeconds * 0.08) * Math.min(noiseStrength, 1);
+              const flipStart =
+                passTime +
+                hash(col, row, 269.5, 183.3) *
+                  Math.min(0.012, columnSeconds * 0.08) *
+                  Math.min(noiseStrength, 1);
               const duration = flipDuration * (1 + 0.18 * (1 - peak));
               const tile = {
                 ...cell,
@@ -455,8 +530,15 @@
                 exit = -Infinity;
               if (Math.abs(dy) < fieldReach) {
                 const dx = Math.sqrt(fieldReach * fieldReach - dy * dy);
-                enter = Math.max(SWEEP_START, passTime - 0.2, cursorTimeAtX(direction === 1 ? cx - dx : cx + dx));
-                exit = Math.min(SWEEP_START + sweepDuration, cursorTimeAtX(direction === 1 ? cx + dx : cx - dx));
+                enter = Math.max(
+                  SWEEP_START,
+                  passTime - 0.2,
+                  cursorTimeAtX(direction === 1 ? cx - dx : cx + dx),
+                );
+                exit = Math.min(
+                  SWEEP_START + sweepDuration,
+                  cursorTimeAtX(direction === 1 ? cx + dx : cx - dx),
+                );
               }
               tile.motionStart = Math.min(enter, tile.active ? flipStart : Infinity);
               tile.motionEnd = Math.max(exit, tile.active ? flipStart + duration : -Infinity);
@@ -476,8 +558,22 @@
           });
           const state = { time: 0 };
           timeline = gsap.timeline({ paused: true });
-          timeline.to(state, { time: DURATION, duration: DURATION, ease: "none", onUpdate: () => renderAt(state.time) }, 0);
-          if (exitMode === "fade") timeline.to(clip, { opacity: 0, duration: 0.5, ease: "power2.in" }, isFinite(cuesIn[1]) && cuesIn[1] > SWEEP_START ? cuesIn[1] : finishTime + 2);
+          timeline.to(
+            state,
+            {
+              time: DURATION,
+              duration: DURATION,
+              ease: "none",
+              onUpdate: () => renderAt(state.time),
+            },
+            0,
+          );
+          if (exitMode === "fade")
+            timeline.to(
+              clip,
+              { opacity: 0, duration: 0.5, ease: "power2.in" },
+              isFinite(cuesIn[1]) && cuesIn[1] > SWEEP_START ? cuesIn[1] : finishTime + 2,
+            );
           window.__timelines = window.__timelines || {};
           window.__timelines["code-slice-hero-vertical"] = timeline;
           renderAt(0);
