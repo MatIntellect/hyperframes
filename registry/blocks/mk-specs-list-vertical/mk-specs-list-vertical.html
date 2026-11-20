@@ -4,7 +4,7 @@
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "full: own ground to the frame edge, the list in the 780x1072 field (y 288-1360), up to 6 rows. top / bottom: the list on a brand card 780x760 at y 288-1048 / 600-1360, up to 4 rows, rest of the frame transparent; taller than the 652 field beside the speaker, so place it full, the face is never under a card.", "default": "full", "options": [{ "value": "full", "label": "Full screen" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "title", "type": "string", "role": "content", "label": "Headline", "description": "Headline above the list, Bebas Neue, one line; the vertical sets it smaller to keep a long headline on one line. Empty hides it.", "maxLength": 24, "default": "Что внутри" },
-    { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 32.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
+    { "id": "rows", "type": "string", "role": "content", "label": "Rows", "description": "Rows separated by ;, each as Label | value (value optional). Up to 6 rows; label up to 20 characters, value up to 28.", "maxLength": 340, "default": "Монтаж | сам, без человека; Графика | из готовой базы; Субтитры | по словам речи; Звук | только эффекты; Рендер | один раз" },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the headline and the first row land, 2 the last row lands (rows between are spread evenly), 3 the list fades out (only when exit is fade). Empty keeps 0.3 and 0.25 s per row.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the list to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -114,7 +114,8 @@
       }
 
       /* the list fills the 780 field (montazher.md:22 "large, all the free space"): sized so the longest rows
-         (6 full screen, 4 on the card; label 20, value 32 characters) still end inside the field */
+         (6 full screen, 4 on the card; label 20, value 28 characters) still end inside the field: a value of 28
+         sets 687 of the 780 px on one line, one of 32 set 768 and real words wrapped to a second line (20.11) */
       #mslv-field {
         left: 150px;
         width: 780px;
@@ -278,7 +279,7 @@
         // The full list was laid out for the author's 1180 field. In the 1072 field (y 288-1360) the air between its
         // groups (under the headline, between the rows) gives up what the list needs to stand 20 px inside the field
         // edges, as six single-line rows under a headline stood in 1180, and never more than the 108 px the field lost.
-        // Measured once the faces have loaded: a value near its 32 characters can wrap. Type, line heights and rows
+        // Measured once the faces have loaded: a value near its 28 characters stays on one line. Type, line heights and rows
         // stay the author's
         if (placement === "full" && rowEls.length > 1) {
           var face = getComputedStyle(rowEls[0]).fontFamily;

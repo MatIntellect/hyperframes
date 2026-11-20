@@ -446,10 +446,13 @@
           var every = Math.max(1, Math.ceil(widest / ((step / scaleMax) * G.trackW)));
           for (var i = 0; i < ticks.length; i++) {
             var tv = i * step;
+            // the 0 label stands on its tick by its left edge and takes up to a whole label width; a centred label
+            // reaches half its width left of its tick, so the next one shows from 1.5 widths (0.75 let "0" and "50"
+            // with a unit run into each other)
             var visible =
               tv <= scaleMax &&
               i % every === 0 &&
-              (i === 0 || (tv / scaleMax) * G.trackW > widest * 0.75);
+              (i === 0 || (tv / scaleMax) * G.trackW > widest * 1.5);
             var tx = G.trackX + (tv / scaleMax) * G.trackW;
             ticks[i].line.style.transform = "translateX(" + tx.toFixed(2) + "px)";
             ticks[i].line.style.opacity = visible ? "1" : "0";
