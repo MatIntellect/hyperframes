@@ -14,7 +14,7 @@
     { "id": "answer4", "type": "string", "role": "content", "label": "Answer bullet 1", "description": "First use-case bullet, naming the brand this video promotes. Empty removes the line.", "portrays": ["subject_name"], "maxLength": 70, "default": "**Рилсы из записи** → MatIntellect" },
     { "id": "answer5", "type": "string", "role": "content", "label": "Answer bullet 2", "description": "Second use-case bullet. Empty removes the line.", "maxLength": 70, "default": "**Длинные видео** → Premiere Pro, но всё руками" },
     { "id": "answer6", "type": "string", "role": "content", "label": "Answer bullet 3", "description": "Third use-case bullet. Empty removes the line.", "maxLength": 70, "default": "**Монтаж с телефона** → CapCut" },
-    { "id": "answer7", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Closing paragraph. Empty removes the line.", "maxLength": 120, "default": "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?" },
+    { "id": "answer7", "type": "string", "role": "content", "label": "Answer paragraph 4", "description": "Closing line, one line. Empty removes the line.", "maxLength": 32, "default": "Начните с MatIntellect." },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 typing starts, 2 the prompt is sent, 3 the answer starts streaming, 4 the answer has landed with its action row, 5 the chat fades out (only when exit is fade). Each stretch of the authored motion is sped up or slowed to land on its cue. Empty keeps the measured rhythm.", "default": "" },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the landed answer to the end of the mount.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
   ]'
@@ -621,11 +621,7 @@
           line("b", "answer4", "**Рилсы из записи** → MatIntellect"),
           line("b", "answer5", "**Длинные видео** → Premiere Pro, но всё руками"),
           line("b", "answer6", "**Монтаж с телефона** → CapCut"),
-          line(
-            "p",
-            "answer7",
-            "Нужен поток роликов без монтажёра – начните с MatIntellect. Для какой площадки снимаете?",
-          ),
+          line("p", "answer7", "Начните с MatIntellect."),
         ].filter((b) => b.text),
       };
 
