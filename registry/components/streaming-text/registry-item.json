@@ -3,7 +3,7 @@
   "name": "streaming-text",
   "type": "hyperframes:component",
   "title": "Streaming Text",
-  "description": "Words arrive the way an AI answer streams - in uneven bursts on a measured token rhythm, each word landing grey and inking to full colour - rather than the even tick of a typewriter. Mount it inside a clip with data-composition-id=\"streaming-text\": its own timeline nests there.",
+  "description": "Words arrive the way an AI answer streams - in uneven bursts on a measured token rhythm, each word landing grey and inking to full colour - rather than the even tick of a typewriter. Mount it with data-composition-src on a host with data-composition-id=\"streaming-text\", once for each place it plays.",
   "tags": ["video-primitive", "text-effect", "ai", "chat", "vertical"],
   "author": "Miao Yang",
   "variables": [

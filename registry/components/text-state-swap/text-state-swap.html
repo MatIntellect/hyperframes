@@ -1,7 +1,7 @@
 <!--
   Text State Swap - transitions.dev-inspired primitive for HyperFrames.
 
-  Paste the markup, CSS and script into a composition. Use the timeline
+  Mount this file with data-composition-src, once for each place it plays (note at the bottom). Use the timeline
   integration note at the bottom as the starting point for deterministic GSAP
   animation.
 
@@ -28,154 +28,157 @@
   On every default the result is identical to the original: near-black
   "Монтирую" lifts 18px through an 8px blur while "Готово" rises into place.
 -->
-
-<div
-  class="hf-transition-text-state-swap"
-  data-composition-variables='[
+<div data-composition-id="text-state-swap">
+  <div
+    class="hf-transition-text-state-swap"
+    data-composition-variables='[
     {"id": "from-text", "type": "string", "role": "content", "label": "From text", "description": "The outgoing label, on screen before the swap.", "default": "Монтирую", "maxLength": 12},
     {"id": "to-text", "type": "string", "role": "content", "label": "To text", "description": "The incoming label, on screen after the swap. It rests hidden until the timeline reveals it.", "default": "Готово", "maxLength": 12},
     {"id": "distance", "type": "enum", "role": "motion", "label": "Distance", "description": "Scales the vertical offset the timeline drives, so each label covers a shorter or longer run in the same time.", "default": "standard", "options": [{"value": "close", "label": "Close"}, {"value": "standard", "label": "Standard"}, {"value": "far", "label": "Far"}]},
     {"id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Label colour: ink for light frames, paper for dark ones, accent rides --brand.", "default": "paper", "options": [{"value": "ink", "label": "Ink"}, {"value": "paper", "label": "Paper"}, {"value": "accent", "label": "Accent"}]}
   ]'
->
-  <span class="from">Монтирую</span><span class="to">Готово</span>
-</div>
+  >
+    <span class="from">Монтирую</span><span class="to">Готово</span>
+  </div>
 
-<style>
-  @font-face {
-    font-family: "Bebas Neue";
-    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: block;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
-      U+A720-A7FF;
-  }
-  .hf-transition-text-state-swap {
-    position: relative;
-    width: 250px;
-    height: 36px;
-    color: var(--hf-text-color, var(--fg, #f2f2f2));
-    font:
-      900 28px/1 "Montserrat",
-      system-ui,
-      sans-serif;
-  }
-  .hf-transition-text-state-swap span {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    text-align: center;
-    filter: blur(var(--hf-text-blur, 0px));
-    transform: translateY(calc(var(--hf-text-y, 0px) * var(--hf-text-reach, 1)));
-    will-change: transform, filter, opacity;
-  }
-  .hf-transition-text-state-swap .to {
-    opacity: 0;
-  }
-</style>
-
-<script>
-  (function () {
-    "use strict";
-
-    var vars =
-      window.__hyperframes && window.__hyperframes.getVariables
-        ? window.__hyperframes.getVariables()
-        : {};
-
-    // Unrecognised overrides return to their declared defaults.
-    var reaches = { close: 0.5, standard: 1, far: 1.85 };
-    var tones = {
-      ink: "var(--bg, #0c1014)",
-      paper: "var(--fg, #f2f2f2)",
-      accent: "var(--brand, #ff0000)",
-    };
-
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+  <style>
+    @font-face {
+      font-family: "Bebas Neue";
+      src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
     }
-
-    function text(value, fallback) {
-      var resolved = value == null ? "" : String(value).trim();
-      return resolved.length > 0 ? resolved : fallback;
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
     }
-
-    var fromText = text(vars["from-text"], "Монтирую");
-    var toText = text(vars["to-text"], "Готово");
-    var reach = reaches[pick(reaches, vars.distance, "standard")];
-    var tone = tones[pick(tones, vars.tone, "paper")];
-
-    var roots = document.querySelectorAll(".hf-transition-text-state-swap");
-    for (var i = 0; i < roots.length; i += 1) {
-      var root = roots[i];
-      root.style.setProperty("--hf-text-reach", String(reach));
-      root.style.setProperty("--hf-text-color", tone);
-      root.querySelector(".from").textContent = fromText;
-      root.querySelector(".to").textContent = toText;
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
-  })();
-</script>
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+    }
+    .hf-transition-text-state-swap {
+      position: relative;
+      width: 250px;
+      height: 36px;
+      color: var(--hf-text-color, var(--fg, #f2f2f2));
+      font:
+        900 28px/1 "Montserrat",
+        system-ui,
+        sans-serif;
+    }
+    .hf-transition-text-state-swap span {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      text-align: center;
+      filter: blur(var(--hf-text-blur, 0px));
+      transform: translateY(calc(var(--hf-text-y, 0px) * var(--hf-text-reach, 1)));
+      will-change: transform, filter, opacity;
+    }
+    .hf-transition-text-state-swap .to {
+      opacity: 0;
+    }
+  </style>
 
-<!--
+  <script>
+    (function () {
+      "use strict";
+
+      var vars =
+        window.__hyperframes && window.__hyperframes.getVariables
+          ? window.__hyperframes.getVariables()
+          : {};
+
+      // Unrecognised overrides return to their declared defaults.
+      var reaches = { close: 0.5, standard: 1, far: 1.85 };
+      var tones = {
+        ink: "var(--bg, #0c1014)",
+        paper: "var(--fg, #f2f2f2)",
+        accent: "var(--brand, #ff0000)",
+      };
+
+      function pick(table, value, fallback) {
+        return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+      }
+
+      function text(value, fallback) {
+        var resolved = value == null ? "" : String(value).trim();
+        return resolved.length > 0 ? resolved : fallback;
+      }
+
+      var fromText = text(vars["from-text"], "Монтирую");
+      var toText = text(vars["to-text"], "Готово");
+      var reach = reaches[pick(reaches, vars.distance, "standard")];
+      var tone = tones[pick(tones, vars.tone, "paper")];
+
+      var roots = document.querySelectorAll(".hf-transition-text-state-swap");
+      for (var i = 0; i < roots.length; i += 1) {
+        var root = roots[i];
+        root.style.setProperty("--hf-text-reach", String(reach));
+        root.style.setProperty("--hf-text-color", tone);
+        root.querySelector(".from").textContent = fromText;
+        root.querySelector(".to").textContent = toText;
+      }
+    })();
+  </script>
+
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["text-state-swap"]; mount the snippet inside a clip with data-composition-id="text-state-swap"
-  and the runtime nests it at that clip's start.
+  window.__timelines["text-state-swap"]; mount this file with data-composition-src on a host with
+  data-composition-id="text-state-swap", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="text-state-swap" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    tl.to(
-      ".hf-transition-text-state-swap .from",
-      {
-        opacity: 0,
-        "--hf-text-y": "-18px",
-        "--hf-text-blur": "8px",
-        duration: 0.18,
-        ease: "power2.in",
-      },
-      startTime,
-    );
-    tl.fromTo(
-      ".hf-transition-text-state-swap .to",
-      { opacity: 0, "--hf-text-y": "18px", "--hf-text-blur": "8px" },
-      {
-        opacity: 1,
-        "--hf-text-y": "0px",
-        "--hf-text-blur": "0px",
-        duration: 0.26,
-        ease: "power2.out",
-      },
-      startTime + 0.12,
-    );
-    window.__timelines = window.__timelines || {};
-    window.__timelines["text-state-swap"] = tl;
-  })();
-</script>
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="text-state-swap" */
+    (function () {
+      var startTime = 0;
+      var tl = gsap.timeline({ paused: true });
+      tl.to(
+        ".hf-transition-text-state-swap .from",
+        {
+          opacity: 0,
+          "--hf-text-y": "-18px",
+          "--hf-text-blur": "8px",
+          duration: 0.18,
+          ease: "power2.in",
+        },
+        startTime,
+      );
+      tl.fromTo(
+        ".hf-transition-text-state-swap .to",
+        { opacity: 0, "--hf-text-y": "18px", "--hf-text-blur": "8px" },
+        {
+          opacity: 1,
+          "--hf-text-y": "0px",
+          "--hf-text-blur": "0px",
+          duration: 0.26,
+          ease: "power2.out",
+        },
+        startTime + 0.12,
+      );
+      window.__timelines = window.__timelines || {};
+      window.__timelines["text-state-swap"] = tl;
+    })();
+  </script>
+</div>

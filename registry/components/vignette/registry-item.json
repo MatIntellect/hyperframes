@@ -3,7 +3,7 @@
   "name": "vignette",
   "type": "hyperframes:component",
   "title": "Vignette",
-  "description": "Cinematic radial vignette overlay using a pure-CSS gradient — darkens the edges to pull focus toward the center. Mount it inside a clip with data-composition-id=\"vignette\": its own timeline nests there.",
+  "description": "Cinematic radial vignette overlay using a pure-CSS gradient — darkens the edges to pull focus toward the center. Mount it with data-composition-src on a host with data-composition-id=\"vignette\", once for each place it plays.",
   "tags": ["vignette", "overlay", "cinematic", "effect", "vertical"],
   "files": [
     {

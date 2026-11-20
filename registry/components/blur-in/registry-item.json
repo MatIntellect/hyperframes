@@ -3,7 +3,7 @@
   "name": "blur-in",
   "type": "hyperframes:component",
   "title": "Blur In",
-  "description": "An Operator Black word-level content reveal that resolves its own text from controlled blur. Mount it inside a clip with data-composition-id=\"blur-in\": its own timeline nests there.",
+  "description": "An Operator Black word-level content reveal that resolves its own text from controlled blur. Mount it with data-composition-src on a host with data-composition-id=\"blur-in\", once for each place it plays.",
   "tags": ["video-primitive", "blur-in", "text-effect", "vertical"],
   "files": [
     {

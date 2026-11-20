@@ -3,7 +3,7 @@
   "name": "success-check",
   "type": "hyperframes:component",
   "title": "Success Check",
-  "description": "Success check for vertical reels: a brand-red tick pops and draws inside a deep red halo with a soft ring. Size, ring and spin are fields; colour is the reel palette. Sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"success-check\": its own timeline nests there.",
+  "description": "Success check for vertical reels: a brand-red tick pops and draws inside a deep red halo with a soft ring. Size, ring and spin are fields; colour is the reel palette. Sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"success-check\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

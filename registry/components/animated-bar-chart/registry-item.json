@@ -3,7 +3,7 @@
   "name": "animated-bar-chart",
   "type": "hyperframes:component",
   "title": "Animated Bar Chart",
-  "description": "A compact data card with deterministic bar growth and value callouts. Mount it inside a clip with data-composition-id=\"animated-bar-chart\": its own timeline nests there.",
+  "description": "A compact data card with deterministic bar growth and value callouts. Mount it with data-composition-src on a host with data-composition-id=\"animated-bar-chart\", once for each place it plays.",
   "tags": ["data", "vertical"],
   "files": [
     {

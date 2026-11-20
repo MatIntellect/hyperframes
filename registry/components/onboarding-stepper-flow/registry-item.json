@@ -3,7 +3,7 @@
   "name": "onboarding-stepper-flow",
   "type": "hyperframes:component",
   "title": "Onboarding Stepper Flow",
-  "description": "Onboarding step for vertical reels: a three-step progress row (done and active in brand red) over a card with step label, heading, hint and a brand-red button. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"onboarding-stepper-flow\": its own timeline nests there.",
+  "description": "Onboarding step for vertical reels: a three-step progress row (done and active in brand red) over a card with step label, heading, hint and a brand-red button. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"onboarding-stepper-flow\", once for each place it plays.",
   "tags": ["ui-flow", "onboarding", "stepper", "vertical"],
   "files": [
     {

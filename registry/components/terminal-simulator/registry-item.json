@@ -3,7 +3,7 @@
   "name": "terminal-simulator",
   "type": "hyperframes:component",
   "title": "Terminal Simulator",
-  "description": "Editor and terminal mock for vertical reels: a dark brand window with a file list, code lines that draw in one by one and a render command that rises in the terminal pane. Brand palette, monospace 28 px for code, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"terminal-simulator\": its own timeline nests there.",
+  "description": "Editor and terminal mock for vertical reels: a dark brand window with a file list, code lines that draw in one by one and a render command that rises in the terminal pane. Brand palette, monospace 28 px for code, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"terminal-simulator\", once for each place it plays.",
   "tags": ["code-animation", "vertical"],
   "files": [
     {

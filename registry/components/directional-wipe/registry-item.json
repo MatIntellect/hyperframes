@@ -3,7 +3,7 @@
   "name": "directional-wipe",
   "type": "hyperframes:component",
   "title": "Directional Wipe",
-  "description": "A directional scene push that slides one panel over another. Mount it inside a clip with data-composition-id=\"directional-wipe\": its own timeline nests there.",
+  "description": "A directional scene push that slides one panel over another. Mount it with data-composition-src on a host with data-composition-id=\"directional-wipe\", once for each place it plays.",
   "tags": ["transition-primitive", "vertical"],
   "variables": [
     {

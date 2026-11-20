@@ -3,7 +3,7 @@
   "name": "avatar-group-hover",
   "type": "hyperframes:component",
   "title": "Avatar Group Hover",
-  "description": "Avatar group for vertical reels: overlapping brand-gradient avatars lift from the centre and bounce back, like a hover on a team row. Size and overlap are fields. Brand palette, Montserrat initials, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"avatar-group-hover\": its own timeline nests there.",
+  "description": "Avatar group for vertical reels: overlapping brand-gradient avatars lift from the centre and bounce back, like a hover on a team row. Size and overlap are fields. Brand palette, Montserrat initials, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"avatar-group-hover\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

@@ -3,7 +3,7 @@
   "name": "tilt-card",
   "type": "hyperframes:component",
   "title": "Tilt Card",
-  "description": "Tilt card for vertical reels: a card rises and tilts in 3D while its brand-red corner glow drifts, the headline lifted on its own depth. Kicker, headline and glow spread are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"tilt-card\": its own timeline nests there.",
+  "description": "Tilt card for vertical reels: a card rises and tilts in 3D while its brand-red corner glow drifts, the headline lifted on its own depth. Kicker, headline and glow spread are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"tilt-card\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

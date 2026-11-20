@@ -3,7 +3,7 @@
   "name": "number-pop-in",
   "type": "hyperframes:component",
   "title": "Number Pop In",
-  "description": "A transitions.dev-inspired digit pop-in with blur, lift, and staggered value reveal. Mount it inside a clip with data-composition-id=\"number-pop-in\": its own timeline nests there.",
+  "description": "A transitions.dev-inspired digit pop-in with blur, lift, and staggered value reveal. Mount it with data-composition-src on a host with data-composition-id=\"number-pop-in\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

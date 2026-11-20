@@ -1,7 +1,7 @@
 <!--
   Blur In - Operator Black content-focus reveal primitive.
 
-  Paste the markup, CSS and script into a composition. Use the timeline
+  Mount this file with data-composition-src, once for each place it plays (note at the bottom). Use the timeline
   integration note at the bottom as the starting point for deterministic GSAP
   animation.
 
@@ -21,60 +21,60 @@
   On every default the result is identical to the original: 52px strong words,
   centred.
 -->
-
-<div
-  data-hf-ui-root
-  class="hf-ui-blur-in"
-  aria-label="Монтаж с ИИ за минуту"
-  data-composition-variables='[
+<div data-composition-id="blur-in">
+  <div
+    data-hf-ui-root
+    class="hf-ui-blur-in"
+    aria-label="Монтаж с ИИ за минуту"
+    data-composition-variables='[
     { "id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the revealed words in pixels; the gap between words scales with it.", "default": 52, "min": 28, "max": 120, "step": 2, "unit": "px" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Word colour: strong for headlines, muted for supporting lines, accent for the brand red.", "default": "strong", "options": [{ "value": "strong", "label": "Strong" }, { "value": "muted", "label": "Muted" }, { "value": "accent", "label": "Accent" }] },
     { "id": "align", "type": "enum", "role": "style", "label": "Align", "description": "Horizontal alignment of the words in the frame.", "default": "center", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }] }
   ]'
->
-  <span>Монтаж</span>
-  <span>с</span>
-  <span>ИИ</span>
-  <span>за</span>
-  <span>минуту</span>
-</div>
+  >
+    <span>Монтаж</span>
+    <span>с</span>
+    <span>ИИ</span>
+    <span>за</span>
+    <span>минуту</span>
+  </div>
 
-<style>
-  @font-face {
-    font-family: "Bebas Neue";
-    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: block;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
-      U+A720-A7FF;
-  }
-  /* hf-ui:tokens:start */
-  /* prettier-ignore */
-  [data-hf-ui-root] {
+  <style>
+    @font-face {
+      font-family: "Bebas Neue";
+      src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* hf-ui:tokens:start */
+    /* prettier-ignore */
+    [data-hf-ui-root] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #eeeeee);
     --_hf-ui-action-contrast: var(--hf-ui-action-contrast, #111111);
@@ -133,14 +133,14 @@
     color-scheme: dark;
     font-family: var(--_hf-ui-font-sans);
   }
-  /* prettier-ignore */
-  [data-hf-ui-root] *,
+    /* prettier-ignore */
+    [data-hf-ui-root] *,
   [data-hf-ui-root] *::before,
   [data-hf-ui-root] *::after {
     box-sizing: border-box;
   }
-  /* prettier-ignore */
-  [data-hf-theme="light"] [data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-theme="light"] [data-hf-ui-root],
   [data-hf-ui-root][data-hf-theme="light"] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #171717);
@@ -169,13 +169,13 @@
     --_hf-ui-warning: var(--hf-ui-warning, #8a4b00);
     color-scheme: light;
   }
-  /* prettier-ignore */
-  [data-hf-ui-root]:focus-visible {
+    /* prettier-ignore */
+    [data-hf-ui-root]:focus-visible {
     outline: 2px solid var(--_hf-ui-accent);
     outline-offset: 3px;
   }
-  /* prettier-ignore */
-  [data-hf-rendering="true"][data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-rendering="true"][data-hf-ui-root],
   [data-hf-rendering="true"] [data-hf-ui-root],
   [data-hf-rendering="true"][data-hf-ui-root] *,
   [data-hf-rendering="true"] [data-hf-ui-root] *,
@@ -192,8 +192,8 @@
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  /* prettier-ignore */
-  @media (prefers-reduced-motion: reduce) {
+    /* prettier-ignore */
+    @media (prefers-reduced-motion: reduce) {
     [data-hf-ui-root],
     [data-hf-ui-root] *,
     [data-hf-ui-root] *::before,
@@ -205,86 +205,96 @@
       scroll-behavior: auto !important;
     }
   }
-  /* hf-ui:tokens:end */
-  .hf-ui-blur-in {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: var(--hf-blur-in-align, center);
-    text-align: center;
-    gap: 0.28em;
-    color: var(--hf-blur-in-color, var(--_hf-ui-text-strong));
-    font: var(--_hf-ui-weight-semibold) 52px/1 var(--_hf-ui-font-sans);
-    font-size: var(--hf-blur-in-size, 52px);
-    letter-spacing: -0.02em;
-  }
-  .hf-ui-blur-in span {
-    display: inline-block;
-    filter: blur(0px);
-    opacity: 1;
-    will-change: opacity, transform, filter;
-  }
-</style>
-
-<script>
-  (function () {
-    "use strict";
-
-    var vars =
-      window.__hyperframes && window.__hyperframes.getVariables
-        ? window.__hyperframes.getVariables()
-        : {};
-
-    // Unrecognised overrides return to their declared defaults.
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    /* hf-ui:tokens:end */
+    .hf-ui-blur-in {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: var(--hf-blur-in-align, center);
+      text-align: center;
+      gap: 0.28em;
+      color: var(--hf-blur-in-color, var(--_hf-ui-text-strong));
+      font: var(--_hf-ui-weight-semibold) 52px/1 var(--_hf-ui-font-sans);
+      font-size: var(--hf-blur-in-size, 52px);
+      letter-spacing: -0.02em;
     }
+    .hf-ui-blur-in span {
+      display: inline-block;
+      filter: blur(0px);
+      opacity: 1;
+      will-change: opacity, transform, filter;
+    }
+  </style>
 
-    function clampNumber(value, min, max, fallback) {
-      var n = typeof value === "number" ? value : parseFloat(value);
-      if (!isFinite(n)) {
-        return fallback;
+  <script>
+    (function () {
+      "use strict";
+
+      var vars =
+        window.__hyperframes && window.__hyperframes.getVariables
+          ? window.__hyperframes.getVariables()
+          : {};
+
+      // Unrecognised overrides return to their declared defaults.
+      function pick(table, value, fallback) {
+        return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
       }
-      return Math.min(max, Math.max(min, n));
-    }
 
-    var tones = {
-      strong: "var(--_hf-ui-text-strong)",
-      muted: "var(--_hf-ui-text-muted)",
-      accent: "var(--brand, #ff0000)", // the brand red, not the interface green
-    };
-    var aligns = { left: "flex-start", center: "center", right: "flex-end" };
+      function clampNumber(value, min, max, fallback) {
+        var n = typeof value === "number" ? value : parseFloat(value);
+        if (!isFinite(n)) {
+          return fallback;
+        }
+        return Math.min(max, Math.max(min, n));
+      }
 
-    var size = clampNumber(vars.size, 28, 120, 52); // 28 px floor (vertical.md:18)
-    var tone = tones[pick(tones, vars.tone, "strong")];
-    var align = aligns[pick(aligns, vars.align, "center")];
+      var tones = {
+        strong: "var(--_hf-ui-text-strong)",
+        muted: "var(--_hf-ui-text-muted)",
+        accent: "var(--brand, #ff0000)", // the brand red, not the interface green
+      };
+      var aligns = { left: "flex-start", center: "center", right: "flex-end" };
 
-    var roots = document.querySelectorAll(".hf-ui-blur-in");
-    for (var i = 0; i < roots.length; i += 1) {
-      roots[i].style.setProperty("--hf-blur-in-size", size + "px");
-      roots[i].style.setProperty("--hf-blur-in-color", tone);
-      roots[i].style.setProperty("--hf-blur-in-align", align);
-    }
-  })();
-</script>
+      var size = clampNumber(vars.size, 28, 120, 52); // 28 px floor (vertical.md:18)
+      var tone = tones[pick(tones, vars.tone, "strong")];
+      var align = aligns[pick(aligns, vars.align, "center")];
 
-<!--
+      var roots = document.querySelectorAll(".hf-ui-blur-in");
+      for (var i = 0; i < roots.length; i += 1) {
+        roots[i].style.setProperty("--hf-blur-in-size", size + "px");
+        roots[i].style.setProperty("--hf-blur-in-color", tone);
+        roots[i].style.setProperty("--hf-blur-in-align", align);
+      }
+    })();
+  </script>
+
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["blur-in"]; mount the snippet inside a clip with data-composition-id="blur-in"
-  and the runtime nests it at that clip's start.
+  window.__timelines["blur-in"]; mount this file with data-composition-src on a host with
+  data-composition-id="blur-in", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="blur-in" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    tl.fromTo(
-      ".hf-ui-blur-in span",
-      { opacity: 0, y: 8, filter: "blur(10px)" },
-      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.36, stagger: 0.04, ease: "power3.out" },
-      startTime,
-    );
-    window.__timelines = window.__timelines || {};
-    window.__timelines["blur-in"] = tl;
-  })();
-</script>
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="blur-in" */
+    (function () {
+      var startTime = 0;
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        ".hf-ui-blur-in span",
+        { opacity: 0, y: 8, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.36,
+          stagger: 0.04,
+          ease: "power3.out",
+        },
+        startTime,
+      );
+      window.__timelines = window.__timelines || {};
+      window.__timelines["blur-in"] = tl;
+    })();
+  </script>
+</div>

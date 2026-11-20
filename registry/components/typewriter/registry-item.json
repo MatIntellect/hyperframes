@@ -3,7 +3,7 @@
   "name": "typewriter",
   "type": "hyperframes:component",
   "title": "Typewriter",
-  "description": "Character-by-character text reveal with a deterministic blinking cursor. Mount it inside a clip with data-composition-id=\"typewriter\": its own timeline nests there.",
+  "description": "Character-by-character text reveal with a deterministic blinking cursor. Mount it with data-composition-src on a host with data-composition-id=\"typewriter\", once for each place it plays.",
   "tags": ["video-primitive", "motion-primitive", "typography", "vertical"],
   "files": [
     {

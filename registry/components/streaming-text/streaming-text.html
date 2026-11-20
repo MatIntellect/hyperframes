@@ -1,7 +1,7 @@
 <!--
   Streaming Text - AI-answer token-flow primitive.
 
-  Paste the markup, CSS and script into a composition. Use the timeline
+  Mount this file with data-composition-src, once for each place it plays (note at the bottom). Use the timeline
   integration note at the bottom as the starting point for deterministic GSAP
   animation.
 
@@ -25,62 +25,63 @@
   On every default the result matches the measured reference: 27px ink on a
   light chat ground.
 -->
-
-<div
-  data-hf-ui-root
-  class="hf-ui-streaming-text"
-  aria-label="Streamed answer text"
-  data-composition-variables='[
+<div data-composition-id="streaming-text">
+  <div
+    data-hf-ui-root
+    class="hf-ui-streaming-text"
+    aria-label="Streamed answer text"
+    data-composition-variables='[
     { "id": "size", "type": "number", "role": "style", "label": "Size", "description": "Type size of the streamed words.", "default": 40, "min": 28, "max": 64, "step": 1, "unit": "px" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Ink pair: dark words on a light ground, or light words on a dark ground.", "default": "light-on-dark", "options": [{ "value": "dark-on-light", "label": "Dark on light" }, { "value": "light-on-dark", "label": "Light on dark" }] }
   ]'
->
-  <p class="hf-st-p">
-    <span class="w">Тебе</span> <span class="w">не</span> <span class="w">нужен</span>
-    <span class="w">монтажёр.</span> <span class="w">Нейросеть</span> <span class="w">соберёт</span>
-    <span class="w">ролик</span> <span class="w">из</span> <span class="w">твоей</span>
-    <span class="w">записи</span> <span class="w">и</span> <span class="w">сама</span>
-    <span class="w">расставит</span> <span class="w">субтитры</span> <span class="w">и</span>
-    <span class="w">хук.</span>
-  </p>
-</div>
+  >
+    <p class="hf-st-p">
+      <span class="w">Тебе</span> <span class="w">не</span> <span class="w">нужен</span>
+      <span class="w">монтажёр.</span> <span class="w">Нейросеть</span>
+      <span class="w">соберёт</span> <span class="w">ролик</span> <span class="w">из</span>
+      <span class="w">твоей</span> <span class="w">записи</span> <span class="w">и</span>
+      <span class="w">сама</span> <span class="w">расставит</span> <span class="w">субтитры</span>
+      <span class="w">и</span>
+      <span class="w">хук.</span>
+    </p>
+  </div>
 
-<style>
-  @font-face {
-    font-family: "Bebas Neue";
-    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: block;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
-      U+A720-A7FF;
-  }
-  /* hf-ui:tokens:start */
-  /* prettier-ignore */
-  [data-hf-ui-root] {
+  <style>
+    @font-face {
+      font-family: "Bebas Neue";
+      src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* hf-ui:tokens:start */
+    /* prettier-ignore */
+    [data-hf-ui-root] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #eeeeee);
     --_hf-ui-action-contrast: var(--hf-ui-action-contrast, #111111);
@@ -139,14 +140,14 @@
     color-scheme: dark;
     font-family: var(--_hf-ui-font-sans);
   }
-  /* prettier-ignore */
-  [data-hf-ui-root] *,
+    /* prettier-ignore */
+    [data-hf-ui-root] *,
   [data-hf-ui-root] *::before,
   [data-hf-ui-root] *::after {
     box-sizing: border-box;
   }
-  /* prettier-ignore */
-  [data-hf-theme="light"] [data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-theme="light"] [data-hf-ui-root],
   [data-hf-ui-root][data-hf-theme="light"] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #171717);
@@ -175,13 +176,13 @@
     --_hf-ui-warning: var(--hf-ui-warning, #8a4b00);
     color-scheme: light;
   }
-  /* prettier-ignore */
-  [data-hf-ui-root]:focus-visible {
+    /* prettier-ignore */
+    [data-hf-ui-root]:focus-visible {
     outline: 2px solid var(--_hf-ui-accent);
     outline-offset: 3px;
   }
-  /* prettier-ignore */
-  [data-hf-rendering="true"][data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-rendering="true"][data-hf-ui-root],
   [data-hf-rendering="true"] [data-hf-ui-root],
   [data-hf-rendering="true"][data-hf-ui-root] *,
   [data-hf-rendering="true"] [data-hf-ui-root] *,
@@ -198,8 +199,8 @@
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  /* prettier-ignore */
-  @media (prefers-reduced-motion: reduce) {
+    /* prettier-ignore */
+    @media (prefers-reduced-motion: reduce) {
     [data-hf-ui-root],
     [data-hf-ui-root] *,
     [data-hf-ui-root] *::before,
@@ -211,90 +212,93 @@
       scroll-behavior: auto !important;
     }
   }
-  /* hf-ui:tokens:end */
+    /* hf-ui:tokens:end */
 
-  .hf-ui-streaming-text {
-    font-size: var(--hf-st-size, 28px);
-    color: var(--hf-st-ink, #f3f3f3);
-    font-family: var(--_hf-ui-font-sans);
-  }
-  .hf-st-p {
-    margin: 0;
-    line-height: 1.43;
-    letter-spacing: 0.046em;
-    max-width: 24.5em;
-  }
-  .hf-ui-streaming-text .w {
-    opacity: 0;
-  }
-</style>
-
-<script>
-  (function () {
-    "use strict";
-
-    var vars =
-      window.__hyperframes && window.__hyperframes.getVariables
-        ? window.__hyperframes.getVariables()
-        : {};
-
-    // Unrecognised overrides return to their declared defaults.
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    .hf-ui-streaming-text {
+      font-size: var(--hf-st-size, 28px);
+      color: var(--hf-st-ink, #f3f3f3);
+      font-family: var(--_hf-ui-font-sans);
     }
+    .hf-st-p {
+      margin: 0;
+      line-height: 1.43;
+      letter-spacing: 0.046em;
+      max-width: 24.5em;
+    }
+    .hf-ui-streaming-text .w {
+      opacity: 0;
+    }
+  </style>
 
-    function clampNumber(value, min, max, fallback) {
-      var n = typeof value === "number" ? value : parseFloat(value);
-      if (!isFinite(n)) {
-        return fallback;
+  <script>
+    (function () {
+      "use strict";
+
+      var vars =
+        window.__hyperframes && window.__hyperframes.getVariables
+          ? window.__hyperframes.getVariables()
+          : {};
+
+      // Unrecognised overrides return to their declared defaults.
+      function pick(table, value, fallback) {
+        return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
       }
-      return Math.min(max, Math.max(min, n));
-    }
 
-    var tones = {
-      "dark-on-light": { ink: "#141414", fresh: "#767676" },
-      "light-on-dark": { ink: "#f3f3f3", fresh: "#5f5f5f" },
-    };
+      function clampNumber(value, min, max, fallback) {
+        var n = typeof value === "number" ? value : parseFloat(value);
+        if (!isFinite(n)) {
+          return fallback;
+        }
+        return Math.min(max, Math.max(min, n));
+      }
 
-    var size = clampNumber(vars.size, 28, 64, 40); // hero size; 28 px is the floor (vertical.md:18)
-    var tone = tones[pick(tones, vars.tone, "light-on-dark")]; // the reels are dark
+      var tones = {
+        "dark-on-light": { ink: "#141414", fresh: "#767676" },
+        "light-on-dark": { ink: "#f3f3f3", fresh: "#5f5f5f" },
+      };
 
-    var roots = document.querySelectorAll(".hf-ui-streaming-text");
-    for (var i = 0; i < roots.length; i += 1) {
-      roots[i].style.setProperty("--hf-st-size", size + "px");
-      roots[i].style.setProperty("--hf-st-ink", tone.ink);
-      roots[i].style.setProperty("--hf-st-fresh", tone.fresh);
-    }
-  })();
-</script>
+      var size = clampNumber(vars.size, 28, 64, 40); // hero size; 28 px is the floor (vertical.md:18)
+      var tone = tones[pick(tones, vars.tone, "light-on-dark")]; // the reels are dark
 
-<!--
+      var roots = document.querySelectorAll(".hf-ui-streaming-text");
+      for (var i = 0; i < roots.length; i += 1) {
+        roots[i].style.setProperty("--hf-st-size", size + "px");
+        roots[i].style.setProperty("--hf-st-ink", tone.ink);
+        roots[i].style.setProperty("--hf-st-fresh", tone.fresh);
+      }
+    })();
+  </script>
+
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["streaming-text"]; mount the snippet inside a clip with data-composition-id="streaming-text"
-  and the runtime nests it at that clip's start.
+  window.__timelines["streaming-text"]; mount this file with data-composition-src on a host with
+  data-composition-id="streaming-text", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="streaming-text" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    var GAPS = [
-      0.167, 0.1, 0.0, 0.367, 0.0, 0.167, 0.133, 0.1, 0.1, 0.133, 0.167, 0.133, 0.0, 0.233, 0.167,
-      0.1, 0.0, 0.133, 0.133, 0.1, 0.167, 0.133, 0.1, 0.133, 0.167, 0.1, 0.133, 0.1, 0.133,
-    ];
-    var t = startTime;
-    gsap.utils.toArray(".hf-ui-streaming-text .w").forEach(function (w, i) {
-      if (i > 0) t += GAPS[i % GAPS.length];
-      tl.set(w, { opacity: 1 }, t);
-      tl.fromTo(
-        w,
-        { color: "var(--hf-st-fresh, #5f5f5f)" },
-        { color: "var(--hf-st-ink, #f3f3f3)", duration: 0.2667, ease: "none" },
-        t,
-      );
-    });
-    window.__timelines = window.__timelines || {};
-    window.__timelines["streaming-text"] = tl;
-  })();
-</script>
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="streaming-text" */
+    (function () {
+      var startTime = 0;
+      var tl = gsap.timeline({ paused: true });
+      var GAPS = [
+        0.167, 0.1, 0.0, 0.367, 0.0, 0.167, 0.133, 0.1, 0.1, 0.133, 0.167, 0.133, 0.0, 0.233, 0.167,
+        0.1, 0.0, 0.133, 0.133, 0.1, 0.167, 0.133, 0.1, 0.133, 0.167, 0.1, 0.133, 0.1, 0.133,
+      ];
+      var t = startTime;
+      gsap.utils.toArray(".hf-ui-streaming-text .w").forEach(function (w, i) {
+        if (i > 0) t += GAPS[i % GAPS.length];
+        tl.set(w, { opacity: 1 }, t);
+        tl.fromTo(
+          w,
+          { color: "var(--hf-st-fresh, #5f5f5f)" },
+          { color: "var(--hf-st-ink, #f3f3f3)", duration: 0.2667, ease: "none" },
+          t,
+        );
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["streaming-text"] = tl;
+    })();
+  </script>
+</div>

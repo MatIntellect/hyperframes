@@ -3,7 +3,7 @@
   "name": "x-follow-card",
   "type": "hyperframes:component",
   "title": "X Follow Card",
-  "description": "A social follow card with avatar, handle, and follower motion. Mount it inside a clip with data-composition-id=\"x-follow-card\": its own timeline nests there.",
+  "description": "A social follow card with avatar, handle, and follower motion. Mount it with data-composition-src on a host with data-composition-id=\"x-follow-card\", once for each place it plays.",
   "tags": ["social-overlay", "vertical"],
   "files": [
     {

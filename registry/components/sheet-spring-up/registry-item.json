@@ -3,7 +3,7 @@
   "name": "sheet-spring-up",
   "type": "hyperframes:component",
   "title": "Sheet Spring-Up",
-  "description": "A bottom sheet rushes up from below the frame on a real spring sampled frame by frame from reference footage, overshooting its resting place and settling back without an approximated ease. Mount it inside a clip with data-composition-id=\"sheet-spring-up\": its own timeline nests there.",
+  "description": "A bottom sheet rushes up from below the frame on a real spring sampled frame by frame from reference footage, overshooting its resting place and settling back without an approximated ease. Mount it with data-composition-src on a host with data-composition-id=\"sheet-spring-up\", once for each place it plays.",
   "tags": ["video-primitive", "sheet", "spring", "mock-ui", "overlay", "vertical"],
   "author": "Miao Yang",
   "variables": [

@@ -3,7 +3,7 @@
   "name": "card-resize",
   "type": "hyperframes:component",
   "title": "Card Resize",
-  "description": "Card resize for vertical reels: a compact status card grows into a detailed one and its hint fades in. Thumbnail treatment and elevation are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"card-resize\": its own timeline nests there.",
+  "description": "Card resize for vertical reels: a compact status card grows into a detailed one and its hint fades in. Thumbnail treatment and elevation are fields. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"card-resize\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

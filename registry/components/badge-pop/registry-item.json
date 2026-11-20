@@ -3,7 +3,7 @@
   "name": "badge-pop",
   "type": "hyperframes:component",
   "title": "Badge Pop",
-  "description": "Notification badge pop for vertical reels: a dark bell tile rises and a brand-red count badge pops onto its corner with an elastic bump. The count is a field. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"badge-pop\": its own timeline nests there.",
+  "description": "Notification badge pop for vertical reels: a dark bell tile rises and a brand-red count badge pops onto its corner with an elastic bump. The count is a field. Brand palette, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"badge-pop\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

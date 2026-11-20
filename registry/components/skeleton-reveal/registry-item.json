@@ -3,7 +3,7 @@
   "name": "skeleton-reveal",
   "type": "hyperframes:component",
   "title": "Skeleton Reveal",
-  "description": "Skeleton reveal for vertical reels: a shimmering placeholder card cross-fades into a name and a detail line. Name and detail are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"skeleton-reveal\": its own timeline nests there.",
+  "description": "Skeleton reveal for vertical reels: a shimmering placeholder card cross-fades into a name and a detail line. Name and detail are fields. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"skeleton-reveal\", once for each place it plays.",
   "tags": [
     "video-primitive",
     "transition-primitive",

@@ -3,7 +3,7 @@
   "name": "stagger-lattice",
   "type": "hyperframes:component",
   "title": "Stagger Lattice",
-  "description": "Stagger lattice for vertical reels: a five-row grid of light tiles rises in a wave across a dark brand panel. Brand palette, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"stagger-lattice\": its own timeline nests there.",
+  "description": "Stagger lattice for vertical reels: a five-row grid of light tiles rises in a wave across a dark brand panel. Brand palette, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"stagger-lattice\", once for each place it plays.",
   "tags": ["advanced-motion", "anime-inspired", "hyperframes-native", "vertical"],
   "files": [
     {

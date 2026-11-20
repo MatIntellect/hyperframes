@@ -3,7 +3,7 @@
   "name": "mesh-gradient-bg",
   "type": "hyperframes:component",
   "title": "Mesh Gradient Background",
-  "description": "Full-bleed brand background: three soft blurred blobs (muted brand red, a light haze) drift on the reel's dark ground for the whole clip, under the content. Mount it inside a clip with data-composition-id=\"mesh-gradient-bg\": its own timeline nests there.",
+  "description": "Full-bleed brand background: three soft blurred blobs (muted brand red, a light haze) drift on the reel's dark ground for the whole clip, under the content. Mount it with data-composition-src on a host with data-composition-id=\"mesh-gradient-bg\", once for each place it plays.",
   "tags": ["effect", "vertical"],
   "files": [
     {

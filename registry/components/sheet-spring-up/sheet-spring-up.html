@@ -1,7 +1,7 @@
 <!--
   Sheet Spring-Up - bottom-sheet arrival primitive.
 
-  Paste the markup, CSS and script into a composition. Use the timeline
+  Mount this file with data-composition-src, once for each place it plays (note at the bottom). Use the timeline
   integration note at the bottom as the starting point for deterministic GSAP
   animation.
 
@@ -23,59 +23,59 @@
   On every default the result matches the measured reference: a 668px light
   sheet with 34px corners.
 -->
-
-<div
-  data-hf-ui-root
-  class="hf-ui-sheet-spring-up"
-  aria-label="Bottom sheet arriving"
-  data-composition-variables='[
+<div data-composition-id="sheet-spring-up">
+  <div
+    data-hf-ui-root
+    class="hf-ui-sheet-spring-up"
+    aria-label="Bottom sheet arriving"
+    data-composition-variables='[
     { "id": "width", "type": "number", "role": "style", "label": "Width", "description": "Sheet width in pixels.", "default": 668, "min": 400, "max": 900, "step": 4, "unit": "px" },
     { "id": "radius", "type": "number", "role": "style", "label": "Radius", "description": "Sheet corner radius.", "default": 34, "min": 16, "max": 48, "step": 1, "unit": "px" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Light is the reference near-white sheet; dark is the raised surface token.", "default": "light", "options": [{ "value": "light", "label": "Light" }, { "value": "dark", "label": "Dark" }] }
   ]'
->
-  <div class="hf-ssu-sheet" id="hf-ssu-sheet-1">
-    <div class="hf-ssu-title">Поделиться</div>
-    <div class="hf-ssu-body" aria-hidden="true"><i></i><i></i><i></i></div>
+  >
+    <div class="hf-ssu-sheet" id="hf-ssu-sheet-1">
+      <div class="hf-ssu-title">Поделиться</div>
+      <div class="hf-ssu-body" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
   </div>
-</div>
 
-<style>
-  @font-face {
-    font-family: "Bebas Neue";
-    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: block;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
-      U+A720-A7FF;
-  }
-  /* hf-ui:tokens:start */
-  /* prettier-ignore */
-  [data-hf-ui-root] {
+  <style>
+    @font-face {
+      font-family: "Bebas Neue";
+      src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* hf-ui:tokens:start */
+    /* prettier-ignore */
+    [data-hf-ui-root] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #eeeeee);
     --_hf-ui-action-contrast: var(--hf-ui-action-contrast, #111111);
@@ -134,14 +134,14 @@
     color-scheme: dark;
     font-family: var(--_hf-ui-font-sans);
   }
-  /* prettier-ignore */
-  [data-hf-ui-root] *,
+    /* prettier-ignore */
+    [data-hf-ui-root] *,
   [data-hf-ui-root] *::before,
   [data-hf-ui-root] *::after {
     box-sizing: border-box;
   }
-  /* prettier-ignore */
-  [data-hf-theme="light"] [data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-theme="light"] [data-hf-ui-root],
   [data-hf-ui-root][data-hf-theme="light"] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #171717);
@@ -170,140 +170,143 @@
     --_hf-ui-warning: var(--hf-ui-warning, #8a4b00);
     color-scheme: light;
   }
-  /* prettier-ignore */
-  [data-hf-ui-root]:focus-visible {
+    /* prettier-ignore */
+    [data-hf-ui-root]:focus-visible {
     outline: 2px solid var(--_hf-ui-accent);
     outline-offset: 3px;
   }
-  /* hf-ui:tokens:end */
+    /* hf-ui:tokens:end */
 
-  .hf-ui-sheet-spring-up {
-    position: relative;
-  }
-  .hf-ssu-sheet {
-    position: relative;
-    width: var(--hf-ssu-width, 668px);
-    border-radius: var(--hf-ssu-radius, 34px);
-    background: var(--hf-ssu-surface, #f9f9f9);
-    color: var(--hf-ssu-ink, #101010);
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
-    padding: 49px 43px 43px;
-    will-change: opacity, transform;
-  }
-  .hf-ssu-title {
-    text-align: center;
-    font-size: 44px;
-    font-weight: var(--_hf-ui-weight-semibold);
-    line-height: 1;
-    letter-spacing: 0.2px;
-  }
-  /* the body is placeholder material: three skeleton text rules at L3 (100 / 86 / 62 %), not words */
-  .hf-ssu-body {
-    margin-top: 32px;
-    display: grid;
-    gap: 16px;
-  }
-  .hf-ssu-body i {
-    display: block;
-    height: 16px;
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--hf-ssu-ink, #101010) 18%, transparent);
-  }
-  .hf-ssu-body i:nth-child(2) {
-    width: 86%;
-  }
-  .hf-ssu-body i:nth-child(3) {
-    width: 62%;
-  }
-</style>
-
-<script>
-  (function () {
-    "use strict";
-
-    var vars =
-      window.__hyperframes && window.__hyperframes.getVariables
-        ? window.__hyperframes.getVariables()
-        : {};
-
-    // Unrecognised overrides return to their declared defaults.
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    .hf-ui-sheet-spring-up {
+      position: relative;
     }
+    .hf-ssu-sheet {
+      position: relative;
+      width: var(--hf-ssu-width, 668px);
+      border-radius: var(--hf-ssu-radius, 34px);
+      background: var(--hf-ssu-surface, #f9f9f9);
+      color: var(--hf-ssu-ink, #101010);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+      padding: 49px 43px 43px;
+      will-change: opacity, transform;
+    }
+    .hf-ssu-title {
+      text-align: center;
+      font-size: 44px;
+      font-weight: var(--_hf-ui-weight-semibold);
+      line-height: 1;
+      letter-spacing: 0.2px;
+    }
+    /* the body is placeholder material: three skeleton text rules at L3 (100 / 86 / 62 %), not words */
+    .hf-ssu-body {
+      margin-top: 32px;
+      display: grid;
+      gap: 16px;
+    }
+    .hf-ssu-body i {
+      display: block;
+      height: 16px;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--hf-ssu-ink, #101010) 18%, transparent);
+    }
+    .hf-ssu-body i:nth-child(2) {
+      width: 86%;
+    }
+    .hf-ssu-body i:nth-child(3) {
+      width: 62%;
+    }
+  </style>
 
-    function clampNumber(value, min, max, fallback) {
-      var n = typeof value === "number" ? value : parseFloat(value);
-      if (!isFinite(n)) {
-        return fallback;
+  <script>
+    (function () {
+      "use strict";
+
+      var vars =
+        window.__hyperframes && window.__hyperframes.getVariables
+          ? window.__hyperframes.getVariables()
+          : {};
+
+      // Unrecognised overrides return to their declared defaults.
+      function pick(table, value, fallback) {
+        return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
       }
-      return Math.min(max, Math.max(min, n));
-    }
 
-    var tones = {
-      light: { surface: "#f9f9f9", ink: "#101010", inkMuted: "#313131" },
-      dark: {
-        surface: "var(--_hf-ui-surface-raised)",
-        ink: "var(--_hf-ui-text-strong)",
-        inkMuted: "var(--_hf-ui-text-muted)",
-      },
-    };
+      function clampNumber(value, min, max, fallback) {
+        var n = typeof value === "number" ? value : parseFloat(value);
+        if (!isFinite(n)) {
+          return fallback;
+        }
+        return Math.min(max, Math.max(min, n));
+      }
 
-    var width = clampNumber(vars.width, 400, 900, 668);
-    var radius = clampNumber(vars.radius, 16, 48, 34);
-    var tone = tones[pick(tones, vars.tone, "light")];
+      var tones = {
+        light: { surface: "#f9f9f9", ink: "#101010", inkMuted: "#313131" },
+        dark: {
+          surface: "var(--_hf-ui-surface-raised)",
+          ink: "var(--_hf-ui-text-strong)",
+          inkMuted: "var(--_hf-ui-text-muted)",
+        },
+      };
 
-    var roots = document.querySelectorAll(".hf-ui-sheet-spring-up");
-    for (var i = 0; i < roots.length; i += 1) {
-      roots[i].style.setProperty("--hf-ssu-width", width + "px");
-      roots[i].style.setProperty("--hf-ssu-radius", radius + "px");
-      roots[i].style.setProperty("--hf-ssu-surface", tone.surface);
-      roots[i].style.setProperty("--hf-ssu-ink", tone.ink);
-      roots[i].style.setProperty("--hf-ssu-ink-muted", tone.inkMuted);
-    }
-  })();
-</script>
+      var width = clampNumber(vars.width, 400, 900, 668);
+      var radius = clampNumber(vars.radius, 16, 48, 34);
+      var tone = tones[pick(tones, vars.tone, "light")];
 
-<!--
+      var roots = document.querySelectorAll(".hf-ui-sheet-spring-up");
+      for (var i = 0; i < roots.length; i += 1) {
+        roots[i].style.setProperty("--hf-ssu-width", width + "px");
+        roots[i].style.setProperty("--hf-ssu-radius", radius + "px");
+        roots[i].style.setProperty("--hf-ssu-surface", tone.surface);
+        roots[i].style.setProperty("--hf-ssu-ink", tone.ink);
+        roots[i].style.setProperty("--hf-ssu-ink-muted", tone.inkMuted);
+      }
+    })();
+  </script>
+
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["sheet-spring-up"]; mount the snippet inside a clip with data-composition-id="sheet-spring-up"
-  and the runtime nests it at that clip's start.
+  window.__timelines["sheet-spring-up"]; mount this file with data-composition-src on a host with
+  data-composition-id="sheet-spring-up", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="sheet-spring-up" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    var SPRING = [
-      [0.0, 1450, 0.0],
-      [0.057, 1198, 0.13],
-      [0.09, 903, 0.21],
-      [0.123, 648, 0.36],
-      [0.157, 437, 0.43],
-      [0.19, 262, 0.5],
-      [0.223, 120, 0.62],
-      [0.257, 8, 0.78],
-      [0.29, -76, 0.89],
-      [0.323, -138, 1.0],
-      [0.357, -175, null],
-      [0.39, -191, null],
-      [0.423, -192, null],
-      [0.457, -181, null],
-      [0.49, -159, null],
-      [0.523, -131, null],
-      [0.557, -100, null],
-      [0.59, -68, null],
-      [0.623, -41, null],
-      [0.657, -18, null],
-      [0.69, -5, null],
-      [0.723, 0, null],
-    ];
-    SPRING.forEach(function (s) {
-      var props = { y: s[1] };
-      if (s[2] !== null) props.autoAlpha = s[2];
-      tl.set("#hf-ssu-sheet-1", props, startTime + s[0]);
-    });
-    window.__timelines = window.__timelines || {};
-    window.__timelines["sheet-spring-up"] = tl;
-  })();
-</script>
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="sheet-spring-up" */
+    (function () {
+      var startTime = 0;
+      var tl = gsap.timeline({ paused: true });
+      var SPRING = [
+        [0.0, 1450, 0.0],
+        [0.057, 1198, 0.13],
+        [0.09, 903, 0.21],
+        [0.123, 648, 0.36],
+        [0.157, 437, 0.43],
+        [0.19, 262, 0.5],
+        [0.223, 120, 0.62],
+        [0.257, 8, 0.78],
+        [0.29, -76, 0.89],
+        [0.323, -138, 1.0],
+        [0.357, -175, null],
+        [0.39, -191, null],
+        [0.423, -192, null],
+        [0.457, -181, null],
+        [0.49, -159, null],
+        [0.523, -131, null],
+        [0.557, -100, null],
+        [0.59, -68, null],
+        [0.623, -41, null],
+        [0.657, -18, null],
+        [0.69, -5, null],
+        [0.723, 0, null],
+      ];
+      SPRING.forEach(function (s) {
+        var props = { y: s[1] };
+        if (s[2] !== null) props.autoAlpha = s[2];
+        tl.set("#hf-ssu-sheet-1", props, startTime + s[0]);
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["sheet-spring-up"] = tl;
+    })();
+  </script>
+</div>

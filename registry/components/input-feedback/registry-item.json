@@ -3,7 +3,7 @@
   "name": "input-feedback",
   "type": "hyperframes:component",
   "title": "Input Feedback",
-  "description": "Input field feedback for vertical reels: a labelled field shakes, a status chip pops and a hint appears. Valid is a neutral light chip, error turns border, chip and hint brand red. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it inside a clip with data-composition-id=\"input-feedback\": its own timeline nests there.",
+  "description": "Input field feedback for vertical reels: a labelled field shakes, a status chip pops and a hint appears. Valid is a neutral light chip, error turns border, chip and hint brand red. Brand palette tokens, Montserrat, sized for the 780 px graphics field. Mount it with data-composition-src on a host with data-composition-id=\"input-feedback\", once for each place it plays.",
   "tags": ["transition-primitive", "transitions-dev-port", "input", "feedback", "vertical"],
   "files": [
     {

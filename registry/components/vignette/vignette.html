@@ -1,7 +1,8 @@
 <!--
   Vignette — cinematic radial darkening overlay.
 
-  Usage: paste this snippet inside your composition's positioned stage.
+  Usage: mount this file with data-composition-src over the content, once for each place it
+  plays.
   The overlay covers the full viewport with pointer-events: none so it
   sits on top of all content without blocking interaction.
 
@@ -12,52 +13,55 @@
   - --vignette-shape: ellipse | circle (default ellipse)
   - z-index: defaults to 90 so grain-overlay (100) reads on top
 -->
+<div data-composition-id="vignette">
+  <div
+    id="hf-vignette"
+    data-layout-allow-occlusion
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 90;
+    "
+  ></div>
 
-<div
-  id="hf-vignette"
-  data-layout-allow-occlusion
-  style="
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 90;
-  "
-></div>
+  <style>
+    #hf-vignette {
+      background: radial-gradient(
+        var(--vignette-shape, ellipse) at center,
+        transparent var(--vignette-size, 45%),
+        var(--vignette-color, rgba(0, 0, 0, 0.7)) var(--vignette-edge, 100%)
+      );
+    }
+  </style>
 
-<style>
-  #hf-vignette {
-    background: radial-gradient(
-      var(--vignette-shape, ellipse) at center,
-      transparent var(--vignette-size, 45%),
-      var(--vignette-color, rgba(0, 0, 0, 0.7)) var(--vignette-edge, 100%)
-    );
-  }
-</style>
-
-<!--
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["vignette"]; mount the snippet inside a clip with data-composition-id="vignette"
-  and the runtime nests it at that clip's start.
+  window.__timelines["vignette"]; mount this file with data-composition-src on a host with
+  data-composition-id="vignette", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="vignette" */
-  (function () {
-    var startTime = 0;
-    var tl = gsap.timeline({ paused: true });
-    tl.fromTo(
-      "#hf-vignette",
-      { "--vignette-color": "rgba(0, 0, 0, 0)" },
-      { "--vignette-color": "rgba(0, 0, 0, 0.7)", duration: 1, ease: "power2.out" },
-      0,
-    );
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="vignette" */
+    (function () {
+      var startTime = 0;
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        "#hf-vignette",
+        { "--vignette-color": "rgba(0, 0, 0, 0)" },
+        { "--vignette-color": "rgba(0, 0, 0, 0.7)", duration: 1, ease: "power2.out" },
+        0,
+      );
 
-    // Or breathe the size in and out (works with any easing)
-    tl.to("#hf-vignette", { "--vignette-size": "35%", duration: 1, ease: "sine.inOut" }, 2);
-    window.__timelines = window.__timelines || {};
-    window.__timelines["vignette"] = tl;
-  })();
-</script>
+      // Or breathe the size in and out (works with any easing)
+      tl.to("#hf-vignette", { "--vignette-size": "35%", duration: 1, ease: "sine.inOut" }, 2);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["vignette"] = tl;
+    })();
+  </script>
+</div>

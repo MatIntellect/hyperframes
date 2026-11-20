@@ -1,7 +1,7 @@
 <!--
   Typing Indicator - chat "someone is writing" primitive.
 
-  Paste the markup, CSS and script into a composition. Use the timeline
+  Mount this file with data-composition-src, once for each place it plays (note at the bottom). Use the timeline
   integration note at the bottom as the starting point for deterministic GSAP
   animation.
 
@@ -24,64 +24,64 @@
   On every default: the measured reference scaled to a 176px dark
   bubble with three 17px dots and a tail.
 -->
-
-<div
-  data-hf-ui-root
-  class="hf-ui-typing-indicator"
-  aria-label="Typing indicator"
-  data-composition-variables='[
+<div data-composition-id="typing-indicator">
+  <div
+    data-hf-ui-root
+    class="hf-ui-typing-indicator"
+    aria-label="Typing indicator"
+    data-composition-variables='[
     { "id": "size", "type": "number", "role": "style", "label": "Size", "description": "Bubble width in pixels; dots and tail scale with it.", "default": 176, "min": 120, "max": 280, "step": 2, "unit": "px" },
     { "id": "tone", "type": "enum", "role": "style", "label": "Tone", "description": "Dark is the reference iOS bubble; light suits bright chat grounds.", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "light", "label": "Light" }] },
     { "id": "tail", "type": "enum", "role": "style", "label": "Tail", "description": "The two shrinking circles anchoring the bubble to the sender side.", "default": "on", "options": [{ "value": "on", "label": "On" }, { "value": "off", "label": "Off" }] }
   ]'
->
-  <div class="hf-ti-wrap" id="hf-ti-1">
-    <div class="hf-ti-bubble">
-      <span class="hf-ti-dot"></span>
-      <span class="hf-ti-dot"></span>
-      <span class="hf-ti-dot"></span>
+  >
+    <div class="hf-ti-wrap" id="hf-ti-1">
+      <div class="hf-ti-bubble">
+        <span class="hf-ti-dot"></span>
+        <span class="hf-ti-dot"></span>
+        <span class="hf-ti-dot"></span>
+      </div>
+      <div class="hf-ti-tail1"></div>
+      <div class="hf-ti-tail2"></div>
     </div>
-    <div class="hf-ti-tail1"></div>
-    <div class="hf-ti-tail2"></div>
   </div>
-</div>
 
-<style>
-  @font-face {
-    font-family: "Bebas Neue";
-    src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-display: block;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-  @font-face {
-    font-family: "Montserrat";
-    src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
-    font-weight: 100 900;
-    font-display: block;
-    unicode-range:
-      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-      U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F,
-      U+A720-A7FF;
-  }
-  /* hf-ui:tokens:start */
-  /* prettier-ignore */
-  [data-hf-ui-root] {
+  <style>
+    @font-face {
+      font-family: "Bebas Neue";
+      src: url("assets/fonts/bebas-neue-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-cyrillic.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Montserrat";
+      src: url("assets/fonts/montserrat-latin-ext.woff2") format("woff2");
+      font-weight: 100 900;
+      font-display: block;
+      unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* hf-ui:tokens:start */
+    /* prettier-ignore */
+    [data-hf-ui-root] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #eeeeee);
     --_hf-ui-action-contrast: var(--hf-ui-action-contrast, #111111);
@@ -140,14 +140,14 @@
     color-scheme: dark;
     font-family: var(--_hf-ui-font-sans);
   }
-  /* prettier-ignore */
-  [data-hf-ui-root] *,
+    /* prettier-ignore */
+    [data-hf-ui-root] *,
   [data-hf-ui-root] *::before,
   [data-hf-ui-root] *::after {
     box-sizing: border-box;
   }
-  /* prettier-ignore */
-  [data-hf-theme="light"] [data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-theme="light"] [data-hf-ui-root],
   [data-hf-ui-root][data-hf-theme="light"] {
     --_hf-ui-accent: var(--hf-ui-accent, var(--brand, #ff0000));
     --_hf-ui-action: var(--hf-ui-action, #171717);
@@ -176,13 +176,13 @@
     --_hf-ui-warning: var(--hf-ui-warning, #8a4b00);
     color-scheme: light;
   }
-  /* prettier-ignore */
-  [data-hf-ui-root]:focus-visible {
+    /* prettier-ignore */
+    [data-hf-ui-root]:focus-visible {
     outline: 2px solid var(--_hf-ui-accent);
     outline-offset: 3px;
   }
-  /* prettier-ignore */
-  [data-hf-rendering="true"][data-hf-ui-root],
+    /* prettier-ignore */
+    [data-hf-rendering="true"][data-hf-ui-root],
   [data-hf-rendering="true"] [data-hf-ui-root],
   [data-hf-rendering="true"][data-hf-ui-root] *,
   [data-hf-rendering="true"] [data-hf-ui-root] *,
@@ -199,8 +199,8 @@
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  /* prettier-ignore */
-  @media (prefers-reduced-motion: reduce) {
+    /* prettier-ignore */
+    @media (prefers-reduced-motion: reduce) {
     [data-hf-ui-root],
     [data-hf-ui-root] *,
     [data-hf-ui-root] *::before,
@@ -212,135 +212,138 @@
       scroll-behavior: auto !important;
     }
   }
-  /* hf-ui:tokens:end */
+    /* hf-ui:tokens:end */
 
-  .hf-ui-typing-indicator {
-    position: relative;
-    display: inline-block;
-  }
-  .hf-ti-wrap {
-    position: relative;
-    display: inline-block;
-    font-size: var(--hf-ti-size, 176px);
-    will-change: opacity, transform;
-  }
-  .hf-ti-bubble {
-    width: 1em;
-    height: 0.54em;
-    background: var(--hf-ti-surface, #242428);
-    border-radius: 0.274em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.081em;
-  }
-  .hf-ti-dot {
-    width: 0.137em;
-    height: 0.137em;
-    border-radius: 50%;
-    background: var(--hf-ti-dot, #8e8e93);
-    display: inline-block;
-  }
-  .hf-ti-tail1 {
-    position: absolute;
-    left: -0.016em;
-    bottom: -0.032em;
-    width: 0.145em;
-    height: 0.145em;
-    border-radius: 50%;
-    background: var(--hf-ti-surface, #242428);
-    display: var(--hf-ti-tail, block);
-  }
-  .hf-ti-tail2 {
-    position: absolute;
-    left: -0.113em;
-    bottom: -0.113em;
-    width: 0.073em;
-    height: 0.073em;
-    border-radius: 50%;
-    background: var(--hf-ti-surface, #242428);
-    display: var(--hf-ti-tail, block);
-  }
-</style>
-
-<script>
-  (function () {
-    "use strict";
-
-    var vars =
-      window.__hyperframes && window.__hyperframes.getVariables
-        ? window.__hyperframes.getVariables()
-        : {};
-
-    // Unrecognised overrides return to their declared defaults.
-    function pick(table, value, fallback) {
-      return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
+    .hf-ui-typing-indicator {
+      position: relative;
+      display: inline-block;
     }
+    .hf-ti-wrap {
+      position: relative;
+      display: inline-block;
+      font-size: var(--hf-ti-size, 176px);
+      will-change: opacity, transform;
+    }
+    .hf-ti-bubble {
+      width: 1em;
+      height: 0.54em;
+      background: var(--hf-ti-surface, #242428);
+      border-radius: 0.274em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.081em;
+    }
+    .hf-ti-dot {
+      width: 0.137em;
+      height: 0.137em;
+      border-radius: 50%;
+      background: var(--hf-ti-dot, #8e8e93);
+      display: inline-block;
+    }
+    .hf-ti-tail1 {
+      position: absolute;
+      left: -0.016em;
+      bottom: -0.032em;
+      width: 0.145em;
+      height: 0.145em;
+      border-radius: 50%;
+      background: var(--hf-ti-surface, #242428);
+      display: var(--hf-ti-tail, block);
+    }
+    .hf-ti-tail2 {
+      position: absolute;
+      left: -0.113em;
+      bottom: -0.113em;
+      width: 0.073em;
+      height: 0.073em;
+      border-radius: 50%;
+      background: var(--hf-ti-surface, #242428);
+      display: var(--hf-ti-tail, block);
+    }
+  </style>
 
-    function clampNumber(value, min, max, fallback) {
-      var n = typeof value === "number" ? value : parseFloat(value);
-      if (!isFinite(n)) {
-        return fallback;
+  <script>
+    (function () {
+      "use strict";
+
+      var vars =
+        window.__hyperframes && window.__hyperframes.getVariables
+          ? window.__hyperframes.getVariables()
+          : {};
+
+      // Unrecognised overrides return to their declared defaults.
+      function pick(table, value, fallback) {
+        return Object.prototype.hasOwnProperty.call(table, value) ? value : fallback;
       }
-      return Math.min(max, Math.max(min, n));
-    }
 
-    var tones = {
-      dark: { surface: "#242428", dot: "#8e8e93" },
-      light: { surface: "#e9e9eb", dot: "#8e8e93" },
-    };
-    var tails = { on: "block", off: "none" };
+      function clampNumber(value, min, max, fallback) {
+        var n = typeof value === "number" ? value : parseFloat(value);
+        if (!isFinite(n)) {
+          return fallback;
+        }
+        return Math.min(max, Math.max(min, n));
+      }
 
-    var size = clampNumber(vars.size, 120, 280, 176);
-    var tone = tones[pick(tones, vars.tone, "dark")];
-    var tail = tails[pick(tails, vars.tail, "on")];
+      var tones = {
+        dark: { surface: "#242428", dot: "#8e8e93" },
+        light: { surface: "#e9e9eb", dot: "#8e8e93" },
+      };
+      var tails = { on: "block", off: "none" };
 
-    var roots = document.querySelectorAll(".hf-ui-typing-indicator");
-    for (var i = 0; i < roots.length; i += 1) {
-      roots[i].style.setProperty("--hf-ti-size", size + "px");
-      roots[i].style.setProperty("--hf-ti-surface", tone.surface);
-      roots[i].style.setProperty("--hf-ti-dot", tone.dot);
-      roots[i].style.setProperty("--hf-ti-tail", tail);
-    }
-  })();
-</script>
+      var size = clampNumber(vars.size, 120, 280, 176);
+      var tone = tones[pick(tones, vars.tone, "dark")];
+      var tail = tails[pick(tails, vars.tail, "on")];
 
-<!--
+      var roots = document.querySelectorAll(".hf-ui-typing-indicator");
+      for (var i = 0; i < roots.length; i += 1) {
+        roots[i].style.setProperty("--hf-ti-size", size + "px");
+        roots[i].style.setProperty("--hf-ti-surface", tone.surface);
+        roots[i].style.setProperty("--hf-ti-dot", tone.dot);
+        roots[i].style.setProperty("--hf-ti-tail", tail);
+      }
+    })();
+  </script>
+
+  <!--
   Timeline integration: built in, see the script below. It registers its own paused timeline as
-  window.__timelines["typing-indicator"]; mount the snippet inside a clip with data-composition-id="typing-indicator"
-  and the runtime nests it at that clip's start.
+  window.__timelines["typing-indicator"]; mount this file with data-composition-src on a host with
+  data-composition-id="typing-indicator", once for each place it plays: each mount keeps its own
+  elements, timeline and variables (docs/concepts/compositions.mdx: "Use a separate file when
+  you want to reuse it").
 -->
 
-<script>
-  /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="typing-indicator" */
-  (function () {
-    var startTime = 0;
-    var hostEl = document.querySelector('[data-composition-id="typing-indicator"]');
-    var endTime =
-      parseFloat(
-        ((hostEl && hostEl.closest("[data-duration]")) || { dataset: {} }).dataset.duration,
-      ) || 3;
-    var tl = gsap.timeline({ paused: true });
-    tl.fromTo(
-      "#hf-ti-1",
-      { scale: 0.6, autoAlpha: 0.4 },
-      { scale: 1, autoAlpha: 1, duration: 0.1, ease: "power2.out" },
-      startTime,
-    );
-
-    // optional dot wave (the reference holds still) - bounded repeats keep it seek-safe
-    var dots = gsap.utils.toArray("#hf-ti-1 .hf-ti-dot");
-    dots.forEach(function (dot, i) {
-      tl.to(
-        dot,
-        { y: "-0.048em", duration: 0.28, ease: "sine.inOut", yoyo: true, repeat: 5 },
-        startTime + 0.1 + i * 0.14,
+  <script>
+    /* own timeline (component-quality-bar.md X1): the host clip carries data-composition-id="typing-indicator" */
+    (function () {
+      var startTime = 0;
+      var hostEl = document.querySelector('[data-composition-id="typing-indicator"]');
+      var endTime =
+        parseFloat(
+          ((hostEl && hostEl.closest("[data-duration]")) || { dataset: {} }).dataset.duration,
+        ) || 3;
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        "#hf-ti-1",
+        { scale: 0.6, autoAlpha: 0.4 },
+        { scale: 1, autoAlpha: 1, duration: 0.1, ease: "power2.out" },
+        startTime,
       );
-    });
 
-    // dismiss
-    tl.set("#hf-ti-1", { autoAlpha: 0 }, endTime);
-    window.__timelines = window.__timelines || {};
-    window.__timelines["typing-indicator"] = tl;
-  })();
-</script>
+      // optional dot wave (the reference holds still) - bounded repeats keep it seek-safe
+      var dots = gsap.utils.toArray("#hf-ti-1 .hf-ti-dot");
+      dots.forEach(function (dot, i) {
+        tl.to(
+          dot,
+          { y: "-0.048em", duration: 0.28, ease: "sine.inOut", yoyo: true, repeat: 5 },
+          startTime + 0.1 + i * 0.14,
+        );
+      });
+
+      // dismiss
+      tl.set("#hf-ti-1", { autoAlpha: 0 }, endTime);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["typing-indicator"] = tl;
+    })();
+  </script>
+</div>
