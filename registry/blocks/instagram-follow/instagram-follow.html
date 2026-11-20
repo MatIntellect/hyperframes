@@ -243,14 +243,18 @@
         root.classList.add("igf-" + placement);
         if (placement !== "full") root.querySelector(".igf-ground").remove();
 
-        root.querySelector(".igf-name").textContent = str(vars.displayName, "MatIntellect");
-        root.querySelector(".igf-handle").textContent = str(vars.handle, "@matintellect");
-        root.querySelector(".igf-followers").textContent = str(
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_str(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : str(v, d);
+        }
+        root.querySelector(".igf-name").textContent = pole_str(vars.displayName, "MatIntellect");
+        root.querySelector(".igf-handle").textContent = pole_str(vars.handle, "@matintellect");
+        root.querySelector(".igf-followers").textContent = pole_str(
           vars.followers,
           "12,5 тыс. подписчиков",
         );
-        root.querySelector("#igf-follow").textContent = str(vars.followLabel, "Подписаться");
-        root.querySelector(".igf-following-label").textContent = str(
+        root.querySelector("#igf-follow").textContent = pole_str(vars.followLabel, "Подписаться");
+        root.querySelector(".igf-following-label").textContent = pole_str(
           vars.followingLabel,
           "Вы подписаны",
         );

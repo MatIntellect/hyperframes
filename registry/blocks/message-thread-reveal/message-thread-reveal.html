@@ -704,6 +704,10 @@
         function text(value, fallback) {
           return typeof value === "string" && value.trim() ? value.trim() : fallback;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_text(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : text(v, d);
+        }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
@@ -742,31 +746,34 @@
           document.getElementById(id).textContent = value;
         }
         var typedMessages = [
-          text(vars.teaserMessage, "смотри 👀"),
-          text(vars.benefitMessage, "субтитры и графика сами"),
-          text(vars.sourceMessage, "на matintellect.com"),
-          text(vars.workflowMessage, "просто кидаешь запись"),
-          text(vars.ownershipMessage, "ролик готов за минуты"),
+          pole_text(vars.teaserMessage, "смотри 👀"),
+          pole_text(vars.benefitMessage, "субтитры и графика сами"),
+          pole_text(vars.sourceMessage, "на matintellect.com"),
+          pole_text(vars.workflowMessage, "просто кидаешь запись"),
+          pole_text(vars.ownershipMessage, "ролик готов за минуты"),
         ];
         setText(
           "mtr-message-question",
-          text(vars.questionMessage, "чем ты монтируешь свои ролики??"),
+          pole_text(vars.questionMessage, "чем ты монтируешь свои ролики??"),
         );
         setText("mtr-message-teaser", typedMessages[0]);
-        setText("mtr-message-reaction", text(vars.reactionMessage, "ЧЕГО, ОНО САМО МОНТИРУЕТ?"));
+        setText(
+          "mtr-message-reaction",
+          pole_text(vars.reactionMessage, "ЧЕГО, ОНО САМО МОНТИРУЕТ?"),
+        );
         setText("mtr-message-emoji", text(vars.reactionEmoji, "🤯🤯🤯"));
         setText("mtr-message-benefit", typedMessages[1]);
-        setText("mtr-message-discovery", text(vars.discoveryMessage, "где ты это нашёл"));
+        setText("mtr-message-discovery", pole_text(vars.discoveryMessage, "где ты это нашёл"));
         setText("mtr-message-source", typedMessages[2]);
         setText("mtr-message-workflow", typedMessages[3]);
         setText("mtr-message-ownership", typedMessages[4]);
-        setText("mtr-message-install", text(vars.installMessage, "уже пробую"));
-        setText("mtr-message-thanks", text(vars.thanksMessage, "спасибо 💚"));
-        document.querySelector(".cardtitle").textContent = text(
+        setText("mtr-message-install", pole_text(vars.installMessage, "уже пробую"));
+        setText("mtr-message-thanks", pole_text(vars.thanksMessage, "спасибо 💚"));
+        document.querySelector(".cardtitle").textContent = pole_text(
           vars.cardTitle,
           "MatIntellect | Монтаж рилсов с ИИ без монтажёра",
         );
-        document.querySelector(".carddomain").textContent = text(
+        document.querySelector(".carddomain").textContent = pole_text(
           vars.cardDomain,
           "matintellect.com",
         );

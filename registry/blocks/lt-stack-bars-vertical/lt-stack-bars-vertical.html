@@ -157,7 +157,7 @@
         root.classList.add("lsbv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
 
         document.getElementById("lsbv-name").textContent =
-          typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+          typeof V.name === "string" ? V.name : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role : "Основатель MatIntellect";
         var roleEl = document.getElementById("lsbv-role");
         roleEl.textContent = role;

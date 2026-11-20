@@ -187,14 +187,18 @@
 
         root.classList.add("mnov-" + oneOf(V.placement, ["top", "center", "bottom"], "top"));
 
-        document.getElementById("mnov-app").textContent = str(V.appName, "MatIntellect");
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_str(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : str(v, d);
+        }
+        document.getElementById("mnov-app").textContent = pole_str(V.appName, "MatIntellect");
         document.getElementById("mnov-icon").src = str(
           V.icon,
           "assets/img/matintellect-avatar.svg",
         );
-        document.getElementById("mnov-time").textContent = str(V.time, "сейчас");
-        document.getElementById("mnov-title").textContent = str(V.title, "Ролик готов");
-        document.getElementById("mnov-body").textContent = str(
+        document.getElementById("mnov-time").textContent = pole_str(V.time, "сейчас");
+        document.getElementById("mnov-title").textContent = pole_str(V.title, "Ролик готов");
+        document.getElementById("mnov-body").textContent = pole_str(
           V.body,
           "Монтаж, графика и субтитры собраны. Файл уже в ветке «Видео»",
         );

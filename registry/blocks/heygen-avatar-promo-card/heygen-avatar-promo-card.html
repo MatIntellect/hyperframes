@@ -528,18 +528,28 @@
       document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
         image.src = text("brandLogo", "assets/img/matintellect-mark.svg");
       });
-      document.getElementById("apc-brand-name").textContent = text("brandName", "MatIntellect");
-      document.getElementById("apc-hdr-title").firstChild.nodeValue = text(
+      // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+      function pole_text(id, d) {
+        return typeof variables[id] === "string" && !variables[id].trim() ? "" : text(id, d);
+      }
+      document.getElementById("apc-brand-name").textContent = pole_text(
+        "brandName",
+        "MatIntellect",
+      );
+      document.getElementById("apc-hdr-title").firstChild.nodeValue = pole_text(
         "titleLine1",
         "Монтаж рилсов",
       );
-      document.getElementById("apc-title-line-2").textContent = text("titleLine2", "из записи.");
-      document.getElementById("apc-hdr-subhead").textContent = text(
+      document.getElementById("apc-title-line-2").textContent = pole_text(
+        "titleLine2",
+        "из записи.",
+      );
+      document.getElementById("apc-hdr-subhead").textContent = pole_text(
         "subhead",
         "Субтитры, графика и звук за минуты.",
       );
-      document.getElementById("apc-pill-1").textContent = text("pill1", "БЕЗ МОНТАЖЁРА");
-      document.getElementById("apc-pill-2").textContent = text("pill2", "ЗА МИНУТЫ");
+      document.getElementById("apc-pill-1").textContent = pole_text("pill1", "БЕЗ МОНТАЖЁРА");
+      document.getElementById("apc-pill-2").textContent = pole_text("pill2", "ЗА МИНУТЫ");
       document.getElementById("apc-code-label").textContent = text("codeLabel", "");
       document.getElementById("apc-promo-prefix").textContent = text("promoPrefix", "");
       document.getElementById("apc-promo-suffix").textContent = text("promoSuffix", "");

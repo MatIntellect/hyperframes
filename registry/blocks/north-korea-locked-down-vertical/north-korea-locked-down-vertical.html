@@ -358,7 +358,11 @@
         ann.style.transform = "scale(" + K + ")";
 
         $("label").innerHTML = "";
-        txt(V.label, "Под|замком")
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_txt(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
+        }
+        pole_txt(V.label, "Под|замком")
           .split("|")
           .slice(0, 2)
           .forEach(function (t, i) {

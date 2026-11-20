@@ -277,16 +277,20 @@
 
         root.classList.add("ntkv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
 
-        document.getElementById("ntkv-livetext").textContent = str(V.live, "") || "Эфир";
-        document.getElementById("ntkv-tag").textContent = str(V.tag, "") || "Срочно";
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_str(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : str(v, d);
+        }
+        document.getElementById("ntkv-livetext").textContent = pole_str(V.live, "");
+        document.getElementById("ntkv-tag").textContent = pole_str(V.tag, "");
         var time = str(V.time, "09:41");
         var timeEl = document.getElementById("ntkv-time");
         if (time) timeEl.textContent = time;
         else timeEl.remove();
 
         /* headline: words named in accentWords turn red */
-        var headline = str(V.headline, "") || "Монтаж роликов теперь делает система";
-        var red = str(V.accentWords, "система")
+        var headline = pole_str(V.headline, "");
+        var red = pole_str(V.accentWords, "система")
           .split(",")
           .map(function (w) {
             return w.trim().toLowerCase();

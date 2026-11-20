@@ -614,18 +614,22 @@
           document.getElementById("acr-keyboard").remove();
         }
 
-        var botName = text(vars.botName, "ChatGPT");
-        var userMessage = text(vars.userMessage, "Как смонтировать рилс без монтажёра?");
-        var answer1 = text(
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_text(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : text(v, d);
+        }
+        var botName = pole_text(vars.botName, "ChatGPT");
+        var userMessage = pole_text(vars.userMessage, "Как смонтировать рилс без монтажёра?");
+        var answer1 = pole_text(
           vars.answer1,
           "Монтажёр не нужен. MatIntellect собирает ролик из твоей записи сам: субтитры, графика, звук.",
         );
-        var answer2 = text(vars.answer2, "Ты только снимаешь.");
-        var answer3 = text(vars.answer3, "Что ты получаешь:");
+        var answer2 = pole_text(vars.answer2, "Ты только снимаешь.");
+        var answer3 = pole_text(vars.answer3, "Что ты получаешь:");
         var bullets = [
-          text(vars.bullet1, "Субтитры по каждому слову"),
-          text(vars.bullet2, "Графику под смысл фразы"),
-          text(vars.bullet3, "Готовый ролик за минуты"),
+          pole_text(vars.bullet1, "Субтитры по каждому слову"),
+          pole_text(vars.bullet2, "Графику под смысл фразы"),
+          pole_text(vars.bullet3, "Готовый ролик за минуты"),
         ];
 
         if (full) document.getElementById("acr-htitle").textContent = botName;

@@ -913,13 +913,17 @@
       if (placement !== "full") document.getElementById("root").classList.add("card", placement);
 
       const put = (sel, v) => document.querySelectorAll(sel).forEach((el) => (el.textContent = v));
-      put(".headline .l1", text(V.line1, "МОНТАЖ"));
-      put(".headline .l2", text(V.line2, "ЗА МИНУТЫ"));
-      put(".headline .sub", text(V.sub, "Ролик из записи без монтажёра"));
+      // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+      function pole_text(v, d) {
+        return typeof v === "string" && !v.trim() ? "" : text(v, d);
+      }
+      put(".headline .l1", pole_text(V.line1, "МОНТАЖ"));
+      put(".headline .l2", pole_text(V.line2, "ЗА МИНУТЫ"));
+      put(".headline .sub", pole_text(V.sub, "Ролик из записи без монтажёра"));
       put(".ambient-word", text(V.word, "ЛЕГКО"));
-      put(".app-name", text(V.app, "MatIntellect"));
-      put(".q-text", text(V.query, "монтаж видео"));
-      put(".status-text", text(V.status, "Готово к монтажу"));
+      put(".app-name", pole_text(V.app, "MatIntellect"));
+      put(".q-text", pole_text(V.query, "монтаж видео"));
+      put(".status-text", pole_text(V.status, "Готово к монтажу"));
 
       gsap.defaults({ force3D: true });
 

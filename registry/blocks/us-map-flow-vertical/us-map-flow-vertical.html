@@ -278,7 +278,7 @@
         // Города «Имя: широта, долгота», потоки «Откуда > Куда: объём»
         var city = {},
           order = [];
-        String(typeof V.cities === "string" && V.cities.trim() ? V.cities : DEFC)
+        String(typeof V.cities === "string" ? V.cities : DEFC)
           .split(";")
           .forEach(function (item) {
             var k = item.indexOf(":");
@@ -297,7 +297,7 @@
             }
           });
         var flows = [];
-        String(typeof V.flows === "string" && V.flows.trim() ? V.flows : DEFF)
+        String(typeof V.flows === "string" ? V.flows : DEFF)
           .split(";")
           .forEach(function (item) {
             var k = item.lastIndexOf(":"),

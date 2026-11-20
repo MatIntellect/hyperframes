@@ -438,9 +438,7 @@
         }
         var codes = DEF.codes.map(function (d, k) {
           var v = V[DEF.fields[k]];
-          return typeof v === "string" && v.replace(/\s/g, "")
-            ? v.replace(/\r/g, "").replace(/\t/g, "  ")
-            : d;
+          return typeof v === "string" ? v.replace(/\r/g, "").replace(/\t/g, "  ") : d;
         });
         var states = [];
         codes.forEach(function (code, k) {
@@ -526,8 +524,7 @@
 
         var fname = document.getElementById("kdmorpv-fname");
         if (fname)
-          fname.textContent =
-            typeof V.filename === "string" && V.filename.trim() ? V.filename.trim() : DEF.filename;
+          fname.textContent = typeof V.filename === "string" ? V.filename.trim() : DEF.filename;
       })();
     </script>
     <script>
@@ -572,7 +569,12 @@
             keyToEl.set(t.key, span);
           }
           var last = codeEl.lastChild;
-          if (last && last.className === "line" && last.children.length === 0)
+          if (
+            last &&
+            last !== codeEl.firstChild &&
+            last.className === "line" &&
+            last.children.length === 0
+          )
             codeEl.removeChild(last);
           return keyToEl;
         }

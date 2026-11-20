@@ -150,10 +150,7 @@
 
         root.classList.add("ltbv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
 
-        var main =
-          typeof V.headline === "string" && V.headline.trim()
-            ? V.headline.trim()
-            : "Монтаж без человека";
+        var main = typeof V.headline === "string" ? V.headline.trim() : "Монтаж без человека";
         var sub = typeof V.sub === "string" ? V.sub.trim() : "Эксклюзив MatIntellect";
         document.getElementById("ltbv-main").textContent = main;
         if (sub) document.getElementById("ltbv-sub").textContent = sub;

@@ -170,7 +170,11 @@
         }
         document.getElementById("cchv-label").textContent = txt(V.label, "REC");
         var date = document.getElementById("cchv-date");
-        txt(V.date, "01 ЯНВ 2000|12:00")
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_txt(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
+        }
+        pole_txt(V.date, "01 ЯНВ 2000|12:00")
           .split("|")
           .slice(0, 2)
           .forEach(function (t, i) {

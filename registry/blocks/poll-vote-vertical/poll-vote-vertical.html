@@ -242,10 +242,10 @@
         var head = text("header", "Опрос в комментариях");
         if (head) $("#pv-head-text").textContent = head;
         else $("#pv-head").remove();
-        $("#pv-q").textContent = text("question", "") || "ИИ-монтаж – это";
+        $("#pv-q").textContent = text("question", "ИИ-монтаж – это");
 
         // answers and shares: two answers split 100 between them, a third takes the rest
-        var labels = [text("opt1", "") || "Норм", text("opt2", "") || "Стрём"];
+        var labels = [text("opt1", "Норм"), text("opt2", "Стрём")];
         var third = text("opt3", "");
         if (third) labels.push(third);
         var p1 = clamp(num("pct1", 64));
@@ -272,7 +272,7 @@
         // the word belongs to the number, so one function writes both. Three Russian forms,
         // one|few|many, as week-in-merges takes them; a single word stays as it is
         var votes = Math.max(0, Math.round(num("votes", 2418)));
-        var forms = (text("votesLabel", "") || "голос|голоса|голосов").split("|");
+        var forms = text("votesLabel", "голос|голоса|голосов").split("|");
         if (forms.length < 3) forms = [forms[0], forms[0], forms[0]];
         function showVotes(count) {
           var m10 = count % 10;

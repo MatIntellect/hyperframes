@@ -404,21 +404,28 @@
           });
         }
 
-        document.getElementById("ssc-title").textContent = text(vars.shareTitle, "Поделиться");
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_text(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : text(v, d);
+        }
+        document.getElementById("ssc-title").textContent = pole_text(vars.shareTitle, "Поделиться");
         var subtitle = document.getElementById("ssc-subtitle");
         subtitle.innerHTML = "";
         var sender = document.createElement("b");
-        sender.textContent = text(vars.senderName, "MatIntellect");
+        sender.textContent = pole_text(vars.senderName, "MatIntellect");
         subtitle.appendChild(sender);
         subtitle.appendChild(
-          document.createTextNode(" хочет поделиться " + text(vars.itemLabel, "видео")),
+          document.createTextNode(" хочет поделиться " + pole_text(vars.itemLabel, "видео")),
         );
-        document.getElementById("ssc-strip-text").textContent = text(
+        document.getElementById("ssc-strip-text").textContent = pole_text(
           vars.stripText,
           "MATINTELLECT.COM",
         );
-        document.getElementById("ssc-decline").textContent = text(vars.declineLabel, "Отклонить");
-        document.getElementById("ssc-accept").textContent = text(vars.acceptLabel, "Принять");
+        document.getElementById("ssc-decline").textContent = pole_text(
+          vars.declineLabel,
+          "Отклонить",
+        );
+        document.getElementById("ssc-accept").textContent = pole_text(vars.acceptLabel, "Принять");
 
         /* -------- timeline: spring entry and cut rhythm measured from the reference -------- */
         var tl = gsap.timeline({ paused: true });

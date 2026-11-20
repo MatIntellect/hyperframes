@@ -161,8 +161,7 @@
         var placement = oneOf(V.placement, ["full", "top", "bottom"], "full");
         if (placement !== "full") root.classList.add("wwvv-card", "wwvv-" + placement);
 
-        var TEXT =
-          typeof V.text === "string" && V.text.trim() ? V.text.trim() : "МОНТАЖ БЕЗ СПЕШКИ";
+        var TEXT = typeof V.text === "string" ? V.text.trim() : "МОНТАЖ БЕЗ СПЕШКИ";
         // ось wght переменного Montserrat бренда – 100..900 (_fonts.css)
         var W_FROM = num(V.weightFrom, 200, 100, 900),
           W_TO = num(V.weightTo, 900, 100, 900),

@@ -158,7 +158,7 @@
         document.getElementById("lknv-kicker").textContent = kicker;
         if (!kicker) document.getElementById("lknv-kickwrap").style.display = "none";
         document.getElementById("lknv-name").textContent =
-          typeof V.name === "string" && V.name.trim() ? V.name : "Мат Джестер";
+          typeof V.name === "string" ? V.name : "Мат Джестер";
 
         var cues = String(V.cues || "")
           .split(",")

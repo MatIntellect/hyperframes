@@ -143,7 +143,11 @@
 
         var box = document.getElementById("mchv-box");
         box.style.textAlign = oneOf(V.align, ["center", "left"], "center");
-        var text = str(V.text, "Монтаж делает система, а не человек за ночь");
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_str(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : str(v, d);
+        }
+        var text = pole_str(V.text, "Монтаж делает система, а не человек за ночь");
         var red = String(typeof V.accentWords === "string" ? V.accentWords : "система")
           .toLowerCase()
           .split(",")

@@ -180,7 +180,7 @@
         root.classList.add("lnbv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
 
         document.getElementById("lnbv-name").textContent =
-          typeof V.name === "string" && V.name.trim() ? V.name.trim() : "Мат Джестер";
+          typeof V.name === "string" ? V.name.trim() : "Мат Джестер";
         var role = typeof V.role === "string" ? V.role.trim() : "Основатель MatIntellect";
         if (role) document.getElementById("lnbv-role").textContent = role;
         else document.getElementById("lnbv-role").remove();

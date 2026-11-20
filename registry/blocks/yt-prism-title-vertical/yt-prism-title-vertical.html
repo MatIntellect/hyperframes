@@ -149,8 +149,7 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
-        var title =
-          typeof V.title === "string" && V.title.trim() ? V.title.trim() : "Монтаж без монтажёра";
+        var title = typeof V.title === "string" ? V.title.trim() : "Монтаж без монтажёра";
         root.querySelectorAll(".yptv-copy, #yptv-main").forEach(function (el) {
           el.textContent = title;
         });

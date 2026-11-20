@@ -2314,7 +2314,11 @@
           // tagline: one tspan per letter for the stagger; a space is a no-break space, so the
           // words keep their gaps (plain spaces in separate tspans collapse away)
           var tagEl = document.querySelector(S + " .outro-tagline");
-          text(V.tagline, "Ролик из записи за минуты.")
+          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+          function pole_text(v, d) {
+            return typeof v === "string" && !v.trim() ? "" : text(v, d);
+          }
+          pole_text(V.tagline, "Ролик из записи за минуты.")
             .split("")
             .forEach(function (ch) {
               var t = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
@@ -2324,7 +2328,7 @@
             });
           // address pill: as wide as its text plus 28 px a side, centred under the tagline
           var urlEl = document.querySelector(S + " .url-text");
-          urlEl.textContent = text(V.url, "matintellect.com");
+          urlEl.textContent = pole_text(V.url, "matintellect.com");
           // measured on a canvas from the computed font, not with getComputedTextLength: the runtime
           // keeps a host that starts later display:none, where SVG text measures 0 and the pill
           // collapses to a 56 px circle when fonts.ready re-runs this after the host is hidden again

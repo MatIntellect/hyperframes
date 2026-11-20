@@ -306,6 +306,10 @@
             ? variables[id]
             : fallback;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_content(id, d) {
+          return typeof variables[id] === "string" && !variables[id].trim() ? "" : content(id, d);
+        }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
@@ -328,25 +332,25 @@
           document.getElementById("sna-chrome").remove();
         }
         if (full)
-          document.getElementById("sna-date").textContent = content(
+          document.getElementById("sna-date").textContent = pole_content(
             "dateLabel",
             "Четверг, 14 августа",
           );
-        var nowLabel = content("nowLabel", "сейчас");
+        var nowLabel = pole_content("nowLabel", "сейчас");
 
         var CONFIG = {
           icon: "assets/img/slack-mark.svg",
           notifs: [
             {
-              title: content("request1Title", "Аня Смирнова"),
-              text: content(
+              title: pole_content("request1Title", "Аня Смирнова"),
+              text: pole_content(
                 "request1Text",
                 "Привет! Успеешь смонтировать ролик к запуску до пятницы?",
               ),
             },
             {
-              title: content("request2Title", "Максим Белов"),
-              text: content("request2Text", "ещё нужна нарезка на 30 секунд для презентации"),
+              title: pole_content("request2Title", "Максим Белов"),
+              text: pole_content("request2Text", "ещё нужна нарезка на 30 секунд для презентации"),
             },
             {
               title: content("request3Title", "#соцсети"),
@@ -388,8 +392,8 @@
               text: content("request11Text", "и последнее: ролик к запуску на Product Hunt"),
             },
             {
-              title: content("payoffTitle", "MatIntellect"),
-              text: content("payoffText", "Слышал, тебе нужны ролики?"),
+              title: pole_content("payoffTitle", "MatIntellect"),
+              text: pole_content("payoffText", "Слышал, тебе нужны ролики?"),
               icon: content("payoffIcon", "assets/img/matintellect-mark.svg"),
             },
           ],

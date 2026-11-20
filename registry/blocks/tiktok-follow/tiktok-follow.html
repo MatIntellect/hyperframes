@@ -239,14 +239,18 @@
         root.classList.add("ttf-" + placement);
         if (placement !== "full") root.querySelector(".ttf-ground").remove();
 
-        root.querySelector(".ttf-name").textContent = str(vars.displayName, "MatIntellect");
-        root.querySelector(".ttf-handle").textContent = str(vars.handle, "@matintellect");
-        root.querySelector(".ttf-followers").textContent = str(
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_str(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : str(v, d);
+        }
+        root.querySelector(".ttf-name").textContent = pole_str(vars.displayName, "MatIntellect");
+        root.querySelector(".ttf-handle").textContent = pole_str(vars.handle, "@matintellect");
+        root.querySelector(".ttf-followers").textContent = pole_str(
           vars.followers,
           "12,5 тыс. подписчиков",
         );
-        root.querySelector("#ttf-follow").textContent = str(vars.followLabel, "Подписаться");
-        root.querySelector(".ttf-following-label").textContent = str(
+        root.querySelector("#ttf-follow").textContent = pole_str(vars.followLabel, "Подписаться");
+        root.querySelector(".ttf-following-label").textContent = pole_str(
           vars.followingLabel,
           "Вы подписаны",
         );

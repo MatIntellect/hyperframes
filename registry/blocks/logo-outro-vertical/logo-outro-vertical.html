@@ -195,9 +195,13 @@
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
-        var word = txt(V.wordmark, "MatIntellect") || "MatIntellect";
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_txt(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
+        }
+        var word = pole_txt(V.wordmark, "MatIntellect");
         var tag = txt(V.tagline, "Монтаж без монтажёра");
-        var url = txt(V.url, "matintellect.com");
+        var url = pole_txt(V.url, "matintellect.com");
         var W = 1080;
         // Размер надписи по длине: средняя ширина знака Bebas около 0,44 кегля
         var avail = 1600,

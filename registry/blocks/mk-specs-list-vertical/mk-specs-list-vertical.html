@@ -235,7 +235,7 @@
         var titleEl = document.getElementById("mslv-title");
         titleEl.textContent = title;
         if (!title) titleEl.style.display = "none";
-        var rows = String(typeof V.rows === "string" && V.rows.trim() ? V.rows : DEF)
+        var rows = String(typeof V.rows === "string" ? V.rows : DEF)
           .split(";")
           .map(function (r) {
             var p = r.split("|");

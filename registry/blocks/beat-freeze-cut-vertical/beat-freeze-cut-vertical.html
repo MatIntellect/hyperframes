@@ -587,7 +587,11 @@
         $("hit-t").textContent = txt(V.hit, "Дроп") || "Дроп";
         $("kicker").textContent = txt(V.kicker, "Промо");
         $("pill").textContent = txt(V.pill, "Эфир");
-        $("badge").textContent = txt(V.badge, "Стоп");
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+        function pole_txt(v, d) {
+          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
+        }
+        $("badge").textContent = pole_txt(V.badge, "Стоп");
         $("eyebrow").textContent = txt(V.eyebrow, "Следующий кадр");
         $("title").textContent = txt(V.title, "Резкая склейка");
         $("sub").textContent = txt(V.sub, "Стоп-кадр в такт, затем склейка. Для промо под музыку");
@@ -601,7 +605,7 @@
           [V.card2, "Стоп|0,8 с", false],
           [V.card3, "Склейка|3,00", true],
         ].map(function (c, i) {
-          var p = (txt(c[0], c[1]) || c[1]).split("|");
+          var p = txt(c[0], c[1]).split("|");
           var el = document.createElement("div");
           el.className = "bfcv-card";
           el.id = "bfcv-card-" + i;

@@ -753,7 +753,11 @@
             }
             const DEFAULT_CODE =
               "# A small functional toolkit\ndef compose(*fns):\n    def run(x):\n        for fn in fns:\n            x = fn(x)\n        return x\n    return run\n\ndef unfold(f, seed):\n    acc = []\n    while (r := f(seed)):\n        acc.append(r[0])\n        seed = r[1]\n    return acc";
-            const codeLines = text(V.code, DEFAULT_CODE)
+            // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+            function pole_text(v, d) {
+              return typeof v === "string" && !v.trim() ? "" : text(v, d);
+            }
+            const codeLines = pole_text(V.code, DEFAULT_CODE)
               .replace(/\r/g, "")
               .split("\n")
               .map(tokenize);
@@ -1055,13 +1059,16 @@
                   ? window.VSCODE_THEME_REGISTRY.find((item) => item.id === themeOrId)
                   : themeOrId;
               if (!root || !theme) return;
-              root.querySelector(".kicker").textContent = text(V.kicker, "Встроенная тема VS Code");
-              root.querySelector(".theme-label").textContent = text(V.title, theme.label);
+              root.querySelector(".kicker").textContent = pole_text(
+                V.kicker,
+                "Встроенная тема VS Code",
+              );
+              root.querySelector(".theme-label").textContent = pole_text(V.title, theme.label);
               const note = root.querySelector(".source-note");
               if (note) note.textContent = text(V.note, "Цвета из файла " + theme.sourceFile);
               root
                 .querySelectorAll(".fname")
-                .forEach((el) => (el.textContent = text(V.file, "functional_toolkit.py")));
+                .forEach((el) => (el.textContent = pole_text(V.file, "functional_toolkit.py")));
 
               const placement = ["full", "top", "bottom"].includes(V.placement)
                 ? V.placement

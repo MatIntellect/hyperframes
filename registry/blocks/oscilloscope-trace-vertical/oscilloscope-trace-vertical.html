@@ -204,12 +204,13 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
         function parts(v, d, n) {
-          var a = str(v, "")
-            .split("|")
-            .map(function (s) {
-              return s.trim();
-            });
-          return a.length >= n && a.every(Boolean) ? a : d.split("|");
+          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+          if (typeof v !== "string") return d.split("|");
+          var a = v.split("|").map(function (s) {
+            return s.trim();
+          });
+          while (a.length < n) a.push("");
+          return a.slice(0, n);
         }
 
         /* scope geometry: a 10x8 graticule of square divisions; S scales strokes with the division */
@@ -438,7 +439,11 @@
           document.querySelectorAll(".oscv-lbl").forEach(function (el, i) {
             el.textContent = labels[i];
           });
-          document.getElementById("oscv-r-title").textContent = str(V.title, "") || "Осциллограф";
+          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
+          function pole_str(v, d) {
+            return typeof v === "string" && !v.trim() ? "" : str(v, d);
+          }
+          document.getElementById("oscv-r-title").textContent = pole_str(V.title, "");
           document.getElementById("oscv-r-wave").textContent =
             names[["sine", "square", "triangle", "data"].indexOf(waveform)];
           document.getElementById("oscv-r-freq").textContent =
