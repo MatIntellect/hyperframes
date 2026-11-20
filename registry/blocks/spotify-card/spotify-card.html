@@ -369,8 +369,11 @@
           t0,
         );
         if (exit === "fade") tl.to(card, { opacity: 0, duration: 0.4, ease: "power2.in" }, at(1));
+        // up rises 12 px: a card that fills its field rose 40 px past y 288 (19 px at scale 0.96). Shrinking to
+        // 0.96 about its centre lowers its top by 2 % of its height (13 px for the 652 card), and a card under 600 px
+        // leaves at least 26 px between it and the field top, so 12 never crosses y 288
         if (exit === "up")
-          tl.to(card, { y: -40, opacity: 0, scale: 0.96, duration: 0.5, ease: "power2.in" }, at(1));
+          tl.to(card, { y: -12, opacity: 0, scale: 0.96, duration: 0.5, ease: "power2.in" }, at(1));
 
         window.__timelines = window.__timelines || {};
         window.__timelines["spotify-card"] = tl;

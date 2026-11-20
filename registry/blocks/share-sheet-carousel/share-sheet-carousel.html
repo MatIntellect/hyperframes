@@ -450,8 +450,12 @@
           [0.69, -5, null],
           [0.723333, 0, null],
         ];
+        /* the overshoot above its place is cut to the room over the sheet: the reference spring's 192 px rise lifted
+           the sheet past y 288 (to 145 full, 96 top) for 0.3-0.7 s; the curve keeps its shape, its part above the
+           rest place is scaled to the room between the sheet top and y 288 */
+        var LIFT = Math.min(1, { full: 337 - 288, top: 0, bottom: 600 - 288 }[placement] / 192);
         SPRING.forEach(function (step) {
-          var props = { y: step[1] };
+          var props = { y: step[1] < 0 ? step[1] * LIFT : step[1] };
           if (step[2] !== null) props.autoAlpha = step[2];
           tl.set("#ssc-card", props, step[0]);
         });

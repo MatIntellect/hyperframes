@@ -3,7 +3,7 @@
   lang="ru"
   data-composition-variables='[
     { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "Overlay over footage, no ground, in the 780 column centred on the frame. top: the comments hang from y 288. center: centred on y 824. bottom: they sit on y 1360, above the caption band.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Centre" }, { "value": "bottom", "label": "Bottom" }] },
-    { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card with its header, as tall as its comments and placed as they are (never taller than the field: 652 top and bottom, 1072 centre), sliding up as in the app.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
+    { "id": "sheet", "type": "enum", "role": "style", "label": "Sheet", "description": "none: the comments float over the footage. youtube: they sit on the dark comments sheet of the YouTube app, a 780 card with its header, as tall as its comments and placed as they are (never taller than the field: 652 top and bottom, 1072 centre), sliding up as in the app. Top and bottom hold the first comment only: two long ones are taller than the 652 field.", "default": "none", "options": [{ "value": "none", "label": "Over footage" }, { "value": "youtube", "label": "YouTube sheet" }] },
     { "id": "sheetTitle", "type": "string", "role": "content", "label": "Sheet title", "description": "Header of the YouTube sheet.", "maxLength": 16, "default": "Комментарии" },
     { "id": "sheetCount", "type": "string", "role": "content", "label": "Sheet count", "description": "Grey comment count after the header. Empty removes it.", "maxLength": 8, "default": "214" },
     { "id": "user1", "type": "string", "role": "content", "label": "Comment 1 user", "description": "Handle of the first commenter.", "maxLength": 20, "default": "@pixelwaves" },
@@ -344,7 +344,10 @@
           ["", "", "", ""],
         ];
         var comments = [];
-        for (var k = 1; k <= 3; k++) {
+        /* the sheet beside the speaker holds one comment: two of three lines ran 88 px past the 652 sheet, into the
+           caption band from the bottom (the author's 760 sheet overran it too) */
+        var most = onSheet && placement !== "center" ? 1 : 3;
+        for (var k = 1; k <= most; k++) {
           var d = DEF[k - 1];
           var c = {
             user: get("user" + k, d[0]),

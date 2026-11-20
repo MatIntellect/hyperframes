@@ -12,7 +12,7 @@
     { "id": "pick", "type": "number", "role": "content", "label": "Picked", "description": "The answer voted for: its bar fills in the accent and a check pops on it. 0 leaves every bar grey.", "default": 1, "min": 0, "max": 3, "step": 1 },
     { "id": "votes", "type": "number", "role": "content", "label": "Votes", "description": "Vote count rolling up under the answers. 0 hides the line.", "default": 2418, "min": 0, "step": 1 },
     { "id": "votesLabel", "type": "string", "role": "content", "label": "Votes word", "description": "The word after the count in three Russian forms, one|few|many, e.g. голос|голоса|голосов: it follows the number while it counts. A single word stays as it is. Each form up to 14 characters.", "maxLength": 44, "default": "голос|голоса|голосов" },
-    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 308, the speaker stays visible below. center: in the middle of the frame. bottom: the card sits on y 1360 (the bottom of the graphics field, above the caption band), the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
+    { "id": "placement", "type": "enum", "role": "layout", "label": "Placement", "description": "top: the card hangs from y 308, the speaker stays visible below. center: centred on y 824, the middle of the 288-1360 field. bottom: the card sits on y 1360 (the bottom of the graphics field, above the caption band), the face stays visible above.", "default": "center", "options": [{ "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" }] },
     { "id": "cues", "type": "string", "role": "timing", "label": "Cues", "description": "Comma-separated seconds from mount start: 1 the card lands with its answers, empty and grey, 2 every bar fills to its share and answer 1 pulses, 3 answer 2 pulses, 4 answer 3 pulses (only with three answers), then optionally the exit second (only when exit is fade). Put each answer on the second the speaker says it. Empty keeps 0.05, 0.89, 2.05, 3.2.", "default": "" },
     { "id": "ground", "type": "enum", "role": "style", "label": "Ground", "description": "own: the brand ground with a soft accent glow behind the card. none: no ground, the reel shows through around the card.", "default": "own", "options": [{ "value": "own", "label": "Own ground" }, { "value": "none", "label": "No ground" }] },
     { "id": "exit", "type": "enum", "role": "timing", "label": "Exit", "description": "none holds the card to the end of the mount; fade drops it away 0.3 s.", "default": "none", "options": [{ "value": "none", "label": "Hold" }, { "value": "fade", "label": "Fade" }] }
@@ -296,11 +296,12 @@
             row.style.fontSize = s - 4 + "px";
         });
 
-        // placement inside the graphics field of the reel (y 288-1360); y 1380-1540 belongs to the hook and the captions
+        // placement inside the graphics field of the reel (y 288-1360); y 1380-1540 belongs to the hook and the captions.
+        // centre: on y 824, the middle of the field (860 was the middle of the old 180-1540 field: a tall card ran to 1378)
         var card = $("#pv-card"),
           H = card.offsetHeight;
         var place = oneOf(V.placement, ["top", "center", "bottom"], "center");
-        var top = place === "top" ? 308 : place === "bottom" ? 1360 - H : Math.round(860 - H / 2);
+        var top = place === "top" ? 308 : place === "bottom" ? 1360 - H : Math.round(824 - H / 2);
         top = Math.max(288, top);
         card.style.top = top + "px";
         var glow = $("#pv-glow");
