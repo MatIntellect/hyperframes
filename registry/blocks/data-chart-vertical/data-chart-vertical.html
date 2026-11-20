@@ -228,12 +228,9 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
           return typeof v === "string" ? v : d;
-        }
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
         }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
@@ -259,18 +256,12 @@
           document.getElementById("dchv-box").classList.add("dchv-card-on");
         }
 
-        document.getElementById("dchv-title").textContent = pole_str(
-          vars.title,
-          "Выручка и конверсия",
-        );
+        document.getElementById("dchv-title").textContent = str(vars.title, "Выручка и конверсия");
         var sub = str(vars.subtitle, "Январь – июнь, тыс. ₽");
         document.getElementById("dchv-sub").textContent = sub;
         if (!sub) document.getElementById("dchv-sub").style.display = "none";
-        document.getElementById("dchv-bar-name").textContent = pole_str(vars.barName, "Выручка");
-        document.getElementById("dchv-line-name").textContent = pole_str(
-          vars.lineName,
-          "Конверсия",
-        );
+        document.getElementById("dchv-bar-name").textContent = str(vars.barName, "Выручка");
+        document.getElementById("dchv-line-name").textContent = str(vars.lineName, "Конверсия");
         var src = str(vars.source, "Источник: внутренняя аналитика");
         document.getElementById("dchv-src").textContent = src;
         if (!src) document.getElementById("dchv-src").style.display = "none";

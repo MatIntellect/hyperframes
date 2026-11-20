@@ -523,8 +523,9 @@
         function $(id) {
           return document.getElementById("apsv-" + id);
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
-          return typeof v === "string" && v.trim() ? v : d;
+          return typeof v !== "string" ? d : v.trim() ? v : "";
         }
         function num(v, d, lo, hi) {
           v = Number(v);
@@ -558,11 +559,7 @@
         var name = str(V.userName, "Мат");
         $("name").textContent = name;
         $("avatar").textContent = name.trim().charAt(0).toUpperCase();
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        $("goal-label").textContent = pole_str(V.goalLabel, "Цель недели");
+        $("goal-label").textContent = str(V.goalLabel, "Цель недели");
         var total = num(V.goalTotal, 3, 1, 7);
         var done = Math.min(num(V.goalDone, 2, 0, 7), total);
         $("done").textContent = done;
@@ -573,11 +570,11 @@
           el.textContent = ch;
           $("days").appendChild(el);
         });
-        $("progress-title").textContent = pole_str(V.progressTitle, "Прогресс");
+        $("progress-title").textContent = str(V.progressTitle, "Прогресс");
         var bars = [
           [str(V.bar1Name, "Бег"), str(V.bar1Value, "5,2 км"), num(V.bar1Level, 75, 0, 100)],
-          [pole_str(V.bar2Name, "Вело"), str(V.bar2Value, "13 км"), num(V.bar2Level, 50, 0, 100)],
-          [pole_str(V.bar3Name, "Сила"), str(V.bar3Value, "45 мин"), num(V.bar3Level, 90, 0, 100)],
+          [str(V.bar2Name, "Вело"), str(V.bar2Value, "13 км"), num(V.bar2Level, 50, 0, 100)],
+          [str(V.bar3Name, "Сила"), str(V.bar3Value, "45 мин"), num(V.bar3Level, 90, 0, 100)],
         ];
         var fills = bars.map(function (b) {
           var row = document.createElement("div");

@@ -213,6 +213,7 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
           return typeof v === "string" ? v : d;
         }
@@ -228,12 +229,8 @@
 
         document.getElementById("atpv-title").textContent = txt(V.title, "bash — 80×24");
         var header = txt(V.header, D.header).trim();
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        var prompt = pole_txt(V.prompt, "user@Mac myapp %").trim() + " ";
-        var command = pole_txt(V.command, "npm run build").trim();
+        var prompt = txt(V.prompt, "user@Mac myapp %").trim() + " ";
+        var command = txt(V.command, "npm run build").trim();
         var output = (typeof V.output === "string" ? V.output : D.output)
           .replace(/\r/g, "")
           .split("\n");

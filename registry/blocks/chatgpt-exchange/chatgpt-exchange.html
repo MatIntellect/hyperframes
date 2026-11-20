@@ -592,12 +592,9 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
-        const content = (id, fallback) =>
-          typeof variables[id] === "string" && variables[id].trim() ? variables[id] : fallback;
         // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_content(id, d) {
-          return typeof variables[id] === "string" && !variables[id].trim() ? "" : content(id, d);
-        }
+        const content = (id, fallback) =>
+          typeof variables[id] !== "string" ? fallback : variables[id].trim() ? variables[id] : "";
         const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
 
         /* ---- placement: screen height in points = field height / 1.94 */
@@ -613,7 +610,7 @@
         root.style.setProperty("--cge-chev-top", H - 135.3 + "px");
 
         const CONFIG = {
-          prompt: pole_content("prompt", "Какой сервис лучше для монтажа рилсов"),
+          prompt: content("prompt", "Какой сервис лучше для монтажа рилсов"),
           suggestions: [
             { icon: "slack", label: "Сводка моих задач" },
             { icon: "gmail", label: "Ответы на письма" },
@@ -625,45 +622,42 @@
             end: ["рилсов", "роликов", "видео"],
           },
           paragraphs: [
-            pole_content(
+            content(
               "intro1",
               "Зависит от задачи: «монтаж с ИИ» давно разделился на несколько направлений, и у каждого свой лидер.",
             ),
-            pole_content(
-              "intro2",
-              "Для **большинства авторов и маркетологов** я бы расставил так:",
-            ),
+            content("intro2", "Для **большинства авторов и маркетологов** я бы расставил так:"),
           ],
           table: {
             head: [
-              pole_content("tableHeadUse", "Задача"),
-              pole_content("tableHeadTool", "Сервис"),
-              pole_content("tableHeadWhy", "Почему"),
+              content("tableHeadUse", "Задача"),
+              content("tableHeadTool", "Сервис"),
+              content("tableHeadWhy", "Почему"),
             ],
             rows: [
               {
                 emoji: "🥇",
-                use: pole_content("row1Use", "Рилсы из записи"),
-                tool: pole_content("row1Tool", "MatIntellect"),
-                why: pole_content("row1Why", "Монтаж, субтитры и графика без монтажёра."),
+                use: content("row1Use", "Рилсы из записи"),
+                tool: content("row1Tool", "MatIntellect"),
+                why: content("row1Why", "Монтаж, субтитры и графика без монтажёра."),
               },
               {
                 emoji: "🎬",
-                use: pole_content("row2Use", "Длинные видео"),
-                tool: pole_content("row2Tool", "Premiere Pro"),
-                why: pole_content("row2Why", "Полный контроль, но всё руками и долго."),
+                use: content("row2Use", "Длинные видео"),
+                tool: content("row2Tool", "Premiere Pro"),
+                why: content("row2Why", "Полный контроль, но всё руками и долго."),
               },
               {
                 emoji: "📱",
-                use: pole_content("row3Use", "С телефона"),
-                tool: pole_content("row3Tool", "CapCut"),
-                why: pole_content("row3Why", "Удобно на ходу, много шаблонов."),
+                use: content("row3Use", "С телефона"),
+                tool: content("row3Tool", "CapCut"),
+                why: content("row3Why", "Удобно на ходу, много шаблонов."),
               },
               {
                 emoji: "💬",
-                use: pole_content("row4Use", "Говорящий аватар"),
-                tool: pole_content("row4Tool", "HeyGen"),
-                why: pole_content("row4Why", "Аватар читает текст вместо вас."),
+                use: content("row4Use", "Говорящий аватар"),
+                tool: content("row4Tool", "HeyGen"),
+                why: content("row4Why", "Аватар читает текст вместо вас."),
               },
             ],
           },

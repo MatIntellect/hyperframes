@@ -419,6 +419,7 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
@@ -451,23 +452,19 @@
           DOODLE = 0.7;
         }
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        var fromName = pole_txt(V.fromName, "Нью-Йорк");
-        var toName = pole_txt(V.toName, "Париж");
+        var fromName = txt(V.fromName, "Нью-Йорк");
+        var toName = txt(V.toName, "Париж");
         $("eyebrow").textContent = txt(V.eyebrow, "Перелёт за шесть секунд");
         if (!$("eyebrow").textContent) $("eyebrow").style.display = "none";
         var hl = $("headline");
         hl.appendChild(document.createTextNode(fromName + " "));
         var j = document.createElement("span");
-        j.textContent = txt(V.join, "–") || "–";
+        j.textContent = txt(V.join, "–");
         hl.appendChild(j);
         hl.appendChild(document.createTextNode(" " + toName));
         $("meta-t").textContent = txt(V.meta, "5 837 км за шесть секунд");
         if (!$("meta-t").textContent) $("meta").style.display = "none";
-        $("badge").textContent = pole_txt(V.badge, "Прилетели");
+        $("badge").textContent = txt(V.badge, "Прилетели");
         function label(el, name, code) {
           el.appendChild(document.createTextNode(name));
           if (code) {

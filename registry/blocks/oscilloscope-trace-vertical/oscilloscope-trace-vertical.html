@@ -197,6 +197,7 @@
           if (!isFinite(n)) n = fallback;
           return Math.min(max, Math.max(min, n));
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
@@ -204,11 +205,11 @@
           return list.indexOf(v) >= 0 ? v : d;
         }
         function parts(v, d, n) {
-          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-          if (typeof v !== "string") return d.split("|");
-          var a = v.split("|").map(function (s) {
-            return s.trim();
-          });
+          var a = str(v, d)
+            .split("|")
+            .map(function (s) {
+              return s.trim();
+            });
           while (a.length < n) a.push("");
           return a.slice(0, n);
         }
@@ -439,11 +440,7 @@
           document.querySelectorAll(".oscv-lbl").forEach(function (el, i) {
             el.textContent = labels[i];
           });
-          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-          function pole_str(v, d) {
-            return typeof v === "string" && !v.trim() ? "" : str(v, d);
-          }
-          document.getElementById("oscv-r-title").textContent = pole_str(V.title, "");
+          document.getElementById("oscv-r-title").textContent = str(V.title, "");
           document.getElementById("oscv-r-wave").textContent =
             names[["sine", "square", "triangle", "data"].indexOf(waveform)];
           document.getElementById("oscv-r-freq").textContent =

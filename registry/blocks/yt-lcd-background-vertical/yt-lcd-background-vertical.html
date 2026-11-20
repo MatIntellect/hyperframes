@@ -204,14 +204,11 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        var title = pole_txt(V.title, "Экран");
+        var title = txt(V.title, "Экран");
         var sub = txt(V.subtitle, "Фон 01");
         var avail = 1700,
           cap = 230;

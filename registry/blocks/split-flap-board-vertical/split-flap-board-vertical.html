@@ -215,9 +215,7 @@
           HMAX = placement === "full" ? 1072 : 652 - edge("Top", "Bottom"),
           CMAX = 120;
 
-        var text = String(
-          typeof V.boardText === "string" && V.boardText.trim() ? V.boardText : "МОНТАЖ ГОТОВ",
-        )
+        var text = String(typeof V.boardText === "string" ? V.boardText : "МОНТАЖ ГОТОВ")
           .toUpperCase()
           .trim();
         /* words into rows of COLS cells. The rows widen to the longest word (up to 28 cells), so a word

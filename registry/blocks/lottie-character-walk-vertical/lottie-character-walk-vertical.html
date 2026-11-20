@@ -215,8 +215,7 @@
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
-        document.getElementById("lcwv-title").textContent =
-          txt(V.title, "Это ваш гид") || "Это ваш гид";
+        document.getElementById("lcwv-title").textContent = txt(V.title, "Это ваш гид");
         var body = txt(
           V.body,
           "Входит уверенным шагом, останавливается и показывает, куда смотреть",

@@ -314,8 +314,9 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
-          return typeof v === "string" && v.trim() ? v.trim() : d;
+          return typeof v === "string" ? v.trim() : d;
         }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
@@ -325,16 +326,9 @@
         root.classList.add("rdpv-" + placement);
         if (placement !== "full") root.querySelector(".rdpv-ground").remove();
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        document.getElementById("rdpv-sub").textContent = pole_str(V.subreddit, "r/matintellect");
-        document.getElementById("rdpv-author").textContent = pole_str(
-          V.author,
-          "u/matjester · 3 ч",
-        );
-        document.getElementById("rdpv-title").textContent = pole_str(
+        document.getElementById("rdpv-sub").textContent = str(V.subreddit, "r/matintellect");
+        document.getElementById("rdpv-author").textContent = str(V.author, "u/matjester · 3 ч");
+        document.getElementById("rdpv-title").textContent = str(
           V.title,
           "Собрал систему, которая монтирует ролики без человека",
         );
@@ -348,7 +342,7 @@
         document.getElementById("rdpv-votes").textContent = str(V.votes, "4,2 тыс");
         document.getElementById("rdpv-votes2").textContent = str(V.votesAfter, "4,3 тыс");
         document.getElementById("rdpv-comments").textContent = str(V.comments, "328");
-        document.getElementById("rdpv-share").textContent = pole_str(V.shareLabel, "Поделиться");
+        document.getElementById("rdpv-share").textContent = str(V.shareLabel, "Поделиться");
         if (!body) document.getElementById("rdpv-title").style.marginBottom = "26px";
 
         var cues = String(V.cues || "")

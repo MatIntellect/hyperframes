@@ -306,8 +306,9 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
-          return typeof v === "string" && v.trim() ? v : d;
+          return typeof v !== "string" ? d : v.trim() ? v : "";
         }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
@@ -317,18 +318,11 @@
         root.classList.add("spc-" + placement);
         if (placement !== "full") root.querySelector(".spc-ground").remove();
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        document.getElementById("spc-track").textContent = pole_str(
+        document.getElementById("spc-track").textContent = str(
           vars.trackName,
           "Монтаж без монтажёра",
         );
-        document.getElementById("spc-artist").textContent = pole_str(
-          vars.artistName,
-          "MatIntellect",
-        );
+        document.getElementById("spc-artist").textContent = str(vars.artistName, "MatIntellect");
         var cover = str(vars.cover, "");
         if (cover) {
           var img = document.createElement("img");

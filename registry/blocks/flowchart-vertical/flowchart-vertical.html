@@ -221,22 +221,20 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
-          return typeof v === "string" && v.trim() ? v.trim() : d;
+          return typeof v === "string" ? v.trim() : d;
         }
         function list(v, d, n) {
-          // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-          var a = (typeof v === "string" ? v.trim() : d).split(";").map(function (s) {
-            return s.trim();
-          });
+          var a = str(v, d)
+            .split(";")
+            .map(function (s) {
+              return s.trim();
+            });
           for (var i = 0; i < n; i++) if (a[i] === undefined) a[i] = "";
           return a.slice(0, n);
         }
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        var question = pole_str(V.question, "Стоит ли учиться программировать?");
+        var question = str(V.question, "Стоит ли учиться программировать?");
         var answers = list(V.answers, "Да; Не уверен", 2);
         var leaves = list(
           V.leaves,

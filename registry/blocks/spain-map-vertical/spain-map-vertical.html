@@ -243,6 +243,7 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
@@ -271,12 +272,8 @@
         subEl.textContent = txt(V.subtitle, "Евро на человека, оценка 2024");
         srcEl.textContent = txt(V.source, "Источник: Национальный институт статистики");
         if (!subEl.textContent) subEl.style.display = "none";
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        document.getElementById("esmv-low").textContent = pole_txt(V.legendLow, "Ниже");
-        document.getElementById("esmv-high").textContent = pole_txt(V.legendHigh, "Выше");
+        document.getElementById("esmv-low").textContent = txt(V.legendLow, "Ниже");
+        document.getElementById("esmv-high").textContent = txt(V.legendHigh, "Выше");
 
         // Данные: «код: значение» по коду автономии (номера – из es-atlas)
         var CODES = {

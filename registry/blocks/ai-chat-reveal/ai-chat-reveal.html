@@ -592,8 +592,9 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function text(value, fallback) {
-          return typeof value === "string" && value.trim() ? value.trim() : fallback;
+          return typeof value === "string" ? value.trim() : fallback;
         }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
@@ -614,22 +615,18 @@
           document.getElementById("acr-keyboard").remove();
         }
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_text(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : text(v, d);
-        }
-        var botName = pole_text(vars.botName, "ChatGPT");
-        var userMessage = pole_text(vars.userMessage, "Как смонтировать рилс без монтажёра?");
-        var answer1 = pole_text(
+        var botName = text(vars.botName, "ChatGPT");
+        var userMessage = text(vars.userMessage, "Как смонтировать рилс без монтажёра?");
+        var answer1 = text(
           vars.answer1,
           "Монтажёр не нужен. MatIntellect собирает ролик из твоей записи сам: субтитры, графика, звук.",
         );
-        var answer2 = pole_text(vars.answer2, "Ты только снимаешь.");
-        var answer3 = pole_text(vars.answer3, "Что ты получаешь:");
+        var answer2 = text(vars.answer2, "Ты только снимаешь.");
+        var answer3 = text(vars.answer3, "Что ты получаешь:");
         var bullets = [
-          pole_text(vars.bullet1, "Субтитры по каждому слову"),
-          pole_text(vars.bullet2, "Графику под смысл фразы"),
-          pole_text(vars.bullet3, "Готовый ролик за минуты"),
+          text(vars.bullet1, "Субтитры по каждому слову"),
+          text(vars.bullet2, "Графику под смысл фразы"),
+          text(vars.bullet3, "Готовый ролик за минуты"),
         ];
 
         if (full) document.getElementById("acr-htitle").textContent = botName;

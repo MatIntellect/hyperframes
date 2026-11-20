@@ -268,6 +268,7 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
@@ -277,20 +278,16 @@
 
         root.classList.add("ntkv-" + oneOf(V.placement, ["bottom", "top", "center"], "bottom"));
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        document.getElementById("ntkv-livetext").textContent = pole_str(V.live, "");
-        document.getElementById("ntkv-tag").textContent = pole_str(V.tag, "");
+        document.getElementById("ntkv-livetext").textContent = str(V.live, "");
+        document.getElementById("ntkv-tag").textContent = str(V.tag, "");
         var time = str(V.time, "09:41");
         var timeEl = document.getElementById("ntkv-time");
         if (time) timeEl.textContent = time;
         else timeEl.remove();
 
         /* headline: words named in accentWords turn red */
-        var headline = pole_str(V.headline, "");
-        var red = pole_str(V.accentWords, "система")
+        var headline = str(V.headline, "");
+        var red = str(V.accentWords, "система")
           .split(",")
           .map(function (w) {
             return w.trim().toLowerCase();
@@ -308,9 +305,9 @@
         });
 
         /* crawl: the items repeat until the track covers the window plus 30 s of travel, so it never runs dry */
-        var items = (
-          str(V.items, "") ||
-          "Ролик собирается за минуты;Графика из готовой базы блоков;Субтитры по словам речи;Рендер один раз после проверок"
+        var items = str(
+          V.items,
+          "Ролик собирается за минуты;Графика из готовой базы блоков;Субтитры по словам речи;Рендер один раз после проверок",
         )
           .split(";")
           .map(function (t) {

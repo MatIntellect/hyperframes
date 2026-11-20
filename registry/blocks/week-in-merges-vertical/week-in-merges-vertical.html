@@ -273,6 +273,7 @@
           window.__hyperframes && typeof window.__hyperframes.getVariables === "function"
             ? window.__hyperframes.getVariables()
             : {};
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function str(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
@@ -379,11 +380,7 @@
           else el.style.display = "none";
         }
         fill("wimv-eyebrow", str(V.eyebrow, "MatIntellect / неделя"));
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_str(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : str(v, d);
-        }
-        document.getElementById("wimv-title").textContent = pole_str(V.title, "");
+        document.getElementById("wimv-title").textContent = str(V.title, "");
         fill("wimv-period", str(V.period, "3–9 ноября 2026"));
         fill("wimv-total", str(V.total, "26 роликов"));
         fill("wimv-footer", str(V.footer, "Скорость – по числу роликов"));

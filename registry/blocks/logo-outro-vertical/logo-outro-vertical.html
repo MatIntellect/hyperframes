@@ -192,16 +192,13 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
           return typeof v === "string" ? v.trim() : d;
         }
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        var word = pole_txt(V.wordmark, "MatIntellect");
+        var word = txt(V.wordmark, "MatIntellect");
         var tag = txt(V.tagline, "Монтаж без монтажёра");
-        var url = pole_txt(V.url, "matintellect.com");
+        var url = txt(V.url, "matintellect.com");
         var W = 1080;
         // Размер надписи по длине: средняя ширина знака Bebas около 0,44 кегля
         var avail = 1600,

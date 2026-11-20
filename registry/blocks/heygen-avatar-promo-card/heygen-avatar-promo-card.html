@@ -511,45 +511,42 @@
           ? window.__hyperframes.getVariables()
           : {};
       const root = document.getElementById("heygen-avatar-promo-card");
+      // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
       const text = (id, fallback) =>
-        typeof variables[id] === "string" && variables[id].trim() ? variables[id] : fallback;
+        typeof variables[id] !== "string" ? fallback : variables[id].trim() ? variables[id] : "";
       const oneOf = (v, list, d) => (list.indexOf(v) >= 0 ? v : d);
 
       const placement = oneOf(variables.placement, ["full", "top", "bottom"], "full");
       root.classList.add("apc-" + placement);
       if (placement !== "full") root.querySelector(".bgfill").remove();
 
-      root.style.setProperty("--apc-canvas", text("canvasColor", "var(--bg, #0c1014)"));
-      root.style.setProperty("--apc-ink", text("inkColor", "var(--fg, #f2f2f2)"));
-      root.style.setProperty("--apc-muted", text("mutedInkColor", "var(--muted, #8a8a90)"));
-      root.style.setProperty("--apc-accent", text("accentColor", "var(--accent, #ff0000)"));
-      root.style.setProperty("--apc-light-tile", text("lightTileColor", "var(--surface, #18181a)"));
-      root.style.setProperty("--apc-dark-tile", text("darkTileColor", "var(--border, #2e2e32)"));
-      document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
-        image.src = text("brandLogo", "assets/img/matintellect-mark.svg");
-      });
-      // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-      function pole_text(id, d) {
-        return typeof variables[id] === "string" && !variables[id].trim() ? "" : text(id, d);
-      }
-      document.getElementById("apc-brand-name").textContent = pole_text(
-        "brandName",
-        "MatIntellect",
+      root.style.setProperty("--apc-canvas", text("canvasColor", "") || "var(--bg, #0c1014)");
+      root.style.setProperty("--apc-ink", text("inkColor", "") || "var(--fg, #f2f2f2)");
+      root.style.setProperty("--apc-muted", text("mutedInkColor", "") || "var(--muted, #8a8a90)");
+      root.style.setProperty("--apc-accent", text("accentColor", "") || "var(--accent, #ff0000)");
+      root.style.setProperty(
+        "--apc-light-tile",
+        text("lightTileColor", "") || "var(--surface, #18181a)",
       );
-      document.getElementById("apc-hdr-title").firstChild.nodeValue = pole_text(
+      root.style.setProperty(
+        "--apc-dark-tile",
+        text("darkTileColor", "") || "var(--border, #2e2e32)",
+      );
+      document.querySelectorAll(".brand-tile img, #apc-hdr-logo img").forEach((image) => {
+        image.src = text("brandLogo", "") || "assets/img/matintellect-mark.svg";
+      });
+      document.getElementById("apc-brand-name").textContent = text("brandName", "MatIntellect");
+      document.getElementById("apc-hdr-title").firstChild.nodeValue = text(
         "titleLine1",
         "Монтаж рилсов",
       );
-      document.getElementById("apc-title-line-2").textContent = pole_text(
-        "titleLine2",
-        "из записи.",
-      );
-      document.getElementById("apc-hdr-subhead").textContent = pole_text(
+      document.getElementById("apc-title-line-2").textContent = text("titleLine2", "из записи.");
+      document.getElementById("apc-hdr-subhead").textContent = text(
         "subhead",
         "Субтитры, графика и звук за минуты.",
       );
-      document.getElementById("apc-pill-1").textContent = pole_text("pill1", "БЕЗ МОНТАЖЁРА");
-      document.getElementById("apc-pill-2").textContent = pole_text("pill2", "ЗА МИНУТЫ");
+      document.getElementById("apc-pill-1").textContent = text("pill1", "БЕЗ МОНТАЖЁРА");
+      document.getElementById("apc-pill-2").textContent = text("pill2", "ЗА МИНУТЫ");
       document.getElementById("apc-code-label").textContent = text("codeLabel", "");
       document.getElementById("apc-promo-prefix").textContent = text("promoPrefix", "");
       document.getElementById("apc-promo-suffix").textContent = text("promoSuffix", "");

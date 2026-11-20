@@ -402,8 +402,9 @@
             ? window.__hyperframes.getVariables()
             : {};
 
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function text(value, fallback) {
-          return typeof value === "string" && value.trim() ? value : fallback;
+          return typeof value !== "string" ? fallback : value.trim() ? value : "";
         }
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
@@ -452,13 +453,10 @@
           });
         }
 
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_text(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : text(v, d);
-        }
-        var notifTitle = pole_text(vars.notifTitle, "Новый ролик");
+        var notifTitle = text(vars.notifTitle, "Новый ролик");
         document.querySelectorAll(".nc-banner").forEach(function (banner, i) {
-          banner.querySelector(".nc-title").textContent = text(vars["title" + (i + 1)], notifTitle);
+          banner.querySelector(".nc-title").textContent =
+            text(vars["title" + (i + 1)], "") || notifTitle;
           var icon = vars["icon" + (i + 1)];
           if (typeof icon === "string" && icon.trim()) {
             var tile = banner.querySelector(".nc-icon");
@@ -474,16 +472,13 @@
           if (by) credit.textContent = by;
           else credit.remove();
         });
-        setAll(".nc-now", pole_text(vars.nowLabel, "сейчас"));
-        document.getElementById("nc-pill-label").textContent = pole_text(
-          vars.pillLabel,
-          "Свернуть",
-        );
+        setAll(".nc-now", text(vars.nowLabel, "сейчас"));
+        document.getElementById("nc-pill-label").textContent = text(vars.pillLabel, "Свернуть");
         var messages = [
-          pole_text(vars.message1, "Ролик готов к публикации."),
-          pole_text(vars.message2, "Все проверки пройдены."),
-          pole_text(vars.message3, "Рендер 4K за 92 секунды."),
-          pole_text(vars.message4, "Опубликовано в канале."),
+          text(vars.message1, "Ролик готов к публикации."),
+          text(vars.message2, "Все проверки пройдены."),
+          text(vars.message3, "Рендер 4K за 92 секунды."),
+          text(vars.message4, "Опубликовано в канале."),
         ];
         document.querySelectorAll(".nc-subtitle").forEach(function (el, i) {
           el.textContent = messages[i] || messages[messages.length - 1];

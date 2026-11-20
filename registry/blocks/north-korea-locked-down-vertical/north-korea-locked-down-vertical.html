@@ -327,8 +327,9 @@
         function oneOf(v, list, d) {
           return list.indexOf(v) >= 0 ? v : d;
         }
+        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
         function txt(v, d) {
-          return typeof v === "string" && v.trim() ? v.trim() : d;
+          return typeof v === "string" ? v.trim() : d;
         }
 
         var W = 1080,
@@ -358,11 +359,7 @@
         ann.style.transform = "scale(" + K + ")";
 
         $("label").innerHTML = "";
-        // an empty field stays empty: the stand-in is only for a field the host never set (Mat, 19.11)
-        function pole_txt(v, d) {
-          return typeof v === "string" && !v.trim() ? "" : txt(v, d);
-        }
-        pole_txt(V.label, "Под|замком")
+        txt(V.label, "Под|замком")
           .split("|")
           .slice(0, 2)
           .forEach(function (t, i) {
